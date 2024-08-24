@@ -3,6 +3,7 @@
 lappend auto_path "../../"
 package require SpiceGenTcl
 package require xyplot
+namespace import ::tcl::mathop::*
 namespace import ::SpiceGenTcl::*
 set ngspiceNameSpc [namespace children ::SpiceGenTcl::Ngspice]
 foreach nameSpc $ngspiceNameSpc {
@@ -111,18 +112,20 @@ $circuit add $nand
 $circuit add $onebit
 $circuit add $twobit
 $circuit add $fourbit
+$circuit add [XAuto new $fourbit x18 {1 2 3 4 5 6 7 8 9 10 11 12 0 13 99}]
 
 set trtf 10e-9
+set tonStep 10e-9
+set perStep 50e-9
 $circuit add [Vdc new cc 99 0 5]
-$circuit add [XAuto new $fourbit x18 {1 2 3 4 5 6 7 8 9 10 11 12 0 13 99}]
-$circuit add [Vpulse new in1a 1 0 0 3 0 $trtf $trtf 10e-9 50e-9]
-$circuit add [Vpulse new in1b 2 0 0 3 0 $trtf $trtf 20e-9 100e-9]
-$circuit add [Vpulse new in2a 3 0 0 3 0 $trtf $trtf 40e-9 200e-9]
-$circuit add [Vpulse new in2b 4 0 0 3 0 $trtf $trtf 80e-9 400e-9]
-$circuit add [Vpulse new in3a 5 0 0 3 0 $trtf $trtf 160e-9 800e-9]
-$circuit add [Vpulse new in3b 6 0 0 3 0 $trtf $trtf 320e-9 1600e-9]
-$circuit add [Vpulse new in4a 7 0 0 3 0 $trtf $trtf 640e-9 3200e-9]
-$circuit add [Vpulse new in4b 8 0 0 3 0 $trtf $trtf 1280e-9 6400e-9]
+$circuit add [Vpulse new in1a 1 0 0 3 0 $trtf $trtf $tonStep $perStep]
+$circuit add [Vpulse new in1b 2 0 0 3 0 $trtf $trtf [* $tonStep 2] [* $perStep 2]]
+$circuit add [Vpulse new in2a 3 0 0 3 0 $trtf $trtf [* $tonStep 4] [* $perStep 4]]
+$circuit add [Vpulse new in2b 4 0 0 3 0 $trtf $trtf [* $tonStep 8] [* $perStep 8]]
+$circuit add [Vpulse new in3a 5 0 0 3 0 $trtf $trtf [* $tonStep 16] [* $perStep 16]]
+$circuit add [Vpulse new in3b 6 0 0 3 0 $trtf $trtf [* $tonStep 32] [* $perStep 32]]
+$circuit add [Vpulse new in4a 7 0 0 3 0 $trtf $trtf [* $tonStep 64] [* $perStep 64]]
+$circuit add [Vpulse new in4b 8 0 0 3 0 $trtf $trtf [* $tonStep 128] [* $perStep 128]]
 
 
 $circuit add [R new bit0 9 0 1e3]
@@ -136,26 +139,28 @@ $circuit add [BjtGPModel new qmod npn -bf 75 -rb 100 -cje 1e-12 -cjc 3e-12]
 
 
 #set simulator with default temporary directory
-set simulator [BatchOutLog new {batch1} {/usr/local/bin/}]
+set simulator [BatchLiveLog new {batch1} {/usr/local/bin/}]
 # attach simulator object to circuit
 $circuit attachSimulator $simulator
 # run circuit, read log and data
 $circuit runAndRead
-# get data object
+# get data dict
 set data [$circuit getDataDict]
 set axis [dict get $data time]
-set v12 [dict get $data v(12)]
-
-
-# plot results with plotchart
-wm geometry . 1000x1000
-xyplot .xyp -xformat "%.2e" -yformat "%.2e" -xtext time,s -ytext "v(12), V" -height 500 -ttk 1
-pack .xyp -fill both -expand true
-
-foreach x $axis y $v12 {
-    lappend xyVout $x $y
+set nodes [list 9 10 11 12]
+foreach node $nodes {
+    set v$node [dict get $data v($node)]
 }
-.xyp add_data sf $xyVout -color red
+# plot results with plotchart
+wm geometry . 1600x1000
+foreach node $nodes {
+    xyplot .xyp$node -xformat "%.2e" -yformat "%.2e" -xtext "time, s" -ytext "v(${node}), V" -ttk 1 
+    pack .xyp$node -fill both -expand true
+    foreach time $axis yV$node [set [subst v$node]] {
+        lappend xyV$node $time [set [subst yV$node]]
+    }
+    .xyp$node add_data sf$node [set [subst xyV$node]] -color red
+}
 
 
 

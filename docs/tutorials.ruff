@@ -342,7 +342,7 @@ namespace eval Tutorials {
         Then we as usual, create `Simulator` class object, attach it to `circuit`, run it multiple times and collect results:
         ```tcl
         #set simulator with default 
-        set simulator [BatchOutLog new {batch1} {/usr/local/bin/}]
+        set simulator [BatchLiveLog new {batch1} {/usr/local/bin/}]
         # attach simulator object to circuit
         $circuit attachSimulator $simulator
         # loop in which we run simulation, change reverse biad and read the results
@@ -357,8 +357,8 @@ namespace eval Tutorials {
             lappend traceList [lindex [dict get $data i(va)] 0 1]
         }
         ```
-        `BatchOutLog` simulator differs from batch in sense of stdout output printing - it prints
-        output line by line during simulation, not only at ther end of it.
+        `BatchLiveLog` simulator differs from `Batch` in sense of stdout output printing - it prints
+        output line by line during simulation, not only at the end of it.
         
         Here we collect imaginary value of current flowing through Va AC voltage source. 
         
@@ -389,7 +389,7 @@ namespace eval Tutorials {
         
         ## Transient simulation of ring oscillator
         
-        In this example we look at circuit with transient analysis, and also we will see how we can use
+        In this example we look at circuit with transient analysis, and also we will see how to use
         Tcl script to build circuit that contains multiple stages of the same subcircuit. 
         
         Circuit is ring oscillator that is made from voltage-controlled switchs, this circuit was taken from Ngspice
@@ -454,16 +454,16 @@ namespace eval Tutorials {
         Now we can run and read data:
         ```tcl
         #set simulator with default temporary directory
-        set simulator [BatchOutLog new {batch1} {/usr/local/bin/}]
+        set simulator [BatchLiveLog new {batch1} {/usr/local/bin/}]
         # attach simulator object to circuit
         $circuit attachSimulator $simulator
         # run circuit, read log and data
         $circuit runAndRead
         # get data object
         set data [$circuit getDataDict]
-	set axis [dict get $data time]
-	set vout [dict get $data v(osc_out)]
-	set imeas [dict get $data i(vmeasure)]
+       	set axis [dict get $data time]
+       	set vout [dict get $data v(osc_out)]
+       	set imeas [dict get $data i(vmeasure)]
         ```
         
         We save output waveform and power currents, and then plot it with `xyplot` package:
@@ -483,6 +483,194 @@ namespace eval Tutorials {
         ```
         
         ![switch_oscillator](assets/img/switch_oscillator.png)
+        
+        ## Transient simulation of four-bit adder
+        
+        This example, as the previous one, contain circuit that is run in transient analysis, but it differs in terms of
+        complexity and presence of nested subcircuits elements. 
+        
+        Circuit is a classical adder with 2 four-bit inputs, this circuit was taken from Ngspice
+        tests (/tests/transient/fourbitadder.cir). We incrementally build it from the simplest NAND logical blocks up to four-bit 
+        adder circuit. 
+        
+        NAND block itself is built from combination of bipolar transistors, diodes and resistors. Its definition is:
+        ```tcl
+        # create class that represents NAND subcircuit
+        oo::class create NAND {
+            superclass Subcircuit
+            constructor {} {
+                # define external pins of subcircuit
+                set pins {1 2 3 4}
+                # define input parameters of subcircuit
+                set params {}
+                # add elements to subcircuit definition
+                my add [Q new 1 9 5 1 qmod]
+                my add [D new 1clamp 0 1 dmod]
+                my add [Q new 2 9 5 2 qmod]
+                my add [D new 2clamp 0 2 dmod]
+                my add [R new b 4 5 4e3]
+                my add [R new 1 4 6 1.6e3]
+                my add [Q new 3 6 9 8 qmod]
+                my add [R new 2 8 0 1e3]
+                my add [R new c 4 7 130]
+                my add [Q new 4 7 6 10 qmod]
+                my add [D new vbedrop 10 3 dmod]
+                my add [Q new 5 3 8 0 qmod]
+                # pass name, list of pins and list of parameters to Subcircuit constructor
+                next nand $pins $params
+            }
+        }
+        # create NAND subcircuit definition instance
+        set nand [NAND new]
+        ```
+        
+        To build one-bit adder we use combination of NAND subcircuits:
+        ```tcl
+        # create class that represents ONEBIT subcircuit
+        oo::class create ONEBIT {
+            superclass Subcircuit
+            constructor {} {
+                # define external pins of subcircuit
+                set pins {1 2 3 4 5 6}
+                # define input parameters of subcircuit
+                set params {}
+                # add elements to subcircuit definition
+                global variable nand
+                my add [XAuto new $nand x1 "1 2 7 6"]
+                my add [XAuto new $nand x2 "1 7 8 6"]
+                my add [XAuto new $nand x3 "2 7 9 6"]
+                my add [XAuto new $nand x4 "8 9 10 6"]
+                my add [XAuto new $nand x5 "3 10 11 6"]
+                my add [XAuto new $nand x6 "3 11 12 6"]
+                my add [XAuto new $nand x7 "10 11 13 6"]
+                my add [XAuto new $nand x8 "12 13 4 6"]
+                my add [XAuto new $nand x9 "11 7 5 6"]
+                # pass name, list of pins and list of parameters to Subcircuit constructor
+                next onebit $pins $params
+            }
+        }
+        # create ONEBIT subcircuit definition instance
+        set onebit [ONEBIT new]
+        ```
+        
+        Previously, we've already built subcircuits, but here you can see that we can use subcircuits inside definitions of other subcircuit,
+        and therefore created multi-level hierarchy to build complex circuits. So now we can combine one-bit to two bit adder, and then again
+        increase level of grouping by connecting two two-bit sub-circuit to create four-bit adder:
+        ```tcl
+        # create class that represents TWOBIT subcircuit
+        oo::class create TWOBIT {
+            superclass Subcircuit
+            constructor {} {
+                # define external pins of subcircuit
+                set pins {1 2 3 4 5 6 7 8 9}
+                # define input parameters of subcircuit
+                set params {}
+                # add elements to subcircuit definition
+                global variable onebit
+                my add [XAuto new $onebit x1 "1 2 7 5 10 9"]
+                my add [XAuto new $onebit x2 "3 4 10 6 8 9"]
+                # pass name, list of pins and list of parameters to Subcircuit constructor
+                next twobit $pins $params
+            }
+        }
+        # create TWOBIT subcircuit definition instance
+        set twobit [TWOBIT new]
+        # create class that represents FOURBIT subcircuit
+        oo::class create FOURBIT {
+            superclass Subcircuit
+            constructor {} {
+                # define external pins of subcircuit
+                set pins {1 2 3 4 5 6 7 8 9 10 11 12 13 14 15}
+                # define input parameters of subcircuit
+                set params {}
+                # add elements to subcircuit definition
+                global variable twobit
+                my add [XAuto new $twobit x1 "1 2 3 4 9 10 13 16 15"]
+                my add [XAuto new $twobit x2 "5 6 7 8 11 12 16 14 15"]
+                # pass name, list of pins and list of parameters to Subcircuit constructor
+                next fourbit $pins $params
+            }
+        }
+        # create FOURBIT subcircuit definition instance
+        set fourbit [FOURBIT new]
+        ```
+        
+        Next step is to initialize top circuit and add all subcircuit definitions to it:
+        ```tcl
+        # create top-level circuit
+        set circuit [Circuit new {Four-bit adder}]
+        # add elements to circuit
+        $circuit add [Tran new 1e-9 10e-6]
+        $circuit add [Options new {{noacct -sw}}]
+        $circuit add $nand
+        $circuit add $onebit
+        $circuit add $twobit
+        $circuit add $fourbit
+        $circuit add [XAuto new $fourbit x18 {1 2 3 4 5 6 7 8 9 10 11 12 0 13 99}]
+        ```
+        
+        To properly see the circuit in action we define input signals to all eight inputs, as well as power:
+        ```tcl
+        set trtf 10e-9
+        set tonStep 10e-9
+        set perStep 50e-9
+        $circuit add [Vdc new cc 99 0 5]
+        $circuit add [Vpulse new in1a 1 0 0 3 0 $trtf $trtf $tonStep $perStep]
+        $circuit add [Vpulse new in1b 2 0 0 3 0 $trtf $trtf [* $tonStep 2] [* $perStep 2]]
+        $circuit add [Vpulse new in2a 3 0 0 3 0 $trtf $trtf [* $tonStep 4] [* $perStep 4]]
+        $circuit add [Vpulse new in2b 4 0 0 3 0 $trtf $trtf [* $tonStep 8] [* $perStep 8]]
+        $circuit add [Vpulse new in3a 5 0 0 3 0 $trtf $trtf [* $tonStep 16] [* $perStep 16]]
+        $circuit add [Vpulse new in3b 6 0 0 3 0 $trtf $trtf [* $tonStep 32] [* $perStep 32]]
+        $circuit add [Vpulse new in4a 7 0 0 3 0 $trtf $trtf [* $tonStep 64] [* $perStep 64]]
+        $circuit add [Vpulse new in4b 8 0 0 3 0 $trtf $trtf [* $tonStep 128] [* $perStep 128]]
+        ```
+        
+        Add load resistors:
+        ```tcl
+        $circuit add [R new bit0 9 0 1e3]
+        $circuit add [R new bit1 10 0 1e3]
+        $circuit add [R new bit2 11 0 1e3]
+        $circuit add [R new bit3 12 0 1e3]
+        $circuit add [R new cout 13 0 1e3]
+        ```
+        
+        Add semiconductor devices models:
+        ```tcl
+        $circuit add [DiodeModel new dmod]
+        $circuit add [BjtGPModel new qmod npn -bf 75 -rb 100 -cje 1e-12 -cjc 3e-12]
+        ```
+        
+        Now we can create simulator and run circuit:
+        ```tcl
+        #set simulator with default temporary directory
+        set simulator [BatchLiveLog new {batch1} {/usr/local/bin/}]
+        # attach simulator object to circuit
+        $circuit attachSimulator $simulator
+        # run circuit, read log and data
+        $circuit runAndRead
+        ```
+        
+        Now we read the data and plot it as usual:
+        ```tcl
+        # get data dict
+        set data [$circuit getDataDict]
+        set axis [dict get $data time]
+        set nodes [list 9 10 11 12]
+        foreach node $nodes {
+            set v$node [dict get $data v($node)]
+        }
+        # plot results with plotchart
+        wm geometry . 1600x1000
+        foreach node $nodes {
+            xyplot .xyp$node -xformat "%.2e" -yformat "%.2e" -xtext "time, s" -ytext "v(${node}), V" -ttk 1 
+            pack .xyp$node -fill both -expand true
+            foreach time $axis yV$node [set [subst v$node]] {
+                lappend xyV$node $time [set [subst yV$node]]
+            }
+            .xyp$node add_data sf$node [set [subst xyV$node]] -color red
+        }
+        ```
+        ![four_bit_adder_wvfm](assets/img/four_bit_adder_wvfm.png)
     }
 
 }

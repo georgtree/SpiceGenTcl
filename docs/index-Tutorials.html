@@ -23,7 +23,7 @@
 <li><a href="index-Tutorials.html#::Tutorials-Diode capacitance simualtion" title="Diode capacitance simualtion" >Diode capacitance simualtion</a> - &quot;examples/diode_cv.tcl&quot; file</li>
 <li>[Sensitive analysis of differential pair] - &quot;examples/diffpair_sens.tcl&quot; file</li>
 <li><a href="index-Tutorials.html#::Tutorials-Transient simulation of ring oscillator" title="Transient simulation of ring oscillator" >Transient simulation of ring oscillator</a> - &quot;examples/transient/switch_oscillator.tcl&quot; file</li>
-<li>[Transient simulation of four-bit adder] - &quot;examples/transient/fourbitadder.tcl&quot; file</li>
+<li><a href="index-Tutorials.html#::Tutorials-Transient simulation of four-bit adder" title="Transient simulation of four-bit adder" >Transient simulation of four-bit adder</a> - &quot;examples/transient/fourbitadder.tcl&quot; file</li>
 </ul>
 <h2 class='ruff'><a name='::Tutorials-Netlist manipulations'></a>Netlist manipulations<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
@@ -353,7 +353,7 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <p class='ruff'>Then we as usual, create <code><b><font color=#923B23>Simulator</font></b></code> class object, attach it to <code>circuit</code>, run it multiple times and collect results:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50>#set simulator with default </font></i>
-<b><font color=#923B23>set</font></b> simulator [BatchOutLog new {batch1} {/usr/local/bin/}]
+<b><font color=#923B23>set</font></b> simulator [<b><font color=#923B23>BatchLiveLog</font></b> new {batch1} {/usr/local/bin/}]
 <i><font color=#4b5d50># attach simulator object to circuit</font></i>
 <font color=#4A181B>$circuit</font> attachSimulator <font color=#4A181B>$simulator</font>
 <i><font color=#4b5d50># loop in which we run simulation, change reverse biad and read the results</font></i>
@@ -369,7 +369,7 @@ x2 net1 net2 rcnet r=1 c={cpar}
 }
 </pre>
 
-</figure><p class='ruff'><code>BatchOutLog</code> simulator differs from batch in sense of stdout output printing - it prints output line by line during simulation, not only at ther end of it.</p>
+</figure><p class='ruff'><code><b><font color=#923B23>BatchLiveLog</font></b></code> simulator differs from <code><b><font color=#923B23>Batch</font></b></code> in sense of stdout output printing - it prints output line by line during simulation, not only at the end of it.</p>
 <p class='ruff'>Here we collect imaginary value of current flowing through Va AC voltage source.</p>
 <p class='ruff'>One question that you could ask - why we use two indexes, 0 and 1 when we extract values from the vector i(va)?</p>
 <p class='ruff'>The answer is following: by first index we extract value from list of values at different frequencies, and by second we get imaginary value. The AC data vectors come in form:</p>
@@ -394,7 +394,7 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <p class='ruff'><img src="assets/img/diode_cv.png" alt="diode_cv" /></p>
 <h2 class='ruff'><a name='::Tutorials-Transient simulation of ring oscillator'></a>Transient simulation of ring oscillator<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
-<p class='ruff'>In this example we look at circuit with transient analysis, and also we will see how we can use Tcl script to build circuit that contains multiple stages of the same subcircuit.</p>
+<p class='ruff'>In this example we look at circuit with transient analysis, and also we will see how to use Tcl script to build circuit that contains multiple stages of the same subcircuit.</p>
 <p class='ruff'>Circuit is ring oscillator that is made from voltage-controlled switchs, this circuit was taken from Ngspice examples (/examples/p-to-n-examples/switch-oscillators.cir). Each stage of oscillator is simple two-switch inverter, the whole circuit contains 17 stages.</p>
 <p class='ruff'>At the beggining we create class <code>Inverter</code> that describes inverter and create object:</p>
 
@@ -453,7 +453,7 @@ x2 net1 net2 rcnet r=1 c={cpar}
 </figure><p class='ruff'>Now we can run and read data:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50>#set simulator with default temporary directory</font></i>
-<b><font color=#923B23>set</font></b> simulator [BatchOutLog new {batch1} {/usr/local/bin/}]
+<b><font color=#923B23>set</font></b> simulator [<b><font color=#923B23>BatchLiveLog</font></b> new {batch1} {/usr/local/bin/}]
 <i><font color=#4b5d50># attach simulator object to circuit</font></i>
 <font color=#4A181B>$circuit</font> attachSimulator <font color=#4A181B>$simulator</font>
 <i><font color=#4b5d50># run circuit, read log and data</font></i>
@@ -482,6 +482,187 @@ x2 net1 net2 rcnet r=1 c={cpar}
 </pre>
 
 </figure><p class='ruff'><img src="assets/img/switch_oscillator.png" alt="switch_oscillator" /></p>
+<h2 class='ruff'><a name='::Tutorials-Transient simulation of four-bit adder'></a>Transient simulation of four-bit adder<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
+<div style='clear:both;'></div>
+<p class='ruff'>This example, as the previous one, contain circuit that is run in transient analysis, but it differs in terms of complexity and presence of nested subcircuits elements.</p>
+<p class='ruff'>Circuit is a classical adder with 2 four-bit inputs, this circuit was taken from Ngspice tests (/tests/transient/fourbitadder.cir). We incrementally build it from the simplest NAND logical blocks up to four-bit adder circuit.</p>
+<p class='ruff'>NAND block itself is built from combination of bipolar transistors, diodes and resistors. Its definition is:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create class that represents NAND subcircuit</font></i>
+<b><font color=#ca14ca>oo::class</font></b> create NAND {
+    superclass Subcircuit
+    <b><font color=#ca14ca>constructor</font></b> {} {
+        <i><font color=#4b5d50># define external pins of subcircuit</font></i>
+        <b><font color=#923B23>set</font></b> pins {1 2 3 4}
+        <i><font color=#4b5d50># define input parameters of subcircuit</font></i>
+        <b><font color=#923B23>set</font></b> params {}
+        <i><font color=#4b5d50># add elements to subcircuit definition</font></i>
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>Q</font></b> new 1 9 5 1 qmod]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>D</font></b> new 1clamp 0 1 dmod]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>Q</font></b> new 2 9 5 2 qmod]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>D</font></b> new 2clamp 0 2 dmod]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new b 4 5 4e3]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new 1 4 6 1.6e3]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>Q</font></b> new 3 6 9 8 qmod]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new 2 8 0 1e3]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new c 4 7 130]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>Q</font></b> new 4 7 6 10 qmod]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>D</font></b> new vbedrop 10 3 dmod]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>Q</font></b> new 5 3 8 0 qmod]
+        <i><font color=#4b5d50># pass name, list of pins and list of parameters to Subcircuit constructor</font></i>
+        <b><font color=#923B23>next</font></b> nand <font color=#4A181B>$pins</font> <font color=#4A181B>$params</font>
+    }
+}
+<i><font color=#4b5d50># create NAND subcircuit definition instance</font></i>
+<b><font color=#923B23>set</font></b> nand [NAND new]
+</pre>
+
+</figure><p class='ruff'>To build one-bit adder we use combination of NAND subcircuits:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create class that represents ONEBIT subcircuit</font></i>
+<b><font color=#ca14ca>oo::class</font></b> create ONEBIT {
+    superclass Subcircuit
+    <b><font color=#ca14ca>constructor</font></b> {} {
+        <i><font color=#4b5d50># define external pins of subcircuit</font></i>
+        <b><font color=#923B23>set</font></b> pins {1 2 3 4 5 6}
+        <i><font color=#4b5d50># define input parameters of subcircuit</font></i>
+        <b><font color=#923B23>set</font></b> params {}
+        <i><font color=#4b5d50># add elements to subcircuit definition</font></i>
+        <b><font color=#923B23>global</font></b> variable nand
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>XAuto</font></b> new <font color=#4A181B>$nand</font> x1 <font color=#035103>&quot;1 2 7 6&quot;</font>]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>XAuto</font></b> new <font color=#4A181B>$nand</font> x2 <font color=#035103>&quot;1 7 8 6&quot;</font>]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>XAuto</font></b> new <font color=#4A181B>$nand</font> x3 <font color=#035103>&quot;2 7 9 6&quot;</font>]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>XAuto</font></b> new <font color=#4A181B>$nand</font> x4 <font color=#035103>&quot;8 9 10 6&quot;</font>]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>XAuto</font></b> new <font color=#4A181B>$nand</font> x5 <font color=#035103>&quot;3 10 11 6&quot;</font>]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>XAuto</font></b> new <font color=#4A181B>$nand</font> x6 <font color=#035103>&quot;3 11 12 6&quot;</font>]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>XAuto</font></b> new <font color=#4A181B>$nand</font> x7 <font color=#035103>&quot;10 11 13 6&quot;</font>]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>XAuto</font></b> new <font color=#4A181B>$nand</font> x8 <font color=#035103>&quot;12 13 4 6&quot;</font>]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>XAuto</font></b> new <font color=#4A181B>$nand</font> x9 <font color=#035103>&quot;11 7 5 6&quot;</font>]
+        <i><font color=#4b5d50># pass name, list of pins and list of parameters to Subcircuit constructor</font></i>
+        <b><font color=#923B23>next</font></b> onebit <font color=#4A181B>$pins</font> <font color=#4A181B>$params</font>
+    }
+}
+<i><font color=#4b5d50># create ONEBIT subcircuit definition instance</font></i>
+<b><font color=#923B23>set</font></b> onebit [ONEBIT new]
+</pre>
+
+</figure><p class='ruff'>Previously, we've already built subcircuits, but here you can see that we can use subcircuits inside definitions of other subcircuit, and therefore created multi-level hierarchy to build complex circuits. So now we can combine one-bit to two bit adder, and then again increase level of grouping by connecting two two-bit sub-circuit to create four-bit adder:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create class that represents TWOBIT subcircuit</font></i>
+<b><font color=#ca14ca>oo::class</font></b> create TWOBIT {
+    superclass Subcircuit
+    <b><font color=#ca14ca>constructor</font></b> {} {
+        <i><font color=#4b5d50># define external pins of subcircuit</font></i>
+        <b><font color=#923B23>set</font></b> pins {1 2 3 4 5 6 7 8 9}
+        <i><font color=#4b5d50># define input parameters of subcircuit</font></i>
+        <b><font color=#923B23>set</font></b> params {}
+        <i><font color=#4b5d50># add elements to subcircuit definition</font></i>
+        <b><font color=#923B23>global</font></b> variable onebit
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>XAuto</font></b> new <font color=#4A181B>$onebit</font> x1 <font color=#035103>&quot;1 2 7 5 10 9&quot;</font>]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>XAuto</font></b> new <font color=#4A181B>$onebit</font> x2 <font color=#035103>&quot;3 4 10 6 8 9&quot;</font>]
+        <i><font color=#4b5d50># pass name, list of pins and list of parameters to Subcircuit constructor</font></i>
+        <b><font color=#923B23>next</font></b> twobit <font color=#4A181B>$pins</font> <font color=#4A181B>$params</font>
+    }
+}
+<i><font color=#4b5d50># create TWOBIT subcircuit definition instance</font></i>
+<b><font color=#923B23>set</font></b> twobit [TWOBIT new]
+<i><font color=#4b5d50># create class that represents FOURBIT subcircuit</font></i>
+<b><font color=#ca14ca>oo::class</font></b> create FOURBIT {
+    superclass Subcircuit
+    <b><font color=#ca14ca>constructor</font></b> {} {
+        <i><font color=#4b5d50># define external pins of subcircuit</font></i>
+        <b><font color=#923B23>set</font></b> pins {1 2 3 4 5 6 7 8 9 10 11 12 13 14 15}
+        <i><font color=#4b5d50># define input parameters of subcircuit</font></i>
+        <b><font color=#923B23>set</font></b> params {}
+        <i><font color=#4b5d50># add elements to subcircuit definition</font></i>
+        <b><font color=#923B23>global</font></b> variable twobit
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>XAuto</font></b> new <font color=#4A181B>$twobit</font> x1 <font color=#035103>&quot;1 2 3 4 9 10 13 16 15&quot;</font>]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>XAuto</font></b> new <font color=#4A181B>$twobit</font> x2 <font color=#035103>&quot;5 6 7 8 11 12 16 14 15&quot;</font>]
+        <i><font color=#4b5d50># pass name, list of pins and list of parameters to Subcircuit constructor</font></i>
+        <b><font color=#923B23>next</font></b> fourbit <font color=#4A181B>$pins</font> <font color=#4A181B>$params</font>
+    }
+}
+<i><font color=#4b5d50># create FOURBIT subcircuit definition instance</font></i>
+<b><font color=#923B23>set</font></b> fourbit [FOURBIT new]
+</pre>
+
+</figure><p class='ruff'>Next step is to initialize top circuit and add all subcircuit definitions to it:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create top-level circuit</font></i>
+<b><font color=#923B23>set</font></b> circuit [<b><font color=#923B23>Circuit</font></b> new {Four-bit adder}]
+<i><font color=#4b5d50># add elements to circuit</font></i>
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Tran</font></b> new 1e-9 10e-6]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Options</font></b> new {{noacct <font color=#463e11>-sw</font>}}]
+<font color=#4A181B>$circuit</font> add <font color=#4A181B>$nand</font>
+<font color=#4A181B>$circuit</font> add <font color=#4A181B>$onebit</font>
+<font color=#4A181B>$circuit</font> add <font color=#4A181B>$twobit</font>
+<font color=#4A181B>$circuit</font> add <font color=#4A181B>$fourbit</font>
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>XAuto</font></b> new <font color=#4A181B>$fourbit</font> x18 {1 2 3 4 5 6 7 8 9 10 11 12 0 13 99}]
+</pre>
+
+</figure><p class='ruff'>To properly see the circuit in action we define input signals to all eight inputs, as well as power:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> trtf 10e-9
+<b><font color=#923B23>set</font></b> tonStep 10e-9
+<b><font color=#923B23>set</font></b> perStep 50e-9
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new cc 99 0 5]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vpulse</font></b> new in1a 1 0 0 3 0 <font color=#4A181B>$trtf</font> <font color=#4A181B>$trtf</font> <font color=#4A181B>$tonStep</font> <font color=#4A181B>$perStep</font>]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vpulse</font></b> new in1b 2 0 0 3 0 <font color=#4A181B>$trtf</font> <font color=#4A181B>$trtf</font> [<b><font color=#923B23>*</font></b> <font color=#4A181B>$tonStep</font> 2] [<b><font color=#923B23>*</font></b> <font color=#4A181B>$perStep</font> 2]]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vpulse</font></b> new in2a 3 0 0 3 0 <font color=#4A181B>$trtf</font> <font color=#4A181B>$trtf</font> [<b><font color=#923B23>*</font></b> <font color=#4A181B>$tonStep</font> 4] [<b><font color=#923B23>*</font></b> <font color=#4A181B>$perStep</font> 4]]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vpulse</font></b> new in2b 4 0 0 3 0 <font color=#4A181B>$trtf</font> <font color=#4A181B>$trtf</font> [<b><font color=#923B23>*</font></b> <font color=#4A181B>$tonStep</font> 8] [<b><font color=#923B23>*</font></b> <font color=#4A181B>$perStep</font> 8]]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vpulse</font></b> new in3a 5 0 0 3 0 <font color=#4A181B>$trtf</font> <font color=#4A181B>$trtf</font> [<b><font color=#923B23>*</font></b> <font color=#4A181B>$tonStep</font> 16] [<b><font color=#923B23>*</font></b> <font color=#4A181B>$perStep</font> 16]]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vpulse</font></b> new in3b 6 0 0 3 0 <font color=#4A181B>$trtf</font> <font color=#4A181B>$trtf</font> [<b><font color=#923B23>*</font></b> <font color=#4A181B>$tonStep</font> 32] [<b><font color=#923B23>*</font></b> <font color=#4A181B>$perStep</font> 32]]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vpulse</font></b> new in4a 7 0 0 3 0 <font color=#4A181B>$trtf</font> <font color=#4A181B>$trtf</font> [<b><font color=#923B23>*</font></b> <font color=#4A181B>$tonStep</font> 64] [<b><font color=#923B23>*</font></b> <font color=#4A181B>$perStep</font> 64]]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vpulse</font></b> new in4b 8 0 0 3 0 <font color=#4A181B>$trtf</font> <font color=#4A181B>$trtf</font> [<b><font color=#923B23>*</font></b> <font color=#4A181B>$tonStep</font> 128] [<b><font color=#923B23>*</font></b> <font color=#4A181B>$perStep</font> 128]]
+</pre>
+
+</figure><p class='ruff'>Add load resistors:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new bit0 9 0 1e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new bit1 10 0 1e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new bit2 11 0 1e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new bit3 12 0 1e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new cout 13 0 1e3]
+</pre>
+
+</figure><p class='ruff'>Add semiconductor devices models:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$circuit</font> add [<b><font color=#923B23>DiodeModel</font></b> new dmod]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>BjtGPModel</font></b> new qmod npn <font color=#463e11>-bf</font> 75 <font color=#463e11>-rb</font> 100 <font color=#463e11>-cje</font> 1e-12 <font color=#463e11>-cjc</font> 3e-12]
+</pre>
+
+</figure><p class='ruff'>Now we can create simulator and run circuit:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50>#set simulator with default temporary directory</font></i>
+<b><font color=#923B23>set</font></b> simulator [<b><font color=#923B23>BatchLiveLog</font></b> new {batch1} {/usr/local/bin/}]
+<i><font color=#4b5d50># attach simulator object to circuit</font></i>
+<font color=#4A181B>$circuit</font> attachSimulator <font color=#4A181B>$simulator</font>
+<i><font color=#4b5d50># run circuit, read log and data</font></i>
+<font color=#4A181B>$circuit</font> runAndRead
+</pre>
+
+</figure><p class='ruff'>Now we read the data and plot it as usual:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># get data dict</font></i>
+<b><font color=#923B23>set</font></b> data [<font color=#4A181B>$circuit</font> getDataDict]
+<b><font color=#923B23>set</font></b> axis [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> time]
+<b><font color=#923B23>set</font></b> nodes [<b><font color=#923B23>list</font></b> 9 10 11 12]
+<b><font color=#923B23>foreach</font></b> node <font color=#4A181B>$nodes</font> {
+    <b><font color=#923B23>set</font></b> v<font color=#4A181B>$node</font> [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> v(<font color=#4A181B>$node</font>)]
+}
+<i><font color=#4b5d50># plot results with plotchart</font></i>
+<b><font color=#7d1c00>wm</font></b> geometry . 1600x1000
+<b><font color=#923B23>foreach</font></b> node <font color=#4A181B>$nodes</font> {
+    xyplot .xyp<font color=#4A181B>$node</font> <font color=#463e11>-xformat</font> <font color=#035103>&quot;%.2e&quot;</font> <font color=#463e11>-yformat</font> <font color=#035103>&quot;%.2e&quot;</font> <font color=#463e11>-xtext</font> <font color=#035103>&quot;time, s&quot;</font> <font color=#463e11>-ytext</font> <font color=#035103>&quot;v(<font color=#4A181B>${</font>node<font color=#4A181B>}</font>), V&quot;</font> <font color=#463e11>-ttk</font> 1 
+    <b><font color=#7d1c00>pack</font></b> .xyp<font color=#4A181B>$node</font> <font color=#463e11>-fill</font> both <font color=#463e11>-expand</font> true
+    <b><font color=#923B23>foreach</font></b> time <font color=#4A181B>$axis</font> yV<font color=#4A181B>$node</font> [<b><font color=#923B23>set</font></b> [<b><font color=#923B23>subst</font></b> v<font color=#4A181B>$node</font>]] {
+        <b><font color=#923B23>lappend</font></b> xyV<font color=#4A181B>$node</font> <font color=#4A181B>$time</font> [<b><font color=#923B23>set</font></b> [<b><font color=#923B23>subst</font></b> yV<font color=#4A181B>$node</font>]]
+    }
+    .xyp<font color=#4A181B>$node</font> add_data sf<font color=#4A181B>$node</font> [<b><font color=#923B23>set</font></b> [<b><font color=#923B23>subst</font></b> xyV<font color=#4A181B>$node</font>]] <font color=#463e11>-color</font> red
+}
+</pre>
+
+</figure><p class='ruff'><img src="assets/img/four_bit_adder_wvfm.png" alt="four_bit_adder_wvfm" /></p>
 </main><nav class='ruff-nav'><ul ><li class='ruff-toc1'><a style='padding-top:2px;' href='index.html'>Start page</a></li>
 <li class='ruff-toc1'><a href='index-docindex.html' accesskey='i'>Index</a></li>
 <hr>
@@ -494,5 +675,5 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-SemiconductorDevices.html'>SpiceGenTcl::Ngspice::SemiconductorDevices</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-Analyses.html'>SpiceGenTcl::Ngspice::Analyses</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-Simulators.html'>SpiceGenTcl::Ngspice::Simulators</a></li>
-<hr><li class='ruff-toc2'><a href='#::Tutorials-Netlist manipulations'>Netlist manipulations</a></li><li class='ruff-toc3'><a href='#::Tutorials-Delete element'>Delete element</a></li><li class='ruff-toc3'><a href='#::Tutorials-Get element'>Get element</a></li><li class='ruff-toc3'><a href='#::Tutorials-Print list of all elements'>Print list of all elements</a></li><li class='ruff-toc3'><a href='#::Tutorials-Temporarly remove of element'>Temporarly remove of element</a></li><li class='ruff-toc2'><a href='#::Tutorials-Subcircuit definition'>Subcircuit definition</a></li><li class='ruff-toc2'><a href='#::Tutorials-Diode current simualtion'>Diode current simualtion</a></li><li class='ruff-toc2'><a href='#::Tutorials-Diode capacitance simualtion'>Diode capacitance simualtion</a></li><li class='ruff-toc2'><a href='#::Tutorials-Transient simulation of ring oscillator'>Transient simulation of ring oscillator</a></li></ul></nav><footer class='ruff-layout-footer ruff-ft'><div style='float: right;'>Document generated by <a href='https://ruff.magicsplat.com'>Ruff!</a></div><div>&copy; George Yashin</div></footer>
+<hr><li class='ruff-toc2'><a href='#::Tutorials-Netlist manipulations'>Netlist manipulations</a></li><li class='ruff-toc3'><a href='#::Tutorials-Delete element'>Delete element</a></li><li class='ruff-toc3'><a href='#::Tutorials-Get element'>Get element</a></li><li class='ruff-toc3'><a href='#::Tutorials-Print list of all elements'>Print list of all elements</a></li><li class='ruff-toc3'><a href='#::Tutorials-Temporarly remove of element'>Temporarly remove of element</a></li><li class='ruff-toc2'><a href='#::Tutorials-Subcircuit definition'>Subcircuit definition</a></li><li class='ruff-toc2'><a href='#::Tutorials-Diode current simualtion'>Diode current simualtion</a></li><li class='ruff-toc2'><a href='#::Tutorials-Diode capacitance simualtion'>Diode capacitance simualtion</a></li><li class='ruff-toc2'><a href='#::Tutorials-Transient simulation of ring oscillator'>Transient simulation of ring oscillator</a></li><li class='ruff-toc2'><a href='#::Tutorials-Transient simulation of four-bit adder'>Transient simulation of four-bit adder</a></li></ul></nav><footer class='ruff-layout-footer ruff-ft'><div style='float: right;'>Document generated by <a href='https://ruff.magicsplat.com'>Ruff!</a></div><div>&copy; George Yashin</div></footer>
 </div></body></html>

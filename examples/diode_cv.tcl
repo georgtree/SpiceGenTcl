@@ -21,7 +21,7 @@ $circuit add [Ac new lin 1 1e5 1e5]
 # add voltage sweep
 set voltSweep [linspace 0 20.1 0.1]
 #set simulator with default 
-set simulator [BatchOutLog new {batch1} {/usr/local/bin/}]
+set simulator [BatchLiveLog new {batch1} {/usr/local/bin/}]
 # attach simulator object to circuit
 $circuit attachSimulator $simulator
 # loop in which we run simulation, change reverse biad and read the results

@@ -1,0 +1,71 @@
+**************** uncommented deck **************
+
+     1       1  switch_oscillator
+     0       2  .global gnd
+     2       3  .tran 50e-12 80e-9
+     3       4  .options method=gear maxord=3
+     4       5  .ic v(osc_out)=0.25
+     5       6  .subckt inverter in out vdd dgnd
+     6       7  cl out dgnd 0.1e-12
+     7       8  c2 out vdd 0.1e-12
+     8       9  sp out vdd vdd in swswitch
+     9      10  sn out dgnd in dgnd switchn
+    10      11  .ends
+    11      12  vdd vdd2 0 3
+    12      13  vmeasure vdd2 vdd 0
+    13      14  cvdd vdd 0 1e-18
+    14      15  xx2 n1 n2 vdd 0 inverter
+    15      16  xx3 n2 n3 vdd 0 inverter
+    16      17  xx4 n3 n4 vdd 0 inverter
+    17      18  xx5 n4 n5 vdd 0 inverter
+    18      19  xx6 n5 n6 vdd 0 inverter
+    19      20  xx7 n6 n7 vdd 0 inverter
+    20      21  xx8 n7 n8 vdd 0 inverter
+    21      22  xx9 n8 n9 vdd 0 inverter
+    22      23  xx10 n9 n10 vdd 0 inverter
+    23      24  xx11 n10 n11 vdd 0 inverter
+    24      25  xx12 n11 n12 vdd 0 inverter
+    25      26  xx13 n12 n13 vdd 0 inverter
+    26      27  xx14 n13 n14 vdd 0 inverter
+    27      28  xx15 n14 n15 vdd 0 inverter
+    28      29  xx16 n15 n16 vdd 0 inverter
+    29      30  xx18 osc_out n1 vdd 0 inverter
+    30      31  xx19 n16 osc_out vdd 0 inverter
+    31      32  .model swswitch sw(vt=1 vh=0.1 ron=1e3 roff=1e12)
+    32      33  .model switchn sw(vt=1 vh=0.1 ron=1e3 roff=1e12)
+
+****************** complete deck ***************
+
+     1       1  switch_oscillator
+     0       2  .global gnd
+     2       3  .tran 50e-12 80e-9
+     3       4  .options method=gear maxord=3
+     4       5  .ic v(osc_out)=0.25
+     5       6  .subckt inverter in out vdd dgnd
+     6       7  cl out dgnd 0.1e-12
+     7       8  c2 out vdd 0.1e-12
+     8       9  sp out vdd vdd in swswitch
+     9      10  sn out dgnd in dgnd switchn
+    10      11  .ends
+    11      12  vdd vdd2 0 3
+    12      13  vmeasure vdd2 vdd 0
+    13      14  cvdd vdd 0 1e-18
+    14      15  xx2 n1 n2 vdd 0 inverter
+    15      16  xx3 n2 n3 vdd 0 inverter
+    16      17  xx4 n3 n4 vdd 0 inverter
+    17      18  xx5 n4 n5 vdd 0 inverter
+    18      19  xx6 n5 n6 vdd 0 inverter
+    19      20  xx7 n6 n7 vdd 0 inverter
+    20      21  xx8 n7 n8 vdd 0 inverter
+    21      22  xx9 n8 n9 vdd 0 inverter
+    22      23  xx10 n9 n10 vdd 0 inverter
+    23      24  xx11 n10 n11 vdd 0 inverter
+    24      25  xx12 n11 n12 vdd 0 inverter
+    25      26  xx13 n12 n13 vdd 0 inverter
+    26      27  xx14 n13 n14 vdd 0 inverter
+    27      28  xx15 n14 n15 vdd 0 inverter
+    28      29  xx16 n15 n16 vdd 0 inverter
+    29      30  xx18 osc_out n1 vdd 0 inverter
+    30      31  xx19 n16 osc_out vdd 0 inverter
+    31      32  .model swswitch sw(vt=1 vh=0.1 ron=1e3 roff=1e12)
+    32      33  .model switchn sw(vt=1 vh=0.1 ron=1e3 roff=1e12)

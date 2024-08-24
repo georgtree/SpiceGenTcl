@@ -2,7 +2,7 @@ package require Tk
 
 namespace eval SpiceGenTcl::Ngspice::Simulators {
     
-    namespace export Batch BatchOutLog
+    namespace export Batch BatchLiveLog
     
     oo::class create Batch {
         # this class represent batch simulation of ngspice
@@ -100,13 +100,13 @@ namespace eval SpiceGenTcl::Ngspice::Simulators {
         }
         method getData {} {
             # Returns data of last completed simulation.
-            # Returns: object of RawFile class
+            # Returns: object of `RawFile` class
             my variable Data
             return $Data
         }
     }
     
-    oo::class create BatchOutLog {
+    oo::class create BatchLiveLog {
         # this class represent batch simulation of ngspice
         superclass SpiceGenTcl::Ngspice::Simulators::Batch
         method runAndRead {circuitStr} {
