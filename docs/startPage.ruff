@@ -1,0 +1,151 @@
+variable startPage {
+    # SpiceGenTcl
+
+    This package provides Tcl interface to different SPICE and SPICE-like simulator, Ngspice, Xyce.
+    It was inspired by [PySpice](https://github.com/PySpice-org/PySpice) project, object-oriented interface to SPICE-like simulators written in Python.
+
+    ## General concept
+    The general concept of package is building netlist by using Tcl scripts. 
+    It is based on TclOO object-oriented system, where all elements are represented by objects, 
+    including elements, models, analyses, waveforms, netlists, etc. After netlist definition you can run simulation, 
+    read result data and then process/display data using Tcl scripting language. 
+
+    This approach is different from [Tclspice](https://ngspice.sourceforge.io/tclspice.html) extension that comes
+    together with Ngspice and tightly binded to internal structures of simulator. SpiceGenTcl provides more flexible approach 
+    that could be extended for applying to different simulators that follow the concept of netlists with similar syntax.
+    
+    ## Usage examples
+    SpiceGenTcl can be used if you need:
+    - automate some repetitive simulation tasks, and you don't like [Nutmeg](https://ngspice.sourceforge.io/ngspice-control-language-tutorial.html) syntax (SPICE standard scripting language)
+    - postprocess output waveforms and data
+    - change netlist structure on the fly
+    - simulate different models in the same circuit setup
+    - run circuit optimization with parameters variations as well as variations in circuit topology
+    
+    ## Install and dependencies
+    To install the package you should extract archive with source code and add path of the package folder to `auto_path`
+    variable:
+    ```tcl
+    lappend auto_path "path to SpiceGenTcl package"
+    ```
+    Package is written in pure Tcl with relying on Tcllib and Tklib. The only necessary external dependency is 
+    the simulator itself.
+
+    - [Ngspice](https://ngspice.sourceforge.io/download.html)
+    - [Tcllib](https://www.tcl.tk/software/tcllib/)
+    - [Tklib](https://www.tcl.tk/software/tklib/)
+
+    ## Documentation and tutorials
+
+    Documentation could be found [here](https://georgtree.github.io/SpiceGenTcl/). 
+    
+    Tutorials describing different examples can be found [here](https://georgtree.github.io/SpiceGenTcl/index-Tutorials.html).
+    
+    It was generated with [ruff!](https://ruff.magicsplat.com/).
+    
+    Tcl syntax highlightning was done with [hl_tcl](https://github.com/aplsimple/hl_tcl).
+
+    ## Quick start
+    
+    - <font color="red"> **Important note 1**</font>: internally, all device names, parameters, nodes, types, reference names, data vector names, etc., 
+    are converted to lowercase after object instantiation. You can enter them in any case, but access by name is possible only in lowercase. 
+    The reason for that is the fact that most SPICE simulators are case-insensitive. So, in order to avoid ambiguity in Tcl code, 
+    in situations where the simulator interprets names with mixed case as the same, with lowercase transformation we can check before netlisting 
+    that we don't have duplicate names in the top-level circuit.
+    - <font color="red"> **Important note 2**</font>: The package wasn't supposed to be used with the `.control` section in Ngspice or `.step` statement in LTspice, 
+    or multiple DC sweeps, and does not support the reading of parametric sweep in raw data. The idea of the package is to put all such work on a Tcl script, without the 
+    usage of internal scripting capabilities of the simulator.
+    
+    ### Packages imports
+    
+    The first step is import of package:
+    ```tcl
+    package require SpiceGenTcl
+    ```
+    Import all commands from ::SpiceGenTcl:
+    ```tcl
+    namespace import ::SpiceGenTcl::*
+    ```
+    One of commands is `importNgspice`, by calling this command we can import all
+    commands related to Ngspice simulator, and you don't need to add prefix `::SpiceGenTcl::Ngspice`
+    before any command. So we do it:
+    ```tcl
+    importNgspice
+    ```
+    To plot results of simulation we also import package `xyplot` from Tklib:
+    ```tcl
+    package require xyplot
+    ```
+    
+    ### Circuit definition
+    
+    Let's try to define simple resistor divider circuit with following netlist:
+    ```
+    voltage divider netlist
+    v1 in 0 1
+    r1 in out 1e3
+    r2 out 0 2e3
+    .dc v1 0 5 0.1
+    ```
+    <img src="assets/img/resistor_divider_cir.png" alt="drawing" width="400"/>
+ 
+    
+    First step is creating circuit object:
+    ```tcl
+    set circuit [Circuit new {voltage divider netlist}]
+    ```
+    `Circuit` command creating a new object of class `Circuit`, it is imported from `::SpiceGenTcl` namespace and represents 
+    top-level circuit. The only argument we supply to it is the name of the circuit 
+    that will be printed at first line of netlist.
+
+    The next step is building netlist by addding elements to top circuit object:
+    ```tcl
+    $circuit add [Vdc new 1 in 0 1]
+    $circuit add [R new 1 in out 1e3]
+    $circuit add [R new 2 out 0 2e3]
+    $circuit add [Dc new v1 0 5 0.1]
+    ```
+    `Circuit` class instance with reference stored in `circuit` variable has `add` method that appends arguments object reference
+    to it. Object creating commands `Vdc`, `R` and `Dc` represent  DC voltage source, 
+    basic resistor and DC analysis accordingly, are imported from `::SpiceGenTcl::Ngspice:Sources`, `::SpiceGenTcl::Ngspice::BasicElements` 
+    and `::SpiceGenTcl::Ngspice::Analyses` namespaces.
+
+    Together with `new` subcommand we supply basic arguments of element, for example, in `R` command we supply name '1', 
+    name of net connected to plus node 'in', name of net connected to minus node '0' (actually global ground), and resistance value '1e3'.
+    
+    The last necessary step is to create `Simulator` object with command `Batch` from `::SpiceGenTcl::Ngspice` namespace and attach it to `Circuit` object:
+    ```tcl
+    set simulator [Batch new {batch1} {/usr/local/bin/}]
+    $circuit attachSimulator $simulator
+    ```
+    Now we are ready to run simulation:
+    ```tcl
+    $circuit runAndRead
+    ```
+    After simulation we can read result data. We use method `getDataDict` to get dictionary with keys as names of result vectors:
+    ```tcl
+    set data [$circuit getDataDict]
+    ```
+    The we can get vectors v(in) and v(out) from dictionary `data`:
+    ```tcl
+    set axis [dict get $data v(in)]
+    set trace [dict get $data v(out)]
+    ```
+    
+    ### Plotting data
+    
+    To plot results we use [`xyplot`](https://core.tcl-lang.org/tklib/file?name=modules/plotchart/xyplot.tcl) package from Tklib:
+    ```tcl
+    wm geometry . 600x400
+    set xyp [xyplot .xyp -xformat "%5.0f" -yformat "%5.0f" -title "Voltage divider simulation result" -xtext "v(in), V" -ytext "voltage, V"]
+    pack $xyp -fill both -expand true
+    foreach x $axis y $trace {
+        lappend xydata $x $y
+    }
+    set s1 [$xyp add_data sf1 $xydata -legend "v(out)" -color red]
+    ```
+    Results:
+    
+    ![resistor_divider](assets/img/resistor_divider.png)
+    
+}

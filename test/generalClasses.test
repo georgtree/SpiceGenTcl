@@ -1,0 +1,1023 @@
+lappend auto_path "../"
+package require tcltest
+package require SpiceGenTcl
+namespace import ::tcltest::*
+namespace import ::SpiceGenTcl::*
+set ngspiceNameSpc [namespace children ::SpiceGenTcl::Ngspice]
+foreach nameSpc $ngspiceNameSpc {
+    namespace import ${nameSpc}::*
+}
+
+    # ________________________ DuplChecker class tests _________________________ #
+    
+test testDuplCheckerClass-1.1 {test of duplListCheck procedure} -setup {
+    set checker [::SpiceGenTcl::DuplChecker new]
+    set testList [list a b f c d e f ]
+} -body {
+    set result [$checker duplListCheck $testList]
+} -result 1
+
+test testDuplCheckerClass-1.2 {test of duplListCheck procedure} -setup {
+    set checker [::SpiceGenTcl::DuplChecker new]
+    set testList [list a b c d e f g]
+} -body {
+    set result [$checker duplListCheck $testList]
+} -result 0
+
+    # ________________________ ParamNameChecker class tests _________________________ #
+
+test testParamNameCheckerClass-1.1 {test of checkName procedure} -setup {
+    set checker [::SpiceGenTcl::ParamNameChecker new]
+    set testName {u0}
+} -body {
+    set result [$checker checkName $testName]
+} -result {}
+
+test testParamNameCheckerClass-1.2 {test of checkName procedure} -setup {
+    set checker [::SpiceGenTcl::ParamNameChecker new]
+    set testName {0p}
+} -body {
+    catch {[$checker checkName $testName]} errorStr
+    return $errorStr
+} -result "Parameter name '0p' is not a valid name"
+
+test testParamNameCheckerClass-1.3 {test of checkName procedure} -setup {
+    set checker [::SpiceGenTcl::ParamNameChecker new]
+    set testName {}
+} -body {
+    catch {[$checker checkName $testName]} errorStr
+    return $errorStr
+} -result "Parameter must have a name, empty string was provided"    
+
+test testParamNameCheckerClass-1.4 {test of checkName procedure} -setup {
+    set checker [::SpiceGenTcl::ParamNameChecker new]
+    set testName {u0_}
+} -body {
+    set result [$checker checkName $testName]
+} -result {}
+
+    # ________________________ ValueChecker class tests _________________________ #
+    
+test testValueCheckerClass-1.1 {test of checkValue procedure} -setup {
+    set checker [::SpiceGenTcl::ValueChecker new]
+    set testValue 1.0
+} -body {
+    set result [$checker checkValue $testValue]
+} -result {}  
+
+test testValueCheckerClass-1.2 {test of checkValue procedure} -setup {
+    set checker [::SpiceGenTcl::ValueChecker new]
+    set testValue 1.0e3
+} -body {
+    set result [$checker checkValue $testValue]
+} -result {}  
+
+test testValueCheckerClass-1.3 {test of checkValue procedure} -setup {
+    set checker [::SpiceGenTcl::ValueChecker new]
+    set testValue 1.0e-3
+} -body {
+    set result [$checker checkValue $testValue]
+} -result {}
+    
+test testValueCheckerClass-1.4 {test of checkValue procedure} -setup {
+    set checker [::SpiceGenTcl::ValueChecker new]
+    set testValue -1.0e-3
+} -body {
+    set result [$checker checkValue $testValue]
+} -result {}
+    
+test testValueCheckerClass-1.5 {test of checkValue procedure} -setup {
+    set checker [::SpiceGenTcl::ValueChecker new]
+    set testValue -5.667e+3
+} -body {
+    set result [$checker checkValue $testValue]
+} -result {}
+
+test testValueCheckerClass-1.6 {test of checkValue procedure} -setup {
+    set checker [::SpiceGenTcl::ValueChecker new]
+    set testValue 1.e-3
+} -body {
+    catch {[$checker checkValue $testValue]} errorStr
+    return $errorStr
+} -result "Value '1.e-3' is not a valid value"    
+    
+test testValueCheckerClass-1.7 {test of checkValue procedure} -setup {
+    set checker [::SpiceGenTcl::ValueChecker new]
+    set testValue {01.e-3}
+} -body {
+    catch {[$checker checkValue $testValue]} errorStr
+    return $errorStr
+} -result "Value '01.e-3' is not a valid value" 
+    
+test testValueCheckerClass-1.8 {test of checkValue procedure} -setup {
+    set checker [::SpiceGenTcl::ValueChecker new]
+    set testValue -5b
+} -body {
+    catch {[$checker checkValue $testValue]} errorStr
+    return $errorStr
+} -result "Value '-5b' is not a valid value" 
+    
+    # ________________________ Pin class tests _________________________ #
+
+test testPinClass-1.1 {test creation of Pin class instance and getName interface} -setup {
+    set pinInst [Pin new drain netd]
+} -body {
+    set result [$pinInst getName]
+} -result drain
+
+test testPinClass-1.2 {test creation of Pin class instance and getName interface} -setup {
+    set pinInst [Pin new 23 netd]
+} -body {
+    set result [$pinInst getName]
+} -result 23
+
+test testPinClass-1.3 {test creation of Pin class instance and getNodeName interface} -setup {
+    set pinInst [Pin new drain netd]
+} -body {
+    set result [$pinInst getNodeName]
+} -result netd
+
+test testPinClass-1.4 {test creation of Pin class instance and genSPICEStr interface} -setup {
+    set pinInst [Pin new drain netd]
+} -body {
+    set result [$pinInst genSPICEString]
+} -result netd
+
+test testPinClass-1.5 {test creation of Pin class instance and checkFloating interface} -setup {
+    set pinInst [Pin new drain {}]
+} -body {
+    set result [$pinInst checkFloating]
+} -result true
+
+test testPinClass-1.6 {test creation of Pin class instance and check how genSPICEStr handling floating pin} -setup {
+    set pinInst [Pin new drain {}]
+} -body {
+    catch {$pinInst genSPICEString} errorStr
+    return $errorStr
+} -result "Pin 'drain' is not connected to the node so can't be netlisted"
+
+test testPinClass-2.1 {test creation of Pin class instance and handling wrong symbols in the name}  -body {
+    catch {set pinInst [Pin new dr-ain netd]} errorStr
+    return $errorStr
+} -result "Pin name 'dr-ain' is not a valid name"
+
+test testPinClass-2.2 {test creation of Pin class instance and handling wrong symbols in the name}  -body {
+    catch {set pinInst [Pin new drain. netd]} errorStr
+    return $errorStr
+} -result "Pin name 'drain.' is not a valid name"
+
+test testPinClass-2.3 {test creation of Pin class instance and handling wrong symbols in the name}  -body {
+    catch {set pinInst [Pin new !drain netd]} errorStr
+    return $errorStr
+} -result "Pin name '!drain' is not a valid name"
+
+test testPinClass-2.4 {test creation of Pin class instance and handling empty string in the name}  -body {
+    catch {set pinInst [Pin new "" netd]} errorStr
+    return $errorStr
+} -result "Pin must have a name, empty string was provided"
+
+test testPinClass-3.1 {test creation of Pin class instance and setNodeName interface} -setup {
+    set pinInst [Pin new drain netd]
+} -body {
+    $pinInst setNodeName net1
+    set result [$pinInst getNodeName]
+} -result net1
+    
+test testPinClass-3.2 {test creation of Pin class instance and setNodeName interface with wrong node name} -setup {
+    set pinInst [Pin new drain netd]
+} -body {
+    catch {$pinInst setNodeName n-et1} errorStr
+    return $errorStr
+} -result "Node name 'n-et1' is not a valid name"
+    
+test testPinClass-3.3 {test creation of Pin class instance and unsetNodeName interface} -setup {
+    set pinInst [Pin new drain netd]
+} -body {
+    $pinInst unsetNodeName
+    set result [$pinInst getNodeName]
+} -result {}
+    
+test testPinClass-3.4 {test creation of Pin class instance and getName interface} -setup {
+    set pinInst [Pin new drain_ netd_]
+} -body {
+    set result [$pinInst getName]
+} -result drain_
+    
+    # ________________________ Parameter class tests _________________________ #
+
+test testParameterClass-1.1 {test creation of Parameter class instance and getName interface} -setup {
+    set parInst [Parameter new VTH 0.7]
+} -body {
+    set result [$parInst getName]
+} -result vth
+
+test testParameterClass-1.2 {test creation of Parameter class instance and getValue interface} -setup {
+    set parInst [Parameter new VTH 0.7]
+} -body {
+    set result [$parInst getValue]
+} -result 0.7
+
+test testParameterClass-1.3 {test creation of Parameter class instance and getValue interface} -setup {
+    set parInst [Parameter new VTH 0.007e+3]
+} -body {
+    set result [$parInst getValue]
+} -result 0.007e+3
+
+test testParameterClass-2.1 {test creation of Parameter class instance and handling wrong symbols in the name}  -body {
+    catch {set parInst [Parameter new VT.H 0.7]} errorStr
+    return $errorStr
+} -result "Parameter name 'VT.H' is not a valid name"
+
+test testParameterClass-2.2 {test creation of Parameter class instance and handling empty string in the name}  -body {
+    catch {set parInst [Parameter new "" 0.7]} errorStr
+    return $errorStr
+} -result "Parameter must have a name, empty string was provided"
+
+test testParameterClass-2.3 {test creation of Parameter class instance and handling wrong form of the value}  -body {
+    catch {set parInst [Parameter new VTH 0.7e-]} errorStr
+    return $errorStr
+} -result "Value '0.7e-' is not a valid value"
+
+test testParameterClass-3.1 {test creation of Parameter class instance and setValue interface} -setup {
+    set parInst [Parameter new VTH 0.7]
+    $parInst setValue 1.0
+} -body {
+    set result [$parInst getValue]
+} -result 1.0
+
+test testParameterClass-3.2 {test creation of Parameter class instance and setValue interface with wrong value string} -setup {
+    set parInst [Parameter new VTH 0.7]
+} -body {
+    catch {$parInst setValue 1..0} errorStr
+    return $errorStr
+} -result "Value '1..0' is not a valid value"
+
+    # ________________________ ParameterWDefault class tests _________________________ #
+
+test testParameterDefaultClass-1.1 {test creation of ParameterDefault class instance and getName interface} -setup {
+    set parInst [ParameterDefault new U0 100 200]
+} -body {
+    set result [$parInst getName]
+} -result u0
+
+test testParameterDefaultClass-1.2 {test creation of ParameterDefault class instance and getValue interface} -setup {
+    set parInst [ParameterDefault new U0 100 200]
+} -body {
+    set result [$parInst getValue]
+} -result 100
+
+test testParameterDefaultClass-1.3 {test creation of ParameterDefault class instance and getDefValue interface} -setup {
+    set parInst [ParameterDefault new U0 100 200]
+} -body {
+    set result [$parInst getDefValue]
+} -result 200
+
+test testParameterDefaultClass-1.4 {test creation of ParameterDefault class instance and resetValue method} -setup {
+    set parInst [ParameterDefault new U0 100 200]
+    $parInst resetValue
+} -body {
+    set result [$parInst getValue]
+} -result 200
+    
+    # ________________________ ParameterSwitch class tests _________________________ #
+
+test testParameterSwitchClass-1.1 {test creation of ParameterSwitch class instance and getName interface} -setup {
+    set parInst [ParameterSwitch new U0]
+} -body {
+    set result [$parInst getName]
+} -result u0
+
+test testParameterSwitchClass-1.2 {test creation of ParameterSwitch class instance and genSPICEString interface} -setup {
+    set parInst [ParameterSwitch new U0]
+} -body {
+    set result [$parInst genSPICEString]
+} -result u0
+    
+    # ________________________ ParameterPositional class tests _________________________ #
+
+test testParameterPositionalClass-1.1 {test creation of ParameterPositional class instance and getName interface} -setup {
+    set parInst [ParameterPositional new U0 100]
+} -body {
+    set result [$parInst getName]
+} -result u0
+
+test testParameterPositionalClass-1.2 {test creation of ParameterPositional class instance and genSPICEString interface} -setup {
+    set parInst [ParameterPositional new U0 100]
+} -body {
+    set result [$parInst genSPICEString]
+} -result 100
+    
+    # ________________________ ParameterEquation class tests _________________________ #
+
+test testParameterEquationClass-1.1 {test creation of ParameterEquation class instance and getValue interface} -setup {
+    set parInst [ParameterEquation new U0T {temp*2.1+U0}]
+} -body {
+    set result [$parInst getValue]
+} -result "temp*2.1+U0"   
+    
+test testParameterEquationClass-1.2 {test creation of ParameterEquation class instance and genSPICEStr interface} -setup {
+    set parInst [ParameterEquation new U0T {temp*2.1+U0}]
+} -body {
+    set result [$parInst genSPICEString]
+} -result "u0t=\{temp*2.1+U0\}" 
+    
+test testParameterEquationClass-1.3 {test creation of ParameterEquation class instance with empty value} -body {
+    catch {ParameterEquation new U0T {}} errorStr
+    return $errorStr
+} -result "Parameter 'u0t' equation can't be empty" 
+
+    # ________________________ ParameterPositionalEquation class tests _________________________ #
+
+test testParameterPositionalEquationClass-1.1 {test creation of ParameterPositionalEquation class instance and getValue interface} -setup {
+    set parInst [ParameterPositionalEquation new U0T {temp*2.1+U0}]
+} -body {
+    set result [$parInst genSPICEString]
+} -result "\{temp*2.1+U0\}"
+    
+    # ________________________ Device class tests _________________________ #
+
+test testDeviceClass-1.1 {test creation of Device class instance and getName interface} -setup {
+    set elemInst [Device new M1 {{d netg} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
+} -body {
+    set result [$elemInst getName]
+} -result m1
+
+test testDeviceClass-1.2 {test creation of Device class instance and getPins interface} -setup {
+    set elemInst [Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
+} -body {
+    set result [$elemInst getPins]
+} -result [dict create d netd g netg s nets]
+
+test testDeviceClass-1.3 {test creation of Device class instance and handling duplicated pins names} -body {
+    catch {set elemInst [Device new M1 {{d netg} {g netg} {s nets} {s netg}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]} errorStr
+    return $errorStr
+} -result "Pins list 'd g s s' has already contains pin with name 's'"
+
+test testDeviceClass-1.4 {test creation of Device class instance and getParams interface} -setup {
+    set elemInst [Device new M1 {{d netg} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
+} -body {
+    set result [$elemInst getParams]
+} -result [dict create vth0 0.7 u0 100 k1 1.5e-3]
+
+test testDeviceClass-1.5 {test creation of Device class instance and handling duplicated parameters names} -body {
+    catch {set elemInst [Device new M1 {{d netg} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3} {VTH0 0.2}}]} errorStr
+    return $errorStr
+} -result "Parameters list 'vth0 u0 k1 vth0' has already contains parameter with name 'vth0'"
+
+test testDeviceClass-1.6 {test creation of Device class instance and handling wrong reference name} -body {
+    catch {set elemInst [Device new 11 {{d netg} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]} errorStr
+    return $errorStr
+} -result "Reference name '11' is not a valid name"
+
+test testDeviceClass-1.7 {test creation of Device class instance and handling wrong reference name} -body {
+    catch {set elemInst [Device new M1. {{d netg} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]} errorStr
+    return $errorStr
+} -result "Reference name 'M1.' is not a valid name"
+
+test testDeviceClass-1.8 {test creation of Device class instance and addParam interface} -setup {
+    set elemInst [Device new M1 {{d netg} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
+} -body {
+    $elemInst addParam K2 -1.2e-4
+    set result [$elemInst getParams]
+} -result [dict create vth0 0.7 u0 100 k1 1.5e-3 k2 -1.2e-4]
+
+test testDeviceClass-1.9 {test creation of Device class instance and deleteParam interface} -setup {
+    set elemInst [Device new M1 {{d netg} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
+} -body {
+    $elemInst deleteParam vth0
+    set result [$elemInst getParams]
+} -result [dict create u0 100 k1 1.5e-3]
+
+test testDeviceClass-2.1 {test creation of Device class instance and test string generation for SPICE netlist} -setup {
+    set elemInst [Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
+} -body {
+    set result [$elemInst genSPICEString]
+} -result "m1 netd netg nets vth0=0.7 u0=100 k1=1.5e-3"
+
+test testDeviceClass-2.2 {test creation of Device class instance and test setPinNodeName} -setup {
+    set elemInst [Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
+    $elemInst setPinNodeName g n123
+} -body {
+    set result [$elemInst getPins]
+} -result [dict create d netd g n123 s nets]
+
+test testDeviceClass-2.3 {test creation of Device class instance and test setPinNodeName with pin name not in the pin list of device} -setup {
+    set elemInst [Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
+} -body {
+    catch {$elemInst setPinNodeName p n123} errorStr
+    return $errorStr
+} -result "Pin with name 'p' was not found in device's 'm1' list of pins 'd g s'"
+
+test testDeviceClass-2.4 {test creation of Device class instance and test setParamValue} -setup {
+    set elemInst [Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
+    $elemInst setParamValue vth0 1.0
+} -body {
+    set result [$elemInst getParams]
+} -result [dict create vth0 1.0 u0 100 k1 1.5e-3]
+
+test testDeviceClass-2.5 {test creation of Device class instance and test setParamValue with parameter name not in the parameter list of device} -setup {
+    set elemInst [Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
+} -body {
+    catch {$elemInst setParamValue VTH01 1.0} errorStr
+    return $errorStr
+} -result "Parameter with name 'vth01' was not found in device's 'm1' list of parameters 'vth0 u0 k1'"
+
+test testDeviceClass-2.6 {test creation of Device class instance and test deleteParam with parameter name not in the parameter list of device} -setup {
+    set elemInst [Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
+} -body {
+    catch {$elemInst deleteParam VTH01} errorStr
+    return $errorStr
+} -result "Parameter with name 'vth01' was not found in device's 'm1' list of parameters 'vth0 u0 k1'"
+
+test testDeviceClass-2.7 {test creation of Device class instance and test string generation for SPICE netlist with positional parameter} -setup {
+    set elemInst [Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 100 -pos} {K1 1.5e-3}}]
+} -body {
+    set result [$elemInst genSPICEString]
+} -result "m1 netd netg nets vth0=0.7 100 k1=1.5e-3"
+
+test testDeviceClass-2.8 {test creation of Device class instance and test string generation for SPICE netlist with positional equation parameter} -setup {
+    set elemInst [Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 {u1+u2} -poseq} {K1 1.5e-3}}]
+} -body {
+    set result [$elemInst genSPICEString]
+} -result "m1 netd netg nets vth0=0.7 {u1+u2} k1=1.5e-3"
+
+test testDeviceClass-2.9 {test creation of Device class instance and test string generation for SPICE netlist with equation parameter} -setup {
+    set elemInst [Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 {u1+u2} -eq} {K1 1.5e-3}}]
+} -body {
+    set result [$elemInst genSPICEString]
+} -result "m1 netd netg nets vth0=0.7 u0={u1+u2} k1=1.5e-3"
+
+test testDeviceClass-2.10 {test creation of Device class instance and test string generation for SPICE netlist with unconnected pin} -setup {
+    set elemInst [Device new M1 {{d netd} {g netg} {s {}}} {{VTH0 0.7} {U0 100 -pos} {K1 1.5e-3}}]
+} -body {
+    catch {$elemInst genSPICEString} errorStr
+    return $errorStr
+} -result "Device 'm1' can't be netlisted because 's' pin is floating"
+
+test testDeviceClass-2.11 {test creation of Device class instance and checkFloatingPins interface} -setup {
+    set elemInst [Device new M1 {{d netd} {g {}} {s nets} {p {}}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
+} -body {
+    set result [$elemInst checkFloatingPins]
+} -result [list g p]
+
+    # ________________________ DeviceModel class tests _________________________ #
+
+test testDeviceModelClass-1.1 {test creation of DeviceModel class instance and getName interface} -setup {
+    set elemInst [DeviceModel new M1 {{d netg} {g netg} {s nets}} nmos1 {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
+} -body {
+    set result [$elemInst getName]
+} -result m1
+
+test testDeviceModelClass-1.2 {test creation of DeviceModel class instance and getPins interface} -setup {
+    set elemInst [DeviceModel new M1 {{d netd} {g netg} {s nets}} nmos1 {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
+} -body {
+    set result [$elemInst getPins]
+} -result [dict create d netd g netg s nets]
+
+test testDeviceModelClass-1.3 {test creation of DeviceModel class instance and getName interface} -setup {
+    set elemInst [DeviceModel new M1 {{d netd} {g netg} {s nets}} nmos1 {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
+} -body {
+    set result [$elemInst getModelName]
+} -result nmos1
+
+test testDeviceModelClass-1.4 {test creation of DeviceModel class instance and getParams interface} -setup {
+    set elemInst [DeviceModel new M1 {{d netd} {g netg} {s nets}} nmos1 {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
+} -body {
+    set result [$elemInst getParams]
+} -result [dict create vth0 0.7 u0 100 k1 1.5e-3]
+
+test testDeviceModelClass-2.1 {test creation of DeviceModel class instance and test string generation for SPICE netlist} -setup {
+    set elemInst [DeviceModel new M1 {{d netd} {g netg} {s nets}} nmos1 {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
+} -body {
+    set result [$elemInst genSPICEString]
+} -result "m1 netd netg nets nmos1 vth0=0.7 u0=100 k1=1.5e-3"
+
+    # ________________________ Model class tests _________________________ #
+    
+test testModelClass-1.1 {test creation of Model class instance and getType interface} -setup {
+    set modelInst [Model new MOD1 NMOS {{VTH0 0.7} {U0 100} {VTH1 1} {K1 1.5e-3}}]
+} -body {
+    set result [$modelInst getType]
+} -result nmos
+
+test testModelClass-1.2 {test creation of Model class instance and getParams interface} -setup {
+    set modelInst [Model new MOD1 NMOS {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
+} -body {
+    set result [$modelInst getParams]
+} -result [dict create vth0 0.7 u0 100 k1 1.5e-3]
+
+test testModelClass-1.3 {test creation of Model class instance and genSPICEString interface} -setup {
+    set modelInst [Model new MOD1 NMOS {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
+} -body {
+    set result [$modelInst genSPICEString]
+} -result ".model mod1 nmos(vth0=0.7 u0=100 k1=1.5e-3)"
+
+test testModelClass-1.4 {test creation of Model class instance and genSPICEString interface} -setup {
+    set modelInst [Model new MOD1 NMOS {{VTH0 0.7} {U0 v2*vb/2 -eq} {K1 1.5e-3}}]
+} -body {
+    set result [$modelInst genSPICEString]
+} -result ".model mod1 nmos(vth0=0.7 u0=\{v2*vb/2\} k1=1.5e-3)"
+
+    # ________________________ RawString class tests _________________________ #
+    
+test testRawStringClass-1.1 {test creation of RawString class instance and genSPICEString interface} -setup {
+    set raw [RawString new {arbitary string}]
+} -body {
+    set result [$raw genSPICEString]
+} -result "arbitary string"
+
+test testRawStringClass-1.2 {test creation of RawString class instance with -name argument and getName interface} -setup {
+    set raw [RawString new {arbitary string} -name raw1]
+} -body {
+    set result [$raw getName]
+} -result "raw1"
+
+#test testRawStringClass-1.3 {test creation of RawString class instance without -name argument and getName interface} -setup {
+#    set raw [RawString new {arbitary string}]
+#} -body {
+#    set result [$raw getName]
+#} -result $raw
+
+    # ________________________ Comment class tests _________________________ #
+    
+test testCommentClass-1.1 {test creation of Comment class instance and genSPICEString interface} -setup {
+    set raw [Comment new {comment string}]
+} -body {
+    set result [$raw genSPICEString]
+} -result "*comment string"
+
+test testCommentClass-1.2 {test creation of Comment class instance and genSPICEString interface with multiline comment} -setup {
+    set raw [Comment new {comment string1
+comment string2
+comment string3}]
+} -body {
+    set result [$raw genSPICEString]
+} -result {*comment string1
+*comment string2
+*comment string3}
+
+    # ________________________ Temp class tests _________________________ #
+    
+test testTempClass-1.1 {test creation of Temp class instance and genSPICEString interface} -setup {
+    set temp [Temp new 10]
+} -body {
+    set result [$temp genSPICEString]
+} -result ".temp 10"
+    
+test testTempClass-1.2 {test creation of Temp class instance and genSPICEString interface} -setup {
+    set temp [Temp new temp -eq]
+} -body {
+    set result [$temp genSPICEString]
+} -result ".temp \{temp\}"
+    
+test testTempClass-1.3 {test creation of Temp class instance and getValue interface} -setup {
+    set temp [Temp new temp -eq]
+} -body {
+    set result [$temp getValue]
+} -result "temp"
+    
+test testTempClass-1.4 {test creation of Temp class instance and setValue interface} -setup {
+    set temp [Temp new temp -eq]
+} -body {
+    $temp setValue temp1 -eq
+    set result [$temp getValue]
+} -result "temp1"
+    
+test testTempClass-1.5 {test creation of Temp class instance and setValue interface with change of parameter type to equational} -setup {
+    set temp [Temp new 10]
+} -body {
+    $temp setValue temp1 -eq
+    set result [$temp getValue]
+} -result "temp1"
+    
+    # ________________________ Include class definition _________________________ #
+
+test testIncludeClass-1.1 {test creation of Include class instance and genSPICEString interface} -setup {
+    set raw [Include new {./libs/mosfets/nmos1}]
+} -body {
+    set result [$raw genSPICEString]
+} -result {.include ./libs/mosfets/nmos1}
+    
+    # ________________________ Library class definition _________________________ #
+
+test testLibraryClass-1.1 {test creation of Library class instance and genSPICEString interface} -setup {
+    set raw [Library new ./libs/mosfets/nmos1 slow_corner]
+} -body {
+    set result [$raw genSPICEString]
+} -result {.lib ./libs/mosfets/nmos1 slow_corner}
+    
+test testLibraryClass-1.2 {test creation of Library class instance and getLibValue interface} -setup {
+    set raw [Library new ./libs/mosfets/nmos1 slow_corner]
+} -body {
+    set result [$raw getLibValue]
+} -result {slow_corner}
+    
+    # ________________________ Options class tests _________________________ #
+
+test testOptionsClass-1.1 {test creation of Options class instance and getParams interface} -setup {
+    set elemInst [Options new {{abstol 1e-12} {noopiter -sw} {gmin 1e-12}}]
+} -body {
+    set result [$elemInst getParams]
+} -result [dict create abstol 1e-12 noopiter {} gmin 1e-12]
+
+test testOptionsClass-1.2 {test creation of Options class instance and genSPICEString interface} -setup {
+    set elemInst [Options new {{abstol 1e-12} {noopiter -sw} {gmin 1e-12}}]
+} -body {
+    set result [$elemInst genSPICEString]
+} -result ".options abstol=1e-12 noopiter gmin=1e-12"
+
+test testOptionsClass-1.4 {test creation of Options class instance and addParam interface} -setup {
+    set elemInst [Options new {{abstol 1e-12} {noopiter -sw} {gmin 1e-12}}]
+    $elemInst addParam vntol 1e-4
+} -body {
+    set result [$elemInst getParams]
+} -result [dict create abstol 1e-12 noopiter "" gmin 1e-12 vntol 1e-4]
+
+test testOptionsClass-1.5 {test creation of Options class instance and addParam interface with adding switch parameter} -setup {
+    set elemInst [Options new {{abstol 1e-12} {vntol 1e-4} {gmin 1e-12}}]
+    $elemInst addParam noopiter -sw
+} -body {
+    set result [$elemInst getParams]
+} -result [dict create abstol 1e-12 vntol 1e-4 gmin 1e-12  noopiter {}]
+
+test testOptionsClass-1.6 {test creation of Options class instance and deleteParam interface} -setup {
+    set elemInst [Options new {{abstol 1e-12} {noopiter -sw} {gmin 1e-12}}]
+    $elemInst deleteParam gmin
+} -body {
+    set result [$elemInst getParams]
+} -result [dict create abstol 1e-12 noopiter {}]
+
+test testOptionsClass-1.7 {test creation of Options class instance with switch parameter without -sw qualificator} -body {
+    catch {Options new {{abstol 1e-12} {noopiter} {gmin 1e-12}}} errorStr
+    return $errorStr
+} -result "Value '' is not a valid value"
+
+    # ________________________ ParamStatement class tests _________________________ #
+    
+test testParamStatementClass-1.1 {test creation of ParamStatement class instance and getParams interface} -setup {
+    set elemInst [ParamStatement new {{U0T {rf+1} -eq} {vth0 10}}]
+} -body {
+    set result [$elemInst getParams]
+} -result [dict create u0t {rf+1} vth0 10]
+
+test testParamStatementClass-1.2 {test creation of ParamStatement class instance and genSPICEString interface} -setup {
+    set elemInst [ParamStatement new {{U0T {rf+1} -eq} {vth0 10}}]
+} -body {
+    set result [$elemInst genSPICEString]
+} -result ".param u0t=\{rf+1\} vth0=10"
+
+test testParamStatementClass-1.3 {test creation of ParamStatement class instance and addParam interface} -setup {
+    set elemInst [ParamStatement new {{U0T {rf+1} -eq} {vth0 10}}]
+    $elemInst addParam k1 1e-4
+} -body {
+    set result [$elemInst getParams]
+} -result [dict create u0t {rf+1} vth0 10 k1 1e-4]
+
+test testParamStatementClass-1.4 {test creation of ParamStatement class instance and addParam interface with adding equation parameter} -setup {
+    set elemInst [ParamStatement new {{k1 1e-4} {vth0 10}}]
+    $elemInst addParam U0T {rf+1} -eq
+} -body {
+    set result [$elemInst getParams]
+} -result [dict create k1 1e-4 vth0 10 u0t {rf+1}]
+
+test testParamStatementClass-1.5 {test creation of ParamStatement class instance with equation parameter without -eq qualificator} -body {
+    catch {ParamStatement new {{U0T {rf+1}} {vth0 10}}} errorStr
+    return $errorStr
+} -result "Value 'rf+1' is not a valid value"
+
+    # ________________________ Netlist class tests _________________________ #
+    
+test testNetlistClass-1.2 {test creation of Netlist class instance with add interface and genSPICEString interface} -setup {
+    set netlistInst [Netlist new newNetlist]
+    $netlistInst add [R new 1 net1 net2 10]
+    $netlistInst add [R new 2 net1 net2 {{r1+5/10} -eq}]
+    $netlistInst add [C new 1 net2 net3 1e-6]
+    $netlistInst add [ParamStatement new {{r1 1} {r2 2}} -name ps1]
+    $netlistInst add [Comment new {some random comment} -name com1]
+    $netlistInst add [Include new {/fold1/fold2/file.lib} -name inc1]
+    $netlistInst add [Library new {/fold1/fold2/file.lib} fast -name lib1]
+    $netlistInst add [RawString new {*comment in form of raw string} -name raw1]
+    $netlistInst add [Vdc new 1 net1 net3 5]
+} -body {
+    set result [$netlistInst genSPICEString]
+} -result {r1 net1 net2 10
+r2 net1 net2 {r1+5/10}
+c1 net2 net3 1e-6
+.param r1=1 r2=2
+*some random comment
+.include /fold1/fold2/file.lib
+.lib /fold1/fold2/file.lib fast
+*comment in form of raw string
+v1 net1 net3 5}   
+
+test testNetlistClass-1.3 {test creation of Netlist class instance with del interface and genSPICEString interface} -setup {
+    set netlistInst [Netlist new newNetlist]
+    $netlistInst add [R new 1 net1 net2 10]
+    $netlistInst add [R new 2 net1 net2 {{r1+5/10} -eq}]
+    $netlistInst add [RSem new 5 net1 net2 res_sem -l 10e-6 -w 100e-6]
+    $netlistInst add [RSemModel new rsem1mod -tc1 0.1 -tc2 0.4]
+    $netlistInst add [C new 1 net2 net3 1e-6]
+    $netlistInst add [ParamStatement new {{r1 1} {r2 2}} -name ps1]
+    $netlistInst add [Comment new {some random comment} -name com1]
+    $netlistInst add [Include new {/fold1/fold2/file.lib} -name inc1]
+    $netlistInst add [Library new {/fold1/fold2/file.lib} fast -name lib1]
+    $netlistInst add [RawString new {*comment in form of raw string} -name raw1]
+    $netlistInst add [Vdc new 1 net1 net3 5]
+} -body {
+    $netlistInst del V1
+    set result [$netlistInst genSPICEString]
+} -result {r1 net1 net2 10
+r2 net1 net2 {r1+5/10}
+r5 net1 net2 res_sem l=10e-6 w=100e-6
+.model rsem1mod r(tc1=0.1 tc2=0.4)
+c1 net2 net3 1e-6
+.param r1=1 r2=2
+*some random comment
+.include /fold1/fold2/file.lib
+.lib /fold1/fold2/file.lib fast
+*comment in form of raw string}    
+
+test testNetlistClass-1.4 {test creation of Netlist class instance with del interface with wrong name of element} -setup {
+    set netlistInst [Netlist new new_netlist]
+    $netlistInst add [R new 1 net1 net2 10]
+    $netlistInst add [R new 2 net1 net2 {{r1+5/10} -eq}]
+    $netlistInst add [C new 1 net2 net3 1e-6]
+    $netlistInst add [ParamStatement new {{r1 1} {r2 2}} -name ps1]
+    $netlistInst add [Comment new {some random comment} -name com1]
+    $netlistInst add [Include new {/fold1/fold2/file.lib} -name inc1]
+    $netlistInst add [Library new {/fold1/fold2/file.lib} fast -name lib1]
+    $netlistInst add [RawString new {*comment in form of raw string} -name raw1]
+    $netlistInst add [Vdc new 1 net1 net3 5]
+} -body {
+    catch {$netlistInst del r3} errorStr
+    return $errorStr
+} -result {Element with name 'r3' was not found in netlist's 'new_netlist' list of elements} 
+
+test testNetlistClass-1.5 {test creation of Netlist class instance and getElement interface} -setup {
+    set netlistInst [Netlist new new_netlist]
+    $netlistInst add [R new 1 net1 net2 10]
+    $netlistInst add [R new 2 net1 net2 {{r1+5/10} -eq}]
+    $netlistInst add [C new 1 net2 net3 1e-6]
+    $netlistInst add [ParamStatement new {{r1 1} {r2 2}} -name ps1]
+    $netlistInst add [Comment new {some random comment} -name com1]
+    $netlistInst add [Include new {/fold1/fold2/file.lib} -name inc1]
+    $netlistInst add [Library new {/fold1/fold2/file.lib} fast -name lib1]
+    $netlistInst add [RawString new {*comment in form of raw string} -name raw1]
+    $netlistInst add [Vdc new 1 net1 net3 5]
+} -body {
+    set elementObj [$netlistInst getElement r2]
+    return [$elementObj getName]
+} -result r2
+
+test testNetlistClass-1.6 {test creation of Netlist class instance with add element with same name as ones already added to netslit} -setup {
+    set netlistInst [Netlist new new_netlist]
+    $netlistInst add [R new 1 net1 net2 10]
+    $netlistInst add [R new 2 net1 net2 {{r1+5/10} -eq}]
+    $netlistInst add [C new 1 net2 net3 1e-6]
+    $netlistInst add [ParamStatement new {{r1 1} {r2 2}} -name ps1]
+    $netlistInst add [Comment new {some random comment} -name com1]
+    $netlistInst add [Include new {/fold1/fold2/file.lib} -name inc1]
+    $netlistInst add [Library new {/fold1/fold2/file.lib} fast -name lib1]
+    $netlistInst add [RawString new {*comment in form of raw string} -name raw1]
+    $netlistInst add [Vdc new 1 net1 net3 5]
+} -body {
+    catch {$netlistInst add [R new 1 net1 net2 15]} errorStr
+    return $errorStr
+} -result {Netlist 'new_netlist' already contains element with name r1} 
+
+test testNetlistClass-1.7 {test creation of Netlist class instance and modifying value of netlist element} -setup {
+    set netlistInst [Netlist new new_netlist]
+    $netlistInst add [R new 1 net1 net2 10]
+    $netlistInst add [R new 2 net1 net2 {{r1+5/10} -eq}]
+    $netlistInst add [C new 1 net2 net3 1e-6]
+    $netlistInst add [ParamStatement new {{r1 1} {r2 2}} -name ps1]
+    $netlistInst add [Comment new {some random comment} -name com1]
+    $netlistInst add [Include new {/fold1/fold2/file.lib} -name inc1]
+    $netlistInst add [Library new {/fold1/fold2/file.lib} fast -name lib1]
+    $netlistInst add [RawString new {*comment in form of raw string} -name raw1]
+    $netlistInst add [Vdc new 1 net1 net3 5]
+} -body {
+    set resistor [$netlistInst getElement r1]
+    $resistor setParamValue r 100
+    return [$netlistInst genSPICEString]
+} -result {r1 net1 net2 100
+r2 net1 net2 {r1+5/10}
+c1 net2 net3 1e-6
+.param r1=1 r2=2
+*some random comment
+.include /fold1/fold2/file.lib
+.lib /fold1/fold2/file.lib fast
+*comment in form of raw string
+v1 net1 net3 5} 
+
+#test testNetlistClass-1.8 {test creation of Netlist class instance with add analysis element as ones already added to netslit} -setup {
+#    set netlistInst [Netlist new new_netlist]
+#    $netlistInst add [R new 1 net1 net2 10]
+#    $netlistInst add [R new 2 net1 net2 {{r1+5/10} -eq}]
+#    $netlistInst add [C new 1 net2 net3 1e-6]
+#    $netlistInst add [ParamStatement new {{r1 1} {r2 2}} -name ps1]
+#    $netlistInst add [Comment new {some random comment} -name com1]
+#    $netlistInst add [Include new {/fold1/fold2/file.lib} -name inc1]
+#    $netlistInst add [Library new {/fold1/fold2/file.lib} fast -name lib1]
+#    $netlistInst add [RawString new {*comment in form of raw string} -name raw1]
+#    $netlistInst add [Vdc new 1 net1 net3 5]
+#    $netlistInst add [Tran new 1e-6 1e-3 -uic -name tran1]
+#} -body {
+#    catch {$netlistInst add [Tran new 1e-6 1e-3 -uic -name tran2]} errorStr
+#    return $errorStr
+#} -result {Netlist 'new_netlist' already contains Analysis element} 
+    
+    # ________________________ Subcircuit class tests _________________________ #
+
+test testSubcircuitClass-1.1 {test creation of Subcircuit class instance with genSPICEString interface} -setup {
+    oo::class create RCnet {
+        superclass Subcircuit
+        constructor {} {
+            # define external pins of subcircuit
+            set pins {plus minus}
+            # define input parameters of subcircuit
+            set params {{r 100} {c 1e-6}}
+            # add elements to subcircuit definition
+            my add [R new 1 net1 net2 {r -eq}]
+            my add [C new 1 net2 net3 {c -eq}]
+            # pass name, list of pins and list of parameters to Subcircuit constructor
+            next rcnet $pins $params
+        }
+    }
+    set subcircuit [RCnet new]
+} -body {
+    set result [$subcircuit genSPICEString]
+    
+} -result {.subckt rcnet plus minus r=100 c=1e-6
+r1 net1 net2 {r}
+c1 net2 net3 {c}
+.ends} -cleanup {
+    rename RCnet ""
+    unset subcircuit
+}
+
+test testSubcircuitClass-1.2 {test creation of Subcircuit class instance with getPins interface} -setup {
+    oo::class create RCnet {
+        superclass Subcircuit
+        constructor {} {
+            # define external pins of subcircuit
+            set pins {plus minus}
+            # define input parameters of subcircuit
+            set params {{r 100} {c 1e-6}}
+            # add elements to subcircuit definition
+            my add [R new 1 net1 net2 {r -eq}]
+            my add [C new 1 net2 net3 {c -eq}]
+            # pass name, list of pins and list of parameters to Subcircuit constructor
+            next rcnet $pins $params
+        }
+    }
+    set subcircuit [RCnet new]
+} -body {
+    set result [$subcircuit getPins]
+} -result {plus {} minus {}} -cleanup {
+    rename RCnet ""
+    unset subcircuit
+}
+ 
+test testSubcircuitClass-1.3 {test creation of Subcircuit class instance with getParams interface} -setup {
+    oo::class create RCnet {
+        superclass Subcircuit
+        constructor {} {
+            # define external pins of subcircuit
+            set pins {plus minus}
+            # define input parameters of subcircuit
+            set params {{r 100} {c 1e-6}}
+            # add elements to subcircuit definition
+            my add [R new 1 net1 net2 {r -eq}]
+            my add [C new 1 net2 net3 {c -eq}]
+            # pass name, list of pins and list of parameters to Subcircuit constructor
+            next rcnet $pins $params
+        }
+    }
+    set subcircuit [RCnet new]
+} -body {
+    set result [$subcircuit getParams]
+} -result [dict create r 100 c 1e-6] -cleanup {
+    rename RCnet ""
+    unset subcircuit
+}
+ 
+test testSubcircuitClass-1.4 {test creation of Subcircuit class instance with forbidden element adding} -setup {
+    oo::class create RCnet {
+        superclass Subcircuit
+        constructor {} {
+            # define external pins of subcircuit
+            set pins {plus minus}
+            # define input parameters of subcircuit
+            set params {{r 100} {c 1e-6}}
+            # add elements to subcircuit definition
+            my add [R new 1 net1 net2 {r -eq}]
+            my add [C new 1 net2 net3 {c -eq}]
+            my add [Include new {/fold1/fold2/file.lib} -name inc1]
+            # pass name, list of pins and list of parameters to Subcircuit constructor
+            next rcnet $pins $params
+        }
+    }
+    
+} -body {
+    catch {RCnet new} errorStr
+    set result $errorStr
+} -result {Include element can't be included in subcircuit} -cleanup {
+    rename RCnet ""
+}
+
+test testSubcircuitClass-1.5 {test creation of Subcircuit class instance with forbidden element Analysis} -setup {
+    oo::class create RCnet {
+        superclass Subcircuit
+        constructor {} {
+            # define external pins of subcircuit
+            set pins {plus minus}
+            # define input parameters of subcircuit
+            set params {{r 100} {c 1e-6}}
+            # add elements to subcircuit definition
+            my add [R new 1 net1 net2 {r -eq}]
+            my add [C new 1 net2 net3 {c -eq}]
+            my add [Op new]
+            # pass name, list of pins and list of parameters to Subcircuit constructor
+            next rcnet $pins $params
+        }
+    }
+    
+} -body {
+    catch {RCnet new} errorStr
+    set result $errorStr
+} -result {Analysis element can't be included in subcircuit} -cleanup {
+    rename RCnet ""
+}
+
+test testSubcircuitClass-1.6 {test creation of Subcircuit class instance with genSPICEString interface} -setup {
+    oo::class create RCnet {
+        superclass Subcircuit
+        constructor {} {
+            # define external pins of subcircuit
+            set pins {plus minus}
+            # define input parameters of subcircuit
+            set params {{r 100} {c 1e-6}}
+            # add elements to subcircuit definition
+            my add [R new 1 net1 net2 {r -eq}]
+            my add [C new 1 net2 net3 {c -eq}]
+            my add [RSem new 5 net1 net2 res_sem -l 10e-6 -w 100e-6]
+            my add [RSemModel new rsem1mod -tc1 0.1 -tc2 0.4]
+            # pass name, list of pins and list of parameters to Subcircuit constructor
+            next rcnet $pins $params
+        }
+    }
+    set subcircuit [RCnet new]
+} -body {
+    set result [$subcircuit genSPICEString]
+    
+} -result {.subckt rcnet plus minus r=100 c=1e-6
+r1 net1 net2 {r}
+c1 net2 net3 {c}
+r5 net1 net2 res_sem l=10e-6 w=100e-6
+.model rsem1mod r(tc1=0.1 tc2=0.4)
+.ends} -cleanup {
+    rename RCnet ""
+    unset subcircuit
+}
+
+    # ________________________ Analysis class tests _________________________ #
+    
+test testAnalysisClass-1.1 {test creation of Analysis class instance and getParams interface} -setup {
+    set anInst [Analysis new dc {{srcnam v1 -posnocheck} {vstart 0} {vstop 5} {vincr 0.1}}]
+} -body {
+    set result [$anInst getParams]
+} -result [dict create srcnam v1 vstart 0 vstop 5 vincr 0.1] 
+
+test testAnalysisClass-1.2 {test creation of Analysis class instance and genSPICEString interface} -setup {
+    set anInst [Analysis new dc {{srcnam v1 -posnocheck} {vstart 0} {vstop 5} {vincr 0.1}}]
+} -body {
+    set result [$anInst genSPICEString]
+} -result ".dc v1 0 5 0.1" 
+
+test testAnalysisClass-1.3 {test creation of Analysis class instance and genSPICEString interface} -body {
+    catch {set anInst [Analysis new dc1 {{srcnam v1 -posnocheck} {vstart 0} {vstop 5} {vincr 0.1}}]} errorStr
+    return $errorStr
+} -result "Type 'dc1' is not in supported list of analysis, should be one of 'ac dc tran op disto noise pz sens sp tf'" 
+
+test testAnalysisClass-1.4 {test creation of Analysis class instance and setParamValue interface} -setup {
+    set anInst [Analysis new dc {{srcnam v1 -posnocheck} {vstart 0} {vstop 5} {vincr 0.1}}]
+    $anInst setParamValue vstop 10
+} -body {
+    return [$anInst genSPICEString]   
+} -result ".dc v1 0 10 0.1" 
+
+test testAnalysisClass-1.5 {test creation of Analysis class instance and genSPICEString interface} -setup {
+    set anInst [Analysis new dc {{srcnam v1 -posnocheck} {vstart 0} {vstop x**2+1 -eq} {vincr 0.1}}]
+} -body {
+    set result [$anInst genSPICEString]
+} -result ".dc v1 0 {x**2+1} 0.1"
+
+test testAnalysisClass-1.6 {test creation of Analysis class instance and genSPICEString interface} -setup {
+    set anInst [Analysis new tran {{tstep 1e-6} {tstop 10e-3} {uic -sw}}]
+} -body {
+    set result [$anInst genSPICEString]
+} -result ".tran 1e-6 10e-3 uic" 
+
+
+cleanupTests

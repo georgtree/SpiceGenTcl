@@ -1,0 +1,158 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"/>
+<title>Tcl SpiceGenTcl package</title>
+<link rel='stylesheet' type='text/css' href='assets/ruff-min.css' />
+<script type='text/javascript' src='assets/ruff-min.js'></script>
+</head>
+<body>
+<div class='ruff-layout'>
+<header class='ruff-layout-header ruff-hd'>
+<a style='text-decoration:none;' href='index.html'>Tcl SpiceGenTcl package (v0.1)</a>
+
+
+            <div id="ruffButtonBar">
+            <button id="ruffNavMove" onclick="ruffMoveNavPane()"></button>
+            <button id="ruffToggleTheme" onclick="ruffNextTheme()"></button>
+            </div>
+        </header><main class='ruff-layout-main ruff-bd'><h1 class='ruff'><a name='SpiceGenTcl'></a>SpiceGenTcl<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h1>
+<div style='clear:both;'></div>
+<p class='ruff'>This package provides Tcl interface to different SPICE and SPICE-like simulator, Ngspice, Xyce. It was inspired by <a href="https://github.com/PySpice-org/PySpice" >PySpice</a> project, object-oriented interface to SPICE-like simulators written in Python.</p>
+<h2 class='ruff'><a name='General concept'></a>General concept<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
+<div style='clear:both;'></div>
+<p class='ruff'>The general concept of package is building netlist by using Tcl scripts. It is based on TclOO object-oriented system, where all elements are represented by objects, including elements, models, analyses, waveforms, netlists, etc. After netlist definition you can run simulation, read result data and then process/display data using Tcl scripting language.</p>
+<p class='ruff'>This approach is different from <a href="https://ngspice.sourceforge.io/tclspice.html" >Tclspice</a> extension that comes together with Ngspice and tightly binded to internal structures of simulator. SpiceGenTcl provides more flexible approach that could be extended for applying to different simulators that follow the concept of netlists with similar syntax.</p>
+<h2 class='ruff'><a name='Usage examples'></a>Usage examples<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
+<div style='clear:both;'></div>
+<p class='ruff'>SpiceGenTcl can be used if you need:</p>
+<ul class='ruff'>
+<li>automate some repetitive simulation tasks, and you don't like <a href="https://ngspice.sourceforge.io/ngspice-control-language-tutorial.html" >Nutmeg</a> syntax (SPICE standard scripting language)</li>
+<li>postprocess output waveforms and data</li>
+<li>change netlist structure on the fly</li>
+<li>simulate different models in the same circuit setup</li>
+<li>run circuit optimization with parameters variations as well as variations in circuit topology</li>
+</ul>
+<h2 class='ruff'><a name='Install and dependencies'></a>Install and dependencies<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
+<div style='clear:both;'></div>
+<p class='ruff'>To install the package you should extract archive with source code and add path of the package folder to <code>auto_path</code> variable:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>lappend</font></b> auto_path <font color=#035103>&quot;path to SpiceGenTcl package&quot;</font>
+</pre>
+
+</figure><p class='ruff'>Package is written in pure Tcl with relying on Tcllib and Tklib. The only necessary external dependency is the simulator itself.</p>
+<ul class='ruff'>
+<li><a href="https://ngspice.sourceforge.io/download.html" >Ngspice</a></li>
+<li><a href="https://www.tcl.tk/software/tcllib/" >Tcllib</a></li>
+<li><a href="https://www.tcl.tk/software/tklib/" >Tklib</a></li>
+</ul>
+<h2 class='ruff'><a name='Documentation and tutorials'></a>Documentation and tutorials<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
+<div style='clear:both;'></div>
+<p class='ruff'>Documentation could be found <a href="https://georgtree.github.io/SpiceGenTcl/" >here</a>.</p>
+<p class='ruff'>Tutorials describing different examples can be found <a href="https://georgtree.github.io/SpiceGenTcl/index-Tutorials.html" >here</a>.</p>
+<p class='ruff'>It was generated with <a href="https://ruff.magicsplat.com/" >ruff!</a>.</p>
+<p class='ruff'>Tcl syntax highlightning was done with <a href="https://github.com/aplsimple/hl_tcl" >hl_tcl</a>.</p>
+<h2 class='ruff'><a name='Quick start'></a>Quick start<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
+<div style='clear:both;'></div>
+<ul class='ruff'>
+<li><font color="red"> <strong>Important note 1</strong></font>: internally, all device names, parameters, nodes, types, reference names, data vector names, etc., are converted to lowercase after object instantiation. You can enter them in any case, but access by name is possible only in lowercase. The reason for that is the fact that most SPICE simulators are case-insensitive. So, in order to avoid ambiguity in Tcl code, in situations where the simulator interprets names with mixed case as the same, with lowercase transformation we can check before netlisting that we don't have duplicate names in the top-level circuit.</li>
+<li><font color="red"> <strong>Important note 2</strong></font>: The package wasn't supposed to be used with the <code>.control</code> section in Ngspice or <code>.step</code> statement in LTspice, or multiple DC sweeps, and does not support the reading of parametric sweep in raw data. The idea of the package is to put all such work on a Tcl script, without the usage of internal scripting capabilities of the simulator.</li>
+</ul>
+<h3 class='ruff'><a name='Packages imports'></a>Packages imports<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
+<div style='clear:both;'></div>
+<p class='ruff'>The first step is import of package:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>package</font></b> require SpiceGenTcl
+</pre>
+
+</figure><p class='ruff'>Import all commands from ::SpiceGenTcl:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>namespace</font></b> import ::SpiceGenTcl::*
+</pre>
+
+</figure><p class='ruff'>One of commands is <code><b><font color=#923B23>importNgspice</font></b></code>, by calling this command we can import all commands related to Ngspice simulator, and you don't need to add prefix <code>::SpiceGenTcl::Ngspice</code> before any command. So we do it:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>importNgspice</font></b>
+</pre>
+
+</figure><p class='ruff'>To plot results of simulation we also import package <code>xyplot</code> from Tklib:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>package</font></b> require xyplot
+</pre>
+
+</figure><h3 class='ruff'><a name='Circuit definition'></a>Circuit definition<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
+<div style='clear:both;'></div>
+<p class='ruff'>Let's try to define simple resistor divider circuit with following netlist:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>voltage divider netlist
+v1 in 0 1
+r1 in out 1e3
+r2 out 0 2e3
+.dc v1 0 5 0.1
+</pre>
+
+</figure><p class='ruff'><img src="assets/img/resistor_divider_cir.png" alt="drawing" width="400"/></p>
+<p class='ruff'>First step is creating circuit object:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> circuit [<b><font color=#923B23>Circuit</font></b> new {voltage divider netlist}]
+</pre>
+
+</figure><p class='ruff'><code><b><font color=#923B23>Circuit</font></b></code> command creating a new object of class <code><b><font color=#923B23>Circuit</font></b></code>, it is imported from <code>::SpiceGenTcl</code> namespace and represents top-level circuit. The only argument we supply to it is the name of the circuit that will be printed at first line of netlist.</p>
+<p class='ruff'>The next step is building netlist by addding elements to top circuit object:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new 1 in 0 1]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new 1 in out 1e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new 2 out 0 2e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Dc</font></b> new v1 0 5 0.1]
+</pre>
+
+</figure><p class='ruff'><code><b><font color=#923B23>Circuit</font></b></code> class instance with reference stored in <code>circuit</code> variable has <code>add</code> method that appends arguments object reference to it. Object creating commands <code><b><font color=#923B23>Vdc</font></b></code>, <code><b><font color=#923B23>R</font></b></code> and <code><b><font color=#923B23>Dc</font></b></code> represent  DC voltage source, basic resistor and DC analysis accordingly, are imported from <code>::SpiceGenTcl::Ngspice:Sources</code>, <code>::SpiceGenTcl::Ngspice::BasicElements</code> and <code>::SpiceGenTcl::Ngspice::Analyses</code> namespaces.</p>
+<p class='ruff'>Together with <code>new</code> subcommand we supply basic arguments of element, for example, in <code><b><font color=#923B23>R</font></b></code> command we supply name '1', name of net connected to plus node 'in', name of net connected to minus node '0' (actually global ground), and resistance value '1e3'.</p>
+<p class='ruff'>The last necessary step is to create <code><b><font color=#923B23>Simulator</font></b></code> object with command <code><b><font color=#923B23>Batch</font></b></code> from <code>::SpiceGenTcl::Ngspice</code> namespace and attach it to <code><b><font color=#923B23>Circuit</font></b></code> object:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> simulator [<b><font color=#923B23>Batch</font></b> new {batch1} {/usr/local/bin/}]
+<font color=#4A181B>$circuit</font> attachSimulator <font color=#4A181B>$simulator</font>
+</pre>
+
+</figure><p class='ruff'>Now we are ready to run simulation:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$circuit</font> runAndRead
+</pre>
+
+</figure><p class='ruff'>After simulation we can read result data. We use method <code>getDataDict</code> to get dictionary with keys as names of result vectors:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> data [<font color=#4A181B>$circuit</font> getDataDict]
+</pre>
+
+</figure><p class='ruff'>The we can get vectors v(in) and v(out) from dictionary <code>data</code>:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> axis [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> v(in)]
+<b><font color=#923B23>set</font></b> trace [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> v(out)]
+</pre>
+
+</figure><h3 class='ruff'><a name='Plotting data'></a>Plotting data<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
+<div style='clear:both;'></div>
+<p class='ruff'>To plot results we use <a href="https://core.tcl-lang.org/tklib/file?name=modules/plotchart/xyplot.tcl" ><code>xyplot</code></a> package from Tklib:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#7d1c00>wm</font></b> geometry . 600x400
+<b><font color=#923B23>set</font></b> xyp [xyplot .xyp <font color=#463e11>-xformat</font> <font color=#035103>&quot;%5.0f&quot;</font> <font color=#463e11>-yformat</font> <font color=#035103>&quot;%5.0f&quot;</font> <font color=#463e11>-title</font> <font color=#035103>&quot;Voltage divider simulation result&quot;</font> <font color=#463e11>-xtext</font> <font color=#035103>&quot;v(in), V&quot;</font> <font color=#463e11>-ytext</font> <font color=#035103>&quot;voltage, V&quot;</font>]
+<b><font color=#7d1c00>pack</font></b> <font color=#4A181B>$xyp</font> <font color=#463e11>-fill</font> both <font color=#463e11>-expand</font> true
+<b><font color=#923B23>foreach</font></b> x <font color=#4A181B>$axis</font> y <font color=#4A181B>$trace</font> {
+    <b><font color=#923B23>lappend</font></b> xydata <font color=#4A181B>$x</font> <font color=#4A181B>$y</font>
+}
+<b><font color=#923B23>set</font></b> s1 [<font color=#4A181B>$xyp</font> add_data sf1 <font color=#4A181B>$xydata</font> <font color=#463e11>-legend</font> <font color=#035103>&quot;v(out)&quot;</font> <font color=#463e11>-color</font> red]
+</pre>
+
+</figure><p class='ruff'>Results:</p>
+<p class='ruff'><img src="assets/img/resistor_divider.png" alt="resistor_divider" /></p>
+</main><nav class='ruff-nav'><ul ><li class='ruff-toc1'><a class='ruff-highlight' style='padding-top:2px;' href='index.html'>Start page</a></li>
+<li class='ruff-toc1'><a href='index-docindex.html' accesskey='i'>Index</a></li>
+<hr>
+<li class='ruff-toc1'><a href='index-FAQ.html'>FAQ</a></li>
+<li class='ruff-toc1'><a href='index-Tutorials.html'>Tutorials</a></li>
+<li class='ruff-toc1'><a href='index-Tips.html'>Tips</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl.html'>SpiceGenTcl</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html'>SpiceGenTcl::Ngspice::BasicDevices</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-Sources.html'>SpiceGenTcl::Ngspice::Sources</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-SemiconductorDevices.html'>SpiceGenTcl::Ngspice::SemiconductorDevices</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-Analyses.html'>SpiceGenTcl::Ngspice::Analyses</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-Simulators.html'>SpiceGenTcl::Ngspice::Simulators</a></li>
+<hr><li class='ruff-toc2'><a href='#General concept'>General concept</a></li><li class='ruff-toc2'><a href='#Usage examples'>Usage examples</a></li><li class='ruff-toc2'><a href='#Install and dependencies'>Install and dependencies</a></li><li class='ruff-toc2'><a href='#Documentation and tutorials'>Documentation and tutorials</a></li><li class='ruff-toc2'><a href='#Quick start'>Quick start</a></li><li class='ruff-toc3'><a href='#Packages imports'>Packages imports</a></li><li class='ruff-toc3'><a href='#Circuit definition'>Circuit definition</a></li><li class='ruff-toc3'><a href='#Plotting data'>Plotting data</a></li></ul></nav><footer class='ruff-layout-footer ruff-ft'><div style='float: right;'>Document generated by <a href='https://ruff.magicsplat.com'>Ruff!</a></div><div>&copy; George Yashin</div></footer>
+</div></body></html>

@@ -1,0 +1,42 @@
+namespace eval FAQ {
+    variable _ruff_preamble {
+        The most frequent questions are collected here.
+        
+        ## Where to find list of availible arguments for devices, models and analysis?
+        For selected simulator you need to open documentation for namespace with the same name, for example, Ngspice,
+        and the select the cathegory you insterested in:
+        - [::SpiceGenTcl::Ngspice::BasicDevices] - for basic devices like resistors, capcitors, etc.
+        - [::SpiceGenTcl::Ngspice::Sources] - for current and voltage sources.
+        - [::SpiceGenTcl::Ngspice::SemiconductorDevices] - for semiconductor devices like diodes, transistors, etc.
+        - [::SpiceGenTcl::Ngspice::Analyses] - for availible analysis for selected simulator.
+        
+        Check out [::SpiceGenTcl::Ngspice::BasicDevices::Resistor] as an example.
+        
+        There you can find the list of all availible methods, the arguments list with description, the 
+        example of how element string looks like in netlist and example of creating object of `Resistor` class.
+        
+        ## How to change parameter of existing element?
+        
+        For all elements with parameters you can change parameter value by its name with method [::SpiceGenTcl::Device::setParamValue].
+        
+        ## How to change node name connected to pin of existing element?
+        
+        For all elements with pins you can change name of connected node name by pin name with method [::SpiceGenTcl::Device::setPinNodeName].
+        
+        ## How to get raw data after simulation?
+        
+        After succesfull simulation, the object of class `RawFile` is created and attached to top-level object of class `Circuit`.
+        So the only thing you need to do is to call method `getDataDict` from `Circuit` object. By this method  you can get the 
+        result vectors in form of dictionary, it contains vectors names as keys and vectors itself as the values. Then you can access it by `dict get` command. 
+        ```tcl
+        set data [$circuit getDataDict]
+        set axisList [dict get $data v(anode)]
+        set traceList [dict get $data i(va)]  
+        ```
+        
+        ## How to get log file after simulation?
+        
+        There is a special method for it in object of `Circuit` class - `getLog`, it returns string containing log file.
+    }
+
+}

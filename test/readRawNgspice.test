@@ -1,0 +1,261 @@
+lappend auto_path "../"
+package require tcltest
+package require SpiceGenTcl
+namespace import ::tcltest::*
+namespace import ::SpiceGenTcl::*
+set ngspiceNameSpc [namespace children ::SpiceGenTcl::Ngspice]
+foreach nameSpc $ngspiceNameSpc {
+    namespace import ${nameSpc}::*
+}
+
+set epsilon 1e-8
+set rawDataLoc "./raw_data_ngspice"
+
+proc matchList {expected actual} {
+    variable epsilon
+    set match 1
+    set len [llength $expected]
+    for {set i 0} {$i<$len} {incr i} {
+        set exp [lindex $expected $i]
+        set act [lindex $actual $i]
+        if {(abs($act-$exp) > $epsilon) || (abs($act-$exp) > $epsilon)} {
+            set match 0
+            break
+        }
+    }
+    return $match
+}
+    
+    
+proc readResultFile {path} {
+    set file [open $path r+]
+    set lines [split [read $file] "\n"]
+    close $file                     
+    foreach line $lines {
+        set data [textutil::split::splitx [string trim $line]]
+        lappend timeData [lindex $data 0]
+        lappend traceData [lindex $data 1]
+    }
+    return [list $timeData $traceData]
+}
+    
+
+
+    # ________________________ Data class tests _________________________ #
+    
+test testDataClass-1.1 {test Data class object construction and getStr interface} -setup {
+    set data [Dataset new v1 voltage 100 real]
+} -body {
+    set result [$data getStr]
+} -result "Name: 'v1', Type: 'voltage', Length: '100', Numerical type: 'real'"
+
+test testDataClass-1.2 {test Data class object construction with wrong numerical type} -body {
+    catch {SpiceGenTcl::Dataset new v1 voltage 100 doublereal} errorStr
+    return $errorStr
+} -result "Unknown numerical type 'doublereal' of data"
+
+test testDataClass-1.3 {test Data class object construction and set/getDataPoints interface} -setup {
+    set data [Dataset new v1 voltage 100 real]
+    $data setDataPoints [list 0 1 2 3 4 5 6 7 8 9]
+} -body {
+    set result [$data getDataPoints]
+} -result [list 0 1 2 3 4 5 6 7 8 9]
+
+test testDataClass-1.2 {test Data class object construction and getDataPoints interface error when access empty list of data points} -setup {
+    set data [Dataset new v1 voltage 100 real]
+} -body {
+    catch {$data getDataPoints} errorStr
+    return $errorStr
+} -result "Dataset with name 'v1' doesn't contain non-zero points"
+
+    # ________________________ RawFile class tests _________________________ #
+    
+test testRawFileClass-1.1 {test RawFile class object construction and reading binary transient data, together with interface getTrace} -setup {
+    set data [RawFile new "${rawDataLoc}/tran.raw"]
+    set traceTime [$data getTrace time]
+    set trace [$data getTrace v(osc_out)]
+    set refData [readResultFile "${rawDataLoc}/vosc.csv"]
+    set timeData [$traceTime getDataPoints]
+    set traceData [$trace getDataPoints]
+} -body {
+    set timeMatch [matchList [lrange [lindex $refData 0] 0 end-1] $timeData]
+    set traceMatch [matchList [lrange [lindex $refData 1] 0 end-1] $traceData]
+    if {$timeMatch && $traceMatch} {
+        set result pass
+    } else {
+        set result fail
+    }
+} -result pass
+
+test testRawFileClass-1.2 {test RawFile class object construction and reading ascii transient data, together with interface getTrace} -setup {
+    set data [RawFile new "${rawDataLoc}/tran_ascii.raw"]
+    set traceTime [$data getTrace time]
+    set trace [$data getTrace v(osc_out)]
+    set refData [readResultFile "${rawDataLoc}/vosc.csv"]
+    set timeData [$traceTime getDataPoints]
+    set traceData [$trace getDataPoints]
+} -body {
+    set timeMatch [matchList [lrange [lindex $refData 0] 0 end-1] $timeData]
+    set traceMatch [matchList [lrange [lindex $refData 1] 0 end-1] $traceData]
+    if {$timeMatch && $traceMatch} {
+        set result pass
+    } else {
+        set result fail
+    }
+} -result pass
+
+test testRawFileClass-1.3 {test RawFile class object construction and reading binary dc data, together with interfaces getTrace and getAxis} -setup {
+    set data [RawFile new "${rawDataLoc}/dc.raw"]
+    set traceAxis [$data getAxis]
+    set trace [$data getTrace i(vs1)]
+    set refData [readResultFile "${rawDataLoc}/ivs1.csv"]
+    set axisData [$traceAxis getDataPoints]
+    set traceData [$trace getDataPoints]
+} -body {
+    set axisMatch [matchList [lrange [lindex $refData 0] 0 end-1] $axisData]
+    set traceMatch [matchList [lrange [lindex $refData 1] 0 end-1] $traceData]
+    if {$axisMatch && $traceMatch} {
+        set result pass
+    } else {
+        set result fail
+    }
+} -result pass
+
+test testRawFileClass-1.4 {test RawFile class object construction and reading ascii dc data, together with interfaces getTrace and getAxis} -setup {
+    set data [RawFile new "${rawDataLoc}/dc_ascii.raw"]
+    set traceAxis [$data getAxis]
+    set trace [$data getTrace i(vs1)]
+    set refData [readResultFile "${rawDataLoc}/ivs1.csv"]
+    set axisData [$traceAxis getDataPoints]
+    set traceData [$trace getDataPoints]
+} -body {
+    set axisMatch [matchList [lrange [lindex $refData 0] 0 end-1] $axisData]
+    set traceMatch [matchList [lrange [lindex $refData 1] 0 end-1] $traceData]
+    if {$axisMatch && $traceMatch} {
+        set result pass
+    } else {
+        set result fail
+    }
+} -result pass
+
+test testRawFileClass-1.5 {test RawFile class object construction and reading binary ac data, together with interfaces getTrace and getAxis} -setup {
+    set data [RawFile new "${rawDataLoc}/ac.raw"]
+    set traceAxis [$data getAxis]
+    set trace [$data getTrace i(vd)]
+    set refData [readResultFile "${rawDataLoc}/ivd.csv"]
+    set axisData [$traceAxis getDataPoints]
+    set traceData [$trace getDataPoints]
+} -body {    
+    set axisMatchRe [matchList [lrange [lindex $refData 0 0] 0 end-1] [lindex $axisData 0]]
+    set traceMatchRe [matchList [lrange [lindex $refData 1 0] 0 end-1] [lindex $traceData 0]]
+    set axisMatchIm [matchList [lrange [lindex $refData 0 1] 0 end-1] [lindex $axisData 1]]
+    set traceMatchIm [matchList [lrange [lindex $refData 1 1] 0 end-1] [lindex $traceData 1]]
+    if {$axisMatchRe && $traceMatchRe && $axisMatchIm && $traceMatchIm} {
+        set result pass
+    } else {
+        set result fail
+    }
+} -result pass
+
+test testRawFileClass-1.6 {test RawFile class object construction and reading ascii ac data, together with interfaces getTrace and getAxis} -setup {
+    set data [RawFile new "${rawDataLoc}/ac_ascii.raw"]
+    set traceAxis [$data getAxis]
+    set trace [$data getTrace i(vd)]
+    set refData [readResultFile "${rawDataLoc}/ivd.csv"]
+    set axisData [$traceAxis getDataPoints]
+    set traceData [$trace getDataPoints]
+} -body {    
+    set axisMatchRe [matchList [lrange [lindex $refData 0 0] 0 end-1] [lindex $axisData 0]]
+    set traceMatchRe [matchList [lrange [lindex $refData 1 0] 0 end-1] [lindex $traceData 0]]
+    set axisMatchIm [matchList [lrange [lindex $refData 0 1] 0 end-1] [lindex $axisData 1]]
+    set traceMatchIm [matchList [lrange [lindex $refData 1 1] 0 end-1] [lindex $traceData 1]]
+    if {$axisMatchRe && $traceMatchRe && $axisMatchIm && $traceMatchIm} {
+        set result pass
+    } else {
+        set result fail
+    }
+} -result pass
+
+test testRawFileClass-1.7 {test RawFile class object construction and reading ascii transient data, together with interface getVariablesNames} -setup {
+    set data [RawFile new "${rawDataLoc}/tran.raw"]
+} -body {    
+    set traceAxis [$data getVariablesNames]
+} -result [list time v(n001) v(n002) v(n003) v(n004) v(n005) v(n006) v(n007) v(n008) v(n009) v(n010) v(n011) v(n012) v(n013) v(n014) v(n015) v(n016) v(osc_out) speedcheck v(vdd) i(vdd) v(vdd2) i(vmeasure)]
+
+test testRawFileClass-1.8 {test RawFile class object construction and reading ascii transient data, together with interface getVoltagesNames} -setup {
+    set data [RawFile new "${rawDataLoc}/tran.raw"]
+} -body {    
+    set traceAxis [$data getVoltagesNames]
+} -result [list v(n001) v(n002) v(n003) v(n004) v(n005) v(n006) v(n007) v(n008) v(n009) v(n010) v(n011) v(n012) v(n013) v(n014) v(n015) v(n016) v(osc_out) v(vdd) v(vdd2)]
+
+test testRawFileClass-1.9 {test RawFile class object construction and reading ascii transient data, together with interface getCurrentsNames} -setup {
+    set data [RawFile new "${rawDataLoc}/tran.raw"]
+} -body {    
+    set traceAxis [$data getCurrentsNames]
+} -result [list i(vdd) i(vmeasure)]
+
+test testRawFileClass-2.0 {test RawFile class object construction and reading ascii transient data, together with interface getRawProperties} -setup {
+    set data [RawFile new "${rawDataLoc}/tran.raw"]
+} -body {    
+    set traceAxis [$data getRawProperties]
+} -result [dict create Filename ${rawDataLoc}/tran.raw Title {* sw ring-oscillators} Date {Fri Aug  2 15} Plotname {Transient Analysis} Flags real {No. Variables} 23 {No. Points} 7488]
+
+test testRawFileClass-2.1 {test RawFile class object construction and reading binary op data, together with interfaces getTrace and getAxis} -setup {
+    set data [RawFile new "${rawDataLoc}/op.raw"]
+    set trace [$data getTrace v(out)]
+    set refData 6.666666666666666e-01
+    set traceData [$trace getDataPoints]
+} -body {
+    set traceMatch [matchList $refData $traceData]
+    if {$traceMatch} {
+        set result pass
+    } else {
+        set result fail
+    }
+} -result pass
+
+test testRawFileClass-2.2 {test RawFile class object construction and reading ascii op data, together with interfaces getTrace and getAxis} -setup {
+    set data [RawFile new "${rawDataLoc}/op_ascii.raw"]
+    set trace [$data getTrace v(out)]
+    set refData 6.666666666666666e-01
+    set traceData [$trace getDataPoints]
+} -body {
+    set traceMatch [matchList $refData $traceData]
+    if {$traceMatch} {
+        set result pass
+    } else {
+        set result fail
+    }
+} -result pass
+
+test testRawFileClass-2.3 {test RawFile class object construction and reading binary transient data, together with interface getTracesStr} -setup {
+    set data [RawFile new "${rawDataLoc}/tran.raw"]
+} -body {    
+    set traces [$data getTracesStr]
+} -result [list {time time double} {v(n001) voltage double} {v(n002) voltage double} {v(n003) voltage double} {v(n004) voltage double} {v(n005) voltage double} {v(n006) voltage double} {v(n007) voltage double} {v(n008) voltage double} {v(n009) voltage double} {v(n010) voltage double} {v(n011) voltage double} {v(n012) voltage double} {v(n013) voltage double} {v(n014) voltage double} {v(n015) voltage double} {v(n016) voltage double} {v(osc_out) voltage double} {speedcheck time double} {v(vdd) voltage double} {i(vdd) current double} {v(vdd2) voltage double} {i(vmeasure) current double}]
+
+test testRawFileClass-2.4 {test RawFile class object construction and reading binary op data, together with interface getTracesData} -setup {
+    set data [RawFile new "${rawDataLoc}/op.raw"] 
+} -body {
+    set tracesData [$data getTracesData]
+} -result [dict create v(in) 1.0 v(out) 0.6666666666666666 i(v1) -0.0003333333333333334]
+
+test testRawFileClass-2.5 {test RawFile class object construction and reading (with waveforms skip) binary transient data, together with interface getTracesStr} -setup {
+    set data [RawFile new "${rawDataLoc}/tran.raw" v(n001)]
+    set trace [$data getTrace v(osc_out)]
+    for {set i 0} {$i<[llength $trace]} {incr i} {
+        lappend refData {}
+    }
+    set vOscOut [dict get [$data getTracesData] v(osc_out)]
+} -body {    
+    set traceMatch [matchList [lrange [lindex $refData 0] 0 end-1] $vOscOut]
+    if {$timeMatch && $traceMatch} {
+        set result pass
+    } else {
+        set result fail
+    }
+    return $result
+} -result pass
+
+
+cleanupTests

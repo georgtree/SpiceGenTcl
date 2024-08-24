@@ -1,0 +1,83 @@
+lappend auto_path "../"
+package require tcltest
+package require SpiceGenTcl
+namespace import ::tcltest::*
+namespace import ::SpiceGenTcl::*
+set ngspiceNameSpc [namespace children ::SpiceGenTcl::Ngspice]
+foreach nameSpc $ngspiceNameSpc {
+    namespace import ${nameSpc}::*
+}
+    
+    # ________________________ RSemModel class tests _________________________ #
+    
+test testRSemModelClass-1.1 {test RSemModel class} -setup {
+    set mod [RSemModel new resmod -tc1 1 -tc2 2]
+} -body {
+    set result [$mod genSPICEString]
+} -result ".model resmod r(tc1=1 tc2=2)"
+
+    # ________________________ CSemModel class tests _________________________ #
+    
+test testCSemModelClass-1.1 {test CSemModel class} -setup {
+    set mod [CSemModel new capmod -tc1 1 -tc2 2]
+} -body {
+    set result [$mod genSPICEString]
+} -result ".model capmod c(tc1=1 tc2=2)"
+
+    # ________________________ VSwitchModel class tests _________________________ #
+    
+test testVSwitchModelClass-1.1 {test VSwitchModel class} -setup {
+    set mod [VSwitchModel new swmod -vt 1 -vh 0.5 -ron 1 -roff 1e6]
+} -body {
+    set result [$mod genSPICEString]
+} -result ".model swmod sw(vt=1 vh=0.5 ron=1 roff=1e6)"
+
+    # ________________________ CSwitchModel class tests _________________________ #
+    
+test testCSwitchModelClass-1.1 {test CSwitchModel class} -setup {
+    set mod [CSwitchModel new cswmod -it 1 -ih 0.5 -ron 1 -roff 1e6]
+} -body {
+    set result [$mod genSPICEString]
+} -result ".model cswmod csw(it=1 ih=0.5 ron=1 roff=1e6)"
+
+    # ________________________ DiodeModel class tests _________________________ #
+    
+test testDiodeModelClass-1.1 {test DiodeModel class} -setup {
+    set mod [DiodeModel new diodemod -is 1e-14 -n 1.2 -rs 0.01 -cj0 1e-9]
+} -body {
+    set result [$mod genSPICEString]
+} -result ".model diodemod d(is=1e-14 n=1.2 rs=0.01 cjo=1e-9)"
+
+    # ________________________ BjtGPModel class tests _________________________ #
+    
+test testBjtGPModelClass-1.1 {test BjtGPModel class} -setup {
+    set mod [BjtGPModel new bjtmod npn -is 1e-15 -bf 200 -vaf 100 -cje 1e-10]
+} -body {
+    set result [$mod genSPICEString]
+} -result ".model bjtmod npn(is=1e-15 bf=200 vaf=100 cje=1e-10 level=1)"
+
+    # ________________________ Jfet1Model class tests _________________________ #
+    
+test testJfet1ModelClass-1.1 {test Jfet1Model class} -setup {
+    set mod [Jfet1Model new jfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4 -cgd 1e-12]
+} -body {
+    set result [$mod genSPICEString]
+} -result ".model jfetmod njf(level=1 vto=2 beta=1e-3 lambda=1e-4 cgd=1e-12)"
+
+    # ________________________ Jfet2Model class tests _________________________ #
+    
+test testJfet2ModelClass-1.1 {test Jfet2Model class} -setup {
+    set mod [Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4 -vbi 1.2]
+} -body {
+    set result [$mod genSPICEString]
+} -result ".model jfetmod njf(level=2 vto=-2 beta=10e-4 rs=1e-4 vbi=1.2)"
+    
+    # ________________________ Mesfet1Model class tests _________________________ #
+    
+test testMesfet1ModelClass-1.1 {test Mesfet1Model class} -setup {
+    set mod [Mesfet1Model new mesfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4 -cgd 1e-12]
+} -body {
+    set result [$mod genSPICEString]
+} -result ".model mesfetmod njf(level=1 vto=2 beta=1e-3 lambda=1e-4 cgd=1e-12)"
+
+cleanupTests

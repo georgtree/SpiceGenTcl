@@ -1,0 +1,46 @@
+lappend auto_path "../"
+package require tcltest
+package require SpiceGenTcl
+namespace import ::tcltest::*
+
+set ngspicePath {/usr/local/bin/}
+
+set epsilon 1e-8
+
+namespace import ::SpiceGenTcl::*
+set ngspiceNameSpc [namespace children ::SpiceGenTcl::Ngspice]
+foreach nameSpc $ngspiceNameSpc {
+    namespace import ${nameSpc}::*
+}
+
+proc matchList {expected actual} {
+    variable epsilon
+    set match 1
+    set len [llength $expected]
+    for {set i 0} {$i<$len} {incr i} {
+        set exp [lindex $expected $i]
+        set act [lindex $actual $i]
+        if {(abs($act-$exp) > $epsilon) || (abs($act-$exp) > $epsilon)} {
+            set match 0
+            break
+        }
+    }
+    return $match
+}
+
+test testSimulations-1.1 {test creation of circuit, run it with NgspiceBatch and read result} -setup {
+    set circuit [Circuit new {voltage divider netlist}]
+    $circuit add [Vdc new 1 in 0 1]
+    $circuit add [R new 1 in out 1e3]
+    $circuit add [R new 2 out 0 2e3]
+    $circuit add [Dc new v1 0 5 1]
+    set simulator [Batch new batch1 $ngspicePath]
+    $circuit attachSimulator $simulator
+    $circuit runAndRead
+    set data [[$circuit getData] getTracesData]
+} -body {
+    set traceMatch [matchList {0.0 0.6666666666666666 1.3333333333333333 2.0 \
+            2.6666666666666665 3.333333333333333} [dict get $data v(out)]]
+    return $traceMatch
+} -result 1
+
