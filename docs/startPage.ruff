@@ -5,14 +5,13 @@ variable startPage {
     It was inspired by [PySpice](https://github.com/PySpice-org/PySpice) project, object-oriented interface to SPICE-like simulators written in Python.
 
     ## General concept
-    The general concept of package is building netlist by using Tcl scripts. 
-    It is based on TclOO object-oriented system, where all elements are represented by objects, 
-    including elements, models, analyses, waveforms, netlists, etc. After netlist definition you can run simulation, 
-    read result data and then process/display data using Tcl scripting language. 
+    The general concept of the package is to build a netlist using Tcl scripts. It is based on the TclOO object-oriented system, 
+    where everything is represented by objects, including elements, models, analyses, waveforms, and netlists. After defining the 
+    netlist, you can run the simulation, read the resulting data, and then process or display the data using the Tcl scripting language.
 
-    This approach is different from [Tclspice](https://ngspice.sourceforge.io/tclspice.html) extension that comes
-    together with Ngspice and tightly binded to internal structures of simulator. SpiceGenTcl provides more flexible approach 
-    that could be extended for applying to different simulators that follow the concept of netlists with similar syntax.
+    This approach differs from the [Tclspice](https://ngspice.sourceforge.io/tclspice.html) extension, which comes bundled with 
+    Ngspice and is tightly bound to the simulator's internal structures. SpiceGenTcl offers a more flexible approach that can be 
+    extended to work with different simulators that use netlists with similar syntax.
     
     ## Usage examples
     SpiceGenTcl can be used if you need:
@@ -47,16 +46,25 @@ variable startPage {
 
     Tcl syntax highlightning was done with [hl_tcl](https://github.com/aplsimple/hl_tcl).
 
+    ## Supported platforms
+    
+    I personally use Kubuntu 22.04, and I haven't tested this on different platforms. 
+    However, Tcl is a cross-platform language, and because this package is written in pure Tcl, 
+    you can practically run it on any platform, including Windows, Linux (all flavors), and FreeBSD. 
+    Ngspice is available as pre-compiled binaries for Linux and Windows, but it can also be compiled on FreeBSD.
+        
     ## Quick start
     
-    - <font color="red"> **Important note 1**</font>: internally, all device names, parameters, nodes, types, reference names, data vector names, etc., 
-    are converted to lowercase after object instantiation. You can enter them in any case, but access by name is possible only in lowercase. 
-    The reason for that is the fact that most SPICE simulators are case-insensitive. So, in order to avoid ambiguity in Tcl code, 
-    in situations where the simulator interprets names with mixed case as the same, with lowercase transformation we can check before netlisting 
-    that we don't have duplicate names in the top-level circuit.
-    - <font color="red"> **Important note 2**</font>: The package wasn't supposed to be used with the `.control` section in Ngspice or `.step` statement in LTspice, 
-    or multiple DC sweeps, and does not support the reading of parametric sweep in raw data. The idea of the package is to put all such work on a Tcl script, without the 
-    usage of internal scripting capabilities of the simulator.
+    - <font color="red"> **Important note 1**</font>: internally, all device names, parameters, nodes, types, 
+    reference names, and data vector names are converted to lowercase after object instantiation. 
+    While you can enter them in any case, they can only be accessed by their lowercase names. 
+    This approach aligns with the fact that most SPICE simulators are case-insensitive. 
+    To prevent ambiguity in Tcl code, where the simulator treats mixed-case names as identical, we convert everything to lowercase. 
+    This ensures that we can detect and resolve any duplicate names in the top-level circuit before generating the netlist.
+    - <font color="red"> **Important note 2**</font>: ihis package is not designed to be used with the `.control` section 
+    in Ngspice, the .step statement in LTspice, or multiple DC sweeps, and it does not support reading parametric 
+    sweeps from raw data. The idea of the package is to handle all such tasks within a Tcl script, 
+    eliminating the need to use the simulator's internal scripting capabilities.
     
     ### Packages imports
     
@@ -68,9 +76,9 @@ variable startPage {
     ```tcl
     namespace import ::SpiceGenTcl::*
     ```
-    One of commands is `importNgspice`, by calling this command we can import all
-    commands related to Ngspice simulator, and you don't need to add prefix `::SpiceGenTcl::Ngspice`
-    before any command. So we do it:
+    One of the commands is `importNgspice`. By calling this command, we can import all commands related to the 
+    Ngspice simulator, eliminating the need to add the ::SpiceGenTcl::Ngspice prefix before any command. 
+    Here's how to do it:
     ```tcl
     importNgspice
     ```
@@ -96,9 +104,9 @@ variable startPage {
     ```tcl
     set circuit [Circuit new {voltage divider netlist}]
     ```
-    `Circuit` command creating a new object of class `Circuit`, it is imported from `::SpiceGenTcl` namespace and represents 
-    top-level circuit. The only argument we supply to it is the name of the circuit 
-    that will be printed at first line of netlist.
+    The `Circuit` command creates a new object of the `Circuit` class, which is imported from the 
+    `::SpiceGenTcl` namespace and represents the top-level circuit. 
+    The only argument we provide is the name of the circuit, which will be printed on the first line of the netlist.
 
     The next step is building netlist by addding elements to top circuit object:
     ```tcl
@@ -107,13 +115,14 @@ variable startPage {
     $circuit add [R new 2 out 0 2e3]
     $circuit add [Dc new v1 0 5 0.1]
     ```
-    `Circuit` class instance with reference stored in `circuit` variable has `add` method that appends arguments object reference
-    to it. Object creating commands `Vdc`, `R` and `Dc` represent  DC voltage source, 
-    basic resistor and DC analysis accordingly, are imported from `::SpiceGenTcl::Ngspice:Sources`, `::SpiceGenTcl::Ngspice::BasicElements` 
+    An instance of the `Circuit` class, referenced by the `circuit` variable, has an `add` method that appends the references of 
+    argument objects to it. The object-creating commands `Vdc`, `R`, and `Dc` — which represent a DC voltage source, a basic resistor, 
+    and a DC analysis, respectively — are imported from the `::SpiceGenTcl::Ngspice::Sources`, `::SpiceGenTcl::Ngspice::BasicElements`, 
     and `::SpiceGenTcl::Ngspice::Analyses` namespaces.
 
-    Together with `new` subcommand we supply basic arguments of element, for example, in `R` command we supply name '1', 
-    name of net connected to plus node 'in', name of net connected to minus node '0' (actually global ground), and resistance value '1e3'.
+    When using the `new` subcommand, you provide the basic arguments for the element. For example, in the `R` command, you would supply the name '1', 
+    the name of the net connected to the positive node 'in', the name of the net connected to the negative node '0' (which is the global ground), 
+    and the resistance value '1e3'.
     
     The last necessary step is to create `Simulator` object with command `Batch` from `::SpiceGenTcl::Ngspice` namespace and attach it to `Circuit` object:
     ```tcl
@@ -124,7 +133,8 @@ variable startPage {
     ```tcl
     $circuit runAndRead
     ```
-    After simulation we can read result data. We use method `getDataDict` to get dictionary with keys as names of result vectors:
+    After the simulation, we can read the resulting data. We use the `getDataDict` method to obtain a dictionary 
+    where the keys are the names of the result vectors:
     ```tcl
     set data [$circuit getDataDict]
     ```

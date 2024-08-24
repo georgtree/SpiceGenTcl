@@ -70,7 +70,7 @@ v1 net1 net3 5
 
 </figure><h3 class='ruff'><a name='::Tutorials-Delete element'></a>Delete element<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
-<p class='ruff'>The opposite action is delete with method <code>del</code>. For example, we can delete 'c1' element from netlist by specifiying its name:</p>
+<p class='ruff'>The opposite action is to delete with the <code>del</code> method. For example, we can delete the 'c1' element from the netlist by specifying its name:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$netlist</font> del c1
 <b><font color=#923B23>puts</font></b> [<font color=#4A181B>$netlist</font> genSPICEString]
@@ -228,7 +228,7 @@ v1 net1 net3 5
 <b><font color=#923B23>set</font></b> subInst1 [<b><font color=#923B23>SubcircuitInstanceAuto</font></b> new <font color=#4A181B>$subcircuit</font> 2 {net1 net2} <font color=#463e11>-r</font> 1 <font color=#463e11>-c</font> {cpar <font color=#463e11>-eq</font>}]
 </pre>
 
-</figure><p class='ruff'>In this approach we pass reference of our subcircuit as first argument. Then we need only pass list of net connected to pins in the order of pins definition in subcircuit, and parameters in form of <code><font color=#463e11>-paramName</font> paramValue</code>. If you try to add parameter that does not exist in subcircuit definition you'll got the error.</p>
+</figure><p class='ruff'>In this approach, we pass the reference of our subcircuit as the first argument. Then, we only need to provide a list of nets connected to the pins, in the order defined in the subcircuit, and parameters in the form of <code><font color=#463e11>-paramName</font> paramValue</code>. If you try to add a parameter that does not exist in the subcircuit definition, you'll receive an error.</p>
 <p class='ruff'>The final circuit is:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>.subckt rcnet plus minus r=100 c=1e-6
@@ -243,7 +243,8 @@ x2 net1 net2 rcnet r=1 c={cpar}
 
 </figure><h2 class='ruff'><a name='::Tutorials-Diode current simualtion'></a>Diode current simualtion<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
-<p class='ruff'>In this example we look at the parametric simulation of diode model current curve, the parameter is ambient temperature. To do this, we should run simulation multiple times with different temperature, save results after each iteration and then add them at one plot. As in previous examples, we create top circuit, and add elements to it:</p>
+<p class='ruff'>In this example, we examine the parametric simulation of a diode model's current curve, with the ambient temperature as the parameter. To achieve this, we need to run the simulation multiple times at different temperatures, save the results from each iteration, and then combine them into a single plot.</p>
+<p class='ruff'>As in previous examples, we start by creating the top circuit and adding elements to it:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create top-level circuit</font></i>
 <b><font color=#923B23>set</font></b> circuit [<b><font color=#923B23>Circuit</font></b> new {diode IV}]
@@ -254,15 +255,15 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Dc</font></b> new va 0 2 0.01]
 </pre>
 
-</figure><p class='ruff'>In upper block of code we add diode instance with <code><b><font color=#923B23>D</font></b> new</code> command, add corresponding diode model with <code><b><font color=#923B23>DiodeModel</font></b> new</code> command, DC voltage source that will be swept and DC analysis statement. Voltage change is from 0 to 2 volts, so we get forward current characteristic.</p>
-<p class='ruff'>The temperature in Ngspice is set with <code>.temp</code> statement, so we create instance of it with <code><b><font color=#923B23>Temp</font></b> new</code> command, save object reference in variable <code>tempSt</code> and add it to <code>circuit</code> :</p>
+</figure><p class='ruff'>In the upper block of code, we add a diode instance using the <code><b><font color=#923B23>D</font></b> new</code> command, create the corresponding diode model with the <code><b><font color=#923B23>DiodeModel</font></b> new</code> command, add a DC voltage source that will be swept, and include a DC analysis statement. The voltage ranges from 0 to 2 volts to obtain the forward current characteristic.</p>
+<p class='ruff'>The temperature in Ngspice is set using the <code>.temp</code> statement. We create an instance with the <code><b><font color=#923B23>Temp</font></b> new</code> command, save the object reference in the variable <code>tempSt</code>, and then add it to the circuit:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># add .temp</font></i>
 <b><font color=#923B23>set</font></b> tempSt [<b><font color=#923B23>Temp</font></b> new 25]
 <font color=#4A181B>$circuit</font> add <font color=#4A181B>$tempSt</font>
 </pre>
 
-</figure><p class='ruff'>Then we create array containing temperature values and create <code><b><font color=#923B23>Simulator</font></b></code> class object:</p>
+</figure><p class='ruff'>Next, we create an array containing the temperature values and instantiate an object of the <code><b><font color=#923B23>Simulator</font></b></code> class.:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># add temperature sweep</font></i>
 <b><font color=#923B23>set</font></b> temps [<b><font color=#923B23>list</font></b> -55 25 85 125 175]
@@ -272,7 +273,7 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <font color=#4A181B>$circuit</font> attachSimulator <font color=#4A181B>$simulator</font>
 </pre>
 
-</figure><p class='ruff'>The only thing that left is to set temperature value in <code><b><font color=#923B23>Temp</font></b></code> class object, run circuit, save data and repeat multiple times:</p>
+</figure><p class='ruff'>The only thing left is to set the temperature value in the Temp class object, run the circuit, save the data, and repeat this process multiple times:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># run circuit, change temperature, read log and data</font></i>
 <b><font color=#923B23>foreach</font></b> temp <font color=#4A181B>$temps</font> {
@@ -287,7 +288,7 @@ x2 net1 net2 rcnet r=1 c={cpar}
 }
 </pre>
 
-</figure><p class='ruff'>And plot the results:</p>
+</figure><p class='ruff'>Plotting the results:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># plot results with plotchart</font></i>
 <b><font color=#7d1c00>wm</font></b> geometry . 600x400
@@ -305,11 +306,11 @@ x2 net1 net2 rcnet r=1 c={cpar}
 }
 </pre>
 
-</figure><p class='ruff'>On the picture you can see how temperature affects the forward current of diode, and because we have temperature dependence of series resistance, we get point of zero temperature coefficient when all lines cross each other near 1.8V:</p>
+</figure><p class='ruff'>In the picture, you can see how temperature affects the forward current of the diode. Because the series resistance has a temperature dependence, all the lines intersect near 1.8V, indicating the point of zero temperature coefficient:</p>
 <p class='ruff'><img src="assets/img/diode_iv.png" alt="diode_iv" /></p>
 <h2 class='ruff'><a name='::Tutorials-Diode capacitance simualtion'></a>Diode capacitance simualtion<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
-<p class='ruff'>In this example we get volt-farad (or capacitance-voltage) of diode depletion charge. To accomplish this, we need to apply negative voltage bias to anode, and do AC simulation at single frequency. Then we can repeat this multiple times at different voltage, collect all results and then finally plot the whole curve. We calculate capacitance value with equation:</p>
+<p class='ruff'>In this example, we measure the volt-farad (or capacitance-voltage) relationship of the diode's depletion charge. To achieve this, we need to apply a negative voltage bias to the anode and perform an AC simulation at a single frequency. We then repeat this process at different voltages, collect all the results, and finally plot the entire curve. We calculate the capacitance value using the following equation:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>          ⎛I⎞   
       <font color=#463e11>-Im</font> ⎜─⎟   
@@ -367,20 +368,28 @@ x2 net1 net2 rcnet r=1 c={cpar}
     <i><font color=#4b5d50># get imaginary part of current</font></i>
     <b><font color=#923B23>lappend</font></b> traceList [<b><font color=#923B23>lindex</font></b> [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> i(va)] 0 1]
 }
+```        
+The `BatchLiveLog` simulator differs from `Batch` in that it prints output line by line during the simulation, 
+rather than only at the end.
+
+Here, we collect the imaginary component of the current flowing through the AC voltage source 'Va'.
+
+You might wonder why we use two indices, 0 and 1, when extracting values from the vector i(va).
+
+The answer is as follows: the first index extracts values from the list of values at different frequencies, 
+<b><font color=#923B23>while</font></b> the second index retrieves the imaginary component. 
+The AC data vectors are organized as follows:
 </pre>
 
-</figure><p class='ruff'><code><b><font color=#923B23>BatchLiveLog</font></b></code> simulator differs from <code><b><font color=#923B23>Batch</font></b></code> in sense of stdout output printing - it prints output line by line during simulation, not only at the end of it.</p>
-<p class='ruff'>Here we collect imaginary value of current flowing through Va AC voltage source.</p>
-<p class='ruff'>One question that you could ask - why we use two indexes, 0 and 1 when we extract values from the vector i(va)?</p>
-<p class='ruff'>The answer is following: by first index we extract value from list of values at different frequencies, and by second we get imaginary value. The AC data vectors come in form:</p>
+</figure><p class='ruff'>{{reVal0 imVal0} {reVal1 imVal1} {reVal2 imVal2} ...}</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>{{reVal0 imVal0} {reVal1 imVal1} {reVal2 imVal2} ...}
-</pre>
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>Here, `reVal0` is the real value at frequency index 0, `imVal0`is the imaginary value at the same frequency, 
+`reVal1` is the real value at frequency index 1, `imVal1` is the imaginary value at that frequency, and so on. 
+Even if there is only one frequency in the AC analysis, you should still extract the value using index 0.
 
-</figure><p class='ruff'>where Val0 is the value at frequency with index 0, Val1 at frequency with index 1, Val2 is the value at frequency with index 2 and so on. Even if we have one frequency in AC analysis, we have to extract it with index 0.</p>
-<p class='ruff'>Now we can plot the results, together with applying equation to calculate capacitance (voltage phasor is equal to 1 so we omit it):</p>
-
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># plot results with plotchart</font></i>
+Now we can plot the results and apply the equation to calculate the capacitance (with the voltage phasor set to 1, so it is omitted):
+```tcl
+<i><font color=#4b5d50># plot results with plotchart</font></i>
 <b><font color=#7d1c00>wm</font></b> geometry . 600x400
 <b><font color=#923B23>set</font></b> xyp [xyplot .xyp <font color=#463e11>-xformat</font> <font color=#035103>&quot;%.2f&quot;</font> <font color=#463e11>-yformat</font> <font color=#035103>&quot;%.2e&quot;</font> <font color=#463e11>-title</font> <font color=#035103>&quot;Diode CV&quot;</font> <font color=#463e11>-xtext</font> <font color=#035103>&quot;v(0,c), V&quot;</font> <font color=#463e11>-ytext</font> <font color=#035103>&quot;C, C&quot;</font>]
 <b><font color=#7d1c00>pack</font></b> <font color=#4A181B>$xyp</font> <font color=#463e11>-fill</font> both <font color=#463e11>-expand</font> true
@@ -390,13 +399,13 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <font color=#4A181B>$xyp</font> add_data sf0 <font color=#4A181B>$xydata</font> <font color=#463e11>-color</font> red
 </pre>
 
-</figure><p class='ruff'>As a result we got expected curve with decreasing capacitance value at higher reverse voltage:</p>
+</figure><p class='ruff'>As a result, we obtain the expected curve, showing a decrease in capacitance value with higher reverse voltage:</p>
 <p class='ruff'><img src="assets/img/diode_cv.png" alt="diode_cv" /></p>
 <h2 class='ruff'><a name='::Tutorials-Transient simulation of ring oscillator'></a>Transient simulation of ring oscillator<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
-<p class='ruff'>In this example we look at circuit with transient analysis, and also we will see how to use Tcl script to build circuit that contains multiple stages of the same subcircuit.</p>
-<p class='ruff'>Circuit is ring oscillator that is made from voltage-controlled switchs, this circuit was taken from Ngspice examples (/examples/p-to-n-examples/switch-oscillators.cir). Each stage of oscillator is simple two-switch inverter, the whole circuit contains 17 stages.</p>
-<p class='ruff'>At the beggining we create class <code>Inverter</code> that describes inverter and create object:</p>
+<p class='ruff'>In this example, we analyze a circuit with transient analysis and demonstrate how to use a Tcl script to build a circuit containing multiple stages of the same subcircuit.</p>
+<p class='ruff'>The circuit is a ring oscillator composed of voltage-controlled switches, based on an example from Ngspice (/examples/p-to-n-examples/switch-oscillators.cir). Each stage of the oscillator is a simple two-switch inverter, and the entire circuit consists of 17 stages.</p>
+<p class='ruff'>At the beginning, we create a class called <code>Inverter</code> to describe the inverter and then instantiate an object of this class:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create class that represents inverter subcircuit</font></i>
 <b><font color=#ca14ca>oo::class</font></b> create Inverter {
@@ -419,7 +428,7 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <b><font color=#923B23>set</font></b> inverter [Inverter new]
 </pre>
 
-</figure><p class='ruff'>Next we define other elements and top-level circuit:</p>
+</figure><p class='ruff'>Next, we define the other elements and the top-level circuit:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create top-level circuit</font></i>
 <b><font color=#923B23>set</font></b> circuit [<b><font color=#923B23>Circuit</font></b> new {switch_oscillator}]
@@ -433,7 +442,7 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>C</font></b> new vdd vdd 0 1e-18]
 </pre>
 
-</figure><p class='ruff'>Multiple stages of invertors we can add in loop, so it saves us many lines of code and allow to change the number of stages dynamically:</p>
+</figure><p class='ruff'>We can add multiple stages of inverters using a loop, which saves many lines of code and allows us to dynamically adjust the number of stages:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># add multiple inverters in the cycle</font></i>
 <b><font color=#923B23>for</font></b> {<b><font color=#923B23>set</font></b> i 1} {<font color=#4A181B>$i</font>&lt;16} {<b><font color=#923B23>incr</font></b> i} {
@@ -442,7 +451,7 @@ x2 net1 net2 rcnet r=1 c={cpar}
 }
 </pre>
 
-</figure><p class='ruff'>After it we add first and last stages, as well as models of switches.</p>
+</figure><p class='ruff'>After that, we add the first and last stages, as well as the models of the switches:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$circuit</font> add [<b><font color=#923B23>SubcircuitInstanceAuto</font></b> new <font color=#4A181B>$inverter</font> x18 {osc_out n1 vdd 0}]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>SubcircuitInstanceAuto</font></b> new <font color=#4A181B>$inverter</font> x19 {n16 osc_out vdd 0}]
@@ -484,9 +493,9 @@ x2 net1 net2 rcnet r=1 c={cpar}
 </figure><p class='ruff'><img src="assets/img/switch_oscillator.png" alt="switch_oscillator" /></p>
 <h2 class='ruff'><a name='::Tutorials-Transient simulation of four-bit adder'></a>Transient simulation of four-bit adder<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
-<p class='ruff'>This example, as the previous one, contain circuit that is run in transient analysis, but it differs in terms of complexity and presence of nested subcircuits elements.</p>
-<p class='ruff'>Circuit is a classical adder with 2 four-bit inputs, this circuit was taken from Ngspice tests (/tests/transient/fourbitadder.cir). We incrementally build it from the simplest NAND logical blocks up to four-bit adder circuit.</p>
-<p class='ruff'>NAND block itself is built from combination of bipolar transistors, diodes and resistors. Its definition is:</p>
+<p class='ruff'>This example, like the previous one, involves a circuit run in transient analysis. However, it differs in terms of complexity and the presence of nested subcircuit elements.</p>
+<p class='ruff'>The circuit is a classic adder with 2 four-bit inputs, sourced from Ngspice tests (/tests/transient/fourbitadder.cir). We incrementally build it from the simplest NAND logic blocks up to the four-bit adder circuit.</p>
+<p class='ruff'>The NAND block itself is constructed from a combination of bipolar transistors, diodes, and resistors. Its definition is as follows:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create class that represents NAND subcircuit</font></i>
 <b><font color=#ca14ca>oo::class</font></b> create NAND {
@@ -546,7 +555,11 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <b><font color=#923B23>set</font></b> onebit [ONEBIT new]
 </pre>
 
-</figure><p class='ruff'>Previously, we've already built subcircuits, but here you can see that we can use subcircuits inside definitions of other subcircuit, and therefore created multi-level hierarchy to build complex circuits. So now we can combine one-bit to two bit adder, and then again increase level of grouping by connecting two two-bit sub-circuit to create four-bit adder:</p>
+</figure><pre class='ruff'>   Previously, we built subcircuits, but here we demonstrate that subcircuits can be used within the definitions of other 
+   subcircuits, allowing us to create a multi-level hierarchy for building complex circuits. We start by combining one-bit 
+   adders to form two-bit adders, and then increase the level of grouping by connecting two two-bit subcircuits to create 
+   a four-bit adder:
+</pre>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create class that represents TWOBIT subcircuit</font></i>
 <b><font color=#ca14ca>oo::class</font></b> create TWOBIT {
@@ -641,7 +654,7 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <font color=#4A181B>$circuit</font> runAndRead
 </pre>
 
-</figure><p class='ruff'>Now we read the data and plot it as usual:</p>
+</figure><p class='ruff'>Finally we read the data and plot it as usual:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># get data dict</font></i>
 <b><font color=#923B23>set</font></b> data [<font color=#4A181B>$circuit</font> getDataDict]

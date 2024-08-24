@@ -55,8 +55,8 @@ namespace eval Tutorials {
         
         ### Delete element
         
-        The opposite action is delete with method `del`. For example, we can delete 'c1' element
-        from netlist by specifiying its name:
+        The opposite action is to delete with the `del` method. 
+        For example, we can delete the 'c1' element from the netlist by specifying its name:
         ```tcl
         $netlist del c1
         puts [$netlist genSPICEString]
@@ -205,9 +205,9 @@ namespace eval Tutorials {
         # create subcircuit instance with help of already created subcircuit definition $subcircuit
         set subInst1 [SubcircuitInstanceAuto new $subcircuit 2 {net1 net2} -r 1 -c {cpar -eq}]
         ```
-        In this approach we pass reference of our subcircuit as first argument. Then we need only pass list of
-        net connected to pins in the order of pins definition in subcircuit, and parameters in form of `-paramName paramValue`.
-        If you try to add parameter that does not exist in subcircuit definition you'll got the error.
+        In this approach, we pass the reference of our subcircuit as the first argument. Then, we only need to provide a list 
+        of nets connected to the pins, in the order defined in the subcircuit, and parameters in the form of `-paramName paramValue`. 
+        If you try to add a parameter that does not exist in the subcircuit definition, you'll receive an error.
         
         The final circuit is:
         ```
@@ -223,10 +223,11 @@ namespace eval Tutorials {
         
         ## Diode current simualtion
         
-        In this example we look at the parametric simulation of diode model current curve, the parameter is ambient temperature.
-        To do this, we should run simulation multiple times with different temperature, save results after each iteration and then
-        add them at one plot.
-        As in previous examples, we create top circuit, and add elements to it:
+        In this example, we examine the parametric simulation of a diode model's current curve, with the ambient temperature as 
+        the parameter. To achieve this, we need to run the simulation multiple times at different temperatures, save the results 
+        from each iteration, and then combine them into a single plot. 
+        
+        As in previous examples, we start by creating the top circuit and adding elements to it:
         ```tcl
         # create top-level circuit
         set circuit [Circuit new {diode IV}]
@@ -236,18 +237,19 @@ namespace eval Tutorials {
         $circuit add [DiodeModel new diomod -is 1e-12 -n 1.2 -rs 0.01 -cj0 1e-9 -trs1 0.001 -xti 5]
         $circuit add [Dc new va 0 2 0.01]
         ```
-        In upper block of code we add diode instance with `D new` command, add corresponding diode model
-        with `DiodeModel new` command, DC voltage source that will be swept and DC analysis statement. Voltage
-        change is from 0 to 2 volts, so we get forward current characteristic.
+        In the upper block of code, we add a diode instance using the `D new` command, create the corresponding diode model 
+        with the `DiodeModel new` command, add a DC voltage source that will be swept, and include a DC analysis statement. 
+        The voltage ranges from 0 to 2 volts to obtain the forward current characteristic.
         
-        The temperature in Ngspice is set with `.temp` statement, so we create instance of it with `Temp new` command,
-         save object reference in variable `tempSt` and add it to `circuit` :
+        The temperature in Ngspice is set using the `.temp` statement. We create an instance with the `Temp new` command, 
+        save the object reference in the variable `tempSt`, and then add it to the circuit:
         ```tcl
         # add .temp
         set tempSt [Temp new 25]
         $circuit add $tempSt
         ```
-        Then we create array containing temperature values and create `Simulator` class object:
+        
+        Next, we create an array containing the temperature values and instantiate an object of the `Simulator` class.:
         ```tcl
         # add temperature sweep
         set temps [list -55 25 85 125 175]
@@ -256,8 +258,9 @@ namespace eval Tutorials {
         # attach simulator object to circuit
         $circuit attachSimulator $simulator
         ```
-        The only thing that left is to set temperature value in `Temp` class object, run circuit, 
-        save data and repeat multiple times:
+        
+        The only thing left is to set the temperature value in the Temp class object, run the circuit, save the data, 
+        and repeat this process multiple times:
         ```tcl
         # run circuit, change temperature, read log and data
         foreach temp $temps {
@@ -272,7 +275,7 @@ namespace eval Tutorials {
         }
         ```
         
-        And plot the results:
+        Plotting the results:
         ```tcl
         # plot results with plotchart
         wm geometry . 600x400
@@ -289,18 +292,18 @@ namespace eval Tutorials {
             incr i
         }
         ```
-        On the picture you can see how temperature affects the forward current of diode, and because we
-        have temperature dependence of series resistance, we get point of zero temperature coefficient when 
-        all lines cross each other near 1.8V:
+        
+        In the picture, you can see how temperature affects the forward current of the diode. Because the series resistance has a 
+        temperature dependence, all the lines intersect near 1.8V, indicating the point of zero temperature coefficient:
         
         ![diode_iv](assets/img/diode_iv.png)
         
         ## Diode capacitance simualtion
         
-        In this example we get volt-farad (or capacitance-voltage) of diode depletion charge. To accomplish this, we need to 
-        apply negative voltage bias to anode, and do AC simulation at single frequency. Then we can repeat this multiple times
-        at different voltage, collect all results and then finally plot the whole curve.
-        We calculate capacitance value with equation:
+        In this example, we measure the volt-farad (or capacitance-voltage) relationship of the diode's depletion charge. 
+        To achieve this, we need to apply a negative voltage bias to the anode and perform an AC simulation at a single frequency. 
+        We then repeat this process at different voltages, collect all the results, and finally plot the entire curve. We calculate 
+        the capacitance value using the following equation:
         ```
                   ⎛I⎞   
               -Im ⎜─⎟   
@@ -356,23 +359,25 @@ namespace eval Tutorials {
             # get imaginary part of current
             lappend traceList [lindex [dict get $data i(va)] 0 1]
         }
-        ```
-        `BatchLiveLog` simulator differs from `Batch` in sense of stdout output printing - it prints
-        output line by line during simulation, not only at the end of it.
+        ```        
+        The `BatchLiveLog` simulator differs from `Batch` in that it prints output line by line during the simulation, 
+        rather than only at the end.
         
-        Here we collect imaginary value of current flowing through Va AC voltage source. 
+        Here, we collect the imaginary component of the current flowing through the AC voltage source 'Va'.
         
-        One question that you could ask - why we use two indexes, 0 and 1 when we extract values from the vector i(va)? 
+        You might wonder why we use two indices, 0 and 1, when extracting values from the vector i(va).
         
-        The answer is following: by first index we extract value from list of values at different frequencies, and by second we get imaginary value. 
-        The AC data vectors come in form: 
+        The answer is as follows: the first index extracts values from the list of values at different frequencies, 
+        while the second index retrieves the imaginary component. 
+        The AC data vectors are organized as follows:
         ```
         {{reVal0 imVal0} {reVal1 imVal1} {reVal2 imVal2} ...}
         ```
-        where Val0 is the value at frequency with index 0, Val1 at frequency with index 1, Val2 is the value at frequency with index 2 and so on. 
-        Even if we have one frequency in AC analysis, we have to extract it with index 0.
+        Here, `reVal0` is the real value at frequency index 0, `imVal0`is the imaginary value at the same frequency, 
+        `reVal1` is the real value at frequency index 1, `imVal1` is the imaginary value at that frequency, and so on. 
+        Even if there is only one frequency in the AC analysis, you should still extract the value using index 0.
         
-        Now we can plot the results, together with applying equation to calculate capacitance (voltage phasor is equal to 1 so we omit it):
+        Now we can plot the results and apply the equation to calculate the capacitance (with the voltage phasor set to 1, so it is omitted):
         ```tcl
         # plot results with plotchart
         wm geometry . 600x400
@@ -383,20 +388,20 @@ namespace eval Tutorials {
         }
         $xyp add_data sf0 $xydata -color red
         ```
-        As a result we got expected curve with decreasing capacitance value at higher reverse voltage:
+        As a result, we obtain the expected curve, showing a decrease in capacitance value with higher reverse voltage:
         
         ![diode_cv](assets/img/diode_cv.png)
         
         ## Transient simulation of ring oscillator
         
-        In this example we look at circuit with transient analysis, and also we will see how to use
-        Tcl script to build circuit that contains multiple stages of the same subcircuit. 
+        In this example, we analyze a circuit with transient analysis and demonstrate how to use a Tcl script to build a circuit 
+        containing multiple stages of the same subcircuit.
         
-        Circuit is ring oscillator that is made from voltage-controlled switchs, this circuit was taken from Ngspice
-        examples (/examples/p-to-n-examples/switch-oscillators.cir). Each stage of oscillator is simple two-switch
-        inverter, the whole circuit contains 17 stages.
+        The circuit is a ring oscillator composed of voltage-controlled switches, based on an example from Ngspice 
+        (/examples/p-to-n-examples/switch-oscillators.cir). Each stage of the oscillator is a simple two-switch inverter, 
+        and the entire circuit consists of 17 stages.
         
-        At the beggining we create class `Inverter` that describes inverter and create object:
+        At the beginning, we create a class called `Inverter` to describe the inverter and then instantiate an object of this class:
         ```tcl
         # create class that represents inverter subcircuit
         oo::class create Inverter {
@@ -419,7 +424,7 @@ namespace eval Tutorials {
         set inverter [Inverter new]
         ```
         
-        Next we define other elements and top-level circuit:
+        Next, we define the other elements and the top-level circuit:
         ```tcl
         # create top-level circuit
         set circuit [Circuit new {switch_oscillator}]
@@ -433,8 +438,8 @@ namespace eval Tutorials {
         $circuit add [C new vdd vdd 0 1e-18]
         ```
         
-        Multiple stages of invertors we can add in loop, so it saves us many lines of code and allow
-        to change the number of stages dynamically:
+        We can add multiple stages of inverters using a loop, which saves many lines of code and allows us to dynamically adjust 
+        the number of stages:
         ```tcl
         # add multiple inverters in the cycle
         for {set i 1} {$i<16} {incr i} {
@@ -443,7 +448,7 @@ namespace eval Tutorials {
         }
         ```
         
-        After it we add first and last stages, as well as models of switches.
+        After that, we add the first and last stages, as well as the models of the switches:
         ```tcl
         $circuit add [SubcircuitInstanceAuto new $inverter x18 {osc_out n1 vdd 0}]
         $circuit add [SubcircuitInstanceAuto new $inverter x19 {n16 osc_out vdd 0}]
@@ -486,14 +491,14 @@ namespace eval Tutorials {
         
         ## Transient simulation of four-bit adder
         
-        This example, as the previous one, contain circuit that is run in transient analysis, but it differs in terms of
-        complexity and presence of nested subcircuits elements. 
+        This example, like the previous one, involves a circuit run in transient analysis. However, it differs in terms of 
+        complexity and the presence of nested subcircuit elements.
         
-        Circuit is a classical adder with 2 four-bit inputs, this circuit was taken from Ngspice
-        tests (/tests/transient/fourbitadder.cir). We incrementally build it from the simplest NAND logical blocks up to four-bit 
-        adder circuit. 
+        The circuit is a classic adder with 2 four-bit inputs, sourced from Ngspice tests (/tests/transient/fourbitadder.cir). 
+        We incrementally build it from the simplest NAND logic blocks up to the four-bit adder circuit.
         
-        NAND block itself is built from combination of bipolar transistors, diodes and resistors. Its definition is:
+        The NAND block itself is constructed from a combination of bipolar transistors, diodes, and resistors. Its definition is 
+        as follows:
         ```tcl
         # create class that represents NAND subcircuit
         oo::class create NAND {
@@ -553,9 +558,10 @@ namespace eval Tutorials {
         set onebit [ONEBIT new]
         ```
         
-        Previously, we've already built subcircuits, but here you can see that we can use subcircuits inside definitions of other subcircuit,
-        and therefore created multi-level hierarchy to build complex circuits. So now we can combine one-bit to two bit adder, and then again
-        increase level of grouping by connecting two two-bit sub-circuit to create four-bit adder:
+       Previously, we built subcircuits, but here we demonstrate that subcircuits can be used within the definitions of other 
+       subcircuits, allowing us to create a multi-level hierarchy for building complex circuits. We start by combining one-bit 
+       adders to form two-bit adders, and then increase the level of grouping by connecting two two-bit subcircuits to create 
+       a four-bit adder:
         ```tcl
         # create class that represents TWOBIT subcircuit
         oo::class create TWOBIT {
@@ -650,7 +656,7 @@ namespace eval Tutorials {
         $circuit runAndRead
         ```
         
-        Now we read the data and plot it as usual:
+        Finally we read the data and plot it as usual:
         ```tcl
         # get data dict
         set data [$circuit getDataDict]
