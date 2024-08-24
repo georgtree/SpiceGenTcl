@@ -2,6 +2,7 @@
 
 lappend auto_path "../"
 lappend auto_path "/home/georgtree/tcl/"
+set path_to_hl_tcl "/home/georgtree/tcl/hl_tcl"
 package require ruff
 package require fileutil
 set dir [file dirname [file normalize [info script]]]
@@ -47,22 +48,11 @@ if {[llength $argv] == 0 || "html" in $argv} {
         {*}$common
 }
 
-
-exec tclsh /home/georgtree/tcl/hl_tcl/tcl_html.tcl "./index.html" 
-exec tclsh /home/georgtree/tcl/hl_tcl/tcl_html.tcl "./index-SpiceGenTcl.html" 
-exec tclsh /home/georgtree/tcl/hl_tcl/tcl_html.tcl "./index-Tutorials.html" 
-exec tclsh /home/georgtree/tcl/hl_tcl/tcl_html.tcl "./index-FAQ.html" 
-exec tclsh /home/georgtree/tcl/hl_tcl/tcl_html.tcl "./index-Tips.html" 
-exec tclsh /home/georgtree/tcl/hl_tcl/tcl_html.tcl "./index-SpiceGenTcl-Ngspice.html" 
-exec tclsh /home/georgtree/tcl/hl_tcl/tcl_html.tcl "./index-SpiceGenTcl-Ngspice-Sources.html" 
-exec tclsh /home/georgtree/tcl/hl_tcl/tcl_html.tcl "./index-SpiceGenTcl-Ngspice-Simulators.html" 
-exec tclsh /home/georgtree/tcl/hl_tcl/tcl_html.tcl "./index-SpiceGenTcl-Ngspice-SemiconductorDevices.html" 
-exec tclsh /home/georgtree/tcl/hl_tcl/tcl_html.tcl "./index-SpiceGenTcl-Ngspice-BasicDevices.html" 
-exec tclsh /home/georgtree/tcl/hl_tcl/tcl_html.tcl "./index-SpiceGenTcl-Ngspice-Analyses.html" 
-exec tclsh /home/georgtree/tcl/hl_tcl/tcl_html.tcl "./index-docindex.html" 
+foreach file [glob *.html] {
+    exec tclsh "${path_to_hl_tcl}/tcl_html.tcl" "./$file"
+}
 
 proc processContents {fileContents} {
-    # Search: AA, replace: aa
     return [string map {max-width:60rem max-width:100rem} $fileContents]
 }
 

@@ -43,7 +43,7 @@ Tutorials describing different examples could be found [here](https://georgtree.
 
 Good tutorial for Tcl language could be found [here](http://tcl.tk/man/tcltutorial/html/tcltutorial.html)
 
-It was generated with [ruff!](https://ruff.magicsplat.com/).
+Documentation was generated with [ruff!](https://ruff.magicsplat.com/).
 
 Tcl syntax highlightning was done with [hl_tcl](https://github.com/aplsimple/hl_tcl).
 
