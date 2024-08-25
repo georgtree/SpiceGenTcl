@@ -1,42 +1,145 @@
 namespace eval FAQ {
     variable _ruff_preamble {
         The most frequent questions are collected here.
+        - [Where to find list of availible arguments for devices, models and analyses?]
+        - [How to change parameter of existing element?]
+        - [How to change node name connected to pin of existing element?]
+        - [How to find the list of optional parameters for elements?]
+        - [How to get raw data after simulation?]
+        - [How to get the names of all vectors in raw file?]
+        - [How to get log file after simulation?]
         
-        ## Where to find list of availible arguments for devices, models and analysis?
-        For selected simulator you need to open documentation for namespace with the same name, for example, Ngspice,
-        and the select the cathegory you insterested in:
-        - [::SpiceGenTcl::Ngspice::BasicDevices] - for basic devices like resistors, capcitors, etc.
+        ## Where to find list of availible arguments for devices, models and analyses?
+        For the selected simulator, you need to open the documentation for the corresponding namespace, such as Ngspice. 
+        Then, select the category you are interested in:
+        - [::SpiceGenTcl::Ngspice::BasicDevices] - for basic devices like resistors, capacitors, etc.
         - [::SpiceGenTcl::Ngspice::Sources] - for current and voltage sources.
         - [::SpiceGenTcl::Ngspice::SemiconductorDevices] - for semiconductor devices like diodes, transistors, etc.
         - [::SpiceGenTcl::Ngspice::Analyses] - for availible analysis for selected simulator.
         
         Check out [::SpiceGenTcl::Ngspice::BasicDevices::Resistor] as an example.
         
-        There you can find the list of all availible methods, the arguments list with description, the 
-        example of how element string looks like in netlist and example of creating object of `Resistor` class.
+        There, you can find a list of all available methods, a description of the arguments, an example of how the element string appears 
+        in the netlist, and an example of creating an object of the Resistor class.
         
         ## How to change parameter of existing element?
         
         For all elements with parameters you can change parameter value by its name with method [::SpiceGenTcl::Device::setParamValue].
         
+        For example here we change the resistance value of basic resistor:
+        ```tcl
+        $resistor setParamValue r 100
+        ```
+        
+        The name of the parameter can be found in the documentation [here]([::SpiceGenTcl::Ngspice::BasicDevices::Resistor]).
+        In the parameter table, the entry for resistance is labeled `rVal`, so the name used for resistance is 'r'. 
+        This naming convention, `param_nameVal`, is applied to all elements in the package.
+        
+        Another option is to call the `getParams` method, which returns a list of all parameters with their values. For example:
+        ```tcl
+        # create resistor
+        set resistor [R new 1 net1 net2 10]
+        puts [$resistor getParams]
+        ```
+        
+        It returns:
+        ```
+        r 10
+        ```
+        So parameter name is 'r' with value '10'.
+        
         ## How to change node name connected to pin of existing element?
         
-        For all elements with pins you can change name of connected node name by pin name with method [::SpiceGenTcl::Device::setPinNodeName].
+        For all elements with pins, you can change the connected node's name by using the pin name with the method [::SpiceGenTcl::Device::setPinNodeName].
         
+        For example, here we change the node name of the basic resistor's positive pin:
+        ```tcl
+        $resistor setPinNodeName np net10
+        ```
+        
+        The pin name can be found in the documentation [here]([::SpiceGenTcl::Ngspice::BasicDevices::Resistor]).
+        In the parameter table, the pins are listed as `npNode` and `nmNode`, so the names used for the positive and negative 
+        pins are 'np' and 'nm', respectively. This `pin_nameNode` convention applies to all elements in the package.
+        
+        Another option is to call the `getPins` method, which returns a list of all pins with their connected node names. For example:
+        ```tcl
+        # create resistor
+        set resistor [R new 1 net1 net2 10]
+        puts [$resistor getPins]
+        ```
+        
+        It returns:
+        ```
+        np net1 nm net2
+        ```
+        So pins names are 'np' and 'nm' with connected nets 'net1' and 'net2'.
+        
+        
+        ## How to find the list of optional parameters for elements?
+        
+        The list of parameters in the documentation includes descriptions of the mandatory arguments but does not elaborate on the 
+        optional parameters found in `args`. This is because some elements, especially models, can have dozens of parameters, and I 
+        wanted to avoid cluttering the documentation.
+        
+        Typically, any optional parameters for elements are also optional in the simulator they relate to, so you can find a list of 
+        them in the simulator's manual. The convention for these parameters is `-nameOfParam value`. For example, for a basic resistor 
+        in Ngspice, you can provide values for the temperature coefficients, 'tc1' and 'tc2'. In SpiceGenTcl, these are added during the 
+        initialization of the resistor like this:
+        ```tcl
+        set resistor [R new 1 net1 net2 10 -tc1 0.1 -tc2 0.4]
+        ```
+        
+        Here we provide the mandatory parameters:
+        - name of device without 'R' designator: '1'
+        - nets connected to pins: 'net1' and 'net2'
+        - value of resistance: '10'
+        Parameters 'tc1' and 'tc2' are provided here as optional arguments.
+        
+        As a last resort, you can look directly at the source code in the documentation. Simply open the `Show source` option, and 
+        you'll find a line within the `constructor` method:
+        ```tcl
+        set paramsNames [list ac m scale temp dtemp tc1 tc2 noisy]
+        ```
+        
+        So the possible optional parameters are: ac, m, scale, temp, dtemp, tc1, tc2, noisy.
+        The same applies to all elements in the package.
+                
         ## How to get raw data after simulation?
         
-        After succesfull simulation, the object of class `RawFile` is created and attached to top-level object of class `Circuit`.
-        So the only thing you need to do is to call method `getDataDict` from `Circuit` object. By this method  you can get the 
-        result vectors in form of dictionary, it contains vectors names as keys and vectors itself as the values. Then you can access it by `dict get` command. 
+        After a successful simulation, an object of the `RawFile` class is created and attached to the top-level `Circuit` object. 
+        To retrieve the result vectors, simply call the `getDataDict` method on the `Circuit` object. This method returns the result 
+        vectors as a dictionary, with vector names as keys and the vectors themselves as values. You can then access these vectors 
+        using the `dict get` command.
+        
+        Example:
         ```tcl
         set data [$circuit getDataDict]
         set axisList [dict get $data v(anode)]
         set traceList [dict get $data i(va)]  
         ```
         
+        ## How to get the names of all vectors in raw file?
+        
+        For this task, you should first retrieve the `RawFile` object reference from the `Circuit` object using the `getData` method. 
+        Then, call the `getVariablesNames` method, which returns a list of all variable names.
+        
+        Example:
+        ```tcl
+        set rawFileObj [$circuit getData]
+        puts [$rawFileObj getVariablesNames]
+        ```
+        
+        There are also methods for retrieve all voltages and currents names separated from each other: `getVoltagesNames` and 
+        `getCurrentsNames`.
+        
         ## How to get log file after simulation?
         
         There is a special method for it in object of `Circuit` class - `getLog`, it returns string containing log file.
+        
+        Example:
+        ```tcl
+        puts [$circuit getLog]
+        ```
     }
 
 }

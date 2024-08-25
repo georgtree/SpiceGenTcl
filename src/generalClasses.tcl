@@ -4,7 +4,7 @@ namespace eval SpiceGenTcl {
 
     namespace export Pin ParameterSwitch Parameter ParameterNoCheck ParameterPositional ParameterPositionalNoCheck \
             ParameterDefault ParameterEquation ParameterPositionalEquation Device DeviceModel Model RawString Comment Include Options \
-            ParamStatement Temp Netlist Circuit Library Subcircuit Analysis Simulator Dataset Axis Trace DummyTrace RawFile
+            ParamStatement Temp Netlist Circuit Library Subcircuit Analysis Simulator Dataset Axis Trace EmptyTrace RawFile
     namespace export importNgspice
     
     proc importNgspice {} {
@@ -1895,10 +1895,10 @@ namespace eval SpiceGenTcl {
         }
     }
     
-    # ________________________ DummyTrace class definition _________________________ #
+    # ________________________ EmptyTrace class definition _________________________ #
 
-    oo::class create DummyTrace {
-        # class that represents empty trace (trace that was not readed) in raw file
+    oo::class create EmptyTrace {
+        # Class represents empty trace (trace that was not readed) in raw file
         superclass Dataset
         constructor {name type len {numType real}} {
             # initialize dummy trace
@@ -1914,7 +1914,7 @@ namespace eval SpiceGenTcl {
     # ________________________ RawFile class definition _________________________ #
 
     oo::class create RawFile {
-        # class that represents raw file
+        # Class represents raw file
         mixin BinaryReader
         # path to raw file including it's file name
         variable Path
@@ -1931,7 +1931,7 @@ namespace eval SpiceGenTcl {
         # binary block size in bytes that contains all variables at axis point value
         variable BlockSize
         constructor {path {traces2read *} {simulator ngspice}} {
-            # constructor that creates RawFile object
+            # Creates RawFile object.
             #  path - path to raw file including it's file name
             #  traces2read - list of traces that will be readed, default value is \*, 
             #   that means reading all traces
@@ -2025,7 +2025,7 @@ namespace eval SpiceGenTcl {
                         set trace [SpiceGenTcl::Trace new $name $varType $NPoints {} $numType]
                     }
                 } else {
-                    set trace [SpiceGenTcl::DummyTrace new $name $varType $NPoints $numType]
+                    set trace [SpiceGenTcl::EmptyTrace new $name $varType $NPoints $numType]
                 }
                 lappend Traces $trace
                 incr ivar
@@ -2044,21 +2044,21 @@ namespace eval SpiceGenTcl {
                 foreach trace $Traces {
                     if {[$trace getNumType]=="double"} {
                         incr calcBlockSize 8
-                        if {[info object class $trace SpiceGenTcl::DummyTrace]} {
+                        if {[info object class $trace SpiceGenTcl::EmptyTrace]} {
                             set fun skip8bytes 
                         } else {
                             set fun readFloat64
                         }
                     } elseif {[$trace getNumType]=="complex"} {
                         incr calcBlockSize 16
-                        if {[info object class $trace SpiceGenTcl::DummyTrace]} {
+                        if {[info object class $trace SpiceGenTcl::EmptyTrace]} {
                             set fun skip16bytes 
                         } else {
                             set fun readComplex 
                         }
                     } elseif {[$trace getNumType]=="real"} {
                         incr calcBlockSize 4
-                        if {[info object class $trace SpiceGenTcl::DummyTrace]} {
+                        if {[info object class $trace SpiceGenTcl::EmptyTrace]} {
                             set fun skip4bytes 
                         } else {
                             set fun readFloat32 
@@ -2075,7 +2075,7 @@ namespace eval SpiceGenTcl {
                     for {set j 0} {$j<[llength $Traces]} {incr j} {
                         set value [eval "my [lindex $scanFunctions $j]" $file] 
                         set trace [lindex $Traces $j]
-                        if {[info object class $trace]!="SpiceGenTcl::DummyTrace"} {
+                        if {[info object class $trace]!="SpiceGenTcl::EmptyTrace"} {
                             $trace appendDataPoints $value 
                         }  
                     }
@@ -2115,28 +2115,28 @@ namespace eval SpiceGenTcl {
             close $file
         }
         method SetPath {path} {
-            # method to set the path of the waveform's file
+            # Sets the path of the waveform's file
             set Path $path
             return
         }
         method getPath {path} {
-            # method to get the path of the waveform's file
+            # Gets the path of the waveform's file
             return $Path
         }
         method getTraces {} {
-            # method returns all Traces objects references
+            # Returns all Traces objects references
             return $Traces
         }
         method getNPoints {} {
-            # method returns number of points
+            # Returns number of points
             return $NPoints
         }
         method getNVariables {} {
-            # method returns number of variables
+            # Returns number of variables
             return $NVariables
         }
         method getAxis {} {
-            # method returns axis object
+            # Returns axis object
             if {[info exists Axis]} {
                 return $Axis
             } else {
@@ -2144,7 +2144,7 @@ namespace eval SpiceGenTcl {
             }
         }
         method getTrace {traceName} {
-            # method return trace object reference by it's name
+            # Returns trace object reference by it's name
             set traceFoundFlag false
             foreach trace $Traces {
                 if {[$trace getName]==$traceName} {
@@ -2159,14 +2159,14 @@ namespace eval SpiceGenTcl {
             return $traceFound
         }
         method getVariablesNames {} {
-            # method returns list that contains names of all variables
+            # Returns list that contains names of all variables
             foreach trace $Traces {
                 lappend tracesNames [$trace getName]
             }
             return $tracesNames
         }
         method getVoltagesNames {} {
-            # method returns list that contains names of all voltage variables
+            # Returns list that contains names of all voltage variables
             foreach trace $Traces {
                 if {[$trace getType]=="voltage"} {
                     lappend voltNames [$trace getName]
@@ -2175,7 +2175,7 @@ namespace eval SpiceGenTcl {
             return $voltNames
         }
         method getCurrentsNames {} {
-            # method returns list that contains names of all current variables
+            # Returns list that contains names of all current variables
             foreach trace $Traces {
                 if {[$trace getType]=="current"} {
                     lappend currNames [$trace getName]
@@ -2184,14 +2184,14 @@ namespace eval SpiceGenTcl {
             return $currNames
         }
         method getTracesStr {} {
-            # method returns information about all Traces in raw file in form of string
+            # Returns information about all Traces in raw file in form of string
             foreach trace $Traces {
                 lappend tracesList "[$trace getName] [$trace getType] [$trace getNumType]"
             }
             return $tracesList
         }
         method getTracesData {} {
-            # method returns dictionary that contains all data in value and name as a key
+            # Returns dictionary that contains all data in value and name as a key
             set dict [dict create]
             foreach trace $Traces {
                 dict append dict [$trace getName] [$trace getDataPoints]
@@ -2199,7 +2199,7 @@ namespace eval SpiceGenTcl {
             return $dict
         }
         method getRawProperties {} {
-            # method returns information all raw files properties
+            # Returns information all raw files properties
             return $RawParams
         }
     }

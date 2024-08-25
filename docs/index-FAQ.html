@@ -16,36 +16,119 @@
         </header><main class='ruff-layout-main ruff-bd'><h1 class='ruff'><a name='FAQ'></a>FAQ<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h1>
 <div style='clear:both;'></div>
 <p class='ruff'>The most frequent questions are collected here.</p>
-<h2 class='ruff'><a name='::FAQ-Where to find list of availible arguments for devices, models and analysis?'></a>Where to find list of availible arguments for devices, models and analysis?<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
-<div style='clear:both;'></div>
-<p class='ruff'>For selected simulator you need to open documentation for namespace with the same name, for example, Ngspice, and the select the cathegory you insterested in:</p>
 <ul class='ruff'>
-<li><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices" title="::SpiceGenTcl::Ngspice::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices</a> - for basic devices like resistors, capcitors, etc.</li>
+<li><a href="index-FAQ.html#::FAQ-Where to find list of availible arguments for devices, models and analyses?" title="Where to find list of availible arguments for devices, models and analyses?" >Where to find list of availible arguments for devices, models and analyses?</a></li>
+<li><a href="index-FAQ.html#::FAQ-How to change parameter of existing element?" title="How to change parameter of existing element?" >How to change parameter of existing element?</a></li>
+<li><a href="index-FAQ.html#::FAQ-How to change node name connected to pin of existing element?" title="How to change node name connected to pin of existing element?" >How to change node name connected to pin of existing element?</a></li>
+<li><a href="index-FAQ.html#::FAQ-How to find the list of optional parameters for elements?" title="How to find the list of optional parameters for elements?" >How to find the list of optional parameters for elements?</a></li>
+<li><a href="index-FAQ.html#::FAQ-How to get raw data after simulation?" title="How to get raw data after simulation?" >How to get raw data after simulation?</a></li>
+<li><a href="index-FAQ.html#::FAQ-How to get the names of all vectors in raw file?" title="How to get the names of all vectors in raw file?" >How to get the names of all vectors in raw file?</a></li>
+<li><a href="index-FAQ.html#::FAQ-How to get log file after simulation?" title="How to get log file after simulation?" >How to get log file after simulation?</a></li>
+</ul>
+<h2 class='ruff'><a name='::FAQ-Where to find list of availible arguments for devices, models and analyses?'></a>Where to find list of availible arguments for devices, models and analyses?<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
+<div style='clear:both;'></div>
+<p class='ruff'>For the selected simulator, you need to open the documentation for the corresponding namespace, such as Ngspice. Then, select the category you are interested in:</p>
+<ul class='ruff'>
+<li><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices" title="::SpiceGenTcl::Ngspice::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices</a> - for basic devices like resistors, capacitors, etc.</li>
 <li><a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources" title="::SpiceGenTcl::Ngspice::Sources" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources</a> - for current and voltage sources.</li>
 <li><a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices" title="::SpiceGenTcl::Ngspice::SemiconductorDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::SemiconductorDevices</a> - for semiconductor devices like diodes, transistors, etc.</li>
 <li><a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses" title="::SpiceGenTcl::Ngspice::Analyses" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses</a> - for availible analysis for selected simulator.</li>
 </ul>
 <p class='ruff'>Check out <a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::Resistor" title="::SpiceGenTcl::Ngspice::BasicDevices::Resistor" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::Resistor</a> as an example.</p>
-<p class='ruff'>There you can find the list of all availible methods, the arguments list with description, the example of how element string looks like in netlist and example of creating object of <code><b><font color=#923B23>Resistor</font></b></code> class.</p>
+<p class='ruff'>There, you can find a list of all available methods, a description of the arguments, an example of how the element string appears in the netlist, and an example of creating an object of the Resistor class.</p>
 <h2 class='ruff'><a name='::FAQ-How to change parameter of existing element?'></a>How to change parameter of existing element?<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
 <p class='ruff'>For all elements with parameters you can change parameter value by its name with method <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setParamValue" title="::SpiceGenTcl::Device::setParamValue" class='ruff_cmd'>::SpiceGenTcl::Device::setParamValue</a>.</p>
+<p class='ruff'>For example here we change the resistance value of basic resistor:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$resistor</font> setParamValue r 100
+</pre>
+
+</figure><p class='ruff'>The name of the parameter can be found in the documentation <a href="[::SpiceGenTcl::Ngspice::BasicDevices::Resistor]" >here</a>. In the parameter table, the entry for resistance is labeled <code>rVal</code>, so the name used for resistance is 'r'. This naming convention, <code>param_nameVal</code>, is applied to all elements in the package.</p>
+<p class='ruff'>Another option is to call the <code>getParams</code> method, which returns a list of all parameters with their values. For example:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create resistor</font></i>
+<b><font color=#923B23>set</font></b> resistor [<b><font color=#923B23>R</font></b> new 1 net1 net2 10]
+<b><font color=#923B23>puts</font></b> [<font color=#4A181B>$resistor</font> getParams]
+</pre>
+
+</figure><p class='ruff'>It returns:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>r 10
+</pre>
+
+</figure><p class='ruff'>So parameter name is 'r' with value '10'.</p>
 <h2 class='ruff'><a name='::FAQ-How to change node name connected to pin of existing element?'></a>How to change node name connected to pin of existing element?<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
-<p class='ruff'>For all elements with pins you can change name of connected node name by pin name with method <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setPinNodeName" title="::SpiceGenTcl::Device::setPinNodeName" class='ruff_cmd'>::SpiceGenTcl::Device::setPinNodeName</a>.</p>
+<p class='ruff'>For all elements with pins, you can change the connected node's name by using the pin name with the method <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setPinNodeName" title="::SpiceGenTcl::Device::setPinNodeName" class='ruff_cmd'>::SpiceGenTcl::Device::setPinNodeName</a>.</p>
+<p class='ruff'>For example, here we change the node name of the basic resistor's positive pin:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$resistor</font> setPinNodeName np net10
+</pre>
+
+</figure><p class='ruff'>The pin name can be found in the documentation <a href="[::SpiceGenTcl::Ngspice::BasicDevices::Resistor]" >here</a>. In the parameter table, the pins are listed as <code>npNode</code> and <code>nmNode</code>, so the names used for the positive and negative pins are 'np' and 'nm', respectively. This <code>pin_nameNode</code> convention applies to all elements in the package.</p>
+<p class='ruff'>Another option is to call the <code>getPins</code> method, which returns a list of all pins with their connected node names. For example:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create resistor</font></i>
+<b><font color=#923B23>set</font></b> resistor [<b><font color=#923B23>R</font></b> new 1 net1 net2 10]
+<b><font color=#923B23>puts</font></b> [<font color=#4A181B>$resistor</font> getPins]
+</pre>
+
+</figure><p class='ruff'>It returns:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>np net1 nm net2
+</pre>
+
+</figure><p class='ruff'>So pins names are 'np' and 'nm' with connected nets 'net1' and 'net2'.</p>
+<h2 class='ruff'><a name='::FAQ-How to find the list of optional parameters for elements?'></a>How to find the list of optional parameters for elements?<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
+<div style='clear:both;'></div>
+<p class='ruff'>The list of parameters in the documentation includes descriptions of the mandatory arguments but does not elaborate on the optional parameters found in <code>args</code>. This is because some elements, especially models, can have dozens of parameters, and I wanted to avoid cluttering the documentation.</p>
+<p class='ruff'>Typically, any optional parameters for elements are also optional in the simulator they relate to, so you can find a list of them in the simulator's manual. The convention for these parameters is <code><font color=#463e11>-nameOfParam</font> value</code>. For example, for a basic resistor in Ngspice, you can provide values for the temperature coefficients, 'tc1' and 'tc2'. In SpiceGenTcl, these are added during the initialization of the resistor like this:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> resistor [<b><font color=#923B23>R</font></b> new 1 net1 net2 10 <font color=#463e11>-tc1</font> 0.1 <font color=#463e11>-tc2</font> 0.4]
+</pre>
+
+</figure><p class='ruff'>Here we provide the mandatory parameters:</p>
+<ul class='ruff'>
+<li>name of device without 'R' designator: '1'</li>
+<li>nets connected to pins: 'net1' and 'net2'</li>
+<li>value of resistance: '10' Parameters 'tc1' and 'tc2' are provided here as optional arguments.</li>
+</ul>
+<p class='ruff'>As a last resort, you can look directly at the source code in the documentation. Simply open the <code>Show source</code> option, and you'll find a line within the <code><b><font color=#ca14ca>constructor</font></b></code> method:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> paramsNames [<b><font color=#923B23>list</font></b> ac m scale temp dtemp tc1 tc2 noisy]
+</pre>
+
+</figure><p class='ruff'>So the possible optional parameters are: ac, m, scale, temp, dtemp, tc1, tc2, noisy. The same applies to all elements in the package.</p>
 <h2 class='ruff'><a name='::FAQ-How to get raw data after simulation?'></a>How to get raw data after simulation?<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
-<p class='ruff'>After succesfull simulation, the object of class <code><b><font color=#923B23>RawFile</font></b></code> is created and attached to top-level object of class <code><b><font color=#923B23>Circuit</font></b></code>. So the only thing you need to do is to call method <code>getDataDict</code> from <code><b><font color=#923B23>Circuit</font></b></code> object. By this method  you can get the result vectors in form of dictionary, it contains vectors names as keys and vectors itself as the values. Then you can access it by <code><b><font color=#923B23>dict</font></b> get</code> command.</p>
+<p class='ruff'>After a successful simulation, an object of the <code><b><font color=#923B23>RawFile</font></b></code> class is created and attached to the top-level <code><b><font color=#923B23>Circuit</font></b></code> object. To retrieve the result vectors, simply call the <code>getDataDict</code> method on the <code><b><font color=#923B23>Circuit</font></b></code> object. This method returns the result vectors as a dictionary, with vector names as keys and the vectors themselves as values. You can then access these vectors using the <code><b><font color=#923B23>dict</font></b> get</code> command.</p>
+<p class='ruff'>Example:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> data [<font color=#4A181B>$circuit</font> getDataDict]
 <b><font color=#923B23>set</font></b> axisList [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> v(anode)]
 <b><font color=#923B23>set</font></b> traceList [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> i(va)]  
 </pre>
 
-</figure><h2 class='ruff'><a name='::FAQ-How to get log file after simulation?'></a>How to get log file after simulation?<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
+</figure><h2 class='ruff'><a name='::FAQ-How to get the names of all vectors in raw file?'></a>How to get the names of all vectors in raw file?<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
+<div style='clear:both;'></div>
+<p class='ruff'>For this task, you should first retrieve the <code><b><font color=#923B23>RawFile</font></b></code> object reference from the <code><b><font color=#923B23>Circuit</font></b></code> object using the <code>getData</code> method. Then, call the <code>getVariablesNames</code> method, which returns a list of all variable names.</p>
+<p class='ruff'>Example:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> rawFileObj [<font color=#4A181B>$circuit</font> getData]
+<b><font color=#923B23>puts</font></b> [<font color=#4A181B>$rawFileObj</font> getVariablesNames]
+</pre>
+
+</figure><p class='ruff'>There are also methods for retrieve all voltages and currents names separated from each other: <code>getVoltagesNames</code> and <code>getCurrentsNames</code>.</p>
+<h2 class='ruff'><a name='::FAQ-How to get log file after simulation?'></a>How to get log file after simulation?<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
 <p class='ruff'>There is a special method for it in object of <code><b><font color=#923B23>Circuit</font></b></code> class - <code>getLog</code>, it returns string containing log file.</p>
-</main><nav class='ruff-nav'><ul ><li class='ruff-toc1'><a style='padding-top:2px;' href='index.html'>Start page</a></li>
+<p class='ruff'>Example:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>puts</font></b> [<font color=#4A181B>$circuit</font> getLog]
+</pre>
+
+</figure></main><nav class='ruff-nav'><ul ><li class='ruff-toc1'><a style='padding-top:2px;' href='index.html'>Start page</a></li>
 <li class='ruff-toc1'><a href='index-docindex.html' accesskey='i'>Index</a></li>
 <hr>
 <li class='ruff-toc1'><a class='ruff-highlight' href='index-FAQ.html'>FAQ</a></li>
@@ -57,5 +140,5 @@
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-SemiconductorDevices.html'>SpiceGenTcl::Ngspice::SemiconductorDevices</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-Analyses.html'>SpiceGenTcl::Ngspice::Analyses</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-Simulators.html'>SpiceGenTcl::Ngspice::Simulators</a></li>
-<hr><li class='ruff-toc2'><a href='#::FAQ-Where to find list of availible arguments for devices, models and analysis?'>Where to find list of availible arguments for devices, models and analysis?</a></li><li class='ruff-toc2'><a href='#::FAQ-How to change parameter of existing element?'>How to change parameter of existing element?</a></li><li class='ruff-toc2'><a href='#::FAQ-How to change node name connected to pin of existing element?'>How to change node name connected to pin of existing element?</a></li><li class='ruff-toc2'><a href='#::FAQ-How to get raw data after simulation?'>How to get raw data after simulation?</a></li><li class='ruff-toc2'><a href='#::FAQ-How to get log file after simulation?'>How to get log file after simulation?</a></li></ul></nav><footer class='ruff-layout-footer ruff-ft'><div style='float: right;'>Document generated by <a href='https://ruff.magicsplat.com'>Ruff!</a></div><div>&copy; George Yashin</div></footer>
+<hr><li class='ruff-toc2'><a href='#::FAQ-Where to find list of availible arguments for devices, models and analyses?'>Where to find list of availible arguments for devices, models and analyses?</a></li><li class='ruff-toc2'><a href='#::FAQ-How to change parameter of existing element?'>How to change parameter of existing element?</a></li><li class='ruff-toc2'><a href='#::FAQ-How to change node name connected to pin of existing element?'>How to change node name connected to pin of existing element?</a></li><li class='ruff-toc2'><a href='#::FAQ-How to find the list of optional parameters for elements?'>How to find the list of optional parameters for elements?</a></li><li class='ruff-toc2'><a href='#::FAQ-How to get raw data after simulation?'>How to get raw data after simulation?</a></li><li class='ruff-toc2'><a href='#::FAQ-How to get the names of all vectors in raw file?'>How to get the names of all vectors in raw file?</a></li><li class='ruff-toc2'><a href='#::FAQ-How to get log file after simulation?'>How to get log file after simulation?</a></li></ul></nav><footer class='ruff-layout-footer ruff-ft'><div style='float: right;'>Document generated by <a href='https://ruff.magicsplat.com'>Ruff!</a></div><div>&copy; George Yashin</div></footer>
 </div></body></html>
