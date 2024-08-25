@@ -21,7 +21,7 @@
 <li><a href="index-Tutorials.html#::Tutorials-Subcircuit definition" title="Subcircuit definition" >Subcircuit definition</a> - &quot;examples/subcircuit.tcl&quot; file</li>
 <li><a href="index-Tutorials.html#::Tutorials-Diode current simualtion" title="Diode current simualtion" >Diode current simualtion</a> - &quot;examples/diode_iv.tcl&quot; file</li>
 <li><a href="index-Tutorials.html#::Tutorials-Diode capacitance simualtion" title="Diode capacitance simualtion" >Diode capacitance simualtion</a> - &quot;examples/diode_cv.tcl&quot; file</li>
-<li>[Sensitive analysis of differential pair] - &quot;examples/diffpair_sens.tcl&quot; file</li>
+<li><a href="index-Tutorials.html#::Tutorials-Sensitive analysis of differential pair" title="Sensitive analysis of differential pair" >Sensitive analysis of differential pair</a> - &quot;examples/diffpair_sens.tcl&quot; file</li>
 <li><a href="index-Tutorials.html#::Tutorials-Transient simulation of ring oscillator" title="Transient simulation of ring oscillator" >Transient simulation of ring oscillator</a> - &quot;examples/transient/switch_oscillator.tcl&quot; file</li>
 <li><a href="index-Tutorials.html#::Tutorials-Transient simulation of four-bit adder" title="Transient simulation of four-bit adder" >Transient simulation of four-bit adder</a> - &quot;examples/transient/fourbitadder.tcl&quot; file</li>
 </ul>
@@ -244,6 +244,8 @@ x2 net1 net2 rcnet r=1 c={cpar}
 </figure><h2 class='ruff'><a name='::Tutorials-Diode current simualtion'></a>Diode current simualtion<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
 <p class='ruff'>In this example, we examine the parametric simulation of a diode model's current curve, with the ambient temperature as the parameter. To achieve this, we need to run the simulation multiple times at different temperatures, save the results from each iteration, and then combine them into a single plot.</p>
+<p class='ruff'>The circuit is simple:</p>
+<p class='ruff'><img src="assets/img/diode_iv_cir.png" alt="drawing" width="400"/></p>
 <p class='ruff'>As in previous examples, we start by creating the top circuit and adding elements to it:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create top-level circuit</font></i>
@@ -344,6 +346,8 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <li>AC voltage source <code>[<b><font color=#923B23>Vac</font></b> new b nin 0 1]</code> - uses to generate AC signal</li>
 <li>AC analysis statement <code>[<b><font color=#923B23>Ac</font></b> new lin 1 1e5 1e5]</code> - uses to define AC frequency, 100 kHz in our case.</li>
 </ul>
+<p class='ruff'>The final circuit looks like this:</p>
+<p class='ruff'><img src="assets/img/diode_cv_cir.png" alt="drawing" width="500"/></p>
 <p class='ruff'>Nest step is to add voltage sweep:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># add voltage sweep</font></i>
@@ -368,28 +372,21 @@ x2 net1 net2 rcnet r=1 c={cpar}
     <i><font color=#4b5d50># get imaginary part of current</font></i>
     <b><font color=#923B23>lappend</font></b> traceList [<b><font color=#923B23>lindex</font></b> [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> i(va)] 0 1]
 }
-```        
-The `BatchLiveLog` simulator differs from `Batch` in that it prints output line by line during the simulation, 
-rather than only at the end.
-
-Here, we collect the imaginary component of the current flowing through the AC voltage source 'Va'.
-
-You might wonder why we use two indices, 0 and 1, when extracting values from the vector i(va).
-
-The answer is as follows: the first index extracts values from the list of values at different frequencies, 
-<b><font color=#923B23>while</font></b> the second index retrieves the imaginary component. 
-The AC data vectors are organized as follows:
 </pre>
 
-</figure><p class='ruff'>{{reVal0 imVal0} {reVal1 imVal1} {reVal2 imVal2} ...}</p>
+</figure><p class='ruff'>The <code><b><font color=#923B23>BatchLiveLog</font></b></code> simulator differs from <code><b><font color=#923B23>Batch</font></b></code> in that it prints output line by line during the simulation, rather than only at the end.</p>
+<p class='ruff'>Here, we collect the imaginary component of the current flowing through the AC voltage source 'Va'.</p>
+<p class='ruff'>You might wonder why we use two indices, 0 and 1, when extracting values from the vector i(va).</p>
+<p class='ruff'>The answer is as follows: the first index extracts values from the list of values at different frequencies, while the second index retrieves the imaginary component.</p>
+<p class='ruff'>The AC data vectors are organized as follows:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>Here, `reVal0` is the real value at frequency index 0, `imVal0`is the imaginary value at the same frequency, 
-`reVal1` is the real value at frequency index 1, `imVal1` is the imaginary value at that frequency, and so on. 
-Even if there is only one frequency in the AC analysis, you should still extract the value using index 0.
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>{{reVal0 imVal0} {reVal1 imVal1} {reVal2 imVal2} ...}
+</pre>
 
-Now we can plot the results and apply the equation to calculate the capacitance (with the voltage phasor set to 1, so it is omitted):
-```tcl
-<i><font color=#4b5d50># plot results with plotchart</font></i>
+</figure><p class='ruff'>Here, <code>reVal0</code> is the real value at frequency index 0, <code>imVal0</code>is the imaginary value at the same frequency, <code>reVal1</code> is the real value at frequency index 1, <code>imVal1</code> is the imaginary value at that frequency, and so on. Even if there is only one frequency in the AC analysis, you should still extract the value using index 0.</p>
+<p class='ruff'>Now we can plot the results and apply the equation to calculate the capacitance (with the voltage phasor set to 1, so it is omitted):</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># plot results with plotchart</font></i>
 <b><font color=#7d1c00>wm</font></b> geometry . 600x400
 <b><font color=#923B23>set</font></b> xyp [xyplot .xyp <font color=#463e11>-xformat</font> <font color=#035103>&quot;%.2f&quot;</font> <font color=#463e11>-yformat</font> <font color=#035103>&quot;%.2e&quot;</font> <font color=#463e11>-title</font> <font color=#035103>&quot;Diode CV&quot;</font> <font color=#463e11>-xtext</font> <font color=#035103>&quot;v(0,c), V&quot;</font> <font color=#463e11>-ytext</font> <font color=#035103>&quot;C, C&quot;</font>]
 <b><font color=#7d1c00>pack</font></b> <font color=#4A181B>$xyp</font> <font color=#463e11>-fill</font> both <font color=#463e11>-expand</font> true
@@ -401,7 +398,62 @@ Now we can plot the results and apply the equation to calculate the capacitance 
 
 </figure><p class='ruff'>As a result, we obtain the expected curve, showing a decrease in capacitance value with higher reverse voltage:</p>
 <p class='ruff'><img src="assets/img/diode_cv.png" alt="diode_cv" /></p>
-<h2 class='ruff'><a name='::Tutorials-Transient simulation of ring oscillator'></a>Transient simulation of ring oscillator<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
+<h2 class='ruff'><a name='::Tutorials-Sensitive analysis of differential pair'></a>Sensitive analysis of differential pair<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
+<div style='clear:both;'></div>
+<p class='ruff'>In this circuit we run DC sensitive analysis of differential pair:</p>
+<p class='ruff'><img src="assets/img/diff_pair_cir.png" alt="drawing" width="700"/></p>
+<p class='ruff'>We build circuit step by step:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create top-level circuit</font></i>
+<b><font color=#923B23>set</font></b> circuit [<b><font color=#923B23>Circuit</font></b> new {simple differential pair}]
+<i><font color=#4b5d50># add elements to circuit</font></i>
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new cc 8 0 12]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new ee 9 0 -12]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vac</font></b> new cm 1 0 1]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vac</font></b> new dm 1 11 1]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Q</font></b> new 1 4 2 6 qnr]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Q</font></b> new 2 5 3 6 qnl]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new s1 11 2 1e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new s2 3 1 1e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new c1 4 8 10e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new c2 5 8 10e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Q</font></b> new 3 7 7 9 qnl]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Q</font></b> new 4 6 7 9 qnr]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new bias 7 8 20e3]
+</pre>
+
+</figure><p class='ruff'>Then we add models for NPN and PNP bipolar transistors:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$circuit</font> add [<b><font color=#923B23>BjtGPModel</font></b> new qnl npn <font color=#463e11>-bf</font> 80 <font color=#463e11>-rb</font> 100 <font color=#463e11>-cjc</font> 2e-12 <font color=#463e11>-tf</font> 0.3e-9 <font color=#463e11>-tr</font> 6e-9 <font color=#463e11>-cje</font> 3e-12 <font color=#463e11>-cjc</font> 2e-12 <font color=#463e11>-va</font> 50]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>BjtGPModel</font></b> new qnr npn <font color=#463e11>-bf</font> 80 <font color=#463e11>-rb</font> 100 <font color=#463e11>-cjc</font> 2e-12 <font color=#463e11>-tf</font> 0.3e-9 <font color=#463e11>-tr</font> 6e-9 <font color=#463e11>-cje</font> 3e-12 <font color=#463e11>-cjc</font> 2e-12 <font color=#463e11>-va</font> 50]
+</pre>
+
+</figure><p class='ruff'>In DC sensistive analysis we add input voltage to which we sense ohter parameters in the circuit:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$circuit</font> add [<b><font color=#923B23>SensDc</font></b> new v(5,4)]
+</pre>
+
+</figure><p class='ruff'>We create simulator, run it and read data:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50>#set simulator with default </font></i>
+<b><font color=#923B23>set</font></b> simulator [<b><font color=#923B23>Batch</font></b> new {batch1} {/usr/local/bin/}]
+<i><font color=#4b5d50># attach simulator object to circuit</font></i>
+<font color=#4A181B>$circuit</font> attachSimulator <font color=#4A181B>$simulator</font>
+<i><font color=#4b5d50># run circuit, read log and data</font></i>
+<font color=#4A181B>$circuit</font> runAndRead
+<i><font color=#4b5d50># get data object</font></i>
+<b><font color=#923B23>set</font></b> data [<font color=#4A181B>$circuit</font> getDataDict]
+<b><font color=#923B23>set</font></b> vrc1 [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> v(rc1)]
+<b><font color=#923B23>set</font></b> vrc2 [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> v(rc2)]
+</pre>
+
+</figure><p class='ruff'>To print resulted sensitivities we use <code><b><font color=#923B23>format</font></b></code> command where we specify the format of the number:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>vrc1=6.032e-04 
+vrc2=-6.032e-04
+</pre>
+
+</figure><h2 class='ruff'><a name='::Tutorials-Transient simulation of ring oscillator'></a>Transient simulation of ring oscillator<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
 <p class='ruff'>In this example, we analyze a circuit with transient analysis and demonstrate how to use a Tcl script to build a circuit containing multiple stages of the same subcircuit.</p>
 <p class='ruff'>The circuit is a ring oscillator composed of voltage-controlled switches, based on an example from Ngspice (/examples/p-to-n-examples/switch-oscillators.cir). Each stage of the oscillator is a simple two-switch inverter, and the entire circuit consists of 17 stages.</p>
@@ -689,5 +741,5 @@ Now we can plot the results and apply the equation to calculate the capacitance 
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-SemiconductorDevices.html'>SpiceGenTcl::Ngspice::SemiconductorDevices</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-Analyses.html'>SpiceGenTcl::Ngspice::Analyses</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-Simulators.html'>SpiceGenTcl::Ngspice::Simulators</a></li>
-<hr><li class='ruff-toc2'><a href='#::Tutorials-Netlist manipulations'>Netlist manipulations</a></li><li class='ruff-toc3'><a href='#::Tutorials-Delete element'>Delete element</a></li><li class='ruff-toc3'><a href='#::Tutorials-Get element'>Get element</a></li><li class='ruff-toc3'><a href='#::Tutorials-Print list of all elements'>Print list of all elements</a></li><li class='ruff-toc3'><a href='#::Tutorials-Temporarly remove of element'>Temporarly remove of element</a></li><li class='ruff-toc2'><a href='#::Tutorials-Subcircuit definition'>Subcircuit definition</a></li><li class='ruff-toc2'><a href='#::Tutorials-Diode current simualtion'>Diode current simualtion</a></li><li class='ruff-toc2'><a href='#::Tutorials-Diode capacitance simualtion'>Diode capacitance simualtion</a></li><li class='ruff-toc2'><a href='#::Tutorials-Transient simulation of ring oscillator'>Transient simulation of ring oscillator</a></li><li class='ruff-toc2'><a href='#::Tutorials-Transient simulation of four-bit adder'>Transient simulation of four-bit adder</a></li></ul></nav><footer class='ruff-layout-footer ruff-ft'><div style='float: right;'>Document generated by <a href='https://ruff.magicsplat.com'>Ruff!</a></div><div>&copy; George Yashin</div></footer>
+<hr><li class='ruff-toc2'><a href='#::Tutorials-Netlist manipulations'>Netlist manipulations</a></li><li class='ruff-toc3'><a href='#::Tutorials-Delete element'>Delete element</a></li><li class='ruff-toc3'><a href='#::Tutorials-Get element'>Get element</a></li><li class='ruff-toc3'><a href='#::Tutorials-Print list of all elements'>Print list of all elements</a></li><li class='ruff-toc3'><a href='#::Tutorials-Temporarly remove of element'>Temporarly remove of element</a></li><li class='ruff-toc2'><a href='#::Tutorials-Subcircuit definition'>Subcircuit definition</a></li><li class='ruff-toc2'><a href='#::Tutorials-Diode current simualtion'>Diode current simualtion</a></li><li class='ruff-toc2'><a href='#::Tutorials-Diode capacitance simualtion'>Diode capacitance simualtion</a></li><li class='ruff-toc2'><a href='#::Tutorials-Sensitive analysis of differential pair'>Sensitive analysis of differential pair</a></li><li class='ruff-toc2'><a href='#::Tutorials-Transient simulation of ring oscillator'>Transient simulation of ring oscillator</a></li><li class='ruff-toc2'><a href='#::Tutorials-Transient simulation of four-bit adder'>Transient simulation of four-bit adder</a></li></ul></nav><footer class='ruff-layout-footer ruff-ft'><div style='float: right;'>Document generated by <a href='https://ruff.magicsplat.com'>Ruff!</a></div><div>&copy; George Yashin</div></footer>
 </div></body></html>

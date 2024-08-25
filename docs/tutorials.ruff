@@ -227,6 +227,10 @@ namespace eval Tutorials {
         the parameter. To achieve this, we need to run the simulation multiple times at different temperatures, save the results 
         from each iteration, and then combine them into a single plot. 
         
+        The circuit is simple:
+        
+        <img src="assets/img/diode_iv_cir.png" alt="drawing" width="400"/>
+        
         As in previous examples, we start by creating the top circuit and adding elements to it:
         ```tcl
         # create top-level circuit
@@ -333,6 +337,10 @@ namespace eval Tutorials {
         What are new here:
         - AC voltage source `[Vac new b nin 0 1]` - uses to generate AC signal
         - AC analysis statement `[Ac new lin 1 1e5 1e5]` - uses to define AC frequency, 100 kHz in our case.
+         
+        The final circuit looks like this:
+        
+        <img src="assets/img/diode_cv_cir.png" alt="drawing" width="500"/>
         
         Nest step is to add voltage sweep:
         ```tcl
@@ -359,7 +367,8 @@ namespace eval Tutorials {
             # get imaginary part of current
             lappend traceList [lindex [dict get $data i(va)] 0 1]
         }
-        ```        
+        ```
+        
         The `BatchLiveLog` simulator differs from `Batch` in that it prints output line by line during the simulation, 
         rather than only at the end.
         
@@ -369,6 +378,7 @@ namespace eval Tutorials {
         
         The answer is as follows: the first index extracts values from the list of values at different frequencies, 
         while the second index retrieves the imaginary component. 
+        
         The AC data vectors are organized as follows:
         ```
         {{reVal0 imVal0} {reVal1 imVal1} {reVal2 imVal2} ...}
@@ -391,6 +401,63 @@ namespace eval Tutorials {
         As a result, we obtain the expected curve, showing a decrease in capacitance value with higher reverse voltage:
         
         ![diode_cv](assets/img/diode_cv.png)
+        
+        ## Sensitive analysis of differential pair
+        
+        In this circuit we run DC sensitive analysis of differential pair: 
+        
+        <img src="assets/img/diff_pair_cir.png" alt="drawing" width="700"/>
+        
+        We build circuit step by step:
+        ```tcl
+        # create top-level circuit
+        set circuit [Circuit new {simple differential pair}]
+        # add elements to circuit
+        $circuit add [Vdc new cc 8 0 12]
+        $circuit add [Vdc new ee 9 0 -12]
+        $circuit add [Vac new cm 1 0 1]
+        $circuit add [Vac new dm 1 11 1]
+        $circuit add [Q new 1 4 2 6 qnr]
+        $circuit add [Q new 2 5 3 6 qnl]
+        $circuit add [R new s1 11 2 1e3]
+        $circuit add [R new s2 3 1 1e3]
+        $circuit add [R new c1 4 8 10e3]
+        $circuit add [R new c2 5 8 10e3]
+        $circuit add [Q new 3 7 7 9 qnl]
+        $circuit add [Q new 4 6 7 9 qnr]
+        $circuit add [R new bias 7 8 20e3]
+        ```
+        
+        Then we add models for NPN and PNP bipolar transistors:
+        ```tcl
+        $circuit add [BjtGPModel new qnl npn -bf 80 -rb 100 -cjc 2e-12 -tf 0.3e-9 -tr 6e-9 -cje 3e-12 -cjc 2e-12 -va 50]
+        $circuit add [BjtGPModel new qnr npn -bf 80 -rb 100 -cjc 2e-12 -tf 0.3e-9 -tr 6e-9 -cje 3e-12 -cjc 2e-12 -va 50]
+        ```
+        
+        In DC sensistive analysis we add input voltage to which we sense ohter parameters in the circuit:
+        ```tcl
+        $circuit add [SensDc new v(5,4)]
+        ```
+        
+        We create simulator, run it and read data:
+        ```tcl
+        #set simulator with default 
+        set simulator [Batch new {batch1} {/usr/local/bin/}]
+        # attach simulator object to circuit
+        $circuit attachSimulator $simulator
+        # run circuit, read log and data
+        $circuit runAndRead
+        # get data object
+        set data [$circuit getDataDict]
+        set vrc1 [dict get $data v(rc1)]
+        set vrc2 [dict get $data v(rc2)]
+        ```
+        
+        To print resulted sensitivities we use `format` command where we specify the format of the number:
+        ```
+        vrc1=6.032e-04 
+        vrc2=-6.032e-04
+        ```
         
         ## Transient simulation of ring oscillator
         

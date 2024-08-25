@@ -37,4 +37,4 @@ $circuit runAndRead
 set data [$circuit getDataDict]
 set vrc1 [dict get $data v(rc1)]
 set vrc2 [dict get $data v(rc2)]
-puts "vrc1=$vrc1 vrc2=$vrc2"
+puts [format "vrc1=%.3e vrc2=%.3e" $vrc1 $vrc2]
