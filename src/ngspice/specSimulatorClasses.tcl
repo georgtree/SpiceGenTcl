@@ -71,6 +71,7 @@ namespace eval SpiceGenTcl::Ngspice::Simulators {
             my variable Log
             set logFile [open "[my getRunLocation]/[my getLastRunFileName].log" r+]
             set Log [read $logFile]
+            close $logFile
             return 
         }
         method getLog {} {
@@ -121,8 +122,8 @@ namespace eval SpiceGenTcl::Ngspice::Simulators {
             set rawFileName "${runLocation}/${firstLine}.raw"
             set logFileName "${runLocation}/${firstLine}.log"
             set cirFileName "${runLocation}/${firstLine}.cir"
-            set chan [open |[list [my getCommand] -b -r $rawFileName $cirFileName] r]
-            chan configure $chan -blocking 1
+            set command [list [my getCommand] -b $cirFileName -r $rawFileName]
+            set chan [open "|$command 2>@1"]
             set logData ""
             while {[gets $chan line] >= 0} {
                 puts $line
@@ -131,6 +132,7 @@ namespace eval SpiceGenTcl::Ngspice::Simulators {
                     close $chan
                 }
             }
+            close $chan
             my setLastRunFileName ${firstLine}
             my setLog $logData
             my readData
