@@ -1,8 +1,8 @@
 # example is from Ngspice example folder (/tests/transient/fourbitadder.cir)
-
+lappend auto_path /home/georgtree/tcl_tools/
 lappend auto_path "../../"
 package require SpiceGenTcl
-package require xyplot
+package require gnuplotutil
 namespace import ::tcl::mathop::*
 namespace import ::SpiceGenTcl::*
 set ngspiceNameSpc [namespace children ::SpiceGenTcl::Ngspice]
@@ -148,19 +148,23 @@ $circuit runAndRead
 set data [$circuit getDataDict]
 set axis [dict get $data time]
 set nodes [list 9 10 11 12]
-foreach node $nodes {
-    set v$node [dict get $data v($node)]
-}
+#foreach node $nodes {
+#    set v$node [dict get $data v($node)]
+#}
 # plot results with plotchart
-wm geometry . 1600x1000
-foreach node $nodes {
-    xyplot .xyp$node -xformat "%.2e" -yformat "%.2e" -xtext "time, s" -ytext "v(${node}), V" -ttk 1 
-    pack .xyp$node -fill both -expand true
-    foreach time $axis yV$node [set [subst v$node]] {
-        lappend xyV$node $time [set [subst yV$node]]
-    }
-    .xyp$node add_data sf$node [set [subst xyV$node]] -color red
-}
+#wm geometry . 1600x1000
+#foreach node $nodes {
+#    xyplot .xyp$node -xformat "%.2e" -yformat "%.2e" -xtext "time, s" -ytext "v(${node}), V" -ttk 1 
+#    pack .xyp$node -fill both -expand true
+#    foreach time $axis yV$node [set [subst v$node]] {
+#        lappend xyV$node $time [set [subst yV$node]]
+#    }
+#    .xyp$node add_data sf$node [set [subst xyV$node]] -color red
+#}
 
-
+set plot1 [list -xlabel time,s -ylabel "v(9), V" -grid -names [list "v(v9)"] -columns $axis [dict get $data v(9)]]
+set plot2 [list -xlabel time,s -ylabel "v(10), V" -grid -names [list "i(vmeasure)"] -columns $axis [dict get $data v(10)]]
+set plot3 [list -xlabel time,s -ylabel "v(11), V" -grid -names [list "i(vmeasure)"] -columns $axis [dict get $data v(11)]]
+set plot4 [list -xlabel time,s -ylabel "v(12), V" -grid -names [list "i(vmeasure)"] -columns $axis [dict get $data v(12)]]
+gnuplotutil::multiplotXNYN {4 1} -plots $plot1 $plot2 $plot3 $plot4 
 

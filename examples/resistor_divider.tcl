@@ -24,11 +24,5 @@ set data [$circuit getDataDict]
 set axis [dict get $data v(in)]
 set trace [dict get $data v(out)]
 
-# plot results with plotchart
-wm geometry . 600x400
-set xyp [xyplot .xyp -xformat "%5.1f" -yformat "%5.1f" -title "Voltage divider simulation result" -xtext "v(in), V" -ytext "voltage, V"]
-pack $xyp -fill both -expand true
-foreach x $axis y $trace {
-    lappend xydata $x $y
-}
-set s1 [$xyp add_data sf1 $xydata -legend "v(out)" -color red]
+# plot results with gnuplot
+gnuplotutil::plotXYN $axis -xlabel "v(in), V" -ylabel "voltage, V" -grid -names [list "Output voltage"] -columns $trace

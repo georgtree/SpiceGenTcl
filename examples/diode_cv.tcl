@@ -2,7 +2,7 @@ lappend auto_path /home/georgtree/tcl_tools/
 lappend auto_path "../"
 source ./helperFuncs.tcl
 package require SpiceGenTcl
-package require xyplot
+package require gnuplotutil
 package require math::constants
 ::math::constants::constants radtodeg degtorad pi
 namespace import ::SpiceGenTcl::*
@@ -36,14 +36,13 @@ foreach volt $voltSweep {
     # get imaginary part of current
     lappend traceList [lindex [dict get $data i(va)] 0 1]
 }
-# plot results with plotchart
-wm geometry . 600x400
-set xyp [xyplot .xyp -xformat "%.2f" -yformat "%.2e" -title "Diode CV" -xtext "v(0,c), V" -ytext "C, C"]
-pack $xyp -fill both -expand true
+# calculate capacitance
 foreach x $voltSweep y $traceList {
-    lappend xydata $x [expr {-$y/(2*$pi*1e5)}] 
+    lappend xdata $x
+    lappend ydata [expr {-$y/(2*$pi*1e5)}] 
 }
-$xyp add_data sf0 $xydata -color red
+# plot results with gnuplot
+gnuplotutil::plotXYN $xdata -xlabel "v(0,c), V"  -ylabel "C, C" -grid -names C -columns $ydata
 
 
 

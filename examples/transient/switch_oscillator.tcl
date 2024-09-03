@@ -1,8 +1,8 @@
 # example is from Ngspice example folder (/examples/p-to-n-examples/switch-oscillators.cir)
-
+lappend auto_path /home/georgtree/tcl_tools/
 lappend auto_path "../../"
 package require SpiceGenTcl
-package require xyplot
+package require gnuplotutil
 namespace import ::SpiceGenTcl::*
 set ngspiceNameSpc [namespace children ::SpiceGenTcl::Ngspice]
 foreach nameSpc $ngspiceNameSpc {
@@ -59,19 +59,11 @@ $circuit attachSimulator $simulator
 $circuit runAndRead
 # get data object
 set data [$circuit getDataDict]
-set axis [dict get $data time]
+set time [dict get $data time]
 set vout [dict get $data v(osc_out)]
 set imeas [dict get $data i(vmeasure)]
 
-# plot results with plotchart
-wm geometry . 1000x800
-set xyp1 [xyplot .xyp1 -xformat "%.2e" -yformat "%.2f" -title "Switch oscillator simulation result" -xtext time,s -ytext "v(out), V"]
-set xyp2 [xyplot .xyp2 -xformat "%.2e" -yformat "%.2e"  -title "Switch oscillator simulation result" -xtext time,s -ytext "i(vmeasure), V"]
-pack $xyp1 -fill both -expand true
-pack $xyp2 -fill both -expand true
-foreach x $axis y1 $vout y2 $imeas {
-    lappend xyVout $x $y1
-    lappend xyImeas $x $y2
-}
-set s1 [$xyp1 add_data sf1 $xyVout -legend "v(out_osc)" -color red]
-set s2 [$xyp2 add_data sf1 $xyImeas -legend "i(meas)" -color red]
+# plot results with gnuplot
+set plot1 [list -xlabel time,s -ylabel "v(out), V" -grid -names [list "v(out)"] -columns $time $vout]
+set plot2 [list -xlabel time,s -ylabel "i(vmeasure), V" -grid -names [list "i(vmeasure)"] -columns $time $imeas]
+gnuplotutil::multiplotXNYN {2 1} -plots $plot1 $plot2
