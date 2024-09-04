@@ -148,20 +148,7 @@ $circuit runAndRead
 set data [$circuit getDataDict]
 set axis [dict get $data time]
 set nodes [list 9 10 11 12]
-#foreach node $nodes {
-#    set v$node [dict get $data v($node)]
-#}
-# plot results with plotchart
-#wm geometry . 1600x1000
-#foreach node $nodes {
-#    xyplot .xyp$node -xformat "%.2e" -yformat "%.2e" -xtext "time, s" -ytext "v(${node}), V" -ttk 1 
-#    pack .xyp$node -fill both -expand true
-#    foreach time $axis yV$node [set [subst v$node]] {
-#        lappend xyV$node $time [set [subst yV$node]]
-#    }
-#    .xyp$node add_data sf$node [set [subst xyV$node]] -color red
-#}
-
+# plot data with gnuplot
 set plot1 [list -xlabel time,s -ylabel "v(9), V" -grid -names [list "v(v9)"] -columns $axis [dict get $data v(9)]]
 set plot2 [list -xlabel time,s -ylabel "v(10), V" -grid -names [list "i(vmeasure)"] -columns $axis [dict get $data v(10)]]
 set plot3 [list -xlabel time,s -ylabel "v(11), V" -grid -names [list "i(vmeasure)"] -columns $axis [dict get $data v(11)]]

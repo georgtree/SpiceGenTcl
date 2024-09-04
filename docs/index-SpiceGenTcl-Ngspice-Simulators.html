@@ -156,6 +156,7 @@
     <b><font color=#ca14ca>my</font></b> variable Log
     <b><font color=#923B23>set</font></b> logFile [<b><font color=#923B23>open</font></b> <font color=#035103>&quot;<font color=#4A181B>[</font>my getRunLocation<font color=#4A181B>]</font>/<font color=#4A181B>[</font>my getLastRunFileName<font color=#4A181B>]</font>.log&quot;</font> r+]
     <b><font color=#923B23>set</font></b> Log [<b><font color=#923B23>read</font></b> <font color=#4A181B>$logFile</font>]
+    <b><font color=#923B23>close</font></b> <font color=#4A181B>$logFile</font>
     <b><font color=#ca14ca>return</font></b>
 }</pre></div>
 </div><h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::Simulators::Batch::runAndRead'>runAndRead</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-Simulators.html#::SpiceGenTcl::Ngspice::Simulators::Batch" title="::SpiceGenTcl::Ngspice::Simulators::Batch" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Simulators::Batch</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice-Simulators.html#::SpiceGenTcl::Ngspice::Simulators::Batch'>Batch</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
@@ -277,8 +278,8 @@
     <b><font color=#923B23>set</font></b> rawFileName <font color=#035103>&quot;<font color=#4A181B>${</font>runLocation<font color=#4A181B>}</font>/<font color=#4A181B>${</font>firstLine<font color=#4A181B>}</font>.raw&quot;</font>
     <b><font color=#923B23>set</font></b> logFileName <font color=#035103>&quot;<font color=#4A181B>${</font>runLocation<font color=#4A181B>}</font>/<font color=#4A181B>${</font>firstLine<font color=#4A181B>}</font>.log&quot;</font>
     <b><font color=#923B23>set</font></b> cirFileName <font color=#035103>&quot;<font color=#4A181B>${</font>runLocation<font color=#4A181B>}</font>/<font color=#4A181B>${</font>firstLine<font color=#4A181B>}</font>.cir&quot;</font>
-    <b><font color=#923B23>set</font></b> chan [<b><font color=#923B23>open</font></b> |[<b><font color=#923B23>list</font></b> [<b><font color=#ca14ca>my</font></b> getCommand] <font color=#463e11>-b</font> <font color=#463e11>-r</font> <font color=#4A181B>$rawFileName</font> <font color=#4A181B>$cirFileName</font>] r]
-    <b><font color=#923B23>chan</font></b> configure <font color=#4A181B>$chan</font> <font color=#463e11>-blocking</font> 1
+    <b><font color=#923B23>set</font></b> command [<b><font color=#923B23>list</font></b> [<b><font color=#ca14ca>my</font></b> getCommand] <font color=#463e11>-b</font> <font color=#4A181B>$cirFileName</font> <font color=#463e11>-r</font> <font color=#4A181B>$rawFileName</font>]
+    <b><font color=#923B23>set</font></b> chan [<b><font color=#923B23>open</font></b> <font color=#035103>&quot;|<font color=#4A181B>$</font>command 2&gt;@1&quot;</font>]
     <b><font color=#923B23>set</font></b> logData <font color=#035103>&quot;&quot;</font>
     <b><font color=#923B23>while</font></b> {[<b><font color=#923B23>gets</font></b> <font color=#4A181B>$chan</font> line] &gt;= 0} {
         <b><font color=#923B23>puts</font></b> <font color=#4A181B>$line</font>
@@ -287,6 +288,7 @@
             <b><font color=#923B23>close</font></b> <font color=#4A181B>$chan</font>
         }
     }
+    <b><font color=#923B23>close</font></b> <font color=#4A181B>$chan</font>
     <b><font color=#ca14ca>my</font></b> setLastRunFileName <font color=#4A181B>${firstLine}</font>
     <b><font color=#ca14ca>my</font></b> setLog <font color=#4A181B>$logData</font>
     <b><font color=#ca14ca>my</font></b> readData

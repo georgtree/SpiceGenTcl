@@ -1,8 +1,9 @@
 lappend auto_path /home/georgtree/tcl_tools/
+lappend auto_path /home/georgtree/tcl/
 lappend auto_path "../"
 package require SpiceGenTcl
 package require gnuplotutil
-package require xyplot
+package require ticklecharts
 namespace import ::SpiceGenTcl::*
 importNgspice
 
@@ -25,4 +26,11 @@ set axis [dict get $data v(in)]
 set trace [dict get $data v(out)]
 
 # plot results with gnuplot
-gnuplotutil::plotXYN $axis -xlabel "v(in), V" -ylabel "voltage, V" -grid -names [list "Output voltage"] -columns $trace
+#gnuplotutil::plotXYN $axis -xlabel "v(in), V" -ylabel "voltage, V" -grid -names [list "Output voltage"] -columns $trace
+
+set chart [ticklecharts::chart new]
+$chart Xaxis -data [list $axis]
+$chart Yaxis
+$chart SetOptions -title {text "Graph on Cartesian"} -tooltip {}
+$chart Add "lineSeries" -data [list $trace]
+$chart Render
