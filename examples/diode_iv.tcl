@@ -1,7 +1,8 @@
 lappend auto_path /home/georgtree/tcl_tools/
+lappend auto_path /home/georgtree/tcl/
 lappend auto_path "../"
 package require SpiceGenTcl
-package require gnuplotutil
+package require ticklecharts
 namespace import ::SpiceGenTcl::*
 importNgspice
 
@@ -27,9 +28,24 @@ foreach temp $temps {
     puts [$circuit getLog]
     # get data object
     set data [$circuit getDataDict]
-    set axisList [dict get $data v(anode)]
-    lappend traceList [dict get $data i(va)]  
+    foreach x [dict get $data v(anode)] y [dict get $data i(va)]   {
+        set xf [format "%.3f" $x]
+        set yf [format "%.3f" $y]
+        lappend xydata [list $xf $yf]
+    }    
+    lappend dataList $xydata
+    unset xydata
 }
 
-# plot resulted data with Gnuplot
-gnuplotutil::plotXYN $axisList -xlabel "v(anode,0), V"  -ylabel "Idiode, A" -grid -names $temps -columns {*}$traceList
+
+# plot results with ticklecharts
+set chart [ticklecharts::chart new]
+$chart Xaxis -name "v(anode,0), V" -minorTick {show "True"}  -type "value"
+$chart Yaxis -name "Idiode, A" -minorTick {show "True"}  -type "value"
+$chart SetOptions -title {} -tooltip {} -animation "False" -legend  {} 
+foreach data $dataList temp $temps {
+    $chart Add "lineSeries" -data $data -showAllSymbol "nothing" -name $temp -symbolSize "1"
+}
+set fbasename [file rootname [file tail [info script]]]
+
+$chart Render -outfile [file join html_charts $fbasename.html]

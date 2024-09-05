@@ -1,8 +1,8 @@
 # example is from Ngspice example folder (/tests/transient/fourbitadder.cir)
-lappend auto_path /home/georgtree/tcl_tools/
+lappend auto_path /home/georgtree/tcl/
 lappend auto_path "../../"
 package require SpiceGenTcl
-package require gnuplotutil
+package require ticklecharts
 namespace import ::tcl::mathop::*
 namespace import ::SpiceGenTcl::*
 set ngspiceNameSpc [namespace children ::SpiceGenTcl::Ngspice]
@@ -146,12 +146,32 @@ $circuit attachSimulator $simulator
 $circuit runAndRead
 # get data dict
 set data [$circuit getDataDict]
-set axis [dict get $data time]
-set nodes [list 9 10 11 12]
-# plot data with gnuplot
-set plot1 [list -xlabel time,s -ylabel "v(9), V" -grid -names [list "v(v9)"] -columns $axis [dict get $data v(9)]]
-set plot2 [list -xlabel time,s -ylabel "v(10), V" -grid -names [list "i(vmeasure)"] -columns $axis [dict get $data v(10)]]
-set plot3 [list -xlabel time,s -ylabel "v(11), V" -grid -names [list "i(vmeasure)"] -columns $axis [dict get $data v(11)]]
-set plot4 [list -xlabel time,s -ylabel "v(12), V" -grid -names [list "i(vmeasure)"] -columns $axis [dict get $data v(12)]]
-gnuplotutil::multiplotXNYN {4 1} -plots $plot1 $plot2 $plot3 $plot4 
+set timeList [dict get $data time]
+set v9List [dict get $data v(9)]
+set v10List [dict get $data v(10)]
+set v11List [dict get $data v(11)]
+set v12List [dict get $data v(12)]
 
+foreach time $timeList v9 $v9List v10 $v10List v11 $v11List v12 $v12List {
+    lappend timeV9 [list $time $v9]
+    lappend timeV10 [list $time $v10]
+    lappend timeV11 [list $time $v11]
+    lappend timeV12 [list $time $v12]
+}
+
+# plot data with gnuplot
+set nodes [list 9 10 11 12]
+set layout [ticklecharts::Gridlayout new]
+set i 0
+foreach node $nodes {
+    ticklecharts::chart create chartV$node
+    chartV$node SetOptions -title {} -tooltip {} -animation "False" -toolbox {feature {dataZoom {yAxisIndex "none"}}}
+    chartV$node Xaxis -name "time, s" -minorTick {show "True"} -type "value"
+    chartV$node Yaxis -name "Voltage, V" -minorTick {show "True"} -type "value"
+    chartV$node Add "lineSeries" -data [subst $[subst timeV$node]] -showAllSymbol "nothing" -name "V(${node})"
+    $layout Add chartV$node -bottom "[expr {25*$i}]%" -height "20%" -width "80%"
+    incr i
+}
+
+set fbasename [file rootname [file tail [info script]]]
+$layout Render -outfile [file join .. html_charts $fbasename.html] -height 800px

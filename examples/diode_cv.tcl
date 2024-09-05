@@ -1,8 +1,8 @@
-lappend auto_path /home/georgtree/tcl_tools/
+lappend auto_path /home/georgtree/tcl/
 lappend auto_path "../"
 source ./helperFuncs.tcl
 package require SpiceGenTcl
-package require gnuplotutil
+package require ticklecharts
 package require math::constants
 ::math::constants::constants radtodeg degtorad pi
 namespace import ::SpiceGenTcl::*
@@ -32,17 +32,21 @@ foreach volt $voltSweep {
     $circuit runAndRead
     # get data object
     set data [$circuit getDataDict]
-    lappend axisList [dict get $data v(c)]
+    set x $volt
     # get imaginary part of current
-    lappend traceList [lindex [dict get $data i(va)] 0 1]
+    set y [lindex [dict get $data i(va)] 0 1]
+    set xf [format "%.3e" $x]
+    set yf [format "%.2e" [expr {-$y/(2*$pi*1e5*1e-9)}]]
+    lappend xydata [list $xf $yf]
 }
-# calculate capacitance
-foreach x $voltSweep y $traceList {
-    lappend xdata $x
-    lappend ydata [expr {-$y/(2*$pi*1e5)}] 
-}
-# plot results with gnuplot
-gnuplotutil::plotXYN $xdata -xlabel "v(0,c), V"  -ylabel "C, C" -grid -names C -columns $ydata
 
+# plot results with ticklecharts
+set chart [ticklecharts::chart new]
+$chart Xaxis -name "v(0,c), V" -minorTick {show "True"} -type "value"
+$chart Yaxis -name "Diode capacitance, nF" -minorTick {show "True"} -type "value"
+$chart SetOptions -title {} -tooltip {} -animation "False" -toolbox {feature {dataZoom {yAxisIndex "none"}}}
+$chart Add "lineSeries" -data $xydata -showAllSymbol "nothing"
+set fbasename [file rootname [file tail [info script]]]
 
+$chart Render -outfile [file join html_charts $fbasename.html]
 
