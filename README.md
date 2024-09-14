@@ -60,7 +60,7 @@ While you can enter them in any case, they can only be accessed by their lowerca
 This approach aligns with the fact that most SPICE simulators are case-insensitive. 
 To prevent ambiguity in Tcl code, where the simulator treats mixed-case names as identical, we convert everything to lowercase. 
 This ensures that we can detect and resolve any duplicate names in the top-level circuit before generating the netlist.
-- <font color="red"> **Important note 2**</font>: ihis package is not designed to be used with the `.control` section 
+- <font color="red"> **Important note 2**</font>: this package is not designed to be used with the `.control` section 
 in Ngspice, the .step statement in LTspice, or multiple DC sweeps, and it does not support reading parametric 
 sweeps from raw data. The idea of the package is to handle all such tasks within a Tcl script, 
 eliminating the need to use the simulator's internal scripting capabilities.
@@ -96,7 +96,7 @@ r1 in out 1e3
 r2 out 0 2e3
 .dc v1 0 5 0.1
 ```
-<img src="assets/img/resistor_divider_cir.png" alt="drawing" width="300"/>
+<img src="docs/assets/img/resistor_divider_cir.png" alt="drawing" width="300"/>
 
 
 First step is creating circuit object:
@@ -162,5 +162,5 @@ $chart Render -outfile [file join html_charts $fbasename.html]
 ```
 To view result, we should open rendered resistor_divider.html chart in browser.
 
-![resistor_divider](assets/img/resistor_divider.png)
+![resistor_divider](docs/assets/img/resistor_divider.png)
 
