@@ -37,11 +37,11 @@
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>lappend</font></b> auto_path <font color=#035103>&quot;path to SpiceGenTcl package&quot;</font>
 </pre>
 
-</figure><p class='ruff'>Package is written in pure Tcl with relying on Tcllib and Tklib. The only necessary external dependency is the simulator itself.</p>
+</figure><p class='ruff'>Package is written in pure Tcl with relying on Tcllib and ticklecharts. The only necessary external dependency is the simulator itself.</p>
 <ul class='ruff'>
 <li><a href="https://ngspice.sourceforge.io/download.html" >Ngspice</a></li>
 <li><a href="https://www.tcl.tk/software/tcllib/" >Tcllib</a></li>
-<li><a href="https://www.tcl.tk/software/tklib/" >Tklib</a></li>
+<li><a href="https://github.com/nico-robert/ticklecharts" >ticklecharts</a></li>
 </ul>
 <h2 class='ruff'><a name='Documentation and tutorials'></a>Documentation and tutorials<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
@@ -76,9 +76,9 @@
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>importNgspice</font></b>
 </pre>
 
-</figure><p class='ruff'>To plot results of simulation we also import package <code>xyplot</code> from Tklib:</p>
+</figure><p class='ruff'>To plot results of simulation we also import package <code>ticklecharts</code>:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>package</font></b> require xyplot
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>package</font></b> require ticklecharts
 </pre>
 
 </figure><h3 class='ruff'><a name='Circuit definition'></a>Circuit definition<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -133,18 +133,23 @@ r2 out 0 2e3
 
 </figure><h3 class='ruff'><a name='Plotting data'></a>Plotting data<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
-<p class='ruff'>To plot results we use <a href="https://core.tcl-lang.org/tklib/file?name=modules/plotchart/xyplot.tcl" ><code>xyplot</code></a> package from Tklib:</p>
+<p class='ruff'>To plot results we use <a href="https://github.com/nico-robert/ticklecharts" ><code>ticklecharts</code></a> package:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#7d1c00>wm</font></b> geometry . 600x400
-<b><font color=#923B23>set</font></b> xyp [xyplot .xyp <font color=#463e11>-xformat</font> <font color=#035103>&quot;%5.0f&quot;</font> <font color=#463e11>-yformat</font> <font color=#035103>&quot;%5.0f&quot;</font> <font color=#463e11>-title</font> <font color=#035103>&quot;Voltage divider simulation result&quot;</font> <font color=#463e11>-xtext</font> <font color=#035103>&quot;v(in), V&quot;</font> <font color=#463e11>-ytext</font> <font color=#035103>&quot;voltage, V&quot;</font>]
-<b><font color=#7d1c00>pack</font></b> <font color=#4A181B>$xyp</font> <font color=#463e11>-fill</font> both <font color=#463e11>-expand</font> true
-<b><font color=#923B23>foreach</font></b> x <font color=#4A181B>$axis</font> y <font color=#4A181B>$trace</font> {
-    <b><font color=#923B23>lappend</font></b> xydata <font color=#4A181B>$x</font> <font color=#4A181B>$y</font>
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>foreach</font></b> x <font color=#4A181B>$axis</font> y <font color=#4A181B>$trace</font> {
+    <b><font color=#923B23>set</font></b> x [<b><font color=#923B23>format</font></b> <font color=#035103>&quot;%.3f&quot;</font> <font color=#4A181B>$x</font>]
+    <b><font color=#923B23>set</font></b> y [<b><font color=#923B23>format</font></b> <font color=#035103>&quot;%.3f&quot;</font> <font color=#4A181B>$y</font>]
+    <b><font color=#923B23>lappend</font></b> xydata [<b><font color=#923B23>list</font></b> <font color=#4A181B>$x</font> <font color=#4A181B>$y</font>]
 }
-<b><font color=#923B23>set</font></b> s1 [<font color=#4A181B>$xyp</font> add_data sf1 <font color=#4A181B>$xydata</font> <font color=#463e11>-legend</font> <font color=#035103>&quot;v(out)&quot;</font> <font color=#463e11>-color</font> red]
+<b><font color=#923B23>set</font></b> chart [ticklecharts::chart new]
+<font color=#4A181B>$chart</font> Xaxis <font color=#463e11>-name</font> <font color=#035103>&quot;v(in), V&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-min</font> 0 <font color=#463e11>-max</font> 5 <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
+<font color=#4A181B>$chart</font> Yaxis <font color=#463e11>-name</font> <font color=#035103>&quot;v(out), V&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-min</font> 0 <font color=#463e11>-max</font> 3.5 <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
+<font color=#4A181B>$chart</font> SetOptions <font color=#463e11>-title</font> {} <font color=#463e11>-tooltip</font> {} <font color=#463e11>-animation</font> <font color=#035103>&quot;False&quot;</font> 
+<font color=#4A181B>$chart</font> Add <font color=#035103>&quot;lineSeries&quot;</font> <font color=#463e11>-data</font> <font color=#4A181B>$xydata</font> <font color=#463e11>-showAllSymbol</font> <font color=#035103>&quot;nothing&quot;</font>
+<b><font color=#923B23>set</font></b> fbasename [<b><font color=#923B23>file</font></b> rootname [<b><font color=#923B23>file</font></b> tail [<b><font color=#923B23>info</font></b> script]]]
+<font color=#4A181B>$chart</font> Render <font color=#463e11>-outfile</font> [<b><font color=#923B23>file</font></b> join html_charts <font color=#4A181B>$fbasename</font>.html]
 </pre>
 
-</figure><p class='ruff'>Results:</p>
+</figure><p class='ruff'>To view result, we should open rendered resistor_divider.html chart in browser.</p>
 <p class='ruff'><img src="assets/img/resistor_divider.png" alt="resistor_divider" /></p>
 </main><nav class='ruff-nav'><ul ><li class='ruff-toc1'><a class='ruff-highlight' style='padding-top:2px;' href='index.html'>Start page</a></li>
 <li class='ruff-toc1'><a href='index-docindex.html' accesskey='i'>Index</a></li>

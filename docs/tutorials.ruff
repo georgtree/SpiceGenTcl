@@ -270,31 +270,32 @@ namespace eval Tutorials {
         foreach temp $temps {
             $tempSt setValue $temp
             $circuit runAndRead
-            # print log output to terminal
             puts [$circuit getLog]
-            # get data object
             set data [$circuit getDataDict]
-    	    lappend axisList [dict get $data v(anode)]
-    	    lappend traceList [dict get $data i(va)] 
+            foreach x [dict get $data v(anode)] y [dict get $data i(va)]   {
+                set xf [format "%.3f" $x]
+                set yf [format "%.3f" [expr {-$y}]]
+                lappend xydata [list $xf $yf]
+            }    
+            lappend dataList $xydata
+            unset xydata
         }
         ```
         
         Plotting the results:
         ```tcl
-        # plot results with plotchart
-        wm geometry . 600x400
-        set xyp [xyplot .xyp -xformat "%.2f" -yformat "%.2f" -title "Diode IV curves" -xtext "v(anode,0), V" -ytext "Idiode, A"]
-        pack $xyp -fill both -expand true
-        set i 0
-        set colors [list red blue green black orange]
-        foreach axis $axisList trace $traceList {
-            foreach x $axis y $trace {
-                lappend xydata $x [* -1.0 $y]
-            }
-            $xyp add_data sf$i $xydata -legend "temp=[lindex $temps $i]" -color [lindex $colors $i]
-            unset xydata
-            incr i
+        # plot results with ticklecharts
+        set chart [ticklecharts::chart new]
+        $chart Xaxis -name "v(anode), V" -minorTick {show "True"}  -type "value"
+        $chart Yaxis -name "Idiode, A" -minorTick {show "True"}  -type "value"
+        $chart SetOptions -title {} -tooltip {} -animation "False" -legend  {} -toolbox {feature {dataZoom {yAxisIndex "none"}}} \
+                -grid {left "5%" right "15%"}
+        foreach data $dataList temp $temps {
+            $chart Add "lineSeries" -data $data -showAllSymbol "nothing" -name "${temp}°C" -symbolSize "1"
         }
+        set fbasename [file rootname [file tail [info script]]]
+
+        $chart Render -outfile [file join html_charts $fbasename.html]
         ```
         
         In the picture, you can see how temperature affects the forward current of the diode. Because the series resistance has a 
@@ -350,22 +351,27 @@ namespace eval Tutorials {
         Here we use procedure `linspace` that is imported from ./helperFuncs.tcl, it creates list of numbers from 
         0 to 20 with step 0.1.
         
-        Then we as usual, create `Simulator` class object, attach it to `circuit`, run it multiple times and collect results:
+        Then we as usual, create `Simulator` class object, attach it to `circuit`, run it multiple times, collect results and 
+        apply the equation to calculate the capacitance (with the voltage phasor set to 1, so it is omitted):
         ```tcl
         #set simulator with default 
         set simulator [BatchLiveLog new {batch1} {/usr/local/bin/}]
         # attach simulator object to circuit
         $circuit attachSimulator $simulator
-        # loop in which we run simulation, change reverse biad and read the results
+        # loop in which we run simulation, change reverse bias and read the results
         foreach volt $voltSweep {
             #set reverse voltage bias
             $vdc setParamValue dc $volt
             # run simulation
             $circuit runAndRead
+            # get data object
             set data [$circuit getDataDict]
-            lappend axisList [dict get $data v(c)]
+            set x $volt
             # get imaginary part of current
-            lappend traceList [lindex [dict get $data i(va)] 0 1]
+            set y [lindex [dict get $data i(va)] 0 1]
+            set xf [format "%.3e" $x]
+            set yf [format "%.2e" [expr {-$y/(2*$pi*1e5*1e-9)}]]
+            lappend xydata [list $xf $yf]
         }
         ```
         
@@ -387,16 +393,17 @@ namespace eval Tutorials {
         `reVal1` is the real value at frequency index 1, `imVal1` is the imaginary value at that frequency, and so on. 
         Even if there is only one frequency in the AC analysis, you should still extract the value using index 0.
         
-        Now we can plot the results and apply the equation to calculate the capacitance (with the voltage phasor set to 1, so it is omitted):
+        Now we can plot the results:
         ```tcl
-        # plot results with plotchart
-        wm geometry . 600x400
-        set xyp [xyplot .xyp -xformat "%.2f" -yformat "%.2e" -title "Diode CV" -xtext "v(0,c), V" -ytext "C, C"]
-        pack $xyp -fill both -expand true
-        foreach x $voltSweep y $traceList {
-            lappend xydata $x [expr {-$y/(2*$pi*1e5)}] 
-        }
-        $xyp add_data sf0 $xydata -color red
+        # plot results with ticklecharts
+        set chart [ticklecharts::chart new]
+        $chart Xaxis -name "v(0,c), V" -minorTick {show "True"} -type "value"
+        $chart Yaxis -name "Diode capacitance, nF" -minorTick {show "True"} -type "value"
+        $chart SetOptions -title {} -tooltip {} -animation "False" -toolbox {feature {dataZoom {yAxisIndex "none"}}}
+        $chart Add "lineSeries" -data $xydata -showAllSymbol "nothing"
+        set fbasename [file rootname [file tail [info script]]]
+
+        $chart Render -outfile [file join html_charts $fbasename.html]
         ```
         As a result, we obtain the expected curve, showing a decrease in capacitance value with higher reverse voltage:
         
@@ -536,22 +543,34 @@ namespace eval Tutorials {
        	set axis [dict get $data time]
        	set vout [dict get $data v(osc_out)]
        	set imeas [dict get $data i(vmeasure)]
+       	foreach time [dict get $data time] vout [dict get $data v(osc_out)] imeas [dict get $data i(vmeasure)] {
+            lappend timeVout [list $time $vout]
+            lappend timeImeas [list $time $imeas]
+        }
         ```
         
-        We save output waveform and power currents, and then plot it with `xyplot` package:
+        We save output waveform and power currents, and then plot it:
         ```tcl
-        # plot results with plotchart
-        wm geometry . 600x400
-        set xyp1 [xyplot .xyp1 -xformat "%.2e" -yformat "%.2f" -title "Switch oscillator simulation result" -xtext "time, s" -ytext "v(out), V"]
-        set xyp2 [xyplot .xyp2 -xformat "%.2e" -yformat "%.2e"  -title "Switch oscillator simulation result" -xtext "time, s" -ytext "i(vmeasure), V"]
-        pack $xyp1 -fill both -expand true
-        pack $xyp2 -fill both -expand true
-        foreach x $axis y1 $vout y2 $imeas {
-            lappend xyVout $x $y1
-            lappend xyImeas $x $y2
-        }
-        set s1 [$xyp1 add_data sf1 $xyVout -legend "v(out_osc)" -color red]
-        set s2 [$xyp2 add_data sf1 $xyImeas -legend "i(meas)" -color red]
+        # plot results with ticklecharts
+        # chart for output voltage
+        set chartVout [ticklecharts::chart new]
+        $chartVout Xaxis -name "time, s" -minorTick {show "True"} -type "value"
+        $chartVout Yaxis -name "Output voltage, V" -minorTick {show "True"} -type "value"
+        $chartVout SetOptions -title {} -tooltip {} -animation "False" -toolbox {feature {dataZoom {yAxisIndex "none"}}}
+        $chartVout Add "lineSeries" -data $timeVout -showAllSymbol "nothing" -symbolSize "0"
+        # chart for measured current
+        set chartImeas [ticklecharts::chart new]
+        $chartImeas Xaxis -name "time, s" -minorTick {show "True"} -type "value"
+        $chartImeas Yaxis -name "Current, I" -minorTick {show "True"} -type "value"
+        $chartImeas SetOptions -title {} -tooltip {} -animation "False" -toolbox {feature {dataZoom {yAxisIndex "none"}}}
+        $chartImeas Add "lineSeries" -data $timeImeas -showAllSymbol "nothing" -symbolSize "0"
+        # create multiplot
+        set layout [ticklecharts::Gridlayout new]
+        $layout Add $chartVout -bottom "5%" -height "40%" -width "80%"
+        $layout Add $chartImeas -bottom "55%" -height "40%" -width "80%"
+
+        set fbasename [file rootname [file tail [info script]]]
+        $layout Render -outfile [file join .. html_charts $fbasename.html] -height 800px
         ```
         
         ![switch_oscillator](assets/img/switch_oscillator.png)
@@ -727,26 +746,38 @@ namespace eval Tutorials {
         ```tcl
         # get data dict
         set data [$circuit getDataDict]
-        set axis [dict get $data time]
+        set timeList [dict get $data time]
+        set v9List [dict get $data v(9)]
+        set v10List [dict get $data v(10)]
+        set v11List [dict get $data v(11)]
+        set v12List [dict get $data v(12)]
+
+        foreach time $timeList v9 $v9List v10 $v10List v11 $v11List v12 $v12List {
+            lappend timeV9 [list $time $v9]
+            lappend timeV10 [list $time $v10]
+            lappend timeV11 [list $time $v11]
+            lappend timeV12 [list $time $v12]
+        }
+        # plot data with ticklecharts
         set nodes [list 9 10 11 12]
+        set layout [ticklecharts::Gridlayout new]
+        set i 0
         foreach node $nodes {
-            set v$node [dict get $data v($node)]
+            ticklecharts::chart create chartV$node
+            chartV$node SetOptions -title {} -tooltip {} -animation "False" -toolbox {feature {dataZoom {yAxisIndex "none"}}}
+            chartV$node Xaxis -name "time, s" -minorTick {show "True"} -type "value"
+            chartV$node Yaxis -name "v(${node}), V" -minorTick {show "True"} -type "value"
+            chartV$node Add "lineSeries" -data [subst $[subst timeV$node]] -showAllSymbol "nothing" -name "V(${node})" -symbolSize "0"
+            $layout Add chartV$node -bottom "[expr {4+24*$i}]%" -height "18%" -width "80%"
+            incr i
         }
-        # plot results with plotchart
-        wm geometry . 1600x1000
-        foreach node $nodes {
-            xyplot .xyp$node -xformat "%.2e" -yformat "%.2e" -xtext "time, s" -ytext "v(${node}), V" -ttk 1 
-            pack .xyp$node -fill both -expand true
-            foreach time $axis yV$node [set [subst v$node]] {
-                lappend xyV$node $time [set [subst yV$node]]
-            }
-            .xyp$node add_data sf$node [set [subst xyV$node]] -color red
-        }
+
+        set fbasename [file rootname [file tail [info script]]]
+        $layout Render -outfile [file join .. html_charts $fbasename.html] -height 800px
         ```
         Results:
         
-        <img src="assets/img/four_bit_adder_wvfm.png" alt="drawing" width="1000"/>
-
+        ![fourbit_adder](assets/img/four_bit_adder_wvfm.png)
     }
 
 }

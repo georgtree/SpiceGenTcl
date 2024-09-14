@@ -26,12 +26,12 @@ variable:
 ```tcl
 lappend auto_path "path to SpiceGenTcl package"
 ```
-Package is written in pure Tcl with relying on Tcllib and Tklib. The only necessary external dependency is 
+Package is written in pure Tcl with relying on Tcllib and ticklecharts. The only necessary external dependency is 
 the simulator itself.
 
 - [Ngspice](https://ngspice.sourceforge.io/download.html)
 - [Tcllib](https://www.tcl.tk/software/tcllib/)
-- [Tklib](https://www.tcl.tk/software/tklib/)
+- [ticklecharts](https://github.com/nico-robert/ticklecharts)
 
 ## Documentation and tutorials
 
@@ -81,9 +81,9 @@ Here's how to do it:
 ```tcl
 importNgspice
 ```
-To plot results of simulation we also import package `xyplot` from Tklib:
+To plot results of simulation we also import package `ticklecharts`:
 ```tcl
-package require xyplot
+package require ticklecharts
 ```
 
 ### Circuit definition
@@ -145,16 +145,22 @@ set trace [dict get $data v(out)]
 
 ### Plotting data
 
-To plot results we use [`xyplot`](https://core.tcl-lang.org/tklib/file?name=modules/plotchart/xyplot.tcl) package from Tklib:
+To plot results we use [`ticklecharts`](https://github.com/nico-robert/ticklecharts) package:
 ```tcl
-wm geometry . 600x400
-set xyp [xyplot .xyp -xformat "%5.0f" -yformat "%5.0f" -title "Voltage divider simulation result" -xtext "v(in), V" -ytext "voltage, V"]
-pack $xyp -fill both -expand true
 foreach x $axis y $trace {
-    lappend xydata $x $y
+    set x [format "%.3f" $x]
+    set y [format "%.3f" $y]
+    lappend xydata [list $x $y]
 }
-set s1 [$xyp add_data sf1 $xydata -legend "v(out)" -color red]
+set chart [ticklecharts::chart new]
+$chart Xaxis -name "v(in), V" -minorTick {show "True"} -min 0 -max 5 -type "value"
+$chart Yaxis -name "v(out), V" -minorTick {show "True"} -min 0 -max 3.5 -type "value"
+$chart SetOptions -title {} -tooltip {} -animation "False" 
+$chart Add "lineSeries" -data $xydata -showAllSymbol "nothing"
+set fbasename [file rootname [file tail [info script]]]
+$chart Render -outfile [file join html_charts $fbasename.html]
 ```
-Results:
+To view result, we should open rendered resistor_divider.html chart in browser.
 
 ![resistor_divider](assets/img/resistor_divider.png)
+

@@ -159,7 +159,7 @@ foreach time $timeList v9 $v9List v10 $v10List v11 $v11List v12 $v12List {
     lappend timeV12 [list $time $v12]
 }
 
-# plot data with gnuplot
+# plot data with ticklecharts
 set nodes [list 9 10 11 12]
 set layout [ticklecharts::Gridlayout new]
 set i 0
@@ -167,9 +167,9 @@ foreach node $nodes {
     ticklecharts::chart create chartV$node
     chartV$node SetOptions -title {} -tooltip {} -animation "False" -toolbox {feature {dataZoom {yAxisIndex "none"}}}
     chartV$node Xaxis -name "time, s" -minorTick {show "True"} -type "value"
-    chartV$node Yaxis -name "Voltage, V" -minorTick {show "True"} -type "value"
-    chartV$node Add "lineSeries" -data [subst $[subst timeV$node]] -showAllSymbol "nothing" -name "V(${node})"
-    $layout Add chartV$node -bottom "[expr {25*$i}]%" -height "20%" -width "80%"
+    chartV$node Yaxis -name "v(${node}), V" -minorTick {show "True"} -type "value"
+    chartV$node Add "lineSeries" -data [subst $[subst timeV$node]] -showAllSymbol "nothing" -name "V(${node})" -symbolSize "0"
+    $layout Add chartV$node -bottom "[expr {4+24*$i}]%" -height "18%" -width "80%"
     incr i
 }
 

@@ -24,7 +24,7 @@ set voltSweep [linspace 0 20.1 0.1]
 set simulator [BatchLiveLog new {batch1} {/usr/local/bin/}]
 # attach simulator object to circuit
 $circuit attachSimulator $simulator
-# loop in which we run simulation, change reverse biad and read the results
+# loop in which we run simulation, change reverse bias and read the results
 foreach volt $voltSweep {
     #set reverse voltage bias
     $vdc setParamValue dc $volt

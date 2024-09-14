@@ -281,31 +281,31 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <b><font color=#923B23>foreach</font></b> temp <font color=#4A181B>$temps</font> {
     <font color=#4A181B>$tempSt</font> setValue <font color=#4A181B>$temp</font>
     <font color=#4A181B>$circuit</font> runAndRead
-    <i><font color=#4b5d50># print log output to terminal</font></i>
     <b><font color=#923B23>puts</font></b> [<font color=#4A181B>$circuit</font> getLog]
-    <i><font color=#4b5d50># get data object</font></i>
     <b><font color=#923B23>set</font></b> data [<font color=#4A181B>$circuit</font> getDataDict]
-    <b><font color=#923B23>lappend</font></b> axisList [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> v(anode)]
-    <b><font color=#923B23>lappend</font></b> traceList [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> i(va)] 
+    <b><font color=#923B23>foreach</font></b> x [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> v(anode)] y [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> i(va)]   {
+        <b><font color=#923B23>set</font></b> xf [<b><font color=#923B23>format</font></b> <font color=#035103>&quot;%.3f&quot;</font> <font color=#4A181B>$x</font>]
+        <b><font color=#923B23>set</font></b> yf [<b><font color=#923B23>format</font></b> <font color=#035103>&quot;%.3f&quot;</font> [<b><font color=#923B23>expr</font></b> {-<font color=#4A181B>$y</font>}]]
+        <b><font color=#923B23>lappend</font></b> xydata [<b><font color=#923B23>list</font></b> <font color=#4A181B>$xf</font> <font color=#4A181B>$yf</font>]
+    }    
+    <b><font color=#923B23>lappend</font></b> dataList <font color=#4A181B>$xydata</font>
+    <b><font color=#923B23>unset</font></b> xydata
 }
 </pre>
 
 </figure><p class='ruff'>Plotting the results:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># plot results with plotchart</font></i>
-<b><font color=#7d1c00>wm</font></b> geometry . 600x400
-<b><font color=#923B23>set</font></b> xyp [xyplot .xyp <font color=#463e11>-xformat</font> <font color=#035103>&quot;%.2f&quot;</font> <font color=#463e11>-yformat</font> <font color=#035103>&quot;%.2f&quot;</font> <font color=#463e11>-title</font> <font color=#035103>&quot;Diode IV curves&quot;</font> <font color=#463e11>-xtext</font> <font color=#035103>&quot;v(anode,0), V&quot;</font> <font color=#463e11>-ytext</font> <font color=#035103>&quot;Idiode, A&quot;</font>]
-<b><font color=#7d1c00>pack</font></b> <font color=#4A181B>$xyp</font> <font color=#463e11>-fill</font> both <font color=#463e11>-expand</font> true
-<b><font color=#923B23>set</font></b> i 0
-<b><font color=#923B23>set</font></b> colors [<b><font color=#923B23>list</font></b> red blue green black orange]
-<b><font color=#923B23>foreach</font></b> axis <font color=#4A181B>$axisList</font> trace <font color=#4A181B>$traceList</font> {
-    <b><font color=#923B23>foreach</font></b> x <font color=#4A181B>$axis</font> y <font color=#4A181B>$trace</font> {
-        <b><font color=#923B23>lappend</font></b> xydata <font color=#4A181B>$x</font> [<b><font color=#923B23>*</font></b> -1.0 <font color=#4A181B>$y</font>]
-    }
-    <font color=#4A181B>$xyp</font> add_data sf<font color=#4A181B>$i</font> <font color=#4A181B>$xydata</font> <font color=#463e11>-legend</font> <font color=#035103>&quot;temp=<font color=#4A181B>[</font>lindex <font color=#4A181B>$</font>temps <font color=#4A181B>$</font>i<font color=#4A181B>]</font>&quot;</font> <font color=#463e11>-color</font> [<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$colors</font> <font color=#4A181B>$i</font>]
-    <b><font color=#923B23>unset</font></b> xydata
-    <b><font color=#923B23>incr</font></b> i
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># plot results with ticklecharts</font></i>
+<b><font color=#923B23>set</font></b> chart [ticklecharts::chart new]
+<font color=#4A181B>$chart</font> Xaxis <font color=#463e11>-name</font> <font color=#035103>&quot;v(anode), V&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>}  <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
+<font color=#4A181B>$chart</font> Yaxis <font color=#463e11>-name</font> <font color=#035103>&quot;Idiode, A&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>}  <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
+<font color=#4A181B>$chart</font> SetOptions <font color=#463e11>-title</font> {} <font color=#463e11>-tooltip</font> {} <font color=#463e11>-animation</font> <font color=#035103>&quot;False&quot;</font> <font color=#463e11>-legend</font>  {} <font color=#463e11>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#035103>&quot;none&quot;</font>}}}  <font color=#463e11>-grid</font> {left <font color=#035103>&quot;5%&quot;</font> right <font color=#035103>&quot;15%&quot;</font>}
+<b><font color=#923B23>foreach</font></b> data <font color=#4A181B>$dataList</font> temp <font color=#4A181B>$temps</font> {
+    <font color=#4A181B>$chart</font> Add <font color=#035103>&quot;lineSeries&quot;</font> <font color=#463e11>-data</font> <font color=#4A181B>$data</font> <font color=#463e11>-showAllSymbol</font> <font color=#035103>&quot;nothing&quot;</font> <font color=#463e11>-name</font> <font color=#035103>&quot;<font color=#4A181B>${</font>temp<font color=#4A181B>}</font>°C&quot;</font> <font color=#463e11>-symbolSize</font> <font color=#035103>&quot;1&quot;</font>
 }
+<b><font color=#923B23>set</font></b> fbasename [<b><font color=#923B23>file</font></b> rootname [<b><font color=#923B23>file</font></b> tail [<b><font color=#923B23>info</font></b> script]]]
+
+<font color=#4A181B>$chart</font> Render <font color=#463e11>-outfile</font> [<b><font color=#923B23>file</font></b> join html_charts <font color=#4A181B>$fbasename</font>.html]
 </pre>
 
 </figure><p class='ruff'>In the picture, you can see how temperature affects the forward current of the diode. Because the series resistance has a temperature dependence, all the lines intersect near 1.8V, indicating the point of zero temperature coefficient:</p>
@@ -355,22 +355,26 @@ x2 net1 net2 rcnet r=1 c={cpar}
 </pre>
 
 </figure><p class='ruff'>Here we use procedure <code><b><font color=#923B23>linspace</font></b></code> that is imported from ./helperFuncs.tcl, it creates list of numbers from 0 to 20 with step 0.1.</p>
-<p class='ruff'>Then we as usual, create <code><b><font color=#923B23>Simulator</font></b></code> class object, attach it to <code>circuit</code>, run it multiple times and collect results:</p>
+<p class='ruff'>Then we as usual, create <code><b><font color=#923B23>Simulator</font></b></code> class object, attach it to <code>circuit</code>, run it multiple times, collect results and apply the equation to calculate the capacitance (with the voltage phasor set to 1, so it is omitted):</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50>#set simulator with default </font></i>
 <b><font color=#923B23>set</font></b> simulator [<b><font color=#923B23>BatchLiveLog</font></b> new {batch1} {/usr/local/bin/}]
 <i><font color=#4b5d50># attach simulator object to circuit</font></i>
 <font color=#4A181B>$circuit</font> attachSimulator <font color=#4A181B>$simulator</font>
-<i><font color=#4b5d50># loop in which we run simulation, change reverse biad and read the results</font></i>
+<i><font color=#4b5d50># loop in which we run simulation, change reverse bias and read the results</font></i>
 <b><font color=#923B23>foreach</font></b> volt <font color=#4A181B>$voltSweep</font> {
     <i><font color=#4b5d50>#set reverse voltage bias</font></i>
     <font color=#4A181B>$vdc</font> setParamValue dc <font color=#4A181B>$volt</font>
     <i><font color=#4b5d50># run simulation</font></i>
     <font color=#4A181B>$circuit</font> runAndRead
+    <i><font color=#4b5d50># get data object</font></i>
     <b><font color=#923B23>set</font></b> data [<font color=#4A181B>$circuit</font> getDataDict]
-    <b><font color=#923B23>lappend</font></b> axisList [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> v(c)]
+    <b><font color=#923B23>set</font></b> x <font color=#4A181B>$volt</font>
     <i><font color=#4b5d50># get imaginary part of current</font></i>
-    <b><font color=#923B23>lappend</font></b> traceList [<b><font color=#923B23>lindex</font></b> [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> i(va)] 0 1]
+    <b><font color=#923B23>set</font></b> y [<b><font color=#923B23>lindex</font></b> [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> i(va)] 0 1]
+    <b><font color=#923B23>set</font></b> xf [<b><font color=#923B23>format</font></b> <font color=#035103>&quot;%.3e&quot;</font> <font color=#4A181B>$x</font>]
+    <b><font color=#923B23>set</font></b> yf [<b><font color=#923B23>format</font></b> <font color=#035103>&quot;%.2e&quot;</font> [<b><font color=#923B23>expr</font></b> {-<font color=#4A181B>$y</font>/(2*<font color=#4A181B>$pi</font>*1e5*1e-9)}]]
+    <b><font color=#923B23>lappend</font></b> xydata [<b><font color=#923B23>list</font></b> <font color=#4A181B>$xf</font> <font color=#4A181B>$yf</font>]
 }
 </pre>
 
@@ -384,16 +388,17 @@ x2 net1 net2 rcnet r=1 c={cpar}
 </pre>
 
 </figure><p class='ruff'>Here, <code>reVal0</code> is the real value at frequency index 0, <code>imVal0</code>is the imaginary value at the same frequency, <code>reVal1</code> is the real value at frequency index 1, <code>imVal1</code> is the imaginary value at that frequency, and so on. Even if there is only one frequency in the AC analysis, you should still extract the value using index 0.</p>
-<p class='ruff'>Now we can plot the results and apply the equation to calculate the capacitance (with the voltage phasor set to 1, so it is omitted):</p>
+<p class='ruff'>Now we can plot the results:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># plot results with plotchart</font></i>
-<b><font color=#7d1c00>wm</font></b> geometry . 600x400
-<b><font color=#923B23>set</font></b> xyp [xyplot .xyp <font color=#463e11>-xformat</font> <font color=#035103>&quot;%.2f&quot;</font> <font color=#463e11>-yformat</font> <font color=#035103>&quot;%.2e&quot;</font> <font color=#463e11>-title</font> <font color=#035103>&quot;Diode CV&quot;</font> <font color=#463e11>-xtext</font> <font color=#035103>&quot;v(0,c), V&quot;</font> <font color=#463e11>-ytext</font> <font color=#035103>&quot;C, C&quot;</font>]
-<b><font color=#7d1c00>pack</font></b> <font color=#4A181B>$xyp</font> <font color=#463e11>-fill</font> both <font color=#463e11>-expand</font> true
-<b><font color=#923B23>foreach</font></b> x <font color=#4A181B>$voltSweep</font> y <font color=#4A181B>$traceList</font> {
-    <b><font color=#923B23>lappend</font></b> xydata <font color=#4A181B>$x</font> [<b><font color=#923B23>expr</font></b> {-<font color=#4A181B>$y</font>/(2*<font color=#4A181B>$pi</font>*1e5)}] 
-}
-<font color=#4A181B>$xyp</font> add_data sf0 <font color=#4A181B>$xydata</font> <font color=#463e11>-color</font> red
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># plot results with ticklecharts</font></i>
+<b><font color=#923B23>set</font></b> chart [ticklecharts::chart new]
+<font color=#4A181B>$chart</font> Xaxis <font color=#463e11>-name</font> <font color=#035103>&quot;v(0,c), V&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
+<font color=#4A181B>$chart</font> Yaxis <font color=#463e11>-name</font> <font color=#035103>&quot;Diode capacitance, nF&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
+<font color=#4A181B>$chart</font> SetOptions <font color=#463e11>-title</font> {} <font color=#463e11>-tooltip</font> {} <font color=#463e11>-animation</font> <font color=#035103>&quot;False&quot;</font> <font color=#463e11>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#035103>&quot;none&quot;</font>}}}
+<font color=#4A181B>$chart</font> Add <font color=#035103>&quot;lineSeries&quot;</font> <font color=#463e11>-data</font> <font color=#4A181B>$xydata</font> <font color=#463e11>-showAllSymbol</font> <font color=#035103>&quot;nothing&quot;</font>
+<b><font color=#923B23>set</font></b> fbasename [<b><font color=#923B23>file</font></b> rootname [<b><font color=#923B23>file</font></b> tail [<b><font color=#923B23>info</font></b> script]]]
+
+<font color=#4A181B>$chart</font> Render <font color=#463e11>-outfile</font> [<b><font color=#923B23>file</font></b> join html_charts <font color=#4A181B>$fbasename</font>.html]
 </pre>
 
 </figure><p class='ruff'>As a result, we obtain the expected curve, showing a decrease in capacitance value with higher reverse voltage:</p>
@@ -524,22 +529,34 @@ vrc2=-6.032e-04
 <b><font color=#923B23>set</font></b> axis [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> time]
 <b><font color=#923B23>set</font></b> vout [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> v(osc_out)]
 <b><font color=#923B23>set</font></b> imeas [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> i(vmeasure)]
+<b><font color=#923B23>foreach</font></b> time [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> time] vout [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> v(osc_out)] imeas [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> i(vmeasure)] {
+    <b><font color=#923B23>lappend</font></b> timeVout [<b><font color=#923B23>list</font></b> <font color=#4A181B>$time</font> <font color=#4A181B>$vout</font>]
+    <b><font color=#923B23>lappend</font></b> timeImeas [<b><font color=#923B23>list</font></b> <font color=#4A181B>$time</font> <font color=#4A181B>$imeas</font>]
+}
 </pre>
 
-</figure><p class='ruff'>We save output waveform and power currents, and then plot it with <code>xyplot</code> package:</p>
+</figure><p class='ruff'>We save output waveform and power currents, and then plot it:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># plot results with plotchart</font></i>
-<b><font color=#7d1c00>wm</font></b> geometry . 600x400
-<b><font color=#923B23>set</font></b> xyp1 [xyplot .xyp1 <font color=#463e11>-xformat</font> <font color=#035103>&quot;%.2e&quot;</font> <font color=#463e11>-yformat</font> <font color=#035103>&quot;%.2f&quot;</font> <font color=#463e11>-title</font> <font color=#035103>&quot;Switch oscillator simulation result&quot;</font> <font color=#463e11>-xtext</font> <font color=#035103>&quot;time, s&quot;</font> <font color=#463e11>-ytext</font> <font color=#035103>&quot;v(out), V&quot;</font>]
-<b><font color=#923B23>set</font></b> xyp2 [xyplot .xyp2 <font color=#463e11>-xformat</font> <font color=#035103>&quot;%.2e&quot;</font> <font color=#463e11>-yformat</font> <font color=#035103>&quot;%.2e&quot;</font>  <font color=#463e11>-title</font> <font color=#035103>&quot;Switch oscillator simulation result&quot;</font> <font color=#463e11>-xtext</font> <font color=#035103>&quot;time, s&quot;</font> <font color=#463e11>-ytext</font> <font color=#035103>&quot;i(vmeasure), V&quot;</font>]
-<b><font color=#7d1c00>pack</font></b> <font color=#4A181B>$xyp1</font> <font color=#463e11>-fill</font> both <font color=#463e11>-expand</font> true
-<b><font color=#7d1c00>pack</font></b> <font color=#4A181B>$xyp2</font> <font color=#463e11>-fill</font> both <font color=#463e11>-expand</font> true
-<b><font color=#923B23>foreach</font></b> x <font color=#4A181B>$axis</font> y1 <font color=#4A181B>$vout</font> y2 <font color=#4A181B>$imeas</font> {
-    <b><font color=#923B23>lappend</font></b> xyVout <font color=#4A181B>$x</font> <font color=#4A181B>$y1</font>
-    <b><font color=#923B23>lappend</font></b> xyImeas <font color=#4A181B>$x</font> <font color=#4A181B>$y2</font>
-}
-<b><font color=#923B23>set</font></b> s1 [<font color=#4A181B>$xyp1</font> add_data sf1 <font color=#4A181B>$xyVout</font> <font color=#463e11>-legend</font> <font color=#035103>&quot;v(out_osc)&quot;</font> <font color=#463e11>-color</font> red]
-<b><font color=#923B23>set</font></b> s2 [<font color=#4A181B>$xyp2</font> add_data sf1 <font color=#4A181B>$xyImeas</font> <font color=#463e11>-legend</font> <font color=#035103>&quot;i(meas)&quot;</font> <font color=#463e11>-color</font> red]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># plot results with ticklecharts</font></i>
+<i><font color=#4b5d50># chart for output voltage</font></i>
+<b><font color=#923B23>set</font></b> chartVout [ticklecharts::chart new]
+<font color=#4A181B>$chartVout</font> Xaxis <font color=#463e11>-name</font> <font color=#035103>&quot;time, s&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
+<font color=#4A181B>$chartVout</font> Yaxis <font color=#463e11>-name</font> <font color=#035103>&quot;Output voltage, V&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
+<font color=#4A181B>$chartVout</font> SetOptions <font color=#463e11>-title</font> {} <font color=#463e11>-tooltip</font> {} <font color=#463e11>-animation</font> <font color=#035103>&quot;False&quot;</font> <font color=#463e11>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#035103>&quot;none&quot;</font>}}}
+<font color=#4A181B>$chartVout</font> Add <font color=#035103>&quot;lineSeries&quot;</font> <font color=#463e11>-data</font> <font color=#4A181B>$timeVout</font> <font color=#463e11>-showAllSymbol</font> <font color=#035103>&quot;nothing&quot;</font> <font color=#463e11>-symbolSize</font> <font color=#035103>&quot;0&quot;</font>
+<i><font color=#4b5d50># chart for measured current</font></i>
+<b><font color=#923B23>set</font></b> chartImeas [ticklecharts::chart new]
+<font color=#4A181B>$chartImeas</font> Xaxis <font color=#463e11>-name</font> <font color=#035103>&quot;time, s&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
+<font color=#4A181B>$chartImeas</font> Yaxis <font color=#463e11>-name</font> <font color=#035103>&quot;Current, I&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
+<font color=#4A181B>$chartImeas</font> SetOptions <font color=#463e11>-title</font> {} <font color=#463e11>-tooltip</font> {} <font color=#463e11>-animation</font> <font color=#035103>&quot;False&quot;</font> <font color=#463e11>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#035103>&quot;none&quot;</font>}}}
+<font color=#4A181B>$chartImeas</font> Add <font color=#035103>&quot;lineSeries&quot;</font> <font color=#463e11>-data</font> <font color=#4A181B>$timeImeas</font> <font color=#463e11>-showAllSymbol</font> <font color=#035103>&quot;nothing&quot;</font> <font color=#463e11>-symbolSize</font> <font color=#035103>&quot;0&quot;</font>
+<i><font color=#4b5d50># create multiplot</font></i>
+<b><font color=#923B23>set</font></b> layout [ticklecharts::Gridlayout new]
+<font color=#4A181B>$layout</font> Add <font color=#4A181B>$chartVout</font> <font color=#463e11>-bottom</font> <font color=#035103>&quot;5%&quot;</font> <font color=#463e11>-height</font> <font color=#035103>&quot;40%&quot;</font> <font color=#463e11>-width</font> <font color=#035103>&quot;80%&quot;</font>
+<font color=#4A181B>$layout</font> Add <font color=#4A181B>$chartImeas</font> <font color=#463e11>-bottom</font> <font color=#035103>&quot;55%&quot;</font> <font color=#463e11>-height</font> <font color=#035103>&quot;40%&quot;</font> <font color=#463e11>-width</font> <font color=#035103>&quot;80%&quot;</font>
+
+<b><font color=#923B23>set</font></b> fbasename [<b><font color=#923B23>file</font></b> rootname [<b><font color=#923B23>file</font></b> tail [<b><font color=#923B23>info</font></b> script]]]
+<font color=#4A181B>$layout</font> Render <font color=#463e11>-outfile</font> [<b><font color=#923B23>file</font></b> join .. html_charts <font color=#4A181B>$fbasename</font>.html] <font color=#463e11>-height</font> 800px
 </pre>
 
 </figure><p class='ruff'><img src="assets/img/switch_oscillator.png" alt="switch_oscillator" /></p>
@@ -710,25 +727,38 @@ vrc2=-6.032e-04
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># get data dict</font></i>
 <b><font color=#923B23>set</font></b> data [<font color=#4A181B>$circuit</font> getDataDict]
-<b><font color=#923B23>set</font></b> axis [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> time]
+<b><font color=#923B23>set</font></b> timeList [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> time]
+<b><font color=#923B23>set</font></b> v9List [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> v(9)]
+<b><font color=#923B23>set</font></b> v10List [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> v(10)]
+<b><font color=#923B23>set</font></b> v11List [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> v(11)]
+<b><font color=#923B23>set</font></b> v12List [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> v(12)]
+
+<b><font color=#923B23>foreach</font></b> time <font color=#4A181B>$timeList</font> v9 <font color=#4A181B>$v9List</font> v10 <font color=#4A181B>$v10List</font> v11 <font color=#4A181B>$v11List</font> v12 <font color=#4A181B>$v12List</font> {
+    <b><font color=#923B23>lappend</font></b> timeV9 [<b><font color=#923B23>list</font></b> <font color=#4A181B>$time</font> <font color=#4A181B>$v9</font>]
+    <b><font color=#923B23>lappend</font></b> timeV10 [<b><font color=#923B23>list</font></b> <font color=#4A181B>$time</font> <font color=#4A181B>$v10</font>]
+    <b><font color=#923B23>lappend</font></b> timeV11 [<b><font color=#923B23>list</font></b> <font color=#4A181B>$time</font> <font color=#4A181B>$v11</font>]
+    <b><font color=#923B23>lappend</font></b> timeV12 [<b><font color=#923B23>list</font></b> <font color=#4A181B>$time</font> <font color=#4A181B>$v12</font>]
+}
+<i><font color=#4b5d50># plot data with ticklecharts</font></i>
 <b><font color=#923B23>set</font></b> nodes [<b><font color=#923B23>list</font></b> 9 10 11 12]
+<b><font color=#923B23>set</font></b> layout [ticklecharts::Gridlayout new]
+<b><font color=#923B23>set</font></b> i 0
 <b><font color=#923B23>foreach</font></b> node <font color=#4A181B>$nodes</font> {
-    <b><font color=#923B23>set</font></b> v<font color=#4A181B>$node</font> [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> v(<font color=#4A181B>$node</font>)]
+    ticklecharts::chart create chartV<font color=#4A181B>$node</font>
+    chartV<font color=#4A181B>$node</font> SetOptions <font color=#463e11>-title</font> {} <font color=#463e11>-tooltip</font> {} <font color=#463e11>-animation</font> <font color=#035103>&quot;False&quot;</font> <font color=#463e11>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#035103>&quot;none&quot;</font>}}}
+    chartV<font color=#4A181B>$node</font> Xaxis <font color=#463e11>-name</font> <font color=#035103>&quot;time, s&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
+    chartV<font color=#4A181B>$node</font> Yaxis <font color=#463e11>-name</font> <font color=#035103>&quot;v(<font color=#4A181B>${</font>node<font color=#4A181B>}</font>), V&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
+    chartV<font color=#4A181B>$node</font> Add <font color=#035103>&quot;lineSeries&quot;</font> <font color=#463e11>-data</font> [<b><font color=#923B23>subst</font></b> $[<b><font color=#923B23>subst</font></b> timeV<font color=#4A181B>$node</font>]] <font color=#463e11>-showAllSymbol</font> <font color=#035103>&quot;nothing&quot;</font> <font color=#463e11>-name</font> <font color=#035103>&quot;V(<font color=#4A181B>${</font>node<font color=#4A181B>}</font>)&quot;</font> <font color=#463e11>-symbolSize</font> <font color=#035103>&quot;0&quot;</font>
+    <font color=#4A181B>$layout</font> Add chartV<font color=#4A181B>$node</font> <font color=#463e11>-bottom</font> <font color=#035103>&quot;<font color=#4A181B>[</font>expr <font color=#4A181B>{</font>4+24*<font color=#4A181B>$</font>i<font color=#4A181B>}]</font>%&quot;</font> <font color=#463e11>-height</font> <font color=#035103>&quot;18%&quot;</font> <font color=#463e11>-width</font> <font color=#035103>&quot;80%&quot;</font>
+    <b><font color=#923B23>incr</font></b> i
 }
-<i><font color=#4b5d50># plot results with plotchart</font></i>
-<b><font color=#7d1c00>wm</font></b> geometry . 1600x1000
-<b><font color=#923B23>foreach</font></b> node <font color=#4A181B>$nodes</font> {
-    xyplot .xyp<font color=#4A181B>$node</font> <font color=#463e11>-xformat</font> <font color=#035103>&quot;%.2e&quot;</font> <font color=#463e11>-yformat</font> <font color=#035103>&quot;%.2e&quot;</font> <font color=#463e11>-xtext</font> <font color=#035103>&quot;time, s&quot;</font> <font color=#463e11>-ytext</font> <font color=#035103>&quot;v(<font color=#4A181B>${</font>node<font color=#4A181B>}</font>), V&quot;</font> <font color=#463e11>-ttk</font> 1 
-    <b><font color=#7d1c00>pack</font></b> .xyp<font color=#4A181B>$node</font> <font color=#463e11>-fill</font> both <font color=#463e11>-expand</font> true
-    <b><font color=#923B23>foreach</font></b> time <font color=#4A181B>$axis</font> yV<font color=#4A181B>$node</font> [<b><font color=#923B23>set</font></b> [<b><font color=#923B23>subst</font></b> v<font color=#4A181B>$node</font>]] {
-        <b><font color=#923B23>lappend</font></b> xyV<font color=#4A181B>$node</font> <font color=#4A181B>$time</font> [<b><font color=#923B23>set</font></b> [<b><font color=#923B23>subst</font></b> yV<font color=#4A181B>$node</font>]]
-    }
-    .xyp<font color=#4A181B>$node</font> add_data sf<font color=#4A181B>$node</font> [<b><font color=#923B23>set</font></b> [<b><font color=#923B23>subst</font></b> xyV<font color=#4A181B>$node</font>]] <font color=#463e11>-color</font> red
-}
+
+<b><font color=#923B23>set</font></b> fbasename [<b><font color=#923B23>file</font></b> rootname [<b><font color=#923B23>file</font></b> tail [<b><font color=#923B23>info</font></b> script]]]
+<font color=#4A181B>$layout</font> Render <font color=#463e11>-outfile</font> [<b><font color=#923B23>file</font></b> join .. html_charts <font color=#4A181B>$fbasename</font>.html] <font color=#463e11>-height</font> 800px
 </pre>
 
 </figure><p class='ruff'>Results:</p>
-<p class='ruff'><img src="assets/img/four_bit_adder_wvfm.png" alt="drawing" width="1000"/></p>
+<p class='ruff'><img src="assets/img/four_bit_adder_wvfm.png" alt="fourbit_adder" /></p>
 </main><nav class='ruff-nav'><ul ><li class='ruff-toc1'><a style='padding-top:2px;' href='index.html'>Start page</a></li>
 <li class='ruff-toc1'><a href='index-docindex.html' accesskey='i'>Index</a></li>
 <hr>
