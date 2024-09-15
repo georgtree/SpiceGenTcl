@@ -1,9 +1,8 @@
-lappend auto_path /home/georgtree/tcl_tools/
+lappend auto_path /home/georgtree/tcl/
 lappend auto_path "../"
 source ./helperFuncs.tcl
 package require SpiceGenTcl
-package require gnuplotutil
-package require xyplot
+package require ticklecharts
 package require math::statistics
 namespace import tcl::mathop::*
 package require math::constants
@@ -79,7 +78,7 @@ set simulator [Batch new {batch1} {/usr/local/bin/}]
 # attach simulator object to circuit
 $circuit attachSimulator $simulator
 # set number of simulations
-set mcRuns 500
+set mcRuns 100
 set numOfIntervals 15
 # loop in which we run simulation with uniform distribution
 for {set i 0} {$i<$mcRuns} {incr i} {
@@ -136,23 +135,39 @@ for {set i 0} {$i<$mcRuns} {incr i} {
 set normIntervals [createIntervals $bwsNorm $numOfIntervals]
 set normDist [createDist $bwsNorm [dict get $normIntervals intervals]]
 
-set optionalCommand "set xtics font 'Helvetica,6'"
-        
 
-# plot results with gnuplot
-gnuplotutil::plotHist [dict get $uniIntervals intervalsStr] -grid -style clustered -fill solid -boxwidth 0.95 -gap 0 -xlabel "Frequency intervals, Hz" \
-        -ylabel "Bandwidths per interval" -names [list {Uniform distribution}] -optcmd $optionalCommand \
-        -columns $uniDist
-gnuplotutil::plotHist [dict get $normIntervals intervalsStr] -grid -style clustered -fill solid -boxwidth 0.95 -gap 0 -xlabel "Frequency intervals, Hz" \
-        -ylabel "Bandwidths per interval" -names [list {Normal distribution}] -optcmd $optionalCommand \
-        -columns $normDist
-        
+# plot results with ticklecharts
+# chart for uniformly distributed parameters
+set chartUni [ticklecharts::chart new]
+$chartUni Xaxis -name "Frequency intervals, Hz" -data [list [dict get $uniIntervals intervalsStr]]\
+        -axisTick {show "True" alignWithLabel "True"} -axisLabel {interval "0" rotate "45" fontSize "8"}
+$chartUni Yaxis -name "Bandwidths per interval" -minorTick {show "True"} -type "value"
+$chartUni SetOptions -title {} -tooltip {} -animation "False" -toolbox {feature {dataZoom {yAxisIndex "none"}}}
+$chartUni Add "barSeries" -data [list $uniDist]
+# chart for normally distributed parameters
+set chartNorm [ticklecharts::chart new]
+$chartNorm Xaxis -name "Frequency intervals, Hz" -data [list [dict get $normIntervals intervalsStr]]\
+        -axisTick {show "True" alignWithLabel "True"} -axisLabel {interval "0" rotate "45" fontSize "8"}
+$chartNorm Yaxis -name "Bandwidths per interval" -minorTick {show "True"} -type "value"
+$chartNorm SetOptions -title {} -tooltip {} -animation "False" -toolbox {feature {dataZoom {yAxisIndex "none"}}}
+$chartNorm Add "barSeries" -data [list $normDist]
+# create multiplot
+set layout [ticklecharts::Gridlayout new]
+$layout Add $chartNorm -bottom "10%" -height "35%" -width "75%"
+$layout Add $chartUni -bottom "60%" -height "35%" -width "75%"
+
+set fbasename [file rootname [file tail [info script]]]
+$layout Render -outfile [file join html_charts $fbasename.html] -height 800px -width 1200px
+
 # find distribution of normal distributed values in uniform intervals       
 set normDistWithUniIntervals [createDist $bwsNorm [dict get $uniIntervals intervals]]
 
-gnuplotutil::plotHist [dict get $uniIntervals intervalsStr] -grid -style clustered -fill solid -boxwidth 0.95 -gap 0 -transparent -xlabel "Frequency intervals, Hz" \
-        -ylabel "Bandwidths per interval" -names [list {Uniform distribution} {Normal distribution}] \
-        -optcmd $optionalCommand -columns $uniDist $normDistWithUniIntervals
-
-
-
+set chartCombined [ticklecharts::chart new]
+$chartCombined Xaxis -name "Frequency intervals, Hz" -data [list [dict get $uniIntervals intervalsStr]]\
+        -axisTick {show "True" alignWithLabel "True"} -axisLabel {interval "0" rotate "45" fontSize "8"}
+$chartCombined Yaxis -name "Bandwidths per interval" -minorTick {show "True"} -type "value"
+$chartCombined SetOptions -title {} -legend  {} -tooltip {} -animation "False"\
+        -toolbox {feature {dataZoom {yAxisIndex "none"}}} -grid {left "10%" right "15%"}       
+$chartCombined Add "barSeries" -data [list $uniDist] -name "Uniform"
+$chartCombined Add "barSeries" -data [list $normDistWithUniIntervals] -name "Normal"
+$chartCombined Render -outfile [file join html_charts ${fbasename}_combined.html] -height 800px -width 1200px
