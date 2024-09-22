@@ -15,13 +15,17 @@ test testDcClass-1.1 {test Dc class} -setup {
     set res [Dc new v1 {time1 -eq} 5 0.1 -name dc1]
 } -body {
     set result [$res genSPICEString]
-} -result ".dc v1 \{time1\} 5 0.1"
+} -result ".dc v1 \{time1\} 5 0.1" -cleanup {
+    unset res result
+}
 
 test testDcClass-1.2 {test Dc class} -setup {
     set res [Dc new v1 0 5 0.1]
 } -body {
     set result [$res genSPICEString]
-} -result ".dc v1 0 5 0.1"
+} -result ".dc v1 0 5 0.1" -cleanup {
+    unset res result
+}
 
     # ________________________ Ac class tests _________________________ #
     
@@ -29,13 +33,17 @@ test testAcClass-1.1 {test Ac class} -setup {
     set res [Ac new dec 10 {f1 -eq} 1e6 -name ac1]
 } -body {
     set result [$res genSPICEString]
-} -result ".ac dec 10 \{f1\} 1e6"
+} -result ".ac dec 10 \{f1\} 1e6" -cleanup {
+    unset res result
+}
 
 test testAcClass-1.2 {test Ac class} -setup {
     set res [Ac new lin 1000 1 1e6]
 } -body {
     set result [$res genSPICEString]
-} -result ".ac lin 1000 1 1e6"
+} -result ".ac lin 1000 1 1e6" -cleanup {
+    unset res result
+}
 
     # ________________________ SensAc class tests _________________________ #
     
@@ -43,13 +51,17 @@ test testSensAcClass-1.1 {test SensAc class} -setup {
     set res [SensAc new v(1,out) dec 10 {f1 -eq} 1e6 -name sensac1]
 } -body {
     set result [$res genSPICEString]
-} -result ".sens v(1,out) ac dec 10 \{f1\} 1e6"
+} -result ".sens v(1,out) ac dec 10 \{f1\} 1e6" -cleanup {
+    unset res result
+}
 
 test testSensAcClass-1.2 {test SensAc class} -setup {
     set res [SensAc new v(1,out) dec 10 1 1e6]
 } -body {
     set result [$res genSPICEString]
-} -result ".sens v(1,out) ac dec 10 1 1e6"
+} -result ".sens v(1,out) ac dec 10 1 1e6" -cleanup {
+    unset res result
+}
     
     # ________________________ SensDc class tests _________________________ #
     
@@ -57,7 +69,9 @@ test testSensDcClass-1.1 {test SensDc class} -setup {
     set res [SensDc new v(1,out) -name sensdc1]
 } -body {
     set result [$res genSPICEString]
-} -result ".sens v(1,out)"
+} -result ".sens v(1,out)" -cleanup {
+    unset res result
+}
     
     # ________________________ Tran class tests _________________________ #
     
@@ -65,19 +79,25 @@ test testTranClass-1.1 {test Tran class} -setup {
     set res [Tran new 1e-6 1e-3 -uic -name tran1]
 } -body {
     set result [$res genSPICEString]
-} -result ".tran 1e-6 1e-3 uic"
+} -result ".tran 1e-6 1e-3 uic" -cleanup {
+    unset res result
+}
 
 test testTranClass-1.2 {test Tran class} -setup {
     set res [Tran new 1e-6 {tend -eq} -uic -name tran1]
 } -body {
     set result [$res genSPICEString]
-} -result ".tran 1e-6 \{tend\} uic"
+} -result ".tran 1e-6 \{tend\} uic" -cleanup {
+    unset res result
+}
 
 test testTranClass-1.3 {test Tran class} -setup {
     set res [Tran new 1e-6 {tend -eq}]
 } -body {
     set result [$res genSPICEString]
-} -result ".tran 1e-6 \{tend\}"
+} -result ".tran 1e-6 \{tend\}" -cleanup {
+    unset res result
+}
 
     # ________________________ Op class tests _________________________ #
     
@@ -85,12 +105,16 @@ test testOpClass-1.1 {test Op class} -setup {
     set res [Op new -name dc1]
 } -body {
     set result [$res genSPICEString]
-} -result ".op"
+} -result ".op" -cleanup {
+    unset res result
+}
 
 test testOpClass-1.2 {test Op class} -setup {
     set res [Op new]
 } -body {
     set result [$res genSPICEString]
-} -result ".op"
+} -result ".op" -cleanup {
+    unset res result
+}
 
 cleanupTests

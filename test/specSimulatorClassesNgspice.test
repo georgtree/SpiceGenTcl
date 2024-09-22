@@ -42,5 +42,8 @@ test testSimulations-1.1 {test creation of circuit, run it with NgspiceBatch and
     set traceMatch [matchList {0.0 0.6666666666666666 1.3333333333333333 2.0 \
             2.6666666666666665 3.333333333333333} [dict get $data v(out)]]
     return $traceMatch
-} -result 1
+} -result 1 -cleanup {
+    unset circuit simulator data traceMatch
+}
 
+cleanupTests

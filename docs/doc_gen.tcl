@@ -1,7 +1,6 @@
 #RUNF: doc_gen.tcl
 
 lappend auto_path "../"
-lappend auto_path "/home/georgtree/tcl/"
 set path_to_hl_tcl "/home/georgtree/tcl/hl_tcl"
 package require ruff
 package require fileutil
