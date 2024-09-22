@@ -11,6 +11,7 @@ source startPage.ruff
 source tutorials.ruff
 source faq.ruff
 source tips.ruff
+source advanced.ruff
 source [file join $sourceDir generalClasses.tcl]
 source [file join $sourceDir ngspice/specElementsClasses.tcl]
 source [file join $sourceDir ngspice/specAnalysesClasses.tcl]
@@ -37,7 +38,7 @@ set common [list \
                 -version $packageVersion \
                 -copyright "George Yashin" {*}$::argv
                ]
-set namespaces [list ::FAQ ::Tutorials ::Tips ::SpiceGenTcl ::SpiceGenTcl::Ngspice::BasicDevices \
+set namespaces [list ::FAQ ::Tutorials ::Tips ::Advanced ::SpiceGenTcl ::SpiceGenTcl::Ngspice::BasicDevices \
                 ::SpiceGenTcl::Ngspice::Sources ::SpiceGenTcl::Ngspice::SemiconductorDevices \
                 ::SpiceGenTcl::Ngspice::Analyses ::SpiceGenTcl::Ngspice::Simulators]
 

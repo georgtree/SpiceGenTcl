@@ -77,18 +77,46 @@ $circuit add [Ac new oct 100 250e3 10e6]
 set simulator [Batch new {batch1} {/usr/local/bin/}]
 # attach simulator object to circuit
 $circuit attachSimulator $simulator
+
+# simulate typical values bandwidth
+
+# run simulation
+$circuit runAndRead
+# get data dictionary
+set data [$circuit getDataDict]
+set trace [calcDbMagVec [dict get $data v(out)]]
+set freqs [dict get $data frequency]
+foreach x $freqs y $trace {
+    lappend xydata [list [lindex $x 0] $y]
+}
+puts [findBW [lmap freq $freqs {lindex $freq 0}] $trace -10]
+set chartTransMag [ticklecharts::chart new]
+$chartTransMag Xaxis -name "Frequency, Hz" -minorTick {show "True"} -type "log"
+$chartTransMag Yaxis -name "Magnitude, dB" -minorTick {show "True"} -type "value"
+$chartTransMag SetOptions -title {} -tooltip {} -animation "False" -toolbox {feature {dataZoom {yAxisIndex "none"}}}\
+        -grid {left "10%" right "15%"}
+$chartTransMag Add "lineSeries" -data $xydata -showAllSymbol "nothing" -symbolSize "1"
+set fbasename [file rootname [file tail [info script]]]
+
+$chartTransMag Render -outfile [file join html_charts ${fbasename}_typ.html] -width 1000px
+
 # set number of simulations
-set mcRuns 100
+set mcRuns 1000
 set numOfIntervals 15
+# set parameter's uniform distributions limits
+set uniformLimits [dict create c1 [dict create min 0.9e-9 max 1.1e-9]\
+        l1 [dict create min 9e-6 max 11e-6]\
+        c2 [dict create min 0.9e-9 max 1.1e-9]\
+        l2 [dict create min 9e-6 max 11e-6]\
+        c3 [dict create min 225e-12 max 275e-12]\
+        l3 [dict create min 36e-6 max 44e-6]]
+
 # loop in which we run simulation with uniform distribution
 for {set i 0} {$i<$mcRuns} {incr i} {
     #set elements values according to uniform distribution
-    c1 setParamValue c [random-uniform 0.9e-9 1.1e-9 1]
-    l1 setParamValue l [random-uniform 9e-6 11e-6 1]
-    c2 setParamValue c [random-uniform 0.9e-9 1.1e-9 1]
-    l2 setParamValue l [random-uniform 9e-6 11e-6 1]
-    c3 setParamValue c [random-uniform 225e-12 275e-12 1]
-    l3 setParamValue l [random-uniform 36e-6 44e-6 1]
+    foreach elem [list c1 l1 c2 l2 c3 l3] {
+        $elem setParamValue [string index $elem 0] [random-uniform {*}[dict values [dict get $uniformLimits $elem]] 1]
+    }
     # run simulation
     $circuit runAndRead
     # get data dictionary
@@ -100,7 +128,9 @@ for {set i 0} {$i<$mcRuns} {incr i} {
             lappend freqRes [lindex $freq 0]
         }
     }
+    # get vout frequency curve
     lappend traceListUni [calcDbMagVec [dict get $data v(out)]]
+    # calculate bandwidths values
     lappend bwsUni [findBW $freqRes [lindex $traceListUni end] -10]
 }
 # get distribution of bandwidths with uniform parameters distribution
@@ -108,15 +138,20 @@ set uniIntervals [createIntervals $bwsUni $numOfIntervals]
 set uniDist [createDist $bwsUni [dict get $uniIntervals intervals]]
 
 
+# set parameter's normal distributions limits
+set normalLimits [dict create c1 [dict create mean 1e-9 std [/ 0.1e-9 3]]\
+        l1 [dict create mean 10e-6 std [/ 1e-6 3]]\
+        c2 [dict create mean 1e-9 std [/ 0.1e-9 3]]\
+        l2 [dict create mean 10e-6 std [/ 1e-6 3]]\
+        c3 [dict create mean 250e-12 std [/ 25e-12 3]]\
+        l3 [dict create mean 40e-6 std [/ 4e-6 3]]]
+
 ## loop in which we run simulation with normal distribution
 for {set i 0} {$i<$mcRuns} {incr i} {
     #set elements values according to normal distribution
-    c1 setParamValue c [random-normal 1e-9 [/ 0.1e-9 3] 1]
-    l1 setParamValue l [random-normal 10e-6 [/ 1e-6 3] 1]
-    c2 setParamValue c [random-normal 1e-9 [/ 0.1e-9 3] 1]
-    l2 setParamValue l [random-normal 10e-6 [/ 1e-6 3] 1]
-    c3 setParamValue c [random-normal 250e-12 [/ 25e-12 3] 1]
-    l3 setParamValue l [random-normal 40e-6 [/ 4e-6 3] 1]
+    foreach elem [list c1 l1 c2 l2 c3 l3] {
+        $elem setParamValue [string index $elem 0] [random-normal {*}[dict values [dict get $normalLimits $elem]] 1]
+    }
     # run simulation
     $circuit runAndRead
     # get data dictionary
@@ -128,7 +163,9 @@ for {set i 0} {$i<$mcRuns} {incr i} {
             lappend freqRes [lindex $freq 0]
         }
     }
+    # get vout frequency curve
     lappend traceListNorm [calcDbMagVec [dict get $data v(out)]]
+    # calculate bandwidths values
     lappend bwsNorm [findBW $freqRes [lindex $traceListNorm end] -10]
 }
 # get distribution of bandwidths with normal parameters distribution

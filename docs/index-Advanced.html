@@ -1,0 +1,277 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"/>
+<title>Tcl SpiceGenTcl package</title>
+<link rel='stylesheet' type='text/css' href='assets/ruff-min.css' />
+<script type='text/javascript' src='assets/ruff-min.js'></script>
+</head>
+<body>
+<div class='ruff-layout'>
+<header class='ruff-layout-header ruff-hd'>
+<a style='text-decoration:none;' href='index.html'>Tcl SpiceGenTcl package (v0.1)</a>
+
+
+            <div id="ruffButtonBar">
+            <button id="ruffNavMove" onclick="ruffMoveNavPane()"></button>
+            <button id="ruffToggleTheme" onclick="ruffNextTheme()"></button>
+            </div>
+        </header><main class='ruff-layout-main ruff-bd'><h1 class='ruff'><a name='Advanced'></a>Advanced<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h1>
+<div style='clear:both;'></div>
+<p class='ruff'>This section provides advanced examples from the <code>examples</code> folder in the root directory of <em>SpiceGenTcl</em>. Rather than focusing on basic operations, we highlight advanced use cases that showcase the full capabilities of both the package and the Tcl language. List of availible examples:</p>
+<ul class='ruff'>
+<li><a href="index-Advanced.html#::Advanced-Monte-Carlo simulation" title="Monte-Carlo simulation" >Monte-Carlo simulation</a> - &quot;examples/monte_carlo.tcl&quot; file</li>
+</ul>
+<h2 class='ruff'><a name='::Advanced-Monte-Carlo simulation'></a>Monte-Carlo simulation<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
+<div style='clear:both;'></div>
+<p class='ruff'>This example demonstrates multiple runs of a simple filter circuit and the collection of the resulting statistical distribution of frequency bandwidths. The original circuit source is from the ngspice source distribution. The target filter circuit is:</p>
+<p class='ruff'><img src="assets/img/monte_carlo_cir.png" alt="drawing" width="700"/></p>
+<p class='ruff'>The filter is a 3rd-order Chebyshev bandpass. The first step is to build the circuit and obtain the magnitude of the transfer characteristic:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create top-level circuit</font></i>
+<b><font color=#923B23>set</font></b> circuit [<b><font color=#923B23>Circuit</font></b> new {Monte-Carlo}]
+<i><font color=#4b5d50># add elements to circuit</font></i>
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vac</font></b> new 1 n001 0 1]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new 1 n002 n001 141]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new 2 0 out 141]
+<b><font color=#923B23>C</font></b> create c1 1 out 0 1e-9
+<b><font color=#923B23>L</font></b> create l1 1 out 0 10e-6
+<b><font color=#923B23>C</font></b> create c2 2 n002 0 1e-9
+<b><font color=#923B23>L</font></b> create l2 2 n002 0 10e-6
+<b><font color=#923B23>C</font></b> create c3 3 out n003 250e-12
+<b><font color=#923B23>L</font></b> create l3 3 n003 n002 40e-6
+<b><font color=#923B23>foreach</font></b> elem [<b><font color=#923B23>list</font></b> c1 l1 c2 l2 c3 l3] {
+    <font color=#4A181B>$circuit</font> add <font color=#4A181B>$elem</font>
+}
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Ac</font></b> new oct 100 250e3 10e6]
+<i><font color=#4b5d50>#set simulator with default </font></i>
+<b><font color=#923B23>set</font></b> simulator [<b><font color=#923B23>Batch</font></b> new {batch1} {/usr/local/bin/}]
+<i><font color=#4b5d50># attach simulator object to circuit</font></i>
+<font color=#4A181B>$circuit</font> attachSimulator <font color=#4A181B>$simulator</font>
+
+</pre>
+
+</figure><p class='ruff'>Here, we use a different method for creating a class instance: <code>create</code> instead of <code>new</code>. With <code>create</code>, we can directly set a custom object reference name, rather than relying on the automatically generated one by Tcl.</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>C</font></b> create c1 1 out 0 1e-9
+</pre>
+
+</figure><p class='ruff'>Keep in mind that <code>c1</code> is an object reference, not the name of a variable storing the reference. Therefore, it can be used as an object command directly, without the need for a <code>$</code>.</p>
+<p class='ruff'>To calculate the magnitude of the transfer function in dB scale from the output voltage phasor, we create a procedure:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ca14ca>proc</font></b> calcDbMag {re im} {
+    <b><font color=#923B23>set</font></b> mag [<b><font color=#923B23>expr</font></b> {sqrt(<font color=#4A181B>$re</font>*<font color=#4A181B>$re</font>+<font color=#4A181B>$im</font>*<font color=#4A181B>$im</font>)}]
+    <b><font color=#923B23>set</font></b> db [<b><font color=#923B23>expr</font></b> {10*log(<font color=#4A181B>$mag</font>)}]
+    <b><font color=#ca14ca>return</font></b> <font color=#4A181B>$db</font>
+}
+
+<b><font color=#ca14ca>proc</font></b> calcDbMagVec {vector} {
+    <b><font color=#923B23>foreach</font></b> value <font color=#4A181B>$vector</font> {
+        <b><font color=#923B23>lappend</font></b> db [calcDbMag [<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$value</font> 0] [<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$value</font> 1]]
+    }
+    <b><font color=#ca14ca>return</font></b> <font color=#4A181B>$db</font>
+}
+</pre>
+
+</figure><table class='ruff_deflist'>
+<tr><td><code>calcDbMagVec</code></td><td>Procedure that apply <code>calcDbMag</code> to list of complex values.</td></tr>
+</table>
+<p class='ruff'>Run and plot the result:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># run simulation</font></i>
+<font color=#4A181B>$circuit</font> runAndRead
+<i><font color=#4b5d50># get data dictionary</font></i>
+<b><font color=#923B23>set</font></b> data [<font color=#4A181B>$circuit</font> getDataDict]
+<b><font color=#923B23>set</font></b> trace [calcDbMagVec [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> v(out)]]
+<b><font color=#923B23>set</font></b> freqs [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> frequency]
+<b><font color=#923B23>foreach</font></b> x <font color=#4A181B>$freqs</font> y <font color=#4A181B>$trace</font> {
+    <b><font color=#923B23>lappend</font></b> xydata [<b><font color=#923B23>list</font></b> [<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$x</font> 0] <font color=#4A181B>$y</font>]
+}
+<b><font color=#923B23>set</font></b> chartTransMag [ticklecharts::chart new]
+<font color=#4A181B>$chartTransMag</font> Xaxis <font color=#463e11>-name</font> <font color=#035103>&quot;Frequency, Hz&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-type</font> <font color=#035103>&quot;log&quot;</font>
+<font color=#4A181B>$chartTransMag</font> Yaxis <font color=#463e11>-name</font> <font color=#035103>&quot;Magnitude, dB&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
+<font color=#4A181B>$chartTransMag</font> SetOptions <font color=#463e11>-title</font> {} <font color=#463e11>-tooltip</font> {} <font color=#463e11>-animation</font> <font color=#035103>&quot;False&quot;</font> <font color=#463e11>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#035103>&quot;none&quot;</font>}}} <font color=#463e11>-grid</font> {left <font color=#035103>&quot;10%&quot;</font> right <font color=#035103>&quot;15%&quot;</font>}
+<font color=#4A181B>$chartTransMag</font> Add <font color=#035103>&quot;lineSeries&quot;</font> <font color=#463e11>-data</font> <font color=#4A181B>$xydata</font> <font color=#463e11>-showAllSymbol</font> <font color=#035103>&quot;nothing&quot;</font> <font color=#463e11>-symbolSize</font> <font color=#035103>&quot;1&quot;</font>
+<b><font color=#923B23>set</font></b> fbasename [<b><font color=#923B23>file</font></b> rootname [<b><font color=#923B23>file</font></b> tail [<b><font color=#923B23>info</font></b> script]]]
+
+<font color=#4A181B>$chartTransMag</font> Render <font color=#463e11>-outfile</font> [<b><font color=#923B23>file</font></b> join html_charts <font color=#4A181B>${fbasename}</font>_typ.html] <font color=#463e11>-width</font> 1000px
+</pre>
+
+</figure><p class='ruff'><img src="assets/img/monte_carlo_typ_mag.png" alt="magnitude plot" /></p>
+<p class='ruff'>We define pass bandwidth by edge values -10dB, to find them we use next procedure:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ca14ca>proc</font></b> findBW {freqs vals trigVal} {
+    <i><font color=#4b5d50># calculate bandwidth of results</font></i>
+    <b><font color=#923B23>set</font></b> freqsLen [<b><font color=#923B23>llength</font></b> <font color=#4A181B>$freqs</font>]
+    <b><font color=#923B23>for</font></b> {<b><font color=#923B23>set</font></b> i 0} {<font color=#4A181B>$i</font>&lt;<font color=#4A181B>$freqsLen</font>} {<b><font color=#923B23>incr</font></b> i} {
+        <b><font color=#923B23>set</font></b> iVal [<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$vals</font> <font color=#4A181B>$i</font>]
+        <b><font color=#923B23>set</font></b> ip1Val [<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$vals</font> [+ <font color=#4A181B>$i</font> 1]]
+        <b><font color=#923B23>if</font></b> {(<font color=#4A181B>$iVal</font>&lt;=<font color=#4A181B>$trigVal</font>) && (<font color=#4A181B>$ip1Val</font>&gt;=<font color=#4A181B>$trigVal</font>)} {
+            <b><font color=#923B23>set</font></b> freqStart [<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$freqs</font> <font color=#4A181B>$i</font>]
+        } <b><font color=#923B23>elseif</font></b> {(<font color=#4A181B>$iVal</font>&gt;=<font color=#4A181B>$trigVal</font>) && (<font color=#4A181B>$ip1Val</font>&lt;=<font color=#4A181B>$trigVal</font>)} {
+            <b><font color=#923B23>set</font></b> freqEnd [<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$freqs</font> <font color=#4A181B>$i</font>]
+        }
+    }
+    <b><font color=#923B23>set</font></b> bw [<b><font color=#923B23>expr</font></b> {<font color=#4A181B>$freqEnd</font>-<font color=#4A181B>$freqStart</font>}]
+    <b><font color=#ca14ca>return</font></b> <font color=#4A181B>$bw</font>
+}
+</pre>
+
+</figure><p class='ruff'>Find bandwidth:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>puts</font></b> [findBW [<b><font color=#923B23>lmap</font></b> freq <font color=#4A181B>$freqs</font> {<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$freq</font> 0}] <font color=#4A181B>$trace</font> -10]
+</pre>
+
+</figure><p class='ruff'>The value is 1.086255 Mhz.</p>
+<p class='ruff'>Our goal is to obtain a distribution of bandwidths by varying the filter parameters. To generate random values for these parameters, we use the built-in functions of the <code>math::statistics</code> package from Tcllib. The parameters can be distributed either normally or uniformly. For uniform distribution, we use <code>::math::statistics::random-uniform xmin xmax number</code>; for normal distribution, we use <code>::math::statistics::random-normal mean stdev number</code>. For uniform distribution, we define the following min and max limits for each C and L element:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> distLimits [<b><font color=#923B23>dict</font></b> create c1 [<b><font color=#923B23>dict</font></b> create min 0.9e-9 max 1.1e-9] l1 [<b><font color=#923B23>dict</font></b> create min 9e-6 max 11e-6] c2 [<b><font color=#923B23>dict</font></b> create min 0.9e-9 max 1.1e-9] l2 [<b><font color=#923B23>dict</font></b> create min 9e-6 max 11e-6] c3 [<b><font color=#923B23>dict</font></b> create min 225e-12 max 275e-12] l3 [<b><font color=#923B23>dict</font></b> create min 36e-6 max 44e-6]]
+</pre>
+
+</figure><p class='ruff'>We can specify different numbers of simulations; the more runs we perform, the more accurate the representation becomes. For example, we set the number of simulations to 1,000 runs with 15 intervals for constructing a boxplot:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># set number of simulations</font></i>
+<b><font color=#923B23>set</font></b> mcRuns 100
+<b><font color=#923B23>set</font></b> numOfIntervals 15
+</pre>
+
+</figure><p class='ruff'>Now we ready to run simulations 1000 times and collect results:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># loop in which we run simulation with uniform distribution</font></i>
+<b><font color=#923B23>for</font></b> {<b><font color=#923B23>set</font></b> i 0} {<font color=#4A181B>$i</font>&lt;<font color=#4A181B>$mcRuns</font>} {<b><font color=#923B23>incr</font></b> i} {
+    <i><font color=#4b5d50>#set elements values according to uniform distribution</font></i>
+    <b><font color=#923B23>foreach</font></b> elem [<b><font color=#923B23>list</font></b> c1 l1 c2 l2 c3 l3] {
+        <font color=#4A181B>$elem</font> setParamValue [<b><font color=#923B23>string</font></b> index <font color=#4A181B>$elem</font> 0] [random-uniform {<b><font color=#923B23>*</font></b>}[<b><font color=#923B23>dict</font></b> values [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$distLimits</font> <font color=#4A181B>$elem</font>]] 1]
+    }
+    <i><font color=#4b5d50># run simulation</font></i>
+    <font color=#4A181B>$circuit</font> runAndRead
+    <i><font color=#4b5d50># get data dictionary</font></i>
+    <b><font color=#923B23>set</font></b> data [<font color=#4A181B>$circuit</font> getDataDict]
+    <i><font color=#4b5d50># get results</font></i>
+    <b><font color=#923B23>if</font></b> {<font color=#4A181B>$i</font>==0} {
+        <b><font color=#923B23>set</font></b> freqs [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> frequency]
+        <b><font color=#923B23>foreach</font></b> freq <font color=#4A181B>$freqs</font> {
+            <b><font color=#923B23>lappend</font></b> freqRes [<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$freq</font> 0]
+        }
+    }
+    <i><font color=#4b5d50># get vout frequency curve</font></i>
+    <b><font color=#923B23>lappend</font></b> traceListUni [calcDbMagVec [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> v(out)]]
+    <i><font color=#4b5d50># calculate bandwidths values</font></i>
+    <b><font color=#923B23>lappend</font></b> bwsUni [findBW <font color=#4A181B>$freqRes</font> [<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$traceListUni</font> end] -10]
+}
+</pre>
+
+</figure><p class='ruff'>To obtain the distribution, we need to determine reasonable limits based on the minimum and maximum of the generated bandwidth values. Using the specified number of intervals (15), we apply the following procedure:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ca14ca>proc</font></b> createIntervals {data numOfIntervals} {
+    <b><font color=#923B23>set</font></b> intervals [::math::statistics::minmax-histogram-limits [tcl::mathfunc::min {<b><font color=#923B23>*</font></b>}<font color=#4A181B>$data</font>]  [tcl::mathfunc::max {<b><font color=#923B23>*</font></b>}<font color=#4A181B>$data</font>] <font color=#4A181B>$numOfIntervals</font>]
+    <b><font color=#923B23>lappend</font></b> intervalsStrings [<b><font color=#923B23>format</font></b> <font color=#035103>&quot;&lt;=%.2e&quot;</font> [<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$intervals</font> 0]]
+    <b><font color=#923B23>for</font></b> {<b><font color=#923B23>set</font></b> i 0} {<font color=#4A181B>$i</font>&lt;[- [<b><font color=#923B23>llength</font></b> <font color=#4A181B>$intervals</font>] 1]} {<b><font color=#923B23>incr</font></b> i} {
+        <b><font color=#923B23>lappend</font></b> intervalsStrings [<b><font color=#923B23>format</font></b> <font color=#035103>&quot;%.2e-%.2e&quot;</font> [<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$intervals</font> <font color=#4A181B>$i</font>] [<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$intervals</font> [+ <font color=#4A181B>$i</font> 1]]]
+    }
+    <b><font color=#ca14ca>return</font></b> [<b><font color=#923B23>dict</font></b> create intervals <font color=#4A181B>$intervals</font> intervalsStr <font color=#4A181B>$intervalsStrings</font>]
+}
+</pre>
+
+</figure><p class='ruff'>Here, we use the dedicated procedure from the statistics package: <code>::math::statistics::minmax-histogram-limits min max number</code>. Additionally, we construct strings in form <code>leftVal-rightVal</code> that represent the intervals on the boxplot chart. We call this procedure and store the results:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> uniIntervals [createIntervals <font color=#4A181B>$bwsUni</font> <font color=#4A181B>$numOfIntervals</font>]
+</pre>
+
+</figure><p class='ruff'>Finally, to obtain the expected histogram for a uniform distribution, we use the following procedure with the built-in function: <code>::math::statistics::histogram-uniform xmin xmax limits number</code>:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ca14ca>proc</font></b> createDist {data intervals} {
+    <b><font color=#923B23>set</font></b> dist [::math::statistics::histogram <font color=#4A181B>$intervals</font> <font color=#4A181B>$data</font>]
+    <b><font color=#ca14ca>return</font></b> [<b><font color=#923B23>lrange</font></b> <font color=#4A181B>$dist</font> 0 end-1]
+}
+</pre>
+
+</figure><p class='ruff'>Call the <code>createDist</code> procedure to calculate the histogram y-axis values, which correspond to the number of bandwidths within each interval:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> normDist [createDist <font color=#4A181B>$bwsNorm</font> [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$normIntervals</font> intervals]]
+</pre>
+
+</figure><p class='ruff'>The same sequence of steps is applied for the normal distribution. We assume that <code>std = (xmax - xmin) / 6</code>, where <code>xmax</code> and <code>xmin</code> are the limits of the uniform distribution.</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># set parameter's normal distributions limits</font></i>
+<b><font color=#923B23>set</font></b> normalLimits [<b><font color=#923B23>dict</font></b> create c1 [<b><font color=#923B23>dict</font></b> create mean 1e-9 std [/ 0.1e-9 3]] l1 [<b><font color=#923B23>dict</font></b> create mean 10e-6 std [/ 1e-6 3]] c2 [<b><font color=#923B23>dict</font></b> create mean 1e-9 std [/ 0.1e-9 3]] l2 [<b><font color=#923B23>dict</font></b> create mean 10e-6 std [/ 1e-6 3]] c3 [<b><font color=#923B23>dict</font></b> create mean 250e-12 std [/ 25e-12 3]] l3 [<b><font color=#923B23>dict</font></b> create mean 40e-6 std [/ 4e-6 3]]]
+
+<i><font color=#4b5d50>## loop in which we run simulation with normal distribution</font></i>
+<b><font color=#923B23>for</font></b> {<b><font color=#923B23>set</font></b> i 0} {<font color=#4A181B>$i</font>&lt;<font color=#4A181B>$mcRuns</font>} {<b><font color=#923B23>incr</font></b> i} {
+    <i><font color=#4b5d50>#set elements values according to normal distribution</font></i>
+    <b><font color=#923B23>foreach</font></b> elem [<b><font color=#923B23>list</font></b> c1 l1 c2 l2 c3 l3] {
+        <font color=#4A181B>$elem</font> setParamValue [<b><font color=#923B23>string</font></b> index <font color=#4A181B>$elem</font> 0] [random-normal {<b><font color=#923B23>*</font></b>}[<b><font color=#923B23>dict</font></b> values [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$normalLimits</font> <font color=#4A181B>$elem</font>]] 1]
+    }
+    <i><font color=#4b5d50># run simulation</font></i>
+    <font color=#4A181B>$circuit</font> runAndRead
+    <i><font color=#4b5d50># get data dictionary</font></i>
+    <b><font color=#923B23>set</font></b> data [<font color=#4A181B>$circuit</font> getDataDict]
+    <i><font color=#4b5d50># get results</font></i>
+    <b><font color=#923B23>if</font></b> {<font color=#4A181B>$i</font>==0} {
+        <b><font color=#923B23>set</font></b> freqs [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> frequency]
+        <b><font color=#923B23>foreach</font></b> freq <font color=#4A181B>$freqs</font> {
+            <b><font color=#923B23>lappend</font></b> freqRes [<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$freq</font> 0]
+        }
+    }
+    <i><font color=#4b5d50># get vout frequency curve</font></i>
+    <b><font color=#923B23>lappend</font></b> traceListNorm [calcDbMagVec [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> v(out)]]
+    <i><font color=#4b5d50># calculate bandwidths values</font></i>
+    <b><font color=#923B23>lappend</font></b> bwsNorm [findBW <font color=#4A181B>$freqRes</font> [<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$traceListNorm</font> end] -10]
+}
+<i><font color=#4b5d50># get distribution of bandwidths with normal parameters distribution</font></i>
+<b><font color=#923B23>set</font></b> normIntervals [createIntervals <font color=#4A181B>$bwsNorm</font> <font color=#4A181B>$numOfIntervals</font>]
+<b><font color=#923B23>set</font></b> normDist [createDist <font color=#4A181B>$bwsNorm</font> [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$normIntervals</font> intervals]]
+</pre>
+
+</figure><p class='ruff'>Finally, we plot resulted distributions:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># plot results with ticklecharts</font></i>
+<i><font color=#4b5d50># chart for uniformly distributed parameters</font></i>
+<b><font color=#923B23>set</font></b> chartUni [ticklecharts::chart new]
+<font color=#4A181B>$chartUni</font> Xaxis <font color=#463e11>-name</font> <font color=#035103>&quot;Frequency intervals, Hz&quot;</font> <font color=#463e11>-data</font> [<b><font color=#923B23>list</font></b> [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$uniIntervals</font> intervalsStr]] <font color=#463e11>-axisTick</font> {show <font color=#035103>&quot;True&quot;</font> alignWithLabel <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-axisLabel</font> {interval <font color=#035103>&quot;0&quot;</font> rotate <font color=#035103>&quot;45&quot;</font> fontSize <font color=#035103>&quot;8&quot;</font>}
+<font color=#4A181B>$chartUni</font> Yaxis <font color=#463e11>-name</font> <font color=#035103>&quot;Bandwidths per interval&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
+<font color=#4A181B>$chartUni</font> SetOptions <font color=#463e11>-title</font> {} <font color=#463e11>-tooltip</font> {} <font color=#463e11>-animation</font> <font color=#035103>&quot;False&quot;</font> <font color=#463e11>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#035103>&quot;none&quot;</font>}}}
+<font color=#4A181B>$chartUni</font> Add <font color=#035103>&quot;barSeries&quot;</font> <font color=#463e11>-data</font> [<b><font color=#923B23>list</font></b> <font color=#4A181B>$uniDist</font>]
+<i><font color=#4b5d50># chart for normally distributed parameters</font></i>
+<b><font color=#923B23>set</font></b> chartNorm [ticklecharts::chart new]
+<font color=#4A181B>$chartNorm</font> Xaxis <font color=#463e11>-name</font> <font color=#035103>&quot;Frequency intervals, Hz&quot;</font> <font color=#463e11>-data</font> [<b><font color=#923B23>list</font></b> [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$normIntervals</font> intervalsStr]] <font color=#463e11>-axisTick</font> {show <font color=#035103>&quot;True&quot;</font> alignWithLabel <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-axisLabel</font> {interval <font color=#035103>&quot;0&quot;</font> rotate <font color=#035103>&quot;45&quot;</font> fontSize <font color=#035103>&quot;8&quot;</font>}
+<font color=#4A181B>$chartNorm</font> Yaxis <font color=#463e11>-name</font> <font color=#035103>&quot;Bandwidths per interval&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
+<font color=#4A181B>$chartNorm</font> SetOptions <font color=#463e11>-title</font> {} <font color=#463e11>-tooltip</font> {} <font color=#463e11>-animation</font> <font color=#035103>&quot;False&quot;</font> <font color=#463e11>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#035103>&quot;none&quot;</font>}}}
+<font color=#4A181B>$chartNorm</font> Add <font color=#035103>&quot;barSeries&quot;</font> <font color=#463e11>-data</font> [<b><font color=#923B23>list</font></b> <font color=#4A181B>$normDist</font>]
+<i><font color=#4b5d50># create multiplot</font></i>
+<b><font color=#923B23>set</font></b> layout [ticklecharts::Gridlayout new]
+<font color=#4A181B>$layout</font> Add <font color=#4A181B>$chartNorm</font> <font color=#463e11>-bottom</font> <font color=#035103>&quot;10%&quot;</font> <font color=#463e11>-height</font> <font color=#035103>&quot;35%&quot;</font> <font color=#463e11>-width</font> <font color=#035103>&quot;75%&quot;</font>
+<font color=#4A181B>$layout</font> Add <font color=#4A181B>$chartUni</font> <font color=#463e11>-bottom</font> <font color=#035103>&quot;60%&quot;</font> <font color=#463e11>-height</font> <font color=#035103>&quot;35%&quot;</font> <font color=#463e11>-width</font> <font color=#035103>&quot;75%&quot;</font>
+
+<b><font color=#923B23>set</font></b> fbasename [<b><font color=#923B23>file</font></b> rootname [<b><font color=#923B23>file</font></b> tail [<b><font color=#923B23>info</font></b> script]]]
+<font color=#4A181B>$layout</font> Render <font color=#463e11>-outfile</font> [<b><font color=#923B23>file</font></b> join html_charts <font color=#4A181B>$fbasename</font>.html] <font color=#463e11>-height</font> 800px <font color=#463e11>-width</font> 1200px
+</pre>
+
+</figure><p class='ruff'><img src="assets/img/monte_carlo_dists.png" alt="dists plot" /></p>
+<p class='ruff'>We can clearly see the difference between normal and uniform distributions; the intervals are close due to setting the standard deviation of the normal distribution as std = (xmax - xmin) / 6.</p>
+<p class='ruff'>We can also take the uniform intervals and calculate the normal distribution values at these intervals:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># find distribution of normal distributed values in uniform intervals       </font></i>
+<b><font color=#923B23>set</font></b> normDistWithUniIntervals [createDist <font color=#4A181B>$bwsNorm</font> [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$uniIntervals</font> intervals]]
+<b><font color=#923B23>set</font></b> chartCombined [ticklecharts::chart new]
+<font color=#4A181B>$chartCombined</font> Xaxis <font color=#463e11>-name</font> <font color=#035103>&quot;Frequency intervals, Hz&quot;</font> <font color=#463e11>-data</font> [<b><font color=#923B23>list</font></b> [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$uniIntervals</font> intervalsStr]] <font color=#463e11>-axisTick</font> {show <font color=#035103>&quot;True&quot;</font> alignWithLabel <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-axisLabel</font> {interval <font color=#035103>&quot;0&quot;</font> rotate <font color=#035103>&quot;45&quot;</font> fontSize <font color=#035103>&quot;8&quot;</font>}
+<font color=#4A181B>$chartCombined</font> Yaxis <font color=#463e11>-name</font> <font color=#035103>&quot;Bandwidths per interval&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
+<font color=#4A181B>$chartCombined</font> SetOptions <font color=#463e11>-title</font> {} <font color=#463e11>-legend</font>  {} <font color=#463e11>-tooltip</font> {} <font color=#463e11>-animation</font> <font color=#035103>&quot;False&quot;</font> <font color=#463e11>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#035103>&quot;none&quot;</font>}}} <font color=#463e11>-grid</font> {left <font color=#035103>&quot;10%&quot;</font> right <font color=#035103>&quot;15%&quot;</font>}       
+<font color=#4A181B>$chartCombined</font> Add <font color=#035103>&quot;barSeries&quot;</font> <font color=#463e11>-data</font> [<b><font color=#923B23>list</font></b> <font color=#4A181B>$uniDist</font>] <font color=#463e11>-name</font> <font color=#035103>&quot;Uniform&quot;</font>
+<font color=#4A181B>$chartCombined</font> Add <font color=#035103>&quot;barSeries&quot;</font> <font color=#463e11>-data</font> [<b><font color=#923B23>list</font></b> <font color=#4A181B>$normDistWithUniIntervals</font>] <font color=#463e11>-name</font> <font color=#035103>&quot;Normal&quot;</font>
+<font color=#4A181B>$chartCombined</font> Render <font color=#463e11>-outfile</font> [<b><font color=#923B23>file</font></b> join html_charts <font color=#4A181B>${fbasename}</font>_combined.html] <font color=#463e11>-height</font> 800px <font color=#463e11>-width</font> 1200px
+</pre>
+
+</figure><p class='ruff'><img src="assets/img/monte_carlo_dists_comb.png" alt="dists comb plot" /></p>
+</main><nav class='ruff-nav'><ul ><li class='ruff-toc1'><a style='padding-top:2px;' href='index.html'>Start page</a></li>
+<li class='ruff-toc1'><a href='index-docindex.html' accesskey='i'>Index</a></li>
+<hr>
+<li class='ruff-toc1'><a href='index-FAQ.html'>FAQ</a></li>
+<li class='ruff-toc1'><a href='index-Tutorials.html'>Tutorials</a></li>
+<li class='ruff-toc1'><a href='index-Tips.html'>Tips</a></li>
+<li class='ruff-toc1'><a class='ruff-highlight' href='index-Advanced.html'>Advanced</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl.html'>SpiceGenTcl</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html'>SpiceGenTcl::Ngspice::BasicDevices</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-Sources.html'>SpiceGenTcl::Ngspice::Sources</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-SemiconductorDevices.html'>SpiceGenTcl::Ngspice::SemiconductorDevices</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-Analyses.html'>SpiceGenTcl::Ngspice::Analyses</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-Simulators.html'>SpiceGenTcl::Ngspice::Simulators</a></li>
+<hr><li class='ruff-toc2'><a href='#::Advanced-Monte-Carlo simulation'>Monte-Carlo simulation</a></li></ul></nav><footer class='ruff-layout-footer ruff-ft'><div style='float: right;'>Document generated by <a href='https://ruff.magicsplat.com'>Ruff!</a></div><div>&copy; George Yashin</div></footer>
+</div></body></html>
