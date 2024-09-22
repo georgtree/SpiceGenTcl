@@ -1,8 +1,5 @@
-lappend auto_path /home/georgtree/tcl_tools/
-lappend auto_path "../"
+lappend auto_path "../../"
 package require SpiceGenTcl
-package require gnuplotutil
-package require xyplot
 namespace import ::SpiceGenTcl::*
 importNgspice
 

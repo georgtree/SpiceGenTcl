@@ -97,23 +97,23 @@ test testValueCheckerClass-1.6 {test of checkValue procedure} -setup {
     set checker [::SpiceGenTcl::ValueChecker new]
     set testValue 1.e-3
 } -body {
-    catch {[$checker checkValue $testValue]} errorStr
-    return $errorStr
-} -result "Value '1.e-3' is not a valid value"    
+    set result [$checker checkValue $testValue]
+    return $result
+} -result {}   
     
 test testValueCheckerClass-1.7 {test of checkValue procedure} -setup {
     set checker [::SpiceGenTcl::ValueChecker new]
     set testValue {01.e-3}
 } -body {
-    catch {[$checker checkValue $testValue]} errorStr
-    return $errorStr
-} -result "Value '01.e-3' is not a valid value" 
+    set result [$checker checkValue $testValue]
+    return $result
+} -result {}
     
 test testValueCheckerClass-1.8 {test of checkValue procedure} -setup {
     set checker [::SpiceGenTcl::ValueChecker new]
     set testValue -5b
 } -body {
-    catch {[$checker checkValue $testValue]} errorStr
+    catch {$checker checkValue $testValue} errorStr
     return $errorStr
 } -result "Value '-5b' is not a valid value" 
     

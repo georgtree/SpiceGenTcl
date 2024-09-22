@@ -19,9 +19,9 @@
 <ul class='ruff'>
 <li><a href="index-Tutorials.html#::Tutorials-Netlist manipulations" title="Netlist manipulations" >Netlist manipulations</a> - &quot;examples/netlist_manipulations.tcl&quot; file</li>
 <li><a href="index-Tutorials.html#::Tutorials-Subcircuit definition" title="Subcircuit definition" >Subcircuit definition</a> - &quot;examples/subcircuit.tcl&quot; file</li>
-<li><a href="index-Tutorials.html#::Tutorials-Diode current simualtion" title="Diode current simualtion" >Diode current simualtion</a> - &quot;examples/diode_iv.tcl&quot; file</li>
-<li><a href="index-Tutorials.html#::Tutorials-Diode capacitance simualtion" title="Diode capacitance simualtion" >Diode capacitance simualtion</a> - &quot;examples/diode_cv.tcl&quot; file</li>
-<li><a href="index-Tutorials.html#::Tutorials-Sensitive analysis of differential pair" title="Sensitive analysis of differential pair" >Sensitive analysis of differential pair</a> - &quot;examples/diffpair_sens.tcl&quot; file</li>
+<li><a href="index-Tutorials.html#::Tutorials-Diode current simualtion" title="Diode current simualtion" >Diode current simualtion</a> - &quot;examples/dc/diode_iv.tcl&quot; file</li>
+<li><a href="index-Tutorials.html#::Tutorials-Diode capacitance simualtion" title="Diode capacitance simualtion" >Diode capacitance simualtion</a> - &quot;examples/ac/diode_cv.tcl&quot; file</li>
+<li><a href="index-Tutorials.html#::Tutorials-Sensitive analysis of differential pair" title="Sensitive analysis of differential pair" >Sensitive analysis of differential pair</a> - &quot;examples/sens/diffpair_sens.tcl&quot; file</li>
 <li><a href="index-Tutorials.html#::Tutorials-Transient simulation of ring oscillator" title="Transient simulation of ring oscillator" >Transient simulation of ring oscillator</a> - &quot;examples/transient/switch_oscillator.tcl&quot; file</li>
 <li><a href="index-Tutorials.html#::Tutorials-Transient simulation of four-bit adder" title="Transient simulation of four-bit adder" >Transient simulation of four-bit adder</a> - &quot;examples/transient/fourbitadder.tcl&quot; file</li>
 </ul>
@@ -624,11 +624,7 @@ vrc2=-6.032e-04
 <b><font color=#923B23>set</font></b> onebit [ONEBIT new]
 </pre>
 
-</figure><pre class='ruff'>   Previously, we built subcircuits, but here we demonstrate that subcircuits can be used within the definitions of other 
-   subcircuits, allowing us to create a multi-level hierarchy for building complex circuits. We start by combining one-bit 
-   adders to form two-bit adders, and then increase the level of grouping by connecting two two-bit subcircuits to create 
-   a four-bit adder:
-</pre>
+</figure><p class='ruff'>Previously, we built subcircuits, but here we demonstrate that subcircuits can be used within the definitions of other subcircuits, allowing us to create a multi-level hierarchy for building complex circuits. We start by combining one-bit adders to form two-bit adders, and then increase the level of grouping by connecting two two-bit subcircuits to create a four-bit adder:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create class that represents TWOBIT subcircuit</font></i>
 <b><font color=#ca14ca>oo::class</font></b> create TWOBIT {
@@ -688,14 +684,11 @@ vrc2=-6.032e-04
 <b><font color=#923B23>set</font></b> tonStep 10e-9
 <b><font color=#923B23>set</font></b> perStep 50e-9
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new cc 99 0 5]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vpulse</font></b> new in1a 1 0 0 3 0 <font color=#4A181B>$trtf</font> <font color=#4A181B>$trtf</font> <font color=#4A181B>$tonStep</font> <font color=#4A181B>$perStep</font>]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vpulse</font></b> new in1b 2 0 0 3 0 <font color=#4A181B>$trtf</font> <font color=#4A181B>$trtf</font> [<b><font color=#923B23>*</font></b> <font color=#4A181B>$tonStep</font> 2] [<b><font color=#923B23>*</font></b> <font color=#4A181B>$perStep</font> 2]]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vpulse</font></b> new in2a 3 0 0 3 0 <font color=#4A181B>$trtf</font> <font color=#4A181B>$trtf</font> [<b><font color=#923B23>*</font></b> <font color=#4A181B>$tonStep</font> 4] [<b><font color=#923B23>*</font></b> <font color=#4A181B>$perStep</font> 4]]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vpulse</font></b> new in2b 4 0 0 3 0 <font color=#4A181B>$trtf</font> <font color=#4A181B>$trtf</font> [<b><font color=#923B23>*</font></b> <font color=#4A181B>$tonStep</font> 8] [<b><font color=#923B23>*</font></b> <font color=#4A181B>$perStep</font> 8]]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vpulse</font></b> new in3a 5 0 0 3 0 <font color=#4A181B>$trtf</font> <font color=#4A181B>$trtf</font> [<b><font color=#923B23>*</font></b> <font color=#4A181B>$tonStep</font> 16] [<b><font color=#923B23>*</font></b> <font color=#4A181B>$perStep</font> 16]]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vpulse</font></b> new in3b 6 0 0 3 0 <font color=#4A181B>$trtf</font> <font color=#4A181B>$trtf</font> [<b><font color=#923B23>*</font></b> <font color=#4A181B>$tonStep</font> 32] [<b><font color=#923B23>*</font></b> <font color=#4A181B>$perStep</font> 32]]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vpulse</font></b> new in4a 7 0 0 3 0 <font color=#4A181B>$trtf</font> <font color=#4A181B>$trtf</font> [<b><font color=#923B23>*</font></b> <font color=#4A181B>$tonStep</font> 64] [<b><font color=#923B23>*</font></b> <font color=#4A181B>$perStep</font> 64]]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vpulse</font></b> new in4b 8 0 0 3 0 <font color=#4A181B>$trtf</font> <font color=#4A181B>$trtf</font> [<b><font color=#923B23>*</font></b> <font color=#4A181B>$tonStep</font> 128] [<b><font color=#923B23>*</font></b> <font color=#4A181B>$perStep</font> 128]]
+<b><font color=#923B23>set</font></b> i 1
+<b><font color=#923B23>foreach</font></b> name [<b><font color=#923B23>list</font></b> in1a in1b in2a in2b in3a in3b in4a in4b] {
+    <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vpulse</font></b> new <font color=#4A181B>$name</font> <font color=#4A181B>$i</font> 0 0 3 0 <font color=#4A181B>$trtf</font> <font color=#4A181B>$trtf</font> [<b><font color=#923B23>expr</font></b> {<font color=#4A181B>$tonStep</font>*pow(2,<font color=#4A181B>$i</font>-1)}] [<b><font color=#923B23>expr</font></b> {<font color=#4A181B>$perStep</font>*pow(2,<font color=#4A181B>$i</font>-1)}]]
+    <b><font color=#923B23>incr</font></b> i
+}
 </pre>
 
 </figure><p class='ruff'>Add load resistors:</p>

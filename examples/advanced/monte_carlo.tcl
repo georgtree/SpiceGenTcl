@@ -1,6 +1,5 @@
-lappend auto_path /home/georgtree/tcl/
-lappend auto_path "../"
-source ./helperFuncs.tcl
+lappend auto_path "../../"
+source ../helperFuncs.tcl
 package require SpiceGenTcl
 package require ticklecharts
 package require math::statistics
@@ -98,7 +97,7 @@ $chartTransMag SetOptions -title {} -tooltip {} -animation "False" -toolbox {fea
 $chartTransMag Add "lineSeries" -data $xydata -showAllSymbol "nothing" -symbolSize "1"
 set fbasename [file rootname [file tail [info script]]]
 
-$chartTransMag Render -outfile [file join html_charts ${fbasename}_typ.html] -width 1000px
+$chartTransMag Render -outfile [file join .. html_charts ${fbasename}_typ.html] -width 1000px
 
 # set number of simulations
 set mcRuns 1000
@@ -194,7 +193,7 @@ $layout Add $chartNorm -bottom "10%" -height "35%" -width "75%"
 $layout Add $chartUni -bottom "60%" -height "35%" -width "75%"
 
 set fbasename [file rootname [file tail [info script]]]
-$layout Render -outfile [file join html_charts $fbasename.html] -height 800px -width 1200px
+$layout Render -outfile [file join .. html_charts $fbasename.html] -height 800px -width 1200px
 
 # find distribution of normal distributed values in uniform intervals       
 set normDistWithUniIntervals [createDist $bwsNorm [dict get $uniIntervals intervals]]
@@ -207,4 +206,4 @@ $chartCombined SetOptions -title {} -legend  {} -tooltip {} -animation "False"\
         -toolbox {feature {dataZoom {yAxisIndex "none"}}} -grid {left "10%" right "15%"}       
 $chartCombined Add "barSeries" -data [list $uniDist] -name "Uniform"
 $chartCombined Add "barSeries" -data [list $normDistWithUniIntervals] -name "Normal"
-$chartCombined Render -outfile [file join html_charts ${fbasename}_combined.html] -height 800px -width 1200px
+$chartCombined Render -outfile [file join .. html_charts ${fbasename}_combined.html] -height 800px -width 1200px

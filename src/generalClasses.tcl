@@ -86,7 +86,7 @@ namespace eval SpiceGenTcl {
         method checkValue {value} {
             # Checks the value.
             #  value - value to check
-            if {[regexp {^[+\-]?(?=\.\d|\d)(?:0|[1-9]\d*)?(?:\.\d*)?(?:\d[eE][+\-]?\d+)?$} $value]} {
+            if {[string is double -strict $value]} {
                 return
             } else {
                 error "Value '$value' is not a valid value"

@@ -1,6 +1,5 @@
-lappend auto_path /home/georgtree/tcl/
-lappend auto_path "../"
-source ./helperFuncs.tcl
+lappend auto_path "../../"
+source ../helperFuncs.tcl
 package require SpiceGenTcl
 package require ticklecharts
 package require math::constants
@@ -48,5 +47,5 @@ $chart SetOptions -title {} -tooltip {} -animation "False" -toolbox {feature {da
 $chart Add "lineSeries" -data $xydata -showAllSymbol "nothing"
 set fbasename [file rootname [file tail [info script]]]
 
-$chart Render -outfile [file join html_charts $fbasename.html]
+$chart Render -outfile [file join .. html_charts $fbasename.html]
 

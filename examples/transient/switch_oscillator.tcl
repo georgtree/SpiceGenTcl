@@ -1,5 +1,4 @@
 # example is from Ngspice example folder (/examples/p-to-n-examples/switch-oscillators.cir)
-lappend auto_path /home/georgtree/tcl/
 lappend auto_path "../../"
 package require SpiceGenTcl
 package require ticklecharts

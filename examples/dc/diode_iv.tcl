@@ -1,6 +1,4 @@
-lappend auto_path /home/georgtree/tcl_tools/
-lappend auto_path /home/georgtree/tcl/
-lappend auto_path "../"
+lappend auto_path "../../"
 package require SpiceGenTcl
 package require ticklecharts
 namespace import ::SpiceGenTcl::*
@@ -48,4 +46,4 @@ foreach data $dataList temp $temps {
 }
 set fbasename [file rootname [file tail [info script]]]
 
-$chart Render -outfile [file join html_charts $fbasename.html]
+$chart Render -outfile [file join .. html_charts $fbasename.html]

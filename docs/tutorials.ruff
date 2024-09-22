@@ -4,9 +4,9 @@ namespace eval Tutorials {
         List of availible tutorials:
         - [Netlist manipulations] - "examples/netlist_manipulations.tcl" file
         - [Subcircuit definition] - "examples/subcircuit.tcl" file
-        - [Diode current simualtion] - "examples/diode_iv.tcl" file
-        - [Diode capacitance simualtion] - "examples/diode_cv.tcl" file
-        - [Sensitive analysis of differential pair] - "examples/diffpair_sens.tcl" file
+        - [Diode current simualtion] - "examples/dc/diode_iv.tcl" file
+        - [Diode capacitance simualtion] - "examples/ac/diode_cv.tcl" file
+        - [Sensitive analysis of differential pair] - "examples/sens/diffpair_sens.tcl" file
         - [Transient simulation of ring oscillator] - "examples/transient/switch_oscillator.tcl" file
         - [Transient simulation of four-bit adder] - "examples/transient/fourbitadder.tcl" file
         
@@ -644,10 +644,10 @@ namespace eval Tutorials {
         set onebit [ONEBIT new]
         ```
         
-       Previously, we built subcircuits, but here we demonstrate that subcircuits can be used within the definitions of other 
-       subcircuits, allowing us to create a multi-level hierarchy for building complex circuits. We start by combining one-bit 
-       adders to form two-bit adders, and then increase the level of grouping by connecting two two-bit subcircuits to create 
-       a four-bit adder:
+        Previously, we built subcircuits, but here we demonstrate that subcircuits can be used within the definitions of other 
+        subcircuits, allowing us to create a multi-level hierarchy for building complex circuits. We start by combining one-bit 
+        adders to form two-bit adders, and then increase the level of grouping by connecting two two-bit subcircuits to create 
+        a four-bit adder:       
         ```tcl
         # create class that represents TWOBIT subcircuit
         oo::class create TWOBIT {
@@ -707,14 +707,11 @@ namespace eval Tutorials {
         set tonStep 10e-9
         set perStep 50e-9
         $circuit add [Vdc new cc 99 0 5]
-        $circuit add [Vpulse new in1a 1 0 0 3 0 $trtf $trtf $tonStep $perStep]
-        $circuit add [Vpulse new in1b 2 0 0 3 0 $trtf $trtf [* $tonStep 2] [* $perStep 2]]
-        $circuit add [Vpulse new in2a 3 0 0 3 0 $trtf $trtf [* $tonStep 4] [* $perStep 4]]
-        $circuit add [Vpulse new in2b 4 0 0 3 0 $trtf $trtf [* $tonStep 8] [* $perStep 8]]
-        $circuit add [Vpulse new in3a 5 0 0 3 0 $trtf $trtf [* $tonStep 16] [* $perStep 16]]
-        $circuit add [Vpulse new in3b 6 0 0 3 0 $trtf $trtf [* $tonStep 32] [* $perStep 32]]
-        $circuit add [Vpulse new in4a 7 0 0 3 0 $trtf $trtf [* $tonStep 64] [* $perStep 64]]
-        $circuit add [Vpulse new in4b 8 0 0 3 0 $trtf $trtf [* $tonStep 128] [* $perStep 128]]
+        set i 1
+        foreach name [list in1a in1b in2a in2b in3a in3b in4a in4b] {
+            $circuit add [Vpulse new $name $i 0 0 3 0 $trtf $trtf [expr {$tonStep*pow(2,$i-1)}] [expr {$perStep*pow(2,$i-1)}]]
+            incr i
+        }
         ```
         
         Add load resistors:

@@ -1,5 +1,4 @@
 # example is from Ngspice example folder (/tests/transient/fourbitadder.cir)
-lappend auto_path /home/georgtree/tcl/
 lappend auto_path "../../"
 package require SpiceGenTcl
 package require ticklecharts
@@ -118,15 +117,11 @@ set trtf 10e-9
 set tonStep 10e-9
 set perStep 50e-9
 $circuit add [Vdc new cc 99 0 5]
-$circuit add [Vpulse new in1a 1 0 0 3 0 $trtf $trtf $tonStep $perStep]
-$circuit add [Vpulse new in1b 2 0 0 3 0 $trtf $trtf [* $tonStep 2] [* $perStep 2]]
-$circuit add [Vpulse new in2a 3 0 0 3 0 $trtf $trtf [* $tonStep 4] [* $perStep 4]]
-$circuit add [Vpulse new in2b 4 0 0 3 0 $trtf $trtf [* $tonStep 8] [* $perStep 8]]
-$circuit add [Vpulse new in3a 5 0 0 3 0 $trtf $trtf [* $tonStep 16] [* $perStep 16]]
-$circuit add [Vpulse new in3b 6 0 0 3 0 $trtf $trtf [* $tonStep 32] [* $perStep 32]]
-$circuit add [Vpulse new in4a 7 0 0 3 0 $trtf $trtf [* $tonStep 64] [* $perStep 64]]
-$circuit add [Vpulse new in4b 8 0 0 3 0 $trtf $trtf [* $tonStep 128] [* $perStep 128]]
-
+set i 1
+foreach name [list in1a in1b in2a in2b in3a in3b in4a in4b] {
+    $circuit add [Vpulse new $name $i 0 0 3 0 $trtf $trtf [expr {$tonStep*pow(2,$i-1)}] [expr {$perStep*pow(2,$i-1)}]]
+    incr i
+}
 
 $circuit add [R new bit0 9 0 1e3]
 $circuit add [R new bit1 10 0 1e3]
