@@ -5,7 +5,6 @@
 # Copyright (C) 2019 Andy Goth <andrew.m.goth@gmail.com>
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
-package require Tcl 8.6
 package provide argparse 0.5
 
 # argparse --

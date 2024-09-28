@@ -305,7 +305,7 @@ x2 net1 net2 rcnet r=1 c={cpar}
 }
 <b><font color=#923B23>set</font></b> fbasename [<b><font color=#923B23>file</font></b> rootname [<b><font color=#923B23>file</font></b> tail [<b><font color=#923B23>info</font></b> script]]]
 
-<font color=#4A181B>$chart</font> Render <font color=#463e11>-outfile</font> [<b><font color=#923B23>file</font></b> join html_charts <font color=#4A181B>$fbasename</font>.html]
+<font color=#4A181B>$chart</font> Render <font color=#463e11>-outfile</font> [<b><font color=#923B23>file</font></b> normalize [<b><font color=#923B23>file</font></b> join html_charts <font color=#4A181B>$fbasename</font>.html]]
 </pre>
 
 </figure><p class='ruff'>In the picture, you can see how temperature affects the forward current of the diode. Because the series resistance has a temperature dependence, all the lines intersect near 1.8V, indicating the point of zero temperature coefficient:</p>
@@ -351,11 +351,10 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <p class='ruff'>Nest step is to add voltage sweep:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># add voltage sweep</font></i>
-<b><font color=#923B23>set</font></b> voltSweep [<b><font color=#923B23>linspace</font></b> 0 20.1 0.1]
+<b><font color=#923B23>set</font></b> voltSweep [lseq 0 20.0 0.1]
 </pre>
 
-</figure><p class='ruff'>Here we use procedure <code><b><font color=#923B23>linspace</font></b></code> that is imported from ./helperFuncs.tcl, it creates list of numbers from 0 to 20 with step 0.1.</p>
-<p class='ruff'>Then we as usual, create <code><b><font color=#923B23>Simulator</font></b></code> class object, attach it to <code>circuit</code>, run it multiple times, collect results and apply the equation to calculate the capacitance (with the voltage phasor set to 1, so it is omitted):</p>
+</figure><p class='ruff'>Then we as usual, create <code><b><font color=#923B23>Simulator</font></b></code> class object, attach it to <code>circuit</code>, run it multiple times, collect results and apply the equation to calculate the capacitance (with the voltage phasor set to 1, so it is omitted):</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50>#set simulator with default </font></i>
 <b><font color=#923B23>set</font></b> simulator [<b><font color=#923B23>BatchLiveLog</font></b> new {batch1} {/usr/local/bin/}]
@@ -398,7 +397,7 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <font color=#4A181B>$chart</font> Add <font color=#035103>&quot;lineSeries&quot;</font> <font color=#463e11>-data</font> <font color=#4A181B>$xydata</font> <font color=#463e11>-showAllSymbol</font> <font color=#035103>&quot;nothing&quot;</font>
 <b><font color=#923B23>set</font></b> fbasename [<b><font color=#923B23>file</font></b> rootname [<b><font color=#923B23>file</font></b> tail [<b><font color=#923B23>info</font></b> script]]]
 
-<font color=#4A181B>$chart</font> Render <font color=#463e11>-outfile</font> [<b><font color=#923B23>file</font></b> join html_charts <font color=#4A181B>$fbasename</font>.html]
+<font color=#4A181B>$chart</font> Render <font color=#463e11>-outfile</font> [<b><font color=#923B23>file</font></b> normalize [<b><font color=#923B23>file</font></b> join html_charts <font color=#4A181B>$fbasename</font>.html]]
 </pre>
 
 </figure><p class='ruff'>As a result, we obtain the expected curve, showing a decrease in capacitance value with higher reverse voltage:</p>
@@ -556,7 +555,7 @@ vrc2=-6.032e-04
 <font color=#4A181B>$layout</font> Add <font color=#4A181B>$chartImeas</font> <font color=#463e11>-bottom</font> <font color=#035103>&quot;55%&quot;</font> <font color=#463e11>-height</font> <font color=#035103>&quot;40%&quot;</font> <font color=#463e11>-width</font> <font color=#035103>&quot;80%&quot;</font>
 
 <b><font color=#923B23>set</font></b> fbasename [<b><font color=#923B23>file</font></b> rootname [<b><font color=#923B23>file</font></b> tail [<b><font color=#923B23>info</font></b> script]]]
-<font color=#4A181B>$layout</font> Render <font color=#463e11>-outfile</font> [<b><font color=#923B23>file</font></b> join .. html_charts <font color=#4A181B>$fbasename</font>.html] <font color=#463e11>-height</font> 800px
+<font color=#4A181B>$layout</font> Render <font color=#463e11>-outfile</font> [<b><font color=#923B23>file</font></b> normalize [<b><font color=#923B23>file</font></b> join .. html_charts <font color=#4A181B>$fbasename</font>.html]] <font color=#463e11>-height</font> 800px
 </pre>
 
 </figure><p class='ruff'><img src="assets/img/switch_oscillator.png" alt="switch_oscillator" /></p>
@@ -747,7 +746,7 @@ vrc2=-6.032e-04
 }
 
 <b><font color=#923B23>set</font></b> fbasename [<b><font color=#923B23>file</font></b> rootname [<b><font color=#923B23>file</font></b> tail [<b><font color=#923B23>info</font></b> script]]]
-<font color=#4A181B>$layout</font> Render <font color=#463e11>-outfile</font> [<b><font color=#923B23>file</font></b> join .. html_charts <font color=#4A181B>$fbasename</font>.html] <font color=#463e11>-height</font> 800px
+<font color=#4A181B>$layout</font> Render <font color=#463e11>-outfile</font> [<b><font color=#923B23>file</font></b> normalize [<b><font color=#923B23>file</font></b> join .. html_charts <font color=#4A181B>$fbasename</font>.html]] <font color=#463e11>-height</font> 800px
 </pre>
 
 </figure><p class='ruff'>Results:</p>

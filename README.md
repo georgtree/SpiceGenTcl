@@ -26,7 +26,7 @@ variable:
 ```tcl
 lappend auto_path "path to SpiceGenTcl package"
 ```
-Package is written in pure Tcl with relying on Tcllib and ticklecharts. The only necessary external dependency is 
+Package is written in pure Tcl with relying on Tcllib and ticklecharts, tcl version is 9.0. The only necessary external dependency is 
 the simulator itself.
 
 - [Ngspice](https://ngspice.sourceforge.io/download.html)
@@ -158,7 +158,7 @@ $chart Yaxis -name "v(out), V" -minorTick {show "True"} -min 0 -max 3.5 -type "v
 $chart SetOptions -title {} -tooltip {} -animation "False" 
 $chart Add "lineSeries" -data $xydata -showAllSymbol "nothing"
 set fbasename [file rootname [file tail [info script]]]
-$chart Render -outfile [file join html_charts $fbasename.html]
+$chart Render -outfile [file normalize [file join html_charts $fbasename.html]]
 ```
 To view result, we should open rendered resistor_divider.html chart in browser.
 

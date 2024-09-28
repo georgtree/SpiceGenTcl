@@ -295,7 +295,7 @@ namespace eval Tutorials {
         }
         set fbasename [file rootname [file tail [info script]]]
 
-        $chart Render -outfile [file join html_charts $fbasename.html]
+        $chart Render -outfile [file normalize [file join html_charts $fbasename.html]]
         ```
         
         In the picture, you can see how temperature affects the forward current of the diode. Because the series resistance has a 
@@ -346,11 +346,9 @@ namespace eval Tutorials {
         Nest step is to add voltage sweep:
         ```tcl
         # add voltage sweep
-        set voltSweep [linspace 0 20.1 0.1]
+        set voltSweep [lseq 0 20.0 0.1]
         ```
-        Here we use procedure `linspace` that is imported from ./helperFuncs.tcl, it creates list of numbers from 
-        0 to 20 with step 0.1.
-        
+
         Then we as usual, create `Simulator` class object, attach it to `circuit`, run it multiple times, collect results and 
         apply the equation to calculate the capacitance (with the voltage phasor set to 1, so it is omitted):
         ```tcl
@@ -403,7 +401,7 @@ namespace eval Tutorials {
         $chart Add "lineSeries" -data $xydata -showAllSymbol "nothing"
         set fbasename [file rootname [file tail [info script]]]
 
-        $chart Render -outfile [file join html_charts $fbasename.html]
+        $chart Render -outfile [file normalize [file join html_charts $fbasename.html]]
         ```
         As a result, we obtain the expected curve, showing a decrease in capacitance value with higher reverse voltage:
         
@@ -570,7 +568,7 @@ namespace eval Tutorials {
         $layout Add $chartImeas -bottom "55%" -height "40%" -width "80%"
 
         set fbasename [file rootname [file tail [info script]]]
-        $layout Render -outfile [file join .. html_charts $fbasename.html] -height 800px
+        $layout Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -height 800px
         ```
         
         ![switch_oscillator](assets/img/switch_oscillator.png)
@@ -770,7 +768,7 @@ namespace eval Tutorials {
         }
 
         set fbasename [file rootname [file tail [info script]]]
-        $layout Render -outfile [file join .. html_charts $fbasename.html] -height 800px
+        $layout Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -height 800px
         ```
         Results:
         

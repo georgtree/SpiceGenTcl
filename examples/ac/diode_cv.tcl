@@ -1,5 +1,4 @@
 lappend auto_path "../../"
-source ../helperFuncs.tcl
 package require SpiceGenTcl
 package require ticklecharts
 package require math::constants
@@ -18,7 +17,7 @@ $circuit add [Vac new b nin 0 1]
 $circuit add [DiodeModel new diomod -is 1e-12 -n 1.2 -rs 0.01 -cj0 1e-9 -trs1 0.001 -xti 5]
 $circuit add [Ac new lin 1 1e5 1e5]
 # add voltage sweep
-set voltSweep [linspace 0 20.1 0.1]
+set voltSweep [lseq 0 20.0 0.1]
 #set simulator with default 
 set simulator [BatchLiveLog new {batch1} {/usr/local/bin/}]
 # attach simulator object to circuit
@@ -47,5 +46,5 @@ $chart SetOptions -title {} -tooltip {} -animation "False" -toolbox {feature {da
 $chart Add "lineSeries" -data $xydata -showAllSymbol "nothing"
 set fbasename [file rootname [file tail [info script]]]
 
-$chart Render -outfile [file join .. html_charts $fbasename.html]
+$chart Render -outfile [file normalize [file join .. html_charts $fbasename.html]]
 

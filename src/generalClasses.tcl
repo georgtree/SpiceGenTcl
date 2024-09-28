@@ -17,7 +17,7 @@ namespace eval SpiceGenTcl {
     
    # ________________________ SPICEElement class definition _________________________ #
     
-    oo::class create SPICEElement {
+    oo::abstract create SPICEElement {
         # Abstract class of all elements of SPICE netlist
         #  and it forces implementation of genSPICEString method for all subclasses.
         variable Name
@@ -37,7 +37,6 @@ namespace eval SpiceGenTcl {
             # Returns: name of SPICE element
             return $Name
         }
-        self unexport create new
     }
     
    # ________________________ DuplChecker class definition _________________________ #
@@ -1673,7 +1672,7 @@ namespace eval SpiceGenTcl {
 
     # ________________________ Simulator class definition _________________________ #
     
-    oo::class create Simulator {
+    oo::abstract create Simulator {
         variable Name
         variable Command
         variable Path
@@ -1723,13 +1722,11 @@ namespace eval SpiceGenTcl {
             # Returns data of last completed simulation.
             error "Not implemented"
         }
-        
-        self unexport create new
     }     
 
     # ________________________ BinaryReader class definition _________________________ #
    
-    oo::class create BinaryReader {
+    oo::abstract create BinaryReader {
         method readFloat64 {file} {
             # Reads 8 bytes number from file .
             #  file - file handler
@@ -1772,7 +1769,6 @@ namespace eval SpiceGenTcl {
             read $file 16
             return
         }
-        self unexport create new
     }
     
     # ________________________ Dataset class _________________________ #

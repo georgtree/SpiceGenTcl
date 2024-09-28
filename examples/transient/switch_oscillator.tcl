@@ -85,4 +85,4 @@ $layout Add $chartVout -bottom "5%" -height "40%" -width "80%"
 $layout Add $chartImeas -bottom "55%" -height "40%" -width "80%"
 
 set fbasename [file rootname [file tail [info script]]]
-$layout Render -outfile [file join .. html_charts $fbasename.html] -height 800px
+$layout Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -height 800px

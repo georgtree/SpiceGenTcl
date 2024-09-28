@@ -85,7 +85,7 @@ namespace eval Advanced {
         $chartTransMag Add "lineSeries" -data $xydata -showAllSymbol "nothing" -symbolSize "1"
         set fbasename [file rootname [file tail [info script]]]
 
-        $chartTransMag Render -outfile [file join html_charts ${fbasename}_typ.html] -width 1000px
+        $chartTransMag Render -outfile [file normalize [file join html_charts ${fbasename}_typ.html]] -width 1000px
         ```
         
         ![magnitude plot](assets/img/monte_carlo_typ_mag.png)
@@ -259,7 +259,7 @@ namespace eval Advanced {
         $layout Add $chartUni -bottom "60%" -height "35%" -width "75%"
 
         set fbasename [file rootname [file tail [info script]]]
-        $layout Render -outfile [file join html_charts $fbasename.html] -height 800px -width 1200px
+        $layout Render -outfile [file normalize [file join html_charts $fbasename.html]] -height 800px -width 1200px
         ```
         
         ![dists plot](assets/img/monte_carlo_dists.png)
@@ -279,7 +279,7 @@ namespace eval Advanced {
                 -toolbox {feature {dataZoom {yAxisIndex "none"}}} -grid {left "10%" right "15%"}       
         $chartCombined Add "barSeries" -data [list $uniDist] -name "Uniform"
         $chartCombined Add "barSeries" -data [list $normDistWithUniIntervals] -name "Normal"
-        $chartCombined Render -outfile [file join html_charts ${fbasename}_combined.html] -height 800px -width 1200px
+        $chartCombined Render -outfile [file normalize [file join html_charts ${fbasename}_combined.html]] -height 800px -width 1200px
         ```
         
         ![dists comb plot](assets/img/monte_carlo_dists_comb.png)

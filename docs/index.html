@@ -37,7 +37,7 @@
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>lappend</font></b> auto_path <font color=#035103>&quot;path to SpiceGenTcl package&quot;</font>
 </pre>
 
-</figure><p class='ruff'>Package is written in pure Tcl with relying on Tcllib and ticklecharts. The only necessary external dependency is the simulator itself.</p>
+</figure><p class='ruff'>Package is written in pure Tcl with relying on Tcllib and ticklecharts, tcl version is 9.0. The only necessary external dependency is the simulator itself.</p>
 <ul class='ruff'>
 <li><a href="https://ngspice.sourceforge.io/download.html" >Ngspice</a></li>
 <li><a href="https://www.tcl.tk/software/tcllib/" >Tcllib</a></li>
@@ -146,7 +146,7 @@ r2 out 0 2e3
 <font color=#4A181B>$chart</font> SetOptions <font color=#463e11>-title</font> {} <font color=#463e11>-tooltip</font> {} <font color=#463e11>-animation</font> <font color=#035103>&quot;False&quot;</font> 
 <font color=#4A181B>$chart</font> Add <font color=#035103>&quot;lineSeries&quot;</font> <font color=#463e11>-data</font> <font color=#4A181B>$xydata</font> <font color=#463e11>-showAllSymbol</font> <font color=#035103>&quot;nothing&quot;</font>
 <b><font color=#923B23>set</font></b> fbasename [<b><font color=#923B23>file</font></b> rootname [<b><font color=#923B23>file</font></b> tail [<b><font color=#923B23>info</font></b> script]]]
-<font color=#4A181B>$chart</font> Render <font color=#463e11>-outfile</font> [<b><font color=#923B23>file</font></b> join html_charts <font color=#4A181B>$fbasename</font>.html]
+<font color=#4A181B>$chart</font> Render <font color=#463e11>-outfile</font> [<b><font color=#923B23>file</font></b> normalize [<b><font color=#923B23>file</font></b> join html_charts <font color=#4A181B>$fbasename</font>.html]]
 </pre>
 
 </figure><p class='ruff'>To view result, we should open rendered resistor_divider.html chart in browser.</p>
