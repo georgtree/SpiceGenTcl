@@ -150,7 +150,7 @@ test testValueCheckerClass-1.8 {test of checkValue procedure} -setup {
 test testPinClass-1.1 {test creation of Pin class instance and getName interface} -setup {
     set pinInst [Pin new drain netd]
 } -body {
-    set result [$pinInst getName]
+    set result [$pinInst configure -Name]
 } -result drain -cleanup {
     unset pinInst result
 }
@@ -158,7 +158,7 @@ test testPinClass-1.1 {test creation of Pin class instance and getName interface
 test testPinClass-1.2 {test creation of Pin class instance and getName interface} -setup {
     set pinInst [Pin new 23 netd]
 } -body {
-    set result [$pinInst getName]
+    set result [$pinInst configure -Name]
 } -result 23 -cleanup {
     unset pinInst result
 }
@@ -166,7 +166,7 @@ test testPinClass-1.2 {test creation of Pin class instance and getName interface
 test testPinClass-1.3 {test creation of Pin class instance and getNodeName interface} -setup {
     set pinInst [Pin new drain netd]
 } -body {
-    set result [$pinInst getNodeName]
+    set result [$pinInst configure -NodeName]
 } -result netd -cleanup {
     unset pinInst result
 }
@@ -227,8 +227,8 @@ test testPinClass-2.4 {test creation of Pin class instance and handling empty st
 test testPinClass-3.1 {test creation of Pin class instance and setNodeName interface} -setup {
     set pinInst [Pin new drain netd]
 } -body {
-    $pinInst setNodeName net1
-    set result [$pinInst getNodeName]
+    $pinInst configure -NodeName net1
+    set result [$pinInst configure -NodeName]
 } -result net1 -cleanup {
     unset pinInst result
 }
@@ -236,7 +236,7 @@ test testPinClass-3.1 {test creation of Pin class instance and setNodeName inter
 test testPinClass-3.2 {test creation of Pin class instance and setNodeName interface with wrong node name} -setup {
     set pinInst [Pin new drain netd]
 } -body {
-    catch {$pinInst setNodeName n-et1} errorStr
+    catch {$pinInst configure -NodeName n-et1} errorStr
     return $errorStr
 } -result "Node name 'n-et1' is not a valid name" -cleanup {
     unset pinInst errorStr
@@ -246,7 +246,7 @@ test testPinClass-3.3 {test creation of Pin class instance and unsetNodeName int
     set pinInst [Pin new drain netd]
 } -body {
     $pinInst unsetNodeName
-    set result [$pinInst getNodeName]
+    set result [$pinInst configure -NodeName]
 } -result {} -cleanup {
     unset pinInst result
 }
@@ -254,7 +254,7 @@ test testPinClass-3.3 {test creation of Pin class instance and unsetNodeName int
 test testPinClass-3.4 {test creation of Pin class instance and getName interface} -setup {
     set pinInst [Pin new drain_ netd_]
 } -body {
-    set result [$pinInst getName]
+    set result [$pinInst configure -Name]
 } -result drain_ -cleanup {
     unset pinInst result
 }
@@ -264,7 +264,7 @@ test testPinClass-3.4 {test creation of Pin class instance and getName interface
 test testParameterClass-1.1 {test creation of Parameter class instance and getName interface} -setup {
     set parInst [Parameter new VTH 0.7]
 } -body {
-    set result [$parInst getName]
+    set result [$parInst configure -Name]
 } -result vth -cleanup {
     unset parInst result
 }
@@ -272,7 +272,7 @@ test testParameterClass-1.1 {test creation of Parameter class instance and getNa
 test testParameterClass-1.2 {test creation of Parameter class instance and getValue interface} -setup {
     set parInst [Parameter new VTH 0.7]
 } -body {
-    set result [$parInst getValue]
+    set result [$parInst configure -Value]
 } -result 0.7 -cleanup {
     unset parInst result
 }
@@ -280,7 +280,7 @@ test testParameterClass-1.2 {test creation of Parameter class instance and getVa
 test testParameterClass-1.3 {test creation of Parameter class instance and getValue interface} -setup {
     set parInst [Parameter new VTH 0.007e+3]
 } -body {
-    set result [$parInst getValue]
+    set result [$parInst configure -Value]
 } -result 0.007e+3 -cleanup {
     unset parInst result
 }
@@ -308,9 +308,9 @@ test testParameterClass-2.3 {test creation of Parameter class instance and handl
 
 test testParameterClass-3.1 {test creation of Parameter class instance and setValue interface} -setup {
     set parInst [Parameter new VTH 0.7]
-    $parInst setValue 1.0
+    $parInst configure -Value 1.0
 } -body {
-    set result [$parInst getValue]
+    set result [$parInst configure -Value]
 } -result 1.0 -cleanup {
     unset parInst result
 }
@@ -318,18 +318,29 @@ test testParameterClass-3.1 {test creation of Parameter class instance and setVa
 test testParameterClass-3.2 {test creation of Parameter class instance and setValue interface with wrong value string} -setup {
     set parInst [Parameter new VTH 0.7]
 } -body {
-    catch {$parInst setValue 1..0} errorStr
+    catch {$parInst configure -Value 1..0} errorStr
     return $errorStr
 } -result "Value '1..0' is not a valid value" -cleanup {
     unset parInst errorStr
 }
 
-    # ________________________ ParameterWDefault class tests _________________________ #
+    # ________________________ ParameterNoCheck class tests _________________________ #
+
+test testParameterNoCheckClass-1.0 {test creation of ParameterNoCheck class instance} -setup {
+    set parInst [ParameterNoCheck new VTH 0.7]
+} -body {
+    $parInst configure -Value 1..0
+    return [$parInst configure -Value]
+} -result "1..0" -cleanup {
+    unset parInst
+}    
+    
+    # ________________________ ParameterDefault class tests _________________________ #
 
 test testParameterDefaultClass-1.1 {test creation of ParameterDefault class instance and getName interface} -setup {
     set parInst [ParameterDefault new U0 100 200]
 } -body {
-    set result [$parInst getName]
+    set result [$parInst configure -Name]
 } -result u0 -cleanup {
     unset parInst result
 }
@@ -337,7 +348,7 @@ test testParameterDefaultClass-1.1 {test creation of ParameterDefault class inst
 test testParameterDefaultClass-1.2 {test creation of ParameterDefault class instance and getValue interface} -setup {
     set parInst [ParameterDefault new U0 100 200]
 } -body {
-    set result [$parInst getValue]
+    set result [$parInst configure -Value]
 } -result 100 -cleanup {
     unset parInst result
 }
@@ -345,7 +356,7 @@ test testParameterDefaultClass-1.2 {test creation of ParameterDefault class inst
 test testParameterDefaultClass-1.3 {test creation of ParameterDefault class instance and getDefValue interface} -setup {
     set parInst [ParameterDefault new U0 100 200]
 } -body {
-    set result [$parInst getDefValue]
+    set result [$parInst configure -DefValue]
 } -result 200 -cleanup {
     unset parInst result
 }
@@ -354,7 +365,7 @@ test testParameterDefaultClass-1.4 {test creation of ParameterDefault class inst
     set parInst [ParameterDefault new U0 100 200]
     $parInst resetValue
 } -body {
-    set result [$parInst getValue]
+    set result [$parInst configure -Value]
 } -result 200 -cleanup {
     unset parInst result
 }
@@ -364,7 +375,7 @@ test testParameterDefaultClass-1.4 {test creation of ParameterDefault class inst
 test testParameterSwitchClass-1.1 {test creation of ParameterSwitch class instance and getName interface} -setup {
     set parInst [ParameterSwitch new U0]
 } -body {
-    set result [$parInst getName]
+    set result [$parInst configure -Name]
 } -result u0 -cleanup {
     unset parInst result
 }
@@ -382,7 +393,7 @@ test testParameterSwitchClass-1.2 {test creation of ParameterSwitch class instan
 test testParameterPositionalClass-1.1 {test creation of ParameterPositional class instance and getName interface} -setup {
     set parInst [ParameterPositional new U0 100]
 } -body {
-    set result [$parInst getName]
+    set result [$parInst configure -Name]
 } -result u0 -cleanup {
     unset parInst result
 }
@@ -394,13 +405,32 @@ test testParameterPositionalClass-1.2 {test creation of ParameterPositional clas
 } -result 100 -cleanup {
     unset parInst result
 }
-    
+
+    # ________________________ ParameterPositionalNoCheck class tests _________________________ #
+
+test testParameterPositionalNoCheckClass-1.0 {test creation of ParameterPositionalNoCheck class instance} -setup {
+    set parInst [ParameterPositionalNoCheck new U0 100]
+} -body {
+    $parInst configure -Value 1...1
+    set result [$parInst configure -Value]
+} -result 1...1 -cleanup {
+    unset parInst result
+}   
+
+test testParameterPositionalNoCheckClass-1.1 {test creation of ParameterPositionalNoCheck class instance} -setup {
+    set parInst [ParameterPositionalNoCheck new U0 1...1]
+} -body {
+    set result [$parInst genSPICEString]
+} -result 1...1 -cleanup {
+    unset parInst result
+}  
+
     # ________________________ ParameterEquation class tests _________________________ #
 
 test testParameterEquationClass-1.1 {test creation of ParameterEquation class instance and getValue interface} -setup {
     set parInst [ParameterEquation new U0T {temp*2.1+U0}]
 } -body {
-    set result [$parInst getValue]
+    set result [$parInst configure -Value]
 } -result "temp*2.1+U0" -cleanup {
     unset parInst result
 }
@@ -435,7 +465,7 @@ test testParameterPositionalEquationClass-1.1 {test creation of ParameterPositio
 test testDeviceClass-1.1 {test creation of Device class instance and getName interface} -setup {
     set elemInst [Device new M1 {{d netg} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
 } -body {
-    set result [$elemInst getName]
+    set result [$elemInst configure -Name]
 } -result m1 -cleanup {
     unset elemInst result
 }
@@ -601,7 +631,7 @@ test testDeviceClass-2.11 {test creation of Device class instance and checkFloat
 test testDeviceModelClass-1.1 {test creation of DeviceModel class instance and getName interface} -setup {
     set elemInst [DeviceModel new M1 {{d netg} {g netg} {s nets}} nmos1 {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
 } -body {
-    set result [$elemInst getName]
+    set result [$elemInst configure -Name]
 } -result m1 -cleanup {
     unset elemInst result
 }
@@ -617,7 +647,7 @@ test testDeviceModelClass-1.2 {test creation of DeviceModel class instance and g
 test testDeviceModelClass-1.3 {test creation of DeviceModel class instance and getName interface} -setup {
     set elemInst [DeviceModel new M1 {{d netd} {g netg} {s nets}} nmos1 {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
 } -body {
-    set result [$elemInst getModelName]
+    set result [$elemInst configure -ModelName]
 } -result nmos1 -cleanup {
     unset elemInst result
 }
@@ -643,7 +673,7 @@ test testDeviceModelClass-2.1 {test creation of DeviceModel class instance and t
 test testModelClass-1.1 {test creation of Model class instance and getType interface} -setup {
     set modelInst [Model new MOD1 NMOS {{VTH0 0.7} {U0 100} {VTH1 1} {K1 1.5e-3}}]
 } -body {
-    set result [$modelInst getType]
+    set result [$modelInst configure -Type]
 } -result nmos -cleanup {
     unset modelInst result
 }
@@ -685,7 +715,7 @@ test testRawStringClass-1.1 {test creation of RawString class instance and genSP
 test testRawStringClass-1.2 {test creation of RawString class instance with -name argument and getName interface} -setup {
     set raw [RawString new {arbitary string} -name raw1]
 } -body {
-    set result [$raw getName]
+    set result [$raw configure -Name]
 } -result "raw1" -cleanup {
     unset raw result
 }
@@ -739,7 +769,7 @@ test testTempClass-1.2 {test creation of Temp class instance and genSPICEString 
 test testTempClass-1.3 {test creation of Temp class instance and getValue interface} -setup {
     set temp [Temp new temp -eq]
 } -body {
-    set result [$temp getValue]
+    set result [$temp configure -Value]
 } -result "temp" -cleanup {
     unset temp result
 }
@@ -747,8 +777,8 @@ test testTempClass-1.3 {test creation of Temp class instance and getValue interf
 test testTempClass-1.4 {test creation of Temp class instance and setValue interface} -setup {
     set temp [Temp new temp -eq]
 } -body {
-    $temp setValue temp1 -eq
-    set result [$temp getValue]
+    $temp configure -Value [list temp1 -eq]
+    set result [$temp configure -Value]
 } -result "temp1" -cleanup {
     unset temp result
 }
@@ -756,8 +786,8 @@ test testTempClass-1.4 {test creation of Temp class instance and setValue interf
 test testTempClass-1.5 {test creation of Temp class instance and setValue interface with change of parameter type to equational} -setup {
     set temp [Temp new 10]
 } -body {
-    $temp setValue temp1 -eq
-    set result [$temp getValue]
+    $temp configure -Value [list temp1 -eq]
+    set result [$temp configure -Value]
 } -result "temp1" -cleanup {
     unset temp result
 }
@@ -785,7 +815,7 @@ test testLibraryClass-1.1 {test creation of Library class instance and genSPICES
 test testLibraryClass-1.2 {test creation of Library class instance and getLibValue interface} -setup {
     set raw [Library new ./libs/mosfets/nmos1 slow_corner]
 } -body {
-    set result [$raw getLibValue]
+    set result [$raw configure -LibValue]
 } -result {slow_corner} -cleanup {
     unset raw result
 }
@@ -972,7 +1002,7 @@ test testNetlistClass-1.5 {test creation of Netlist class instance and getElemen
     $netlistInst add [Vdc new 1 net1 net3 5]
 } -body {
     set elementObj [$netlistInst getElement r2]
-    return [$elementObj getName]
+    return [$elementObj configure -Name]
 } -result r2 -cleanup {
     unset netlistInst elementObj
 }

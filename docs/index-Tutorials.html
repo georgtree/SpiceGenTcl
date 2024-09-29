@@ -272,14 +272,14 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <i><font color=#4b5d50># set simulator with default </font></i>
 <b><font color=#923B23>set</font></b> simulator [<b><font color=#923B23>Batch</font></b> new {batch1} {/usr/local/bin/}]
 <i><font color=#4b5d50># attach simulator object to circuit</font></i>
-<font color=#4A181B>$circuit</font> attachSimulator <font color=#4A181B>$simulator</font>
+<font color=#4A181B>$circuit</font> configure <font color=#463e11>-Simulator</font> <font color=#4A181B>$simulator</font>
 </pre>
 
 </figure><p class='ruff'>The only thing left is to set the temperature value in the Temp class object, run the circuit, save the data, and repeat this process multiple times:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># run circuit, change temperature, read log and data</font></i>
 <b><font color=#923B23>foreach</font></b> temp <font color=#4A181B>$temps</font> {
-    <font color=#4A181B>$tempSt</font> setValue <font color=#4A181B>$temp</font>
+    <font color=#4A181B>$tempSt</font> configure <font color=#463e11>-Value</font> <font color=#4A181B>$temp</font>
     <font color=#4A181B>$circuit</font> runAndRead
     <b><font color=#923B23>puts</font></b> [<font color=#4A181B>$circuit</font> getLog]
     <b><font color=#923B23>set</font></b> data [<font color=#4A181B>$circuit</font> getDataDict]
@@ -359,7 +359,7 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50>#set simulator with default </font></i>
 <b><font color=#923B23>set</font></b> simulator [<b><font color=#923B23>BatchLiveLog</font></b> new {batch1} {/usr/local/bin/}]
 <i><font color=#4b5d50># attach simulator object to circuit</font></i>
-<font color=#4A181B>$circuit</font> attachSimulator <font color=#4A181B>$simulator</font>
+<font color=#4A181B>$circuit</font> configure <font color=#463e11>-Simulator</font> <font color=#4A181B>$simulator</font>
 <i><font color=#4b5d50># loop in which we run simulation, change reverse bias and read the results</font></i>
 <b><font color=#923B23>foreach</font></b> volt <font color=#4A181B>$voltSweep</font> {
     <i><font color=#4b5d50>#set reverse voltage bias</font></i>
@@ -442,7 +442,7 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50>#set simulator with default </font></i>
 <b><font color=#923B23>set</font></b> simulator [<b><font color=#923B23>Batch</font></b> new {batch1} {/usr/local/bin/}]
 <i><font color=#4b5d50># attach simulator object to circuit</font></i>
-<font color=#4A181B>$circuit</font> attachSimulator <font color=#4A181B>$simulator</font>
+<font color=#4A181B>$circuit</font> configure <font color=#463e11>-Simulator</font> <font color=#4A181B>$simulator</font>
 <i><font color=#4b5d50># run circuit, read log and data</font></i>
 <font color=#4A181B>$circuit</font> runAndRead
 <i><font color=#4b5d50># get data object</font></i>
@@ -520,7 +520,7 @@ vrc2=-6.032e-04
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50>#set simulator with default temporary directory</font></i>
 <b><font color=#923B23>set</font></b> simulator [<b><font color=#923B23>BatchLiveLog</font></b> new {batch1} {/usr/local/bin/}]
 <i><font color=#4b5d50># attach simulator object to circuit</font></i>
-<font color=#4A181B>$circuit</font> attachSimulator <font color=#4A181B>$simulator</font>
+<font color=#4A181B>$circuit</font> configure <font color=#463e11>-Simulator</font> <font color=#4A181B>$simulator</font>
 <i><font color=#4b5d50># run circuit, read log and data</font></i>
 <font color=#4A181B>$circuit</font> runAndRead
 <i><font color=#4b5d50># get data object</font></i>
@@ -710,7 +710,7 @@ vrc2=-6.032e-04
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50>#set simulator with default temporary directory</font></i>
 <b><font color=#923B23>set</font></b> simulator [<b><font color=#923B23>BatchLiveLog</font></b> new {batch1} {/usr/local/bin/}]
 <i><font color=#4b5d50># attach simulator object to circuit</font></i>
-<font color=#4A181B>$circuit</font> attachSimulator <font color=#4A181B>$simulator</font>
+<font color=#4A181B>$circuit</font> configure <font color=#463e11>-Simulator</font> <font color=#4A181B>$simulator</font>
 <i><font color=#4b5d50># run circuit, read log and data</font></i>
 <font color=#4A181B>$circuit</font> runAndRead
 </pre>

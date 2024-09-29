@@ -27,7 +27,7 @@ $circuit add [SensDc new v(5,4)]
 #set simulator with default 
 set simulator [Batch new {batch1} {/usr/local/bin/}]
 # attach simulator object to circuit
-$circuit attachSimulator $simulator
+$circuit configure -Simulator $simulator
 # run circuit, read log and data
 $circuit runAndRead
 # get data object

@@ -35,9 +35,9 @@ test testSimulations-1.1 {test creation of circuit, run it with NgspiceBatch and
     $circuit add [R new 2 out 0 2e3]
     $circuit add [Dc new v1 0 5 1]
     set simulator [Batch new batch1 $ngspicePath]
-    $circuit attachSimulator $simulator
+    $circuit configure -Simulator $simulator
     $circuit runAndRead
-    set data [[$circuit getData] getTracesData]
+    set data [[$circuit configure -Data] getTracesData]
 } -body {
     set traceMatch [matchList {0.0 0.6666666666666666 1.3333333333333333 2.0 \
             2.6666666666666665 3.333333333333333} [dict get $data v(out)]]

@@ -184,14 +184,14 @@ namespace eval SpiceGenTcl::Ngspice::Analyses {
                 -name=
             }]
             if {[info exists name]} {
-                my SetName $name
+                my configure -Name $name
             } else {
-                my SetName [self object]
+                my configure -Name [self object]
             }
-            my SetType op
+            my configure -Type op
         }
         method genSPICEString {} {
-            return ".[my getType]"
+            return ".[my configure -Type]"
         }
     }
 }

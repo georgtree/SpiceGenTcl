@@ -136,7 +136,7 @@ $circuit add [BjtGPModel new qmod npn -bf 75 -rb 100 -cje 1e-12 -cjc 3e-12]
 #set simulator with default temporary directory
 set simulator [BatchLiveLog new {batch1} {/usr/local/bin/}]
 # attach simulator object to circuit
-$circuit attachSimulator $simulator
+$circuit configure -Simulator $simulator
 # run circuit, read log and data
 $circuit runAndRead
 # get data dict

@@ -446,7 +446,7 @@ namespace eval SpiceGenTcl::Ngspice::BasicDevices {
         }
         method genSPICEString {} {
             set string [next]
-            return [linsert $string 3 [$CControlParam getValue]]
+            return [linsert $string 3 [$CControlParam configure -Value]]
         }
     }
     # alias for CSwitch class
@@ -502,7 +502,7 @@ namespace eval SpiceGenTcl::Ngspice::BasicDevices {
                 error "Wrong object class '$objClass' is passed as subcktObj, should be 'SpiceGenTcl::Subcircuit'"
             }
             # get name of subcircuit
-            set subName [$subcktObj getName] 
+            set subName [$subcktObj configure -Name] 
             # get pins names of subcircuit
             set pinsNames [dict keys [$subcktObj getPins]]
             # check if number of pins in subcircuit definition matchs the number of supplied nodes
@@ -622,17 +622,17 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
                 if {$error!=1} {
                     lappend nodes [$pin genSPICEString]
                 } else {
-                    error "Device '[my getName]' can't be netlisted because '$pinName' pin is floating"
+                    error "Device '[my configure -Name]' can't be netlisted because '$pinName' pin is floating"
                 }
             }
             if {$Params==""} {
                 lappend params ""
-                return "[my getName] [join $nodes] [my getModelName]"
+                return "[my configure -Name] [join $nodes] [my configure -ModelName]"
             } else {
                 dict for {paramName param} $Params {
                     lappend params [$param genSPICEString]
                 }
-                return "[my getName] [join $nodes] [my getModelName]([join $params])"
+                return "[my configure -Name] [join $nodes] [my configure -ModelName]([join $params])"
             } 
         }
         self unexport create new
@@ -1414,13 +1414,13 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
                 if {$error!=1} {
                     lappend nodes [$pin genSPICEString]
                 } else {
-                    error "Device '[my getName]' can't be netlisted because '$pinName' pin is floating"
+                    error "Device '[my configure -Name]' can't be netlisted because '$pinName' pin is floating"
                 }
             }
             dict for {paramName param} $Params {
                 lappend params [$param genSPICEString]
             }
-            return "[my getName] [join $nodes] [$Vname getValue] [join $params]"
+            return "[my configure -Name] [join $nodes] [$Vname configure -Value] [join $params]"
         } 
     }
     # alias for Cccs class
@@ -1463,13 +1463,13 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
                 if {$error!=1} {
                     lappend nodes [$pin genSPICEString]
                 } else {
-                    error "Device '[my getName]' can't be netlisted because '$pinName' pin is floating"
+                    error "Device '[my configure -Name]' can't be netlisted because '$pinName' pin is floating"
                 }
             }
             dict for {paramName param} $Params {
                 lappend params [$param genSPICEString]
             }
-            return "[my getName] [join $nodes] [$Vname getValue] [join $params]"
+            return "[my configure -Name] [join $nodes] [$Vname configure -Value] [join $params]"
         } 
     }
     # alias for Ccvs class

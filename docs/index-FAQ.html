@@ -112,20 +112,20 @@
 
 </figure><h2 class='ruff'><a name='::FAQ-How to get the names of all vectors in raw file?'></a>How to get the names of all vectors in raw file?<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
-<p class='ruff'>For this task, you should first retrieve the <code><b><font color=#923B23>RawFile</font></b></code> object reference from the <code><b><font color=#923B23>Circuit</font></b></code> object using the <code>getData</code> method. Then, call the <code>getVariablesNames</code> method, which returns a list of all variable names.</p>
+<p class='ruff'>For this task, you should first retrieve the <code><b><font color=#923B23>RawFile</font></b></code> object reference from the <code><b><font color=#923B23>Circuit</font></b></code> object using the <code>configure <font color=#463e11>-Data</font></code> method. Then, call the <code>getVariablesNames</code> method, which returns a list of all variable names.</p>
 <p class='ruff'>Example:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> rawFileObj [<font color=#4A181B>$circuit</font> getData]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> rawFileObj [<font color=#4A181B>$circuit</font> configure <font color=#463e11>-Data</font>]
 <b><font color=#923B23>puts</font></b> [<font color=#4A181B>$rawFileObj</font> getVariablesNames]
 </pre>
 
 </figure><p class='ruff'>There are also methods for retrieve all voltages and currents names separated from each other: <code>getVoltagesNames</code> and <code>getCurrentsNames</code>.</p>
 <h2 class='ruff'><a name='::FAQ-How to get log file after simulation?'></a>How to get log file after simulation?<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
-<p class='ruff'>There is a special method for it in object of <code><b><font color=#923B23>Circuit</font></b></code> class - <code>getLog</code>, it returns string containing log file.</p>
+<p class='ruff'>There is a property method for it in object of <code><b><font color=#923B23>Circuit</font></b></code> class - <code>configure <font color=#463e11>-Log</font></code>, it returns string containing log file.</p>
 <p class='ruff'>Example:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>puts</font></b> [<font color=#4A181B>$circuit</font> getLog]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>puts</font></b> [<font color=#4A181B>$circuit</font> configure <font color=#463e11>-Log</font>]
 </pre>
 
 </figure></main><nav class='ruff-nav'><ul ><li class='ruff-toc1'><a style='padding-top:2px;' href='index.html'>Start page</a></li>

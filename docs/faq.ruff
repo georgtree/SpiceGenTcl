@@ -120,12 +120,12 @@ namespace eval FAQ {
         
         ## How to get the names of all vectors in raw file?
         
-        For this task, you should first retrieve the `RawFile` object reference from the `Circuit` object using the `getData` method. 
+        For this task, you should first retrieve the `RawFile` object reference from the `Circuit` object using the `configure -Data` method. 
         Then, call the `getVariablesNames` method, which returns a list of all variable names.
         
         Example:
         ```tcl
-        set rawFileObj [$circuit getData]
+        set rawFileObj [$circuit configure -Data]
         puts [$rawFileObj getVariablesNames]
         ```
         
@@ -134,11 +134,11 @@ namespace eval FAQ {
         
         ## How to get log file after simulation?
         
-        There is a special method for it in object of `Circuit` class - `getLog`, it returns string containing log file.
+        There is a property method for it in object of `Circuit` class - `configure -Log`, it returns string containing log file.
         
         Example:
         ```tcl
-        puts [$circuit getLog]
+        puts [$circuit configure -Log]
         ```
     }
 
