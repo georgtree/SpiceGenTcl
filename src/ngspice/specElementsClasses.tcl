@@ -1576,27 +1576,39 @@ namespace eval SpiceGenTcl::Ngspice::SemiconductorDevices {
             #  neNode - name of node connected to emitter pin
             #  modelName - name of the model
             #  args - keyword instance parameters, for details please see Ngspice manual, 8 chapter.
+            #  Optional nodes could be provided as additional arguments:
+            #  `-ns nodeName` name of node connected to substrate pin and
+            #  `-tj nodeName` name of node connected to thermal pin, requires `-ns` option
             # ```
-            # QXXXXXXX nc nb ne mname <area=val> <areac=val>
-            # + <areab=val> <m=val> <off> <ic=vbe , vce> <temp=val>
+            # QXXXXXXX nc nb ne <ns> <tj> mname <area=val> <areac=val>
+            # + <areab=val> <m=val> <off> <ic=vbe,vce> <temp=val>
             # + <dtemp=val>
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::SemiconductorDevices::Bjt new 1 netc netb nete bjtmod -area 1e-3
+            # SpiceGenTcl::Ngspice::SemiconductorDevices::Bjt new 1 netc netb nete bjtmod -ns nets -area 1e-3
             # ```
             set paramsNames [list area areac areab m temp dtemp]
             set paramDefList [my buildArgStr $paramsNames]
             set arguments [argparse -inline "
                 $paramDefList
+                -ns=
+                {-tj= -require {ns}}
             "]
+            set paramList ""
             dict for {paramName value} $arguments {
-                lappend paramList "$paramName $value"
+                if {$paramName ni {ns tj}} {
+                    lappend paramList "$paramName $value"
+                }
             }
-            if {[info exists paramList]} {
-                next q$name [list "nc $ncNode" "nb $nbNode" "ne $neNode"] $modelName $paramList
+            if {[dict exists $arguments ns]} {
+                if {[dict exists $arguments tj]} {
+                    next q$name [list "nc $ncNode" "nb $nbNode" "ne $neNode" "ns [dict get $arguments ns]" "tj [dict get $arguments tj]"] $modelName $paramList
+                } else {
+                    next q$name [list "nc $ncNode" "nb $nbNode" "ne $neNode" "ns [dict get $arguments ns]"] $modelName $paramList
+                }
             } else {
-                next q$name [list "nc $ncNode" "nb $nbNode" "ne $neNode"] $modelName ""
+                next q$name [list "nc $ncNode" "nb $nbNode" "ne $neNode"] $modelName $paramList
             }
             
         }
@@ -1604,94 +1616,6 @@ namespace eval SpiceGenTcl::Ngspice::SemiconductorDevices {
     # alias for Bjt class
     oo::class create Q {
         superclass Bjt
-    }
-    
-    ## ________________________ BjtSub class _________________________ ##
-    
-    oo::class create BjtSub {
-        superclass SpiceGenTcl::DeviceModel
-        mixin SpiceGenTcl::KeyArgsBuilder
-        constructor {name ncNode nbNode neNode nsNode modelName args} {
-            # Creates object of class `BjtSub` that describes semiconductor bipolar junction transistor device with substrate pin.
-            #  name - name of the device without first-letter designator Q
-            #  ncNode - name of node connected to collector pin
-            #  nbNode - name of node connected to base pin
-            #  neNode - name of node connected to emitter pin
-            #  nsNode - name of node connected to substrate pin
-            #  modelName - name of the model
-            #  args - keyword instance parameters, for details please see Ngspice manual, 8 chapter.
-            # ```
-            # QXXXXXXX nc nb ne ns mname <area=val> <areac=val>
-            # + <areab=val> <m=val> <off> <ic=vbe , vce> <temp=val>
-            # + <dtemp=val>
-            # ```
-            # Example of class initialization:
-            # ```
-            # SpiceGenTcl::Ngspice::SemiconductorDevices::Bjt new 1 netc netb nete bjtmod -area 1e-3
-            # ```
-            set paramsNames [list area areac areab m temp dtemp]
-            set paramDefList [my buildArgStr $paramsNames]
-            set arguments [argparse -inline "
-                $paramDefList
-            "]
-            dict for {paramName value} $arguments {
-                lappend paramList "$paramName $value"
-            }
-            if {[info exists paramList]} {
-                next q$name [list "nc $ncNode" "nb $nbNode" "ne $neNode" "ns $nsNode"] $modelName $paramList
-            } else {
-                next q$name [list "nc $ncNode" "nb $nbNode" "ne $neNode" "ns $nsNode"] $modelName ""
-            }
-            
-        }
-    }
-    # alias for BjtSub class
-    oo::class create QSub {
-        superclass BjtSub
-    }
-    
-    ## ________________________ BjtSubTj class _________________________ ##
-    
-    oo::class create BjtSubTj {
-        superclass SpiceGenTcl::DeviceModel
-        mixin SpiceGenTcl::KeyArgsBuilder
-        constructor {name ncNode nbNode neNode nsNode tjNode modelName args} {
-            # Creates object of class `BjtSubTj` that describes semiconductor bipolar junction transistor device with substrate pin and thermal pin.
-            #  name - name of the device without first-letter designator Q
-            #  ncNode - name of node connected to collector pin
-            #  nbNode - name of node connected to base pin
-            #  neNode - name of node connected to emitter pin
-            #  nsNode - name of node connected to substrate pin
-            #  tjNode - name of node connected to thermal pin
-            #  modelName - name of the model
-            #  args - keyword instance parameters, for details please see Ngspice manual, 8 chapter.
-            # ```
-            # QXXXXXXX nc nb ne ns tj mname <area=val> <areac=val>
-            # + <areab=val> <m=val> <off> <ic=vbe , vce> <temp=val>
-            # + <dtemp=val>
-            # ```
-            # Example of class initialization:
-            # ```
-            # SpiceGenTcl::Ngspice::SemiconductorDevices::Bjt new 1 netc netb nete nettj bjtmod -area 1e-3
-            # ```
-            set paramsNames [list area areac areab m temp dtemp]
-            set paramDefList [my buildArgStr $paramsNames]
-            set arguments [argparse -inline "
-                $paramDefList
-            "]
-            dict for {paramName value} $arguments {
-                lappend paramList "$paramName $value"
-            }
-            if {[info exists paramList]} {
-                next q$name [list "nc $ncNode" "nb $nbNode" "ne $neNode" "ns $nsNode" "tj $tjNode"] $modelName $paramList
-            } else {
-                next q$name [list "nc $ncNode" "nb $nbNode" "ne $neNode" "ns $nsNode" "tj $tjNode"] $modelName ""
-            }
-        }
-    }
-    # alias for BjtSubTj class
-    oo::class create QSubTj {
-        superclass BjtSubTj
     }
     
     ## ________________________ Jfet class _________________________ ##
@@ -1762,7 +1686,7 @@ namespace eval SpiceGenTcl::Ngspice::SemiconductorDevices {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::SemiconductorDevices::J new 1 netd netg nets jfetmod -area {area*2 -eq} -temp 25
+            # SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet new 1 netd netg nets mesfetmod -area {area*2 -eq} -temp 25
             # ```
             set paramsNames [list area]
             set paramDefList [my buildArgStr $paramsNames]
@@ -1799,15 +1723,19 @@ namespace eval SpiceGenTcl::Ngspice::SemiconductorDevices {
     oo::class create Mosfet {
         superclass SpiceGenTcl::DeviceModel
         mixin SpiceGenTcl::KeyArgsBuilder
-        constructor {name ndNode ngNode nsNode nbNode modelName args} {
+        constructor {name ndNode ngNode nsNode modelName args} {
             # Creates object of class `Mosfet` that describes semiconductor MOSFET device.
             #  name - name of the device without first-letter designator M
             #  ndNode - name of node connected to drain pin
             #  ngNode - name of node connected to gate pin
             #  nsNode - name of node connected to source pin
-            #  nbNode - name of node connected to source pin
             #  modelName - name of the model
             #  args - keyword instance parameters, for details please see Ngspice manual, 10 chapter.
+            # Optional nodes could be provided as additional arguments:
+            #  `-n4 nodeName` name of 4th node;
+            #  `-n5 nodeName` name of 5th node, requires `-n4` option;
+            #  `-n6 nodeName` name of 6th node, requires `-n5` option;
+            #  `-n7 nodeName` name of 7th node, requires `-n6` option;
             # ```
             # MXXXXXXX nd ng ns nb mname <m=val> <l=val> <w=val>
             # + <ad=val> <as=val> <pd=val> <ps=val> <nrd=val>
@@ -1815,22 +1743,46 @@ namespace eval SpiceGenTcl::Ngspice::SemiconductorDevices {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::SemiconductorDevices::J new 1 netd netg nets jfetmod -area {area*2 -eq} -temp 25
+            # SpiceGenTcl::Ngspice::Mosfet new 1 netd netg nets mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5
             # ```
             set paramsNames [list m l w ad as pd ps nrd nrs]
             set paramDefList [my buildArgStr $paramsNames]
             set arguments [argparse -inline "
                 $paramDefList
+                -n4=
+                {-n5= -require {n4}}
+                {-n6= -require {n5}}
+                {-n7= -require {n7}}
             "]
+            set paramList ""
             dict for {paramName value} $arguments { 
-                lappend paramList "$paramName $value"
+                if {$paramName ni {n4 n5 n6 n7}} {
+                    lappend paramList "$paramName $value"
+                }
             }
-            if {[info exists paramList]} {
-                next m$name [list "nd $ndNode" "ng $ngNode" "ns $nsNode" "nb $nbNode"] $modelName $paramList
+            if {[dict exists $arguments n4]} {
+                if {[dict exists $arguments n5]} {
+                    if {[dict exists $arguments n6]} {
+                        if {[dict exists $arguments n7]} {
+                            next m$name [list "nd $ndNode" "ng $ngNode" "ns $nsNode" "n4 [dict get $arguments n4]"\
+                                    "n5 [dict get $arguments n5]" "n6 [dict get $arguments n6]"\
+                                    "n7 [dict get $arguments n7]"] $modelName $paramList
+                        } else {
+                            next m$name [list "nd $ndNode" "ng $ngNode" "ns $nsNode" "n4 [dict get $arguments n4]"\
+                                    "n5 [dict get $arguments n5]" "n6 [dict get $arguments n6]"]\
+                                    $modelName $paramList
+                        }
+                    } else {
+                        next m$name [list "nd $ndNode" "ng $ngNode" "ns $nsNode" "n4 [dict get $arguments n4]"\
+                                "n5 [dict get $arguments n5]"] $modelName $paramList
+                    } 
+                } else {
+                    next m$name [list "nd $ndNode" "ng $ngNode" "ns $nsNode" "n4 [dict get $arguments n4]"]\
+                            $modelName $paramList
+                }
             } else {
-                next m$name [list "nd $ndNode" "ng $ngNode" "ns $nsNode" "nb $nbNode"] $modelName ""
+                next m$name [list "nd $ndNode" "ng $ngNode" "ns $nsNode"] $modelName $paramList
             }
-            
         }
     }
     # alias for Mosfet class

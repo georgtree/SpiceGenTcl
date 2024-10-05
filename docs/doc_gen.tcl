@@ -31,7 +31,7 @@ set common [list \
                 -pagesplit namespace \
                 -autopunctuate true \
                 -compact false \
-                -includeprivate true \
+                -includeprivate false \
                 -product SpiceGenTcl \
                 -diagrammer "ditaa --border-width 1" \
                 -version $packageVersion \

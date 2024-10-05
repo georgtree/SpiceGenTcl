@@ -906,6 +906,22 @@ test testBjtClass-1.1 {test Bjt class} -setup {
     unset bjt result
 }
 
+test testBjtClass-1.2 {test Bjt class} -setup {
+    set bjt [Bjt new 1 netc netb nete bjtmod -ns nets -area 1e-3 -temp 25]
+} -body {
+    set result [$bjt genSPICEString]
+} -result "q1 netc netb nete nets bjtmod area=1e-3 temp=25" -cleanup {
+    unset bjt result
+}
+
+test testBjtClass-1.3 {test Bjt class} -setup {
+    set bjt [Bjt new 1 netc netb nete bjtmod -ns nets -tj nettj -area 1e-3 -temp 25]
+} -body {
+    set result [$bjt genSPICEString]
+} -result "q1 netc netb nete nets nettj bjtmod area=1e-3 temp=25" -cleanup {
+    unset bjt result
+}
+
 test testQClass-1.1 {test Q class} -setup {
     set bjt [Q new 1 netc netb nete bjtmod -area 1e-3 -temp 25]
 } -body {
@@ -914,41 +930,6 @@ test testQClass-1.1 {test Q class} -setup {
     unset bjt result
 }
     
-    ## ________________________ BjtSub class tests _________________________ ##
-    
-test testBjtSubClass-1.1 {test BjtSub class} -setup {
-    set bjt [BjtSub new 1 netc netb nete nets bjtmod -area 1e-3 -temp 25]
-} -body {
-    set result [$bjt genSPICEString]
-} -result "q1 netc netb nete nets bjtmod area=1e-3 temp=25" -cleanup {
-    unset bjt result
-}
-
-test testQSubClass-1.1 {test QSub class} -setup {
-    set bjt [QSub new 1 netc netb nete nets bjtmod -area 1e-3 -temp 25]
-} -body {
-    set result [$bjt genSPICEString]
-} -result "q1 netc netb nete nets bjtmod area=1e-3 temp=25" -cleanup {
-    unset bjt result
-}
-    
-    ## ________________________ BjtSubTj class tests _________________________ ##
-    
-test testBjtSubTjClass-1.1 {test BjtSubTj class} -setup {
-    set bjt [BjtSubTj new 1 netc netb nete nets nettj bjtmod -area 1e-3 -temp 25]
-} -body {
-    set result [$bjt genSPICEString]
-} -result "q1 netc netb nete nets nettj bjtmod area=1e-3 temp=25" -cleanup {
-    unset bjt result
-}
-
-test testQSubTjClass-1.1 {test QSubTj class} -setup {
-    set bjt [QSubTj new 1 netc netb nete nets nettj bjtmod -area 1e-3 -temp 25]
-} -body {
-    set result [$bjt genSPICEString]
-} -result "q1 netc netb nete nets nettj bjtmod area=1e-3 temp=25" -cleanup {
-    unset bjt result
-}
     
     ## ________________________ Jfet class tests _________________________ ##
     
@@ -989,18 +970,66 @@ test testZClass-1.1 {test J class} -setup {
     ## ________________________ Mosfet class tests _________________________ ##
     
 test testMosfetClass-1.1 {test Mosfet class} -setup {
-    set mosfet [Mosfet new 1 netd netg nets netb mosfetmod -l 1e-6 -w 10e-3]
+    set mosfet [Mosfet new 1 netd netg nets mosfetmod -l 1e-6 -w 10e-3]
 } -body {
     set result [$mosfet genSPICEString]
-} -result "m1 netd netg nets netb mosfetmod l=1e-6 w=10e-3" -cleanup {
+} -result "m1 netd netg nets mosfetmod l=1e-6 w=10e-3" -cleanup {
     unset mosfet result
 }
 
-test testMClass-1.1 {test M class} -setup {
-    set mosfet [M new 1 netd netg nets netb mosfetmod -l 1e-6 -w {w/nf -eq}]
+test testMosfetClass-1.2 {test Mosfet class} -setup {
+    set mosfet [Mosfet new 1 netd netg nets mosfetmod -l 1e-6 -w 10e-3 -n4 netsub]
 } -body {
     set result [$mosfet genSPICEString]
-} -result "m1 netd netg nets netb mosfetmod l=1e-6 w={w/nf}" -cleanup {
+} -result "m1 netd netg nets netsub mosfetmod l=1e-6 w=10e-3" -cleanup {
+    unset mosfet result
+}
+
+test testMosfetClass-1.3 {test Mosfet class} -setup {
+    set mosfet [Mosfet new 1 netd netg nets mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5]
+} -body {
+    set result [$mosfet genSPICEString]
+} -result "m1 netd netg nets netsub net5 mosfetmod l=1e-6 w=10e-3" -cleanup {
+    unset mosfet result
+}
+
+test testMosfetClass-1.4 {test Mosfet class} -setup {
+    set mosfet [Mosfet new 1 netd netg nets mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5 -n6 net6]
+} -body {
+    set result [$mosfet genSPICEString]
+} -result "m1 netd netg nets netsub net5 net6 mosfetmod l=1e-6 w=10e-3" -cleanup {
+    unset mosfet result
+}
+
+test testMosfetClass-1.5 {test Mosfet class} -setup {
+    set mosfet [Mosfet new 1 netd netg nets mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5 -n6 net6 -n7 net7]
+} -body {
+    set result [$mosfet genSPICEString]
+} -result "m1 netd netg nets netsub net5 net6 net7 mosfetmod l=1e-6 w=10e-3" -cleanup {
+    unset mosfet result
+}
+
+test testMosfetClass-1.6 {test Mosfet class} -setup {
+    catch {Mosfet new 1 netd netg nets mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n6 net6 -n7 net7} errorStr
+} -body {
+    set result $errorStr
+} -result "-n6 requires -n5" -cleanup {
+    unset result
+}
+
+test testMosfetClass-1.7 {test Mosfet class} -setup {
+    catch {Mosfet new 1 netd netg nets mosfetmod -l 1e-6 -w 10e-3 -n5 net5 -n6 net6 -n7 net7} errorStr
+} -body {
+    set result $errorStr
+} -result "-n5 requires -n4" -cleanup {
+    unset result
+}
+
+test testMClass-1.1 {test M class} -setup {
+    set mosfet [M new 1 netd netg nets mosfetmod -l 1e-6 -w {w/nf -eq}]
+} -body {
+    set result [$mosfet genSPICEString]
+} -result "m1 netd netg nets mosfetmod l=1e-6 w={w/nf}" -cleanup {
     unset mosfet result
 }
     

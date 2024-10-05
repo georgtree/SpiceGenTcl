@@ -17,7 +17,7 @@ namespace eval SpiceGenTcl {
     
    # ________________________ SPICEElement class definition _________________________ #
     
-    oo::abstract create SPICEElement {
+    oo::configurable create SPICEElement {
         # Abstract class of all elements of SPICE netlist
         #  and it forces implementation of genSPICEString method for all subclasses.
         variable Name
@@ -50,39 +50,6 @@ namespace eval SpiceGenTcl {
         }
     }
 
-   # ________________________ ParamNameChecker class definition _________________________ #
-     
-    oo::class create ParamNameChecker {
-        method checkName {name} {
-            # Checks parameter name for forbidden symbols.
-            #  name - name to check
-            if {$name==""} {
-                error "Parameter must have a name, empty string was provided"
-            } elseif {[regexp {[^A-Za-z0-9_]+} $name]} {
-                error "Parameter name '$name' is not a valid name"
-            } elseif {[regexp {^[A-Za-z][A-Za-z0-9]*} $name]} {
-                return
-            } else {
-                error "Parameter name '$name' is not a valid name"
-            }
-            return
-        }
-    }
-
-    # ________________________ ValueChecker class definition _________________________ #
-
-    oo::class create ValueChecker {
-        method checkValue {value} {
-            # Checks the value.
-            #  value - value to check
-            if {[string is double -strict $value]} {
-                return
-            } else {
-                error "Value '$value' is not a valid value"
-            }
-        }
-    }
-
     # ________________________ KeyArgsBuilder class definition _________________________ #
 
     oo::class create KeyArgsBuilder {
@@ -92,7 +59,7 @@ namespace eval SpiceGenTcl {
             #  using two element list {paramName aliasName}
             # Returns: string in form *-paramName= \n {-paramName= -alias aliasName} \n ...*
             foreach paramName $paramsNames {
-                if {[llength $paramName]>1} {
+                if {[llength $paramName]>1} { 
                     lappend paramDefList "\{-[lindex $paramName 0]= -alias [lindex $paramName 1]\}"
                 } else {
                     lappend paramDefList "-${paramName}="
@@ -199,7 +166,7 @@ namespace eval SpiceGenTcl {
     # ________________________ Parameter class definition _________________________ #
 
     oo::configurable create Parameter {
-        superclass ParameterSwitch ValueChecker 
+        superclass ParameterSwitch 
         property Value -set {
             if {[string is double -strict $value]} {
                 set Value $value
@@ -1050,7 +1017,7 @@ namespace eval SpiceGenTcl {
         }
         property Value -set {
             lassign $value value eq
-            if {$eq=="eq"} {
+            if {$eq=="-eq"} {
                 my AddParam temp $value -eq
             } elseif {$eq==""} {
                 my AddParam temp $value
