@@ -18,6 +18,7 @@ namespace eval SpiceGenTcl {
    # ________________________ SPICEElement class definition _________________________ #
     
     oo::configurable create SPICEElement {
+        self mixin -append oo::abstract
         # Abstract class of all elements of SPICE netlist
         #  and it forces implementation of genSPICEString method for all subclasses.
         variable Name
@@ -32,6 +33,7 @@ namespace eval SpiceGenTcl {
    # ________________________ DuplChecker class definition _________________________ #
    
     oo::configurable create DuplChecker {
+        self mixin -append oo::abstract
         method duplListCheck {list} {
             # Checks if list contains duplicates.
             #  list - list to check
@@ -53,6 +55,7 @@ namespace eval SpiceGenTcl {
     # ________________________ KeyArgsBuilder class definition _________________________ #
 
     oo::class create KeyArgsBuilder {
+        self mixin -append oo::abstract
         method buildArgStr {paramsNames} {
             # Builds argument list for argparse.
             #  paramsNames - list of parameter names, define alias for parameter name by
@@ -1475,6 +1478,7 @@ namespace eval SpiceGenTcl {
     # ________________________ Simulator class definition _________________________ #
     
     oo::configurable create Simulator {
+        self mixin -append oo::abstract
         property Name
         variable Name
         property Command
@@ -1501,12 +1505,12 @@ namespace eval SpiceGenTcl {
             # Reads raw data file of last simulation.
             error "Not implemented"
         }
-        unexport new create createWithNamespace
     }     
 
     # ________________________ BinaryReader class definition _________________________ #
    
     oo::configurable create BinaryReader {
+        self mixin -append oo::abstract
         method readFloat64 {file} {
             # Reads 8 bytes number from file .
             #  file - file handler
@@ -1549,7 +1553,6 @@ namespace eval SpiceGenTcl {
             read $file 16
             return
         }
-        unexport new create createWithNamespace
     }
     
     # ________________________ Dataset class _________________________ #

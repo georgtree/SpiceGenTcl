@@ -546,7 +546,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
 
     ## ________________________ dc sources template class _________________________ ##
     
-    oo::class create dc {
+    oo::abstract create dc {
         superclass SpiceGenTcl::Device
         constructor {name type npNode nmNode dcVal} {
             if {([llength $dcVal]>1) && ([lindex $dcVal 1]=="-eq")} {
@@ -556,12 +556,11 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
             }
             next $type$name [list "np $npNode" "nm $nmNode"] $paramList
         }
-        self unexport create new
     }
 
     ## ________________________ ac sources template class _________________________ ##
 
-    oo::class create ac {
+    oo::abstract create ac {
         superclass SpiceGenTcl::Device
         constructor {name type npNode nmNode acMag args} {
             set arguments [argparse {
@@ -582,12 +581,11 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
             }
             next $type$name [list "np $npNode" "nm $nmNode"] $paramList
         }
-        self unexport create new
     }   
     
     ## ________________________ pulse sources template class _________________________ ##
     
-    oo::class create pulse {
+    oo::abstract create pulse {
         superclass SpiceGenTcl::DeviceModel
         constructor {name type npNode nmNode low high td tr tf pw per args} {
             set arguments [argparse {
@@ -635,12 +633,11 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
                 return "[my configure -Name] [join $nodes] [my configure -ModelName]([join $params])"
             } 
         }
-        self unexport create new
     }  
     
     ## ________________________ sin sources template class _________________________ ##
     
-    oo::class create sin {
+    oo::abstract create sin {
         superclass SpiceGenTcl::DeviceModel
         mixin SpiceGenTcl::KeyArgsBuilder
         constructor {name type npNode nmNode v0 va freq args} {
@@ -668,12 +665,11 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
         }
         set def [info class definition SpiceGenTcl::Ngspice::Sources::pulse genSPICEString]
         method genSPICEString [lindex $def 0] [lindex $def 1]
-        self unexport create new
     }  
     
     ## ________________________ exp sources template class _________________________ ##
     
-    oo::class create exp {
+    oo::abstract create exp {
         superclass SpiceGenTcl::DeviceModel
         constructor {name type npNode nmNode v1 v2 td1 tau1 td2 tau2} {
             set paramNames [lrange [lindex [info class constructor [info object class [self]]] 0] 3 end]
@@ -689,12 +685,11 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
         }
         set def [info class definition SpiceGenTcl::Ngspice::Sources::pulse genSPICEString]
         method genSPICEString [lindex $def 0] [lindex $def 1]
-        self unexport create new
     }    
     
     ## ________________________ pwl sources template class _________________________ ##
     
-    oo::class create pwl {
+    oo::abstract create pwl {
         superclass SpiceGenTcl::DeviceModel
         constructor {name type npNode nmNode pwlSeq} {
             set pwlSeqLen [llength $pwlSeq]
@@ -720,12 +715,11 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
         }
         set def [info class definition SpiceGenTcl::Ngspice::Sources::pulse genSPICEString]
         method genSPICEString [lindex $def 0] [lindex $def 1]
-        self unexport create new
     }
 
     ## ________________________ sffm sources template class _________________________ ##
     
-    oo::class create sffm {
+    oo::abstract create sffm {
         superclass SpiceGenTcl::DeviceModel
         mixin SpiceGenTcl::KeyArgsBuilder
         constructor {name type npNode nmNode v0 va fc mdi fs args} {
@@ -753,12 +747,11 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
         }
         set def [info class definition SpiceGenTcl::Ngspice::Sources::pulse genSPICEString]
         method genSPICEString [lindex $def 0] [lindex $def 1]
-        self unexport create new
     }      
 
     ## ________________________ am sources template class _________________________ ##
     
-    oo::class create am {
+    oo::abstract create am {
         superclass SpiceGenTcl::DeviceModel
         constructor {name type npNode nmNode v0 va mf fc td args} {
             set arguments [argparse -inline {
@@ -784,7 +777,6 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
         }
         set def [info class definition SpiceGenTcl::Ngspice::Sources::pulse genSPICEString]
         method genSPICEString [lindex $def 0] [lindex $def 1]
-        self unexport create new
     }   
     
     ## ________________________ Vdc class _________________________ ##
