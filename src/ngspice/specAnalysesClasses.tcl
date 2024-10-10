@@ -1,17 +1,17 @@
 
-namespace eval SpiceGenTcl {
+namespace eval ::SpiceGenTcl {
     namespace eval Ngspice::Analyses {
         namespace export Dc Ac Tran Op Disto Noise Pz SensAc SensDc Sp Tf
     }
 }
 
-namespace eval SpiceGenTcl::Ngspice::Analyses {
+namespace eval ::SpiceGenTcl::Ngspice::Analyses {
     
     
     # ________________________ Dc class _________________________ #
 
     oo::class create Dc {
-        superclass SpiceGenTcl::Analysis
+        superclass ::SpiceGenTcl::Analysis
         constructor {srcnam vstart vstop vincr args} {
             # Creates object of class `Dc` that describes DC analysis. 
             #  srcnam - name of independent voltage or current source, a resistor, or the circuit temperature
@@ -24,7 +24,7 @@ namespace eval SpiceGenTcl::Ngspice::Analyses {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Analyses::Dc new v1 {time1 -eq} 5 0.1 -name dc1
+            # ::SpiceGenTcl::Analyses::Dc new v1 {time1 -eq} 5 0.1 -name dc1
             # ```
             set arguments [argparse {
                 -name=
@@ -42,7 +42,7 @@ namespace eval SpiceGenTcl::Ngspice::Analyses {
     # ________________________ Ac class _________________________ #
 
     oo::class create Ac {
-        superclass SpiceGenTcl::Analysis
+        superclass ::SpiceGenTcl::Analysis
         constructor {variation n fstart fstop args} {
             # Creates object of class `Ac` that describes AC analysis. 
             #  variation - parameter that defines frequency scale, could be dec, oct or lin
@@ -55,7 +55,7 @@ namespace eval SpiceGenTcl::Ngspice::Analyses {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Analyses::Ac new dec 10 1 1e6 -name dc1
+            # ::SpiceGenTcl::Analyses::Ac new dec 10 1 1e6 -name dc1
             # ```
             set arguments [argparse {
                 -name=
@@ -73,7 +73,7 @@ namespace eval SpiceGenTcl::Ngspice::Analyses {
     # ________________________ SensAc class _________________________ #
 
     oo::class create SensAc {
-        superclass SpiceGenTcl::Analysis
+        superclass ::SpiceGenTcl::Analysis
         constructor {outVar variation n fstart fstop args} {
             # Creates object of class `SensAc` that describes SENS ac analysis. 
             #  outVar - output variable
@@ -87,7 +87,7 @@ namespace eval SpiceGenTcl::Ngspice::Analyses {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Analyses::SensAc new v(1,out) dec 10 1 1e6 -name dc1
+            # ::SpiceGenTcl::Analyses::SensAc new v(1,out) dec 10 1 1e6 -name dc1
             # ```
             set arguments [argparse {
                 -name=
@@ -105,7 +105,7 @@ namespace eval SpiceGenTcl::Ngspice::Analyses {
     # ________________________ SensDc class _________________________ #
 
     oo::class create SensDc {
-        superclass SpiceGenTcl::Analysis
+        superclass ::SpiceGenTcl::Analysis
         constructor {outVar args} {
             # Creates object of class `SensDc` that describes SENS dc analysis. 
             #  outVar - output variable
@@ -115,7 +115,7 @@ namespace eval SpiceGenTcl::Ngspice::Analyses {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Analyses::SensDc new v(1,out) -name sensdc1
+            # ::SpiceGenTcl::Analyses::SensDc new v(1,out) -name sensdc1
             # ```
             set arguments [argparse {
                 -name=
@@ -133,7 +133,7 @@ namespace eval SpiceGenTcl::Ngspice::Analyses {
     # ________________________ Tran class _________________________ #
 
     oo::class create Tran {
-        superclass SpiceGenTcl::Analysis
+        superclass ::SpiceGenTcl::Analysis
         constructor {tstep tstop args} {
             # Creates object of class `Tran` that describes TRAN analysis. 
             #  tstep - size of maximum time step
@@ -144,7 +144,7 @@ namespace eval SpiceGenTcl::Ngspice::Analyses {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Analyses::Tran new 1e-9 10e-6 -name dc1
+            # ::SpiceGenTcl::Analyses::Tran new 1e-9 10e-6 -name dc1
             # ```
             set arguments [argparse {
                 -name=
@@ -168,7 +168,7 @@ namespace eval SpiceGenTcl::Ngspice::Analyses {
     # ________________________ Op class _________________________ #
 
     oo::class create Op {
-        superclass SpiceGenTcl::Analysis
+        superclass ::SpiceGenTcl::Analysis
         constructor {args} {
             # Creates object of class `Op` that describes OP analysis. 
             #  args - optional name argument
@@ -177,7 +177,7 @@ namespace eval SpiceGenTcl::Ngspice::Analyses {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Analyses::Op new -name op1
+            # ::SpiceGenTcl::Analyses::Op new -name op1
             # ```
             my variable Name
             set arguments [argparse {

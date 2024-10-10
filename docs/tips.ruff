@@ -1,6 +1,107 @@
 namespace eval Tips {
     variable _ruff_preamble {
         This page contains different tips that help you to use SpiceGenTcl more efficiently.
+        
+        ## Define custom element
+        
+        To define custom element class we should use `Device` class as a superclass. Why we need this?
+        One simple example is custom Verilog-A device, that could have arbitary number of pins and parameters.
+        Let's try to define new element for next Verilog-A device:
+        ```verilog-a
+        module core(p,n);
+        magnetic p, n;
+        parameter real len=0.1 from (0:1000);	// effective magnetic length of core
+        parameter real area=1 from (0:inf);	// magnetic cross-sectional area of core
+        parameter real ms=1.6M from (0:inf);	// saturation magnetization
+        parameter real a=1100 from (0:inf);	// 
+        parameter real k=2000 from (0:inf);	// bulk coupliing coefficient
+        parameter real alpha=1.6m from (0:inf); // interdomain coupling coef.
+        parameter real c=0.2 from [0:1];	// coef. for reversable magnetization
+        magnetic Hdot;  	// internal Hdot node
+        real H;			// field intensity
+        real B;			// flux density
+        real Manh;		// anhysteric magnetization
+        real Mirr;		// irreversible magnetization
+        real dMirr;		// dMirr/dH
+        real M;			// total magnetization
+        real Heff;		// effective field intensity
+        integer delta;		// direction of the input MMF
+        integer migrating;	// flag indicating that the pinning sites are moving
+        // sign function
+            analog function integer sign;
+       	input arg;
+       	real arg;
+       	sign = (arg >= 0.0 ? 1 : -1);
+            endfunction
+        // hyperbolic cotangent function
+            analog function real coth;
+       	input arg;
+       	real arg;
+       	real x;
+       	begin
+       	    x = exp(min(80,max(-80,arg)));
+       	    coth = (x+1/x)/(x-1/x);
+       	end
+            endfunction
+        // core model
+            analog begin
+       	H = MMF(p,n) / len;
+       	MMF(Hdot) <+ ddt(H);
+       	delta = sign(MMF(Hdot));
+       	B = Phi(p,n)/area;
+       	M = B/`P_U0 - H;
+       	Heff = H + alpha * M;
+       	if (abs(Heff) > 0.001 * a) 
+       	    Manh = ms * (coth(Heff/a) - a/Heff);
+       	else
+       	    Manh = ms * Heff/(3.0*a);	// Taylor series expansion of coth()
+       	dMirr = (Manh - M)/(delta*k - alpha*(Manh - M)) * MMF(Hdot);
+       	migrating = (delta > 0) ^ (M > Manh);
+       	Mirr = idt( migrating * dMirr, Manh );
+       	M = (1-c)*Mirr + c*Manh;
+       	Phi(p,n) <+ area*`P_U0*(H+M);
+            end
+        endmodule
+        ```
+        
+        This model is taken from [designers-guide](https://designers-guide.org/modeling/jilath.va), that contains many Verilog-AMS models.
+        
+        ```tcl
+        oo::class create Core {
+            superclass SpiceGenTcl::Device
+            mixin SpiceGenTcl::KeyArgsBuilder
+            constructor {name pNode nNode args} {
+                set paramsNames [list len area ms a k alpha c]
+                set paramDefList [my buildArgStr $paramsNames]
+                set arguments [argparse -inline "
+                    $paramDefList
+                "]
+                set paramList ""
+                dict for {paramName value} $arguments {
+                    lappend paramList "$paramName $value"
+                }
+                next n$name [list "p $pNode" "n $nNode"] $paramList
+            }
+        }
+        ```
+        
+        In this block of code we define instance class of core. Let's go through the each line.
+        First line is class definition:
+        ```tcl
+        oo::class create Core
+        ```
+        
+        It is good convention to start class name from capital letter.
+        
+        Superclass for new element is `Device`:
+        ```tcl
+        superclass SpiceGenTcl::Device
+        ```
+        
+        We use mixin class [::SpiceGenTcl::KeyArgsBuilder] to add it's method [::SpiceGenTcl::KeyArgsBuilder::buildArgStr], that helps to build arguments
+        list for `argparse` package.
+        
+        In next line we define arguments
     }
 
 }

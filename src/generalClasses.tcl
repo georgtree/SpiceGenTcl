@@ -1,6 +1,6 @@
 
 
-namespace eval SpiceGenTcl {
+namespace eval ::SpiceGenTcl {
 
     namespace export Pin ParameterSwitch Parameter ParameterNoCheck ParameterPositional ParameterPositionalNoCheck \
             ParameterDefault ParameterEquation ParameterPositionalEquation Device DeviceModel Model RawString Comment Include Options \
@@ -462,7 +462,7 @@ namespace eval SpiceGenTcl {
             if {[my duplListCheck $pinList]} {
                 error "Pins list '$pinList' has already contains pin with name '$pinName'"
             }
-            dict append Pins $pinName [SpiceGenTcl::Pin new $pinName $nodeName]
+            dict append Pins $pinName [::SpiceGenTcl::Pin new $pinName $nodeName]
             return
         }
         method addParam {paramName value args} {
@@ -487,15 +487,15 @@ namespace eval SpiceGenTcl {
             }
             # select parameter object according to parameter qualificator
             if {$value=="-sw"} {
-                dict append Params $paramName [SpiceGenTcl::ParameterSwitch new $paramName]
+                dict append Params $paramName [::SpiceGenTcl::ParameterSwitch new $paramName]
             } elseif {[info exists pos]} {
-                dict append Params $paramName [SpiceGenTcl::ParameterPositional new $paramName $value]
+                dict append Params $paramName [::SpiceGenTcl::ParameterPositional new $paramName $value]
             } elseif {[info exists eq]} {
-                dict append Params $paramName [SpiceGenTcl::ParameterEquation new $paramName $value]
+                dict append Params $paramName [::SpiceGenTcl::ParameterEquation new $paramName $value]
             } elseif {[info exists poseq]} {
-                dict append Params $paramName [SpiceGenTcl::ParameterPositionalEquation new $paramName $value]
+                dict append Params $paramName [::SpiceGenTcl::ParameterPositionalEquation new $paramName $value]
             } else {
-                dict append Params $paramName [SpiceGenTcl::Parameter new $paramName $value]
+                dict append Params $paramName [::SpiceGenTcl::Parameter new $paramName $value]
             }
             return
         }
@@ -667,11 +667,11 @@ namespace eval SpiceGenTcl {
                 set Params ""
             }
         }
-        set def [info class definition SpiceGenTcl::Device addParam]
+        set def [info class definition ::SpiceGenTcl::Device addParam]
         method addParam [lindex $def 0] [lindex $def 1]
-        set def [info class definition SpiceGenTcl::Device deleteParam]
+        set def [info class definition ::SpiceGenTcl::Device deleteParam]
         method deleteParam [lindex $def 0] [lindex $def 1]
-        set def [info class definition SpiceGenTcl::Device setParamValue]
+        set def [info class definition ::SpiceGenTcl::Device setParamValue]
         method setParamValue [lindex $def 0] [lindex $def 1]            
         method getParams {} {
             # Gets the dictionary that contains parameter name as keys and
@@ -886,13 +886,13 @@ namespace eval SpiceGenTcl {
                 error "Parameters list '$paramList' has already contains parameter with name '$paramName'"
             }
             if {$value=="-sw"} {
-                dict append Params $paramName [SpiceGenTcl::ParameterSwitch new $paramName]
+                dict append Params $paramName [::SpiceGenTcl::ParameterSwitch new $paramName]
             } else {
-                dict append Params $paramName [SpiceGenTcl::ParameterNoCheck new $paramName $value]
+                dict append Params $paramName [::SpiceGenTcl::ParameterNoCheck new $paramName $value]
             }
             return
         }
-        set def [info class definition SpiceGenTcl::Device deleteParam]
+        set def [info class definition ::SpiceGenTcl::Device deleteParam]
         method deleteParam [lindex $def 0] [lindex $def 1]
         method setParamValue {paramName value} {
             # Sets (or changes) value of particular parameter
@@ -979,13 +979,13 @@ namespace eval SpiceGenTcl {
                 error "Parameters list \{$paramList\} has already contains parameter with name \{$paramName\}"
             }
             if {[info exists eq]} {
-                dict append Params $paramName [SpiceGenTcl::ParameterEquation new $paramName $value]
+                dict append Params $paramName [::SpiceGenTcl::ParameterEquation new $paramName $value]
             } else {
-                dict append Params $paramName [SpiceGenTcl::Parameter new $paramName $value]
+                dict append Params $paramName [::SpiceGenTcl::Parameter new $paramName $value]
             }
             return
         }
-        set def [info class definition SpiceGenTcl::Device deleteParam]
+        set def [info class definition ::SpiceGenTcl::Device deleteParam]
         method deleteParam [lindex $def 0] [lindex $def 1]
         method setParamValue {paramName value} {
             # Sets (or changes) value of particular parameter.
@@ -1056,9 +1056,9 @@ namespace eval SpiceGenTcl {
                 {-eq -boolean} 
             }]
             if {$eq} {
-                set Value [SpiceGenTcl::ParameterPositionalEquation new $paramName $value]
+                set Value [::SpiceGenTcl::ParameterPositionalEquation new $paramName $value]
             } else {
-                set Value [SpiceGenTcl::ParameterPositional new $paramName $value]
+                set Value [::SpiceGenTcl::ParameterPositional new $paramName $value]
             }
             return
         }
@@ -1290,15 +1290,15 @@ namespace eval SpiceGenTcl {
             next $name
         }
         # copy methods of Device to manipulate header .subckt definition elements
-        set def [info class definition SpiceGenTcl::Device AddPin]
+        set def [info class definition ::SpiceGenTcl::Device AddPin]
         method AddPin [lindex $def 0] [lindex $def 1]       
-        set def [info class definition SpiceGenTcl::Device getPins]
+        set def [info class definition ::SpiceGenTcl::Device getPins]
         method getPins [lindex $def 0] [lindex $def 1] 
-        set def [info class definition SpiceGenTcl::Device deleteParam]
+        set def [info class definition ::SpiceGenTcl::Device deleteParam]
         method deleteParam [lindex $def 0] [lindex $def 1] 
-        set def [info class definition SpiceGenTcl::Device setParamValue]
+        set def [info class definition ::SpiceGenTcl::Device setParamValue]
         method setParamValue [lindex $def 0] [lindex $def 1]     
-        set def [info class definition SpiceGenTcl::Device getParams]
+        set def [info class definition ::SpiceGenTcl::Device getParams]
         method getParams [lindex $def 0] [lindex $def 1]  
         method addParam {paramName value} {
             # Adds new parameter to subcircuit, and throws error
@@ -1313,7 +1313,7 @@ namespace eval SpiceGenTcl {
             if {[my duplListCheck $paramList]} {
                 error "Parameters list '$paramList' has already contains parameter with name '$paramName'"
             }
-            dict append Params $paramName [SpiceGenTcl::Parameter new $paramName $value]
+            dict append Params $paramName [::SpiceGenTcl::Parameter new $paramName $value]
             return
         }
         
@@ -1439,17 +1439,17 @@ namespace eval SpiceGenTcl {
                 error "Parameters list \{$paramList\} has already contains parameter with name \{$paramName\}"
             }
             if {$value=="-sw"} {
-                dict append Params $paramName [SpiceGenTcl::ParameterSwitch new $paramName]
+                dict append Params $paramName [::SpiceGenTcl::ParameterSwitch new $paramName]
             } elseif {[info exists eq]} {
-                dict append Params $paramName [SpiceGenTcl::ParameterPositionalEquation new $paramName $value]
+                dict append Params $paramName [::SpiceGenTcl::ParameterPositionalEquation new $paramName $value]
             } elseif {[info exists posnocheck]} {
-                dict append Params $paramName [SpiceGenTcl::ParameterPositionalNoCheck new $paramName $value]
+                dict append Params $paramName [::SpiceGenTcl::ParameterPositionalNoCheck new $paramName $value]
             } else {
-                dict append Params $paramName [SpiceGenTcl::ParameterPositional new $paramName $value]
+                dict append Params $paramName [::SpiceGenTcl::ParameterPositional new $paramName $value]
             }
             return
         }
-        set def [info class definition SpiceGenTcl::Device deleteParam]
+        set def [info class definition ::SpiceGenTcl::Device deleteParam]
         method deleteParam [lindex $def 0] [lindex $def 1]
         method setParamValue {paramName value} {
             # Sets (or changes) value of particular parameter.
@@ -1665,6 +1665,12 @@ namespace eval SpiceGenTcl {
             #  numType - numerical type of dummy trace
             next $name $type $len $numType
         }
+        method getDataPoints {} {
+            if {[info exists DataPoints]} {
+                return ""
+            }
+            return 
+        }
     }
     
     # ________________________ RawFile class definition _________________________ #
@@ -1785,16 +1791,16 @@ namespace eval SpiceGenTcl {
                     } else {
                         set axisNumType $numType
                     }
-                    my configure -Axis [SpiceGenTcl::Axis new $name $varType $NPoints $axisNumType]
+                    my configure -Axis [::SpiceGenTcl::Axis new $name $varType $NPoints $axisNumType]
                     set trace $Axis
                 } elseif {($traces2read=="*") || ($name in $traces2read)} {
                     if {$hasAxis} {
-                        set trace [SpiceGenTcl::Trace new $name $varType $NPoints [[my configure -Axis] configure -Name] $numType]
+                        set trace [::SpiceGenTcl::Trace new $name $varType $NPoints [[my configure -Axis] configure -Name] $numType]
                     } else {
-                        set trace [SpiceGenTcl::Trace new $name $varType $NPoints {} $numType]
+                        set trace [::SpiceGenTcl::Trace new $name $varType $NPoints {} $numType]
                     }
                 } else {
-                    set trace [SpiceGenTcl::EmptyTrace new $name $varType $NPoints $numType]
+                    set trace [::SpiceGenTcl::EmptyTrace new $name $varType $NPoints $numType]
                 }
                 lappend Traces $trace
                 incr ivar
@@ -1813,21 +1819,21 @@ namespace eval SpiceGenTcl {
                 foreach trace [my configure -Traces] {
                     if {[$trace configure -NumType]=="double"} {
                         incr calcBlockSize 8
-                        if {[info object class $trace SpiceGenTcl::EmptyTrace]} {
+                        if {[info object class $trace ::SpiceGenTcl::EmptyTrace]} {
                             set fun skip8bytes 
                         } else {
                             set fun readFloat64
                         }
                     } elseif {[$trace configure -NumType]=="complex"} {
                         incr calcBlockSize 16
-                        if {[info object class $trace SpiceGenTcl::EmptyTrace]} {
+                        if {[info object class $trace ::SpiceGenTcl::EmptyTrace]} {
                             set fun skip16bytes 
                         } else {
                             set fun readComplex 
                         }
                     } elseif {[$trace configure -NumType]=="real"} {
                         incr calcBlockSize 4
-                        if {[info object class $trace SpiceGenTcl::EmptyTrace]} {
+                        if {[info object class $trace ::SpiceGenTcl::EmptyTrace]} {
                             set fun skip4bytes 
                         } else {
                             set fun readFloat32 
@@ -1844,7 +1850,7 @@ namespace eval SpiceGenTcl {
                     for {set j 0} {$j<[llength [my configure -Traces]]} {incr j} {
                         set value [eval "my [lindex $scanFunctions $j]" $file] 
                         set trace [lindex [my configure -Traces] $j]
-                        if {[info object class $trace]!="SpiceGenTcl::EmptyTrace"} {
+                        if {[info object class $trace]!="::SpiceGenTcl::EmptyTrace"} {
                             $trace appendDataPoints $value 
                         }  
                     }

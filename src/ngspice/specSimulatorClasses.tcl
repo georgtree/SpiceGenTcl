@@ -1,12 +1,12 @@
 package require Tk
 
-namespace eval SpiceGenTcl::Ngspice::Simulators {
+namespace eval ::SpiceGenTcl::Ngspice::Simulators {
     
     namespace export Batch BatchLiveLog
     
     oo::configurable create Batch {
         # this class represent batch simulation of ngspice
-        superclass SpiceGenTcl::Simulator
+        superclass ::SpiceGenTcl::Simulator
         property Log -get {
             if {[info exists Log]!=0} {
                 return $Log
@@ -69,14 +69,14 @@ namespace eval SpiceGenTcl::Ngspice::Simulators {
         method readData {} {
             # Reads raw data file, create RawFile object and return it's reference name.
             my variable Data
-            set Data [SpiceGenTcl::RawFile new "[my configure -RunLocation]/[my configure -LastRunFileName].raw"]
+            set Data [::SpiceGenTcl::RawFile new "[my configure -RunLocation]/[my configure -LastRunFileName].raw"]
             return
         }
     }
     
     oo::configurable create BatchLiveLog {
         # this class represent batch simulation of ngspice
-        superclass SpiceGenTcl::Ngspice::Simulators::Batch
+        superclass ::SpiceGenTcl::Ngspice::Simulators::Batch
         method runAndRead {circuitStr} {
             # Runs netlist circuit file.
             #  circuitStr - top-level netlist string

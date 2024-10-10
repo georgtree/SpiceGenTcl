@@ -121,13 +121,13 @@
         <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Parameters list \{<font color=#4A181B>$</font>paramList\} has already contains parameter with name \{<font color=#4A181B>$</font>paramName\}&quot;</font>
     }
     <b><font color=#923B23>if</font></b> {<font color=#4A181B>$value</font>==&quot;-sw&quot;} {
-        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [SpiceGenTcl::ParameterSwitch new <font color=#4A181B>$paramName</font>]
+        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [::SpiceGenTcl::ParameterSwitch new <font color=#4A181B>$paramName</font>]
     } <b><font color=#923B23>elseif</font></b> {[<b><font color=#923B23>info</font></b> exists eq]} {
-        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [SpiceGenTcl::ParameterPositionalEquation new <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
+        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [::SpiceGenTcl::ParameterPositionalEquation new <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
     } <b><font color=#923B23>elseif</font></b> {[<b><font color=#923B23>info</font></b> exists posnocheck]} {
-        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [SpiceGenTcl::ParameterPositionalNoCheck new <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
+        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [::SpiceGenTcl::ParameterPositionalNoCheck new <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
     } <b><font color=#923B23>else</font></b> {
-        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [SpiceGenTcl::ParameterPositional new <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
+        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [::SpiceGenTcl::ParameterPositional new <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
     }
     <b><font color=#ca14ca>return</font></b>
 }</pre></div>
@@ -784,15 +784,15 @@
     }
     <i><font color=#4b5d50># select parameter object according to parameter qualificator</font></i>
     <b><font color=#923B23>if</font></b> {<font color=#4A181B>$value</font>==&quot;-sw&quot;} {
-        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [SpiceGenTcl::ParameterSwitch new <font color=#4A181B>$paramName</font>]
+        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [::SpiceGenTcl::ParameterSwitch new <font color=#4A181B>$paramName</font>]
     } <b><font color=#923B23>elseif</font></b> {[<b><font color=#923B23>info</font></b> exists pos]} {
-        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [SpiceGenTcl::ParameterPositional new <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
+        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [::SpiceGenTcl::ParameterPositional new <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
     } <b><font color=#923B23>elseif</font></b> {[<b><font color=#923B23>info</font></b> exists eq]} {
-        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [SpiceGenTcl::ParameterEquation new <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
+        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [::SpiceGenTcl::ParameterEquation new <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
     } <b><font color=#923B23>elseif</font></b> {[<b><font color=#923B23>info</font></b> exists poseq]} {
-        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [SpiceGenTcl::ParameterPositionalEquation new <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
+        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [::SpiceGenTcl::ParameterPositionalEquation new <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
     } <b><font color=#923B23>else</font></b> {
-        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [SpiceGenTcl::Parameter new <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
+        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [::SpiceGenTcl::Parameter new <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
     }
     <b><font color=#ca14ca>return</font></b>
 }</pre></div>
@@ -1059,7 +1059,7 @@
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::EmptyTrace::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>appendDataPoints</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Dataset::appendDataPoints" title="Dataset.appendDataPoints" class='ruff_cmd'>Dataset.appendDataPoints</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
-<tr><td><code>getDataPoints</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Dataset::getDataPoints" title="Dataset.getDataPoints" class='ruff_cmd'>Dataset.getDataPoints</a></td></tr>
+<tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::EmptyTrace::getDataPoints" title="getDataPoints" class='ruff_cmd'>getDataPoints</a></td><td>Not documented.</td></tr>
 <tr><td><code>getStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Dataset::getStr" title="Dataset.getStr" class='ruff_cmd'>Dataset.getStr</a></td></tr>
 <tr><td><code>setDataPoints</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Dataset::setDataPoints" title="Dataset.setDataPoints" class='ruff_cmd'>Dataset.setDataPoints</a></td></tr>
 </table>
@@ -1087,6 +1087,17 @@
     <i><font color=#4b5d50>#  axis - name of axis that is linked to dummy trace</font></i>
     <i><font color=#4b5d50>#  numType - numerical type of dummy trace</font></i>
     <b><font color=#923B23>next</font></b> <font color=#4A181B>$name</font> <font color=#4A181B>$type</font> <font color=#4A181B>$len</font> <font color=#4A181B>$numType</font>
+}</pre></div>
+</div><h4 class='ruffmethod'><a name='::SpiceGenTcl::EmptyTrace::getDataPoints'>getDataPoints</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::EmptyTrace" title="::SpiceGenTcl::EmptyTrace" class='ruff_cmd'>::SpiceGenTcl::EmptyTrace</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::EmptyTrace'>EmptyTrace</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
+<div style='clear:both;'></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT getDataPoints</span> </div>
+<div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_EmptyTrace_getDataPoints' href="javascript:toggleSource('SpiceGenTcl_EmptyTrace_getDataPoints')">Show source</a></p>
+<div id='SpiceGenTcl_EmptyTrace_getDataPoints' class='ruff_dyn_src'><pre><b><font color=#ca14ca>method</font></b> getDataPoints {} {
+
+    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> exists DataPoints]} {
+        <b><font color=#ca14ca>return</font></b> <font color=#035103>&quot;&quot;</font>
+    }
+    <b><font color=#ca14ca>return</font></b>
 }</pre></div>
 </div><h3 class='ruffclass'><a name='::SpiceGenTcl::Include'>Include</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl" title="::SpiceGenTcl" class='ruff_cmd'>::SpiceGenTcl</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
@@ -1305,15 +1316,15 @@
     }
     <i><font color=#4b5d50># select parameter object according to parameter qualificator</font></i>
     <b><font color=#923B23>if</font></b> {<font color=#4A181B>$value</font>==&quot;-sw&quot;} {
-        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [SpiceGenTcl::ParameterSwitch new <font color=#4A181B>$paramName</font>]
+        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [::SpiceGenTcl::ParameterSwitch new <font color=#4A181B>$paramName</font>]
     } <b><font color=#923B23>elseif</font></b> {[<b><font color=#923B23>info</font></b> exists pos]} {
-        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [SpiceGenTcl::ParameterPositional new <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
+        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [::SpiceGenTcl::ParameterPositional new <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
     } <b><font color=#923B23>elseif</font></b> {[<b><font color=#923B23>info</font></b> exists eq]} {
-        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [SpiceGenTcl::ParameterEquation new <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
+        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [::SpiceGenTcl::ParameterEquation new <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
     } <b><font color=#923B23>elseif</font></b> {[<b><font color=#923B23>info</font></b> exists poseq]} {
-        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [SpiceGenTcl::ParameterPositionalEquation new <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
+        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [::SpiceGenTcl::ParameterPositionalEquation new <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
     } <b><font color=#923B23>else</font></b> {
-        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [SpiceGenTcl::Parameter new <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
+        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [::SpiceGenTcl::Parameter new <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
     }
     <b><font color=#ca14ca>return</font></b>
 }</pre></div>
@@ -1611,9 +1622,9 @@
         <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Parameters list '<font color=#4A181B>$</font>paramList' has already contains parameter with name '<font color=#4A181B>$</font>paramName'&quot;</font>
     }
     <b><font color=#923B23>if</font></b> {<font color=#4A181B>$value</font>==&quot;-sw&quot;} {
-        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [SpiceGenTcl::ParameterSwitch new <font color=#4A181B>$paramName</font>]
+        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [::SpiceGenTcl::ParameterSwitch new <font color=#4A181B>$paramName</font>]
     } <b><font color=#923B23>else</font></b> {
-        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [SpiceGenTcl::ParameterNoCheck new <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
+        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [::SpiceGenTcl::ParameterNoCheck new <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
     }
     <b><font color=#ca14ca>return</font></b>
 }</pre></div>
@@ -2105,9 +2116,9 @@
         <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Parameters list \{<font color=#4A181B>$</font>paramList\} has already contains parameter with name \{<font color=#4A181B>$</font>paramName\}&quot;</font>
     }
     <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> exists eq]} {
-        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [SpiceGenTcl::ParameterEquation new <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
+        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [::SpiceGenTcl::ParameterEquation new <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
     } <b><font color=#923B23>else</font></b> {
-        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [SpiceGenTcl::Parameter new <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
+        <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [::SpiceGenTcl::Parameter new <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
     }
     <b><font color=#ca14ca>return</font></b>
 }</pre></div>
@@ -2387,16 +2398,16 @@
             } <b><font color=#923B23>else</font></b> {
                 <b><font color=#923B23>set</font></b> axisNumType <font color=#4A181B>$numType</font>
             }
-            <b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-Axis</font> [SpiceGenTcl::Axis new <font color=#4A181B>$name</font> <font color=#4A181B>$varType</font> <font color=#4A181B>$NPoints</font> <font color=#4A181B>$axisNumType</font>]
+            <b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-Axis</font> [::SpiceGenTcl::Axis new <font color=#4A181B>$name</font> <font color=#4A181B>$varType</font> <font color=#4A181B>$NPoints</font> <font color=#4A181B>$axisNumType</font>]
             <b><font color=#923B23>set</font></b> trace <font color=#4A181B>$Axis</font>
         } <b><font color=#923B23>elseif</font></b> {(<font color=#4A181B>$traces2read</font>==&quot;*&quot;) || (<font color=#4A181B>$name</font> in <font color=#4A181B>$traces2read</font>)} {
             <b><font color=#923B23>if</font></b> {<font color=#4A181B>$hasAxis</font>} {
-                <b><font color=#923B23>set</font></b> trace [SpiceGenTcl::Trace new <font color=#4A181B>$name</font> <font color=#4A181B>$varType</font> <font color=#4A181B>$NPoints</font> [[<b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-Axis</font>] configure <font color=#463e11>-Name</font>] <font color=#4A181B>$numType</font>]
+                <b><font color=#923B23>set</font></b> trace [::SpiceGenTcl::Trace new <font color=#4A181B>$name</font> <font color=#4A181B>$varType</font> <font color=#4A181B>$NPoints</font> [[<b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-Axis</font>] configure <font color=#463e11>-Name</font>] <font color=#4A181B>$numType</font>]
             } <b><font color=#923B23>else</font></b> {
-                <b><font color=#923B23>set</font></b> trace [SpiceGenTcl::Trace new <font color=#4A181B>$name</font> <font color=#4A181B>$varType</font> <font color=#4A181B>$NPoints</font> {} <font color=#4A181B>$numType</font>]
+                <b><font color=#923B23>set</font></b> trace [::SpiceGenTcl::Trace new <font color=#4A181B>$name</font> <font color=#4A181B>$varType</font> <font color=#4A181B>$NPoints</font> {} <font color=#4A181B>$numType</font>]
             }
         } <b><font color=#923B23>else</font></b> {
-            <b><font color=#923B23>set</font></b> trace [SpiceGenTcl::EmptyTrace new <font color=#4A181B>$name</font> <font color=#4A181B>$varType</font> <font color=#4A181B>$NPoints</font> <font color=#4A181B>$numType</font>]
+            <b><font color=#923B23>set</font></b> trace [::SpiceGenTcl::EmptyTrace new <font color=#4A181B>$name</font> <font color=#4A181B>$varType</font> <font color=#4A181B>$NPoints</font> <font color=#4A181B>$numType</font>]
         }
         <b><font color=#923B23>lappend</font></b> Traces <font color=#4A181B>$trace</font>
         <b><font color=#923B23>incr</font></b> ivar
@@ -2415,21 +2426,21 @@
         <b><font color=#923B23>foreach</font></b> trace [<b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-Traces</font>] {
             <b><font color=#923B23>if</font></b> {[<font color=#4A181B>$trace</font> configure <font color=#463e11>-NumType</font>]==<font color=#035103>&quot;double&quot;</font>} {
                 <b><font color=#923B23>incr</font></b> calcBlockSize 8
-                <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> object class <font color=#4A181B>$trace</font> SpiceGenTcl::EmptyTrace]} {
+                <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> object class <font color=#4A181B>$trace</font> ::SpiceGenTcl::EmptyTrace]} {
                     <b><font color=#923B23>set</font></b> fun skip8bytes
                 } <b><font color=#923B23>else</font></b> {
                     <b><font color=#923B23>set</font></b> fun readFloat64
                 }
             } <b><font color=#923B23>elseif</font></b> {[<font color=#4A181B>$trace</font> configure <font color=#463e11>-NumType</font>]==<font color=#035103>&quot;complex&quot;</font>} {
                 <b><font color=#923B23>incr</font></b> calcBlockSize 16
-                <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> object class <font color=#4A181B>$trace</font> SpiceGenTcl::EmptyTrace]} {
+                <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> object class <font color=#4A181B>$trace</font> ::SpiceGenTcl::EmptyTrace]} {
                     <b><font color=#923B23>set</font></b> fun skip16bytes
                 } <b><font color=#923B23>else</font></b> {
                     <b><font color=#923B23>set</font></b> fun readComplex
                 }
             } <b><font color=#923B23>elseif</font></b> {[<font color=#4A181B>$trace</font> configure <font color=#463e11>-NumType</font>]==<font color=#035103>&quot;real&quot;</font>} {
                 <b><font color=#923B23>incr</font></b> calcBlockSize 4
-                <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> object class <font color=#4A181B>$trace</font> SpiceGenTcl::EmptyTrace]} {
+                <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> object class <font color=#4A181B>$trace</font> ::SpiceGenTcl::EmptyTrace]} {
                     <b><font color=#923B23>set</font></b> fun skip4bytes
                 } <b><font color=#923B23>else</font></b> {
                     <b><font color=#923B23>set</font></b> fun readFloat32
@@ -2446,7 +2457,7 @@
             <b><font color=#923B23>for</font></b> {<b><font color=#923B23>set</font></b> j 0} {<font color=#4A181B>$j</font>&lt;[<b><font color=#923B23>llength</font></b> [<b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-Traces</font>]]} {<b><font color=#923B23>incr</font></b> j} {
                 <b><font color=#923B23>set</font></b> value [<b><font color=#923B23>eval</font></b> <font color=#035103>&quot;my <font color=#4A181B>[</font>lindex <font color=#4A181B>$</font>scanFunctions <font color=#4A181B>$</font>j<font color=#4A181B>]</font>&quot;</font> <font color=#4A181B>$file</font>]
                 <b><font color=#923B23>set</font></b> trace [<b><font color=#923B23>lindex</font></b> [<b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-Traces</font>] <font color=#4A181B>$j</font>]
-                <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> object class <font color=#4A181B>$trace</font>]!=<font color=#035103>&quot;SpiceGenTcl::EmptyTrace&quot;</font>} {
+                <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> object class <font color=#4A181B>$trace</font>]!=<font color=#035103>&quot;::SpiceGenTcl::EmptyTrace&quot;</font>} {
                     <font color=#4A181B>$trace</font> appendDataPoints <font color=#4A181B>$value</font>
                 }
             }
@@ -2816,7 +2827,7 @@
     <b><font color=#923B23>if</font></b> {[<b><font color=#ca14ca>my</font></b> duplListCheck <font color=#4A181B>$paramList</font>]} {
         <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Parameters list '<font color=#4A181B>$</font>paramList' has already contains parameter with name '<font color=#4A181B>$</font>paramName'&quot;</font>
     }
-    <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [SpiceGenTcl::Parameter new <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
+    <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [::SpiceGenTcl::Parameter new <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
     <b><font color=#ca14ca>return</font></b>
 }</pre></div>
 </div><h4 class='ruffmethod'><a name='::SpiceGenTcl::Subcircuit::deleteParam'>deleteParam</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Subcircuit" title="::SpiceGenTcl::Subcircuit" class='ruff_cmd'>::SpiceGenTcl::Subcircuit</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Subcircuit'>Subcircuit</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
@@ -3071,7 +3082,7 @@
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker'>DuplChecker</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck'>duplListCheck</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT duplListCheck&lt;/span&gt; &lt;span class='ruff_arg'&gt;<b><font color=#923B23>list</font></b>&lt;/span&gt;</pre>Checks if list contains duplicates.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::EmptyTrace'>EmptyTrace</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::EmptyTrace::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;EmptyTrace create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name type len ?numType?&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;EmptyTrace new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name type len ?numType?&lt;/span&gt;</pre>initialize dummy trace
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Include'>Include</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Include::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>Include</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;value ?args?&lt;/span&gt;
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::EmptyTrace::getDataPoints'>getDataPoints</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getDataPoints&lt;/span&gt; </pre></span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Include'>Include</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Include::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>Include</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;value ?args?&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;<b><font color=#923B23>Include</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;value ?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#923B23>Include</font></b></code>.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Include::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre>Creates include string for SPICE netlist.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder'>KeyArgsBuilder</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr'>buildArgStr</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT buildArgStr&lt;/span&gt; &lt;span class='ruff_arg'&gt;paramsNames&lt;/span&gt;</pre>Builds argument list for argparse.

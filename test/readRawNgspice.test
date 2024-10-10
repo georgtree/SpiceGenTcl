@@ -52,7 +52,7 @@ test testDataClass-1.1 {test Data class object construction and getStr interface
 }
 
 test testDataClass-1.2 {test Data class object construction with wrong numerical type} -body {
-    catch {SpiceGenTcl::Dataset new v1 voltage 100 doublereal} errorStr
+    catch {::SpiceGenTcl::Dataset new v1 voltage 100 doublereal} errorStr
     return $errorStr
 } -result "Unknown numerical type 'doublereal' of data" -cleanup {
     unset errorStr

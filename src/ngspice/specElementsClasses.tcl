@@ -1,5 +1,5 @@
 
-namespace eval SpiceGenTcl {
+namespace eval ::SpiceGenTcl {
     namespace eval Ngspice::BasicDevices {
         namespace export Resistor R ResistorBehavioural RBeh ResistorSemiconductor RSem Capacitor \
                 CapacitorBehaviouralQ CBehQ CapacitorBehaviouralC CBehC \
@@ -20,15 +20,15 @@ namespace eval SpiceGenTcl {
 
     # ________________________ Basic devices _________________________ #
 
-namespace eval SpiceGenTcl::Ngspice::BasicDevices {
+namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
 
     ## ________________________ resistor classes _________________________ ##
     
     ### ________________________ Resistor class _________________________ ###
 
     oo::class create Resistor {
-        superclass SpiceGenTcl::Device
-        mixin SpiceGenTcl::KeyArgsBuilder
+        superclass ::SpiceGenTcl::Device
+        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name npNode nmNode rVal args} {
             # Creates object of class `Resistor` that describes simple resistor. 
             #  name - name of the device without first-letter designator R
@@ -43,7 +43,7 @@ namespace eval SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::BasicDevices::Resistor new 1 netp netm 1e3 -tc1 1 -ac 1e6 -temp {temp_amb -eq}
+            # ::SpiceGenTcl::Ngspice::BasicDevices::Resistor new 1 netp netm 1e3 -tc1 1 -ac 1e6 -temp {temp_amb -eq}
             # ```
             set paramsNames [list ac m scale temp dtemp tc1 tc2 noisy]
             set paramDefList [my buildArgStr $paramsNames]
@@ -69,8 +69,8 @@ namespace eval SpiceGenTcl::Ngspice::BasicDevices {
     ### ________________________ ResistorBehavioural class _________________________ ###
     
     oo::class create ResistorBehavioural {
-        superclass SpiceGenTcl::Device
-        mixin SpiceGenTcl::KeyArgsBuilder
+        superclass ::SpiceGenTcl::Device
+        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name npNode nmNode rExpr args} {
             # Creates object of class `ResistorBehavioural` that describes device dependent on expressions.
             #  name - name of the device without first-letter designator R
@@ -83,7 +83,7 @@ namespace eval SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::BasicDevices::ResistorBehavioural new 1 netp netm "V(a)+V(b)+pow(V(c),2)" -tc1 1
+            # ::SpiceGenTcl::Ngspice::BasicDevices::ResistorBehavioural new 1 netp netm "V(a)+V(b)+pow(V(c),2)" -tc1 1
             # ```
             set paramDefList [my buildArgStr [list tc1 tc2 noisy]]
             set arguments [argparse -inline "
@@ -105,8 +105,8 @@ namespace eval SpiceGenTcl::Ngspice::BasicDevices {
     ### ________________________ ResistorSemiconductor class _________________________ ###
     
     oo::class create ResistorSemiconductor {
-        superclass SpiceGenTcl::DeviceModel
-        mixin SpiceGenTcl::KeyArgsBuilder
+        superclass ::SpiceGenTcl::DeviceModel
+        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name npNode nmNode modelName args} {
             # Creates object of class `ResistorSemiconductor` that describes semiconductor resistor device.
             #  name - name of the device without first-letter designator R
@@ -121,7 +121,7 @@ namespace eval SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::ResistorSemiconductor new 1 netp netm resm -l 1e-6 -w 10e-6
+            # ::SpiceGenTcl::Ngspice::ResistorSemiconductor new 1 netp netm resm -l 1e-6 -w 10e-6
             # ```
             set paramsNames [list l w temp dtemp m ac scale noisy]
             set paramDefList [my buildArgStr $paramsNames]
@@ -144,8 +144,8 @@ namespace eval SpiceGenTcl::Ngspice::BasicDevices {
     ### ________________________ Capacitor class _________________________ ###
 
     oo::class create Capacitor {
-        superclass SpiceGenTcl::Device
-        mixin SpiceGenTcl::KeyArgsBuilder
+        superclass ::SpiceGenTcl::Device
+        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name npNode nmNode cVal args} {
             # Creates object of class `Capacitor` that describes simple capacitor device.
             #  name - name of the device without first-letter designator C
@@ -159,7 +159,7 @@ namespace eval SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::BasicDevices::Capacitor new 1 netp netm 1e-6 -tc1 1 -temp 25
+            # ::SpiceGenTcl::Ngspice::BasicDevices::Capacitor new 1 netp netm 1e-6 -tc1 1 -temp 25
             # ```
             set paramsNames [list m scale temp dtemp tc1 tc2 ic]
             set paramDefList [my buildArgStr $paramsNames]
@@ -185,8 +185,8 @@ namespace eval SpiceGenTcl::Ngspice::BasicDevices {
     ### ________________________ CapacitorBehaviouralC class _________________________ ###
 
     oo::class create CapacitorBehaviouralC {
-        superclass SpiceGenTcl::Device
-        mixin SpiceGenTcl::KeyArgsBuilder
+        superclass ::SpiceGenTcl::Device
+        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name npNode nmNode cExpr args} {
             # Creates object of class `CapacitorBehaviouralC` that describes capacitor device dependents on expressions in C form.
             #  name - name of the device without first-letter designator R
@@ -199,7 +199,7 @@ namespace eval SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::BasicDevices::CapacitorBehaviouralC new 1 netp netm "V(a)+V(b)+pow(V(c),2)" -tc1 1
+            # ::SpiceGenTcl::Ngspice::BasicDevices::CapacitorBehaviouralC new 1 netp netm "V(a)+V(b)+pow(V(c),2)" -tc1 1
             # ```
             set paramDefList [my buildArgStr [list tc1 tc2]]
             set arguments [argparse -inline "
@@ -221,8 +221,8 @@ namespace eval SpiceGenTcl::Ngspice::BasicDevices {
     ### ________________________ CapacitorBehaviouralQ class _________________________ ###
 
     oo::class create CapacitorBehaviouralQ {
-        superclass SpiceGenTcl::Device
-        mixin SpiceGenTcl::KeyArgsBuilder
+        superclass ::SpiceGenTcl::Device
+        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name npNode nmNode qExpr args} {
             # Creates object of class `CapacitorBehaviouralQ` that describes capacitor device dependents on expressions in Q form.
             #  name - name of the device without first-letter designator R
@@ -235,7 +235,7 @@ namespace eval SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::BasicDevices::CapacitorBehaviouralQ new 1 netp netm "V(a)+V(b)+pow(V(c),2)" -tc1 1
+            # ::SpiceGenTcl::Ngspice::BasicDevices::CapacitorBehaviouralQ new 1 netp netm "V(a)+V(b)+pow(V(c),2)" -tc1 1
             # ```
             set paramDefList [my buildArgStr [list tc1 tc2]]
             set arguments [argparse -inline "
@@ -257,8 +257,8 @@ namespace eval SpiceGenTcl::Ngspice::BasicDevices {
     ### ________________________ CapacitorSemiconductor class _________________________ ###
     
     oo::class create CapacitorSemiconductor {
-        superclass SpiceGenTcl::DeviceModel
-        mixin SpiceGenTcl::KeyArgsBuilder
+        superclass ::SpiceGenTcl::DeviceModel
+        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name npNode nmNode modelName args} {
             # Creates object of class `CapacitorBehaviouralQ` that describes semiconductor capacitor device.
             #  name - name of the device without first-letter designator C
@@ -272,7 +272,7 @@ namespace eval SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::CapacitorSemiconductor new 1 netp netm capm -l 1e-6 -w 10e-6
+            # ::SpiceGenTcl::Ngspice::CapacitorSemiconductor new 1 netp netm capm -l 1e-6 -w 10e-6
             # ```
             set paramsNames [list l w temp dtemp m ac scale]
             set paramDefList [my buildArgStr $paramsNames]
@@ -295,8 +295,8 @@ namespace eval SpiceGenTcl::Ngspice::BasicDevices {
     ### ________________________ Inductor class _________________________ ###
 
     oo::class create Inductor {
-        superclass SpiceGenTcl::Device
-        mixin SpiceGenTcl::KeyArgsBuilder
+        superclass ::SpiceGenTcl::Device
+        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name npNode nmNode lVal args} {
             # Creates object of class `Inductor` that describes simple inductor device.
             #  name - name of the device without first-letter designator L
@@ -311,7 +311,7 @@ namespace eval SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::BasicDevices::Inductor new 1 netp netm 1e-6 -tc1 1 -temp 25
+            # ::SpiceGenTcl::Ngspice::BasicDevices::Inductor new 1 netp netm 1e-6 -tc1 1 -temp 25
             # ```
             set paramsNames [list nt m scale temp dtemp tc1 tc2 ic]
             set paramDefList [my buildArgStr $paramsNames]
@@ -337,8 +337,8 @@ namespace eval SpiceGenTcl::Ngspice::BasicDevices {
     ### ________________________ InductorBehavioural class _________________________ ###
     
     oo::class create InductorBehavioural {
-        superclass SpiceGenTcl::Device
-        mixin SpiceGenTcl::KeyArgsBuilder
+        superclass ::SpiceGenTcl::Device
+        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name npNode nmNode lExpr args} {
             # Creates object of class `InductorBehavioural` that describes inductor device dependent on expressions.
             #  name - name of the device without first-letter designator R
@@ -351,7 +351,7 @@ namespace eval SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::BasicDevices::InductorBehavioural new 1 netp netm "V(a)+V(b)+pow(V(c),2)" -tc1 1
+            # ::SpiceGenTcl::Ngspice::BasicDevices::InductorBehavioural new 1 netp netm "V(a)+V(b)+pow(V(c),2)" -tc1 1
             # ```
             set paramDefList [my buildArgStr [list tc1 tc2]]
             set arguments [argparse -inline "
@@ -373,7 +373,7 @@ namespace eval SpiceGenTcl::Ngspice::BasicDevices {
     ## ________________________ VSwitch class _________________________ ##
   
     oo::class create VSwitch {
-        superclass SpiceGenTcl::DeviceModel
+        superclass ::SpiceGenTcl::DeviceModel
         constructor {name npNode nmNode ncpNode ncmNode modelName args} {
             # Creates object of class `VSwitch` that describes voltage controlled switch device.
             #  name - name of the device without first-letter designator S
@@ -388,7 +388,7 @@ namespace eval SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::BasicDevices::VSwitch new 1 net1 0 netc 0 sw1 -on
+            # ::SpiceGenTcl::Ngspice::BasicDevices::VSwitch new 1 net1 0 netc 0 sw1 -on
             # ```
             set arguments [argparse {
                 {-on -forbid {off}}
@@ -412,7 +412,7 @@ namespace eval SpiceGenTcl::Ngspice::BasicDevices {
     ## ________________________ CSwitch class _________________________ ##
   
     oo::class create CSwitch {
-        superclass SpiceGenTcl::DeviceModel
+        superclass ::SpiceGenTcl::DeviceModel
         # special positional parameter that is placed before model name
         variable CControlParam
         constructor {name npNode nmNode cControl modelName args} {
@@ -428,7 +428,7 @@ namespace eval SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::BasicDevices::ISwitch new 1 net1 0 v1 sw1 -on
+            # ::SpiceGenTcl::Ngspice::BasicDevices::ISwitch new 1 net1 0 v1 sw1 -on
             # ```
             set arguments [argparse {
                 {-on -forbid {off}}
@@ -441,7 +441,7 @@ namespace eval SpiceGenTcl::Ngspice::BasicDevices {
             } else {
                 set param ""
             }
-            set CControlParam [SpiceGenTcl::ParameterPositionalNoCheck new ccontrol $cControl]
+            set CControlParam [::SpiceGenTcl::ParameterPositionalNoCheck new ccontrol $cControl]
             next w$name [list "np $npNode" "nm $nmNode"] $modelName $param
         }
         method genSPICEString {} {
@@ -457,7 +457,7 @@ namespace eval SpiceGenTcl::Ngspice::BasicDevices {
     ## ________________________ SubcircuitInstance class _________________________ ##
 
     oo::class create SubcircuitInstance {
-        superclass SpiceGenTcl::DeviceModel
+        superclass ::SpiceGenTcl::DeviceModel
         constructor {name pins subName params} {
             # Creates object of class `CSwitch` that describes subcircuit instance.
             #  name - name of the device without first-letter designator X
@@ -469,7 +469,7 @@ namespace eval SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar -eq}}
+            # ::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar -eq}}
             # ```
             next x$name $pins $subName $params
         }
@@ -482,7 +482,7 @@ namespace eval SpiceGenTcl::Ngspice::BasicDevices {
     ## ________________________ SubcircuitInstanceAuto class _________________________ ##
     
     oo::class create SubcircuitInstanceAuto {
-        superclass SpiceGenTcl::DeviceModel
+        superclass ::SpiceGenTcl::DeviceModel
         constructor {subcktObj name nodes args} {
             # Creates object of class `SubcircuitInstanceAuto` that describes subcircuit instance with already created subcircuit definition object.
             #  subcktObj - object of subcircuit that defines it's pins, subName and parameters
@@ -493,13 +493,13 @@ namespace eval SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstanceAuto new $subcktObj 1 {net1 net2} -r 1 -c {cpar -eq}
+            # ::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstanceAuto new $subcktObj 1 {net1 net2} -r 1 -c {cpar -eq}
             # ```
             
             # check that inputs object class is Subcircuit
-            if {[info object class $subcktObj "SpiceGenTcl::Subcircuit"]!=1} {
+            if {[info object class $subcktObj "::SpiceGenTcl::Subcircuit"]!=1} {
                 set objClass [info object class $subcktObj]
-                error "Wrong object class '$objClass' is passed as subcktObj, should be 'SpiceGenTcl::Subcircuit'"
+                error "Wrong object class '$objClass' is passed as subcktObj, should be '::SpiceGenTcl::Subcircuit'"
             }
             # get name of subcircuit
             set subName [$subcktObj configure -Name] 
@@ -542,12 +542,12 @@ namespace eval SpiceGenTcl::Ngspice::BasicDevices {
 
     # ________________________ Sources devices _________________________ #
 
-namespace eval SpiceGenTcl::Ngspice::Sources {
+namespace eval ::SpiceGenTcl::Ngspice::Sources {
 
     ## ________________________ dc sources template class _________________________ ##
     
     oo::abstract create dc {
-        superclass SpiceGenTcl::Device
+        superclass ::SpiceGenTcl::Device
         constructor {name type npNode nmNode dcVal} {
             if {([llength $dcVal]>1) && ([lindex $dcVal 1]=="-eq")} {
                 lappend paramList "dc [lindex $dcVal 0] -poseq"
@@ -561,7 +561,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
     ## ________________________ ac sources template class _________________________ ##
 
     oo::abstract create ac {
-        superclass SpiceGenTcl::Device
+        superclass ::SpiceGenTcl::Device
         constructor {name type npNode nmNode acMag args} {
             set arguments [argparse {
                 -acphase=
@@ -586,7 +586,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
     ## ________________________ pulse sources template class _________________________ ##
     
     oo::abstract create pulse {
-        superclass SpiceGenTcl::DeviceModel
+        superclass ::SpiceGenTcl::DeviceModel
         constructor {name type npNode nmNode low high td tr tf pw per args} {
             set arguments [argparse {
                 -np=
@@ -638,8 +638,8 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
     ## ________________________ sin sources template class _________________________ ##
     
     oo::abstract create sin {
-        superclass SpiceGenTcl::DeviceModel
-        mixin SpiceGenTcl::KeyArgsBuilder
+        superclass ::SpiceGenTcl::DeviceModel
+        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name type npNode nmNode v0 va freq args} {
             set paramDefList [my buildArgStr [list td theta phase]]
             set arguments [argparse -inline "
@@ -663,14 +663,14 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
             }
             next $type$name [list "np $npNode" "nm $nmNode"] sin $paramList
         }
-        set def [info class definition SpiceGenTcl::Ngspice::Sources::pulse genSPICEString]
+        set def [info class definition ::SpiceGenTcl::Ngspice::Sources::pulse genSPICEString]
         method genSPICEString [lindex $def 0] [lindex $def 1]
     }  
     
     ## ________________________ exp sources template class _________________________ ##
     
     oo::abstract create exp {
-        superclass SpiceGenTcl::DeviceModel
+        superclass ::SpiceGenTcl::DeviceModel
         constructor {name type npNode nmNode v1 v2 td1 tau1 td2 tau2} {
             set paramNames [lrange [lindex [info class constructor [info object class [self]]] 0] 3 end]
             foreach paramName $paramNames {
@@ -683,14 +683,14 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
             }
             next $type$name [list "np $npNode" "nm $nmNode"] exp $paramList
         }
-        set def [info class definition SpiceGenTcl::Ngspice::Sources::pulse genSPICEString]
+        set def [info class definition ::SpiceGenTcl::Ngspice::Sources::pulse genSPICEString]
         method genSPICEString [lindex $def 0] [lindex $def 1]
     }    
     
     ## ________________________ pwl sources template class _________________________ ##
     
     oo::abstract create pwl {
-        superclass SpiceGenTcl::DeviceModel
+        superclass ::SpiceGenTcl::DeviceModel
         constructor {name type npNode nmNode pwlSeq} {
             set pwlSeqLen [llength $pwlSeq]
             if {$pwlSeqLen%2} {
@@ -713,15 +713,15 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
             }
             next $type$name [list "np $npNode" "nm $nmNode"] pwl $paramList
         }
-        set def [info class definition SpiceGenTcl::Ngspice::Sources::pulse genSPICEString]
+        set def [info class definition ::SpiceGenTcl::Ngspice::Sources::pulse genSPICEString]
         method genSPICEString [lindex $def 0] [lindex $def 1]
     }
 
     ## ________________________ sffm sources template class _________________________ ##
     
     oo::abstract create sffm {
-        superclass SpiceGenTcl::DeviceModel
-        mixin SpiceGenTcl::KeyArgsBuilder
+        superclass ::SpiceGenTcl::DeviceModel
+        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name type npNode nmNode v0 va fc mdi fs args} {
             set paramDefList [my buildArgStr [list phasec phases]]
             set arguments [argparse -inline "
@@ -745,14 +745,14 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
             }
             next $type$name [list "np $npNode" "nm $nmNode"] sffm $paramList
         }
-        set def [info class definition SpiceGenTcl::Ngspice::Sources::pulse genSPICEString]
+        set def [info class definition ::SpiceGenTcl::Ngspice::Sources::pulse genSPICEString]
         method genSPICEString [lindex $def 0] [lindex $def 1]
     }      
 
     ## ________________________ am sources template class _________________________ ##
     
     oo::abstract create am {
-        superclass SpiceGenTcl::DeviceModel
+        superclass ::SpiceGenTcl::DeviceModel
         constructor {name type npNode nmNode v0 va mf fc td args} {
             set arguments [argparse -inline {
                 -phases=
@@ -775,14 +775,14 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
             }
             next $type$name [list "np $npNode" "nm $nmNode"] am $paramList
         }
-        set def [info class definition SpiceGenTcl::Ngspice::Sources::pulse genSPICEString]
+        set def [info class definition ::SpiceGenTcl::Ngspice::Sources::pulse genSPICEString]
         method genSPICEString [lindex $def 0] [lindex $def 1]
     }   
     
     ## ________________________ Vdc class _________________________ ##
         
     oo::class create Vdc {
-        superclass SpiceGenTcl::Ngspice::Sources::dc
+        superclass ::SpiceGenTcl::Ngspice::Sources::dc
         constructor {name npNode nmNode dcVal} {
             # Creates object of class `Vdc` that describes simple constant voltage source.
             #  name - name of the device without first-letter designator V
@@ -794,7 +794,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::Sources::Vdc new 1 netp netm 10
+            # ::SpiceGenTcl::Ngspice::Sources::Vdc new 1 netp netm 10
             # ```
             next $name v $npNode $nmNode $dcVal
         }
@@ -803,7 +803,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
     ## ________________________ Vac class _________________________ ##
     
     oo::class create Vac {
-        superclass SpiceGenTcl::Ngspice::Sources::ac
+        superclass ::SpiceGenTcl::Ngspice::Sources::ac
         constructor {name npNode nmNode acMag args} {
             # Creates object of class `Vac` that describes ac voltage source.
             #  name - name of the device without first-letter designator V
@@ -816,7 +816,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::Sources::Vac new 1 netp netm 10
+            # ::SpiceGenTcl::Ngspice::Sources::Vac new 1 netp netm 10
             # ```
             set arguments [argparse {
                 -acphase=
@@ -832,7 +832,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
     ## ________________________ Vpulse class _________________________ ##
 
     oo::class create Vpulse {
-        superclass SpiceGenTcl::Ngspice::Sources::pulse
+        superclass ::SpiceGenTcl::Ngspice::Sources::pulse
         constructor {name npNode nmNode low high td tr tf pw per args} {
             # Creates object of class `Vpulse` that describes pulse voltage source.
             #  name - name of the device without first-letter designator V
@@ -850,7 +850,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::Sources::Vpulse new 1 net1 net2 0 1 {td -eq} 1e-9 1e-9 10e-6 20e-6 -np {np -eq}
+            # ::SpiceGenTcl::Ngspice::Sources::Vpulse new 1 net1 net2 0 1 {td -eq} 1e-9 1e-9 10e-6 20e-6 -np {np -eq}
             # ```
             set arguments [argparse {
                 -np=
@@ -866,8 +866,8 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
     ## ________________________ Vsin class _________________________ ##
 
     oo::class create Vsin {
-        superclass SpiceGenTcl::Ngspice::Sources::sin
-        mixin SpiceGenTcl::KeyArgsBuilder
+        superclass ::SpiceGenTcl::Ngspice::Sources::sin
+        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name npNode nmNode v0 va freq args} {
             # Creates object of class `Vsin` that describes sinusoidal voltage source.
             #  name - name of the device without first-letter designator V
@@ -882,7 +882,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::Sources::Vsin new 1 net1 net2 0 2 50 -td 1e-6 -phase {phase -eq}
+            # ::SpiceGenTcl::Ngspice::Sources::Vsin new 1 net1 net2 0 2 50 -td 1e-6 -phase {phase -eq}
             # ```
             set paramDefList [my buildArgStr [list td theta phase]]
             set arguments [argparse -inline "
@@ -906,7 +906,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
     ## ________________________ Vexp class _________________________ ##
 
     oo::class create Vexp {
-        superclass SpiceGenTcl::Ngspice::Sources::exp
+        superclass ::SpiceGenTcl::Ngspice::Sources::exp
         constructor {name npNode nmNode v1 v2 td1 tau1 td2 tau2} {
             # Creates object of class `Vexp` that describes exponential voltage source.
             #  name - name of the device without first-letter designator V
@@ -923,7 +923,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::Sources::Vexp new 1 net1 net2 0 1 1e-9 1e-9 {td2 -eq} 10e-6
+            # ::SpiceGenTcl::Ngspice::Sources::Vexp new 1 net1 net2 0 1 1e-9 1e-9 {td2 -eq} 10e-6
             # ```
             next $name v $npNode $nmNode $v1 $v2 $td1 $tau1 $td2 $tau2
         }
@@ -932,7 +932,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
     ## ________________________ Vpwl class _________________________ ##
 
     oo::class create Vpwl {
-        superclass SpiceGenTcl::Ngspice::Sources::pwl
+        superclass ::SpiceGenTcl::Ngspice::Sources::pwl
         constructor {name npNode nmNode pwlSeq} {
             # Creates object of class `Vpwl` that describes piece-wise voltage source.
             #  name - name of the device without first-letter designator V
@@ -944,7 +944,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::Sources::Vpwl new 1 npNode nmNode {0 0 {t1 -eq} 1 2 2 3 3 4 4}
+            # ::SpiceGenTcl::Ngspice::Sources::Vpwl new 1 npNode nmNode {0 0 {t1 -eq} 1 2 2 3 3 4 4}
             # ```
             next $name v $npNode $nmNode $pwlSeq
         }
@@ -953,8 +953,8 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
     ## ________________________ Vsffm class _________________________ ##
 
     oo::class create Vsffm {
-        superclass SpiceGenTcl::Ngspice::Sources::sffm
-        mixin SpiceGenTcl::KeyArgsBuilder
+        superclass ::SpiceGenTcl::Ngspice::Sources::sffm
+        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name npNode nmNode v0 va fc mdi fs args} {
             # Creates object of class `Vsffm` that describes single-frequency FM voltage source.
             #  name - name of the device without first-letter designator V
@@ -971,7 +971,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::Sources::Vsin new 1 net1 net2 0 2 50 -td 1e-6 -phase {phase -eq}
+            # ::SpiceGenTcl::Ngspice::Sources::Vsin new 1 net1 net2 0 2 50 -td 1e-6 -phase {phase -eq}
             # ```
             set paramDefList [my buildArgStr [list phasec phases]]
             set arguments [argparse -inline "
@@ -995,7 +995,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
     ## ________________________ Vam class _________________________ ##
 
     oo::class create Vam {
-        superclass SpiceGenTcl::Ngspice::Sources::am
+        superclass ::SpiceGenTcl::Ngspice::Sources::am
         constructor {name npNode nmNode v0 va mf fc td args} {
             # Creates object of class `Vam` that describes single-frequency FM voltage source.
             #  name - name of the device without first-letter designator V
@@ -1011,7 +1011,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::Sources::Vam new 1 net1 net2 0 2 1e3 5e3 -phase {phase -eq}
+            # ::SpiceGenTcl::Ngspice::Sources::Vam new 1 net1 net2 0 2 1e3 5e3 -phase {phase -eq}
             # ```
             set arguments [argparse -inline {
                 -phases=
@@ -1034,7 +1034,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
     ## ________________________ Idc class _________________________ ##
 
     oo::class create Idc {
-        superclass SpiceGenTcl::Ngspice::Sources::dc
+        superclass ::SpiceGenTcl::Ngspice::Sources::dc
         constructor {name npNode nmNode dcVal} {
             # Creates object of class `Idc` that describes simple constant current source.
             #  name - name of the device without first-letter designator V
@@ -1046,7 +1046,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::Sources::Idc new 1 netp netm 10 -acphase 45
+            # ::SpiceGenTcl::Ngspice::Sources::Idc new 1 netp netm 10 -acphase 45
             # ```
             next $name i $npNode $nmNode $dcVal
         }
@@ -1055,7 +1055,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
     ## ________________________ Iac class _________________________ ##
 
     oo::class create Iac {
-        superclass SpiceGenTcl::Ngspice::Sources::ac
+        superclass ::SpiceGenTcl::Ngspice::Sources::ac
         constructor {name npNode nmNode acMag args} {
             # Creates object of class `Iac` that describes simple ac current source.
             #  name - name of the device without first-letter designator I
@@ -1068,7 +1068,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::Sources::Iac new 1 netp netm 10 -acphase 45
+            # ::SpiceGenTcl::Ngspice::Sources::Iac new 1 netp netm 10 -acphase 45
             # ```
             set arguments [argparse {
                 -acphase=
@@ -1085,7 +1085,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
     ## ________________________ Ipulse class _________________________ ##
 
     oo::class create Ipulse {
-        superclass SpiceGenTcl::Ngspice::Sources::pulse
+        superclass ::SpiceGenTcl::Ngspice::Sources::pulse
         constructor {name npNode nmNode low high td tr tf pw per args} {
             # Creates object of class `Ipulse` that describes pulse current source.
             #  name - name of the device without first-letter designator I
@@ -1103,7 +1103,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::Sources::Ipulse new 1 net1 net2 0 1 {td -eq} 1e-9 1e-9 10e-6 20e-6 -np {np -eq}
+            # ::SpiceGenTcl::Ngspice::Sources::Ipulse new 1 net1 net2 0 1 {td -eq} 1e-9 1e-9 10e-6 20e-6 -np {np -eq}
             # ```
             set arguments [argparse {
                 -np=
@@ -1119,8 +1119,8 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
     ## ________________________ Isin class _________________________ ##
 
     oo::class create Isin {
-        superclass SpiceGenTcl::Ngspice::Sources::sin
-        mixin SpiceGenTcl::KeyArgsBuilder
+        superclass ::SpiceGenTcl::Ngspice::Sources::sin
+        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name npNode nmNode v0 va freq args} {
             # Creates object of class `Isin` that describes sinusoidal current source.
             #  name - name of the device without first-letter designator I
@@ -1135,7 +1135,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::Sources::Isin new 1 net1 net2 0 2 50 -td 1e-6 -phase {phase -eq}
+            # ::SpiceGenTcl::Ngspice::Sources::Isin new 1 net1 net2 0 2 50 -td 1e-6 -phase {phase -eq}
             # ```
             set paramDefList [my buildArgStr [list td theta phase]]
             set arguments [argparse -inline "
@@ -1159,7 +1159,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
     ## ________________________ Iexp class _________________________ ##
 
     oo::class create Iexp {
-        superclass SpiceGenTcl::Ngspice::Sources::exp
+        superclass ::SpiceGenTcl::Ngspice::Sources::exp
         constructor {name npNode nmNode v1 v2 td1 tau1 td2 tau2} {
             # Creates object of class `Iexp` that describes exponential current source.
             #  name - name of the device without first-letter designator I
@@ -1176,7 +1176,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::Sources::Iexp new 1 net1 net2 0 1 1e-9 1e-9 {td2 -eq} 10e-6
+            # ::SpiceGenTcl::Ngspice::Sources::Iexp new 1 net1 net2 0 1 1e-9 1e-9 {td2 -eq} 10e-6
             # ```
             next $name i $npNode $nmNode $v1 $v2 $td1 $tau1 $td2 $tau2
         }
@@ -1185,7 +1185,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
     ## ________________________ Ipwl class _________________________ ##
 
     oo::class create Ipwl {
-        superclass SpiceGenTcl::Ngspice::Sources::pwl
+        superclass ::SpiceGenTcl::Ngspice::Sources::pwl
         constructor {name npNode nmNode pwlSeq} {
             # Creates object of class `Ipwl` that describes piece-wise linear current source.
             #  name - name of the device without first-letter designator I
@@ -1197,7 +1197,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::Sources::Ipwl new 1 npNode nmNode {0 0 {t1 -eq} 1 2 2 3 3 4 4}
+            # ::SpiceGenTcl::Ngspice::Sources::Ipwl new 1 npNode nmNode {0 0 {t1 -eq} 1 2 2 3 3 4 4}
             # ```
             next $name i $npNode $nmNode $pwlSeq
         }
@@ -1206,8 +1206,8 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
     ## ________________________ Isffm class _________________________ ##
 
     oo::class create Isffm {
-        superclass SpiceGenTcl::Ngspice::Sources::sffm
-        mixin SpiceGenTcl::KeyArgsBuilder
+        superclass ::SpiceGenTcl::Ngspice::Sources::sffm
+        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name npNode nmNode v0 va fc mdi fs args} {
             # Creates object of class `Isffm` that describes single-frequency FM current source.
             #  name - name of the device without first-letter designator I
@@ -1224,7 +1224,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::Sources::Isin new 1 net1 net2 0 2 50 -td 1e-6 -phase {phase -eq}
+            # ::SpiceGenTcl::Ngspice::Sources::Isin new 1 net1 net2 0 2 50 -td 1e-6 -phase {phase -eq}
             # ```
             set paramDefList [my buildArgStr [list phasec phases]]
             set arguments [argparse -inline "
@@ -1248,7 +1248,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
     ## ________________________ Iam class _________________________ ##
 
     oo::class create Iam {
-        superclass SpiceGenTcl::Ngspice::Sources::am
+        superclass ::SpiceGenTcl::Ngspice::Sources::am
         constructor {name npNode nmNode v0 va mf fc td args} {
             # Creates object of class `Iam` that describes single-frequency AM current source.
             #  name - name of the device without first-letter designator I
@@ -1265,7 +1265,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::Sources::Iam new 1 net1 net2 0 2 1e3 5e3 -phase {phase -eq}
+            # ::SpiceGenTcl::Ngspice::Sources::Iam new 1 net1 net2 0 2 1e3 5e3 -phase {phase -eq}
             # ```
             set arguments [argparse -inline {
                 -phases=
@@ -1288,7 +1288,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
     ## ________________________ Vccs class _________________________ ##
   
     oo::class create Vccs {
-        superclass SpiceGenTcl::Device
+        superclass ::SpiceGenTcl::Device
         constructor {name npNode nmNode ncpNode ncmNode value args} {
             # Creates object of class `Vccs` that describes linear voltage-controlled current source.
             #  name - name of the device without first-letter designator G
@@ -1303,7 +1303,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::Sources::Vccs new 1 net1 0 netc 0 10 -m 1
+            # ::SpiceGenTcl::Ngspice::Sources::Vccs new 1 net1 0 netc 0 10 -m 1
             # ```
             set arguments [argparse {
                 -m=
@@ -1331,7 +1331,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
     ## ________________________ Vcvs class _________________________ ##
   
     oo::class create Vcvs {
-        superclass SpiceGenTcl::Device
+        superclass ::SpiceGenTcl::Device
         constructor {name npNode nmNode ncpNode ncmNode value} {
             # Creates object of class `Vcvs` that describes linear voltage-controlled current source.
             #  name - name of the device without first-letter designator G
@@ -1345,7 +1345,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::Sources::Vcvs new 1 net1 0 netc 0 10
+            # ::SpiceGenTcl::Ngspice::Sources::Vcvs new 1 net1 0 netc 0 10
             # ```
             if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
                 lappend paramList "vgain [lindex $value 0] -poseq"
@@ -1363,7 +1363,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
     ## ________________________ Cccs class _________________________ ##
   
     oo::class create Cccs {
-        superclass SpiceGenTcl::Device
+        superclass ::SpiceGenTcl::Device
         variable Vname
         constructor {name npNode nmNode vname value args} {
             # Creates object of class `Cccs` that describes linear current-controlled current source. 
@@ -1378,7 +1378,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::Sources::Cccs new 1 net1 0 netc 0 10
+            # ::SpiceGenTcl::Ngspice::Sources::Cccs new 1 net1 0 netc 0 10
             # ```
             set arguments [argparse {
                 -m=
@@ -1395,7 +1395,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
                     lappend paramList "m $m"
                 }
             }
-            set Vname [SpiceGenTcl::ParameterPositionalNoCheck new vname $vname]
+            set Vname [::SpiceGenTcl::ParameterPositionalNoCheck new vname $vname]
             next f$name [list "np $npNode" "nm $nmNode"] $paramList
         }
         method genSPICEString {} {
@@ -1423,7 +1423,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
     ## ________________________ Ccvs class _________________________ ##
   
     oo::class create Ccvs {
-        superclass SpiceGenTcl::Device
+        superclass ::SpiceGenTcl::Device
         variable Vname
         constructor {name npNode nmNode vname value args} {
             # Creates object of class `Ccvs` that describes linear current-controlled current source.
@@ -1437,14 +1437,14 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::Sources::Ccvs new 1 net1 0 vc 10
+            # ::SpiceGenTcl::Ngspice::Sources::Ccvs new 1 net1 0 vc 10
             # ```
             if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
                 lappend paramList "tres [lindex $value 0] -poseq"
             } else {
                 lappend paramList "tres $value -pos"
             }
-            set Vname [SpiceGenTcl::ParameterPositionalNoCheck new vname $vname]
+            set Vname [::SpiceGenTcl::ParameterPositionalNoCheck new vname $vname]
             next h$name [list "np $npNode" "nm $nmNode"] $paramList
         }
         method genSPICEString {} {
@@ -1472,8 +1472,8 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
     ## ________________________ BehaviouralSource class _________________________ ##
     
     oo::class create BehaviouralSource {
-        superclass SpiceGenTcl::Device
-        mixin SpiceGenTcl::KeyArgsBuilder
+        superclass ::SpiceGenTcl::Device
+        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name npNode nmNode type expr args} {
             # Creates object of class `BehaviouralSource` that describes behavioural source.
             #  name - name of the device without first-letter designator R
@@ -1486,7 +1486,7 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::Sources::BehaviouralSource new 1 netp netm i "V(a)+V(b)+pow(V(c),2)" -tc1 1
+            # ::SpiceGenTcl::Ngspice::Sources::BehaviouralSource new 1 netp netm i "V(a)+V(b)+pow(V(c),2)" -tc1 1
             # ```
             set paramsNames [list tc1 tc2 noisy temp dtemp]
             set paramDefList [my buildArgStr $paramsNames]
@@ -1511,13 +1511,13 @@ namespace eval SpiceGenTcl::Ngspice::Sources {
 }
     # ________________________ SemiconductorDevices _________________________ #
 
-namespace eval SpiceGenTcl::Ngspice::SemiconductorDevices {
+namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
     
     ## ________________________ Diode class _________________________ ##
     
     oo::class create Diode {
-        superclass SpiceGenTcl::DeviceModel
-        mixin SpiceGenTcl::KeyArgsBuilder
+        superclass ::SpiceGenTcl::DeviceModel
+        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name npNode nmNode modelName args} {
             # Creates object of class `Diode` that describes semiconductor diode device.
             #  name - name of the device without first-letter designator D
@@ -1532,7 +1532,7 @@ namespace eval SpiceGenTcl::Ngspice::SemiconductorDevices {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::SemiconductorDevices::Diode new 1 netp netm diomod -l 1e-6 -w 10e-6
+            # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Diode new 1 netp netm diomod -l 1e-6 -w 10e-6
             # ```
             set paramsNames [list area pj ic temp dtemp lm wm lp wp]
             set paramDefList [my buildArgStr $paramsNames]
@@ -1558,8 +1558,8 @@ namespace eval SpiceGenTcl::Ngspice::SemiconductorDevices {
     ## ________________________ Bjt class _________________________ ##
     
     oo::class create Bjt {
-        superclass SpiceGenTcl::DeviceModel
-        mixin SpiceGenTcl::KeyArgsBuilder
+        superclass ::SpiceGenTcl::DeviceModel
+        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name ncNode nbNode neNode modelName args} {
             # Creates object of class `Bjt` that describes semiconductor bipolar junction transistor device.
             #  name - name of the device without first-letter designator Q
@@ -1578,7 +1578,7 @@ namespace eval SpiceGenTcl::Ngspice::SemiconductorDevices {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::SemiconductorDevices::Bjt new 1 netc netb nete bjtmod -ns nets -area 1e-3
+            # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Bjt new 1 netc netb nete bjtmod -ns nets -area 1e-3
             # ```
             set paramsNames [list area areac areab m temp dtemp]
             set paramDefList [my buildArgStr $paramsNames]
@@ -1613,8 +1613,8 @@ namespace eval SpiceGenTcl::Ngspice::SemiconductorDevices {
     ## ________________________ Jfet class _________________________ ##
     
     oo::class create Jfet {
-        superclass SpiceGenTcl::DeviceModel
-        mixin SpiceGenTcl::KeyArgsBuilder
+        superclass ::SpiceGenTcl::DeviceModel
+        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name ndNode ngNode nsNode modelName args} {
             # Creates object of class `Jfet` that describes semiconductor junction FET device.
             #  name - name of the device without first-letter designator J
@@ -1628,7 +1628,7 @@ namespace eval SpiceGenTcl::Ngspice::SemiconductorDevices {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::SemiconductorDevices::J new 1 netd netg nets jfetmod -area {area*2 -eq} -temp 25
+            # ::SpiceGenTcl::Ngspice::SemiconductorDevices::J new 1 netd netg nets jfetmod -area {area*2 -eq} -temp 25
             # ```
             set paramsNames [list area temp]
             set paramDefList [my buildArgStr $paramsNames]
@@ -1663,8 +1663,8 @@ namespace eval SpiceGenTcl::Ngspice::SemiconductorDevices {
     ## ________________________ Mesfet class _________________________ ##
     
     oo::class create Mesfet {
-        superclass SpiceGenTcl::DeviceModel
-        mixin SpiceGenTcl::KeyArgsBuilder
+        superclass ::SpiceGenTcl::DeviceModel
+        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name ndNode ngNode nsNode modelName args} {
             # Creates object of class `Mesfet` that describes semiconductor MESFET device.
             #  name - name of the device without first-letter designator Z
@@ -1678,7 +1678,7 @@ namespace eval SpiceGenTcl::Ngspice::SemiconductorDevices {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet new 1 netd netg nets mesfetmod -area {area*2 -eq} -temp 25
+            # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet new 1 netd netg nets mesfetmod -area {area*2 -eq} -temp 25
             # ```
             set paramsNames [list area]
             set paramDefList [my buildArgStr $paramsNames]
@@ -1713,8 +1713,8 @@ namespace eval SpiceGenTcl::Ngspice::SemiconductorDevices {
     ## ________________________ Mosfet class _________________________ ##
     
     oo::class create Mosfet {
-        superclass SpiceGenTcl::DeviceModel
-        mixin SpiceGenTcl::KeyArgsBuilder
+        superclass ::SpiceGenTcl::DeviceModel
+        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name ndNode ngNode nsNode modelName args} {
             # Creates object of class `Mosfet` that describes semiconductor MOSFET device.
             #  name - name of the device without first-letter designator M
@@ -1735,7 +1735,7 @@ namespace eval SpiceGenTcl::Ngspice::SemiconductorDevices {
             # ```
             # Example of class initialization:
             # ```
-            # SpiceGenTcl::Ngspice::Mosfet new 1 netd netg nets mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5
+            # ::SpiceGenTcl::Ngspice::Mosfet new 1 netd netg nets mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5
             # ```
             set paramsNames [list m l w ad as pd ps nrd nrs]
             set paramDefList [my buildArgStr $paramsNames]
