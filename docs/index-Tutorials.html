@@ -46,7 +46,7 @@
 <font color=#4A181B>$netlist</font> add [<b><font color=#923B23>Tran</font></b> new 1e-6 1e-3 <font color=#463e11>-uic</font> <font color=#463e11>-name</font> tran1]
 </pre>
 
-</figure><p class='ruff'>Here we can see the <code>add</code> method that adds elemements objects references to <code><b><font color=#923B23>Netlist</font></b></code> object. To view netlist we can invoke method <code>genSPICEString</code> that have all circuit elements:</p>
+</figure><p class='ruff'>Here we can see the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Netlist::add" title="::SpiceGenTcl::Netlist::add" class='ruff_cmd'>::SpiceGenTcl::Netlist::add</a> method that adds elemements objects references to <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Netlist" title="::SpiceGenTcl::Netlist" class='ruff_cmd'>::SpiceGenTcl::Netlist</a> object. To view netlist we can invoke method <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Netlist::genSPICEString" title="::SpiceGenTcl::Netlist::genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Netlist::genSPICEString</a> that have all circuit elements:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># generate SPICE netlist</font></i>
 <b><font color=#923B23>puts</font></b> [<font color=#4A181B>$netlist</font> genSPICEString]
@@ -70,7 +70,7 @@ v1 net1 net3 5
 
 </figure><h3 class='ruff'><a name='::Tutorials-Delete element'></a>Delete element<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
-<p class='ruff'>The opposite action is to delete with the <code>del</code> method. For example, we can delete the 'c1' element from the netlist by specifying its name:</p>
+<p class='ruff'>The opposite action is to delete with the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Netlist::del" title="::SpiceGenTcl::Netlist::del" class='ruff_cmd'>::SpiceGenTcl::Netlist::del</a> method. For example, we can delete the 'c1' element from the netlist by specifying its name:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$netlist</font> del c1
 <b><font color=#923B23>puts</font></b> [<font color=#4A181B>$netlist</font> genSPICEString]
@@ -106,13 +106,13 @@ v1 net1 net3 5
 <font color=#4A181B>$resistor</font> setParamValue r 100
 </pre>
 
-</figure><p class='ruff'>We apply method <code>setParamValue</code> with two arguments: name of parameter 'r' and its new value '100'. The other action we can do is change the pin connection of element:</p>
+</figure><p class='ruff'>We apply method <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setParamValue" title="::SpiceGenTcl::Device::setParamValue" class='ruff_cmd'>::SpiceGenTcl::Device::setParamValue</a> with two arguments: name of parameter 'r' and its new value '100'. The other action we can do is change the pin connection of element:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># change the name of connected net to plus pin</font></i>
 <font color=#4A181B>$resistor</font> setPinNodeName np net10
 </pre>
 
-</figure><p class='ruff'>We use method <code>setPinNodeName</code> with pin name and name of the net as arguments.</p>
+</figure><p class='ruff'>We use method <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setPinNodeName" title="::SpiceGenTcl::Device::setPinNodeName" class='ruff_cmd'>::SpiceGenTcl::Device::setPinNodeName</a> with pin name and name of the net as arguments.</p>
 <p class='ruff'>Then we can again print netlist and see that value of parameter and name of connected name have been changed:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>r1 net10 net2 100
@@ -156,10 +156,10 @@ v1 net1 net3 5
 <font color=#4A181B>$netlist</font> add <font color=#4A181B>$r5</font>
 </pre>
 
-</figure><p class='ruff'>In this case we can directly modify 'r5' parameters without necessity to call <code>getElement</code> method.</p>
+</figure><p class='ruff'>In this case we can directly modify 'r5' parameters without necessity to call <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Netlist::getElement" title="::SpiceGenTcl::Netlist::getElement" class='ruff_cmd'>::SpiceGenTcl::Netlist::getElement</a> method.</p>
 <h2 class='ruff'><a name='::Tutorials-Subcircuit definition'></a>Subcircuit definition<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
-<p class='ruff'>To create subcircuit definition we use special <code><b><font color=#923B23>Subcircuit</font></b></code> class and make subcircuit by defining new class with <code><b><font color=#923B23>Subcircuit</font></b></code> as superclass:</p>
+<p class='ruff'>To create subcircuit definition we use special <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Subcircuit" title="::SpiceGenTcl::Subcircuit" class='ruff_cmd'>::SpiceGenTcl::Subcircuit</a> class and make subcircuit by defining new class with it as superclass:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ca14ca>oo::class</font></b> create RCnet {
     superclass Subcircuit
@@ -213,8 +213,8 @@ v1 net1 net3 5
 
 </figure><p class='ruff'>But place definition of subcircuit is not enough - we need to place netlist instance of subcircuit. We can do it by using two mechanisms:</p>
 <ul class='ruff'>
-<li>use <code><b><font color=#923B23>SubcircuitInstance</font></b></code> class</li>
-<li>use <code><b><font color=#923B23>SubcircuitInstanceAuto</font></b></code> class</li>
+<li>use <a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstance" title="::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstance" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstance</a> class</li>
+<li>use <a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstanceAuto" title="::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstanceAuto" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstanceAuto</a> class</li>
 </ul>
 <p class='ruff'>First way is direct construction of element by providing pins and parameter lists:</p>
 
@@ -257,15 +257,15 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Dc</font></b> new va 0 2 0.01]
 </pre>
 
-</figure><p class='ruff'>In the upper block of code, we add a diode instance using the <code><b><font color=#923B23>D</font></b> new</code> command, create the corresponding diode model with the <code><b><font color=#923B23>DiodeModel</font></b> new</code> command, add a DC voltage source that will be swept, and include a DC analysis statement. The voltage ranges from 0 to 2 volts to obtain the forward current characteristic.</p>
-<p class='ruff'>The temperature in Ngspice is set using the <code>.temp</code> statement. We create an instance with the <code><b><font color=#923B23>Temp</font></b> new</code> command, save the object reference in the variable <code>tempSt</code>, and then add it to the circuit:</p>
+</figure><p class='ruff'>In the upper block of code, we add a diode instance using the <a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::D" title="::SpiceGenTcl::Ngspice::SemiconductorDevices::D" class='ruff_cmd'>::SpiceGenTcl::Ngspice::SemiconductorDevices::D</a> command, create the corresponding diode model with the <a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel" title="::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel" class='ruff_cmd'>::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel</a> command, add a DC voltage source that will be swept, and include a DC analysis statement. The voltage ranges from 0 to 2 volts to obtain the forward current characteristic.</p>
+<p class='ruff'>The temperature in Ngspice is set using the <code>.temp</code> statement. We create an instance with the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Temp" title="::SpiceGenTcl::Temp" class='ruff_cmd'>::SpiceGenTcl::Temp</a> command, save the object reference in the variable <code>tempSt</code>, and then add it to the circuit:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># add .temp</font></i>
 <b><font color=#923B23>set</font></b> tempSt [<b><font color=#923B23>Temp</font></b> new 25]
 <font color=#4A181B>$circuit</font> add <font color=#4A181B>$tempSt</font>
 </pre>
 
-</figure><p class='ruff'>Next, we create an array containing the temperature values and instantiate an object of the <code><b><font color=#923B23>Simulator</font></b></code> class.:</p>
+</figure><p class='ruff'>Next, we create an array containing the temperature values and instantiate an object of the <a href="index-SpiceGenTcl-Ngspice-Simulators.html#::SpiceGenTcl::Ngspice::Simulators::Batch" title="::SpiceGenTcl::Ngspice::Simulators::Batch" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Simulators::Batch</a> class.:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># add temperature sweep</font></i>
 <b><font color=#923B23>set</font></b> temps [<b><font color=#923B23>list</font></b> -55 25 85 125 175]
@@ -275,7 +275,7 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <font color=#4A181B>$circuit</font> configure <font color=#463e11>-Simulator</font> <font color=#4A181B>$simulator</font>
 </pre>
 
-</figure><p class='ruff'>The only thing left is to set the temperature value in the Temp class object, run the circuit, save the data, and repeat this process multiple times:</p>
+</figure><p class='ruff'>The only thing left is to set the temperature value in the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Temp" title="::SpiceGenTcl::Temp" class='ruff_cmd'>::SpiceGenTcl::Temp</a> class object, run the circuit, save the data, and repeat this process multiple times:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># run circuit, change temperature, read log and data</font></i>
 <b><font color=#923B23>foreach</font></b> temp <font color=#4A181B>$temps</font> {
@@ -354,7 +354,7 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <b><font color=#923B23>set</font></b> voltSweep [lseq 0 20.0 0.1]
 </pre>
 
-</figure><p class='ruff'>Then we as usual, create <code><b><font color=#923B23>Simulator</font></b></code> class object, attach it to <code>circuit</code>, run it multiple times, collect results and apply the equation to calculate the capacitance (with the voltage phasor set to 1, so it is omitted):</p>
+</figure><p class='ruff'>Then we as usual, create <a href="index-SpiceGenTcl-Ngspice-Simulators.html#::SpiceGenTcl::Ngspice::Simulators::BatchLiveLog" title="::SpiceGenTcl::Ngspice::Simulators::BatchLiveLog" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Simulators::BatchLiveLog</a> class object, attach it to <code><font color=#4A181B>$circuit</font></code>, run it multiple times, collect results and apply the equation to calculate the capacitance (with the voltage phasor set to 1, so it is omitted):</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50>#set simulator with default </font></i>
 <b><font color=#923B23>set</font></b> simulator [<b><font color=#923B23>BatchLiveLog</font></b> new {batch1} {/usr/local/bin/}]
@@ -377,7 +377,7 @@ x2 net1 net2 rcnet r=1 c={cpar}
 }
 </pre>
 
-</figure><p class='ruff'>The <code><b><font color=#923B23>BatchLiveLog</font></b></code> simulator differs from <code><b><font color=#923B23>Batch</font></b></code> in that it prints output line by line during the simulation, rather than only at the end.</p>
+</figure><p class='ruff'>The <a href="index-SpiceGenTcl-Ngspice-Simulators.html#::SpiceGenTcl::Ngspice::Simulators::BatchLiveLog" title="::SpiceGenTcl::Ngspice::Simulators::BatchLiveLog" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Simulators::BatchLiveLog</a> simulator differs from <a href="index-SpiceGenTcl-Ngspice-Simulators.html#::SpiceGenTcl::Ngspice::Simulators::Batch" title="::SpiceGenTcl::Ngspice::Simulators::Batch" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Simulators::Batch</a> in that it prints output line by line during the simulation, rather than only at the end.</p>
 <p class='ruff'>Here, we collect the imaginary component of the current flowing through the AC voltage source 'Va'.</p>
 <p class='ruff'>You might wonder why we use two indices, 0 and 1, when extracting values from the vector i(va).</p>
 <p class='ruff'>The answer is as follows: the first index extracts values from the list of values at different frequencies, while the second index retrieves the imaginary component.</p>

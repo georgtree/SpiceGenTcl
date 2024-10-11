@@ -31,8 +31,8 @@ namespace eval Tutorials {
         $netlist add [Vdc new 1 net1 net3 5]
         $netlist add [Tran new 1e-6 1e-3 -uic -name tran1]
         ```
-        Here we can see the `add` method that adds elemements objects references to `Netlist` object.
-        To view netlist we can invoke method `genSPICEString` that have all circuit elements:
+        Here we can see the [::SpiceGenTcl::Netlist::add] method that adds elemements objects references to [::SpiceGenTcl::Netlist] object.
+        To view netlist we can invoke method [::SpiceGenTcl::Netlist::genSPICEString] that have all circuit elements:
         ```tcl
         # generate SPICE netlist
         puts [$netlist genSPICEString]
@@ -55,7 +55,7 @@ namespace eval Tutorials {
         
         ### Delete element
         
-        The opposite action is to delete with the `del` method. 
+        The opposite action is to delete with the [::SpiceGenTcl::Netlist::del] method. 
         For example, we can delete the 'c1' element from the netlist by specifying its name:
         ```tcl
         $netlist del c1
@@ -89,13 +89,13 @@ namespace eval Tutorials {
         # change the value of resistor in circuit
         $resistor setParamValue r 100
         ```
-        We apply method `setParamValue` with two arguments: name of parameter 'r' and its new value '100'.
+        We apply method [::SpiceGenTcl::Device::setParamValue] with two arguments: name of parameter 'r' and its new value '100'.
         The other action we can do is change the pin connection of element:
         ```tcl
         # change the name of connected net to plus pin
         $resistor setPinNodeName np net10
         ```
-        We use method `setPinNodeName` with pin name and name of the net as arguments.
+        We use method [::SpiceGenTcl::Device::setPinNodeName] with pin name and name of the net as arguments.
         
         Then we can again print netlist and see that value of parameter and name of connected name have been changed:
         ```
@@ -138,12 +138,12 @@ namespace eval Tutorials {
         set r5 [R new 5 net1 net2 10]
         $netlist add $r5
         ```
-        In this case we can directly modify 'r5' parameters without necessity to call `getElement` method.
+        In this case we can directly modify 'r5' parameters without necessity to call [::SpiceGenTcl::Netlist::getElement] method.
         
         
         ## Subcircuit definition
         
-        To create subcircuit definition we use special `Subcircuit` class and make subcircuit by defining new class with `Subcircuit` as superclass:
+        To create subcircuit definition we use special [::SpiceGenTcl::Subcircuit] class and make subcircuit by defining new class with it as superclass:
         ```tcl
         oo::class create RCnet {
             superclass Subcircuit
@@ -192,8 +192,8 @@ namespace eval Tutorials {
         $netlist add $subcircuit
         ```
         But place definition of subcircuit is not enough - we need to place netlist instance of subcircuit. We can do it by using two mechanisms:
-        - use `SubcircuitInstance` class
-        - use `SubcircuitInstanceAuto` class
+        - use [::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstance] class
+        - use [::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstanceAuto] class
         
         First way is direct construction of element by providing pins and parameter lists:
         ```tcl
@@ -241,11 +241,11 @@ namespace eval Tutorials {
         $circuit add [DiodeModel new diomod -is 1e-12 -n 1.2 -rs 0.01 -cj0 1e-9 -trs1 0.001 -xti 5]
         $circuit add [Dc new va 0 2 0.01]
         ```
-        In the upper block of code, we add a diode instance using the `D new` command, create the corresponding diode model 
-        with the `DiodeModel new` command, add a DC voltage source that will be swept, and include a DC analysis statement. 
+        In the upper block of code, we add a diode instance using the [::SpiceGenTcl::Ngspice::SemiconductorDevices::D] command, create the corresponding diode model 
+        with the [::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel] command, add a DC voltage source that will be swept, and include a DC analysis statement. 
         The voltage ranges from 0 to 2 volts to obtain the forward current characteristic.
         
-        The temperature in Ngspice is set using the `.temp` statement. We create an instance with the `Temp new` command, 
+        The temperature in Ngspice is set using the `.temp` statement. We create an instance with the [::SpiceGenTcl::Temp] command, 
         save the object reference in the variable `tempSt`, and then add it to the circuit:
         ```tcl
         # add .temp
@@ -253,7 +253,7 @@ namespace eval Tutorials {
         $circuit add $tempSt
         ```
         
-        Next, we create an array containing the temperature values and instantiate an object of the `Simulator` class.:
+        Next, we create an array containing the temperature values and instantiate an object of the [::SpiceGenTcl::Ngspice::Simulators::Batch] class.:
         ```tcl
         # add temperature sweep
         set temps [list -55 25 85 125 175]
@@ -263,7 +263,7 @@ namespace eval Tutorials {
         $circuit configure -Simulator $simulator
         ```
         
-        The only thing left is to set the temperature value in the Temp class object, run the circuit, save the data, 
+        The only thing left is to set the temperature value in the [::SpiceGenTcl::Temp] class object, run the circuit, save the data, 
         and repeat this process multiple times:
         ```tcl
         # run circuit, change temperature, read log and data
@@ -349,7 +349,7 @@ namespace eval Tutorials {
         set voltSweep [lseq 0 20.0 0.1]
         ```
 
-        Then we as usual, create `Simulator` class object, attach it to `circuit`, run it multiple times, collect results and 
+        Then we as usual, create [::SpiceGenTcl::Ngspice::Simulators::BatchLiveLog] class object, attach it to `$circuit`, run it multiple times, collect results and 
         apply the equation to calculate the capacitance (with the voltage phasor set to 1, so it is omitted):
         ```tcl
         #set simulator with default 
@@ -373,7 +373,7 @@ namespace eval Tutorials {
         }
         ```
         
-        The `BatchLiveLog` simulator differs from `Batch` in that it prints output line by line during the simulation, 
+        The [::SpiceGenTcl::Ngspice::Simulators::BatchLiveLog] simulator differs from [::SpiceGenTcl::Ngspice::Simulators::Batch] in that it prints output line by line during the simulation, 
         rather than only at the end.
         
         Here, we collect the imaginary component of the current flowing through the AC voltage source 'Va'.

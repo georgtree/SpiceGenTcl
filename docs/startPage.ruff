@@ -76,8 +76,8 @@ variable startPage {
     ```tcl
     namespace import ::SpiceGenTcl::*
     ```
-    One of the commands is `importNgspice`. By calling this command, we can import all commands related to the 
-    Ngspice simulator, eliminating the need to add the ::SpiceGenTcl::Ngspice prefix before any command. 
+    One of the commands is [::SpiceGenTcl::importNgspice]. By calling this command, we can import all commands related to the 
+    Ngspice simulator, eliminating the need to add the `::SpiceGenTcl::Ngspice` prefix before any command. 
     Here's how to do it:
     ```tcl
     importNgspice
@@ -104,7 +104,7 @@ variable startPage {
     ```tcl
     set circuit [Circuit new {voltage divider netlist}]
     ```
-    The `Circuit` command creates a new object of the `Circuit` class, which is imported from the 
+    The `Circuit` command creates a new object of the [::SpiceGenTcl::Circuit] class, which is imported from the 
     `::SpiceGenTcl` namespace and represents the top-level circuit. 
     The only argument we provide is the name of the circuit, which will be printed on the first line of the netlist.
 
@@ -115,7 +115,7 @@ variable startPage {
     $circuit add [R new 2 out 0 2e3]
     $circuit add [Dc new v1 0 5 0.1]
     ```
-    An instance of the `Circuit` class, referenced by the `circuit` variable, has an `add` method that appends the references of 
+    An instance of the [::SpiceGenTcl::Circuit] class, referenced by the `circuit` variable, has an [::SpiceGenTcl::Circuit::add] method that appends the references of 
     argument objects to it. The object-creating commands `Vdc`, `R`, and `Dc` — which represent a DC voltage source, a basic resistor, 
     and a DC analysis, respectively — are imported from the `::SpiceGenTcl::Ngspice::Sources`, `::SpiceGenTcl::Ngspice::BasicElements`, 
     and `::SpiceGenTcl::Ngspice::Analyses` namespaces.
@@ -124,7 +124,7 @@ variable startPage {
     the name of the net connected to the positive node 'in', the name of the net connected to the negative node '0' (which is the global ground), 
     and the resistance value '1e3'.
     
-    The last necessary step is to create `Simulator` object with command `Batch` from `::SpiceGenTcl::Ngspice` namespace and attach it to `Circuit` object:
+    The last necessary step is to create [::SpiceGenTcl::Simulator] object with command `Batch` from `::SpiceGenTcl::Ngspice` namespace and attach it to [::SpiceGenTcl::Circuit] object:
     ```tcl
     set simulator [Batch new {batch1} {/usr/local/bin/}]
     $circuit configure -Simulator $simulator
@@ -133,7 +133,7 @@ variable startPage {
     ```tcl
     $circuit runAndRead
     ```
-    After the simulation, we can read the resulting data. We use the `getDataDict` method to obtain a dictionary 
+    After the simulation, we can read the resulting data. We use the [::SpiceGenTcl::Circuit::getDataDict] method to obtain a dictionary 
     where the keys are the names of the result vectors:
     ```tcl
     set data [$circuit getDataDict]

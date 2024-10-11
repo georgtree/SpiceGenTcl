@@ -35,7 +35,7 @@ namespace eval FAQ {
         In the parameter table, the entry for resistance is labeled `rVal`, so the name used for resistance is 'r'. 
         This naming convention, `param_nameVal`, is applied to all elements in the package.
         
-        Another option is to call the `getParams` method, which returns a list of all parameters with their values. For example:
+        Another option is to call the [::SpiceGenTcl::Device::getParams] method, which returns a list of all parameters with their values. For example:
         ```tcl
         # create resistor
         set resistor [R new 1 net1 net2 10]
@@ -61,7 +61,7 @@ namespace eval FAQ {
         In the parameter table, the pins are listed as `npNode` and `nmNode`, so the names used for the positive and negative 
         pins are 'np' and 'nm', respectively. This `pin_nameNode` convention applies to all elements in the package.
         
-        Another option is to call the `getPins` method, which returns a list of all pins with their connected node names. For example:
+        Another option is to call the [::SpiceGenTcl::Device::getPins] method, which returns a list of all pins with their connected node names. For example:
         ```tcl
         # create resistor
         set resistor [R new 1 net1 net2 10]
@@ -101,13 +101,13 @@ namespace eval FAQ {
         set paramsNames [list ac m scale temp dtemp tc1 tc2 noisy]
         ```
         
-        So the possible optional parameters are: ac, m, scale, temp, dtemp, tc1, tc2, noisy.
+        So the possible optional parameters are: `-ac`, `-m`, `-scale`, `-temp`, `-dtemp`, `-tc1`, `-tc2`, `-noisy`.
         The same applies to all elements in the package.
                 
         ## How to get raw data after simulation?
         
-        After a successful simulation, an object of the `RawFile` class is created and attached to the top-level `Circuit` object. 
-        To retrieve the result vectors, simply call the `getDataDict` method on the `Circuit` object. This method returns the result 
+        After a successful simulation, an object of the [::SpiceGenTcl::RawFile] class is created and attached to the top-level [::SpiceGenTcl::Circuit] object. 
+        To retrieve the result vectors, simply call the [::SpiceGenTcl::Circuit::getDataDict] method on the [::SpiceGenTcl::Circuit] object. This method returns the result 
         vectors as a dictionary, with vector names as keys and the vectors themselves as values. You can then access these vectors 
         using the `dict get` command.
         
@@ -120,8 +120,8 @@ namespace eval FAQ {
         
         ## How to get the names of all vectors in raw file?
         
-        For this task, you should first retrieve the `RawFile` object reference from the `Circuit` object using the `configure -Data` method. 
-        Then, call the `getVariablesNames` method, which returns a list of all variable names.
+        For this task, you should first retrieve the [::SpiceGenTcl::RawFile] object reference from the [::SpiceGenTcl::Circuit] object using the `configure -Data` method. 
+        Then, call the [::SpiceGenTcl::RawFile::getVariablesNames] method, which returns a list of all variable names.
         
         Example:
         ```tcl
@@ -129,12 +129,12 @@ namespace eval FAQ {
         puts [$rawFileObj getVariablesNames]
         ```
         
-        There are also methods for retrieve all voltages and currents names separated from each other: `getVoltagesNames` and 
-        `getCurrentsNames`.
+        There are also methods for retrieve all voltages and currents names separated from each other: [::SpiceGenTcl::RawFile::getVoltagesNames] and 
+        [::SpiceGenTcl::RawFile::getCurrentsNames].
         
         ## How to get log file after simulation?
         
-        There is a property method for it in object of `Circuit` class - `configure -Log`, it returns string containing log file.
+        There is a property method for it in object of [::SpiceGenTcl::Circuit] class - `configure -Log`, it returns string containing log file.
         
         Example:
         ```tcl

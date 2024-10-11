@@ -71,7 +71,7 @@
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>namespace</font></b> import ::SpiceGenTcl::*
 </pre>
 
-</figure><p class='ruff'>One of the commands is <code><b><font color=#923B23>importNgspice</font></b></code>. By calling this command, we can import all commands related to the Ngspice simulator, eliminating the need to add the ::SpiceGenTcl::Ngspice prefix before any command. Here's how to do it:</p>
+</figure><p class='ruff'>One of the commands is <a href="index-SpiceGenTcl.html#::SpiceGenTcl::importNgspice" title="::SpiceGenTcl::importNgspice" class='ruff_cmd'>::SpiceGenTcl::importNgspice</a>. By calling this command, we can import all commands related to the Ngspice simulator, eliminating the need to add the <code>::SpiceGenTcl::Ngspice</code> prefix before any command. Here's how to do it:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>importNgspice</font></b>
 </pre>
@@ -98,7 +98,7 @@ r2 out 0 2e3
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> circuit [<b><font color=#923B23>Circuit</font></b> new {voltage divider netlist}]
 </pre>
 
-</figure><p class='ruff'>The <code><b><font color=#923B23>Circuit</font></b></code> command creates a new object of the <code><b><font color=#923B23>Circuit</font></b></code> class, which is imported from the <code>::SpiceGenTcl</code> namespace and represents the top-level circuit. The only argument we provide is the name of the circuit, which will be printed on the first line of the netlist.</p>
+</figure><p class='ruff'>The <code><b><font color=#923B23>Circuit</font></b></code> command creates a new object of the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> class, which is imported from the <code>::SpiceGenTcl</code> namespace and represents the top-level circuit. The only argument we provide is the name of the circuit, which will be printed on the first line of the netlist.</p>
 <p class='ruff'>The next step is building netlist by addding elements to top circuit object:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new 1 in 0 1]
@@ -107,9 +107,9 @@ r2 out 0 2e3
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Dc</font></b> new v1 0 5 0.1]
 </pre>
 
-</figure><p class='ruff'>An instance of the <code><b><font color=#923B23>Circuit</font></b></code> class, referenced by the <code>circuit</code> variable, has an <code>add</code> method that appends the references of argument objects to it. The object-creating commands <code><b><font color=#923B23>Vdc</font></b></code>, <code><b><font color=#923B23>R</font></b></code>, and <code><b><font color=#923B23>Dc</font></b></code> — which represent a DC voltage source, a basic resistor, and a DC analysis, respectively — are imported from the <code>::SpiceGenTcl::Ngspice::Sources</code>, <code>::SpiceGenTcl::Ngspice::BasicElements</code>, and <code>::SpiceGenTcl::Ngspice::Analyses</code> namespaces.</p>
+</figure><p class='ruff'>An instance of the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> class, referenced by the <code>circuit</code> variable, has an <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::add" title="::SpiceGenTcl::Circuit::add" class='ruff_cmd'>::SpiceGenTcl::Circuit::add</a> method that appends the references of argument objects to it. The object-creating commands <code><b><font color=#923B23>Vdc</font></b></code>, <code><b><font color=#923B23>R</font></b></code>, and <code><b><font color=#923B23>Dc</font></b></code> — which represent a DC voltage source, a basic resistor, and a DC analysis, respectively — are imported from the <code>::SpiceGenTcl::Ngspice::Sources</code>, <code>::SpiceGenTcl::Ngspice::BasicElements</code>, and <code>::SpiceGenTcl::Ngspice::Analyses</code> namespaces.</p>
 <p class='ruff'>When using the <code>new</code> subcommand, you provide the basic arguments for the element. For example, in the <code><b><font color=#923B23>R</font></b></code> command, you would supply the name '1', the name of the net connected to the positive node 'in', the name of the net connected to the negative node '0' (which is the global ground), and the resistance value '1e3'.</p>
-<p class='ruff'>The last necessary step is to create <code><b><font color=#923B23>Simulator</font></b></code> object with command <code><b><font color=#923B23>Batch</font></b></code> from <code>::SpiceGenTcl::Ngspice</code> namespace and attach it to <code><b><font color=#923B23>Circuit</font></b></code> object:</p>
+<p class='ruff'>The last necessary step is to create <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Simulator" title="::SpiceGenTcl::Simulator" class='ruff_cmd'>::SpiceGenTcl::Simulator</a> object with command <code><b><font color=#923B23>Batch</font></b></code> from <code>::SpiceGenTcl::Ngspice</code> namespace and attach it to <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> object:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> simulator [<b><font color=#923B23>Batch</font></b> new {batch1} {/usr/local/bin/}]
 <font color=#4A181B>$circuit</font> configure <font color=#463e11>-Simulator</font> <font color=#4A181B>$simulator</font>
@@ -120,7 +120,7 @@ r2 out 0 2e3
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$circuit</font> runAndRead
 </pre>
 
-</figure><p class='ruff'>After the simulation, we can read the resulting data. We use the <code>getDataDict</code> method to obtain a dictionary where the keys are the names of the result vectors:</p>
+</figure><p class='ruff'>After the simulation, we can read the resulting data. We use the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::getDataDict" title="::SpiceGenTcl::Circuit::getDataDict" class='ruff_cmd'>::SpiceGenTcl::Circuit::getDataDict</a> method to obtain a dictionary where the keys are the names of the result vectors:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> data [<font color=#4A181B>$circuit</font> getDataDict]
 </pre>

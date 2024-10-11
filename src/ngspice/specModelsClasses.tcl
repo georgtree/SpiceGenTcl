@@ -1,8 +1,7 @@
 
 namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
     
-    namespace export RSemModel CSemModel VSwitchModel CSwitchModel DiodeModel BjtGPModel Jfet1Model \
-            Jfet2Model Mesfet1Model
+    namespace export RSemModel CSemModel VSwitchModel CSwitchModel 
     
     # ________________________ RSemModel class _________________________ #
     
@@ -119,7 +118,12 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             }
         }
     }
-
+}
+    
+namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {    
+    
+    namespace export DiodeModel BjtGPModel Jfet1Model Jfet2Model Mesfet1Model
+    
     # ________________________ DiodeModel class _________________________ #
     
     oo::class create DiodeModel {
