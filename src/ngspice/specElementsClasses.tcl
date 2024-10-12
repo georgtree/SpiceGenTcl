@@ -81,8 +81,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             set paramsNames [list tc1 tc2 noisy]
             set params [my argsPreprocess $paramsNames {*}$args]
-            set params [linsert $params 0 "r $rExpr -eq"]
-            next r$name [list "np $npNode" "nm $nmNode"] $params
+            next r$name [list "np $npNode" "nm $nmNode"] [linsert $params 0 "r $rExpr -eq"]
         }
     }
 
@@ -113,8 +112,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ::SpiceGenTcl::Ngspice::ResistorSemiconductor new 1 netp netm resm -l 1e-6 -w 10e-6
             # ```
             set paramsNames [list l w temp dtemp m ac scale noisy]
-            set params [my argsPreprocess $paramsNames {*}$args]
-            next r$name [list "np $npNode" "nm $nmNode"] $modelName $params
+            next r$name [list "np $npNode" "nm $nmNode"] $modelName [my argsPreprocess $paramsNames {*}$args]
         }
     }
     # alias for ResistorSemiconductor class
@@ -180,8 +178,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             set paramsNames [list tc1 tc2]
             set params [my argsPreprocess $paramsNames {*}$args]
-            set params [linsert $params 0 "c $cExpr -eq"]
-            next c$name [list "np $npNode" "nm $nmNode"] $params
+            next c$name [list "np $npNode" "nm $nmNode"] [linsert $params 0 "c $cExpr -eq"]
         }
     }
     
@@ -211,8 +208,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             set paramsNames [list tc1 tc2]
             set params [my argsPreprocess $paramsNames {*}$args]
-            set params [linsert $params 0 "q $qExpr -eq"]
-            next c$name [list "np $npNode" "nm $nmNode"] $params
+            next c$name [list "np $npNode" "nm $nmNode"] [linsert $params 0 "q $qExpr -eq"]
         }
     }
     
@@ -242,8 +238,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ::SpiceGenTcl::Ngspice::CapacitorSemiconductor new 1 netp netm capm -l 1e-6 -w 10e-6
             # ```
             set paramsNames [list l w temp dtemp m ac scale]
-            set params [my argsPreprocess $paramsNames {*}$args]
-            next c$name [list "np $npNode" "nm $nmNode"] $modelName $params
+            next c$name [list "np $npNode" "nm $nmNode"] $modelName [my argsPreprocess $paramsNames {*}$args]
         }
     }
     # alias for CapacitorSemiconductor class
@@ -310,8 +305,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             set paramsNames [list tc1 tc2]
             set params [my argsPreprocess $paramsNames {*}$args]
-            set params [linsert $params 0 "l $lExpr -eq"]
-            next l$name [list "np $npNode" "nm $nmNode"] $params
+            next l$name [list "np $npNode" "nm $nmNode"] [linsert $params 0 "l $lExpr -eq"]
         }
     }
     
@@ -837,7 +831,8 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             set paramDefList [my buildArgStr [list td theta phase]]
             set arguments [argparse -inline "
                 $paramDefList
-            "]            
+            "]
+            set paramList ""
             dict for {paramName value} $arguments {
                 if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
                     lappend paramList "-$paramName" "[lindex $value 0] -poseq"
@@ -845,11 +840,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
                     lappend paramList "-$paramName" "$value"
                 }
             }
-            if {[info exists paramList]} {
-                next $name v $npNode $nmNode $v0 $va $freq {*}$paramList
-            } else {
-                next $name v $npNode $nmNode $v0 $va $freq
-            }
+            next $name v $npNode $nmNode $v0 $va $freq {*}$paramList
         }
     }
     
@@ -926,7 +917,8 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             set paramDefList [my buildArgStr [list phasec phases]]
             set arguments [argparse -inline "
                 $paramDefList
-            "]    
+            "]
+            set paramList ""
             dict for {paramName value} $arguments {
                 if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
                     lappend paramList "-$paramName" "[lindex $value 0] -poseq"
@@ -934,11 +926,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
                     lappend paramList "-$paramName" "$value"
                 }
             }
-            if {[info exists paramList]} {
-                next $name v $npNode $nmNode $v0 $va $fc $mdi $fs {*}$paramList
-            } else {
-                next $name v $npNode $nmNode $v0 $va $fc $mdi $fs
-            }
+            next $name v $npNode $nmNode $v0 $va $fc $mdi $fs {*}$paramList
         }
     }
     
@@ -966,6 +954,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             set arguments [argparse -inline {
                 -phases=
             }]
+            set paramList ""
             dict for {paramName value} $arguments {
                 if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
                     lappend paramList "-$paramName" "[lindex $value 0] -poseq"
@@ -973,11 +962,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
                     lappend paramList "-$paramName" "$value"
                 }
             }
-            if {[info exists paramList]} {
-                next $name v $npNode $nmNode $v0 $va $mf $fc $td {*}$paramList
-            } else {
-                next $name v $npNode $nmNode $v0 $va $mf $fc $td
-            }
+            next $name v $npNode $nmNode $v0 $va $mf $fc $td {*}$paramList
         }
     }    
     
@@ -1090,7 +1075,8 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             set paramDefList [my buildArgStr [list td theta phase]]
             set arguments [argparse -inline "
                 $paramDefList
-            "]    
+            "]
+            set paramList ""
             dict for {paramName value} $arguments {
                 if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
                     lappend paramList "-$paramName" "[lindex $value 0] -poseq"
@@ -1098,11 +1084,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
                     lappend paramList "-$paramName" "$value"
                 }
             }
-            if {[info exists paramList]} {
-                next $name i $npNode $nmNode $v0 $va $freq {*}$paramList
-            } else {
-                next $name i $npNode $nmNode $v0 $va $freq
-            }
+            next $name i $npNode $nmNode $v0 $va $freq {*}$paramList
         }
     }
     
@@ -1179,7 +1161,8 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             set paramDefList [my buildArgStr [list phasec phases]]
             set arguments [argparse -inline "
                 $paramDefList
-            "]    
+            "]
+            set paramList ""
             dict for {paramName value} $arguments {
                 if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
                     lappend paramList "-$paramName" "[lindex $value 0] -poseq"
@@ -1187,11 +1170,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
                     lappend paramList "-$paramName" "$value"
                 }
             }
-            if {[info exists paramList]} {
-                next $name i $npNode $nmNode $v0 $va $fc $mdi $fs {*}$paramList
-            } else {
-                next $name i $npNode $nmNode $v0 $va $fc $mdi $fs
-            }
+            next $name i $npNode $nmNode $v0 $va $fc $mdi $fs {*}$paramList
         }
     }
         
@@ -1220,6 +1199,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             set arguments [argparse -inline {
                 -phases=
             }]
+            set paramList ""
             dict for {paramName value} $arguments {
                 if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
                     lappend paramList "-$paramName" "[lindex $value 0] -poseq"
@@ -1227,11 +1207,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
                     lappend paramList "-$paramName" "$value"
                 }
             }
-            if {[info exists paramList]} {
-                next $name i $npNode $nmNode $v0 $va $mf $fc $td {*}$paramList
-            } else {
-                next $name i $npNode $nmNode $v0 $va $mf $fc $td
-            }
+            next $name i $npNode $nmNode $v0 $va $mf $fc $td {*}$paramList
         }
     }
     
@@ -1532,16 +1508,14 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
                     lappend paramList "$paramName $value"
                 }
             }
+            set pinList [list "nc $ncNode" "nb $nbNode" "ne $neNode"]
             if {[dict exists $arguments ns]} {
+                lappend pinList "ns [dict get $arguments ns]"
                 if {[dict exists $arguments tj]} {
-                    next q$name [list "nc $ncNode" "nb $nbNode" "ne $neNode" "ns [dict get $arguments ns]" "tj [dict get $arguments tj]"] $modelName $paramList
-                } else {
-                    next q$name [list "nc $ncNode" "nb $nbNode" "ne $neNode" "ns [dict get $arguments ns]"] $modelName $paramList
+                    lappend pinList "tj [dict get $arguments tj]"
                 }
-            } else {
-                next q$name [list "nc $ncNode" "nb $nbNode" "ne $neNode"] $modelName $paramList
             }
-            
+            next q$name $pinList $modelName $paramList
         }
     }
     # alias for Bjt class
@@ -1574,6 +1548,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             set arguments [argparse -inline "
                 $paramDefList
             "]
+            set paramList ""
             dict for {paramName value} $arguments {
                 if {$paramName=="area"} {
                     if {[lindex $value 1]=="-eq"} {
@@ -1586,12 +1561,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
                     lappend paramList "$paramName $value"
                 }
             }
-            if {[info exists paramList]} {
-                next j$name [list "nd $ndNode" "ng $ngNode" "ns $nsNode"] $modelName $paramList
-            } else {
-                next j$name [list "nd $ndNode" "ng $ngNode" "ns $nsNode"] $modelName ""
-            }
-            
+            next j$name [list "nd $ndNode" "ng $ngNode" "ns $nsNode"] $modelName $paramList
         }
     }
     # alias for Jfet class
@@ -1624,6 +1594,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             set arguments [argparse -inline "
                 $paramDefList
             "]
+            set paramList ""
             dict for {paramName value} $arguments {
                 if {$paramName=="area"} {
                     if {[lindex $value 1]=="-eq"} {
@@ -1636,11 +1607,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
                     lappend paramList "$paramName $value"
                 }
             }
-            if {[info exists paramList]} {
-                next z$name [list "nd $ndNode" "ng $ngNode" "ns $nsNode"] $modelName $paramList
-            } else {
-                next z$name [list "nd $ndNode" "ng $ngNode" "ns $nsNode"] $modelName ""
-            }
+            next z$name [list "nd $ndNode" "ng $ngNode" "ns $nsNode"] $modelName $paramList
             
         }
     }
@@ -1691,29 +1658,20 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
                     lappend paramList "$paramName $value"
                 }
             }
+            set pinList [list "nd $ndNode" "ng $ngNode" "ns $nsNode"]
             if {[dict exists $arguments n4]} {
+                lappend pinList "n4 [dict get $arguments n4]"
                 if {[dict exists $arguments n5]} {
+                    lappend pinList "n5 [dict get $arguments n5]"
                     if {[dict exists $arguments n6]} {
+                        lappend pinList "n6 [dict get $arguments n6]"
                         if {[dict exists $arguments n7]} {
-                            next m$name [list "nd $ndNode" "ng $ngNode" "ns $nsNode" "n4 [dict get $arguments n4]"\
-                                    "n5 [dict get $arguments n5]" "n6 [dict get $arguments n6]"\
-                                    "n7 [dict get $arguments n7]"] $modelName $paramList
-                        } else {
-                            next m$name [list "nd $ndNode" "ng $ngNode" "ns $nsNode" "n4 [dict get $arguments n4]"\
-                                    "n5 [dict get $arguments n5]" "n6 [dict get $arguments n6]"]\
-                                    $modelName $paramList
+                            lappend pinList "n7 [dict get $arguments n7]"
                         }
-                    } else {
-                        next m$name [list "nd $ndNode" "ng $ngNode" "ns $nsNode" "n4 [dict get $arguments n4]"\
-                                "n5 [dict get $arguments n5]"] $modelName $paramList
-                    } 
-                } else {
-                    next m$name [list "nd $ndNode" "ng $ngNode" "ns $nsNode" "n4 [dict get $arguments n4]"]\
-                            $modelName $paramList
+                    }
                 }
-            } else {
-                next m$name [list "nd $ndNode" "ng $ngNode" "ns $nsNode"] $modelName $paramList
             }
+            next m$name $pinList $modelName $paramList
         }
     }
     # alias for Mosfet class

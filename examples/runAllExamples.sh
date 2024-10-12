@@ -1,6 +1,6 @@
 tclsh ./subcircuit.tcl
 tclsh ./netlist_manipulations.tcl
-cd dc
+cd ngspice/dc
 tclsh ./resistor_divider.tcl
 tclsh ./diode_iv.tcl
 cd ../ac

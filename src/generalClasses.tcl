@@ -1418,13 +1418,9 @@ namespace eval ::SpiceGenTcl {
                     my addParam [lindex $param 0] [lindex $param 1]    
                 } elseif {[lindex $param 1]=="-sw"} {
                     my addParam [lindex $param 0] -sw 
-                } elseif {[lindex $param 2]=="-eq"} {
-                    my addParam [lindex $param 0] [lindex $param 1] -eq 
-                } elseif {[lindex $param 2]=="-posnocheck"} {
-                    my addParam [lindex $param 0] [lindex $param 1] -posnocheck 
-                } else { 
-                    error "Wrong parameter definition in Analysis '[my configure -Name]'"
-                }   
+                } else  {
+                    my addParam {*}$param
+                } 
             }
         }
         method getParams {} {
@@ -1444,7 +1440,10 @@ namespace eval ::SpiceGenTcl {
             #  args - optional arguments *-eq* or *-posnocheck* as parameter qualificators
             set arguments [argparse {
                 {-eq -forbid {posnocheck}}
+                {-poseq -forbid {posnocheck}}
                 {-posnocheck -forbid {eq}}
+                {-pos -forbid {eq}}
+                {-nocheck -forbid {eq}}
             }]
             set paramName [string tolower $paramName]
             if {[info exists Params]} {
@@ -1457,11 +1456,17 @@ namespace eval ::SpiceGenTcl {
             if {$value=="-sw"} {
                 dict append Params $paramName [::SpiceGenTcl::ParameterSwitch new $paramName]
             } elseif {[info exists eq]} {
+                dict append Params $paramName [::SpiceGenTcl::ParameterEquation new $paramName $value]
+            } elseif {[info exists poseq]} {
                 dict append Params $paramName [::SpiceGenTcl::ParameterPositionalEquation new $paramName $value]
             } elseif {[info exists posnocheck]} {
                 dict append Params $paramName [::SpiceGenTcl::ParameterPositionalNoCheck new $paramName $value]
-            } else {
+            } elseif {[info exists pos]} {
                 dict append Params $paramName [::SpiceGenTcl::ParameterPositional new $paramName $value]
+            } elseif {[info exists nocheck]} {
+                dict append Params $paramName [::SpiceGenTcl::ParameterNoCheck new $paramName $value]
+            } else {
+                dict append Params $paramName [::SpiceGenTcl::Parameter new $paramName $value]
             }
             return
         }

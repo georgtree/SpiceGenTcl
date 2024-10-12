@@ -18,8 +18,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ::SpiceGenTcl::Ngspice::BasicDevices::RSemModel new resmod -tc1 1 -tc2 2
             # ```
             set paramsNames [list tc1 tc2 rsh defw narrow short tnom kf af wf lf ef {r res}]
-            set params [my argsPreprocess $paramsNames {*}$args]
-            next $name r $params
+            next $name r [my argsPreprocess $paramsNames {*}$args]
         }
     }
 
@@ -37,8 +36,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ::SpiceGenTcl::Ngspice::BasicDevices::CSemModel new capmod -tc1 1 -tc2 2
             # ```
             set paramsNames [list cap cj cjsw defw narrow short tc1 tc2 tnom di thick]
-            set params [my argsPreprocess $paramsNames {*}$args]
-            next $name c $params
+            next $name c [my argsPreprocess $paramsNames {*}$args]
         }
     }
     
@@ -56,8 +54,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ::SpiceGenTcl::Ngspice::BasicDevices::VSwitchModel new swmod -vt 1 -vh 0.5 -ron 1 -roff 1e6
             # ```
             set paramsNames [list vt vh ron roff]
-            set params [my argsPreprocess $paramsNames {*}$args]
-            next $name sw $params
+            next $name sw [my argsPreprocess $paramsNames {*}$args]
         }
     }
 
@@ -75,8 +72,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ::SpiceGenTcl::Ngspice::BasicDevices::CSwitchModel new cswmod -it 1 -ih 0.5 -ron 1 -roff 1e6
             # ```
             set paramsNames [list it ih ron roff]
-            set params [my argsPreprocess $paramsNames {*}$args]
-            next $name csw $params
+            next $name csw [my argsPreprocess $paramsNames {*}$args]
         }
     }
 }
@@ -102,8 +98,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
                     fc fcs mjsw php tt lm lp wm wp xom xoi xm xp eg trs2 tm1 tm2 ttt1 ttt2 \
                     xti tlev tlevc ctp tcv {is js} {ikf ik} {cjo cj0} {cjp cjsw} {m mj} {vj pb} \
                     {tnom tref} {trs1 trs} {cta ctc}]
-            set params [my argsPreprocess $paramsNames {*}$args]
-            next $name d $params
+            next $name d [my argsPreprocess $paramsNames {*}$args]
         }
     }    
     
@@ -130,8 +125,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
                     cte cts tvjc tvje titf1 titf2 ttf1 ttf2 ttr1 ttr2 tmje1 tmje2 tmjc1 tmjc2 \
                     rco gamma qco vg cn d]
             set params [my argsPreprocess $paramsNames {*}$args]
-            set params [linsert $params 0 [list level 1]]
-            next $name $type $params
+            next $name $type [linsert $params 0 [list level 1]]
         }
     } 
         
@@ -152,8 +146,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             set paramsNames [list vto beta lambda rd rs cgs cgd pb is b kf af nlev gdsnoi fc tnom \
                     tcv vtotc bex betatce xti eg]
             set params [my argsPreprocess $paramsNames {*}$args]
-            set params [linsert $params 0 [list level 1]]
-            next $name $type $params
+            next $name $type [linsert $params 0 [list level 1]]
         }
     }
     
@@ -175,8 +168,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
                     hfg1 hfg2 ibd is lfgam lfg1 lfg2 mvst n p q rs rd  taud taug vbd \
                     vbi vst vto xc xi z rg lg ls ld cdss afac nfing tnom temp]
             set params [my argsPreprocess $paramsNames {*}$args]
-            set params [linsert $params 0 [list level 2]]
-            next $name $type $params
+            next $name $type [linsert $params 0 [list level 2]]
         }
     } 
     
@@ -196,8 +188,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             # ```
             set paramsNames [list vto beta b alpha lambda rd rs cgs cgd pb kf af fc]
             set params [my argsPreprocess $paramsNames {*}$args]
-            set params [linsert $params 0 [list level 1]]
-            next $name $type $params
+            next $name $type [linsert $params 0 [list level 1]]
         }
     } 
 }

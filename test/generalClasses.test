@@ -1112,7 +1112,7 @@ r5 net1 net2 res_sem l=10e-6 w=100e-6
     # ________________________ Analysis class tests _________________________ #
     
 test testAnalysisClass-1.1 {test creation of Analysis class instance and getParams interface} -setup {
-    set anInst [Analysis new dc {{srcnam v1 -posnocheck} {vstart 0} {vstop 5} {vincr 0.1}}]
+    set anInst [Analysis new dc {{srcnam v1 -posnocheck} {vstart 0 -pos} {vstop 5 -pos} {vincr 0.1 -pos}}]
 } -body {
     set result [$anInst getParams]
 } -result [dict create srcnam v1 vstart 0 vstop 5 vincr 0.1] -cleanup {
@@ -1120,7 +1120,7 @@ test testAnalysisClass-1.1 {test creation of Analysis class instance and getPara
 }
 
 test testAnalysisClass-1.2 {test creation of Analysis class instance and genSPICEString interface} -setup {
-    set anInst [Analysis new dc {{srcnam v1 -posnocheck} {vstart 0} {vstop 5} {vincr 0.1}}]
+    set anInst [Analysis new dc {{srcnam v1 -posnocheck} {vstart 0 -pos} {vstop 5 -pos} {vincr 0.1 -pos}}]
 } -body {
     set result [$anInst genSPICEString]
 } -result ".dc v1 0 5 0.1" -cleanup {
@@ -1128,14 +1128,14 @@ test testAnalysisClass-1.2 {test creation of Analysis class instance and genSPIC
 }
 
 test testAnalysisClass-1.3 {test creation of Analysis class instance and genSPICEString interface} -body {
-    catch {set anInst [Analysis new dc1 {{srcnam v1 -posnocheck} {vstart 0} {vstop 5} {vincr 0.1}}]} errorStr
+    catch {set anInst [Analysis new dc1 {{srcnam v1 -posnocheck} {vstart 0 -pos} {vstop 5 -pos} {vincr 0.1 -pos}}]} errorStr
     return $errorStr
 } -result "Type 'dc1' is not in supported list of analysis, should be one of 'ac dc tran op disto noise pz sens sp tf'" -cleanup {
     unset errorStr
 }
 
 test testAnalysisClass-1.4 {test creation of Analysis class instance and setParamValue interface} -setup {
-    set anInst [Analysis new dc {{srcnam v1 -posnocheck} {vstart 0} {vstop 5} {vincr 0.1}}]
+    set anInst [Analysis new dc {{srcnam v1 -posnocheck} {vstart 0 -pos} {vstop 5 -pos} {vincr 0.1 -pos}}]
     $anInst setParamValue vstop 10
 } -body {
     return [$anInst genSPICEString]   
@@ -1144,7 +1144,7 @@ test testAnalysisClass-1.4 {test creation of Analysis class instance and setPara
 }
 
 test testAnalysisClass-1.5 {test creation of Analysis class instance and genSPICEString interface} -setup {
-    set anInst [Analysis new dc {{srcnam v1 -posnocheck} {vstart 0} {vstop x**2+1 -eq} {vincr 0.1}}]
+    set anInst [Analysis new dc {{srcnam v1 -posnocheck} {vstart 0 -pos} {vstop x**2+1 -poseq} {vincr 0.1 -pos}}]
 } -body {
     set result [$anInst genSPICEString]
 } -result ".dc v1 0 {x**2+1} 0.1" -cleanup {
@@ -1152,7 +1152,7 @@ test testAnalysisClass-1.5 {test creation of Analysis class instance and genSPIC
 }
 
 test testAnalysisClass-1.6 {test creation of Analysis class instance and genSPICEString interface} -setup {
-    set anInst [Analysis new tran {{tstep 1e-6} {tstop 10e-3} {uic -sw}}]
+    set anInst [Analysis new tran {{tstep 1e-6 -pos} {tstop 10e-3 -pos} {uic -sw}}]
 } -body {
     set result [$anInst genSPICEString]
 } -result ".tran 1e-6 10e-3 uic" -cleanup {

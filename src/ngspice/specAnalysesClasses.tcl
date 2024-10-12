@@ -24,7 +24,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Analyses::Dc new v1 {time1 -eq} 5 0.1 -name dc1
+            # ::SpiceGenTcl::Ngspice::Analyses::Dc new v1 {time1 -eq} 5 0.1 -name dc1
             # ```
             set arguments [argparse {
                 -name=
@@ -34,8 +34,21 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             } else {
                 set name [self object]
             }
-            set params [list "srcnam $srcnam -posnocheck" "vstart $vstart" "vstop $vstop" "vincr $vincr"]
-            next dc $params -name $name
+            set argsNames [lrange [lindex [info class constructor [self class]] 0] 1 end-1]
+            set paramList [list "srcnam $srcnam -posnocheck"]
+            foreach argName $argsNames {
+                set argVal [subst $[subst $argName]]
+                if {[llength $argVal]>1} {
+                    if {[lindex $argVal 1]=="-eq"} {
+                        lappend paramList "$argName [lindex $argVal 0] -poseq"
+                    } else {
+                        error "Wrong qualificator '[lindex $argVal 1]' for $argName parameter"
+                    }
+                } else {
+                    lappend paramList "$argName $argVal -pos"
+                }
+            }
+            next dc $paramList -name $name
         }
     }
 
@@ -55,7 +68,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Analyses::Ac new dec 10 1 1e6 -name dc1
+            # ::SpiceGenTcl::Ngspice::Analyses::Ac new dec 10 1 1e6 -name dc1
             # ```
             set arguments [argparse {
                 -name=
@@ -65,8 +78,21 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             } else {
                 set name [self object]
             }
-            set params [list "$variation -sw" "n $n" "fstart $fstart" "fstop $fstop"]
-            next ac $params -name $name
+            set argsNames [lrange [lindex [info class constructor [self class]] 0] 1 end-1]
+            set paramList [list "$variation -sw"]
+            foreach argName $argsNames {
+                set argVal [subst $[subst $argName]]
+                if {[llength $argVal]>1} {
+                    if {[lindex $argVal 1]=="-eq"} {
+                        lappend paramList "$argName [lindex $argVal 0] -poseq"
+                    } else {
+                        error "Wrong qualificator '[lindex $argVal 1]' for $argName parameter"
+                    }
+                } else {
+                    lappend paramList "$argName $argVal -pos"
+                }
+            }
+            next ac $paramList -name $name
         }
     }
 
@@ -87,7 +113,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Analyses::SensAc new v(1,out) dec 10 1 1e6 -name dc1
+            # ::SpiceGenTcl::Ngspice::Analyses::SensAc new v(1,out) dec 10 1 1e6 -name dc1
             # ```
             set arguments [argparse {
                 -name=
@@ -97,8 +123,21 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             } else {
                 set name [self object]
             }
-            set params [list "outvar $outVar -posnocheck" "ac -sw" "$variation -sw" "n $n" "fstart $fstart" "fstop $fstop"]
-            next sens $params -name $name
+            set argsNames [lrange [lindex [info class constructor [self class]] 0] 2 end-1]
+            set paramList [list "outvar $outVar -posnocheck" "ac -sw" "$variation -sw"]
+            foreach argName $argsNames {
+                set argVal [subst $[subst $argName]]
+                if {[llength $argVal]>1} {
+                    if {[lindex $argVal 1]=="-eq"} {
+                        lappend paramList "$argName [lindex $argVal 0] -poseq"
+                    } else {
+                        error "Wrong qualificator '[lindex $argVal 1]' for $argName parameter"
+                    }
+                } else {
+                    lappend paramList "$argName $argVal -pos"
+                }
+            }
+            next sens $paramList -name $name
         }
     }
     
@@ -115,7 +154,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Analyses::SensDc new v(1,out) -name sensdc1
+            # ::SpiceGenTcl::Ngspice::Analyses::SensDc new v(1,out) -name sensdc1
             # ```
             set arguments [argparse {
                 -name=
@@ -144,24 +183,35 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Analyses::Tran new 1e-9 10e-6 -name dc1
+            # ::SpiceGenTcl::Ngspice::Analyses::Tran new 1e-9 10e-6 -name dc1
             # ```
-            set arguments [argparse {
+            set arguments [argparse -inline {
                 -name=
                 {-uic -boolean}
             }]
-            if {[info exists name]} {
-                set name $name
+            if {[dict exists $arguments name]} {
+                set name [dict get $arguments name]
             } else {
                 set name [self object]
             }
-            if {$uic==1} {
-                set params [list "tstep $tstep" "tstop $tstop" "uic -sw"]
-            } else {
-                set params [list "tstep $tstep" "tstop $tstop"]
+            set argsNames [lrange [lindex [info class constructor [self class]] 0] 0 end-1]
+            set paramList ""
+            foreach argName $argsNames {
+                set argVal [subst $[subst $argName]]
+                if {[llength $argVal]>1} {
+                    if {[lindex $argVal 1]=="-eq"} {
+                        lappend paramList "$argName [lindex $argVal 0] -poseq"
+                    } else {
+                        error "Wrong qualificator '[lindex $argVal 1]' for $argName parameter"
+                    }
+                } else {
+                    lappend paramList "$argName $argVal -pos"
+                }
             }
-            
-            next tran $params -name $name
+            if {[dict get $arguments uic]==1} {
+                lappend paramList "uic -sw"
+            }
+            next tran $paramList -name $name
         }
     }
     
@@ -177,7 +227,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Analyses::Op new -name op1
+            # ::SpiceGenTcl::Ngspice::Analyses::Op new -name op1
             # ```
             my variable Name
             set arguments [argparse {
