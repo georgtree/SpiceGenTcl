@@ -2,6 +2,7 @@
 namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
     
     namespace export RSemModel CSemModel VSwitchModel CSwitchModel 
+
     
     # ________________________ RSemModel class _________________________ #
     
@@ -17,18 +18,8 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ::SpiceGenTcl::Ngspice::BasicDevices::RSemModel new resmod -tc1 1 -tc2 2
             # ```
             set paramsNames [list tc1 tc2 rsh defw narrow short tnom kf af wf lf ef {r res}]
-            set paramDefList [my buildArgStr $paramsNames]
-            set arguments [argparse -inline "
-                $paramDefList
-            "]
-            dict for {paramName value} $arguments {
-                lappend params [list $paramName $value]
-            }
-            if {[info exists params]} {
-                next $name r $params
-            } else {
-                next $name r ""
-            }
+            set params [my argsPreprocess $paramsNames {*}$args]
+            next $name r $params
         }
     }
 
@@ -46,18 +37,8 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ::SpiceGenTcl::Ngspice::BasicDevices::CSemModel new capmod -tc1 1 -tc2 2
             # ```
             set paramsNames [list cap cj cjsw defw narrow short tc1 tc2 tnom di thick]
-            set paramDefList [my buildArgStr $paramsNames]
-            set arguments [argparse -inline "
-                $paramDefList
-            "]
-            dict for {paramName value} $arguments {
-                lappend params [list $paramName $value]
-            }
-            if {[info exists params]} {
-                next $name c $params
-            } else {
-                next $name c ""
-            }
+            set params [my argsPreprocess $paramsNames {*}$args]
+            next $name c $params
         }
     }
     
@@ -75,18 +56,8 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ::SpiceGenTcl::Ngspice::BasicDevices::VSwitchModel new swmod -vt 1 -vh 0.5 -ron 1 -roff 1e6
             # ```
             set paramsNames [list vt vh ron roff]
-            set paramDefList [my buildArgStr $paramsNames]
-            set arguments [argparse -inline "
-                $paramDefList
-            "]
-            dict for {paramName value} $arguments {
-                lappend params [list $paramName $value]
-            }
-            if {[info exists params]} {
-                next $name sw $params
-            } else {
-                next $name sw ""
-            }
+            set params [my argsPreprocess $paramsNames {*}$args]
+            next $name sw $params
         }
     }
 
@@ -104,18 +75,8 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ::SpiceGenTcl::Ngspice::BasicDevices::CSwitchModel new cswmod -it 1 -ih 0.5 -ron 1 -roff 1e6
             # ```
             set paramsNames [list it ih ron roff]
-            set paramDefList [my buildArgStr $paramsNames]
-            set arguments [argparse -inline "
-                $paramDefList
-            "]
-            dict for {paramName value} $arguments {
-                lappend params [list $paramName $value]
-            }
-            if {[info exists params]} {
-                next $name csw $params
-            } else {
-                next $name csw ""
-            }
+            set params [my argsPreprocess $paramsNames {*}$args]
+            next $name csw $params
         }
     }
 }
@@ -141,18 +102,8 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
                     fc fcs mjsw php tt lm lp wm wp xom xoi xm xp eg trs2 tm1 tm2 ttt1 ttt2 \
                     xti tlev tlevc ctp tcv {is js} {ikf ik} {cjo cj0} {cjp cjsw} {m mj} {vj pb} \
                     {tnom tref} {trs1 trs} {cta ctc}]
-            set paramDefList [my buildArgStr $paramsNames]
-            set arguments [argparse -inline "
-                $paramDefList
-            "]
-            dict for {paramName value} $arguments {
-                lappend params [list $paramName $value]
-            }
-            if {[info exists params]} {
-                next $name d $params
-            } else {
-                next $name d ""
-            }
+            set params [my argsPreprocess $paramsNames {*}$args]
+            next $name d $params
         }
     }    
     
@@ -178,19 +129,9 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
                     tnc1 tnc2 tne1 tne2 tnf1 tnf2 tnr1 tnr2 tvaf1 tvaf2 tvar1 tvar2 ctc \
                     cte cts tvjc tvje titf1 titf2 ttf1 ttf2 ttr1 ttr2 tmje1 tmje2 tmjc1 tmjc2 \
                     rco gamma qco vg cn d]
-            set paramDefList [my buildArgStr $paramsNames]
-            set arguments [argparse -inline "
-                $paramDefList
-            "]
-            dict for {paramName value} $arguments {
-                lappend params [list $paramName $value]
-            }
-            lappend params [list level 1]
-            if {[info exists params]} {
-                next $name $type $params
-            } else {
-                next $name $type ""
-            }
+            set params [my argsPreprocess $paramsNames {*}$args]
+            set params [linsert $params 0 [list level 1]]
+            next $name $type $params
         }
     } 
         
@@ -210,21 +151,11 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             # ```
             set paramsNames [list vto beta lambda rd rs cgs cgd pb is b kf af nlev gdsnoi fc tnom \
                     tcv vtotc bex betatce xti eg]
-            set paramDefList [my buildArgStr $paramsNames]
-            set arguments [argparse -inline "
-                $paramDefList
-            "]
-            lappend params [list level 1]
-            dict for {paramName value} $arguments {
-                lappend params [list $paramName $value]
-            }
-            if {[info exists params]} {
-                next $name $type $params
-            } else {
-                next $name $type ""
-            }
+            set params [my argsPreprocess $paramsNames {*}$args]
+            set params [linsert $params 0 [list level 1]]
+            next $name $type $params
         }
-    } 
+    }
     
     # ________________________ Jfet2Model class _________________________ #
     
@@ -243,19 +174,9 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             set paramsNames [list acgam beta cgd cgs delta fc hfeta hfe1 hfe2 hfgam \
                     hfg1 hfg2 ibd is lfgam lfg1 lfg2 mvst n p q rs rd  taud taug vbd \
                     vbi vst vto xc xi z rg lg ls ld cdss afac nfing tnom temp]
-            set paramDefList [my buildArgStr $paramsNames]
-            set arguments [argparse -inline "
-                $paramDefList
-            "]
-            lappend params [list level 2]
-            dict for {paramName value} $arguments {
-                lappend params [list $paramName $value]
-            }
-            if {[info exists params]} {
-                next $name $type $params
-            } else {
-                next $name $type ""
-            }
+            set params [my argsPreprocess $paramsNames {*}$args]
+            set params [linsert $params 0 [list level 2]]
+            next $name $type $params
         }
     } 
     
@@ -274,19 +195,9 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             # ::SpiceGenTcl::Ngspice::BasicDevices::Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4 -vbi 1.2
             # ```
             set paramsNames [list vto beta b alpha lambda rd rs cgs cgd pb kf af fc]
-            set paramDefList [my buildArgStr $paramsNames]
-            set arguments [argparse -inline "
-                $paramDefList
-            "]
-            lappend params [list level 1]
-            dict for {paramName value} $arguments {
-                lappend params [list $paramName $value]
-            }
-            if {[info exists params]} {
-                next $name $type $params
-            } else {
-                next $name $type ""
-            }
+            set params [my argsPreprocess $paramsNames {*}$args]
+            set params [linsert $params 0 [list level 1]]
+            next $name $type $params
         }
     } 
 }

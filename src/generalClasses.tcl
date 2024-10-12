@@ -71,6 +71,22 @@ namespace eval ::SpiceGenTcl {
             set paramDefStr [join $paramDefList \n]
             return $paramDefStr
         }
+        method argsPreprocess {paramsNames args} {
+            # Calls argparse and constructs list for passing to Device or DeviceModel constructor.
+            #  paramsNames - list of parameter names, define alias for parameter name by
+            #  using two element list {paramName aliasName}
+            #  args - argument list with key names and it's values
+            # Returns: string in form *-paramName= \n {-paramName= -alias aliasName} \n ...*
+            set paramDefList [my buildArgStr $paramsNames]
+            set arguments [argparse -inline "
+                $paramDefList
+            "]
+            set params ""
+            dict for {paramName value} $arguments {
+                lappend params "$paramName $value"
+            }
+            return $params
+        }
     }
     
     # ________________________ Pin class definition _________________________ #

@@ -4,7 +4,7 @@ namespace eval Tips {
         
         ## Define custom element
         
-        To define custom element class we should use `Device` class as a superclass. Why we need this?
+        To define custom element class we should use [::SpiceGenTcl::Device] or [::SpiceGenTcl::DeviceModel] class as a superclass. Why we need this?
         One simple example is custom Verilog-A device, that could have arbitary number of pins and parameters.
         Let's try to define new element for next Verilog-A device:
         ```verilog-a
@@ -68,9 +68,9 @@ namespace eval Tips {
         
         ```tcl
         oo::class create Core {
-            superclass SpiceGenTcl::Device
-            mixin SpiceGenTcl::KeyArgsBuilder
-            constructor {name pNode nNode args} {
+            superclass ::SpiceGenTcl::DeviceModel
+            mixin ::SpiceGenTcl::KeyArgsBuilder
+            constructor {name pNode nNode modelName args} {
                 set paramsNames [list len area ms a k alpha c]
                 set paramDefList [my buildArgStr $paramsNames]
                 set arguments [argparse -inline "
@@ -80,7 +80,7 @@ namespace eval Tips {
                 dict for {paramName value} $arguments {
                     lappend paramList "$paramName $value"
                 }
-                next n$name [list "p $pNode" "n $nNode"] $paramList
+                next n$name [list "p $pNode" "n $nNode"] $modelName $paramList
             }
         }
         ```
@@ -93,15 +93,69 @@ namespace eval Tips {
         
         It is good convention to start class name from capital letter.
         
-        Superclass for new element is `Device`:
+        Superclass for new element is [::SpiceGenTcl::DeviceModel]:
         ```tcl
-        superclass SpiceGenTcl::Device
+        superclass SpiceGenTcl::DeviceModel
         ```
         
         We use mixin class [::SpiceGenTcl::KeyArgsBuilder] to add it's method [::SpiceGenTcl::KeyArgsBuilder::buildArgStr], that helps to build arguments
-        list for `argparse` package.
+        list for [argparse](https://wiki.tcl-lang.org/page/argparse) package.
         
-        In next line we define arguments
+        In next line we define arguments for constructor:
+        ```tcl
+        constructor {name pNode nNode modelName args}
+        ```
+        First argument is name of instance, then positive node and negative node names, model name and `args` accepts all optional
+        parameters of device.
+        
+        In these few lines we process `args` variable with `argparse` package:
+        ```tcl
+        set paramsNames [list len area ms a k alpha c]
+        set paramDefList [my buildArgStr $paramsNames]
+        set arguments [argparse -inline "
+            $paramDefList
+        "]
+        ```
+        
+        List `[list len area ms a k alpha c]` contains all parameters we have in core verilog-a model.
+        Due to these line we can pass parameters to element in forms `-paramName $paramValue $paramQual`, for example:
+        `-area 1e-4` or `-area l*m -eq`.
+        
+        The list of possible qualificators is:
+        -sw - parameter works as a switch, no value is provided
+        -eq - parameter is equation that can contain arbitary expressions and in SPICE syntax looks like `paramName={expression}`
+        -pos - parameter is positional and places without it's name, just the value. 
+          The order is defined by order of supplying arguments to [::SpiceGenTcl::DeviceModel] constructor
+        -poseq - combine both positional and eqaution types
+        
+        In the next few lines we build parameter list that will be passed to [::SpiceGenTcl::DeviceModel] constructor:      
+        ```tcl
+        set paramList ""
+        dict for {paramName value} $arguments {
+            lappend paramList "$paramName $value"
+        }
+        ```
+        
+        The last but not the least is step of passing arguments to [::SpiceGenTcl::DeviceModel] constructor:
+        ```tcl
+        next n$name [list "p $pNode" "n $nNode"] $modelName $paramList
+        ```
+        
+        This superclass accept arguments in form `constructor {name pins modelName instParams}`.
+        So, we pass string `n$name` as device name, `n` is reference designator for verilog-a devices in ngspice.
+        Secondly we pass list of nodes `[list "p $pNode" "n $nNode"]` in form of `{{Name0 NodeName} {Name1 NodeName} {Name2 NodeName} ...}`.
+        Then we pass name of the model `$modelName`.
+        And the last is list of parameters in form `{{Name Value ?-pos|eq|poseq?} {Name Value ?-pos|eq|poseq?} {Name Value ?-pos|eq|poseq?} ...}`.
+        
+        So, after that we can create a new instance of newly created class:
+        ```tcl
+        set coreInst [Core new 1 p n coreModel -area 1e-4 -len {l*5 -eq}]
+        puts [$coreInst genSPICEString]
+        ```
+        Resulted SPICE string is:
+        ```
+        n1 p n coremodel area=1e-4 len={l*5}
+        ```
     }
 
 }
