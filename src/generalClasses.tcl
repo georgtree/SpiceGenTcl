@@ -409,19 +409,13 @@ namespace eval ::SpiceGenTcl {
             #  - poseq - combination of both flags, print only '{$Equation}'
             if {$params!=""} {
                 foreach param $params {
-                    if {[lindex $param 1]=="-sw"} {
-                        my addParam [lindex $param 0] -sw 
-                    } elseif {[lindex $param 2]=={}} {
+                    if {[lindex $param 2]=={}} {
                         my addParam [lindex $param 0] [lindex $param 1] 
-                    } elseif {[lindex $param 2]=="-pos"} {
-                        my addParam [lindex $param 0] [lindex $param 1] -pos 
-                    } elseif {[lindex $param 2]=="-eq"} {
-                        my addParam [lindex $param 0] [lindex $param 1] -eq
-                    } elseif {[lindex $param 2]=="-poseq"} {
-                        my addParam [lindex $param 0] [lindex $param 1] -poseq
+                    } elseif {[lindex $param 1]=="-sw"} {
+                        my addParam [lindex $param 0] -sw 
                     } else {
-                        error "Wrong parameter definition in device $name"
-                    }  
+                        my addParam {*}$param
+                    } 
                 }
             } else {
                 set Params ""
@@ -1418,7 +1412,7 @@ namespace eval ::SpiceGenTcl {
                     my addParam [lindex $param 0] [lindex $param 1]    
                 } elseif {[lindex $param 1]=="-sw"} {
                     my addParam [lindex $param 0] -sw 
-                } else  {
+                } else {
                     my addParam {*}$param
                 } 
             }

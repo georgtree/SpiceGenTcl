@@ -835,7 +835,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             set paramList ""
             dict for {paramName value} $arguments {
                 if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                    lappend paramList "-$paramName" "[lindex $value 0] -poseq"
+                    lappend paramList "-$paramName" "[lindex $value 0] -eq"
                 } else {
                     lappend paramList "-$paramName" "$value"
                 }
@@ -921,7 +921,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             set paramList ""
             dict for {paramName value} $arguments {
                 if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                    lappend paramList "-$paramName" "[lindex $value 0] -poseq"
+                    lappend paramList "-$paramName" "[lindex $value 0] -eq"
                 } else {
                     lappend paramList "-$paramName" "$value"
                 }
@@ -957,7 +957,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             set paramList ""
             dict for {paramName value} $arguments {
                 if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                    lappend paramList "-$paramName" "[lindex $value 0] -poseq"
+                    lappend paramList "-$paramName" "[lindex $value 0] -eq"
                 } else {
                     lappend paramList "-$paramName" "$value"
                 }
@@ -1079,7 +1079,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             set paramList ""
             dict for {paramName value} $arguments {
                 if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                    lappend paramList "-$paramName" "[lindex $value 0] -poseq"
+                    lappend paramList "-$paramName" "[lindex $value 0] -eq"
                 } else {
                     lappend paramList "-$paramName" "$value"
                 }
@@ -1165,7 +1165,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             set paramList ""
             dict for {paramName value} $arguments {
                 if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                    lappend paramList "-$paramName" "[lindex $value 0] -poseq"
+                    lappend paramList "-$paramName" "[lindex $value 0] -eq"
                 } else {
                     lappend paramList "-$paramName" "$value"
                 }
@@ -1202,7 +1202,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             set paramList ""
             dict for {paramName value} $arguments {
                 if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                    lappend paramList "-$paramName" "[lindex $value 0] -poseq"
+                    lappend paramList "-$paramName" "[lindex $value 0] -eq"
                 } else {
                     lappend paramList "-$paramName" "$value"
                 }
