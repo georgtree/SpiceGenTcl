@@ -18,11 +18,11 @@ namespace eval Tutorials {
         # create netlist 
         set netlist [Netlist new main_netlist]
         # incrementally build netlist by adding different elements
-        $netlist add [R new 1 net1 net2 10]
-        $netlist add [RSem new 5 net1 net2 res_sem -l 10e-6 -w 100e-6]
+        $netlist add [R new 1 net1 net2 -r 10]
+        $netlist add [R new 5 net1 net2 -model res_sem -l 10e-6 -w 100e-6]
         $netlist add [RSemModel new rsem1mod -tc1 0.1 -tc2 0.4]
-        $netlist add [R new 2 net1 net2 {{r1+5/10} -eq}]
-        $netlist add [C new 1 net2 net3 1e-6]
+        $netlist add [R new 2 net1 net2 -r {{r1+5/10} -eq}]
+        $netlist add [C new 1 net2 net3 -c 1e-6]
         $netlist add [ParamStatement new {{r1 1} {r2 2}} -name ps1]
         $netlist add [Comment new {some random comment} -name com1]
         $netlist add [Include new {/fold1/fold2/file.lib} -name inc1]
@@ -135,7 +135,7 @@ namespace eval Tutorials {
         ```
         Also, we can save reference to object before adding to netlist in variable and only then add it to netlist:
         ```tcl
-        set r5 [R new 5 net1 net2 10]
+        set r5 [R new 5 net1 net2 -r 10]
         $netlist add $r5
         ```
         In this case we can directly modify 'r5' parameters without necessity to call [::SpiceGenTcl::Netlist::getElement] method.
@@ -153,9 +153,9 @@ namespace eval Tutorials {
                 # define input parameters of subcircuit
                 set params {{r 100} {c 1e-6}}
                 # add elements to subcircuit definition
-                my add [R new 1 net1 plus {r -eq}]
-                my add [C new 1 net2 net3 {c -eq}]
-                my add [RSem new 5 minus net2 res_sem -l 10e-6 -w 100e-6]
+                my add [R new 1 net1 plus -r {r -eq}]
+                my add [C new 1 net2 net3 -r {c -eq}]
+                my add [R new 5 minus net2 -model res_sem -l 10e-6 -w 100e-6]
                 my add [RSemModel new rsem1mod -tc1 0.1 -tc2 0.4]
                 # pass name, list of pins and list of parameters to Subcircuit constructor
                 next rcnet $pins $params
@@ -172,9 +172,9 @@ namespace eval Tutorials {
         ```
         Next step is adding elements to subcircuit:
         ```tcl
-        my add [R new 1 net1 plus {r -eq}]
-        my add [C new 1 net2 net3 {c -eq}]
-        my add [RSem new 5 minus net2 res_sem -l 10e-6 -w 100e-6]
+        my add [R new 1 net1 plus -r {r -eq}]
+        my add [C new 1 net2 net3 -c {c -eq}]
+        my add [R new 5 minus net2 -model res_sem -l 10e-6 -w 100e-6]
         my add [RSemModel new rsem1mod -tc1 0.1 -tc2 0.4]
         ```
         The last action is to pass name of subcircuit, list of pins and parameters to constructor of superclass:
@@ -424,13 +424,13 @@ namespace eval Tutorials {
         $circuit add [Vac new dm 1 11 1]
         $circuit add [Q new 1 4 2 6 qnr]
         $circuit add [Q new 2 5 3 6 qnl]
-        $circuit add [R new s1 11 2 1e3]
-        $circuit add [R new s2 3 1 1e3]
-        $circuit add [R new c1 4 8 10e3]
-        $circuit add [R new c2 5 8 10e3]
+        $circuit add [R new s1 11 2 -r 1e3]
+        $circuit add [R new s2 3 1 -r 1e3]
+        $circuit add [R new c1 4 8 -r 10e3]
+        $circuit add [R new c2 5 8 -r 10e3]
         $circuit add [Q new 3 7 7 9 qnl]
         $circuit add [Q new 4 6 7 9 qnr]
-        $circuit add [R new bias 7 8 20e3]
+        $circuit add [R new bias 7 8 -r 20e3]
         ```
         
         Then we add models for NPN and PNP bipolar transistors:
@@ -484,8 +484,8 @@ namespace eval Tutorials {
                 # define input parameters of subcircuit
                 set params {}
                 # add elements to subcircuit definition
-                my add [C new l out dgnd 0.1e-12]
-                my add [C new 2 out vdd 0.1e-12]
+                my add [C new l out dgnd -c 0.1e-12]
+                my add [C new 2 out vdd -c 0.1e-12]
                 my add [VSwitch new p out vdd vdd in swswitch]
                 my add [VSwitch new n out dgnd in dgnd switchn]
                 # pass name, list of pins and list of parameters to Subcircuit constructor
@@ -507,7 +507,7 @@ namespace eval Tutorials {
         $circuit add $inverter
         $circuit add [Vdc new dd vdd2 0 3]
         $circuit add [Vdc new measure vdd2 vdd 0]
-        $circuit add [C new vdd vdd 0 1e-18]
+        $circuit add [C new vdd vdd 0 -c 1e-18]
         ```
         
         We can add multiple stages of inverters using a loop, which saves many lines of code and allows us to dynamically adjust 
@@ -597,11 +597,11 @@ namespace eval Tutorials {
                 my add [D new 1clamp 0 1 dmod]
                 my add [Q new 2 9 5 2 qmod]
                 my add [D new 2clamp 0 2 dmod]
-                my add [R new b 4 5 4e3]
-                my add [R new 1 4 6 1.6e3]
+                my add [R new b 4 5 -r 4e3]
+                my add [R new 1 4 6 -r 1.6e3]
                 my add [Q new 3 6 9 8 qmod]
-                my add [R new 2 8 0 1e3]
-                my add [R new c 4 7 130]
+                my add [R new 2 8 0 -r 1e3]
+                my add [R new c 4 7 -r 130]
                 my add [Q new 4 7 6 10 qmod]
                 my add [D new vbedrop 10 3 dmod]
                 my add [Q new 5 3 8 0 qmod]
@@ -714,11 +714,11 @@ namespace eval Tutorials {
         
         Add load resistors:
         ```tcl
-        $circuit add [R new bit0 9 0 1e3]
-        $circuit add [R new bit1 10 0 1e3]
-        $circuit add [R new bit2 11 0 1e3]
-        $circuit add [R new bit3 12 0 1e3]
-        $circuit add [R new cout 13 0 1e3]
+        $circuit add [R new bit0 9 0 -r 1e3]
+        $circuit add [R new bit1 10 0 -r 1e3]
+        $circuit add [R new bit2 11 0 -r 1e3]
+        $circuit add [R new bit3 12 0 -r 1e3]
+        $circuit add [R new cout 13 0 -r 1e3]
         ```
         
         Add semiconductor devices models:

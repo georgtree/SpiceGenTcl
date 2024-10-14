@@ -32,11 +32,11 @@
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create netlist </font></i>
 <b><font color=#923B23>set</font></b> netlist [<b><font color=#923B23>Netlist</font></b> new main_netlist]
 <i><font color=#4b5d50># incrementally build netlist by adding different elements</font></i>
-<font color=#4A181B>$netlist</font> add [<b><font color=#923B23>R</font></b> new 1 net1 net2 10]
-<font color=#4A181B>$netlist</font> add [<b><font color=#923B23>RSem</font></b> new 5 net1 net2 res_sem <font color=#463e11>-l</font> 10e-6 <font color=#463e11>-w</font> 100e-6]
+<font color=#4A181B>$netlist</font> add [<b><font color=#923B23>R</font></b> new 1 net1 net2 <font color=#463e11>-r</font> 10]
+<font color=#4A181B>$netlist</font> add [<b><font color=#923B23>R</font></b> new 5 net1 net2 <font color=#463e11>-model</font> res_sem <font color=#463e11>-l</font> 10e-6 <font color=#463e11>-w</font> 100e-6]
 <font color=#4A181B>$netlist</font> add [<b><font color=#923B23>RSemModel</font></b> new rsem1mod <font color=#463e11>-tc1</font> 0.1 <font color=#463e11>-tc2</font> 0.4]
-<font color=#4A181B>$netlist</font> add [<b><font color=#923B23>R</font></b> new 2 net1 net2 {{r1+5/10} <font color=#463e11>-eq</font>}]
-<font color=#4A181B>$netlist</font> add [<b><font color=#923B23>C</font></b> new 1 net2 net3 1e-6]
+<font color=#4A181B>$netlist</font> add [<b><font color=#923B23>R</font></b> new 2 net1 net2 <font color=#463e11>-r</font> {{r1+5/10} <font color=#463e11>-eq</font>}]
+<font color=#4A181B>$netlist</font> add [<b><font color=#923B23>C</font></b> new 1 net2 net3 <font color=#463e11>-c</font> 1e-6]
 <font color=#4A181B>$netlist</font> add [<b><font color=#923B23>ParamStatement</font></b> new {{r1 1} {r2 2}} <font color=#463e11>-name</font> ps1]
 <font color=#4A181B>$netlist</font> add [<b><font color=#923B23>Comment</font></b> new {some random comment} <font color=#463e11>-name</font> com1]
 <font color=#4A181B>$netlist</font> add [<b><font color=#923B23>Include</font></b> new {/fold1/fold2/file.lib} <font color=#463e11>-name</font> inc1]
@@ -152,7 +152,7 @@ v1 net1 net3 5
 
 </figure><p class='ruff'>Also, we can save reference to object before adding to netlist in variable and only then add it to netlist:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> r5 [<b><font color=#923B23>R</font></b> new 5 net1 net2 10]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> r5 [<b><font color=#923B23>R</font></b> new 5 net1 net2 <font color=#463e11>-r</font> 10]
 <font color=#4A181B>$netlist</font> add <font color=#4A181B>$r5</font>
 </pre>
 
@@ -169,9 +169,9 @@ v1 net1 net3 5
         <i><font color=#4b5d50># define input parameters of subcircuit</font></i>
         <b><font color=#923B23>set</font></b> params {{r 100} {c 1e-6}}
         <i><font color=#4b5d50># add elements to subcircuit definition</font></i>
-        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new 1 net1 plus {r <font color=#463e11>-eq</font>}]
-        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>C</font></b> new 1 net2 net3 {c <font color=#463e11>-eq</font>}]
-        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>RSem</font></b> new 5 minus net2 res_sem <font color=#463e11>-l</font> 10e-6 <font color=#463e11>-w</font> 100e-6]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new 1 net1 plus <font color=#463e11>-r</font> {r <font color=#463e11>-eq</font>}]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>C</font></b> new 1 net2 net3 <font color=#463e11>-r</font> {c <font color=#463e11>-eq</font>}]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new 5 minus net2 <font color=#463e11>-model</font> res_sem <font color=#463e11>-l</font> 10e-6 <font color=#463e11>-w</font> 100e-6]
         <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>RSemModel</font></b> new rsem1mod <font color=#463e11>-tc1</font> 0.1 <font color=#463e11>-tc2</font> 0.4]
         <i><font color=#4b5d50># pass name, list of pins and list of parameters to Subcircuit constructor</font></i>
         <b><font color=#923B23>next</font></b> rcnet <font color=#4A181B>$pins</font> <font color=#4A181B>$params</font>
@@ -191,9 +191,9 @@ v1 net1 net3 5
 
 </figure><p class='ruff'>Next step is adding elements to subcircuit:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new 1 net1 plus {r <font color=#463e11>-eq</font>}]
-<b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>C</font></b> new 1 net2 net3 {c <font color=#463e11>-eq</font>}]
-<b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>RSem</font></b> new 5 minus net2 res_sem <font color=#463e11>-l</font> 10e-6 <font color=#463e11>-w</font> 100e-6]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new 1 net1 plus <font color=#463e11>-r</font> {r <font color=#463e11>-eq</font>}]
+<b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>C</font></b> new 1 net2 net3 <font color=#463e11>-c</font> {c <font color=#463e11>-eq</font>}]
+<b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new 5 minus net2 <font color=#463e11>-model</font> res_sem <font color=#463e11>-l</font> 10e-6 <font color=#463e11>-w</font> 100e-6]
 <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>RSemModel</font></b> new rsem1mod <font color=#463e11>-tc1</font> 0.1 <font color=#463e11>-tc2</font> 0.4]
 </pre>
 
@@ -417,13 +417,13 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vac</font></b> new dm 1 11 1]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Q</font></b> new 1 4 2 6 qnr]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Q</font></b> new 2 5 3 6 qnl]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new s1 11 2 1e3]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new s2 3 1 1e3]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new c1 4 8 10e3]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new c2 5 8 10e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new s1 11 2 <font color=#463e11>-r</font> 1e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new s2 3 1 <font color=#463e11>-r</font> 1e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new c1 4 8 <font color=#463e11>-r</font> 10e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new c2 5 8 <font color=#463e11>-r</font> 10e3]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Q</font></b> new 3 7 7 9 qnl]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Q</font></b> new 4 6 7 9 qnr]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new bias 7 8 20e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new bias 7 8 <font color=#463e11>-r</font> 20e3]
 </pre>
 
 </figure><p class='ruff'>Then we add models for NPN and PNP bipolar transistors:</p>
@@ -472,8 +472,8 @@ vrc2=-6.032e-04
         <i><font color=#4b5d50># define input parameters of subcircuit</font></i>
         <b><font color=#923B23>set</font></b> params {}
         <i><font color=#4b5d50># add elements to subcircuit definition</font></i>
-        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>C</font></b> new l out dgnd 0.1e-12]
-        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>C</font></b> new 2 out vdd 0.1e-12]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>C</font></b> new l out dgnd <font color=#463e11>-c</font> 0.1e-12]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>C</font></b> new 2 out vdd <font color=#463e11>-c</font> 0.1e-12]
         <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>VSwitch</font></b> new p out vdd vdd in swswitch]
         <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>VSwitch</font></b> new n out dgnd in dgnd switchn]
         <i><font color=#4b5d50># pass name, list of pins and list of parameters to Subcircuit constructor</font></i>
@@ -495,7 +495,7 @@ vrc2=-6.032e-04
 <font color=#4A181B>$circuit</font> add <font color=#4A181B>$inverter</font>
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new dd vdd2 0 3]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new measure vdd2 vdd 0]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>C</font></b> new vdd vdd 0 1e-18]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>C</font></b> new vdd vdd 0 <font color=#463e11>-c</font> 1e-18]
 </pre>
 
 </figure><p class='ruff'>We can add multiple stages of inverters using a loop, which saves many lines of code and allows us to dynamically adjust the number of stages:</p>
@@ -578,11 +578,11 @@ vrc2=-6.032e-04
         <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>D</font></b> new 1clamp 0 1 dmod]
         <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>Q</font></b> new 2 9 5 2 qmod]
         <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>D</font></b> new 2clamp 0 2 dmod]
-        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new b 4 5 4e3]
-        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new 1 4 6 1.6e3]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new b 4 5 <font color=#463e11>-r</font> 4e3]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new 1 4 6 <font color=#463e11>-r</font> 1.6e3]
         <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>Q</font></b> new 3 6 9 8 qmod]
-        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new 2 8 0 1e3]
-        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new c 4 7 130]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new 2 8 0 <font color=#463e11>-r</font> 1e3]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new c 4 7 <font color=#463e11>-r</font> 130]
         <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>Q</font></b> new 4 7 6 10 qmod]
         <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>D</font></b> new vbedrop 10 3 dmod]
         <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>Q</font></b> new 5 3 8 0 qmod]
@@ -692,11 +692,11 @@ vrc2=-6.032e-04
 
 </figure><p class='ruff'>Add load resistors:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new bit0 9 0 1e3]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new bit1 10 0 1e3]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new bit2 11 0 1e3]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new bit3 12 0 1e3]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new cout 13 0 1e3]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new bit0 9 0 <font color=#463e11>-r</font> 1e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new bit1 10 0 <font color=#463e11>-r</font> 1e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new bit2 11 0 <font color=#463e11>-r</font> 1e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new bit3 12 0 <font color=#463e11>-r</font> 1e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new cout 13 0 <font color=#463e11>-r</font> 1e3]
 </pre>
 
 </figure><p class='ruff'>Add semiconductor devices models:</p>
