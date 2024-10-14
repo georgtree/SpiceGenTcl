@@ -23,11 +23,11 @@ oo::class create NAND {
         my add [D new 1clamp 0 1 dmod]
         my add [Q new 2 9 5 2 qmod]
         my add [D new 2clamp 0 2 dmod]
-        my add [R new b 4 5 4e3]
-        my add [R new 1 4 6 1.6e3]
+        my add [R new b 4 5 -r 4e3]
+        my add [R new 1 4 6 -r 1.6e3]
         my add [Q new 3 6 9 8 qmod]
-        my add [R new 2 8 0 1e3]
-        my add [R new c 4 7 130]
+        my add [R new 2 8 0 -r 1e3]
+        my add [R new c 4 7 -r 130]
         my add [Q new 4 7 6 10 qmod]
         my add [D new vbedrop 10 3 dmod]
         my add [Q new 5 3 8 0 qmod]
@@ -123,11 +123,11 @@ foreach name [list in1a in1b in2a in2b in3a in3b in4a in4b] {
     incr i
 }
 
-$circuit add [R new bit0 9 0 1e3]
-$circuit add [R new bit1 10 0 1e3]
-$circuit add [R new bit2 11 0 1e3]
-$circuit add [R new bit3 12 0 1e3]
-$circuit add [R new cout 13 0 1e3]
+$circuit add [R new bit0 9 0 -r 1e3]
+$circuit add [R new bit1 10 0 -r 1e3]
+$circuit add [R new bit2 11 0 -r 1e3]
+$circuit add [R new bit3 12 0 -r 1e3]
+$circuit add [R new cout 13 0 -r 1e3]
 
 $circuit add [DiodeModel new dmod]
 $circuit add [BjtGPModel new qmod npn -bf 75 -rb 100 -cje 1e-12 -cjc 3e-12]

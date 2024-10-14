@@ -17,8 +17,8 @@ oo::class create Inverter {
         # define input parameters of subcircuit
         set params {}
         # add elements to subcircuit definition
-        my add [C new l out dgnd 0.1e-12]
-        my add [C new 2 out vdd 0.1e-12]
+        my add [C new l out dgnd -c 0.1e-12]
+        my add [C new 2 out vdd -c 0.1e-12]
         my add [VSwitch new p out vdd vdd in swswitch]
         my add [VSwitch new n out dgnd in dgnd switchn]
         # pass name, list of pins and list of parameters to Subcircuit constructor
@@ -38,7 +38,7 @@ $circuit add [RawString new ".ic v(osc_out)=0.25"]
 $circuit add $inverter
 $circuit add [Vdc new dd vdd2 0 3]
 $circuit add [Vdc new measure vdd2 vdd 0]
-$circuit add [C new vdd vdd 0 1e-18]
+$circuit add [C new vdd vdd 0 -c 1e-18]
 
 # add multiple inverters in the cycle
 for {set i 1} {$i<16} {incr i} {

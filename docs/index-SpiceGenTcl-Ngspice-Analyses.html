@@ -49,7 +49,7 @@
 
 </figure><p class='ruff'>Example of class initialization:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Analyses::Ac new dec 10 1 1e6 <font color=#463e11>-name</font> dc1
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Ngspice::Analyses::Ac new dec 10 1 1e6 <font color=#463e11>-name</font> dc1
 </pre>
 
 </figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Ngspice_Analyses_Ac_constructor' href="javascript:toggleSource('SpiceGenTcl_Ngspice_Analyses_Ac_constructor')">Show source</a></p>
@@ -66,7 +66,7 @@
     <i><font color=#4b5d50># ```</font></i>
     <i><font color=#4b5d50># Example of class initialization:</font></i>
     <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># ::SpiceGenTcl::Analyses::Ac new dec 10 1 1e6 -name dc1</font></i>
+    <i><font color=#4b5d50># ::SpiceGenTcl::Ngspice::Analyses::Ac new dec 10 1 1e6 -name dc1</font></i>
     <i><font color=#4b5d50># ```</font></i>
     <b><font color=#923B23>set</font></b> arguments [argparse {
         <font color=#463e11>-name</font>=
@@ -76,8 +76,21 @@
     } <b><font color=#923B23>else</font></b> {
         <b><font color=#923B23>set</font></b> name [<b><font color=#ca14ca>self</font></b> object]
     }
-    <b><font color=#923B23>set</font></b> params [<b><font color=#923B23>list</font></b> <font color=#035103>&quot;<font color=#4A181B>$</font>variation -sw&quot;</font> <font color=#035103>&quot;n <font color=#4A181B>$</font>n&quot;</font> <font color=#035103>&quot;fstart <font color=#4A181B>$</font>fstart&quot;</font> <font color=#035103>&quot;fstop <font color=#4A181B>$</font>fstop&quot;</font>]
-    <b><font color=#923B23>next</font></b> ac <font color=#4A181B>$params</font> <font color=#463e11>-name</font> <font color=#4A181B>$name</font>
+    <b><font color=#923B23>set</font></b> argsNames [<b><font color=#923B23>lrange</font></b> [<b><font color=#923B23>lindex</font></b> [<b><font color=#923B23>info</font></b> class constructor [<b><font color=#ca14ca>self</font></b> class]] 0] 1 end-1]
+    <b><font color=#923B23>set</font></b> paramList [<b><font color=#923B23>list</font></b> <font color=#035103>&quot;<font color=#4A181B>$</font>variation -sw&quot;</font>]
+    <b><font color=#923B23>foreach</font></b> argName <font color=#4A181B>$argsNames</font> {
+        <b><font color=#923B23>set</font></b> argVal [<b><font color=#923B23>subst</font></b> $[<b><font color=#923B23>subst</font></b> <font color=#4A181B>$argName</font>]]
+        <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>llength</font></b> <font color=#4A181B>$argVal</font>]&gt;1} {
+            <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$argVal</font> 1]==<font color=#035103>&quot;-eq&quot;</font>} {
+                <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;<font color=#4A181B>$</font>argName <font color=#4A181B>[</font>lindex <font color=#4A181B>$</font>argVal 0<font color=#4A181B>]</font> -poseq&quot;</font>
+            } <b><font color=#923B23>else</font></b> {
+                <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Wrong qualificator '<font color=#4A181B>[</font>lindex <font color=#4A181B>$</font>argVal 1<font color=#4A181B>]</font>' for <font color=#4A181B>$</font>argName parameter&quot;</font>
+            }
+        } <b><font color=#923B23>else</font></b> {
+            <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;<font color=#4A181B>$</font>argName <font color=#4A181B>$</font>argVal -pos&quot;</font>
+        }
+    }
+    <b><font color=#923B23>next</font></b> ac <font color=#4A181B>$paramList</font> <font color=#463e11>-name</font> <font color=#4A181B>$name</font>
 }</pre></div>
 </div><h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::Analyses::Dc'>Dc</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses" title="::SpiceGenTcl::Ngspice::Analyses" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
@@ -111,7 +124,7 @@
 
 </figure><p class='ruff'>Example of class initialization:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Analyses::Dc new v1 {time1 <font color=#463e11>-eq</font>} 5 0.1 <font color=#463e11>-name</font> dc1
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Ngspice::Analyses::Dc new v1 {time1 <font color=#463e11>-eq</font>} 5 0.1 <font color=#463e11>-name</font> dc1
 </pre>
 
 </figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Ngspice_Analyses_Dc_constructor' href="javascript:toggleSource('SpiceGenTcl_Ngspice_Analyses_Dc_constructor')">Show source</a></p>
@@ -128,7 +141,7 @@
     <i><font color=#4b5d50># ```</font></i>
     <i><font color=#4b5d50># Example of class initialization:</font></i>
     <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># ::SpiceGenTcl::Analyses::Dc new v1 {time1 -eq} 5 0.1 -name dc1</font></i>
+    <i><font color=#4b5d50># ::SpiceGenTcl::Ngspice::Analyses::Dc new v1 {time1 -eq} 5 0.1 -name dc1</font></i>
     <i><font color=#4b5d50># ```</font></i>
     <b><font color=#923B23>set</font></b> arguments [argparse {
         <font color=#463e11>-name</font>=
@@ -138,8 +151,21 @@
     } <b><font color=#923B23>else</font></b> {
         <b><font color=#923B23>set</font></b> name [<b><font color=#ca14ca>self</font></b> object]
     }
-    <b><font color=#923B23>set</font></b> params [<b><font color=#923B23>list</font></b> <font color=#035103>&quot;srcnam <font color=#4A181B>$</font>srcnam -posnocheck&quot;</font> <font color=#035103>&quot;vstart <font color=#4A181B>$</font>vstart&quot;</font> <font color=#035103>&quot;vstop <font color=#4A181B>$</font>vstop&quot;</font> <font color=#035103>&quot;vincr <font color=#4A181B>$</font>vincr&quot;</font>]
-    <b><font color=#923B23>next</font></b> dc <font color=#4A181B>$params</font> <font color=#463e11>-name</font> <font color=#4A181B>$name</font>
+    <b><font color=#923B23>set</font></b> argsNames [<b><font color=#923B23>lrange</font></b> [<b><font color=#923B23>lindex</font></b> [<b><font color=#923B23>info</font></b> class constructor [<b><font color=#ca14ca>self</font></b> class]] 0] 1 end-1]
+    <b><font color=#923B23>set</font></b> paramList [<b><font color=#923B23>list</font></b> <font color=#035103>&quot;srcnam <font color=#4A181B>$</font>srcnam -posnocheck&quot;</font>]
+    <b><font color=#923B23>foreach</font></b> argName <font color=#4A181B>$argsNames</font> {
+        <b><font color=#923B23>set</font></b> argVal [<b><font color=#923B23>subst</font></b> $[<b><font color=#923B23>subst</font></b> <font color=#4A181B>$argName</font>]]
+        <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>llength</font></b> <font color=#4A181B>$argVal</font>]&gt;1} {
+            <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$argVal</font> 1]==<font color=#035103>&quot;-eq&quot;</font>} {
+                <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;<font color=#4A181B>$</font>argName <font color=#4A181B>[</font>lindex <font color=#4A181B>$</font>argVal 0<font color=#4A181B>]</font> -poseq&quot;</font>
+            } <b><font color=#923B23>else</font></b> {
+                <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Wrong qualificator '<font color=#4A181B>[</font>lindex <font color=#4A181B>$</font>argVal 1<font color=#4A181B>]</font>' for <font color=#4A181B>$</font>argName parameter&quot;</font>
+            }
+        } <b><font color=#923B23>else</font></b> {
+            <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;<font color=#4A181B>$</font>argName <font color=#4A181B>$</font>argVal -pos&quot;</font>
+        }
+    }
+    <b><font color=#923B23>next</font></b> dc <font color=#4A181B>$paramList</font> <font color=#463e11>-name</font> <font color=#4A181B>$name</font>
 }</pre></div>
 </div><h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::Analyses::Op'>Op</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses" title="::SpiceGenTcl::Ngspice::Analyses" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
@@ -169,7 +195,7 @@
 
 </figure><p class='ruff'>Example of class initialization:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Analyses::Op new <font color=#463e11>-name</font> op1
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Ngspice::Analyses::Op new <font color=#463e11>-name</font> op1
 </pre>
 
 </figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Ngspice_Analyses_Op_constructor' href="javascript:toggleSource('SpiceGenTcl_Ngspice_Analyses_Op_constructor')">Show source</a></p>
@@ -182,7 +208,7 @@
     <i><font color=#4b5d50># ```</font></i>
     <i><font color=#4b5d50># Example of class initialization:</font></i>
     <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># ::SpiceGenTcl::Analyses::Op new -name op1</font></i>
+    <i><font color=#4b5d50># ::SpiceGenTcl::Ngspice::Analyses::Op new -name op1</font></i>
     <i><font color=#4b5d50># ```</font></i>
     <b><font color=#ca14ca>my</font></b> variable Name
     <b><font color=#923B23>set</font></b> arguments [argparse {
@@ -236,7 +262,7 @@
 
 </figure><p class='ruff'>Example of class initialization:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Analyses::SensAc new v(1,out) dec 10 1 1e6 <font color=#463e11>-name</font> dc1
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Ngspice::Analyses::SensAc new v(1,out) dec 10 1 1e6 <font color=#463e11>-name</font> dc1
 </pre>
 
 </figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Ngspice_Analyses_SensAc_constructor' href="javascript:toggleSource('SpiceGenTcl_Ngspice_Analyses_SensAc_constructor')">Show source</a></p>
@@ -254,7 +280,7 @@
     <i><font color=#4b5d50># ```</font></i>
     <i><font color=#4b5d50># Example of class initialization:</font></i>
     <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># ::SpiceGenTcl::Analyses::SensAc new v(1,out) dec 10 1 1e6 -name dc1</font></i>
+    <i><font color=#4b5d50># ::SpiceGenTcl::Ngspice::Analyses::SensAc new v(1,out) dec 10 1 1e6 -name dc1</font></i>
     <i><font color=#4b5d50># ```</font></i>
     <b><font color=#923B23>set</font></b> arguments [argparse {
         <font color=#463e11>-name</font>=
@@ -264,8 +290,21 @@
     } <b><font color=#923B23>else</font></b> {
         <b><font color=#923B23>set</font></b> name [<b><font color=#ca14ca>self</font></b> object]
     }
-    <b><font color=#923B23>set</font></b> params [<b><font color=#923B23>list</font></b> <font color=#035103>&quot;outvar <font color=#4A181B>$</font>outVar -posnocheck&quot;</font> <font color=#035103>&quot;ac -sw&quot;</font> <font color=#035103>&quot;<font color=#4A181B>$</font>variation -sw&quot;</font> <font color=#035103>&quot;n <font color=#4A181B>$</font>n&quot;</font> <font color=#035103>&quot;fstart <font color=#4A181B>$</font>fstart&quot;</font> <font color=#035103>&quot;fstop <font color=#4A181B>$</font>fstop&quot;</font>]
-    <b><font color=#923B23>next</font></b> sens <font color=#4A181B>$params</font> <font color=#463e11>-name</font> <font color=#4A181B>$name</font>
+    <b><font color=#923B23>set</font></b> argsNames [<b><font color=#923B23>lrange</font></b> [<b><font color=#923B23>lindex</font></b> [<b><font color=#923B23>info</font></b> class constructor [<b><font color=#ca14ca>self</font></b> class]] 0] 2 end-1]
+    <b><font color=#923B23>set</font></b> paramList [<b><font color=#923B23>list</font></b> <font color=#035103>&quot;outvar <font color=#4A181B>$</font>outVar -posnocheck&quot;</font> <font color=#035103>&quot;ac -sw&quot;</font> <font color=#035103>&quot;<font color=#4A181B>$</font>variation -sw&quot;</font>]
+    <b><font color=#923B23>foreach</font></b> argName <font color=#4A181B>$argsNames</font> {
+        <b><font color=#923B23>set</font></b> argVal [<b><font color=#923B23>subst</font></b> $[<b><font color=#923B23>subst</font></b> <font color=#4A181B>$argName</font>]]
+        <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>llength</font></b> <font color=#4A181B>$argVal</font>]&gt;1} {
+            <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$argVal</font> 1]==<font color=#035103>&quot;-eq&quot;</font>} {
+                <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;<font color=#4A181B>$</font>argName <font color=#4A181B>[</font>lindex <font color=#4A181B>$</font>argVal 0<font color=#4A181B>]</font> -poseq&quot;</font>
+            } <b><font color=#923B23>else</font></b> {
+                <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Wrong qualificator '<font color=#4A181B>[</font>lindex <font color=#4A181B>$</font>argVal 1<font color=#4A181B>]</font>' for <font color=#4A181B>$</font>argName parameter&quot;</font>
+            }
+        } <b><font color=#923B23>else</font></b> {
+            <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;<font color=#4A181B>$</font>argName <font color=#4A181B>$</font>argVal -pos&quot;</font>
+        }
+    }
+    <b><font color=#923B23>next</font></b> sens <font color=#4A181B>$paramList</font> <font color=#463e11>-name</font> <font color=#4A181B>$name</font>
 }</pre></div>
 </div><h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::Analyses::SensDc'>SensDc</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses" title="::SpiceGenTcl::Ngspice::Analyses" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
@@ -296,7 +335,7 @@
 
 </figure><p class='ruff'>Example of class initialization:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Analyses::SensDc new v(1,out) <font color=#463e11>-name</font> sensdc1
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Ngspice::Analyses::SensDc new v(1,out) <font color=#463e11>-name</font> sensdc1
 </pre>
 
 </figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Ngspice_Analyses_SensDc_constructor' href="javascript:toggleSource('SpiceGenTcl_Ngspice_Analyses_SensDc_constructor')">Show source</a></p>
@@ -310,7 +349,7 @@
     <i><font color=#4b5d50># ```</font></i>
     <i><font color=#4b5d50># Example of class initialization:</font></i>
     <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># ::SpiceGenTcl::Analyses::SensDc new v(1,out) -name sensdc1</font></i>
+    <i><font color=#4b5d50># ::SpiceGenTcl::Ngspice::Analyses::SensDc new v(1,out) -name sensdc1</font></i>
     <i><font color=#4b5d50># ```</font></i>
     <b><font color=#923B23>set</font></b> arguments [argparse {
         <font color=#463e11>-name</font>=
@@ -353,7 +392,7 @@
 
 </figure><p class='ruff'>Example of class initialization:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Analyses::Tran new 1e-9 10e-6 <font color=#463e11>-name</font> dc1
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Ngspice::Analyses::Tran new 1e-9 10e-6 <font color=#463e11>-name</font> dc1
 </pre>
 
 </figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Ngspice_Analyses_Tran_constructor' href="javascript:toggleSource('SpiceGenTcl_Ngspice_Analyses_Tran_constructor')">Show source</a></p>
@@ -368,24 +407,35 @@
     <i><font color=#4b5d50># ```</font></i>
     <i><font color=#4b5d50># Example of class initialization:</font></i>
     <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># ::SpiceGenTcl::Analyses::Tran new 1e-9 10e-6 -name dc1</font></i>
+    <i><font color=#4b5d50># ::SpiceGenTcl::Ngspice::Analyses::Tran new 1e-9 10e-6 -name dc1</font></i>
     <i><font color=#4b5d50># ```</font></i>
-    <b><font color=#923B23>set</font></b> arguments [argparse {
+    <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> {
         <font color=#463e11>-name</font>=
         {<font color=#463e11>-uic</font> <font color=#463e11>-boolean</font>}
     }]
-    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> exists name]} {
-        <b><font color=#923B23>set</font></b> name <font color=#4A181B>$name</font>
+    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dict</font></b> exists <font color=#4A181B>$arguments</font> name]} {
+        <b><font color=#923B23>set</font></b> name [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$arguments</font> name]
     } <b><font color=#923B23>else</font></b> {
         <b><font color=#923B23>set</font></b> name [<b><font color=#ca14ca>self</font></b> object]
     }
-    <b><font color=#923B23>if</font></b> {<font color=#4A181B>$uic</font>==1} {
-        <b><font color=#923B23>set</font></b> params [<b><font color=#923B23>list</font></b> <font color=#035103>&quot;tstep <font color=#4A181B>$</font>tstep&quot;</font> <font color=#035103>&quot;tstop <font color=#4A181B>$</font>tstop&quot;</font> <font color=#035103>&quot;uic -sw&quot;</font>]
-    } <b><font color=#923B23>else</font></b> {
-        <b><font color=#923B23>set</font></b> params [<b><font color=#923B23>list</font></b> <font color=#035103>&quot;tstep <font color=#4A181B>$</font>tstep&quot;</font> <font color=#035103>&quot;tstop <font color=#4A181B>$</font>tstop&quot;</font>]
+    <b><font color=#923B23>set</font></b> argsNames [<b><font color=#923B23>lrange</font></b> [<b><font color=#923B23>lindex</font></b> [<b><font color=#923B23>info</font></b> class constructor [<b><font color=#ca14ca>self</font></b> class]] 0] 0 end-1]
+    <b><font color=#923B23>set</font></b> paramList <font color=#035103>&quot;&quot;</font>
+    <b><font color=#923B23>foreach</font></b> argName <font color=#4A181B>$argsNames</font> {
+        <b><font color=#923B23>set</font></b> argVal [<b><font color=#923B23>subst</font></b> $[<b><font color=#923B23>subst</font></b> <font color=#4A181B>$argName</font>]]
+        <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>llength</font></b> <font color=#4A181B>$argVal</font>]&gt;1} {
+            <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$argVal</font> 1]==<font color=#035103>&quot;-eq&quot;</font>} {
+                <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;<font color=#4A181B>$</font>argName <font color=#4A181B>[</font>lindex <font color=#4A181B>$</font>argVal 0<font color=#4A181B>]</font> -poseq&quot;</font>
+            } <b><font color=#923B23>else</font></b> {
+                <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Wrong qualificator '<font color=#4A181B>[</font>lindex <font color=#4A181B>$</font>argVal 1<font color=#4A181B>]</font>' for <font color=#4A181B>$</font>argName parameter&quot;</font>
+            }
+        } <b><font color=#923B23>else</font></b> {
+            <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;<font color=#4A181B>$</font>argName <font color=#4A181B>$</font>argVal -pos&quot;</font>
+        }
     }
-
-    <b><font color=#923B23>next</font></b> tran <font color=#4A181B>$params</font> <font color=#463e11>-name</font> <font color=#4A181B>$name</font>
+    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$arguments</font> uic]==1} {
+        <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;uic -sw&quot;</font>
+    }
+    <b><font color=#923B23>next</font></b> tran <font color=#4A181B>$paramList</font> <font color=#463e11>-name</font> <font color=#4A181B>$name</font>
 }</pre></div>
 </div></main><nav class='ruff-nav'><ul ><li class='ruff-toc1'><a style='padding-top:2px;' href='index.html'>Start page</a></li>
 <li class='ruff-toc1'><a href='index-docindex.html' accesskey='i'>Index</a></li>

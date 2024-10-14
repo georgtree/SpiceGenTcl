@@ -14,7 +14,7 @@ foreach nameSpc $ngspiceNameSpc {
     ## ________________________ Resistor class tests _________________________ ##
     
 test testResistorClass-1.1 {test Resistor class} -setup {
-    set res [Resistor new 1 netp netm 1e3 -tc1 1 -ac 1e6 -temp 25]
+    set res [Resistor new 1 netp netm -r 1e3 -tc1 1 -ac 1e6 -temp 25]
 } -body {
     set result [$res genSPICEString]
 } -result "r1 netp netm 1e3 tc1=1 ac=1e6 temp=25" -cleanup {
@@ -22,7 +22,7 @@ test testResistorClass-1.1 {test Resistor class} -setup {
 }
 
 test testResistorClass-1.2 {test Resistor class} -setup {
-    set res [Resistor new 1 netp netm 1e3]
+    set res [Resistor new 1 netp netm -r 1e3]
 } -body {
     set result [$res genSPICEString]
 } -result "r1 netp netm 1e3" -cleanup {
@@ -30,7 +30,7 @@ test testResistorClass-1.2 {test Resistor class} -setup {
 }
 
 test testResistorClass-1.3 {test Resistor class with equation positional parameter} -setup {
-    set res [Resistor new 1 netp netm {{6*x+y} -eq}]
+    set res [Resistor new 1 netp netm -r {{6*x+y} -eq}]
 } -body {
     set result [$res genSPICEString]
 } -result "r1 netp netm \{6*x+y\}" -cleanup {
@@ -38,61 +38,72 @@ test testResistorClass-1.3 {test Resistor class with equation positional paramet
 }
 
 test testResistorClass-1.4 {test Resistor class with equation positional parameter and combination of normal and equation parameters} -setup {
-    set res [Resistor new 1 netp netm {{6*x+y} -eq} -tc1 7 -tc2 {"x^2" -eq}]
+    set res [Resistor new 1 netp netm -r {{6*x+y} -eq} -tc1 7 -tc2 {"x^2" -eq}]
 } -body {
     set result [$res genSPICEString]
 } -result "r1 netp netm \{6*x+y\} tc1=7 tc2=\{x^2\}" -cleanup {
     unset res result
 }
 
+test testResistorClass-1.5 {test Resistor class with behavioural switch} -setup {
+    set res [Resistor new 1 netp netm -r "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1]
+} -body {
+    set result [$res genSPICEString]
+} -result "r1 netp netm r={V(a)+V(b)+pow(V(c),2)} tc1=1" -cleanup {
+    unset res result
+}    
+
+test testResistorClass-1.6 {test Resistor class with model switch and resistance value} -setup {
+    set res [Resistor new 1 netp netm -r 1 -model resmod -l 1e-6 -temp 25]
+} -body {
+    set result [$res genSPICEString]
+} -result "r1 netp netm 1 resmod l=1e-6 temp=25" -cleanup {
+    unset res result
+}
+
+test testResistorClass-1.7 {test Resistor class with model switch} -setup {
+    set res [Resistor new 1 netp netm -model resmod -l 1e-6 -temp 25]
+} -body {
+    set result [$res genSPICEString]
+} -result "r1 netp netm resmod l=1e-6 temp=25" -cleanup {
+    unset res result
+}
+
+test testResistorClass-1.9 {test Resistor class without -r pramater and -model switch} -body {
+    catch {Resistor new 1 netp netm} errorStr
+    return $errorStr
+} -result "Resistor value must be specified with '-r value'" -cleanup {
+    unset errorStr
+} 
+
 test testRClass-1.1 {test R alias for Resistor class} -setup {
-    set res [R new 1 netp netm 1e3 -tc1 1 -ac 1e6 -temp 25]
+    set res [R new 1 netp netm -r 1e3 -tc1 1 -ac 1e6 -temp 25]
 } -body {
     set result [$res genSPICEString]
 } -result "r1 netp netm 1e3 tc1=1 ac=1e6 temp=25" -cleanup {
     unset res result
-}
-
-    ## ________________________ ResistorBehavioural class tests _________________________ ##
-    
-test testResistorBehaviouralClass-1.1 {test ResistorBehavioural class} -setup {
-    set res [ResistorBehavioural new 1 netp netm "V(a)+V(b)+pow(V(c),2)" -tc1 1]
+}  
+  
+test testRClass-1.2 {test R alias for Resistor class with behavioural switch} -setup {
+    set res [R new 1 netp netm -r "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1]
 } -body {
     set result [$res genSPICEString]
 } -result "r1 netp netm r={V(a)+V(b)+pow(V(c),2)} tc1=1" -cleanup {
     unset res result
-}    
-    
-test testRBehClass-1.1 {test RBeh class} -setup {
-    set res [RBeh new 1 netp netm "V(a)+V(b)+pow(V(c),2)" -tc1 1]
+}     
+       
+test testRClass-1.3 {test R alias for Resistor class with model switch} -setup {
+    set res [R new 1 netp netm -model resmod -l 1e-6 -temp 25]
 } -body {
     set result [$res genSPICEString]
-} -result "r1 netp netm r={V(a)+V(b)+pow(V(c),2)} tc1=1" -cleanup {
+} -result "r1 netp netm resmod l=1e-6 temp=25" -cleanup {
     unset res result
-}    
-    
-    ## ________________________ ResistorSemiconductor class tests _________________________ ##
-    
-test testResistorSemiconductorClass-1.1 {test ResistorSemiconductor class} -setup {
-    set res [ResistorSemiconductor new 1 netp netm resmod -l 1e-6 -ac 1e6 -temp 25]
-} -body {
-    set result [$res genSPICEString]
-} -result "r1 netp netm resmod l=1e-6 ac=1e6 temp=25" -cleanup {
-    unset res result
-}
-
-test testRSemClass-1.1 {test RSem alias for ResistorSemiconductor class} -setup {
-    set res [RSem new 1 netp netm resmod -l 1e-6 -ac 1e6 -temp 25]
-} -body {
-    set result [$res genSPICEString]
-} -result "r1 netp netm resmod l=1e-6 ac=1e6 temp=25" -cleanup {
-    unset res result
-}
+} 
 
     ## ________________________ Capacitor class tests _________________________ ##
     
 test testCapacitorClass-1.1 {test Capacitor class} -setup {
-    set cap [Capacitor new 1 netp netm 1e-6 -tc1 1 -temp 25]
+    set cap [Capacitor new 1 netp netm -c 1e-6 -tc1 1 -temp 25]
 } -body {
     set result [$cap genSPICEString]
 } -result "c1 netp netm 1e-6 tc1=1 temp=25" -cleanup {
@@ -100,79 +111,95 @@ test testCapacitorClass-1.1 {test Capacitor class} -setup {
 }
 
 test testCapacitorClass-1.2 {test Capacitor class} -setup {
-    set cap [Capacitor new 1 netp netm 1e-6]
+    set cap [Capacitor new 1 netp netm -c 1e-6]
 } -body {
     set result [$cap genSPICEString]
 } -result "c1 netp netm 1e-6" -cleanup {
     unset cap result
 }
 
-test testCClass-1.1 {test C alias for Capacitor class} -setup {
-    set cap [C new 1 netp netm 1e-6 -tc1 1 -temp 25]
+test testCapacitorClass-1.3 {test Capacitor class witch C behavioural equation} -setup {
+    set cap [Capacitor new 1 netp netm -c "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1]
+} -body {
+    set result [$cap genSPICEString]
+} -result "c1 netp netm c={V(a)+V(b)+pow(V(c),2)} tc1=1" -cleanup {
+    unset cap result
+}
+       
+test testCapacitorClass-1.4 {test Capacitor class witch Q behavioural equation} -setup {
+    set cap [Capacitor new 1 netp netm -q "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1]
+} -body {
+    set result [$cap genSPICEString]
+} -result "c1 netp netm q={V(a)+V(b)+pow(V(c),2)} tc1=1" -cleanup {
+    unset cap result
+}         
+
+test testCapacitorClass-1.5 {test Capacitor class with model switch} -setup {
+    set cap [Capacitor new 1 netp netm -model capmod -l 1e-6 -w 10e-6 -temp 25]
+} -body {
+    set result [$cap genSPICEString]
+} -result "c1 netp netm capmod l=1e-6 w=10e-6 temp=25" -cleanup {
+    unset cap result
+}
+
+test testCapacitorClass-1.6 {test apacitor class with model switch and value} -setup {
+    set cap [Capacitor new 1 netp netm -c 1 -model capmod -l 1e-6 -w 10e-6 -temp 25]
+} -body {
+    set result [$cap genSPICEString]
+} -result "c1 netp netm 1 capmod l=1e-6 w=10e-6 temp=25" -cleanup {
+    unset cap result
+}  
+
+test testCapacitorClass-1.7 {test Capacitor class without capacitance value, error generated} -body {
+    catch {Capacitor new 1 netp netm} errorStr
+    return $errorStr
+} -result "Capacitor value must be specified with '-c value'" -cleanup {
+    unset errorStr
+} 
+
+test testCapacitorClass-1.8 {test Capacitor class} -body {
+    catch {Capacitor new 1 netp netm -beh} errorStr
+    return $errorStr
+} -result "Capacitor value must be specified with '-c value'" -cleanup {
+    unset errorStr
+} 
+
+test testCClass-1.1 {test C alias for Capacitor class witch C behavioural equation} -setup {
+    set cap [C new 1 netp netm -c "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1]
+} -body {
+    set result [$cap genSPICEString]
+} -result "c1 netp netm c={V(a)+V(b)+pow(V(c),2)} tc1=1" -cleanup {
+    unset cap result
+}
+
+test testClass-1.2 {test C alias for Capacitor class with Q behavioural equation} -setup {
+    set cap [C new 1 netp netm -q "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1]
+} -body {
+    set result [$cap genSPICEString]
+} -result "c1 netp netm q={V(a)+V(b)+pow(V(c),2)} tc1=1" -cleanup {
+    unset cap result
+}         
+
+test testCClass-1.3 {test C alias for Capacitor class with model switch} -setup {
+    set cap [C new 1 netp netm -model capmod -l 1e-6 -w 10e-6 -temp 25]
+} -body {
+    set result [$cap genSPICEString]
+} -result "c1 netp netm capmod l=1e-6 w=10e-6 temp=25" -cleanup {
+    unset cap result
+}
+
+test testCClass-1.4 {test C alias for Capacitor class} -setup {
+    set cap [C new 1 netp netm -c 1e-6 -tc1 1 -temp 25]
 } -body {
     set result [$cap genSPICEString]
 } -result "c1 netp netm 1e-6 tc1=1 temp=25" -cleanup {
-    unset cap result
-}
-    
-    ## ________________________ CapacitorBehaviouralC class tests _________________________ ##
-    
-test testCapacitorBehaviouralCClass-1.1 {test CapacitorBehaviouralC class} -setup {
-    set cap [CapacitorBehaviouralC new 1 netp netm "V(a)+V(b)+pow(V(c),2)" -tc1 1]
-} -body {
-    set result [$cap genSPICEString]
-} -result "c1 netp netm c={V(a)+V(b)+pow(V(c),2)} tc1=1" -cleanup {
-    unset cap result
-}
-    
-test testCBehCClass-1.1 {test CBehC class} -setup {
-    set cap [CBehC new 1 netp netm "V(a)+V(b)+pow(V(c),2)" -tc1 1]
-} -body {
-    set result [$cap genSPICEString]
-} -result "c1 netp netm c={V(a)+V(b)+pow(V(c),2)} tc1=1" -cleanup {
-    unset cap result
-}
-
-    ## ________________________ CapacitorBehaviouralQ class tests _________________________ ##
-    
-test testCapacitorBehaviouralQClass-1.1 {test CapacitorBehaviouralQ class} -setup {
-    set cap [CapacitorBehaviouralQ new 1 netp netm "V(a)+V(b)+pow(V(c),2)" -tc1 1]
-} -body {
-    set result [$cap genSPICEString]
-} -result "c1 netp netm q={V(a)+V(b)+pow(V(c),2)} tc1=1" -cleanup {
-    unset cap result
-}   
-    
-test testCBehQlass-1.1 {test CBehQ class} -setup {
-    set cap [CBehQ new 1 netp netm "V(a)+V(b)+pow(V(c),2)" -tc1 1]
-} -body {
-    set result [$cap genSPICEString]
-} -result "c1 netp netm q={V(a)+V(b)+pow(V(c),2)} tc1=1" -cleanup {
-    unset cap result
-}      
-    
-    ## ________________________ CapacitorSemiconductor class tests _________________________ ##
-    
-test testCapacitorSemiconductorClass-1.1 {test CapacitorSemiconductor class} -setup {
-    set cap [CapacitorSemiconductor new 1 netp netm capmod -l 1e-6 -w 10e-6 -temp 25]
-} -body {
-    set result [$cap genSPICEString]
-} -result "c1 netp netm capmod l=1e-6 w=10e-6 temp=25" -cleanup {
-    unset cap result
-}
-
-test testCSemClass-1.1 {test CSem alias for CapacitorSemiconductor class} -setup {
-    set cap [CSem new 1 netp netm capmod -l 1e-6 -w 10e-6 -temp 25]
-} -body {
-    set result [$cap genSPICEString]
-} -result "c1 netp netm capmod l=1e-6 w=10e-6 temp=25" -cleanup {
     unset cap result
 }
 
     ## ________________________ Inductor class tests _________________________ ##
     
 test testInductorClass-1.1 {test Inductor class} -setup {
-    set ind [Inductor new 1 netp netm 1e-6 -tc1 1 -temp 25]
+    set ind [Inductor new 1 netp netm -l 1e-6 -tc1 1 -temp 25]
 } -body {
     set result [$ind genSPICEString]
 } -result "l1 netp netm 1e-6 tc1=1 temp=25" -cleanup {
@@ -180,33 +207,47 @@ test testInductorClass-1.1 {test Inductor class} -setup {
 }
 
 test testInductorClass-1.2 {test Inductor class} -setup {
-    set ind [Inductor new 1 netp netm 1e-6]
+    set ind [Inductor new 1 netp netm -l 1e-6]
 } -body {
     set result [$ind genSPICEString]
 } -result "l1 netp netm 1e-6" -cleanup {
     unset ind result
 }
 
-test testLClass-1.1 {test L alias for Inductor class} -setup {
-    set ind [L new 1 netp netm 1e-6 -tc1 1 -temp 25]
+test testInductorClass-1.3 {test Inductor class with model switch} -setup {
+    set ind [Inductor new 1 netp netm -l 1e-6 -model indm]
 } -body {
     set result [$ind genSPICEString]
-} -result "l1 netp netm 1e-6 tc1=1 temp=25" -cleanup {
+} -result "l1 netp netm 1e-6 indm" -cleanup {
     unset ind result
 }
 
-   ## ________________________ InductorBehavioural class tests _________________________ ##
-    
-test testInductorBehaviouralClass-1.1 {test InductorBehavioural class} -setup {
-    set ind [InductorBehavioural new 1 netp netm "V(a)+V(b)+pow(V(c),2)" -tc1 1]
+test testInductorClass-1.4 {test Inductor class with model switch} -setup {
+    set ind [Inductor new 1 netp netm -model indm]
+} -body {
+    set result [$ind genSPICEString]
+} -result "l1 netp netm indm" -cleanup {
+    unset ind result
+}
+
+test testInductorClass-1.1 {test Inductor class with beh switch} -setup {
+    set ind [Inductor new 1 netp netm -l "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1]
 } -body {
     set result [$ind genSPICEString]
 } -result "l1 netp netm l={V(a)+V(b)+pow(V(c),2)} tc1=1" -cleanup {
     unset ind result
 } 
-    
-test testLBehClass-1.1 {test LBeh class} -setup {
-    set ind [LBeh new 1 netp netm "V(a)+V(b)+pow(V(c),2)" -tc1 1]
+
+test testLClass-1.1 {test L alias for Inductor class} -setup {
+    set ind [L new 1 netp netm -l 1e-6 -tc1 1 -temp 25]
+} -body {
+    set result [$ind genSPICEString]
+} -result "l1 netp netm 1e-6 tc1=1 temp=25" -cleanup {
+    unset ind result
+}
+  
+test testLClass-1.1 {test L alias for Inductor class with beh switch} -setup {
+    set ind [L new 1 netp netm -l "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1]
 } -body {
     set result [$ind genSPICEString]
 } -result "l1 netp netm l={V(a)+V(b)+pow(V(c),2)} tc1=1" -cleanup {
@@ -1062,8 +1103,8 @@ test testSubcircuitInstanceAutoClass-1.1 {test creation of SubcircuitInstanceAut
             # define input parameters of subcircuit
             set params {{r 100} {c 1e-6}}
             # add elements to subcircuit definition
-            my add [R new 1 net1 net2 {r -eq}]
-            my add [C new 1 net2 net3 {c -eq}]
+            my add [R new 1 net1 net2 -r {r -eq}]
+            my add [C new 1 net2 net3 -c {c -eq}]
             # pass name, list of pins and list of parameters to Subcircuit constructor
             next rcnet $pins $params
         }
@@ -1086,8 +1127,8 @@ test testSubcircuitInstanceAutoClass-1.2 {test creation of SubcircuitInstanceAut
             # define input parameters of subcircuit
             set params {{r 100} {c 1e-6}}
             # add elements to subcircuit definition
-            my add [R new 1 net1 net2 {r -eq}]
-            my add [C new 1 net2 net3 {c -eq}]
+            my add [R new 1 net1 net2 -r {r -eq}]
+            my add [C new 1 net2 net3 -c {c -eq}]
             # pass name, list of pins and list of parameters to Subcircuit constructor
             next rcnet $pins $params
         }
@@ -1110,14 +1151,14 @@ test testSubcircuitInstanceAutoClass-1.3 {test creation of SubcircuitInstanceAut
             # define input parameters of subcircuit
             set params {{r 100} {c 1e-6}}
             # add elements to subcircuit definition
-            my add [R new 1 net1 net2 {r -eq}]
-            my add [C new 1 net2 net3 {c -eq}]
+            my add [R new 1 net1 net2 -r {r -eq}]
+            my add [C new 1 net2 net3 -c {c -eq}]
             # pass name, list of pins and list of parameters to Subcircuit constructor
             next rcnet $pins $params
         }
     }
     set subcircuit [RCnet new]
-    set res [R new 1 netp netm 1e3 -tc1 1 -ac 1e6 -temp 25]
+    set res [R new 1 netp netm -r 1e3 -tc1 1 -ac 1e6 -temp 25]
 } -body {
     catch {SubcircuitInstanceAuto new $res 2 {net1 net2 net3} -r 1 -c {cpar -eq}} errorStr
     return $errorStr  

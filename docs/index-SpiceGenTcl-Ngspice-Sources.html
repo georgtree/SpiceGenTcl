@@ -158,6 +158,7 @@
 <div style='clear:both;'></div>
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
@@ -177,6 +178,7 @@
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::BehaviouralSource::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
@@ -738,18 +740,15 @@
     <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> {
         <font color=#463e11>-phases</font>=
     }]
+    <b><font color=#923B23>set</font></b> paramList <font color=#035103>&quot;&quot;</font>
     <b><font color=#923B23>dict</font></b> for {paramName value} <font color=#4A181B>$arguments</font> {
         <b><font color=#923B23>if</font></b> {([<b><font color=#923B23>llength</font></b> <font color=#4A181B>$value</font>]&gt;1) && ([<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$value</font> 1]==<font color=#035103>&quot;-eq&quot;</font>)} {
-            <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;-<font color=#4A181B>$</font>paramName&quot;</font> <font color=#035103>&quot;<font color=#4A181B>[</font>lindex <font color=#4A181B>$</font>value 0<font color=#4A181B>]</font> -poseq&quot;</font>
+            <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;-<font color=#4A181B>$</font>paramName&quot;</font> <font color=#035103>&quot;<font color=#4A181B>[</font>lindex <font color=#4A181B>$</font>value 0<font color=#4A181B>]</font> -eq&quot;</font>
         } <b><font color=#923B23>else</font></b> {
             <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;-<font color=#4A181B>$</font>paramName&quot;</font> <font color=#035103>&quot;<font color=#4A181B>$</font>value&quot;</font>
         }
     }
-    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> exists paramList]} {
-        <b><font color=#923B23>next</font></b> <font color=#4A181B>$name</font> i <font color=#4A181B>$npNode</font> <font color=#4A181B>$nmNode</font> <font color=#4A181B>$v0</font> <font color=#4A181B>$va</font> <font color=#4A181B>$mf</font> <font color=#4A181B>$fc</font> <font color=#4A181B>$td</font> {<b><font color=#923B23>*</font></b>}<font color=#4A181B>$paramList</font>
-    } <b><font color=#923B23>else</font></b> {
-        <b><font color=#923B23>next</font></b> <font color=#4A181B>$name</font> i <font color=#4A181B>$npNode</font> <font color=#4A181B>$nmNode</font> <font color=#4A181B>$v0</font> <font color=#4A181B>$va</font> <font color=#4A181B>$mf</font> <font color=#4A181B>$fc</font> <font color=#4A181B>$td</font>
-    }
+    <b><font color=#923B23>next</font></b> <font color=#4A181B>$name</font> i <font color=#4A181B>$npNode</font> <font color=#4A181B>$nmNode</font> <font color=#4A181B>$v0</font> <font color=#4A181B>$va</font> <font color=#4A181B>$mf</font> <font color=#4A181B>$fc</font> <font color=#4A181B>$td</font> {<b><font color=#923B23>*</font></b>}<font color=#4A181B>$paramList</font>
 }</pre></div>
 </div><h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::Sources::Idc'>Idc</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources" title="::SpiceGenTcl::Ngspice::Sources" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
@@ -1002,6 +1001,7 @@
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::Isffm::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
@@ -1065,24 +1065,22 @@
     <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> <font color=#035103>&quot;</font>
 <font color=#035103>        <font color=#4A181B>$</font>paramDefList</font>
 <font color=#035103>    &quot;</font>]
+    <b><font color=#923B23>set</font></b> paramList <font color=#035103>&quot;&quot;</font>
     <b><font color=#923B23>dict</font></b> for {paramName value} <font color=#4A181B>$arguments</font> {
         <b><font color=#923B23>if</font></b> {([<b><font color=#923B23>llength</font></b> <font color=#4A181B>$value</font>]&gt;1) && ([<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$value</font> 1]==<font color=#035103>&quot;-eq&quot;</font>)} {
-            <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;-<font color=#4A181B>$</font>paramName&quot;</font> <font color=#035103>&quot;<font color=#4A181B>[</font>lindex <font color=#4A181B>$</font>value 0<font color=#4A181B>]</font> -poseq&quot;</font>
+            <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;-<font color=#4A181B>$</font>paramName&quot;</font> <font color=#035103>&quot;<font color=#4A181B>[</font>lindex <font color=#4A181B>$</font>value 0<font color=#4A181B>]</font> -eq&quot;</font>
         } <b><font color=#923B23>else</font></b> {
             <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;-<font color=#4A181B>$</font>paramName&quot;</font> <font color=#035103>&quot;<font color=#4A181B>$</font>value&quot;</font>
         }
     }
-    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> exists paramList]} {
-        <b><font color=#923B23>next</font></b> <font color=#4A181B>$name</font> i <font color=#4A181B>$npNode</font> <font color=#4A181B>$nmNode</font> <font color=#4A181B>$v0</font> <font color=#4A181B>$va</font> <font color=#4A181B>$fc</font> <font color=#4A181B>$mdi</font> <font color=#4A181B>$fs</font> {<b><font color=#923B23>*</font></b>}<font color=#4A181B>$paramList</font>
-    } <b><font color=#923B23>else</font></b> {
-        <b><font color=#923B23>next</font></b> <font color=#4A181B>$name</font> i <font color=#4A181B>$npNode</font> <font color=#4A181B>$nmNode</font> <font color=#4A181B>$v0</font> <font color=#4A181B>$va</font> <font color=#4A181B>$fc</font> <font color=#4A181B>$mdi</font> <font color=#4A181B>$fs</font>
-    }
+    <b><font color=#923B23>next</font></b> <font color=#4A181B>$name</font> i <font color=#4A181B>$npNode</font> <font color=#4A181B>$nmNode</font> <font color=#4A181B>$v0</font> <font color=#4A181B>$va</font> <font color=#4A181B>$fc</font> <font color=#4A181B>$mdi</font> <font color=#4A181B>$fs</font> {<b><font color=#923B23>*</font></b>}<font color=#4A181B>$paramList</font>
 }</pre></div>
 </div><h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::Sources::Isin'>Isin</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources" title="::SpiceGenTcl::Ngspice::Sources" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::Isin::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
@@ -1142,18 +1140,15 @@
     <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> <font color=#035103>&quot;</font>
 <font color=#035103>        <font color=#4A181B>$</font>paramDefList</font>
 <font color=#035103>    &quot;</font>]
+    <b><font color=#923B23>set</font></b> paramList <font color=#035103>&quot;&quot;</font>
     <b><font color=#923B23>dict</font></b> for {paramName value} <font color=#4A181B>$arguments</font> {
         <b><font color=#923B23>if</font></b> {([<b><font color=#923B23>llength</font></b> <font color=#4A181B>$value</font>]&gt;1) && ([<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$value</font> 1]==<font color=#035103>&quot;-eq&quot;</font>)} {
-            <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;-<font color=#4A181B>$</font>paramName&quot;</font> <font color=#035103>&quot;<font color=#4A181B>[</font>lindex <font color=#4A181B>$</font>value 0<font color=#4A181B>]</font> -poseq&quot;</font>
+            <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;-<font color=#4A181B>$</font>paramName&quot;</font> <font color=#035103>&quot;<font color=#4A181B>[</font>lindex <font color=#4A181B>$</font>value 0<font color=#4A181B>]</font> -eq&quot;</font>
         } <b><font color=#923B23>else</font></b> {
             <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;-<font color=#4A181B>$</font>paramName&quot;</font> <font color=#035103>&quot;<font color=#4A181B>$</font>value&quot;</font>
         }
     }
-    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> exists paramList]} {
-        <b><font color=#923B23>next</font></b> <font color=#4A181B>$name</font> i <font color=#4A181B>$npNode</font> <font color=#4A181B>$nmNode</font> <font color=#4A181B>$v0</font> <font color=#4A181B>$va</font> <font color=#4A181B>$freq</font> {<b><font color=#923B23>*</font></b>}<font color=#4A181B>$paramList</font>
-    } <b><font color=#923B23>else</font></b> {
-        <b><font color=#923B23>next</font></b> <font color=#4A181B>$name</font> i <font color=#4A181B>$npNode</font> <font color=#4A181B>$nmNode</font> <font color=#4A181B>$v0</font> <font color=#4A181B>$va</font> <font color=#4A181B>$freq</font>
-    }
+    <b><font color=#923B23>next</font></b> <font color=#4A181B>$name</font> i <font color=#4A181B>$npNode</font> <font color=#4A181B>$nmNode</font> <font color=#4A181B>$v0</font> <font color=#4A181B>$va</font> <font color=#4A181B>$freq</font> {<b><font color=#923B23>*</font></b>}<font color=#4A181B>$paramList</font>
 }</pre></div>
 </div><h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::Sources::pulse'>pulse</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources" title="::SpiceGenTcl::Ngspice::Sources" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
@@ -1332,6 +1327,7 @@
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::sffm::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
@@ -1422,6 +1418,7 @@
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::sin::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
@@ -1632,18 +1629,15 @@
     <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> {
         <font color=#463e11>-phases</font>=
     }]
+    <b><font color=#923B23>set</font></b> paramList <font color=#035103>&quot;&quot;</font>
     <b><font color=#923B23>dict</font></b> for {paramName value} <font color=#4A181B>$arguments</font> {
         <b><font color=#923B23>if</font></b> {([<b><font color=#923B23>llength</font></b> <font color=#4A181B>$value</font>]&gt;1) && ([<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$value</font> 1]==<font color=#035103>&quot;-eq&quot;</font>)} {
-            <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;-<font color=#4A181B>$</font>paramName&quot;</font> <font color=#035103>&quot;<font color=#4A181B>[</font>lindex <font color=#4A181B>$</font>value 0<font color=#4A181B>]</font> -poseq&quot;</font>
+            <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;-<font color=#4A181B>$</font>paramName&quot;</font> <font color=#035103>&quot;<font color=#4A181B>[</font>lindex <font color=#4A181B>$</font>value 0<font color=#4A181B>]</font> -eq&quot;</font>
         } <b><font color=#923B23>else</font></b> {
             <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;-<font color=#4A181B>$</font>paramName&quot;</font> <font color=#035103>&quot;<font color=#4A181B>$</font>value&quot;</font>
         }
     }
-    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> exists paramList]} {
-        <b><font color=#923B23>next</font></b> <font color=#4A181B>$name</font> v <font color=#4A181B>$npNode</font> <font color=#4A181B>$nmNode</font> <font color=#4A181B>$v0</font> <font color=#4A181B>$va</font> <font color=#4A181B>$mf</font> <font color=#4A181B>$fc</font> <font color=#4A181B>$td</font> {<b><font color=#923B23>*</font></b>}<font color=#4A181B>$paramList</font>
-    } <b><font color=#923B23>else</font></b> {
-        <b><font color=#923B23>next</font></b> <font color=#4A181B>$name</font> v <font color=#4A181B>$npNode</font> <font color=#4A181B>$nmNode</font> <font color=#4A181B>$v0</font> <font color=#4A181B>$va</font> <font color=#4A181B>$mf</font> <font color=#4A181B>$fc</font> <font color=#4A181B>$td</font>
-    }
+    <b><font color=#923B23>next</font></b> <font color=#4A181B>$name</font> v <font color=#4A181B>$npNode</font> <font color=#4A181B>$nmNode</font> <font color=#4A181B>$v0</font> <font color=#4A181B>$va</font> <font color=#4A181B>$mf</font> <font color=#4A181B>$fc</font> <font color=#4A181B>$td</font> {<b><font color=#923B23>*</font></b>}<font color=#4A181B>$paramList</font>
 }</pre></div>
 </div><h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::Sources::Vccs'>Vccs</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources" title="::SpiceGenTcl::Ngspice::Sources" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
@@ -2036,6 +2030,7 @@
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::Vsffm::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
@@ -2099,24 +2094,22 @@
     <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> <font color=#035103>&quot;</font>
 <font color=#035103>        <font color=#4A181B>$</font>paramDefList</font>
 <font color=#035103>    &quot;</font>]
+    <b><font color=#923B23>set</font></b> paramList <font color=#035103>&quot;&quot;</font>
     <b><font color=#923B23>dict</font></b> for {paramName value} <font color=#4A181B>$arguments</font> {
         <b><font color=#923B23>if</font></b> {([<b><font color=#923B23>llength</font></b> <font color=#4A181B>$value</font>]&gt;1) && ([<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$value</font> 1]==<font color=#035103>&quot;-eq&quot;</font>)} {
-            <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;-<font color=#4A181B>$</font>paramName&quot;</font> <font color=#035103>&quot;<font color=#4A181B>[</font>lindex <font color=#4A181B>$</font>value 0<font color=#4A181B>]</font> -poseq&quot;</font>
+            <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;-<font color=#4A181B>$</font>paramName&quot;</font> <font color=#035103>&quot;<font color=#4A181B>[</font>lindex <font color=#4A181B>$</font>value 0<font color=#4A181B>]</font> -eq&quot;</font>
         } <b><font color=#923B23>else</font></b> {
             <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;-<font color=#4A181B>$</font>paramName&quot;</font> <font color=#035103>&quot;<font color=#4A181B>$</font>value&quot;</font>
         }
     }
-    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> exists paramList]} {
-        <b><font color=#923B23>next</font></b> <font color=#4A181B>$name</font> v <font color=#4A181B>$npNode</font> <font color=#4A181B>$nmNode</font> <font color=#4A181B>$v0</font> <font color=#4A181B>$va</font> <font color=#4A181B>$fc</font> <font color=#4A181B>$mdi</font> <font color=#4A181B>$fs</font> {<b><font color=#923B23>*</font></b>}<font color=#4A181B>$paramList</font>
-    } <b><font color=#923B23>else</font></b> {
-        <b><font color=#923B23>next</font></b> <font color=#4A181B>$name</font> v <font color=#4A181B>$npNode</font> <font color=#4A181B>$nmNode</font> <font color=#4A181B>$v0</font> <font color=#4A181B>$va</font> <font color=#4A181B>$fc</font> <font color=#4A181B>$mdi</font> <font color=#4A181B>$fs</font>
-    }
+    <b><font color=#923B23>next</font></b> <font color=#4A181B>$name</font> v <font color=#4A181B>$npNode</font> <font color=#4A181B>$nmNode</font> <font color=#4A181B>$v0</font> <font color=#4A181B>$va</font> <font color=#4A181B>$fc</font> <font color=#4A181B>$mdi</font> <font color=#4A181B>$fs</font> {<b><font color=#923B23>*</font></b>}<font color=#4A181B>$paramList</font>
 }</pre></div>
 </div><h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::Sources::Vsin'>Vsin</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources" title="::SpiceGenTcl::Ngspice::Sources" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::Vsin::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
@@ -2176,18 +2169,15 @@
     <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> <font color=#035103>&quot;</font>
 <font color=#035103>        <font color=#4A181B>$</font>paramDefList</font>
 <font color=#035103>    &quot;</font>]
+    <b><font color=#923B23>set</font></b> paramList <font color=#035103>&quot;&quot;</font>
     <b><font color=#923B23>dict</font></b> for {paramName value} <font color=#4A181B>$arguments</font> {
         <b><font color=#923B23>if</font></b> {([<b><font color=#923B23>llength</font></b> <font color=#4A181B>$value</font>]&gt;1) && ([<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$value</font> 1]==<font color=#035103>&quot;-eq&quot;</font>)} {
-            <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;-<font color=#4A181B>$</font>paramName&quot;</font> <font color=#035103>&quot;<font color=#4A181B>[</font>lindex <font color=#4A181B>$</font>value 0<font color=#4A181B>]</font> -poseq&quot;</font>
+            <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;-<font color=#4A181B>$</font>paramName&quot;</font> <font color=#035103>&quot;<font color=#4A181B>[</font>lindex <font color=#4A181B>$</font>value 0<font color=#4A181B>]</font> -eq&quot;</font>
         } <b><font color=#923B23>else</font></b> {
             <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;-<font color=#4A181B>$</font>paramName&quot;</font> <font color=#035103>&quot;<font color=#4A181B>$</font>value&quot;</font>
         }
     }
-    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> exists paramList]} {
-        <b><font color=#923B23>next</font></b> <font color=#4A181B>$name</font> v <font color=#4A181B>$npNode</font> <font color=#4A181B>$nmNode</font> <font color=#4A181B>$v0</font> <font color=#4A181B>$va</font> <font color=#4A181B>$freq</font> {<b><font color=#923B23>*</font></b>}<font color=#4A181B>$paramList</font>
-    } <b><font color=#923B23>else</font></b> {
-        <b><font color=#923B23>next</font></b> <font color=#4A181B>$name</font> v <font color=#4A181B>$npNode</font> <font color=#4A181B>$nmNode</font> <font color=#4A181B>$v0</font> <font color=#4A181B>$va</font> <font color=#4A181B>$freq</font>
-    }
+    <b><font color=#923B23>next</font></b> <font color=#4A181B>$name</font> v <font color=#4A181B>$npNode</font> <font color=#4A181B>$nmNode</font> <font color=#4A181B>$v0</font> <font color=#4A181B>$va</font> <font color=#4A181B>$freq</font> {<b><font color=#923B23>*</font></b>}<font color=#4A181B>$paramList</font>
 }</pre></div>
 </div></main><nav class='ruff-nav'><ul ><li class='ruff-toc1'><a style='padding-top:2px;' href='index.html'>Start page</a></li>
 <li class='ruff-toc1'><a href='index-docindex.html' accesskey='i'>Index</a></li>

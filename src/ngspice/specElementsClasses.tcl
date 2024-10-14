@@ -29,79 +29,34 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
     oo::class create Resistor {
         superclass ::SpiceGenTcl::Device
         mixin ::SpiceGenTcl::KeyArgsBuilder
-        constructor {name npNode nmNode rVal args} {
-            # Creates object of class `Resistor` that describes simple resistor. 
+        constructor {name npNode nmNode args} {
+            # Creates object of class `Resistor` that describes resistor. 
             #  name - name of the device without first-letter designator R
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  rVal - value of resistance
             #  args - keyword instance parameters
+            # Resistor type could be specified with additional switches: `-beh` if we
+            # want to model circuit's variable dependent resistor, or `-model modelName`
+            # if we want to simulate resistor with model card.
+            # Simple resistor:
             # ```
             # RXXXXXXX n+ n- <resistance|r=>value <ac=val> <m=val>
             # + <scale=val> <temp=val> <dtemp=val> <tc1=val> <tc2=val>
             # + <noisy=0|1>
             # ```
-            # Example of class initialization:
+            # Example of class initialization as a simple resistor:
             # ```
-            # ::SpiceGenTcl::Ngspice::BasicDevices::Resistor new 1 netp netm 1e3 -tc1 1 -ac 1e6 -temp {temp_amb -eq}
+            # ::SpiceGenTcl::Ngspice::BasicDevices::Resistor new 1 netp netm -r 1e3 -tc1 1 -ac 1e6 -temp {temp_amb -eq}
             # ```
-            set paramsNames [list ac m scale temp dtemp tc1 tc2 noisy]
-            set params [my argsPreprocess $paramsNames {*}$args]
-            if {([llength $rVal]>1) && ([lindex $rVal 1]=="-eq")} {
-                set params [linsert $params 0 "r [lindex $rVal 0] -poseq"]
-            } else {
-                set params [linsert $params 0 "r $rVal -pos"]
-            }
-            next r$name [list "np $npNode" "nm $nmNode"] $params
-        }
-    }
-    # alias for Resistor class
-    oo::class create R {
-        superclass Resistor
-    }
-    
-    ### ________________________ ResistorBehavioural class _________________________ ###
-    
-    oo::class create ResistorBehavioural {
-        superclass ::SpiceGenTcl::Device
-        mixin ::SpiceGenTcl::KeyArgsBuilder
-        constructor {name npNode nmNode rExpr args} {
-            # Creates object of class `ResistorBehavioural` that describes device dependent on expressions.
-            #  name - name of the device without first-letter designator R
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
-            #  rExpr - equation of resistance
-            #  args - keyword instance parameters
+            # Behavioral resistor:
             # ```
             # RXXXXXXX n+ n- R ={expression} <tc1=value> <tc2=value> <noisy=0>
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::BasicDevices::ResistorBehavioural new 1 netp netm "V(a)+V(b)+pow(V(c),2)" -tc1 1
+            # ::SpiceGenTcl::Ngspice::BasicDevices::Resistor new 1 netp netm -r "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1
             # ```
-            set paramsNames [list tc1 tc2 noisy]
-            set params [my argsPreprocess $paramsNames {*}$args]
-            next r$name [list "np $npNode" "nm $nmNode"] [linsert $params 0 "r $rExpr -eq"]
-        }
-    }
-
-    # alias for ResistorBehavioural class
-    oo::class create RBeh {
-        superclass ResistorBehavioural
-    }    
-    
-    ### ________________________ ResistorSemiconductor class _________________________ ###
-    
-    oo::class create ResistorSemiconductor {
-        superclass ::SpiceGenTcl::DeviceModel
-        mixin ::SpiceGenTcl::KeyArgsBuilder
-        constructor {name npNode nmNode modelName args} {
-            # Creates object of class `ResistorSemiconductor` that describes semiconductor resistor device.
-            #  name - name of the device without first-letter designator R
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
-            #  modelName - name of the model
-            #  args - keyword instance parameters
+            # Resistor with model card:
             # ```
             # RXXXXXXX n+ n- <value> <mname> <l=length> <w=width>
             # + <temp=val> <dtemp=val> <m=val> <ac=val> <scale=val>
@@ -109,15 +64,51 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::ResistorSemiconductor new 1 netp netm resm -l 1e-6 -w 10e-6
+            # ::SpiceGenTcl::Ngspice::BasicDevices::Resistor new 1 netp netm -model resm -l 1e-6 -w 10e-6
             # ```
-            set paramsNames [list l w temp dtemp m ac scale noisy]
-            next r$name [list "np $npNode" "nm $nmNode"] $modelName [my argsPreprocess $paramsNames {*}$args]
+            set arguments [argparse -inline {
+                -r=
+                {-beh -forbid {model} -require {r}}
+                {-model= -forbid {beh}}
+                {-ac= -forbid {model beh}}
+                {-m= -forbid {beh}}
+                {-scale= -forbid {beh}}
+                {-temp= -forbid {beh}}
+                {-dtemp= -forbid {beh}}
+                {-tc1= -forbid {model}}
+                {-tc2= -forbid {model}}
+                {-noisy= -enum {0 1}}
+                {-l= -require {model}}
+                {-w= -require {model}}
+            }]
+            set params ""
+            if {[dict exists $arguments r]} {
+                set rVal [dict get $arguments r]
+                if {[dict exists $arguments beh]} {
+                    lappend params "r $rVal -eq"
+                } elseif {([llength $rVal]>1) && ([lindex $rVal 1]=="-eq")} {
+                    lappend params "r [lindex $rVal 0] -poseq"
+                } else {
+                    lappend params "r $rVal -pos"
+                }
+            } elseif {[dict exists $arguments model]==0} {
+                error "Resistor value must be specified with '-r value'"
+            }
+            if {[dict exists $arguments model]} {
+                lappend params "model [dict get $arguments model] -posnocheck"
+            }
+            dict for {paramName value} $arguments {
+                if {$paramName ni {r beh model}} {
+                    lappend params "$paramName $value"
+                }
+            }
+            next r$name [list "np $npNode" "nm $nmNode"] $params
         }
     }
-    # alias for ResistorSemiconductor class
-    oo::class create RSem {
-        superclass ResistorSemiconductor
+    ### ________________________ R class _________________________ ###
+    # alias for Resistor class
+    oo::class create R {
+        superclass Resistor
     }
 
     ## ________________________ capacitor classes _________________________ ##
@@ -127,123 +118,100 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
     oo::class create Capacitor {
         superclass ::SpiceGenTcl::Device
         mixin ::SpiceGenTcl::KeyArgsBuilder
-        constructor {name npNode nmNode cVal args} {
-            # Creates object of class `Capacitor` that describes simple capacitor device.
+        constructor {name npNode nmNode args} {
+            # Creates object of class `Capacitor` that describes capacitor. 
             #  name - name of the device without first-letter designator C
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  cVal - value of capacitance
             #  args - keyword instance parameters
+            # Capacitor type could be specified with additional switches: `-beh` if we
+            # want to model circuit's variable dependent capacitor, or `-model modelName`
+            # if we want to simulate capacitor with model card.
+            # Simple capacitor:
             # ```
             # CXXXXXXX n+ n- <value> <mname> <m=val> <scale=val> <temp=val>
             # + <dtemp=val> <tc1=val> <tc2=val> <ic=init_condition>
             # ```
-            # Example of class initialization:
+            # Example of class initialization as a simple capacitor:
             # ```
-            # ::SpiceGenTcl::Ngspice::BasicDevices::Capacitor new 1 netp netm 1e-6 -tc1 1 -temp 25
+            # ::SpiceGenTcl::Ngspice::BasicDevices::Capacitor new 1 netp netm 1e-6 -tc1 1 -temp {temp -eq}
             # ```
-            set paramsNames [list m scale temp dtemp tc1 tc2 ic]
-            set params [my argsPreprocess $paramsNames {*}$args]
-            if {([llength $cVal]>1) && ([lindex $cVal 1]=="-eq")} {
-                set params [linsert $params 0 "c [lindex $cVal 0] -poseq"]
-            } else {
-                set params [linsert $params 0 "c $cVal -pos"]
-            }
-            next c$name [list "np $npNode" "nm $nmNode"] $params
-        }
-    }
-    # alias for Capacitor class
-    oo::class create C {
-        superclass Capacitor
-    }
-
-    ### ________________________ CapacitorBehaviouralC class _________________________ ###
-
-    oo::class create CapacitorBehaviouralC {
-        superclass ::SpiceGenTcl::Device
-        mixin ::SpiceGenTcl::KeyArgsBuilder
-        constructor {name npNode nmNode cExpr args} {
-            # Creates object of class `CapacitorBehaviouralC` that describes capacitor device dependents on expressions in C form.
-            #  name - name of the device without first-letter designator R
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
-            #  cExpr - equation of capacitance
-            #  args - keyword instance parameters
+            # Behavioral capacitor with C expression:
             # ```
             # CXXXXXXX n+ n- C={expression} <tc1=value> <tc2=value>
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::BasicDevices::CapacitorBehaviouralC new 1 netp netm "V(a)+V(b)+pow(V(c),2)" -tc1 1
+            # ::SpiceGenTcl::Ngspice::BasicDevices::Capacitor new 1 netp netm -c "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1
             # ```
-            set paramsNames [list tc1 tc2]
-            set params [my argsPreprocess $paramsNames {*}$args]
-            next c$name [list "np $npNode" "nm $nmNode"] [linsert $params 0 "c $cExpr -eq"]
-        }
-    }
-    
-    # alias for CapacitorBehaviouralC class
-    oo::class create CBehC {
-        superclass CapacitorBehaviouralC
-    }  
-
-    ### ________________________ CapacitorBehaviouralQ class _________________________ ###
-
-    oo::class create CapacitorBehaviouralQ {
-        superclass ::SpiceGenTcl::Device
-        mixin ::SpiceGenTcl::KeyArgsBuilder
-        constructor {name npNode nmNode qExpr args} {
-            # Creates object of class `CapacitorBehaviouralQ` that describes capacitor device dependents on expressions in Q form.
-            #  name - name of the device without first-letter designator R
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
-            #  qExpr - equation of charge
-            #  args - keyword instance parameters
+            # Behavioral capacitor with Q expression:
             # ```
             # CXXXXXXX n+ n- Q={expression} <tc1=value> <tc2=value>
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::BasicDevices::CapacitorBehaviouralQ new 1 netp netm "V(a)+V(b)+pow(V(c),2)" -tc1 1
+            # ::SpiceGenTcl::Ngspice::BasicDevices::Capacitor new 1 netp netm -q "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1
             # ```
-            set paramsNames [list tc1 tc2]
-            set params [my argsPreprocess $paramsNames {*}$args]
-            next c$name [list "np $npNode" "nm $nmNode"] [linsert $params 0 "q $qExpr -eq"]
-        }
-    }
-    
-    # alias for CapacitorBehaviouralQ class
-    oo::class create CBehQ {
-        superclass CapacitorBehaviouralQ
-    }      
-    
-    ### ________________________ CapacitorSemiconductor class _________________________ ###
-    
-    oo::class create CapacitorSemiconductor {
-        superclass ::SpiceGenTcl::DeviceModel
-        mixin ::SpiceGenTcl::KeyArgsBuilder
-        constructor {name npNode nmNode modelName args} {
-            # Creates object of class `CapacitorBehaviouralQ` that describes semiconductor capacitor device.
-            #  name - name of the device without first-letter designator C
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
-            #  modelName - name of the model
-            #  args - keyword instance parameters
+            # Capacitor with model card:
             # ```
             # CXXXXXXX n+ n- <value> <mname> <l=length> <w=width> <m=val>
             # + <scale=val> <temp=val> <dtemp=val> <ic=init_condition>
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::CapacitorSemiconductor new 1 netp netm capm -l 1e-6 -w 10e-6
+            # ::SpiceGenTcl::Ngspice::BasicDevices::Capacitor new 1 netp netm -model capm -l 1e-6 -w 10e-6
             # ```
-            set paramsNames [list l w temp dtemp m ac scale]
-            next c$name [list "np $npNode" "nm $nmNode"] $modelName [my argsPreprocess $paramsNames {*}$args]
+            set arguments [argparse -inline {
+                {-c= -forbid {q}}
+                {-q= -require {beh} -forbid {c model}}
+                {-beh -forbid {model}}
+                {-model= -forbid {beh}}
+                {-m= -forbid {beh}}
+                {-scale= -forbid {beh}}
+                {-temp= -forbid {beh}}
+                {-dtemp= -forbid {beh}}
+                {-tc1= -forbid {model}}
+                {-tc2= -forbid {model}}
+                {-ic= -forbid {beh}}
+                {-l= -require {model}}
+                {-w= -require {model}}
+            }]
+            set params ""
+            if {[dict exists $arguments c]} {
+                set cVal [dict get $arguments c]
+                if {[dict exists $arguments beh]} {
+                    lappend params "c $cVal -eq"
+                } elseif {([llength $cVal]>1) && ([lindex $cVal 1]=="-eq")} {
+                    lappend params "c [lindex $cVal 0] -poseq"
+                } else {
+                    lappend params "c $cVal -pos"
+                }
+            } elseif {([dict exists $arguments model]==0) && ([dict exists $arguments q]==0)} {
+                error "Capacitor value must be specified with '-c value'"
+            }
+            if {[dict exists $arguments q]} {
+                set qVal [dict get $arguments q]
+                if {[dict exists $arguments beh]} {
+                    lappend params "q $qVal -eq"
+                } else {
+                    error "Charge of capacitor can't be specified without '-beh' switch"
+                }
+            }
+            if {[dict exists $arguments model]} {
+                lappend params "model [dict get $arguments model] -posnocheck"
+            }
+            dict for {paramName value} $arguments {
+                if {$paramName ni {c q beh model}} {
+                    lappend params "$paramName $value"
+                }
+            }
+            next c$name [list "np $npNode" "nm $nmNode"] $params
         }
     }
-    # alias for CapacitorSemiconductor class
-    oo::class create CSem {
-        superclass CapacitorSemiconductor
+    ### ________________________ C class _________________________ ###
+    # alias for Capacitor class
+    oo::class create C {
+        superclass Capacitor
     }
 
     ## ________________________ inductor classes _________________________ ##
@@ -253,13 +221,34 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
     oo::class create Inductor {
         superclass ::SpiceGenTcl::Device
         mixin ::SpiceGenTcl::KeyArgsBuilder
-        constructor {name npNode nmNode lVal args} {
-            # Creates object of class `Inductor` that describes simple inductor device.
+        constructor {name npNode nmNode args} {
+            # Creates object of class `Inductor` that describes inductor. 
             #  name - name of the device without first-letter designator L
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  lVal - value of inductance
             #  args - keyword instance parameters
+            # Inductor type could be specified with additional switches: `-beh` if we
+            # want to model circuit's variable dependent inductor, or `-model modelName`
+            # if we want to simulate inductor with model card.
+            # Simple inductor:
+            # ```
+            # LYYYYYYY n+ n- <value> <m=val>
+            # + <scale=val> <temp=val> <dtemp=val> <tc1=val>
+            # + <tc2=val> <ic=init_condition>
+            # ```
+            # Example of class initialization as a simple inductor:
+            # ```
+            # ::SpiceGenTcl::Ngspice::BasicDevices::Inductor new 1 netp netm -l 1e-6 -tc1 1 -temp {temp -eq}
+            # ```
+            # Behavioral inductor:
+            # ```
+            # LYYYYYYY n+ n- L={expression} <tc1=val> <tc2=val>
+            # ```
+            # Example of class initialization:
+            # ```
+            # ::SpiceGenTcl::Ngspice::BasicDevices::Inductor new 1 netp netm -l "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1
+            # ```
+            # Inductor with model card:
             # ```
             # LYYYYYYY n+ n- <value> <mname> <nt=val> <m=val>
             # + <scale=val> <temp=val> <dtemp=val> <tc1=val>
@@ -267,52 +256,52 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::BasicDevices::Inductor new 1 netp netm 1e-6 -tc1 1 -temp 25
+            # ::SpiceGenTcl::Ngspice::BasicDevices::Inductor new 1 netp netm -l 1e-6 -model indm
             # ```
-            set paramsNames [list nt m scale temp dtemp tc1 tc2 ic]
-            set params [my argsPreprocess $paramsNames {*}$args]
-            if {([llength $lVal]>1) && ([lindex $lVal 1]=="-eq")} {
-                set params [linsert $params 0 "l [lindex $lVal 0] -poseq"]
-            } else {
-                set params [linsert $params 0 "l $lVal -pos"]
+            set arguments [argparse -inline {
+                -l=
+                {-beh -forbid {model} -require {l}}
+                {-model= -forbid {beh}}
+                {-m= -forbid {beh}}
+                {-scale= -forbid {beh}}
+                {-temp= -forbid {beh}}
+                {-dtemp= -forbid {beh}}
+                -tc1=
+                -tc2=
+                {-nt= -require {model}}
+            }]
+            set params ""
+            if {[dict exists $arguments l]} {
+                set lVal [dict get $arguments l]
+                if {[dict exists $arguments beh]} {
+                    lappend params "l $lVal -eq"
+                } elseif {([llength $lVal]>1) && ([lindex $lVal 1]=="-eq")} {
+                    lappend params "l [lindex $lVal 0] -poseq"
+                } else {
+                    lappend params "l $lVal -pos"
+                }
+            } elseif {[dict exists $arguments model]==0} {
+                error "Inductor value must be specified with '-l value'"
+            }
+            if {[dict exists $arguments model]} {
+                lappend params "model [dict get $arguments model] -posnocheck"
+            }
+            dict for {paramName value} $arguments {
+                if {$paramName ni {l beh model}} {
+                    lappend params "$paramName $value"
+                }
             }
             next l$name [list "np $npNode" "nm $nmNode"] $params
+            
         }
     }
+    
+    ### ________________________ L class _________________________ ###
+    
     # alias for Inductor class
     oo::class create L {
         superclass Inductor
-    }
-    
-    ### ________________________ InductorBehavioural class _________________________ ###
-    
-    oo::class create InductorBehavioural {
-        superclass ::SpiceGenTcl::Device
-        mixin ::SpiceGenTcl::KeyArgsBuilder
-        constructor {name npNode nmNode lExpr args} {
-            # Creates object of class `InductorBehavioural` that describes inductor device dependent on expressions.
-            #  name - name of the device without first-letter designator R
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
-            #  lExpr - equation of inductance
-            #  args - keyword instance parameters
-            # ```
-            # LXXXXXXX n+ n- L={expression} <tc1=value> <tc2=value>
-            # ```
-            # Example of class initialization:
-            # ```
-            # ::SpiceGenTcl::Ngspice::BasicDevices::InductorBehavioural new 1 netp netm "V(a)+V(b)+pow(V(c),2)" -tc1 1
-            # ```
-            set paramsNames [list tc1 tc2]
-            set params [my argsPreprocess $paramsNames {*}$args]
-            next l$name [list "np $npNode" "nm $nmNode"] [linsert $params 0 "l $lExpr -eq"]
-        }
-    }
-    
-    # alias for InductorBehavioural class
-    oo::class create LBeh {
-        superclass InductorBehavioural
-    }  
+    }    
     
     ## ________________________ VSwitch class _________________________ ##
   

@@ -59,14 +59,14 @@ variable pi
 set circuit [Circuit new {Monte-Carlo}]
 # add elements to circuit
 $circuit add [Vac new 1 n001 0 1]
-$circuit add [R new 1 n002 n001 141]
-$circuit add [R new 2 0 out 141]
-C create c1 1 out 0 1e-9
-L create l1 1 out 0 10e-6
-C create c2 2 n002 0 1e-9
-L create l2 2 n002 0 10e-6
-C create c3 3 out n003 250e-12
-L create l3 3 n003 n002 40e-6
+$circuit add [R new 1 n002 n001 -r 141]
+$circuit add [R new 2 0 out -r 141]
+C create c1 1 out 0 -c 1e-9
+L create l1 1 out 0 -l 10e-6
+C create c2 2 n002 0 -c 1e-9
+L create l2 2 n002 0 -l 10e-6
+C create c3 3 out n003 -c 250e-12
+L create l3 3 n003 n002 -l 40e-6
 foreach elem [list c1 l1 c2 l2 c3 l3] {
     $circuit add $elem
 }

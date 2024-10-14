@@ -803,9 +803,9 @@ test testParamStatementClass-1.5 {test creation of ParamStatement class instance
     
 test testNetlistClass-1.2 {test creation of Netlist class instance with add interface and genSPICEString interface} -setup {
     set netlistInst [Netlist new newNetlist]
-    $netlistInst add [R new 1 net1 net2 10]
-    $netlistInst add [R new 2 net1 net2 {{r1+5/10} -eq}]
-    $netlistInst add [C new 1 net2 net3 1e-6]
+    $netlistInst add [R new 1 net1 net2 -r 10]
+    $netlistInst add [R new 2 net1 net2 -r {{r1+5/10} -eq}]
+    $netlistInst add [C new 1 net2 net3 -c 1e-6]
     $netlistInst add [ParamStatement new {{r1 1} {r2 2}} -name ps1]
     $netlistInst add [Comment new {some random comment} -name com1]
     $netlistInst add [Include new {/fold1/fold2/file.lib} -name inc1]
@@ -828,11 +828,11 @@ v1 net1 net3 5} -cleanup {
 
 test testNetlistClass-1.3 {test creation of Netlist class instance with del interface and genSPICEString interface} -setup {
     set netlistInst [Netlist new newNetlist]
-    $netlistInst add [R new 1 net1 net2 10]
-    $netlistInst add [R new 2 net1 net2 {{r1+5/10} -eq}]
-    $netlistInst add [RSem new 5 net1 net2 res_sem -l 10e-6 -w 100e-6]
+    $netlistInst add [R new 1 net1 net2 -r 10]
+    $netlistInst add [R new 2 net1 net2 -r {{r1+5/10} -eq}]
+    $netlistInst add [R new 5 net1 net2 -model res_sem -l 10e-6 -w 100e-6]
     $netlistInst add [RSemModel new rsem1mod -tc1 0.1 -tc2 0.4]
-    $netlistInst add [C new 1 net2 net3 1e-6]
+    $netlistInst add [C new 1 net2 net3 -c 1e-6]
     $netlistInst add [ParamStatement new {{r1 1} {r2 2}} -name ps1]
     $netlistInst add [Comment new {some random comment} -name com1]
     $netlistInst add [Include new {/fold1/fold2/file.lib} -name inc1]
@@ -857,9 +857,9 @@ c1 net2 net3 1e-6
 
 test testNetlistClass-1.4 {test creation of Netlist class instance with del interface with wrong name of element} -setup {
     set netlistInst [Netlist new new_netlist]
-    $netlistInst add [R new 1 net1 net2 10]
-    $netlistInst add [R new 2 net1 net2 {{r1+5/10} -eq}]
-    $netlistInst add [C new 1 net2 net3 1e-6]
+    $netlistInst add [R new 1 net1 net2 -r 10]
+    $netlistInst add [R new 2 net1 net2 -r {{r1+5/10} -eq}]
+    $netlistInst add [C new 1 net2 net3 -c 1e-6]
     $netlistInst add [ParamStatement new {{r1 1} {r2 2}} -name ps1]
     $netlistInst add [Comment new {some random comment} -name com1]
     $netlistInst add [Include new {/fold1/fold2/file.lib} -name inc1]
@@ -875,9 +875,9 @@ test testNetlistClass-1.4 {test creation of Netlist class instance with del inte
 
 test testNetlistClass-1.5 {test creation of Netlist class instance and getElement interface} -setup {
     set netlistInst [Netlist new new_netlist]
-    $netlistInst add [R new 1 net1 net2 10]
-    $netlistInst add [R new 2 net1 net2 {{r1+5/10} -eq}]
-    $netlistInst add [C new 1 net2 net3 1e-6]
+    $netlistInst add [R new 1 net1 net2 -r 10]
+    $netlistInst add [R new 2 net1 net2 -r {{r1+5/10} -eq}]
+    $netlistInst add [C new 1 net2 net3 -c 1e-6]
     $netlistInst add [ParamStatement new {{r1 1} {r2 2}} -name ps1]
     $netlistInst add [Comment new {some random comment} -name com1]
     $netlistInst add [Include new {/fold1/fold2/file.lib} -name inc1]
@@ -893,9 +893,9 @@ test testNetlistClass-1.5 {test creation of Netlist class instance and getElemen
 
 test testNetlistClass-1.6 {test creation of Netlist class instance with add element with same name as ones already added to netslit} -setup {
     set netlistInst [Netlist new new_netlist]
-    $netlistInst add [R new 1 net1 net2 10]
-    $netlistInst add [R new 2 net1 net2 {{r1+5/10} -eq}]
-    $netlistInst add [C new 1 net2 net3 1e-6]
+    $netlistInst add [R new 1 net1 net2 -r 10]
+    $netlistInst add [R new 2 net1 net2 -r {{r1+5/10} -eq}]
+    $netlistInst add [C new 1 net2 net3 -c 1e-6]
     $netlistInst add [ParamStatement new {{r1 1} {r2 2}} -name ps1]
     $netlistInst add [Comment new {some random comment} -name com1]
     $netlistInst add [Include new {/fold1/fold2/file.lib} -name inc1]
@@ -903,7 +903,7 @@ test testNetlistClass-1.6 {test creation of Netlist class instance with add elem
     $netlistInst add [RawString new {*comment in form of raw string} -name raw1]
     $netlistInst add [Vdc new 1 net1 net3 5]
 } -body {
-    catch {$netlistInst add [R new 1 net1 net2 15]} errorStr
+    catch {$netlistInst add [R new 1 net1 net2 -r 15]} errorStr
     return $errorStr
 } -result {Netlist 'new_netlist' already contains element with name r1} -cleanup {
     unset netlistInst errorStr
@@ -911,9 +911,9 @@ test testNetlistClass-1.6 {test creation of Netlist class instance with add elem
 
 test testNetlistClass-1.7 {test creation of Netlist class instance and modifying value of netlist element} -setup {
     set netlistInst [Netlist new new_netlist]
-    $netlistInst add [R new 1 net1 net2 10]
-    $netlistInst add [R new 2 net1 net2 {{r1+5/10} -eq}]
-    $netlistInst add [C new 1 net2 net3 1e-6]
+    $netlistInst add [R new 1 net1 net2 -r 10]
+    $netlistInst add [R new 2 net1 net2 -r {{r1+5/10} -eq}]
+    $netlistInst add [C new 1 net2 net3 -c 1e-6]
     $netlistInst add [ParamStatement new {{r1 1} {r2 2}} -name ps1]
     $netlistInst add [Comment new {some random comment} -name com1]
     $netlistInst add [Include new {/fold1/fold2/file.lib} -name inc1]
@@ -964,8 +964,8 @@ test testSubcircuitClass-1.1 {test creation of Subcircuit class instance with ge
             # define input parameters of subcircuit
             set params {{r 100} {c 1e-6}}
             # add elements to subcircuit definition
-            my add [R new 1 net1 net2 {r -eq}]
-            my add [C new 1 net2 net3 {c -eq}]
+            my add [R new 1 net1 net2 -r {r -eq}]
+            my add [C new 1 net2 net3 -c {c -eq}]
             # pass name, list of pins and list of parameters to Subcircuit constructor
             next rcnet $pins $params
         }
@@ -991,8 +991,8 @@ test testSubcircuitClass-1.2 {test creation of Subcircuit class instance with ge
             # define input parameters of subcircuit
             set params {{r 100} {c 1e-6}}
             # add elements to subcircuit definition
-            my add [R new 1 net1 net2 {r -eq}]
-            my add [C new 1 net2 net3 {c -eq}]
+            my add [R new 1 net1 net2 -r {r -eq}]
+            my add [C new 1 net2 net3 -c {c -eq}]
             # pass name, list of pins and list of parameters to Subcircuit constructor
             next rcnet $pins $params
         }
@@ -1014,8 +1014,8 @@ test testSubcircuitClass-1.3 {test creation of Subcircuit class instance with ge
             # define input parameters of subcircuit
             set params {{r 100} {c 1e-6}}
             # add elements to subcircuit definition
-            my add [R new 1 net1 net2 {r -eq}]
-            my add [C new 1 net2 net3 {c -eq}]
+            my add [R new 1 net1 net2 -r {r -eq}]
+            my add [C new 1 net2 net3 -c {c -eq}]
             # pass name, list of pins and list of parameters to Subcircuit constructor
             next rcnet $pins $params
         }
@@ -1037,8 +1037,8 @@ test testSubcircuitClass-1.4 {test creation of Subcircuit class instance with fo
             # define input parameters of subcircuit
             set params {{r 100} {c 1e-6}}
             # add elements to subcircuit definition
-            my add [R new 1 net1 net2 {r -eq}]
-            my add [C new 1 net2 net3 {c -eq}]
+            my add [R new 1 net1 net2 -r {r -eq}]
+            my add [C new 1 net2 net3 -c {c -eq}]
             my add [Include new {/fold1/fold2/file.lib} -name inc1]
             # pass name, list of pins and list of parameters to Subcircuit constructor
             next rcnet $pins $params
@@ -1062,8 +1062,8 @@ test testSubcircuitClass-1.5 {test creation of Subcircuit class instance with fo
             # define input parameters of subcircuit
             set params {{r 100} {c 1e-6}}
             # add elements to subcircuit definition
-            my add [R new 1 net1 net2 {r -eq}]
-            my add [C new 1 net2 net3 {c -eq}]
+            my add [R new 1 net1 net2 -r {r -eq}]
+            my add [C new 1 net2 net3 -c {c -eq}]
             my add [Op new]
             # pass name, list of pins and list of parameters to Subcircuit constructor
             next rcnet $pins $params
@@ -1087,9 +1087,9 @@ test testSubcircuitClass-1.6 {test creation of Subcircuit class instance with ge
             # define input parameters of subcircuit
             set params {{r 100} {c 1e-6}}
             # add elements to subcircuit definition
-            my add [R new 1 net1 net2 {r -eq}]
-            my add [C new 1 net2 net3 {c -eq}]
-            my add [RSem new 5 net1 net2 res_sem -l 10e-6 -w 100e-6]
+            my add [R new 1 net1 net2 -r {r -eq}]
+            my add [C new 1 net2 net3 -c {c -eq}]
+            my add [R new 5 net1 net2 -model res_sem -l 10e-6 -w 100e-6]
             my add [RSemModel new rsem1mod -tc1 0.1 -tc2 0.4]
             # pass name, list of pins and list of parameters to Subcircuit constructor
             next rcnet $pins $params

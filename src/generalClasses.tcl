@@ -485,6 +485,7 @@ namespace eval ::SpiceGenTcl {
                 {-pos -forbid {poseq}}
                 {-eq -forbid {poseq}}
                 {-poseq -forbid {pos eq}}
+                {-posnocheck -forbid {poseq eq pos}}
             }]
             # method adds new Parameter object to the list Params
             set paramName [string tolower $paramName]
@@ -504,6 +505,8 @@ namespace eval ::SpiceGenTcl {
                 dict append Params $paramName [::SpiceGenTcl::ParameterEquation new $paramName $value]
             } elseif {[info exists poseq]} {
                 dict append Params $paramName [::SpiceGenTcl::ParameterPositionalEquation new $paramName $value]
+            } elseif {[info exists posnocheck]} {
+                dict append Params $paramName [::SpiceGenTcl::ParameterPositionalNoCheck new $paramName $value]
             } else {
                 dict append Params $paramName [::SpiceGenTcl::Parameter new $paramName $value]
             }
@@ -566,7 +569,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-    # ________________________ DeviceModel class definition _________________________ #
+     #________________________ DeviceModel class definition _________________________ #
 
     oo::configurable create DeviceModel {
         superclass Device

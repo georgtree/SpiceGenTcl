@@ -21,6 +21,7 @@
 <div style='clear:both;'></div>
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
@@ -40,6 +41,7 @@
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::Capacitor::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
@@ -58,319 +60,153 @@
 <h5 class='ruff'>Subclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::C" title="C" class='ruff_cmd'>C</a></p>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::BasicDevices::Capacitor::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::Capacitor" title="::SpiceGenTcl::Ngspice::BasicDevices::Capacitor" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::Capacitor</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::Capacitor'>Capacitor</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
-<p class='ruff'>Creates object of class <code><b><font color=#923B23>Capacitor</font></b></code> that describes simple capacitor device.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>Capacitor create OBJNAME</span> <span class='ruff_arg'>name npNode nmNode cVal ?args?</span><br><span class='ruff_cmd'>Capacitor new</span> <span class='ruff_arg'>name npNode nmNode cVal ?args?</span></div>
+<p class='ruff'>Creates object of class <code><b><font color=#923B23>Capacitor</font></b></code> that describes capacitor.</p>
+<div class='ruff_synopsis'><span class='ruff_cmd'>Capacitor create OBJNAME</span> <span class='ruff_arg'>name npNode nmNode ?args?</span><br><span class='ruff_cmd'>Capacitor new</span> <span class='ruff_arg'>name npNode nmNode ?args?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator C.</td></tr>
 <tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
 <tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>cVal</code></td><td>Value of capacitance.</td></tr>
 <tr><td><code>args</code></td><td>Keyword instance parameters.</td></tr>
 </table>
-<h5 class='ruff'>Description</h5>
+<h5 class='ruff'>Description</h5><p class='ruff'>Capacitor type could be specified with additional switches: <code><font color=#463e11>-beh</font></code> if we want to model circuit's variable dependent capacitor, or <code><font color=#463e11>-model</font> modelName</code> if we want to simulate capacitor with model card. Simple capacitor:</p>
+
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>CXXXXXXX n+ n- &lt;value&gt; &lt;mname&gt; &lt;m=val&gt; &lt;<b><font color=#7d1c00>scale</font></b>=val&gt; &lt;temp=val&gt;
 + &lt;dtemp=val&gt; &lt;tc1=val&gt; &lt;tc2=val&gt; &lt;ic=init_condition&gt;
 </pre>
 
-</figure><p class='ruff'>Example of class initialization:</p>
+</figure><p class='ruff'>Example of class initialization as a simple capacitor:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Ngspice::BasicDevices::Capacitor new 1 netp netm 1e-6 <font color=#463e11>-tc1</font> 1 <font color=#463e11>-temp</font> 25
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Ngspice::BasicDevices::Capacitor new 1 netp netm 1e-6 <font color=#463e11>-tc1</font> 1 <font color=#463e11>-temp</font> {temp <font color=#463e11>-eq</font>}
 </pre>
 
-</figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Ngspice_BasicDevices_Capacitor_constructor' href="javascript:toggleSource('SpiceGenTcl_Ngspice_BasicDevices_Capacitor_constructor')">Show source</a></p>
-<div id='SpiceGenTcl_Ngspice_BasicDevices_Capacitor_constructor' class='ruff_dyn_src'><pre><b><font color=#ca14ca>method</font></b> constructor {name npNode nmNode cVal args} {
+</figure><p class='ruff'>Behavioral capacitor with C expression:</p>
 
-    <i><font color=#4b5d50># Creates object of class `Capacitor` that describes simple capacitor device.</font></i>
-    <i><font color=#4b5d50>#  name - name of the device without first-letter designator C</font></i>
-    <i><font color=#4b5d50>#  npNode - name of node connected to positive pin</font></i>
-    <i><font color=#4b5d50>#  nmNode - name of node connected to negative pin</font></i>
-    <i><font color=#4b5d50>#  cVal - value of capacitance</font></i>
-    <i><font color=#4b5d50>#  args - keyword instance parameters</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># CXXXXXXX n+ n- &lt;value&gt; &lt;mname&gt; &lt;m=val&gt; &lt;scale=val&gt; &lt;temp=val&gt;</font></i>
-    <i><font color=#4b5d50># + &lt;dtemp=val&gt; &lt;tc1=val&gt; &lt;tc2=val&gt; &lt;ic=init_condition&gt;</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># Example of class initialization:</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># ::SpiceGenTcl::Ngspice::BasicDevices::Capacitor new 1 netp netm 1e-6 -tc1 1 -temp 25</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <b><font color=#923B23>set</font></b> paramsNames [<b><font color=#923B23>list</font></b> m scale temp dtemp tc1 tc2 ic]
-    <b><font color=#923B23>set</font></b> paramDefList [<b><font color=#ca14ca>my</font></b> buildArgStr <font color=#4A181B>$paramsNames</font>]
-    <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> <font color=#035103>&quot;</font>
-<font color=#035103>        <font color=#4A181B>$</font>paramDefList</font>
-<font color=#035103>    &quot;</font>]
-    <b><font color=#923B23>if</font></b> {([<b><font color=#923B23>llength</font></b> <font color=#4A181B>$cVal</font>]&gt;1) && ([<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$cVal</font> 1]==<font color=#035103>&quot;-eq&quot;</font>)} {
-        <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;c <font color=#4A181B>[</font>lindex <font color=#4A181B>$</font>cVal 0<font color=#4A181B>]</font> -poseq&quot;</font>
-    } <b><font color=#923B23>else</font></b> {
-        <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;c <font color=#4A181B>$</font>cVal -pos&quot;</font>
-    }
-    <b><font color=#923B23>dict</font></b> for {paramName value} <font color=#4A181B>$arguments</font> {
-        <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;<font color=#4A181B>$</font>paramName <font color=#4A181B>$</font>value&quot;</font>
-    }
-    <b><font color=#923B23>next</font></b> c<font color=#4A181B>$name</font> [<b><font color=#923B23>list</font></b> <font color=#035103>&quot;np <font color=#4A181B>$</font>npNode&quot;</font> <font color=#035103>&quot;nm <font color=#4A181B>$</font>nmNode&quot;</font>] <font color=#4A181B>$paramList</font>
-}</pre></div>
-</div><h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::BasicDevices::CapacitorBehaviouralC'>CapacitorBehaviouralC</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices" title="::SpiceGenTcl::Ngspice::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
-<div style='clear:both;'></div>
-<h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
-<tr><td><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CapacitorBehaviouralC::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
-<tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
-<tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
-<tr><td><code>configure</code></td><td>Configure properties.</td></tr>
-<tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
-<tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
-<tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
-<tr><td><code>setParamValue</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setParamValue" title="::SpiceGenTcl::Device.setParamValue" class='ruff_cmd'>::SpiceGenTcl::Device.setParamValue</a></td></tr>
-<tr><td><code>setPinNodeName</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setPinNodeName" title="::SpiceGenTcl::Device.setPinNodeName" class='ruff_cmd'>::SpiceGenTcl::Device.setPinNodeName</a></td></tr>
-</table>
-<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#463e11>-Name</font></code></p>
-<p class='ruff'>Writable: <code><font color=#463e11>-Name</font></code></p>
-<h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device" title="::SpiceGenTcl::Device" class='ruff_cmd'>::SpiceGenTcl::Device</a></p>
-<h5 class='ruff'>Mixins</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder" title="::SpiceGenTcl::KeyArgsBuilder" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder</a></p>
-<h5 class='ruff'>Subclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CBehC" title="CBehC" class='ruff_cmd'>CBehC</a></p>
-<h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::BasicDevices::CapacitorBehaviouralC::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CapacitorBehaviouralC" title="::SpiceGenTcl::Ngspice::BasicDevices::CapacitorBehaviouralC" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::CapacitorBehaviouralC</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CapacitorBehaviouralC'>CapacitorBehaviouralC</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
-<div style='clear:both;'></div>
-<p class='ruff'>Creates object of class <code><b><font color=#923B23>CapacitorBehaviouralC</font></b></code> that describes capacitor device dependents on expressions in C form.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>CapacitorBehaviouralC create OBJNAME</span> <span class='ruff_arg'>name npNode nmNode cExpr ?args?</span><br><span class='ruff_cmd'>CapacitorBehaviouralC new</span> <span class='ruff_arg'>name npNode nmNode cExpr ?args?</span></div>
-<h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
-<tr><td><code>name</code></td><td>Name of the device without first-letter designator R.</td></tr>
-<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
-<tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>cExpr</code></td><td>Equation of capacitance.</td></tr>
-<tr><td><code>args</code></td><td>Keyword instance parameters.</td></tr>
-</table>
-<h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>CXXXXXXX n+ n- C={expression} &lt;tc1=value&gt; &lt;tc2=value&gt;
 </pre>
 
 </figure><p class='ruff'>Example of class initialization:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Ngspice::BasicDevices::CapacitorBehaviouralC new 1 netp netm <font color=#035103>&quot;V(a)+V(b)+pow(V(c),2)&quot;</font> <font color=#463e11>-tc1</font> 1
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Ngspice::BasicDevices::Capacitor new 1 netp netm <font color=#463e11>-c</font> <font color=#035103>&quot;V(a)+V(b)+pow(V(c),2)&quot;</font> <font color=#463e11>-beh</font> <font color=#463e11>-tc1</font> 1
 </pre>
 
-</figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Ngspice_BasicDevices_CapacitorBehaviouralC_constructor' href="javascript:toggleSource('SpiceGenTcl_Ngspice_BasicDevices_CapacitorBehaviouralC_constructor')">Show source</a></p>
-<div id='SpiceGenTcl_Ngspice_BasicDevices_CapacitorBehaviouralC_constructor' class='ruff_dyn_src'><pre><b><font color=#ca14ca>method</font></b> constructor {name npNode nmNode cExpr args} {
+</figure><p class='ruff'>Behavioral capacitor with Q expression:</p>
 
-    <i><font color=#4b5d50># Creates object of class `CapacitorBehaviouralC` that describes capacitor device dependents on expressions in C form.</font></i>
-    <i><font color=#4b5d50>#  name - name of the device without first-letter designator R</font></i>
-    <i><font color=#4b5d50>#  npNode - name of node connected to positive pin</font></i>
-    <i><font color=#4b5d50>#  nmNode - name of node connected to negative pin</font></i>
-    <i><font color=#4b5d50>#  cExpr - equation of capacitance</font></i>
-    <i><font color=#4b5d50>#  args - keyword instance parameters</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># CXXXXXXX n+ n- C={expression} &lt;tc1=value&gt; &lt;tc2=value&gt;</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># Example of class initialization:</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># ::SpiceGenTcl::Ngspice::BasicDevices::CapacitorBehaviouralC new 1 netp netm &quot;V(a)+V(b)+pow(V(c),2)&quot; -tc1 1</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <b><font color=#923B23>set</font></b> paramDefList [<b><font color=#ca14ca>my</font></b> buildArgStr [<b><font color=#923B23>list</font></b> tc1 tc2]]
-    <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> <font color=#035103>&quot;</font>
-<font color=#035103>        <font color=#4A181B>$</font>paramDefList</font>
-<font color=#035103>    &quot;</font>]
-    <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;c <font color=#4A181B>$</font>cExpr -eq&quot;</font>
-    <b><font color=#923B23>dict</font></b> for {paramName value} <font color=#4A181B>$arguments</font> {
-        <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;<font color=#4A181B>$</font>paramName <font color=#4A181B>$</font>value&quot;</font>
-    }
-    <b><font color=#923B23>next</font></b> c<font color=#4A181B>$name</font> [<b><font color=#923B23>list</font></b> <font color=#035103>&quot;np <font color=#4A181B>$</font>npNode&quot;</font> <font color=#035103>&quot;nm <font color=#4A181B>$</font>nmNode&quot;</font>] <font color=#4A181B>$paramList</font>
-}</pre></div>
-</div><h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::BasicDevices::CapacitorBehaviouralQ'>CapacitorBehaviouralQ</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices" title="::SpiceGenTcl::Ngspice::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
-<div style='clear:both;'></div>
-<h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
-<tr><td><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CapacitorBehaviouralQ::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
-<tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
-<tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
-<tr><td><code>configure</code></td><td>Configure properties.</td></tr>
-<tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
-<tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
-<tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
-<tr><td><code>setParamValue</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setParamValue" title="::SpiceGenTcl::Device.setParamValue" class='ruff_cmd'>::SpiceGenTcl::Device.setParamValue</a></td></tr>
-<tr><td><code>setPinNodeName</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setPinNodeName" title="::SpiceGenTcl::Device.setPinNodeName" class='ruff_cmd'>::SpiceGenTcl::Device.setPinNodeName</a></td></tr>
-</table>
-<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#463e11>-Name</font></code></p>
-<p class='ruff'>Writable: <code><font color=#463e11>-Name</font></code></p>
-<h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device" title="::SpiceGenTcl::Device" class='ruff_cmd'>::SpiceGenTcl::Device</a></p>
-<h5 class='ruff'>Mixins</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder" title="::SpiceGenTcl::KeyArgsBuilder" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder</a></p>
-<h5 class='ruff'>Subclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CBehQ" title="CBehQ" class='ruff_cmd'>CBehQ</a></p>
-<h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::BasicDevices::CapacitorBehaviouralQ::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CapacitorBehaviouralQ" title="::SpiceGenTcl::Ngspice::BasicDevices::CapacitorBehaviouralQ" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::CapacitorBehaviouralQ</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CapacitorBehaviouralQ'>CapacitorBehaviouralQ</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
-<div style='clear:both;'></div>
-<p class='ruff'>Creates object of class <code><b><font color=#923B23>CapacitorBehaviouralQ</font></b></code> that describes capacitor device dependents on expressions in Q form.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>CapacitorBehaviouralQ create OBJNAME</span> <span class='ruff_arg'>name npNode nmNode qExpr ?args?</span><br><span class='ruff_cmd'>CapacitorBehaviouralQ new</span> <span class='ruff_arg'>name npNode nmNode qExpr ?args?</span></div>
-<h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
-<tr><td><code>name</code></td><td>Name of the device without first-letter designator R.</td></tr>
-<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
-<tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>qExpr</code></td><td>Equation of charge.</td></tr>
-<tr><td><code>args</code></td><td>Keyword instance parameters.</td></tr>
-</table>
-<h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>CXXXXXXX n+ n- Q={expression} &lt;tc1=value&gt; &lt;tc2=value&gt;
 </pre>
 
 </figure><p class='ruff'>Example of class initialization:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Ngspice::BasicDevices::CapacitorBehaviouralQ new 1 netp netm <font color=#035103>&quot;V(a)+V(b)+pow(V(c),2)&quot;</font> <font color=#463e11>-tc1</font> 1
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Ngspice::BasicDevices::Capacitor new 1 netp netm <font color=#463e11>-q</font> <font color=#035103>&quot;V(a)+V(b)+pow(V(c),2)&quot;</font> <font color=#463e11>-beh</font> <font color=#463e11>-tc1</font> 1
 </pre>
 
-</figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Ngspice_BasicDevices_CapacitorBehaviouralQ_constructor' href="javascript:toggleSource('SpiceGenTcl_Ngspice_BasicDevices_CapacitorBehaviouralQ_constructor')">Show source</a></p>
-<div id='SpiceGenTcl_Ngspice_BasicDevices_CapacitorBehaviouralQ_constructor' class='ruff_dyn_src'><pre><b><font color=#ca14ca>method</font></b> constructor {name npNode nmNode qExpr args} {
+</figure><p class='ruff'>Capacitor with model card:</p>
 
-    <i><font color=#4b5d50># Creates object of class `CapacitorBehaviouralQ` that describes capacitor device dependents on expressions in Q form.</font></i>
-    <i><font color=#4b5d50>#  name - name of the device without first-letter designator R</font></i>
-    <i><font color=#4b5d50>#  npNode - name of node connected to positive pin</font></i>
-    <i><font color=#4b5d50>#  nmNode - name of node connected to negative pin</font></i>
-    <i><font color=#4b5d50>#  qExpr - equation of charge</font></i>
-    <i><font color=#4b5d50>#  args - keyword instance parameters</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># CXXXXXXX n+ n- Q={expression} &lt;tc1=value&gt; &lt;tc2=value&gt;</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># Example of class initialization:</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># ::SpiceGenTcl::Ngspice::BasicDevices::CapacitorBehaviouralQ new 1 netp netm &quot;V(a)+V(b)+pow(V(c),2)&quot; -tc1 1</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <b><font color=#923B23>set</font></b> paramDefList [<b><font color=#ca14ca>my</font></b> buildArgStr [<b><font color=#923B23>list</font></b> tc1 tc2]]
-    <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> <font color=#035103>&quot;</font>
-<font color=#035103>        <font color=#4A181B>$</font>paramDefList</font>
-<font color=#035103>    &quot;</font>]
-    <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;q <font color=#4A181B>$</font>qExpr -eq&quot;</font>
-    <b><font color=#923B23>dict</font></b> for {paramName value} <font color=#4A181B>$arguments</font> {
-        <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;<font color=#4A181B>$</font>paramName <font color=#4A181B>$</font>value&quot;</font>
-    }
-    <b><font color=#923B23>next</font></b> c<font color=#4A181B>$name</font> [<b><font color=#923B23>list</font></b> <font color=#035103>&quot;np <font color=#4A181B>$</font>npNode&quot;</font> <font color=#035103>&quot;nm <font color=#4A181B>$</font>nmNode&quot;</font>] <font color=#4A181B>$paramList</font>
-}</pre></div>
-</div><h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::BasicDevices::CapacitorSemiconductor'>CapacitorSemiconductor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices" title="::SpiceGenTcl::Ngspice::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
-<div style='clear:both;'></div>
-<h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
-<tr><td><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CapacitorSemiconductor::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
-<tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
-<tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
-<tr><td><code>configure</code></td><td>Configure properties.</td></tr>
-<tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DeviceModel::genSPICEString" title="::SpiceGenTcl::DeviceModel.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::DeviceModel.genSPICEString</a></td></tr>
-<tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
-<tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
-<tr><td><code>setParamValue</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setParamValue" title="::SpiceGenTcl::Device.setParamValue" class='ruff_cmd'>::SpiceGenTcl::Device.setParamValue</a></td></tr>
-<tr><td><code>setPinNodeName</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setPinNodeName" title="::SpiceGenTcl::Device.setPinNodeName" class='ruff_cmd'>::SpiceGenTcl::Device.setPinNodeName</a></td></tr>
-</table>
-<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#463e11>-ModelName</font></code>, <code><font color=#463e11>-Name</font></code></p>
-<p class='ruff'>Writable: <code><font color=#463e11>-ModelName</font></code>, <code><font color=#463e11>-Name</font></code></p>
-<h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::DeviceModel" title="::SpiceGenTcl::DeviceModel" class='ruff_cmd'>::SpiceGenTcl::DeviceModel</a></p>
-<h5 class='ruff'>Mixins</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder" title="::SpiceGenTcl::KeyArgsBuilder" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder</a></p>
-<h5 class='ruff'>Subclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CSem" title="CSem" class='ruff_cmd'>CSem</a></p>
-<h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::BasicDevices::CapacitorSemiconductor::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CapacitorSemiconductor" title="::SpiceGenTcl::Ngspice::BasicDevices::CapacitorSemiconductor" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::CapacitorSemiconductor</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CapacitorSemiconductor'>CapacitorSemiconductor</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
-<div style='clear:both;'></div>
-<p class='ruff'>Creates object of class <code><b><font color=#923B23>CapacitorBehaviouralQ</font></b></code> that describes semiconductor capacitor device.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>CapacitorSemiconductor create OBJNAME</span> <span class='ruff_arg'>name npNode nmNode modelName ?args?</span><br><span class='ruff_cmd'>CapacitorSemiconductor new</span> <span class='ruff_arg'>name npNode nmNode modelName ?args?</span></div>
-<h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
-<tr><td><code>name</code></td><td>Name of the device without first-letter designator C.</td></tr>
-<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
-<tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>modelName</code></td><td>Name of the model.</td></tr>
-<tr><td><code>args</code></td><td>Keyword instance parameters.</td></tr>
-</table>
-<h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>CXXXXXXX n+ n- &lt;value&gt; &lt;mname&gt; &lt;l=length&gt; &lt;w=width&gt; &lt;m=val&gt;
 + &lt;<b><font color=#7d1c00>scale</font></b>=val&gt; &lt;temp=val&gt; &lt;dtemp=val&gt; &lt;ic=init_condition&gt;
 </pre>
 
 </figure><p class='ruff'>Example of class initialization:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Ngspice::CapacitorSemiconductor new 1 netp netm capm <font color=#463e11>-l</font> 1e-6 <font color=#463e11>-w</font> 10e-6
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Ngspice::BasicDevices::Capacitor new 1 netp netm <font color=#463e11>-model</font> capm <font color=#463e11>-l</font> 1e-6 <font color=#463e11>-w</font> 10e-6
 </pre>
 
-</figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Ngspice_BasicDevices_CapacitorSemiconductor_constructor' href="javascript:toggleSource('SpiceGenTcl_Ngspice_BasicDevices_CapacitorSemiconductor_constructor')">Show source</a></p>
-<div id='SpiceGenTcl_Ngspice_BasicDevices_CapacitorSemiconductor_constructor' class='ruff_dyn_src'><pre><b><font color=#ca14ca>method</font></b> constructor {name npNode nmNode modelName args} {
+</figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Ngspice_BasicDevices_Capacitor_constructor' href="javascript:toggleSource('SpiceGenTcl_Ngspice_BasicDevices_Capacitor_constructor')">Show source</a></p>
+<div id='SpiceGenTcl_Ngspice_BasicDevices_Capacitor_constructor' class='ruff_dyn_src'><pre><b><font color=#ca14ca>method</font></b> constructor {name npNode nmNode args} {
 
-    <i><font color=#4b5d50># Creates object of class `CapacitorBehaviouralQ` that describes semiconductor capacitor device.</font></i>
+    <i><font color=#4b5d50># Creates object of class `Capacitor` that describes capacitor.</font></i>
     <i><font color=#4b5d50>#  name - name of the device without first-letter designator C</font></i>
     <i><font color=#4b5d50>#  npNode - name of node connected to positive pin</font></i>
     <i><font color=#4b5d50>#  nmNode - name of node connected to negative pin</font></i>
-    <i><font color=#4b5d50>#  modelName - name of the model</font></i>
     <i><font color=#4b5d50>#  args - keyword instance parameters</font></i>
+    <i><font color=#4b5d50># Capacitor type could be specified with additional switches: `-beh` if we</font></i>
+    <i><font color=#4b5d50># want to model circuit's variable dependent capacitor, or `-model modelName`</font></i>
+    <i><font color=#4b5d50># if we want to simulate capacitor with model card.</font></i>
+    <i><font color=#4b5d50># Simple capacitor:</font></i>
+    <i><font color=#4b5d50># ```</font></i>
+    <i><font color=#4b5d50># CXXXXXXX n+ n- &lt;value&gt; &lt;mname&gt; &lt;m=val&gt; &lt;scale=val&gt; &lt;temp=val&gt;</font></i>
+    <i><font color=#4b5d50># + &lt;dtemp=val&gt; &lt;tc1=val&gt; &lt;tc2=val&gt; &lt;ic=init_condition&gt;</font></i>
+    <i><font color=#4b5d50># ```</font></i>
+    <i><font color=#4b5d50># Example of class initialization as a simple capacitor:</font></i>
+    <i><font color=#4b5d50># ```</font></i>
+    <i><font color=#4b5d50># ::SpiceGenTcl::Ngspice::BasicDevices::Capacitor new 1 netp netm 1e-6 -tc1 1 -temp {temp -eq}</font></i>
+    <i><font color=#4b5d50># ```</font></i>
+    <i><font color=#4b5d50># Behavioral capacitor with C expression:</font></i>
+    <i><font color=#4b5d50># ```</font></i>
+    <i><font color=#4b5d50># CXXXXXXX n+ n- C={expression} &lt;tc1=value&gt; &lt;tc2=value&gt;</font></i>
+    <i><font color=#4b5d50># ```</font></i>
+    <i><font color=#4b5d50># Example of class initialization:</font></i>
+    <i><font color=#4b5d50># ```</font></i>
+    <i><font color=#4b5d50># ::SpiceGenTcl::Ngspice::BasicDevices::Capacitor new 1 netp netm -c &quot;V(a)+V(b)+pow(V(c),2)&quot; -beh -tc1 1</font></i>
+    <i><font color=#4b5d50># ```</font></i>
+    <i><font color=#4b5d50># Behavioral capacitor with Q expression:</font></i>
+    <i><font color=#4b5d50># ```</font></i>
+    <i><font color=#4b5d50># CXXXXXXX n+ n- Q={expression} &lt;tc1=value&gt; &lt;tc2=value&gt;</font></i>
+    <i><font color=#4b5d50># ```</font></i>
+    <i><font color=#4b5d50># Example of class initialization:</font></i>
+    <i><font color=#4b5d50># ```</font></i>
+    <i><font color=#4b5d50># ::SpiceGenTcl::Ngspice::BasicDevices::Capacitor new 1 netp netm -q &quot;V(a)+V(b)+pow(V(c),2)&quot; -beh -tc1 1</font></i>
+    <i><font color=#4b5d50># ```</font></i>
+    <i><font color=#4b5d50># Capacitor with model card:</font></i>
     <i><font color=#4b5d50># ```</font></i>
     <i><font color=#4b5d50># CXXXXXXX n+ n- &lt;value&gt; &lt;mname&gt; &lt;l=length&gt; &lt;w=width&gt; &lt;m=val&gt;</font></i>
     <i><font color=#4b5d50># + &lt;scale=val&gt; &lt;temp=val&gt; &lt;dtemp=val&gt; &lt;ic=init_condition&gt;</font></i>
     <i><font color=#4b5d50># ```</font></i>
     <i><font color=#4b5d50># Example of class initialization:</font></i>
     <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># ::SpiceGenTcl::Ngspice::CapacitorSemiconductor new 1 netp netm capm -l 1e-6 -w 10e-6</font></i>
+    <i><font color=#4b5d50># ::SpiceGenTcl::Ngspice::BasicDevices::Capacitor new 1 netp netm -model capm -l 1e-6 -w 10e-6</font></i>
     <i><font color=#4b5d50># ```</font></i>
-    <b><font color=#923B23>set</font></b> paramsNames [<b><font color=#923B23>list</font></b> l w temp dtemp m ac scale]
-    <b><font color=#923B23>set</font></b> paramDefList [<b><font color=#ca14ca>my</font></b> buildArgStr <font color=#4A181B>$paramsNames</font>]
-    <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> <font color=#035103>&quot;</font>
-<font color=#035103>        <font color=#4A181B>$</font>paramDefList</font>
-<font color=#035103>    &quot;</font>]
-    <b><font color=#923B23>dict</font></b> for {paramName value} <font color=#4A181B>$arguments</font> {
-        <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;<font color=#4A181B>$</font>paramName <font color=#4A181B>$</font>value&quot;</font>
+    <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> {
+        {<font color=#463e11>-c</font>= <font color=#463e11>-forbid</font> {q}}
+        {<font color=#463e11>-q</font>= <font color=#463e11>-require</font> {beh} <font color=#463e11>-forbid</font> {c model}}
+        {<font color=#463e11>-beh</font> <font color=#463e11>-forbid</font> {model}}
+        {<font color=#463e11>-model</font>= <font color=#463e11>-forbid</font> {beh}}
+        {<font color=#463e11>-m</font>= <font color=#463e11>-forbid</font> {beh}}
+        {<font color=#463e11>-scale</font>= <font color=#463e11>-forbid</font> {beh}}
+        {<font color=#463e11>-temp</font>= <font color=#463e11>-forbid</font> {beh}}
+        {<font color=#463e11>-dtemp</font>= <font color=#463e11>-forbid</font> {beh}}
+        {<font color=#463e11>-tc1</font>= <font color=#463e11>-forbid</font> {model}}
+        {<font color=#463e11>-tc2</font>= <font color=#463e11>-forbid</font> {model}}
+        {<font color=#463e11>-ic</font>= <font color=#463e11>-forbid</font> {beh}}
+        {<font color=#463e11>-l</font>= <font color=#463e11>-require</font> {model}}
+        {<font color=#463e11>-w</font>= <font color=#463e11>-require</font> {model}}
+    }]
+    <b><font color=#923B23>set</font></b> params <font color=#035103>&quot;&quot;</font>
+    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dict</font></b> exists <font color=#4A181B>$arguments</font> c]} {
+        <b><font color=#923B23>set</font></b> cVal [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$arguments</font> c]
+        <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dict</font></b> exists <font color=#4A181B>$arguments</font> beh]} {
+            <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;c <font color=#4A181B>$</font>cVal -eq&quot;</font>
+        } <b><font color=#923B23>elseif</font></b> {([<b><font color=#923B23>llength</font></b> <font color=#4A181B>$cVal</font>]&gt;1) && ([<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$cVal</font> 1]==<font color=#035103>&quot;-eq&quot;</font>)} {
+            <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;c <font color=#4A181B>[</font>lindex <font color=#4A181B>$</font>cVal 0<font color=#4A181B>]</font> -poseq&quot;</font>
+        } <b><font color=#923B23>else</font></b> {
+            <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;c <font color=#4A181B>$</font>cVal -pos&quot;</font>
+        }
+    } <b><font color=#923B23>elseif</font></b> {([<b><font color=#923B23>dict</font></b> exists <font color=#4A181B>$arguments</font> model]==0) && ([<b><font color=#923B23>dict</font></b> exists <font color=#4A181B>$arguments</font> q]==0)} {
+        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Capacitor value must be specified with '-c value'&quot;</font>
     }
-    <b><font color=#923B23>next</font></b> c<font color=#4A181B>$name</font> [<b><font color=#923B23>list</font></b> <font color=#035103>&quot;np <font color=#4A181B>$</font>npNode&quot;</font> <font color=#035103>&quot;nm <font color=#4A181B>$</font>nmNode&quot;</font>] <font color=#4A181B>$modelName</font> <font color=#4A181B>$paramList</font>
+    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dict</font></b> exists <font color=#4A181B>$arguments</font> q]} {
+        <b><font color=#923B23>set</font></b> qVal [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$arguments</font> q]
+        <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dict</font></b> exists <font color=#4A181B>$arguments</font> beh]} {
+            <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;q <font color=#4A181B>$</font>qVal -eq&quot;</font>
+        } <b><font color=#923B23>else</font></b> {
+            <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Charge of capacitor can't be specified without '-beh' switch&quot;</font>
+        }
+    }
+    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dict</font></b> exists <font color=#4A181B>$arguments</font> model]} {
+        <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;model <font color=#4A181B>[</font>dict get <font color=#4A181B>$</font>arguments model<font color=#4A181B>]</font> -posnocheck&quot;</font>
+    }
+    <b><font color=#923B23>dict</font></b> for {paramName value} <font color=#4A181B>$arguments</font> {
+        <b><font color=#923B23>if</font></b> {<font color=#4A181B>$paramName</font> ni {c q beh model}} {
+            <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;<font color=#4A181B>$</font>paramName <font color=#4A181B>$</font>value&quot;</font>
+        }
+    }
+    <b><font color=#923B23>next</font></b> c<font color=#4A181B>$name</font> [<b><font color=#923B23>list</font></b> <font color=#035103>&quot;np <font color=#4A181B>$</font>npNode&quot;</font> <font color=#035103>&quot;nm <font color=#4A181B>$</font>nmNode&quot;</font>] <font color=#4A181B>$params</font>
 }</pre></div>
-</div><h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::BasicDevices::CBehC'>CBehC</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices" title="::SpiceGenTcl::Ngspice::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
-<div style='clear:both;'></div>
-<h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
-<tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
-<tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
-<tr><td><code>configure</code></td><td>Configure properties.</td></tr>
-<tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
-<tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
-<tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
-<tr><td><code>setParamValue</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setParamValue" title="::SpiceGenTcl::Device.setParamValue" class='ruff_cmd'>::SpiceGenTcl::Device.setParamValue</a></td></tr>
-<tr><td><code>setPinNodeName</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setPinNodeName" title="::SpiceGenTcl::Device.setPinNodeName" class='ruff_cmd'>::SpiceGenTcl::Device.setPinNodeName</a></td></tr>
-</table>
-<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#463e11>-Name</font></code></p>
-<p class='ruff'>Writable: <code><font color=#463e11>-Name</font></code></p>
-<h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CapacitorBehaviouralC" title="CapacitorBehaviouralC" class='ruff_cmd'>CapacitorBehaviouralC</a></p>
-<h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::BasicDevices::CBehQ'>CBehQ</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices" title="::SpiceGenTcl::Ngspice::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
-<div style='clear:both;'></div>
-<h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
-<tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
-<tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
-<tr><td><code>configure</code></td><td>Configure properties.</td></tr>
-<tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
-<tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
-<tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
-<tr><td><code>setParamValue</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setParamValue" title="::SpiceGenTcl::Device.setParamValue" class='ruff_cmd'>::SpiceGenTcl::Device.setParamValue</a></td></tr>
-<tr><td><code>setPinNodeName</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setPinNodeName" title="::SpiceGenTcl::Device.setPinNodeName" class='ruff_cmd'>::SpiceGenTcl::Device.setPinNodeName</a></td></tr>
-</table>
-<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#463e11>-Name</font></code></p>
-<p class='ruff'>Writable: <code><font color=#463e11>-Name</font></code></p>
-<h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CapacitorBehaviouralQ" title="CapacitorBehaviouralQ" class='ruff_cmd'>CapacitorBehaviouralQ</a></p>
-<h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::BasicDevices::CSem'>CSem</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices" title="::SpiceGenTcl::Ngspice::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
-<div style='clear:both;'></div>
-<h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
-<tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
-<tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
-<tr><td><code>configure</code></td><td>Configure properties.</td></tr>
-<tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DeviceModel::genSPICEString" title="::SpiceGenTcl::DeviceModel.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::DeviceModel.genSPICEString</a></td></tr>
-<tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
-<tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
-<tr><td><code>setParamValue</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setParamValue" title="::SpiceGenTcl::Device.setParamValue" class='ruff_cmd'>::SpiceGenTcl::Device.setParamValue</a></td></tr>
-<tr><td><code>setPinNodeName</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setPinNodeName" title="::SpiceGenTcl::Device.setPinNodeName" class='ruff_cmd'>::SpiceGenTcl::Device.setPinNodeName</a></td></tr>
-</table>
-<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#463e11>-ModelName</font></code>, <code><font color=#463e11>-Name</font></code></p>
-<p class='ruff'>Writable: <code><font color=#463e11>-ModelName</font></code>, <code><font color=#463e11>-Name</font></code></p>
-<h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CapacitorSemiconductor" title="CapacitorSemiconductor" class='ruff_cmd'>CapacitorSemiconductor</a></p>
-<h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::BasicDevices::CSemModel'>CSemModel</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices" title="::SpiceGenTcl::Ngspice::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
+</div><h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::BasicDevices::CSemModel'>CSemModel</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices" title="::SpiceGenTcl::Ngspice::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CSemModel::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::addParam" title="::SpiceGenTcl::Model.addParam" class='ruff_cmd'>::SpiceGenTcl::Model.addParam</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::deleteParam" title="::SpiceGenTcl::Model.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Model.deleteParam</a></td></tr>
@@ -407,18 +243,7 @@
     <i><font color=#4b5d50># ::SpiceGenTcl::Ngspice::BasicDevices::CSemModel new capmod -tc1 1 -tc2 2</font></i>
     <i><font color=#4b5d50># ```</font></i>
     <b><font color=#923B23>set</font></b> paramsNames [<b><font color=#923B23>list</font></b> cap cj cjsw defw narrow short tc1 tc2 tnom di thick]
-    <b><font color=#923B23>set</font></b> paramDefList [<b><font color=#ca14ca>my</font></b> buildArgStr <font color=#4A181B>$paramsNames</font>]
-    <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> <font color=#035103>&quot;</font>
-<font color=#035103>        <font color=#4A181B>$</font>paramDefList</font>
-<font color=#035103>    &quot;</font>]
-    <b><font color=#923B23>dict</font></b> for {paramName value} <font color=#4A181B>$arguments</font> {
-        <b><font color=#923B23>lappend</font></b> params [<b><font color=#923B23>list</font></b> <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
-    }
-    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> exists params]} {
-        <b><font color=#923B23>next</font></b> <font color=#4A181B>$name</font> c <font color=#4A181B>$params</font>
-    } <b><font color=#923B23>else</font></b> {
-        <b><font color=#923B23>next</font></b> <font color=#4A181B>$name</font> c <font color=#035103>&quot;&quot;</font>
-    }
+    <b><font color=#923B23>next</font></b> <font color=#4A181B>$name</font> c [<b><font color=#ca14ca>my</font></b> argsPreprocess <font color=#4A181B>$paramsNames</font> {<b><font color=#923B23>*</font></b>}<font color=#4A181B>$args</font>]
 }</pre></div>
 </div><h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::BasicDevices::CSw'>CSw</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices" title="::SpiceGenTcl::Ngspice::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
@@ -522,6 +347,7 @@
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CSwitchModel::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::addParam" title="::SpiceGenTcl::Model.addParam" class='ruff_cmd'>::SpiceGenTcl::Model.addParam</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::deleteParam" title="::SpiceGenTcl::Model.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Model.deleteParam</a></td></tr>
@@ -558,24 +384,14 @@
     <i><font color=#4b5d50># ::SpiceGenTcl::Ngspice::BasicDevices::CSwitchModel new cswmod -it 1 -ih 0.5 -ron 1 -roff 1e6</font></i>
     <i><font color=#4b5d50># ```</font></i>
     <b><font color=#923B23>set</font></b> paramsNames [<b><font color=#923B23>list</font></b> it ih ron roff]
-    <b><font color=#923B23>set</font></b> paramDefList [<b><font color=#ca14ca>my</font></b> buildArgStr <font color=#4A181B>$paramsNames</font>]
-    <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> <font color=#035103>&quot;</font>
-<font color=#035103>        <font color=#4A181B>$</font>paramDefList</font>
-<font color=#035103>    &quot;</font>]
-    <b><font color=#923B23>dict</font></b> for {paramName value} <font color=#4A181B>$arguments</font> {
-        <b><font color=#923B23>lappend</font></b> params [<b><font color=#923B23>list</font></b> <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
-    }
-    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> exists params]} {
-        <b><font color=#923B23>next</font></b> <font color=#4A181B>$name</font> csw <font color=#4A181B>$params</font>
-    } <b><font color=#923B23>else</font></b> {
-        <b><font color=#923B23>next</font></b> <font color=#4A181B>$name</font> csw <font color=#035103>&quot;&quot;</font>
-    }
+    <b><font color=#923B23>next</font></b> <font color=#4A181B>$name</font> csw [<b><font color=#ca14ca>my</font></b> argsPreprocess <font color=#4A181B>$paramsNames</font> {<b><font color=#923B23>*</font></b>}<font color=#4A181B>$args</font>]
 }</pre></div>
 </div><h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::BasicDevices::Inductor'>Inductor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices" title="::SpiceGenTcl::Ngspice::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::Inductor::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
@@ -594,16 +410,38 @@
 <h5 class='ruff'>Subclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::L" title="L" class='ruff_cmd'>L</a></p>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::BasicDevices::Inductor::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::Inductor" title="::SpiceGenTcl::Ngspice::BasicDevices::Inductor" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::Inductor</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::Inductor'>Inductor</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
-<p class='ruff'>Creates object of class <code><b><font color=#923B23>Inductor</font></b></code> that describes simple inductor device.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>Inductor create OBJNAME</span> <span class='ruff_arg'>name npNode nmNode lVal ?args?</span><br><span class='ruff_cmd'>Inductor new</span> <span class='ruff_arg'>name npNode nmNode lVal ?args?</span></div>
+<p class='ruff'>Creates object of class <code><b><font color=#923B23>Inductor</font></b></code> that describes inductor.</p>
+<div class='ruff_synopsis'><span class='ruff_cmd'>Inductor create OBJNAME</span> <span class='ruff_arg'>name npNode nmNode ?args?</span><br><span class='ruff_cmd'>Inductor new</span> <span class='ruff_arg'>name npNode nmNode ?args?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator L.</td></tr>
 <tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
 <tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>lVal</code></td><td>Value of inductance.</td></tr>
 <tr><td><code>args</code></td><td>Keyword instance parameters.</td></tr>
 </table>
-<h5 class='ruff'>Description</h5>
+<h5 class='ruff'>Description</h5><p class='ruff'>Inductor type could be specified with additional switches: <code><font color=#463e11>-beh</font></code> if we want to model circuit's variable dependent inductor, or <code><font color=#463e11>-model</font> modelName</code> if we want to simulate inductor with model card. Simple inductor:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>LYYYYYYY n+ n- &lt;value&gt; &lt;m=val&gt;
++ &lt;<b><font color=#7d1c00>scale</font></b>=val&gt; &lt;temp=val&gt; &lt;dtemp=val&gt; &lt;tc1=val&gt;
++ &lt;tc2=val&gt; &lt;ic=init_condition&gt;
+</pre>
+
+</figure><p class='ruff'>Example of class initialization as a simple inductor:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Ngspice::BasicDevices::Inductor new 1 netp netm <font color=#463e11>-l</font> 1e-6 <font color=#463e11>-tc1</font> 1 <font color=#463e11>-temp</font> {temp <font color=#463e11>-eq</font>}
+</pre>
+
+</figure><p class='ruff'>Behavioral inductor:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>LYYYYYYY n+ n- L={expression} &lt;tc1=val&gt; &lt;tc2=val&gt;
+</pre>
+
+</figure><p class='ruff'>Example of class initialization:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Ngspice::BasicDevices::Inductor new 1 netp netm <font color=#463e11>-l</font> <font color=#035103>&quot;V(a)+V(b)+pow(V(c),2)&quot;</font> <font color=#463e11>-beh</font> <font color=#463e11>-tc1</font> 1
+</pre>
+
+</figure><p class='ruff'>Inductor with model card:</p>
+
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>LYYYYYYY n+ n- &lt;value&gt; &lt;mname&gt; &lt;nt=val&gt; &lt;m=val&gt;
 + &lt;<b><font color=#7d1c00>scale</font></b>=val&gt; &lt;temp=val&gt; &lt;dtemp=val&gt; &lt;tc1=val&gt;
 + &lt;tc2=val&gt; &lt;ic=init_condition&gt;
@@ -611,18 +449,39 @@
 
 </figure><p class='ruff'>Example of class initialization:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Ngspice::BasicDevices::Inductor new 1 netp netm 1e-6 <font color=#463e11>-tc1</font> 1 <font color=#463e11>-temp</font> 25
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Ngspice::BasicDevices::Inductor new 1 netp netm <font color=#463e11>-l</font> 1e-6 <font color=#463e11>-model</font> indm
 </pre>
 
 </figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Ngspice_BasicDevices_Inductor_constructor' href="javascript:toggleSource('SpiceGenTcl_Ngspice_BasicDevices_Inductor_constructor')">Show source</a></p>
-<div id='SpiceGenTcl_Ngspice_BasicDevices_Inductor_constructor' class='ruff_dyn_src'><pre><b><font color=#ca14ca>method</font></b> constructor {name npNode nmNode lVal args} {
+<div id='SpiceGenTcl_Ngspice_BasicDevices_Inductor_constructor' class='ruff_dyn_src'><pre><b><font color=#ca14ca>method</font></b> constructor {name npNode nmNode args} {
 
-    <i><font color=#4b5d50># Creates object of class `Inductor` that describes simple inductor device.</font></i>
+    <i><font color=#4b5d50># Creates object of class `Inductor` that describes inductor.</font></i>
     <i><font color=#4b5d50>#  name - name of the device without first-letter designator L</font></i>
     <i><font color=#4b5d50>#  npNode - name of node connected to positive pin</font></i>
     <i><font color=#4b5d50>#  nmNode - name of node connected to negative pin</font></i>
-    <i><font color=#4b5d50>#  lVal - value of inductance</font></i>
     <i><font color=#4b5d50>#  args - keyword instance parameters</font></i>
+    <i><font color=#4b5d50># Inductor type could be specified with additional switches: `-beh` if we</font></i>
+    <i><font color=#4b5d50># want to model circuit's variable dependent inductor, or `-model modelName`</font></i>
+    <i><font color=#4b5d50># if we want to simulate inductor with model card.</font></i>
+    <i><font color=#4b5d50># Simple inductor:</font></i>
+    <i><font color=#4b5d50># ```</font></i>
+    <i><font color=#4b5d50># LYYYYYYY n+ n- &lt;value&gt; &lt;m=val&gt;</font></i>
+    <i><font color=#4b5d50># + &lt;scale=val&gt; &lt;temp=val&gt; &lt;dtemp=val&gt; &lt;tc1=val&gt;</font></i>
+    <i><font color=#4b5d50># + &lt;tc2=val&gt; &lt;ic=init_condition&gt;</font></i>
+    <i><font color=#4b5d50># ```</font></i>
+    <i><font color=#4b5d50># Example of class initialization as a simple inductor:</font></i>
+    <i><font color=#4b5d50># ```</font></i>
+    <i><font color=#4b5d50># ::SpiceGenTcl::Ngspice::BasicDevices::Inductor new 1 netp netm -l 1e-6 -tc1 1 -temp {temp -eq}</font></i>
+    <i><font color=#4b5d50># ```</font></i>
+    <i><font color=#4b5d50># Behavioral inductor:</font></i>
+    <i><font color=#4b5d50># ```</font></i>
+    <i><font color=#4b5d50># LYYYYYYY n+ n- L={expression} &lt;tc1=val&gt; &lt;tc2=val&gt;</font></i>
+    <i><font color=#4b5d50># ```</font></i>
+    <i><font color=#4b5d50># Example of class initialization:</font></i>
+    <i><font color=#4b5d50># ```</font></i>
+    <i><font color=#4b5d50># ::SpiceGenTcl::Ngspice::BasicDevices::Inductor new 1 netp netm -l &quot;V(a)+V(b)+pow(V(c),2)&quot; -beh -tc1 1</font></i>
+    <i><font color=#4b5d50># ```</font></i>
+    <i><font color=#4b5d50># Inductor with model card:</font></i>
     <i><font color=#4b5d50># ```</font></i>
     <i><font color=#4b5d50># LYYYYYYY n+ n- &lt;value&gt; &lt;mname&gt; &lt;nt=val&gt; &lt;m=val&gt;</font></i>
     <i><font color=#4b5d50># + &lt;scale=val&gt; &lt;temp=val&gt; &lt;dtemp=val&gt; &lt;tc1=val&gt;</font></i>
@@ -630,94 +489,48 @@
     <i><font color=#4b5d50># ```</font></i>
     <i><font color=#4b5d50># Example of class initialization:</font></i>
     <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># ::SpiceGenTcl::Ngspice::BasicDevices::Inductor new 1 netp netm 1e-6 -tc1 1 -temp 25</font></i>
+    <i><font color=#4b5d50># ::SpiceGenTcl::Ngspice::BasicDevices::Inductor new 1 netp netm -l 1e-6 -model indm</font></i>
     <i><font color=#4b5d50># ```</font></i>
-    <b><font color=#923B23>set</font></b> paramsNames [<b><font color=#923B23>list</font></b> nt m scale temp dtemp tc1 tc2 ic]
-    <b><font color=#923B23>set</font></b> paramDefList [<b><font color=#ca14ca>my</font></b> buildArgStr <font color=#4A181B>$paramsNames</font>]
-    <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> <font color=#035103>&quot;</font>
-<font color=#035103>        <font color=#4A181B>$</font>paramDefList</font>
-<font color=#035103>    &quot;</font>]
-    <b><font color=#923B23>if</font></b> {([<b><font color=#923B23>llength</font></b> <font color=#4A181B>$lVal</font>]&gt;1) && ([<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$lVal</font> 1]==<font color=#035103>&quot;-eq&quot;</font>)} {
-        <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;l <font color=#4A181B>[</font>lindex <font color=#4A181B>$</font>lVal 0<font color=#4A181B>]</font> -poseq&quot;</font>
-    } <b><font color=#923B23>else</font></b> {
-        <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;l <font color=#4A181B>$</font>lVal -pos&quot;</font>
+    <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> {
+        <font color=#463e11>-l</font>=
+        {<font color=#463e11>-beh</font> <font color=#463e11>-forbid</font> {model} <font color=#463e11>-require</font> {l}}
+        {<font color=#463e11>-model</font>= <font color=#463e11>-forbid</font> {beh}}
+        {<font color=#463e11>-m</font>= <font color=#463e11>-forbid</font> {beh}}
+        {<font color=#463e11>-scale</font>= <font color=#463e11>-forbid</font> {beh}}
+        {<font color=#463e11>-temp</font>= <font color=#463e11>-forbid</font> {beh}}
+        {<font color=#463e11>-dtemp</font>= <font color=#463e11>-forbid</font> {beh}}
+        <font color=#463e11>-tc1</font>=
+        <font color=#463e11>-tc2</font>=
+        {<font color=#463e11>-nt</font>= <font color=#463e11>-require</font> {model}}
+    }]
+    <b><font color=#923B23>set</font></b> params <font color=#035103>&quot;&quot;</font>
+    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dict</font></b> exists <font color=#4A181B>$arguments</font> l]} {
+        <b><font color=#923B23>set</font></b> lVal [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$arguments</font> l]
+        <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dict</font></b> exists <font color=#4A181B>$arguments</font> beh]} {
+            <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;l <font color=#4A181B>$</font>lVal -eq&quot;</font>
+        } <b><font color=#923B23>elseif</font></b> {([<b><font color=#923B23>llength</font></b> <font color=#4A181B>$lVal</font>]&gt;1) && ([<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$lVal</font> 1]==<font color=#035103>&quot;-eq&quot;</font>)} {
+            <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;l <font color=#4A181B>[</font>lindex <font color=#4A181B>$</font>lVal 0<font color=#4A181B>]</font> -poseq&quot;</font>
+        } <b><font color=#923B23>else</font></b> {
+            <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;l <font color=#4A181B>$</font>lVal -pos&quot;</font>
+        }
+    } <b><font color=#923B23>elseif</font></b> {[<b><font color=#923B23>dict</font></b> exists <font color=#4A181B>$arguments</font> model]==0} {
+        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Inductor value must be specified with '-l value'&quot;</font>
+    }
+    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dict</font></b> exists <font color=#4A181B>$arguments</font> model]} {
+        <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;model <font color=#4A181B>[</font>dict get <font color=#4A181B>$</font>arguments model<font color=#4A181B>]</font> -posnocheck&quot;</font>
     }
     <b><font color=#923B23>dict</font></b> for {paramName value} <font color=#4A181B>$arguments</font> {
-        <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;<font color=#4A181B>$</font>paramName <font color=#4A181B>$</font>value&quot;</font>
+        <b><font color=#923B23>if</font></b> {<font color=#4A181B>$paramName</font> ni {l beh model}} {
+            <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;<font color=#4A181B>$</font>paramName <font color=#4A181B>$</font>value&quot;</font>
+        }
     }
-    <b><font color=#923B23>next</font></b> l<font color=#4A181B>$name</font> [<b><font color=#923B23>list</font></b> <font color=#035103>&quot;np <font color=#4A181B>$</font>npNode&quot;</font> <font color=#035103>&quot;nm <font color=#4A181B>$</font>nmNode&quot;</font>] <font color=#4A181B>$paramList</font>
-}</pre></div>
-</div><h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::BasicDevices::InductorBehavioural'>InductorBehavioural</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices" title="::SpiceGenTcl::Ngspice::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
-<div style='clear:both;'></div>
-<h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
-<tr><td><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::InductorBehavioural::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
-<tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
-<tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
-<tr><td><code>configure</code></td><td>Configure properties.</td></tr>
-<tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
-<tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
-<tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
-<tr><td><code>setParamValue</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setParamValue" title="::SpiceGenTcl::Device.setParamValue" class='ruff_cmd'>::SpiceGenTcl::Device.setParamValue</a></td></tr>
-<tr><td><code>setPinNodeName</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setPinNodeName" title="::SpiceGenTcl::Device.setPinNodeName" class='ruff_cmd'>::SpiceGenTcl::Device.setPinNodeName</a></td></tr>
-</table>
-<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#463e11>-Name</font></code></p>
-<p class='ruff'>Writable: <code><font color=#463e11>-Name</font></code></p>
-<h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device" title="::SpiceGenTcl::Device" class='ruff_cmd'>::SpiceGenTcl::Device</a></p>
-<h5 class='ruff'>Mixins</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder" title="::SpiceGenTcl::KeyArgsBuilder" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder</a></p>
-<h5 class='ruff'>Subclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::LBeh" title="LBeh" class='ruff_cmd'>LBeh</a></p>
-<h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::BasicDevices::InductorBehavioural::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::InductorBehavioural" title="::SpiceGenTcl::Ngspice::BasicDevices::InductorBehavioural" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::InductorBehavioural</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::InductorBehavioural'>InductorBehavioural</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
-<div style='clear:both;'></div>
-<p class='ruff'>Creates object of class <code><b><font color=#923B23>InductorBehavioural</font></b></code> that describes inductor device dependent on expressions.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>InductorBehavioural create OBJNAME</span> <span class='ruff_arg'>name npNode nmNode lExpr ?args?</span><br><span class='ruff_cmd'>InductorBehavioural new</span> <span class='ruff_arg'>name npNode nmNode lExpr ?args?</span></div>
-<h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
-<tr><td><code>name</code></td><td>Name of the device without first-letter designator R.</td></tr>
-<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
-<tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>lExpr</code></td><td>Equation of inductance.</td></tr>
-<tr><td><code>args</code></td><td>Keyword instance parameters.</td></tr>
-</table>
-<h5 class='ruff'>Description</h5>
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>LXXXXXXX n+ n- L={expression} &lt;tc1=value&gt; &lt;tc2=value&gt;
-</pre>
-
-</figure><p class='ruff'>Example of class initialization:</p>
-
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Ngspice::BasicDevices::InductorBehavioural new 1 netp netm <font color=#035103>&quot;V(a)+V(b)+pow(V(c),2)&quot;</font> <font color=#463e11>-tc1</font> 1
-</pre>
-
-</figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Ngspice_BasicDevices_InductorBehavioural_constructor' href="javascript:toggleSource('SpiceGenTcl_Ngspice_BasicDevices_InductorBehavioural_constructor')">Show source</a></p>
-<div id='SpiceGenTcl_Ngspice_BasicDevices_InductorBehavioural_constructor' class='ruff_dyn_src'><pre><b><font color=#ca14ca>method</font></b> constructor {name npNode nmNode lExpr args} {
-
-    <i><font color=#4b5d50># Creates object of class `InductorBehavioural` that describes inductor device dependent on expressions.</font></i>
-    <i><font color=#4b5d50>#  name - name of the device without first-letter designator R</font></i>
-    <i><font color=#4b5d50>#  npNode - name of node connected to positive pin</font></i>
-    <i><font color=#4b5d50>#  nmNode - name of node connected to negative pin</font></i>
-    <i><font color=#4b5d50>#  lExpr - equation of inductance</font></i>
-    <i><font color=#4b5d50>#  args - keyword instance parameters</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># LXXXXXXX n+ n- L={expression} &lt;tc1=value&gt; &lt;tc2=value&gt;</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># Example of class initialization:</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># ::SpiceGenTcl::Ngspice::BasicDevices::InductorBehavioural new 1 netp netm &quot;V(a)+V(b)+pow(V(c),2)&quot; -tc1 1</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <b><font color=#923B23>set</font></b> paramDefList [<b><font color=#ca14ca>my</font></b> buildArgStr [<b><font color=#923B23>list</font></b> tc1 tc2]]
-    <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> <font color=#035103>&quot;</font>
-<font color=#035103>        <font color=#4A181B>$</font>paramDefList</font>
-<font color=#035103>    &quot;</font>]
-    <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;l <font color=#4A181B>$</font>lExpr -eq&quot;</font>
-    <b><font color=#923B23>dict</font></b> for {paramName value} <font color=#4A181B>$arguments</font> {
-        <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;<font color=#4A181B>$</font>paramName <font color=#4A181B>$</font>value&quot;</font>
-    }
-    <b><font color=#923B23>next</font></b> l<font color=#4A181B>$name</font> [<b><font color=#923B23>list</font></b> <font color=#035103>&quot;np <font color=#4A181B>$</font>npNode&quot;</font> <font color=#035103>&quot;nm <font color=#4A181B>$</font>nmNode&quot;</font>] <font color=#4A181B>$paramList</font>
+    <b><font color=#923B23>next</font></b> l<font color=#4A181B>$name</font> [<b><font color=#923B23>list</font></b> <font color=#035103>&quot;np <font color=#4A181B>$</font>npNode&quot;</font> <font color=#035103>&quot;nm <font color=#4A181B>$</font>nmNode&quot;</font>] <font color=#4A181B>$params</font>
 }</pre></div>
 </div><h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::BasicDevices::L'>L</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices" title="::SpiceGenTcl::Ngspice::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
@@ -732,28 +545,11 @@
 <h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#463e11>-Name</font></code></p>
 <p class='ruff'>Writable: <code><font color=#463e11>-Name</font></code></p>
 <h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::Inductor" title="Inductor" class='ruff_cmd'>Inductor</a></p>
-<h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::BasicDevices::LBeh'>LBeh</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices" title="::SpiceGenTcl::Ngspice::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
-<div style='clear:both;'></div>
-<h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
-<tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
-<tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
-<tr><td><code>configure</code></td><td>Configure properties.</td></tr>
-<tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
-<tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
-<tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
-<tr><td><code>setParamValue</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setParamValue" title="::SpiceGenTcl::Device.setParamValue" class='ruff_cmd'>::SpiceGenTcl::Device.setParamValue</a></td></tr>
-<tr><td><code>setPinNodeName</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setPinNodeName" title="::SpiceGenTcl::Device.setPinNodeName" class='ruff_cmd'>::SpiceGenTcl::Device.setPinNodeName</a></td></tr>
-</table>
-<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#463e11>-Name</font></code></p>
-<p class='ruff'>Writable: <code><font color=#463e11>-Name</font></code></p>
-<h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::InductorBehavioural" title="InductorBehavioural" class='ruff_cmd'>InductorBehavioural</a></p>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::BasicDevices::R'>R</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices" title="::SpiceGenTcl::Ngspice::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
@@ -768,29 +564,12 @@
 <h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#463e11>-Name</font></code></p>
 <p class='ruff'>Writable: <code><font color=#463e11>-Name</font></code></p>
 <h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::Resistor" title="Resistor" class='ruff_cmd'>Resistor</a></p>
-<h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::BasicDevices::RBeh'>RBeh</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices" title="::SpiceGenTcl::Ngspice::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
-<div style='clear:both;'></div>
-<h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
-<tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
-<tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
-<tr><td><code>configure</code></td><td>Configure properties.</td></tr>
-<tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
-<tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
-<tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
-<tr><td><code>setParamValue</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setParamValue" title="::SpiceGenTcl::Device.setParamValue" class='ruff_cmd'>::SpiceGenTcl::Device.setParamValue</a></td></tr>
-<tr><td><code>setPinNodeName</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setPinNodeName" title="::SpiceGenTcl::Device.setPinNodeName" class='ruff_cmd'>::SpiceGenTcl::Device.setPinNodeName</a></td></tr>
-</table>
-<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#463e11>-Name</font></code></p>
-<p class='ruff'>Writable: <code><font color=#463e11>-Name</font></code></p>
-<h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::ResistorBehavioural" title="ResistorBehavioural" class='ruff_cmd'>ResistorBehavioural</a></p>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::BasicDevices::Resistor'>Resistor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices" title="::SpiceGenTcl::Ngspice::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::Resistor::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
@@ -809,159 +588,38 @@
 <h5 class='ruff'>Subclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::R" title="R" class='ruff_cmd'>R</a></p>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::BasicDevices::Resistor::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::Resistor" title="::SpiceGenTcl::Ngspice::BasicDevices::Resistor" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::Resistor</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::Resistor'>Resistor</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
-<p class='ruff'>Creates object of class <code><b><font color=#923B23>Resistor</font></b></code> that describes simple resistor.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>Resistor create OBJNAME</span> <span class='ruff_arg'>name npNode nmNode rVal ?args?</span><br><span class='ruff_cmd'>Resistor new</span> <span class='ruff_arg'>name npNode nmNode rVal ?args?</span></div>
+<p class='ruff'>Creates object of class <code><b><font color=#923B23>Resistor</font></b></code> that describes resistor.</p>
+<div class='ruff_synopsis'><span class='ruff_cmd'>Resistor create OBJNAME</span> <span class='ruff_arg'>name npNode nmNode ?args?</span><br><span class='ruff_cmd'>Resistor new</span> <span class='ruff_arg'>name npNode nmNode ?args?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator R.</td></tr>
 <tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
 <tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>rVal</code></td><td>Value of resistance.</td></tr>
 <tr><td><code>args</code></td><td>Keyword instance parameters.</td></tr>
 </table>
-<h5 class='ruff'>Description</h5>
+<h5 class='ruff'>Description</h5><p class='ruff'>Resistor type could be specified with additional switches: <code><font color=#463e11>-beh</font></code> if we want to model circuit's variable dependent resistor, or <code><font color=#463e11>-model</font> modelName</code> if we want to simulate resistor with model card. Simple resistor:</p>
+
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>RXXXXXXX n+ n- &lt;resistance|r=&gt;value &lt;ac=val&gt; &lt;m=val&gt;
 + &lt;<b><font color=#7d1c00>scale</font></b>=val&gt; &lt;temp=val&gt; &lt;dtemp=val&gt; &lt;tc1=val&gt; &lt;tc2=val&gt;
 + &lt;noisy=0|1&gt;
 </pre>
 
-</figure><p class='ruff'>Example of class initialization:</p>
+</figure><p class='ruff'>Example of class initialization as a simple resistor:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Ngspice::BasicDevices::Resistor new 1 netp netm 1e3 <font color=#463e11>-tc1</font> 1 <font color=#463e11>-ac</font> 1e6 <font color=#463e11>-temp</font> {temp_amb <font color=#463e11>-eq</font>}
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Ngspice::BasicDevices::Resistor new 1 netp netm <font color=#463e11>-r</font> 1e3 <font color=#463e11>-tc1</font> 1 <font color=#463e11>-ac</font> 1e6 <font color=#463e11>-temp</font> {temp_amb <font color=#463e11>-eq</font>}
 </pre>
 
-</figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Ngspice_BasicDevices_Resistor_constructor' href="javascript:toggleSource('SpiceGenTcl_Ngspice_BasicDevices_Resistor_constructor')">Show source</a></p>
-<div id='SpiceGenTcl_Ngspice_BasicDevices_Resistor_constructor' class='ruff_dyn_src'><pre><b><font color=#ca14ca>method</font></b> constructor {name npNode nmNode rVal args} {
+</figure><p class='ruff'>Behavioral resistor:</p>
 
-    <i><font color=#4b5d50># Creates object of class `Resistor` that describes simple resistor.</font></i>
-    <i><font color=#4b5d50>#  name - name of the device without first-letter designator R</font></i>
-    <i><font color=#4b5d50>#  npNode - name of node connected to positive pin</font></i>
-    <i><font color=#4b5d50>#  nmNode - name of node connected to negative pin</font></i>
-    <i><font color=#4b5d50>#  rVal - value of resistance</font></i>
-    <i><font color=#4b5d50>#  args - keyword instance parameters</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># RXXXXXXX n+ n- &lt;resistance|r=&gt;value &lt;ac=val&gt; &lt;m=val&gt;</font></i>
-    <i><font color=#4b5d50># + &lt;scale=val&gt; &lt;temp=val&gt; &lt;dtemp=val&gt; &lt;tc1=val&gt; &lt;tc2=val&gt;</font></i>
-    <i><font color=#4b5d50># + &lt;noisy=0|1&gt;</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># Example of class initialization:</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># ::SpiceGenTcl::Ngspice::BasicDevices::Resistor new 1 netp netm 1e3 -tc1 1 -ac 1e6 -temp {temp_amb -eq}</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <b><font color=#923B23>set</font></b> paramsNames [<b><font color=#923B23>list</font></b> ac m scale temp dtemp tc1 tc2 noisy]
-    <b><font color=#923B23>set</font></b> paramDefList [<b><font color=#ca14ca>my</font></b> buildArgStr <font color=#4A181B>$paramsNames</font>]
-    <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> <font color=#035103>&quot;</font>
-<font color=#035103>        <font color=#4A181B>$</font>paramDefList</font>
-<font color=#035103>    &quot;</font>]
-    <b><font color=#923B23>if</font></b> {([<b><font color=#923B23>llength</font></b> <font color=#4A181B>$rVal</font>]&gt;1) && ([<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$rVal</font> 1]==<font color=#035103>&quot;-eq&quot;</font>)} {
-        <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;r <font color=#4A181B>[</font>lindex <font color=#4A181B>$</font>rVal 0<font color=#4A181B>]</font> -poseq&quot;</font>
-    } <b><font color=#923B23>else</font></b> {
-        <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;r <font color=#4A181B>$</font>rVal -pos&quot;</font>
-    }
-    <b><font color=#923B23>dict</font></b> for {paramName value} <font color=#4A181B>$arguments</font> {
-        <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;<font color=#4A181B>$</font>paramName <font color=#4A181B>$</font>value&quot;</font>
-    }
-    <b><font color=#923B23>next</font></b> r<font color=#4A181B>$name</font> [<b><font color=#923B23>list</font></b> <font color=#035103>&quot;np <font color=#4A181B>$</font>npNode&quot;</font> <font color=#035103>&quot;nm <font color=#4A181B>$</font>nmNode&quot;</font>] <font color=#4A181B>$paramList</font>
-}</pre></div>
-</div><h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::BasicDevices::ResistorBehavioural'>ResistorBehavioural</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices" title="::SpiceGenTcl::Ngspice::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
-<div style='clear:both;'></div>
-<h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
-<tr><td><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::ResistorBehavioural::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
-<tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
-<tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
-<tr><td><code>configure</code></td><td>Configure properties.</td></tr>
-<tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
-<tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
-<tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
-<tr><td><code>setParamValue</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setParamValue" title="::SpiceGenTcl::Device.setParamValue" class='ruff_cmd'>::SpiceGenTcl::Device.setParamValue</a></td></tr>
-<tr><td><code>setPinNodeName</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setPinNodeName" title="::SpiceGenTcl::Device.setPinNodeName" class='ruff_cmd'>::SpiceGenTcl::Device.setPinNodeName</a></td></tr>
-</table>
-<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#463e11>-Name</font></code></p>
-<p class='ruff'>Writable: <code><font color=#463e11>-Name</font></code></p>
-<h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device" title="::SpiceGenTcl::Device" class='ruff_cmd'>::SpiceGenTcl::Device</a></p>
-<h5 class='ruff'>Mixins</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder" title="::SpiceGenTcl::KeyArgsBuilder" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder</a></p>
-<h5 class='ruff'>Subclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::RBeh" title="RBeh" class='ruff_cmd'>RBeh</a></p>
-<h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::BasicDevices::ResistorBehavioural::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::ResistorBehavioural" title="::SpiceGenTcl::Ngspice::BasicDevices::ResistorBehavioural" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::ResistorBehavioural</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::ResistorBehavioural'>ResistorBehavioural</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
-<div style='clear:both;'></div>
-<p class='ruff'>Creates object of class <code><b><font color=#923B23>ResistorBehavioural</font></b></code> that describes device dependent on expressions.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>ResistorBehavioural create OBJNAME</span> <span class='ruff_arg'>name npNode nmNode rExpr ?args?</span><br><span class='ruff_cmd'>ResistorBehavioural new</span> <span class='ruff_arg'>name npNode nmNode rExpr ?args?</span></div>
-<h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
-<tr><td><code>name</code></td><td>Name of the device without first-letter designator R.</td></tr>
-<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
-<tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>rExpr</code></td><td>Equation of resistance.</td></tr>
-<tr><td><code>args</code></td><td>Keyword instance parameters.</td></tr>
-</table>
-<h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>RXXXXXXX n+ n- R ={expression} &lt;tc1=value&gt; &lt;tc2=value&gt; &lt;noisy=0&gt;
 </pre>
 
 </figure><p class='ruff'>Example of class initialization:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Ngspice::BasicDevices::ResistorBehavioural new 1 netp netm <font color=#035103>&quot;V(a)+V(b)+pow(V(c),2)&quot;</font> <font color=#463e11>-tc1</font> 1
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Ngspice::BasicDevices::Resistor new 1 netp netm <font color=#463e11>-r</font> <font color=#035103>&quot;V(a)+V(b)+pow(V(c),2)&quot;</font> <font color=#463e11>-beh</font> <font color=#463e11>-tc1</font> 1
 </pre>
 
-</figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Ngspice_BasicDevices_ResistorBehavioural_constructor' href="javascript:toggleSource('SpiceGenTcl_Ngspice_BasicDevices_ResistorBehavioural_constructor')">Show source</a></p>
-<div id='SpiceGenTcl_Ngspice_BasicDevices_ResistorBehavioural_constructor' class='ruff_dyn_src'><pre><b><font color=#ca14ca>method</font></b> constructor {name npNode nmNode rExpr args} {
+</figure><p class='ruff'>Resistor with model card:</p>
 
-    <i><font color=#4b5d50># Creates object of class `ResistorBehavioural` that describes device dependent on expressions.</font></i>
-    <i><font color=#4b5d50>#  name - name of the device without first-letter designator R</font></i>
-    <i><font color=#4b5d50>#  npNode - name of node connected to positive pin</font></i>
-    <i><font color=#4b5d50>#  nmNode - name of node connected to negative pin</font></i>
-    <i><font color=#4b5d50>#  rExpr - equation of resistance</font></i>
-    <i><font color=#4b5d50>#  args - keyword instance parameters</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># RXXXXXXX n+ n- R ={expression} &lt;tc1=value&gt; &lt;tc2=value&gt; &lt;noisy=0&gt;</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># Example of class initialization:</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># ::SpiceGenTcl::Ngspice::BasicDevices::ResistorBehavioural new 1 netp netm &quot;V(a)+V(b)+pow(V(c),2)&quot; -tc1 1</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <b><font color=#923B23>set</font></b> paramDefList [<b><font color=#ca14ca>my</font></b> buildArgStr [<b><font color=#923B23>list</font></b> tc1 tc2 noisy]]
-    <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> <font color=#035103>&quot;</font>
-<font color=#035103>        <font color=#4A181B>$</font>paramDefList</font>
-<font color=#035103>    &quot;</font>]
-    <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;r <font color=#4A181B>$</font>rExpr -eq&quot;</font>
-    <b><font color=#923B23>dict</font></b> for {paramName value} <font color=#4A181B>$arguments</font> {
-        <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;<font color=#4A181B>$</font>paramName <font color=#4A181B>$</font>value&quot;</font>
-    }
-    <b><font color=#923B23>next</font></b> r<font color=#4A181B>$name</font> [<b><font color=#923B23>list</font></b> <font color=#035103>&quot;np <font color=#4A181B>$</font>npNode&quot;</font> <font color=#035103>&quot;nm <font color=#4A181B>$</font>nmNode&quot;</font>] <font color=#4A181B>$paramList</font>
-}</pre></div>
-</div><h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::BasicDevices::ResistorSemiconductor'>ResistorSemiconductor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices" title="::SpiceGenTcl::Ngspice::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
-<div style='clear:both;'></div>
-<h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
-<tr><td><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::ResistorSemiconductor::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
-<tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
-<tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
-<tr><td><code>configure</code></td><td>Configure properties.</td></tr>
-<tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DeviceModel::genSPICEString" title="::SpiceGenTcl::DeviceModel.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::DeviceModel.genSPICEString</a></td></tr>
-<tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
-<tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
-<tr><td><code>setParamValue</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setParamValue" title="::SpiceGenTcl::Device.setParamValue" class='ruff_cmd'>::SpiceGenTcl::Device.setParamValue</a></td></tr>
-<tr><td><code>setPinNodeName</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setPinNodeName" title="::SpiceGenTcl::Device.setPinNodeName" class='ruff_cmd'>::SpiceGenTcl::Device.setPinNodeName</a></td></tr>
-</table>
-<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#463e11>-ModelName</font></code>, <code><font color=#463e11>-Name</font></code></p>
-<p class='ruff'>Writable: <code><font color=#463e11>-ModelName</font></code>, <code><font color=#463e11>-Name</font></code></p>
-<h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::DeviceModel" title="::SpiceGenTcl::DeviceModel" class='ruff_cmd'>::SpiceGenTcl::DeviceModel</a></p>
-<h5 class='ruff'>Mixins</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder" title="::SpiceGenTcl::KeyArgsBuilder" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder</a></p>
-<h5 class='ruff'>Subclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::RSem" title="RSem" class='ruff_cmd'>RSem</a></p>
-<h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::BasicDevices::ResistorSemiconductor::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::ResistorSemiconductor" title="::SpiceGenTcl::Ngspice::BasicDevices::ResistorSemiconductor" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::ResistorSemiconductor</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::ResistorSemiconductor'>ResistorSemiconductor</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
-<div style='clear:both;'></div>
-<p class='ruff'>Creates object of class <code><b><font color=#923B23>ResistorSemiconductor</font></b></code> that describes semiconductor resistor device.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>ResistorSemiconductor create OBJNAME</span> <span class='ruff_arg'>name npNode nmNode modelName ?args?</span><br><span class='ruff_cmd'>ResistorSemiconductor new</span> <span class='ruff_arg'>name npNode nmNode modelName ?args?</span></div>
-<h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
-<tr><td><code>name</code></td><td>Name of the device without first-letter designator R.</td></tr>
-<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
-<tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>modelName</code></td><td>Name of the model.</td></tr>
-<tr><td><code>args</code></td><td>Keyword instance parameters.</td></tr>
-</table>
-<h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>RXXXXXXX n+ n- &lt;value&gt; &lt;mname&gt; &lt;l=length&gt; &lt;w=width&gt;
 + &lt;temp=val&gt; &lt;dtemp=val&gt; &lt;m=val&gt; &lt;ac=val&gt; &lt;<b><font color=#7d1c00>scale</font></b>=val&gt;
 + &lt;noisy=0|1&gt;
@@ -969,18 +627,39 @@
 
 </figure><p class='ruff'>Example of class initialization:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Ngspice::ResistorSemiconductor new 1 netp netm resm <font color=#463e11>-l</font> 1e-6 <font color=#463e11>-w</font> 10e-6
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Ngspice::BasicDevices::Resistor new 1 netp netm <font color=#463e11>-model</font> resm <font color=#463e11>-l</font> 1e-6 <font color=#463e11>-w</font> 10e-6
 </pre>
 
-</figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Ngspice_BasicDevices_ResistorSemiconductor_constructor' href="javascript:toggleSource('SpiceGenTcl_Ngspice_BasicDevices_ResistorSemiconductor_constructor')">Show source</a></p>
-<div id='SpiceGenTcl_Ngspice_BasicDevices_ResistorSemiconductor_constructor' class='ruff_dyn_src'><pre><b><font color=#ca14ca>method</font></b> constructor {name npNode nmNode modelName args} {
+</figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Ngspice_BasicDevices_Resistor_constructor' href="javascript:toggleSource('SpiceGenTcl_Ngspice_BasicDevices_Resistor_constructor')">Show source</a></p>
+<div id='SpiceGenTcl_Ngspice_BasicDevices_Resistor_constructor' class='ruff_dyn_src'><pre><b><font color=#ca14ca>method</font></b> constructor {name npNode nmNode args} {
 
-    <i><font color=#4b5d50># Creates object of class `ResistorSemiconductor` that describes semiconductor resistor device.</font></i>
+    <i><font color=#4b5d50># Creates object of class `Resistor` that describes resistor.</font></i>
     <i><font color=#4b5d50>#  name - name of the device without first-letter designator R</font></i>
     <i><font color=#4b5d50>#  npNode - name of node connected to positive pin</font></i>
     <i><font color=#4b5d50>#  nmNode - name of node connected to negative pin</font></i>
-    <i><font color=#4b5d50>#  modelName - name of the model</font></i>
     <i><font color=#4b5d50>#  args - keyword instance parameters</font></i>
+    <i><font color=#4b5d50># Resistor type could be specified with additional switches: `-beh` if we</font></i>
+    <i><font color=#4b5d50># want to model circuit's variable dependent resistor, or `-model modelName`</font></i>
+    <i><font color=#4b5d50># if we want to simulate resistor with model card.</font></i>
+    <i><font color=#4b5d50># Simple resistor:</font></i>
+    <i><font color=#4b5d50># ```</font></i>
+    <i><font color=#4b5d50># RXXXXXXX n+ n- &lt;resistance|r=&gt;value &lt;ac=val&gt; &lt;m=val&gt;</font></i>
+    <i><font color=#4b5d50># + &lt;scale=val&gt; &lt;temp=val&gt; &lt;dtemp=val&gt; &lt;tc1=val&gt; &lt;tc2=val&gt;</font></i>
+    <i><font color=#4b5d50># + &lt;noisy=0|1&gt;</font></i>
+    <i><font color=#4b5d50># ```</font></i>
+    <i><font color=#4b5d50># Example of class initialization as a simple resistor:</font></i>
+    <i><font color=#4b5d50># ```</font></i>
+    <i><font color=#4b5d50># ::SpiceGenTcl::Ngspice::BasicDevices::Resistor new 1 netp netm -r 1e3 -tc1 1 -ac 1e6 -temp {temp_amb -eq}</font></i>
+    <i><font color=#4b5d50># ```</font></i>
+    <i><font color=#4b5d50># Behavioral resistor:</font></i>
+    <i><font color=#4b5d50># ```</font></i>
+    <i><font color=#4b5d50># RXXXXXXX n+ n- R ={expression} &lt;tc1=value&gt; &lt;tc2=value&gt; &lt;noisy=0&gt;</font></i>
+    <i><font color=#4b5d50># ```</font></i>
+    <i><font color=#4b5d50># Example of class initialization:</font></i>
+    <i><font color=#4b5d50># ```</font></i>
+    <i><font color=#4b5d50># ::SpiceGenTcl::Ngspice::BasicDevices::Resistor new 1 netp netm -r &quot;V(a)+V(b)+pow(V(c),2)&quot; -beh -tc1 1</font></i>
+    <i><font color=#4b5d50># ```</font></i>
+    <i><font color=#4b5d50># Resistor with model card:</font></i>
     <i><font color=#4b5d50># ```</font></i>
     <i><font color=#4b5d50># RXXXXXXX n+ n- &lt;value&gt; &lt;mname&gt; &lt;l=length&gt; &lt;w=width&gt;</font></i>
     <i><font color=#4b5d50># + &lt;temp=val&gt; &lt;dtemp=val&gt; &lt;m=val&gt; &lt;ac=val&gt; &lt;scale=val&gt;</font></i>
@@ -988,41 +667,52 @@
     <i><font color=#4b5d50># ```</font></i>
     <i><font color=#4b5d50># Example of class initialization:</font></i>
     <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># ::SpiceGenTcl::Ngspice::ResistorSemiconductor new 1 netp netm resm -l 1e-6 -w 10e-6</font></i>
+    <i><font color=#4b5d50># ::SpiceGenTcl::Ngspice::BasicDevices::Resistor new 1 netp netm -model resm -l 1e-6 -w 10e-6</font></i>
     <i><font color=#4b5d50># ```</font></i>
-    <b><font color=#923B23>set</font></b> paramsNames [<b><font color=#923B23>list</font></b> l w temp dtemp m ac scale noisy]
-    <b><font color=#923B23>set</font></b> paramDefList [<b><font color=#ca14ca>my</font></b> buildArgStr <font color=#4A181B>$paramsNames</font>]
-    <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> <font color=#035103>&quot;</font>
-<font color=#035103>        <font color=#4A181B>$</font>paramDefList</font>
-<font color=#035103>    &quot;</font>]
-    <b><font color=#923B23>dict</font></b> for {paramName value} <font color=#4A181B>$arguments</font> {
-        <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;<font color=#4A181B>$</font>paramName <font color=#4A181B>$</font>value&quot;</font>
+    <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> {
+        <font color=#463e11>-r</font>=
+        {<font color=#463e11>-beh</font> <font color=#463e11>-forbid</font> {model} <font color=#463e11>-require</font> {r}}
+        {<font color=#463e11>-model</font>= <font color=#463e11>-forbid</font> {beh}}
+        {<font color=#463e11>-ac</font>= <font color=#463e11>-forbid</font> {model beh}}
+        {<font color=#463e11>-m</font>= <font color=#463e11>-forbid</font> {beh}}
+        {<font color=#463e11>-scale</font>= <font color=#463e11>-forbid</font> {beh}}
+        {<font color=#463e11>-temp</font>= <font color=#463e11>-forbid</font> {beh}}
+        {<font color=#463e11>-dtemp</font>= <font color=#463e11>-forbid</font> {beh}}
+        {<font color=#463e11>-tc1</font>= <font color=#463e11>-forbid</font> {model}}
+        {<font color=#463e11>-tc2</font>= <font color=#463e11>-forbid</font> {model}}
+        {<font color=#463e11>-noisy</font>= <font color=#463e11>-enum</font> {0 1}}
+        {<font color=#463e11>-l</font>= <font color=#463e11>-require</font> {model}}
+        {<font color=#463e11>-w</font>= <font color=#463e11>-require</font> {model}}
+    }]
+    <b><font color=#923B23>set</font></b> params <font color=#035103>&quot;&quot;</font>
+    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dict</font></b> exists <font color=#4A181B>$arguments</font> r]} {
+        <b><font color=#923B23>set</font></b> rVal [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$arguments</font> r]
+        <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dict</font></b> exists <font color=#4A181B>$arguments</font> beh]} {
+            <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;r <font color=#4A181B>$</font>rVal -eq&quot;</font>
+        } <b><font color=#923B23>elseif</font></b> {([<b><font color=#923B23>llength</font></b> <font color=#4A181B>$rVal</font>]&gt;1) && ([<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$rVal</font> 1]==<font color=#035103>&quot;-eq&quot;</font>)} {
+            <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;r <font color=#4A181B>[</font>lindex <font color=#4A181B>$</font>rVal 0<font color=#4A181B>]</font> -poseq&quot;</font>
+        } <b><font color=#923B23>else</font></b> {
+            <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;r <font color=#4A181B>$</font>rVal -pos&quot;</font>
+        }
+    } <b><font color=#923B23>elseif</font></b> {[<b><font color=#923B23>dict</font></b> exists <font color=#4A181B>$arguments</font> model]==0} {
+        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Resistor value must be specified with '-r value'&quot;</font>
     }
-    <b><font color=#923B23>next</font></b> r<font color=#4A181B>$name</font> [<b><font color=#923B23>list</font></b> <font color=#035103>&quot;np <font color=#4A181B>$</font>npNode&quot;</font> <font color=#035103>&quot;nm <font color=#4A181B>$</font>nmNode&quot;</font>] <font color=#4A181B>$modelName</font> <font color=#4A181B>$paramList</font>
+    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dict</font></b> exists <font color=#4A181B>$arguments</font> model]} {
+        <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;model <font color=#4A181B>[</font>dict get <font color=#4A181B>$</font>arguments model<font color=#4A181B>]</font> -posnocheck&quot;</font>
+    }
+    <b><font color=#923B23>dict</font></b> for {paramName value} <font color=#4A181B>$arguments</font> {
+        <b><font color=#923B23>if</font></b> {<font color=#4A181B>$paramName</font> ni {r beh model}} {
+            <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;<font color=#4A181B>$</font>paramName <font color=#4A181B>$</font>value&quot;</font>
+        }
+    }
+    <b><font color=#923B23>next</font></b> r<font color=#4A181B>$name</font> [<b><font color=#923B23>list</font></b> <font color=#035103>&quot;np <font color=#4A181B>$</font>npNode&quot;</font> <font color=#035103>&quot;nm <font color=#4A181B>$</font>nmNode&quot;</font>] <font color=#4A181B>$params</font>
 }</pre></div>
-</div><h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::BasicDevices::RSem'>RSem</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices" title="::SpiceGenTcl::Ngspice::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
-<div style='clear:both;'></div>
-<h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
-<tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
-<tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
-<tr><td><code>configure</code></td><td>Configure properties.</td></tr>
-<tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DeviceModel::genSPICEString" title="::SpiceGenTcl::DeviceModel.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::DeviceModel.genSPICEString</a></td></tr>
-<tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
-<tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
-<tr><td><code>setParamValue</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setParamValue" title="::SpiceGenTcl::Device.setParamValue" class='ruff_cmd'>::SpiceGenTcl::Device.setParamValue</a></td></tr>
-<tr><td><code>setPinNodeName</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setPinNodeName" title="::SpiceGenTcl::Device.setPinNodeName" class='ruff_cmd'>::SpiceGenTcl::Device.setPinNodeName</a></td></tr>
-</table>
-<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#463e11>-ModelName</font></code>, <code><font color=#463e11>-Name</font></code></p>
-<p class='ruff'>Writable: <code><font color=#463e11>-ModelName</font></code>, <code><font color=#463e11>-Name</font></code></p>
-<h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::ResistorSemiconductor" title="ResistorSemiconductor" class='ruff_cmd'>ResistorSemiconductor</a></p>
-<h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::BasicDevices::RSemModel'>RSemModel</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices" title="::SpiceGenTcl::Ngspice::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
+</div><h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::BasicDevices::RSemModel'>RSemModel</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices" title="::SpiceGenTcl::Ngspice::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::RSemModel::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::addParam" title="::SpiceGenTcl::Model.addParam" class='ruff_cmd'>::SpiceGenTcl::Model.addParam</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::deleteParam" title="::SpiceGenTcl::Model.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Model.deleteParam</a></td></tr>
@@ -1059,18 +749,7 @@
     <i><font color=#4b5d50># ::SpiceGenTcl::Ngspice::BasicDevices::RSemModel new resmod -tc1 1 -tc2 2</font></i>
     <i><font color=#4b5d50># ```</font></i>
     <b><font color=#923B23>set</font></b> paramsNames [<b><font color=#923B23>list</font></b> tc1 tc2 rsh defw narrow short tnom kf af wf lf ef {r res}]
-    <b><font color=#923B23>set</font></b> paramDefList [<b><font color=#ca14ca>my</font></b> buildArgStr <font color=#4A181B>$paramsNames</font>]
-    <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> <font color=#035103>&quot;</font>
-<font color=#035103>        <font color=#4A181B>$</font>paramDefList</font>
-<font color=#035103>    &quot;</font>]
-    <b><font color=#923B23>dict</font></b> for {paramName value} <font color=#4A181B>$arguments</font> {
-        <b><font color=#923B23>lappend</font></b> params [<b><font color=#923B23>list</font></b> <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
-    }
-    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> exists params]} {
-        <b><font color=#923B23>next</font></b> <font color=#4A181B>$name</font> r <font color=#4A181B>$params</font>
-    } <b><font color=#923B23>else</font></b> {
-        <b><font color=#923B23>next</font></b> <font color=#4A181B>$name</font> r <font color=#035103>&quot;&quot;</font>
-    }
+    <b><font color=#923B23>next</font></b> <font color=#4A181B>$name</font> r [<b><font color=#ca14ca>my</font></b> argsPreprocess <font color=#4A181B>$paramsNames</font> {<b><font color=#923B23>*</font></b>}<font color=#4A181B>$args</font>]
 }</pre></div>
 </div><h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstance'>SubcircuitInstance</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices" title="::SpiceGenTcl::Ngspice::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
@@ -1310,6 +989,7 @@
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::VSwitchModel::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::addParam" title="::SpiceGenTcl::Model.addParam" class='ruff_cmd'>::SpiceGenTcl::Model.addParam</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::deleteParam" title="::SpiceGenTcl::Model.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Model.deleteParam</a></td></tr>
@@ -1346,18 +1026,7 @@
     <i><font color=#4b5d50># ::SpiceGenTcl::Ngspice::BasicDevices::VSwitchModel new swmod -vt 1 -vh 0.5 -ron 1 -roff 1e6</font></i>
     <i><font color=#4b5d50># ```</font></i>
     <b><font color=#923B23>set</font></b> paramsNames [<b><font color=#923B23>list</font></b> vt vh ron roff]
-    <b><font color=#923B23>set</font></b> paramDefList [<b><font color=#ca14ca>my</font></b> buildArgStr <font color=#4A181B>$paramsNames</font>]
-    <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> <font color=#035103>&quot;</font>
-<font color=#035103>        <font color=#4A181B>$</font>paramDefList</font>
-<font color=#035103>    &quot;</font>]
-    <b><font color=#923B23>dict</font></b> for {paramName value} <font color=#4A181B>$arguments</font> {
-        <b><font color=#923B23>lappend</font></b> params [<b><font color=#923B23>list</font></b> <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
-    }
-    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> exists params]} {
-        <b><font color=#923B23>next</font></b> <font color=#4A181B>$name</font> sw <font color=#4A181B>$params</font>
-    } <b><font color=#923B23>else</font></b> {
-        <b><font color=#923B23>next</font></b> <font color=#4A181B>$name</font> sw <font color=#035103>&quot;&quot;</font>
-    }
+    <b><font color=#923B23>next</font></b> <font color=#4A181B>$name</font> sw [<b><font color=#ca14ca>my</font></b> argsPreprocess <font color=#4A181B>$paramsNames</font> {<b><font color=#923B23>*</font></b>}<font color=#4A181B>$args</font>]
 }</pre></div>
 </div><h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::BasicDevices::X'>X</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices" title="::SpiceGenTcl::Ngspice::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
@@ -1406,31 +1075,19 @@
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-SemiconductorDevices.html'>SpiceGenTcl::Ngspice::SemiconductorDevices</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-Analyses.html'>SpiceGenTcl::Ngspice::Analyses</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-Simulators.html'>SpiceGenTcl::Ngspice::Simulators</a></li>
-<hr><li class='ruff-toc2'><a href='#::SpiceGenTcl::Ngspice::BasicDevices-Classes'>Classes</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::C'>C</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::Capacitor'>Capacitor</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::Capacitor::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>Capacitor</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode cVal ?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>Capacitor</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode cVal ?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#923B23>Capacitor</font></b></code> that describes simple capacitor device.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CapacitorBehaviouralC'>CapacitorBehaviouralC</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CapacitorBehaviouralC::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>CapacitorBehaviouralC</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode cExpr ?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>CapacitorBehaviouralC</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode cExpr ?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#923B23>CapacitorBehaviouralC</font></b></code> that describes capacitor device dependents on expressions in C form.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CapacitorBehaviouralQ'>CapacitorBehaviouralQ</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CapacitorBehaviouralQ::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>CapacitorBehaviouralQ</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode qExpr ?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>CapacitorBehaviouralQ</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode qExpr ?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#923B23>CapacitorBehaviouralQ</font></b></code> that describes capacitor device dependents on expressions in Q form.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CapacitorSemiconductor'>CapacitorSemiconductor</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CapacitorSemiconductor::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>CapacitorSemiconductor</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode modelName ?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>CapacitorSemiconductor</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode modelName ?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#923B23>CapacitorBehaviouralQ</font></b></code> that describes semiconductor capacitor device.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CBehC'>CBehC</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CBehQ'>CBehQ</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CSem'>CSem</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CSemModel'>CSemModel</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CSemModel::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>CSemModel</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name ?args?&lt;/span&gt;
+<hr><li class='ruff-toc2'><a href='#::SpiceGenTcl::Ngspice::BasicDevices-Classes'>Classes</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::C'>C</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::Capacitor'>Capacitor</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::Capacitor::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>Capacitor</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode ?args?&lt;/span&gt;
+&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>Capacitor</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode ?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#923B23>Capacitor</font></b></code> that describes capacitor.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CSemModel'>CSemModel</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CSemModel::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>CSemModel</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name ?args?&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;<b><font color=#923B23>CSemModel</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name ?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#923B23>CSemModel</font></b></code> that describes semiconductor capacitor model.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CSw'>CSw</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CSwitch'>CSwitch</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CSwitch::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>CSwitch</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode cControl modelName ?args?&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;<b><font color=#923B23>CSwitch</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode cControl modelName ?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#923B23>CSwitch</font></b></code> that describes current controlled switch device.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CSwitch::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre></span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CSwitchModel'>CSwitchModel</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CSwitchModel::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>CSwitchModel</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name ?args?&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;<b><font color=#923B23>CSwitchModel</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name ?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#923B23>CSwitchModel</font></b></code> that describes current switch model.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::Inductor'>Inductor</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::Inductor::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>Inductor</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode lVal ?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>Inductor</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode lVal ?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#923B23>Inductor</font></b></code> that describes simple inductor device.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::InductorBehavioural'>InductorBehavioural</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::InductorBehavioural::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>InductorBehavioural</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode lExpr ?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>InductorBehavioural</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode lExpr ?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#923B23>InductorBehavioural</font></b></code> that describes inductor device dependent on expressions.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::L'>L</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::LBeh'>LBeh</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::R'>R</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::RBeh'>RBeh</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::Resistor'>Resistor</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::Resistor::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>Resistor</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode rVal ?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>Resistor</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode rVal ?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#923B23>Resistor</font></b></code> that describes simple resistor.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::ResistorBehavioural'>ResistorBehavioural</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::ResistorBehavioural::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>ResistorBehavioural</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode rExpr ?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>ResistorBehavioural</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode rExpr ?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#923B23>ResistorBehavioural</font></b></code> that describes device dependent on expressions.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::ResistorSemiconductor'>ResistorSemiconductor</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::ResistorSemiconductor::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>ResistorSemiconductor</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode modelName ?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>ResistorSemiconductor</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode modelName ?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#923B23>ResistorSemiconductor</font></b></code> that describes semiconductor resistor device.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::RSem'>RSem</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::RSemModel'>RSemModel</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::RSemModel::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>RSemModel</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name ?args?&lt;/span&gt;
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::Inductor'>Inductor</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::Inductor::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>Inductor</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode ?args?&lt;/span&gt;
+&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>Inductor</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode ?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#923B23>Inductor</font></b></code> that describes inductor.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::L'>L</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::R'>R</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::Resistor'>Resistor</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::Resistor::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>Resistor</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode ?args?&lt;/span&gt;
+&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>Resistor</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode ?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#923B23>Resistor</font></b></code> that describes resistor.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::RSemModel'>RSemModel</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::RSemModel::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>RSemModel</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name ?args?&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;<b><font color=#923B23>RSemModel</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name ?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#923B23>RSemModel</font></b></code> that describes semiconductor resistor model.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstance'>SubcircuitInstance</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstance::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>SubcircuitInstance</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name pins subName params&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;<b><font color=#923B23>SubcircuitInstance</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name pins subName params&lt;/span&gt;</pre>Creates object of class <code><b><font color=#923B23>CSwitch</font></b></code> that describes subcircuit instance.
