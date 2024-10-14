@@ -1,45 +1,62 @@
 
 namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
     
-    namespace export RSemModel CSemModel VSwitchModel CSwitchModel 
+    namespace export RModel CModel LModel VSwitchModel CSwitchModel 
 
     
-    # ________________________ RSemModel class _________________________ #
+    # ________________________ RModel class _________________________ #
     
-    oo::class create RSemModel {
+    oo::class create RModel {
         superclass ::SpiceGenTcl::Model
         mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name args} {
-            # Creates object of class `RSemModel` that describes semiconductor resistor model.
+            # Creates object of class `RModel` that describes semiconductor resistor model.
             #  name - name of the model 
             #  args - keyword instance parameters 
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::BasicDevices::RSemModel new resmod -tc1 1 -tc2 2
+            # ::SpiceGenTcl::Ngspice::BasicDevices::RModel new resmod -tc1 1 -tc2 2
             # ```
             set paramsNames [list tc1 tc2 rsh defw narrow short tnom kf af wf lf ef {r res}]
             next $name r [my argsPreprocess $paramsNames {*}$args]
         }
     }
 
-    # ________________________ CSemModel class _________________________ #
+    # ________________________ CModel class _________________________ #
     
-    oo::class create CSemModel {
+    oo::class create CModel {
         superclass ::SpiceGenTcl::Model
         mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name args} {
-            # Creates object of class `CSemModel` that describes semiconductor capacitor model.
+            # Creates object of class `CModel` that describes semiconductor capacitor model.
             #  name - name of the model 
             #  args - keyword instance parameters 
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::BasicDevices::CSemModel new capmod -tc1 1 -tc2 2
+            # ::SpiceGenTcl::Ngspice::BasicDevices::CModel new capmod -tc1 1 -tc2 2
             # ```
             set paramsNames [list cap cj cjsw defw narrow short tc1 tc2 tnom di thick]
             next $name c [my argsPreprocess $paramsNames {*}$args]
         }
     }
+
+    # ________________________ LModel class _________________________ #
     
+    oo::class create LModel {
+        superclass ::SpiceGenTcl::Model
+        mixin ::SpiceGenTcl::KeyArgsBuilder
+        constructor {name args} {
+            # Creates object of class `LModel` that describes inductor model.
+            #  name - name of the model 
+            #  args - keyword instance parameters 
+            # Example of class initialization:
+            # ```
+            # ::SpiceGenTcl::Ngspice::BasicDevices::LModel new indmod -tc1 1 -tc2 2
+            # ```
+            set paramsNames [list ind csect dia length tc1 tc2 tnom nt mu]
+            next $name l [my argsPreprocess $paramsNames {*}$args]
+        }
+    }    
     # ________________________ VSwitchModel class _________________________ #
     
     oo::class create VSwitchModel {

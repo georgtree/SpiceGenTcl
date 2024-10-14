@@ -8,26 +8,35 @@ foreach nameSpc $ngspiceNameSpc {
     namespace import ${nameSpc}::*
 }
     
-    # ________________________ RSemModel class tests _________________________ #
+    # ________________________ RModel class tests _________________________ #
     
-test testRSemModelClass-1.1 {test RSemModel class} -setup {
-    set mod [RSemModel new resmod -tc1 1 -tc2 2]
+test testRModelClass-1.1 {test RModel class} -setup {
+    set mod [RModel new resmod -tc1 1 -tc2 2]
 } -body {
     set result [$mod genSPICEString]
 } -result ".model resmod r(tc1=1 tc2=2)" -cleanup {
     unset mod result
 }
 
-    # ________________________ CSemModel class tests _________________________ #
+    # ________________________ CModel class tests _________________________ #
     
-test testCSemModelClass-1.1 {test CSemModel class} -setup {
-    set mod [CSemModel new capmod -tc1 1 -tc2 2]
+test testCModelClass-1.1 {test CModel class} -setup {
+    set mod [CModel new capmod -tc1 1 -tc2 2]
 } -body {
     set result [$mod genSPICEString]
 } -result ".model capmod c(tc1=1 tc2=2)" -cleanup {
     unset mod result
 }
 
+    # ________________________ LModel class tests _________________________ #
+    
+test testLModelClass-1.1 {test LModel class} -setup {
+    set mod [LModel new indmod -tc1 1 -tc2 2]
+} -body {
+    set result [$mod genSPICEString]
+} -result ".model indmod l(tc1=1 tc2=2)" -cleanup {
+    unset mod result
+}
     # ________________________ VSwitchModel class tests _________________________ #
     
 test testVSwitchModelClass-1.1 {test VSwitchModel class} -setup {

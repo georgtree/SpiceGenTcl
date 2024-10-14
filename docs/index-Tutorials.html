@@ -34,7 +34,7 @@
 <i><font color=#4b5d50># incrementally build netlist by adding different elements</font></i>
 <font color=#4A181B>$netlist</font> add [<b><font color=#923B23>R</font></b> new 1 net1 net2 <font color=#463e11>-r</font> 10]
 <font color=#4A181B>$netlist</font> add [<b><font color=#923B23>R</font></b> new 5 net1 net2 <font color=#463e11>-model</font> res_sem <font color=#463e11>-l</font> 10e-6 <font color=#463e11>-w</font> 100e-6]
-<font color=#4A181B>$netlist</font> add [<b><font color=#923B23>RSemModel</font></b> new rsem1mod <font color=#463e11>-tc1</font> 0.1 <font color=#463e11>-tc2</font> 0.4]
+<font color=#4A181B>$netlist</font> add [RSemModel new rsem1mod <font color=#463e11>-tc1</font> 0.1 <font color=#463e11>-tc2</font> 0.4]
 <font color=#4A181B>$netlist</font> add [<b><font color=#923B23>R</font></b> new 2 net1 net2 <font color=#463e11>-r</font> {{r1+5/10} <font color=#463e11>-eq</font>}]
 <font color=#4A181B>$netlist</font> add [<b><font color=#923B23>C</font></b> new 1 net2 net3 <font color=#463e11>-c</font> 1e-6]
 <font color=#4A181B>$netlist</font> add [<b><font color=#923B23>ParamStatement</font></b> new {{r1 1} {r2 2}} <font color=#463e11>-name</font> ps1]
@@ -172,7 +172,7 @@ v1 net1 net3 5
         <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new 1 net1 plus <font color=#463e11>-r</font> {r <font color=#463e11>-eq</font>}]
         <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>C</font></b> new 1 net2 net3 <font color=#463e11>-r</font> {c <font color=#463e11>-eq</font>}]
         <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new 5 minus net2 <font color=#463e11>-model</font> res_sem <font color=#463e11>-l</font> 10e-6 <font color=#463e11>-w</font> 100e-6]
-        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>RSemModel</font></b> new rsem1mod <font color=#463e11>-tc1</font> 0.1 <font color=#463e11>-tc2</font> 0.4]
+        <b><font color=#ca14ca>my</font></b> add [RSemModel new rsem1mod <font color=#463e11>-tc1</font> 0.1 <font color=#463e11>-tc2</font> 0.4]
         <i><font color=#4b5d50># pass name, list of pins and list of parameters to Subcircuit constructor</font></i>
         <b><font color=#923B23>next</font></b> rcnet <font color=#4A181B>$pins</font> <font color=#4A181B>$params</font>
     }
@@ -194,7 +194,7 @@ v1 net1 net3 5
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new 1 net1 plus <font color=#463e11>-r</font> {r <font color=#463e11>-eq</font>}]
 <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>C</font></b> new 1 net2 net3 <font color=#463e11>-c</font> {c <font color=#463e11>-eq</font>}]
 <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new 5 minus net2 <font color=#463e11>-model</font> res_sem <font color=#463e11>-l</font> 10e-6 <font color=#463e11>-w</font> 100e-6]
-<b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>RSemModel</font></b> new rsem1mod <font color=#463e11>-tc1</font> 0.1 <font color=#463e11>-tc2</font> 0.4]
+<b><font color=#ca14ca>my</font></b> add [RSemModel new rsem1mod <font color=#463e11>-tc1</font> 0.1 <font color=#463e11>-tc2</font> 0.4]
 </pre>
 
 </figure><p class='ruff'>The last action is to pass name of subcircuit, list of pins and parameters to constructor of superclass:</p>

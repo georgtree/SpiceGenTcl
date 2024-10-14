@@ -831,7 +831,7 @@ test testNetlistClass-1.3 {test creation of Netlist class instance with del inte
     $netlistInst add [R new 1 net1 net2 -r 10]
     $netlistInst add [R new 2 net1 net2 -r {{r1+5/10} -eq}]
     $netlistInst add [R new 5 net1 net2 -model res_sem -l 10e-6 -w 100e-6]
-    $netlistInst add [RSemModel new rsem1mod -tc1 0.1 -tc2 0.4]
+    $netlistInst add [RModel new rsem1mod -tc1 0.1 -tc2 0.4]
     $netlistInst add [C new 1 net2 net3 -c 1e-6]
     $netlistInst add [ParamStatement new {{r1 1} {r2 2}} -name ps1]
     $netlistInst add [Comment new {some random comment} -name com1]
@@ -1090,7 +1090,7 @@ test testSubcircuitClass-1.6 {test creation of Subcircuit class instance with ge
             my add [R new 1 net1 net2 -r {r -eq}]
             my add [C new 1 net2 net3 -c {c -eq}]
             my add [R new 5 net1 net2 -model res_sem -l 10e-6 -w 100e-6]
-            my add [RSemModel new rsem1mod -tc1 0.1 -tc2 0.4]
+            my add [RModel new rsem1mod -tc1 0.1 -tc2 0.4]
             # pass name, list of pins and list of parameters to Subcircuit constructor
             next rcnet $pins $params
         }
