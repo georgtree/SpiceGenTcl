@@ -306,35 +306,34 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
     ## ________________________ VSwitch class _________________________ ##
   
     oo::class create VSwitch {
-        superclass ::SpiceGenTcl::DeviceModel
-        constructor {name npNode nmNode ncpNode ncmNode modelName args} {
+        superclass ::SpiceGenTcl::Device
+        constructor {name npNode nmNode ncpNode ncmNode args} {
             # Creates object of class `VSwitch` that describes voltage controlled switch device.
             #  name - name of the device without first-letter designator S
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
             #  ncpNode - name of node connected to positive controlling pin
             #  ncmNode - name of node connected to negative controlling pin
-            #  modelName - name of the model
             #  args - on or off state parameter, optional
             # ```
             # SXXXXXXX N+ N- NC+ NC- MODEL <ON> <OFF>
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::BasicDevices::VSwitch new 1 net1 0 netc 0 sw1 -on
+            # ::SpiceGenTcl::Ngspice::BasicDevices::VSwitch new 1 net1 0 netc 0 -model sw1 -on
             # ```
-            set arguments [argparse {
+            set arguments [argparse -inline {
+                {-model= -required}
                 {-on -forbid {off}}
                 {-off -forbid {on}}
             }]
-            if {[info exists on]} {
-                lappend param {on -sw}
-            } elseif {[info exists off]} {
-                lappend param {off -sw}
-            } else {
-                set param ""
+            lappend params "model [dict get $arguments model] -posnocheck"
+            if {[dict exists $arguments on]} {
+                lappend params {on -sw}
+            } elseif {[dict exists $arguments off]} {
+                lappend params {off -sw}
             }
-            next s$name [list "np $npNode" "nm $nmNode" "ncp $ncpNode" "ncm $ncmNode"] $modelName $param
+            next s$name [list "np $npNode" "nm $nmNode" "ncp $ncpNode" "ncm $ncmNode"] $params
         }
     }
     # alias for VSwitch class
@@ -345,41 +344,36 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
     ## ________________________ CSwitch class _________________________ ##
   
     oo::class create CSwitch {
-        superclass ::SpiceGenTcl::DeviceModel
+        superclass ::SpiceGenTcl::Device
         # special positional parameter that is placed before model name
         variable CControlParam
-        constructor {name npNode nmNode cControl modelName args} {
+        constructor {name npNode nmNode args} {
             # Creates object of class `CSwitch` that describes current controlled switch device.
             #  name - name of the device without first-letter designator W
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  cControl - name of source current through which controls switch
-            #  modelName - name of the model
             #  args - on or off state parameter, optional
             # ```
             # WYYYYYYY N+ N- VNAM MODEL <ON> <OFF>
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::BasicDevices::ISwitch new 1 net1 0 v1 sw1 -on
+            # ::SpiceGenTcl::Ngspice::BasicDevices::CSwitch new 1 net1 0 -icntrl v1 -model sw1 -on
             # ```
-            set arguments [argparse {
+            set arguments [argparse -inline {
+                {-icntrl= -required}
+                {-model= -required}
                 {-on -forbid {off}}
                 {-off -forbid {on}}
             }]
-            if {[info exists on]} {
-                lappend param {on -sw}
-            } elseif {[info exists off]} {
-                lappend param {off -sw}
-            } else {
-                set param ""
+            lappend params "icntrl [dict get $arguments icntrl] -posnocheck"
+            lappend params "model [dict get $arguments model] -posnocheck"
+            if {[dict exists $arguments on]} {
+                lappend params {on -sw}
+            } elseif {[dict exists $arguments off]} {
+                lappend params {off -sw}
             }
-            set CControlParam [::SpiceGenTcl::ParameterPositionalNoCheck new ccontrol $cControl]
-            next w$name [list "np $npNode" "nm $nmNode"] $modelName $param
-        }
-        method genSPICEString {} {
-            set string [next]
-            return [linsert $string 3 [$CControlParam configure -Value]]
+            next w$name [list "np $npNode" "nm $nmNode"] $params
         }
     }
     # alias for CSwitch class

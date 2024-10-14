@@ -257,7 +257,7 @@ test testLClass-1.1 {test L alias for Inductor class with beh switch} -setup {
     ## ________________________ VSwitch class tests _________________________ ##
     
 test testVSwitchClass-1.1 {test VSwitch class} -setup {
-    set vsw [VSwitch new 1 net1 0 netc 0 sw1 -on]
+    set vsw [VSwitch new 1 net1 0 netc 0 -model sw1 -on]
 } -body {
     set result [$vsw genSPICEString]
 } -result "s1 net1 0 netc 0 sw1 on" -cleanup {
@@ -265,7 +265,7 @@ test testVSwitchClass-1.1 {test VSwitch class} -setup {
 }
 
 test testVSwitchClass-1.2 {test VSwitch class} -setup {
-    set vsw [VSwitch new 1 net1 0 netc 0 sw1]
+    set vsw [VSwitch new 1 net1 0 netc 0 -model sw1]
 } -body {
     set result [$vsw genSPICEString]
 } -result "s1 net1 0 netc 0 sw1" -cleanup {
@@ -273,7 +273,7 @@ test testVSwitchClass-1.2 {test VSwitch class} -setup {
 }
 
 test testVSwitchClass-1.3 {test VSwitch class} -body {
-    catch {set vsw [VSwitch new 1 net1 0 netc 0 sw1 -on -off]} errorStr
+    catch {set vsw [VSwitch new 1 net1 0 netc 0 -model sw1 -on -off]} errorStr
     return $errorStr
 } -result "-on conflicts with -off" -cleanup {
     unset errorStr
@@ -282,7 +282,7 @@ test testVSwitchClass-1.3 {test VSwitch class} -body {
     ## ________________________ CSwitch class tests _________________________ ##
     
 test testCSwitchClass-1.1 {test CSwitch class} -setup {
-    set csw [CSwitch new 1 net1 0 v1 sw1 -on]
+    set csw [CSwitch new 1 net1 0 -icntrl v1 -model sw1 -on]
 } -body {
     set result [$csw genSPICEString]
 } -result "w1 net1 0 v1 sw1 on" -cleanup {
@@ -290,7 +290,7 @@ test testCSwitchClass-1.1 {test CSwitch class} -setup {
 }
 
 test testCSwitchClass-1.2 {test CSwitch class} -setup {
-    set csw [CSwitch new 1 net1 0 v1 sw1]
+    set csw [CSwitch new 1 net1 0 -icntrl v1 -model sw1]
 } -body {
     set result [$csw genSPICEString]
 } -result "w1 net1 0 v1 sw1" -cleanup {
