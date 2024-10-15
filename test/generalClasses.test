@@ -801,7 +801,7 @@ test testParamStatementClass-1.5 {test creation of ParamStatement class instance
 
     # ________________________ Netlist class tests _________________________ #
     
-test testNetlistClass-1.2 {test creation of Netlist class instance with add interface and genSPICEString interface} -setup {
+test testNetlistClass-1.1 {test creation of Netlist class instance with add interface and genSPICEString interface} -setup {
     set netlistInst [Netlist new newNetlist]
     $netlistInst add [R new 1 net1 net2 -r 10]
     $netlistInst add [R new 2 net1 net2 -r {{r1+5/10} -eq}]
@@ -811,7 +811,7 @@ test testNetlistClass-1.2 {test creation of Netlist class instance with add inte
     $netlistInst add [Include new {/fold1/fold2/file.lib} -name inc1]
     $netlistInst add [Library new {/fold1/fold2/file.lib} fast -name lib1]
     $netlistInst add [RawString new {*comment in form of raw string} -name raw1]
-    $netlistInst add [Vdc new 1 net1 net3 5]
+    $netlistInst add [Vdc new 1 net1 net3 -dc 5]
 } -body {
     set result [$netlistInst genSPICEString]
 } -result {r1 net1 net2 10
@@ -826,7 +826,7 @@ v1 net1 net3 5} -cleanup {
     unset netlistInst result
 }
 
-test testNetlistClass-1.3 {test creation of Netlist class instance with del interface and genSPICEString interface} -setup {
+test testNetlistClass-1.2 {test creation of Netlist class instance with del interface and genSPICEString interface} -setup {
     set netlistInst [Netlist new newNetlist]
     $netlistInst add [R new 1 net1 net2 -r 10]
     $netlistInst add [R new 2 net1 net2 -r {{r1+5/10} -eq}]
@@ -838,7 +838,7 @@ test testNetlistClass-1.3 {test creation of Netlist class instance with del inte
     $netlistInst add [Include new {/fold1/fold2/file.lib} -name inc1]
     $netlistInst add [Library new {/fold1/fold2/file.lib} fast -name lib1]
     $netlistInst add [RawString new {*comment in form of raw string} -name raw1]
-    $netlistInst add [Vdc new 1 net1 net3 5]
+    $netlistInst add [Vdc new 1 net1 net3 -dc 5]
 } -body {
     $netlistInst del V1
     set result [$netlistInst genSPICEString]
@@ -855,7 +855,7 @@ c1 net2 net3 1e-6
     unset netlistInst result
 } 
 
-test testNetlistClass-1.4 {test creation of Netlist class instance with del interface with wrong name of element} -setup {
+test testNetlistClass-1.3 {test creation of Netlist class instance with del interface with wrong name of element} -setup {
     set netlistInst [Netlist new new_netlist]
     $netlistInst add [R new 1 net1 net2 -r 10]
     $netlistInst add [R new 2 net1 net2 -r {{r1+5/10} -eq}]
@@ -865,7 +865,7 @@ test testNetlistClass-1.4 {test creation of Netlist class instance with del inte
     $netlistInst add [Include new {/fold1/fold2/file.lib} -name inc1]
     $netlistInst add [Library new {/fold1/fold2/file.lib} fast -name lib1]
     $netlistInst add [RawString new {*comment in form of raw string} -name raw1]
-    $netlistInst add [Vdc new 1 net1 net3 5]
+    $netlistInst add [Vdc new 1 net1 net3 -dc 5]
 } -body {
     catch {$netlistInst del r3} errorStr
     return $errorStr
@@ -873,7 +873,7 @@ test testNetlistClass-1.4 {test creation of Netlist class instance with del inte
     unset netlistInst errorStr
 }
 
-test testNetlistClass-1.5 {test creation of Netlist class instance and getElement interface} -setup {
+test testNetlistClass-1.4 {test creation of Netlist class instance and getElement interface} -setup {
     set netlistInst [Netlist new new_netlist]
     $netlistInst add [R new 1 net1 net2 -r 10]
     $netlistInst add [R new 2 net1 net2 -r {{r1+5/10} -eq}]
@@ -883,7 +883,7 @@ test testNetlistClass-1.5 {test creation of Netlist class instance and getElemen
     $netlistInst add [Include new {/fold1/fold2/file.lib} -name inc1]
     $netlistInst add [Library new {/fold1/fold2/file.lib} fast -name lib1]
     $netlistInst add [RawString new {*comment in form of raw string} -name raw1]
-    $netlistInst add [Vdc new 1 net1 net3 5]
+    $netlistInst add [Vdc new 1 net1 net3 -dc 5]
 } -body {
     set elementObj [$netlistInst getElement r2]
     return [$elementObj configure -Name]
@@ -891,7 +891,7 @@ test testNetlistClass-1.5 {test creation of Netlist class instance and getElemen
     unset netlistInst elementObj
 }
 
-test testNetlistClass-1.6 {test creation of Netlist class instance with add element with same name as ones already added to netslit} -setup {
+test testNetlistClass-1.5 {test creation of Netlist class instance with add element with same name as ones already added to netslit} -setup {
     set netlistInst [Netlist new new_netlist]
     $netlistInst add [R new 1 net1 net2 -r 10]
     $netlistInst add [R new 2 net1 net2 -r {{r1+5/10} -eq}]
@@ -901,7 +901,7 @@ test testNetlistClass-1.6 {test creation of Netlist class instance with add elem
     $netlistInst add [Include new {/fold1/fold2/file.lib} -name inc1]
     $netlistInst add [Library new {/fold1/fold2/file.lib} fast -name lib1]
     $netlistInst add [RawString new {*comment in form of raw string} -name raw1]
-    $netlistInst add [Vdc new 1 net1 net3 5]
+    $netlistInst add [Vdc new 1 net1 net3 -dc 5]
 } -body {
     catch {$netlistInst add [R new 1 net1 net2 -r 15]} errorStr
     return $errorStr
@@ -909,7 +909,7 @@ test testNetlistClass-1.6 {test creation of Netlist class instance with add elem
     unset netlistInst errorStr
 }
 
-test testNetlistClass-1.7 {test creation of Netlist class instance and modifying value of netlist element} -setup {
+test testNetlistClass-1.6 {test creation of Netlist class instance and modifying value of netlist element} -setup {
     set netlistInst [Netlist new new_netlist]
     $netlistInst add [R new 1 net1 net2 -r 10]
     $netlistInst add [R new 2 net1 net2 -r {{r1+5/10} -eq}]
@@ -919,7 +919,7 @@ test testNetlistClass-1.7 {test creation of Netlist class instance and modifying
     $netlistInst add [Include new {/fold1/fold2/file.lib} -name inc1]
     $netlistInst add [Library new {/fold1/fold2/file.lib} fast -name lib1]
     $netlistInst add [RawString new {*comment in form of raw string} -name raw1]
-    $netlistInst add [Vdc new 1 net1 net3 5]
+    $netlistInst add [Vdc new 1 net1 net3 -dc 5]
 } -body {
     set resistor [$netlistInst getElement r1]
     $resistor setParamValue r 100
@@ -936,22 +936,6 @@ v1 net1 net3 5} -cleanup {
     unset netlistInst resistor
 }
 
-#test testNetlistClass-1.8 {test creation of Netlist class instance with add analysis element as ones already added to netslit} -setup {
-#    set netlistInst [Netlist new new_netlist]
-#    $netlistInst add [R new 1 net1 net2 10]
-#    $netlistInst add [R new 2 net1 net2 {{r1+5/10} -eq}]
-#    $netlistInst add [C new 1 net2 net3 1e-6]
-#    $netlistInst add [ParamStatement new {{r1 1} {r2 2}} -name ps1]
-#    $netlistInst add [Comment new {some random comment} -name com1]
-#    $netlistInst add [Include new {/fold1/fold2/file.lib} -name inc1]
-#    $netlistInst add [Library new {/fold1/fold2/file.lib} fast -name lib1]
-#    $netlistInst add [RawString new {*comment in form of raw string} -name raw1]
-#    $netlistInst add [Vdc new 1 net1 net3 5]
-#    $netlistInst add [Tran new 1e-6 1e-3 -uic -name tran1]
-#} -body {
-#    catch {$netlistInst add [Tran new 1e-6 1e-3 -uic -name tran2]} errorStr
-#    return $errorStr
-#} -result {Netlist 'new_netlist' already contains Analysis element} 
     
     # ________________________ Subcircuit class tests _________________________ #
 

@@ -475,13 +475,17 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
     
     oo::abstract create dc {
         superclass ::SpiceGenTcl::Device
-        constructor {name type npNode nmNode dcVal} {
+        constructor {name type npNode nmNode args} {
+            set arguments [argparse -inline {
+                {-dc= -required}
+            }]
+            set dcVal [dict get $arguments dc]
             if {([llength $dcVal]>1) && ([lindex $dcVal 1]=="-eq")} {
-                lappend paramList "dc [lindex $dcVal 0] -poseq"
+                lappend params "dc [lindex $dcVal 0] -poseq"
             } else {
-                lappend paramList "dc $dcVal -pos"
+                lappend params "dc $dcVal -pos"
             }
-            next $type$name [list "np $npNode" "nm $nmNode"] $paramList
+            next $type$name [list "np $npNode" "nm $nmNode"] $params
         }
     }
 
@@ -489,147 +493,147 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
 
     oo::abstract create ac {
         superclass ::SpiceGenTcl::Device
-        constructor {name type npNode nmNode acMag args} {
-            set arguments [argparse {
+        constructor {name type npNode nmNode args} {
+            set arguments [argparse -inline {
+                {-ac= -required}
                 -acphase=
             }]
-            lappend paramList "ac -sw"
-            if {([llength $acMag]>1) && ([lindex $acMag 1]=="-eq")} {
-                lappend paramList "acmag [lindex $acMag 0] -poseq"
+            set acVal [dict get $arguments ac]
+            lappend params "ac -sw"
+            if {([llength $acVal]>1) && ([lindex $acVal 1]=="-eq")} {
+                lappend params "acval [lindex $acVal 0] -poseq"
             } else {
-                lappend paramList "acmag $acMag -pos"
+                lappend params "acval $acVal -pos"
             }
-            if {[info exists acphase]} {
-                if {([llength $acphase]>1) && ([lindex $acphase 1]=="-eq")} {
-                    lappend paramList "acphase [lindex $acphase 0] -poseq"
-                } else {
-                    lappend paramList "acphase $acphase -pos"
+            dict for {paramName value} $arguments {
+                if {$paramName ni {ac}} {
+                    if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
+                        lappend params "$paramName [lindex $value 0] -poseq"
+                    } else {
+                        lappend params "$paramName $value -pos"
+                    }
                 }
             }
-            next $type$name [list "np $npNode" "nm $nmNode"] $paramList
+            next $type$name [list "np $npNode" "nm $nmNode"] $params
         }
     }   
     
     ## ________________________ pulse sources template class _________________________ ##
     
     oo::abstract create pulse {
-        superclass ::SpiceGenTcl::DeviceModel
-        constructor {name type npNode nmNode low high td tr tf pw per args} {
-            set arguments [argparse {
+        superclass ::SpiceGenTcl::Device
+        constructor {name type npNode nmNode args} {
+            set arguments [argparse -inline {
+                {-low= -required}
+                {-high= -required}
+                {-td= -required}
+                {-tr= -required}
+                {-tf= -required}
+                {-pw= -required}
+                {-per= -required}
                 -np=
             }]
-            set paramNames [lrange [lindex [info class constructor [info object class [self]]] 0] 3 end-1]
-            foreach paramName $paramNames {
-                set paramNameVal [subst $$paramName]
-                if {([llength $paramNameVal]>1) && ([lindex $paramNameVal 1]=="-eq")} {
-                    lappend paramList "$paramName [lindex $paramNameVal 0] -poseq"
-                } else {
-                    lappend paramList "$paramName $paramNameVal -pos"
+            set paramsOrder [list low high td tr tf pw per np]
+            foreach param $paramsOrder {
+                if {[dict exists $arguments $param]} {
+                    dict append argsOrdered $param [dict get $arguments $param]
                 }
             }
-            if {[info exists np]} {
-                if {([llength $np]>1) && ([lindex $np 1]=="-eq")} {
-                    lappend paramList "np [lindex $np 0] -poseq"
+            lappend params "model pulse -posnocheck"
+            dict for {paramName value} $argsOrdered {
+                if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
+                    lappend params "$paramName [lindex $value 0] -poseq"
                 } else {
-                    lappend paramList "np $np -pos"
+                    lappend params "$paramName $value -pos"
                 }
             }
-            next $type$name [list "np $npNode" "nm $nmNode"] pulse $paramList
+            next $type$name [list "np $npNode" "nm $nmNode"] $params
         }
-        method genSPICEString {} {
-            # method creates device string for SPICE netlist in form
-            #  "referenceName nodes modelName(parameters)"
-            # this is special extension for independent sources
-            my variable Params
-            my variable Pins
-            dict for {pinName pin} $Pins {
-                set error [catch {$pin genSPICEString} errStr] 
-                if {$error!=1} {
-                    lappend nodes [$pin genSPICEString]
-                } else {
-                    error "Device '[my configure -Name]' can't be netlisted because '$pinName' pin is floating"
-                }
-            }
-            if {$Params==""} {
-                lappend params ""
-                return "[my configure -Name] [join $nodes] [my configure -ModelName]"
-            } else {
-                dict for {paramName param} $Params {
-                    lappend params [$param genSPICEString]
-                }
-                return "[my configure -Name] [join $nodes] [my configure -ModelName]([join $params])"
-            }
-        }
-    }  
+    } 
     
     ## ________________________ sin sources template class _________________________ ##
     
     oo::abstract create sin {
-        superclass ::SpiceGenTcl::DeviceModel
+        superclass ::SpiceGenTcl::Device
         mixin ::SpiceGenTcl::KeyArgsBuilder
-        constructor {name type npNode nmNode v0 va freq args} {
-            set paramDefList [my buildArgStr [list td theta phase]]
-            set arguments [argparse -inline "
-                $paramDefList
-            "]
-            set paramNames [lrange [lindex [info class constructor [info object class [self]]] 0] 3 end-1]
-            foreach paramName $paramNames {
-                set paramNameVal [subst $$paramName]
-                if {([llength $paramNameVal]>1) && ([lindex $paramNameVal 1]=="-eq")} {
-                    lappend paramList "$paramName [lindex $paramNameVal 0] -poseq"
-                } else {
-                    lappend paramList "$paramName $paramNameVal -pos"
+        constructor {name type npNode nmNode args} {
+            set arguments [argparse -inline {
+                {-v0= -required}
+                {-va= -required}
+                {-freq= -required}
+                -td=
+                {-theta= -require {td}}
+                {-phase= -require {td theta}}
+            }]
+            set paramsOrder [list v0 va freq td theta phase]
+            foreach param $paramsOrder {
+                if {[dict exists $arguments $param]} {
+                    dict append argsOrdered $param [dict get $arguments $param]
                 }
             }
-            dict for {paramName value} $arguments {
+            lappend params "model sin -posnocheck"
+            dict for {paramName value} $argsOrdered {
                 if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                    lappend paramList "$paramName [lindex $value 0] -poseq"
+                    lappend params "$paramName [lindex $value 0] -poseq"
                 } else {
-                    lappend paramList "$paramName $value -pos"
+                    lappend params "$paramName $value -pos"
                 }
             }
-            next $type$name [list "np $npNode" "nm $nmNode"] sin $paramList
+            next $type$name [list "np $npNode" "nm $nmNode"] $params
         }
-        set def [info class definition ::SpiceGenTcl::Ngspice::Sources::pulse genSPICEString]
-        method genSPICEString [lindex $def 0] [lindex $def 1]
     }  
     
     ## ________________________ exp sources template class _________________________ ##
     
     oo::abstract create exp {
-        superclass ::SpiceGenTcl::DeviceModel
-        constructor {name type npNode nmNode v1 v2 td1 tau1 td2 tau2} {
-            set paramNames [lrange [lindex [info class constructor [info object class [self]]] 0] 3 end]
-            foreach paramName $paramNames {
-                set paramNameVal [subst $$paramName]
-                if {([llength $paramNameVal]>1) && ([lindex $paramNameVal 1]=="-eq")} {
-                    lappend paramList "$paramName [lindex $paramNameVal 0] -poseq"
-                } else {
-                    lappend paramList "$paramName $paramNameVal -pos"
+        superclass ::SpiceGenTcl::Device
+        constructor {name type npNode nmNode args} {
+            set arguments [argparse -inline {
+                {-v1= -required}
+                {-v2= -required}
+                {-td1= -required}
+                {-tau1= -required}
+                {-td2= -required}
+                {-tau2= -required}
+            }]
+            set paramsOrder [list v1 v2 td1 tau1 td2 tau2]
+            foreach param $paramsOrder {
+                if {[dict exists $arguments $param]} {
+                    dict append argsOrdered $param [dict get $arguments $param]
                 }
             }
-            next $type$name [list "np $npNode" "nm $nmNode"] exp $paramList
+            lappend params "model exp -posnocheck"
+            dict for {paramName value} $argsOrdered {
+                if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
+                    lappend params "$paramName [lindex $value 0] -poseq"
+                } else {
+                    lappend params "$paramName $value -pos"
+                }
+            }
+            next $type$name [list "np $npNode" "nm $nmNode"] $params
         }
-        set def [info class definition ::SpiceGenTcl::Ngspice::Sources::pulse genSPICEString]
-        method genSPICEString [lindex $def 0] [lindex $def 1]
     }    
     
     ## ________________________ pwl sources template class _________________________ ##
     
     oo::abstract create pwl {
-        superclass ::SpiceGenTcl::DeviceModel
-        constructor {name type npNode nmNode pwlSeq} {
-            set pwlSeqLen [llength $pwlSeq]
+        superclass ::SpiceGenTcl::Device
+        constructor {name type npNode nmNode args} {
+            set arguments [argparse -inline {
+                {-seq= -required}
+            }]
+            set pwlSeqVal [dict get $arguments seq]
+            set pwlSeqLen [llength $pwlSeqVal]
             if {$pwlSeqLen%2} {
                 error "Number of elements '$pwlSeqLen' in pwl sequence is odd in element '$type$name', must be even"
             } elseif {$pwlSeqLen<4} {
                 error "Number of elements '$pwlSeqLen' in pwl sequence in element '$type$name' must be >=4"
             }
             # parse pwlSeq argument
-            for {set i 0} {$i<[llength $pwlSeq]/2} {incr i} {
+            for {set i 0} {$i<[llength $pwlSeqVal]/2} {incr i} {
                 set 2i [* 2 $i]
                 set 2ip1 [+ $2i 1]
-                lappend params "t$i [list [lindex $pwlSeq $2i]]" "$type$i [list [lindex $pwlSeq $2ip1]]"
+                lappend params "t$i [list [lindex $pwlSeqVal $2i]]" "$type$i [list [lindex $pwlSeqVal $2ip1]]"
             }
             foreach param $params {
                 if {([llength [lindex $param 1]]>1) && ([lindex [lindex $param 1] 1]=="-eq")} {
@@ -638,92 +642,93 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
                     lappend paramList "[lindex $param 0] [lindex $param 1] -pos"
                 }
             }
-            next $type$name [list "np $npNode" "nm $nmNode"] pwl $paramList
+            set paramList [linsert $paramList 0 "model pwl -posnocheck"]
+            next $type$name [list "np $npNode" "nm $nmNode"] $paramList
         }
-        set def [info class definition ::SpiceGenTcl::Ngspice::Sources::pulse genSPICEString]
-        method genSPICEString [lindex $def 0] [lindex $def 1]
     }
 
     ## ________________________ sffm sources template class _________________________ ##
     
     oo::abstract create sffm {
-        superclass ::SpiceGenTcl::DeviceModel
+        superclass ::SpiceGenTcl::Device
         mixin ::SpiceGenTcl::KeyArgsBuilder
-        constructor {name type npNode nmNode v0 va fc mdi fs args} {
-            set paramDefList [my buildArgStr [list phasec phases]]
-            set arguments [argparse -inline "
-                $paramDefList
-            "]
-            set paramNames [lrange [lindex [info class constructor [info object class [self]]] 0] 3 end-1]
-            foreach paramName $paramNames {
-                set paramNameVal [subst $$paramName]
-                if {([llength $paramNameVal]>1) && ([lindex $paramNameVal 1]=="-eq")} {
-                    lappend paramList "$paramName [lindex $paramNameVal 0] -poseq"
-                } else {
-                    lappend paramList "$paramName $paramNameVal -pos"
+        constructor {name type npNode nmNode args} {
+            set arguments [argparse -inline {
+                {-v0= -required}
+                {-va= -required}
+                {-fc= -required}
+                {-mdi= -required}
+                {-fs= -required}
+                -phasec=
+                {-phases= -require {phasec}}
+            }]
+            set paramsOrder [list v0 va fc mdi fs phasec phases]
+            foreach param $paramsOrder {
+                if {[dict exists $arguments $param]} {
+                    dict append argsOrdered $param [dict get $arguments $param]
                 }
             }
-            dict for {paramName value} $arguments {
+            lappend params "model sffm -posnocheck"
+            dict for {paramName value} $argsOrdered {
                 if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                    lappend paramList "$paramName [lindex $value 0] -poseq"
+                    lappend params "$paramName [lindex $value 0] -poseq"
                 } else {
-                    lappend paramList "$paramName $value -pos"
+                    lappend params "$paramName $value -pos"
                 }
             }
-            next $type$name [list "np $npNode" "nm $nmNode"] sffm $paramList
+            next $type$name [list "np $npNode" "nm $nmNode"] $params
         }
-        set def [info class definition ::SpiceGenTcl::Ngspice::Sources::pulse genSPICEString]
-        method genSPICEString [lindex $def 0] [lindex $def 1]
     }      
 
     ## ________________________ am sources template class _________________________ ##
     
     oo::abstract create am {
-        superclass ::SpiceGenTcl::DeviceModel
-        constructor {name type npNode nmNode v0 va mf fc td args} {
+        superclass ::SpiceGenTcl::Device
+        constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
+                {-v0= -required}
+                {-va= -required}
+                {-mf= -required}
+                {-fc= -required}
+                {-td= -required}
                 -phases=
             }]
-            set paramNames [lrange [lindex [info class constructor [info object class [self]]] 0] 3 end-1]
-            foreach paramName $paramNames {
-                set paramNameVal [subst $$paramName]
-                if {([llength $paramNameVal]>1) && ([lindex $paramNameVal 1]=="-eq")} {
-                    lappend paramList "$paramName [lindex $paramNameVal 0] -poseq"
-                } else {
-                    lappend paramList "$paramName $paramNameVal -pos"
+            set paramsOrder [list v0 va mf fc td phases]
+            foreach param $paramsOrder {
+                if {[dict exists $arguments $param]} {
+                    dict append argsOrdered $param [dict get $arguments $param]
                 }
             }
-            dict for {paramName value} $arguments {
+            lappend params "model am -posnocheck"
+            dict for {paramName value} $argsOrdered {
                 if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                    lappend paramList "$paramName [lindex $value 0] -poseq"
+                    lappend params "$paramName [lindex $value 0] -poseq"
                 } else {
-                    lappend paramList "$paramName $value -pos"
+                    lappend params "$paramName $value -pos"
                 }
             }
-            next $type$name [list "np $npNode" "nm $nmNode"] am $paramList
+            next $type$name [list "np $npNode" "nm $nmNode"] $params
         }
-        set def [info class definition ::SpiceGenTcl::Ngspice::Sources::pulse genSPICEString]
-        method genSPICEString [lindex $def 0] [lindex $def 1]
     }   
     
     ## ________________________ Vdc class _________________________ ##
         
     oo::class create Vdc {
         superclass ::SpiceGenTcl::Ngspice::Sources::dc
-        constructor {name npNode nmNode dcVal} {
+        constructor {name npNode nmNode args} {
             # Creates object of class `Vdc` that describes simple constant voltage source.
             #  name - name of the device without first-letter designator V
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  dcVal - value of constant voltage
+            #  -dc - DC voltage value
             # ```
             # VYYYYYYY n+ n- <<DC> DC/TRAN VALUE>>
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Sources::Vdc new 1 netp netm 10
+            # ::SpiceGenTcl::Ngspice::Sources::Vdc new 1 netp netm -dc 10
             # ```
-            next $name v $npNode $nmNode $dcVal
+            next $name v $npNode $nmNode {*}$args
         }
     }
 
@@ -731,28 +736,22 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
     
     oo::class create Vac {
         superclass ::SpiceGenTcl::Ngspice::Sources::ac
-        constructor {name npNode nmNode acMag args} {
+        constructor {name npNode nmNode args} {
             # Creates object of class `Vac` that describes ac voltage source.
             #  name - name of the device without first-letter designator V
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  acMag - value of ac voltage
-            #  args - optional phase of ac voltage
+            #  -dc - AC voltage value
+            #  -acphase - phase of AC voltage
             # ```
-            # VYYYYYYY n+ n-  <AC <ACMAG <ACPHASE>>>
+            # VYYYYYYY n+ n- <AC<ACMAG<ACPHASE>>>
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Sources::Vac new 1 netp netm 10
+            # ::SpiceGenTcl::Ngspice::Sources::Vac new 1 netp netm -ac 10 -acphase 45
             # ```
-            set arguments [argparse {
-                -acphase=
-            }]
-            if {[info exists acphase]} {
-                next $name v $npNode $nmNode $acMag -acphase $acphase
-            } else {
-                next $name v $npNode $nmNode $acMag
-            }
+            next $name v $npNode $nmNode {*}$args
+
         }
     }
     
@@ -760,33 +759,27 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
 
     oo::class create Vpulse {
         superclass ::SpiceGenTcl::Ngspice::Sources::pulse
-        constructor {name npNode nmNode low high td tr tf pw per args} {
+        constructor {name npNode nmNode args} {
             # Creates object of class `Vpulse` that describes pulse voltage source.
             #  name - name of the device without first-letter designator V
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  low - initial value
-            #  high - pulsed value
-            #  td - delay time
-            #  tr - rise time
-            #  pw - pulse width
-            #  per - period
-            #  args - option argument -np: number of pulses
+            #  -low - low value
+            #  -high - high value
+            #  -td - time delay
+            #  -tr - rise time
+            #  -tf - fall time
+            #  -pw - width of pulse
+            #  -per - period time
+            #  -np - number of pulses, optional
             # ```
             # VYYYYYYY n+ n- PULSE(V1 V2 TD TR TF PW PER NP)
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Sources::Vpulse new 1 net1 net2 0 1 {td -eq} 1e-9 1e-9 10e-6 20e-6 -np {np -eq}
+            # ::SpiceGenTcl::Ngspice::Sources::Vpulse new 1 net1 net2 -low 0 -high 1 -td {td -eq} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6 -np {np -eq}
             # ```
-            set arguments [argparse {
-                -np=
-            }]
-            if {[info exists np]} {
-                next $name v $npNode $nmNode $low $high $td $tr $tf $pw $per -np $np
-            } else {
-                next $name v $npNode $nmNode $low $high $td $tr $tf $pw $per
-            }
+            next $name v $npNode $nmNode {*}$args
         }
     }  
     
@@ -795,35 +788,25 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
     oo::class create Vsin {
         superclass ::SpiceGenTcl::Ngspice::Sources::sin
         mixin ::SpiceGenTcl::KeyArgsBuilder
-        constructor {name npNode nmNode v0 va freq args} {
+        constructor {name npNode nmNode args} {
             # Creates object of class `Vsin` that describes sinusoidal voltage source.
             #  name - name of the device without first-letter designator V
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  v0 - initial value
-            #  va - pulsed value
-            #  freq - delay time
-            #  args - optional arguments -td: delay, -theta: damping factor, -phase: phase
+            #  -v0 - DC shift value
+            #  -va - amplitude value
+            #  -freq - frequency of sinusoidal signal
+            #  -td - time delay, optional
+            #  -theta - damping factor, optional, require -td
+            #  -phase - phase of signal, optional, require -td and -phase
             # ```
             # VYYYYYYY n+ n- SIN(VO VA FREQ TD THETA PHASE)
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Sources::Vsin new 1 net1 net2 0 2 50 -td 1e-6 -phase {phase -eq}
+            # ::SpiceGenTcl::Ngspice::Sources::Vsin new 1 net1 net2 -v0 0 -va 2 -freq {freq -eq} -td 1e-6 -theta {theta -eq}
             # ```
-            set paramDefList [my buildArgStr [list td theta phase]]
-            set arguments [argparse -inline "
-                $paramDefList
-            "]
-            set paramList ""
-            dict for {paramName value} $arguments {
-                if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                    lappend paramList "-$paramName" "[lindex $value 0] -eq"
-                } else {
-                    lappend paramList "-$paramName" "$value"
-                }
-            }
-            next $name v $npNode $nmNode $v0 $va $freq {*}$paramList
+            next $name v $npNode $nmNode {*}$args
         }
     }
     
@@ -831,25 +814,25 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
 
     oo::class create Vexp {
         superclass ::SpiceGenTcl::Ngspice::Sources::exp
-        constructor {name npNode nmNode v1 v2 td1 tau1 td2 tau2} {
+        constructor {name npNode nmNode args} {
             # Creates object of class `Vexp` that describes exponential voltage source.
             #  name - name of the device without first-letter designator V
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  v1 - initial value
-            #  v2 - pulsed value
-            #  td1 - rise delay time
-            #  tau1 - rise time constant
-            #  td2 - fall delay time
-            #  tau2 - fall time constant
+            #  -v1 - initial value
+            #  -v2 - pulsed value
+            #  -td1 - rise delay time
+            #  -tau1 - rise time constant
+            #  -td2 - fall delay time
+            #  -tau2 - fall time constant
             # ```
             # VYYYYYYY n+ n- EXP(V1 V2 TD1 TAU1 TD2 TAU2)
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Sources::Vexp new 1 net1 net2 0 1 1e-9 1e-9 {td2 -eq} 10e-6
+            # ::SpiceGenTcl::Ngspice::Sources::Vexp new 1 net1 net2 -v1 0 -v2 1 -td1 1e-9 -tau1 1e-9 -td2 {td2 -eq} -tau2 10e-6
             # ```
-            next $name v $npNode $nmNode $v1 $v2 $td1 $tau1 $td2 $tau2
+            next $name v $npNode $nmNode {*}$args
         }
     }
     
@@ -857,20 +840,20 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
 
     oo::class create Vpwl {
         superclass ::SpiceGenTcl::Ngspice::Sources::pwl
-        constructor {name npNode nmNode pwlSeq} {
+        constructor {name npNode nmNode args} {
             # Creates object of class `Vpwl` that describes piece-wise voltage source.
             #  name - name of the device without first-letter designator V
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  pwlSeq - sequence of pwl points in form (t0 v0 t1 v1 t2 v2 t3 v3 ...)
+            #  -seq - sequence of pwl points in form {t0 v0 t1 v1 t2 v2 t3 v3 ...}
             # ```
             # VYYYYYYY n+ n- PWL (T1 V1 <T2 V2 T3 V3 T4 V4 ...>)
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Sources::Vpwl new 1 npNode nmNode {0 0 {t1 -eq} 1 2 2 3 3 4 4}
+            # ::SpiceGenTcl::Ngspice::Sources::Vpwl new 1 npNode nmNode -seq {0 0 {t1 -eq} 1 2 2 3 3 4 4}
             # ```
-            next $name v $npNode $nmNode $pwlSeq
+            next $name v $npNode $nmNode {*}$args
         }
     }    
     
@@ -879,37 +862,26 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
     oo::class create Vsffm {
         superclass ::SpiceGenTcl::Ngspice::Sources::sffm
         mixin ::SpiceGenTcl::KeyArgsBuilder
-        constructor {name npNode nmNode v0 va fc mdi fs args} {
+        constructor {name npNode nmNode args} {
             # Creates object of class `Vsffm` that describes single-frequency FM voltage source.
             #  name - name of the device without first-letter designator V
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  v0 - initial value
-            #  va - pulsed value
-            #  fc - carrier frequency
-            #  mdi - modulation index
-            #  fs - signal frequency
-            #  args - optional arguments -phasec: carrier phase, -phases: signal phase
+            #  -v0 - initial value
+            #  -va - pulsed value
+            #  -fc - carrier frequency
+            #  -mdi - modulation index
+            #  -fs - signal frequency
+            #  -phasec - carrier phase, optional
+            #  -phases - signal phase, optional, require -phasec
             # ```
             # VYYYYYYY n+ n- SFFM(VO VA FC MDI FS PHASEC PHASES)
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Sources::Vsin new 1 net1 net2 0 2 50 -td 1e-6 -phase {phase -eq}
+            # ::SpiceGenTcl::Ngspice::Sources::Vsin new 1 net1 net2 -v0 0 -va 1 -fc {freq -eq} -mdi 0 -fs 1e3 -phasec {phase -eq}
             # ```
-            set paramDefList [my buildArgStr [list phasec phases]]
-            set arguments [argparse -inline "
-                $paramDefList
-            "]
-            set paramList ""
-            dict for {paramName value} $arguments {
-                if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                    lappend paramList "-$paramName" "[lindex $value 0] -eq"
-                } else {
-                    lappend paramList "-$paramName" "$value"
-                }
-            }
-            next $name v $npNode $nmNode $v0 $va $fc $mdi $fs {*}$paramList
+            next $name v $npNode $nmNode {*}$args
         }
     }
     
@@ -917,35 +889,25 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
 
     oo::class create Vam {
         superclass ::SpiceGenTcl::Ngspice::Sources::am
-        constructor {name npNode nmNode v0 va mf fc td args} {
+        constructor {name npNode nmNode args} {
             # Creates object of class `Vam` that describes single-frequency FM voltage source.
             #  name - name of the device without first-letter designator V
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  v0 - initial value
-            #  va - pulsed value
-            #  mf - modulating frequency
-            #  fc - carrier frequency
-            #  args - optional arguments -td: signal delay, -phases: phase
+            #  -v0 - initial value
+            #  -va - pulsed value
+            #  -mf - modulating frequency
+            #  -fc - carrier frequency
+            #  -td - signal delay, optional
+            #  -phases - phase, optional, require -td
             # ```
             # VYYYYYYY n+ n- AM(VA VO MF FC TD PHASES)
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Sources::Vam new 1 net1 net2 0 2 1e3 5e3 -phase {phase -eq}
+            # ::SpiceGenTcl::Ngspice::Sources::Vam new 1 net1 net2 -v0 0 -va 2 -mf 1e3 -fc {freq -eq} -td 1e-6 -phases {phase -eq}
             # ```
-            set arguments [argparse -inline {
-                -phases=
-            }]
-            set paramList ""
-            dict for {paramName value} $arguments {
-                if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                    lappend paramList "-$paramName" "[lindex $value 0] -eq"
-                } else {
-                    lappend paramList "-$paramName" "$value"
-                }
-            }
-            next $name v $npNode $nmNode $v0 $va $mf $fc $td {*}$paramList
+            next $name v $npNode $nmNode {*}$args
         }
     }    
     
@@ -953,20 +915,20 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
 
     oo::class create Idc {
         superclass ::SpiceGenTcl::Ngspice::Sources::dc
-        constructor {name npNode nmNode dcVal} {
-            # Creates object of class `Idc` that describes simple constant current source.
-            #  name - name of the device without first-letter designator V
+        constructor {name npNode nmNode args} {
+            # Creates object of class `Idc` that describes simple constant voltage source.
+            #  name - name of the device without first-letter designator I
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  dcVal - value of constant current
+            #  -dc - DC voltage value
             # ```
             # IYYYYYYY n+ n- <<DC> DC/TRAN VALUE>>
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Sources::Idc new 1 netp netm 10 -acphase 45
+            # ::SpiceGenTcl::Ngspice::Sources::Idc new 1 netp netm -dc 10
             # ```
-            next $name i $npNode $nmNode $dcVal
+            next $name i $npNode $nmNode {*}$args
         }
     }
 
@@ -974,28 +936,20 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
 
     oo::class create Iac {
         superclass ::SpiceGenTcl::Ngspice::Sources::ac
-        constructor {name npNode nmNode acMag args} {
-            # Creates object of class `Iac` that describes simple ac current source.
+        constructor {name npNode nmNode args} {
+            # Creates object of class `Iac` that describes ac current source.
             #  name - name of the device without first-letter designator I
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  acMag - value of ac current
-            #  args - optional phase of ac current
+            #  -dc - AC current value
+            #  -acphase - phase of AC current
             # ```
-            # IYYYYYYY n+ n-  <AC <ACMAG <ACPHASE>>>
+            # IYYYYYYY n+ n- <AC<ACMAG<ACPHASE>>>
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Sources::Iac new 1 netp netm 10 -acphase 45
-            # ```
-            set arguments [argparse {
-                -acphase=
-            }]
-            if {[info exists acphase]} {
-                next $name i $npNode $nmNode $acMag -acphase $acphase
-            } else {
-                next $name i $npNode $nmNode $acMag
-            }
+            # ::SpiceGenTcl::Ngspice::Sources::Iac new 1 netp netm -ac 10 -acphase 45
+            next $name i $npNode $nmNode {*}$args
         }
     }
     
@@ -1004,33 +958,27 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
 
     oo::class create Ipulse {
         superclass ::SpiceGenTcl::Ngspice::Sources::pulse
-        constructor {name npNode nmNode low high td tr tf pw per args} {
+        constructor {name npNode nmNode args} {
             # Creates object of class `Ipulse` that describes pulse current source.
             #  name - name of the device without first-letter designator I
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  low - initial value
-            #  high - pulsed value
-            #  td - delay time
-            #  tr - rise time
-            #  pw - pulse width
-            #  per - period
-            #  args - option argument -np: number of pulses
+            #  -low - low value
+            #  -high - high value
+            #  -td - time delay
+            #  -tr - rise time
+            #  -tf - fall time
+            #  -pw - width of pulse
+            #  -per - period time
+            #  -np - number of pulses, optional
             # ```
             # IYYYYYYY n+ n- PULSE(V1 V2 TD TR TF PW PER NP)
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Sources::Ipulse new 1 net1 net2 0 1 {td -eq} 1e-9 1e-9 10e-6 20e-6 -np {np -eq}
+            # ::SpiceGenTcl::Ngspice::Sources::Ipulse new 1 net1 net2 -low 0 -high 1 -td {td -eq} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6 -np {np -eq}
             # ```
-            set arguments [argparse {
-                -np=
-            }]
-            if {[info exists np]} {
-                next $name i $npNode $nmNode $low $high $td $tr $tf $pw $per -np $np
-            } else {
-                next $name i $npNode $nmNode $low $high $td $tr $tf $pw $per
-            }
+            next $name i $npNode $nmNode {*}$args
         }
     }
     
@@ -1039,35 +987,25 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
     oo::class create Isin {
         superclass ::SpiceGenTcl::Ngspice::Sources::sin
         mixin ::SpiceGenTcl::KeyArgsBuilder
-        constructor {name npNode nmNode v0 va freq args} {
+        constructor {name npNode nmNode args} {
             # Creates object of class `Isin` that describes sinusoidal current source.
             #  name - name of the device without first-letter designator I
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  v0 - initial value
-            #  va - pulsed value
-            #  freq - delay time
-            #  args - optional arguments -td: delay, -theta: damping factor, -phase: phase
+            #  -v0 - DC shift value
+            #  -va - amplitude value
+            #  -freq - frequency of sinusoidal signal
+            #  -td - time delay, optional
+            #  -theta - damping factor, optional, require -td
+            #  -phase - phase of signal, optional, require -td and -phase
             # ```
             # IYYYYYYY n+ n- SIN(VO VA FREQ TD THETA PHASE)
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Sources::Isin new 1 net1 net2 0 2 50 -td 1e-6 -phase {phase -eq}
+            # ::SpiceGenTcl::Ngspice::Sources::Isin new 1 net1 net2 -v0 0 -va 2 -freq {freq -eq} -td 1e-6 -theta {theta -eq}
             # ```
-            set paramDefList [my buildArgStr [list td theta phase]]
-            set arguments [argparse -inline "
-                $paramDefList
-            "]
-            set paramList ""
-            dict for {paramName value} $arguments {
-                if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                    lappend paramList "-$paramName" "[lindex $value 0] -eq"
-                } else {
-                    lappend paramList "-$paramName" "$value"
-                }
-            }
-            next $name i $npNode $nmNode $v0 $va $freq {*}$paramList
+            next $name i $npNode $nmNode {*}$args
         }
     }
     
@@ -1075,25 +1013,25 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
 
     oo::class create Iexp {
         superclass ::SpiceGenTcl::Ngspice::Sources::exp
-        constructor {name npNode nmNode v1 v2 td1 tau1 td2 tau2} {
+        constructor {name npNode nmNode args} {
             # Creates object of class `Iexp` that describes exponential current source.
             #  name - name of the device without first-letter designator I
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  v1 - initial value
-            #  v2 - pulsed value
-            #  td1 - rise delay time
-            #  tau1 - rise time constant
-            #  td2 - fall delay time
-            #  tau2 - fall time constant
+            #  -v1 - initial value
+            #  -v2 - pulsed value
+            #  -td1 - rise delay time
+            #  -tau1 - rise time constant
+            #  -td2 - fall delay time
+            #  -tau2 - fall time constant
             # ```
             # IYYYYYYY n+ n- EXP(V1 V2 TD1 TAU1 TD2 TAU2)
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Sources::Iexp new 1 net1 net2 0 1 1e-9 1e-9 {td2 -eq} 10e-6
+            # ::SpiceGenTcl::Ngspice::Sources::Iexp new 1 net1 net2 -v1 0 -v2 1 -td1 1e-9 -tau1 1e-9 -td2 {td2 -eq} -tau2 10e-6
             # ```
-            next $name i $npNode $nmNode $v1 $v2 $td1 $tau1 $td2 $tau2
+            next $name i $npNode $nmNode {*}$args
         }
     }
 
@@ -1101,20 +1039,20 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
 
     oo::class create Ipwl {
         superclass ::SpiceGenTcl::Ngspice::Sources::pwl
-        constructor {name npNode nmNode pwlSeq} {
-            # Creates object of class `Ipwl` that describes piece-wise linear current source.
+        constructor {name npNode nmNode args} {
+            # Creates object of class `Ipwl` that describes piece-wise current source.
             #  name - name of the device without first-letter designator I
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  pwlSeq - sequence of pwl points in form (t0 i0 t1 i1 t2 i2 t3 i3 ...)
+            #  -seq - sequence of pwl points in form {t0 v0 t1 v1 t2 v2 t3 v3 ...}
             # ```
-            # IYYYYYYY n+ n- PWL (T1 I1 <T2 I2 T3 I3 T4 I4 ...>)
+            # IYYYYYYY n+ n- PWL (T1 V1 <T2 V2 T3 V3 T4 V4 ...>)
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Sources::Ipwl new 1 npNode nmNode {0 0 {t1 -eq} 1 2 2 3 3 4 4}
+            # ::SpiceGenTcl::Ngspice::Sources::Ipwl new 1 npNode nmNode -seq {0 0 {t1 -eq} 1 2 2 3 3 4 4}
             # ```
-            next $name i $npNode $nmNode $pwlSeq
+            next $name i $npNode $nmNode {*}$args
         }
     }   
     
@@ -1123,37 +1061,26 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
     oo::class create Isffm {
         superclass ::SpiceGenTcl::Ngspice::Sources::sffm
         mixin ::SpiceGenTcl::KeyArgsBuilder
-        constructor {name npNode nmNode v0 va fc mdi fs args} {
+        constructor {name npNode nmNode args} {
             # Creates object of class `Isffm` that describes single-frequency FM current source.
             #  name - name of the device without first-letter designator I
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  v0 - initial value
-            #  va - pulsed value
-            #  fc - carrier frequency
-            #  mdi - modulation index
-            #  fs - signal frequency
-            #  args - optional arguments -phasec: carrier phase, -phases: signal phase
+            #  -v0 - initial value
+            #  -va - pulsed value
+            #  -fc - carrier frequency
+            #  -mdi - modulation index
+            #  -fs - signal frequency
+            #  -phasec - carrier phase, optional
+            #  -phases - signal phase, optional, require -phasec
             # ```
             # IYYYYYYY n+ n- SFFM(VO VA FC MDI FS PHASEC PHASES)
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Sources::Isin new 1 net1 net2 0 2 50 -td 1e-6 -phase {phase -eq}
+            # ::SpiceGenTcl::Ngspice::Sources::Isin new 1 net1 net2 -v0 0 -va 1 -fc {freq -eq} -mdi 0 -fs 1e3 -phasec {phase -eq}
             # ```
-            set paramDefList [my buildArgStr [list phasec phases]]
-            set arguments [argparse -inline "
-                $paramDefList
-            "]
-            set paramList ""
-            dict for {paramName value} $arguments {
-                if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                    lappend paramList "-$paramName" "[lindex $value 0] -eq"
-                } else {
-                    lappend paramList "-$paramName" "$value"
-                }
-            }
-            next $name i $npNode $nmNode $v0 $va $fc $mdi $fs {*}$paramList
+            next $name i $npNode $nmNode {*}$args
         }
     }
         
@@ -1161,36 +1088,25 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
 
     oo::class create Iam {
         superclass ::SpiceGenTcl::Ngspice::Sources::am
-        constructor {name npNode nmNode v0 va mf fc td args} {
-            # Creates object of class `Iam` that describes single-frequency AM current source.
+        constructor {name npNode nmNode args} {
+            # Creates object of class `Iam` that describes single-frequency FM current source.
             #  name - name of the device without first-letter designator I
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  v0 - initial value
-            #  va - pulsed value
-            #  mf - modulating frequency
-            #  fc - carrier frequency
-            #  td - signal delay
-            #  args - optional argument -phases: phase
+            #  -v0 - initial value
+            #  -va - pulsed value
+            #  -mf - modulating frequency
+            #  -fc - carrier frequency
+            #  -td - signal delay, optional
+            #  -phases - phase, optional, require -td
             # ```
             # IYYYYYYY n+ n- AM(VA VO MF FC TD PHASES)
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Sources::Iam new 1 net1 net2 0 2 1e3 5e3 -phase {phase -eq}
+            # ::SpiceGenTcl::Ngspice::Sources::Iam new 1 net1 net2 -v0 0 -va 2 -mf 1e3 -fc {freq -eq} -td 1e-6 -phases {phase -eq}
             # ```
-            set arguments [argparse -inline {
-                -phases=
-            }]
-            set paramList ""
-            dict for {paramName value} $arguments {
-                if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                    lappend paramList "-$paramName" "[lindex $value 0] -eq"
-                } else {
-                    lappend paramList "-$paramName" "$value"
-                }
-            }
-            next $name i $npNode $nmNode $v0 $va $mf $fc $td {*}$paramList
+            next $name i $npNode $nmNode {*}$args
         }
     }
     
@@ -1198,38 +1114,41 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
   
     oo::class create Vccs {
         superclass ::SpiceGenTcl::Device
-        constructor {name npNode nmNode ncpNode ncmNode value args} {
+        constructor {name npNode nmNode ncpNode ncmNode args} {
             # Creates object of class `Vccs` that describes linear voltage-controlled current source.
             #  name - name of the device without first-letter designator G
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
             #  ncpNode - name of node connected to positive controlling pin
             #  ncmNode - name of node connected to negative controlling pin
-            #  value - transconductance 
-            #  args - on or off state parameter, optional
+            #  -trcond - transconductance
+            #  -m - multiplier factor, optional
             # ```
             # GXXXXXXX N+ N- NC+ NC- VALUE <m=val>
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Sources::Vccs new 1 net1 0 netc 0 10 -m 1
+            # ::SpiceGenTcl::Ngspice::Sources::Vccs new 1 net1 0 netc 0 -trcond 10 -m 1
             # ```
-            set arguments [argparse {
+            set arguments [argparse -inline {
+                {-trcond -required}
                 -m=
             }]
-            if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                lappend paramList "trcond [lindex $value 0] -poseq"
+            set trcondVal [dict get $arguments trcond]
+            if {([llength $trcondVal]>1) && ([lindex $trcondVal 1]=="-eq")} {
+                lappend params "trcond [lindex $trcondVal 0] -poseq"
             } else {
-                lappend paramList "trcond $value -pos"
+                lappend params "trcond $trcondVal -pos"
             }
-            if {[info exists m]} {
-                if {([llength $m]>1) && ([lindex $m 1]=="-eq")} {
-                    lappend paramList "m [lindex $m 0] -eq"
+            if {[dict exists $arguments m]} {
+                set mVal [dict get $arguments m]
+                if {([llength $mVal]>1) && ([lindex $mVal 1]=="-eq")} {
+                    lappend params "m [lindex $mVal 0] -eq"
                 } else {
-                    lappend paramList "m $m"
+                    lappend params "m $mVal"
                 }
             }
-            next g$name [list "np $npNode" "nm $nmNode" "ncp $ncpNode" "ncm $ncmNode"] $paramList
+            next g$name [list "np $npNode" "nm $nmNode" "ncp $ncpNode" "ncm $ncmNode"] $params
         }
     }
     # alias for Vccs class
@@ -1241,27 +1160,31 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
   
     oo::class create Vcvs {
         superclass ::SpiceGenTcl::Device
-        constructor {name npNode nmNode ncpNode ncmNode value} {
+        constructor {name npNode nmNode ncpNode ncmNode args} {
             # Creates object of class `Vcvs` that describes linear voltage-controlled current source.
             #  name - name of the device without first-letter designator G
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
             #  ncpNode - name of node connected to positive controlling pin
             #  ncmNode - name of node connected to negative controlling pin
-            #  value - voltage gain 
+            #  -gain - voltage gain 
             # ```
             # EXXXXXXX N+ N- NC+ NC- VALUE
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Sources::Vcvs new 1 net1 0 netc 0 10
+            # ::SpiceGenTcl::Ngspice::Sources::Vcvs new 1 net1 0 netc 0 -gain 10
             # ```
-            if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                lappend paramList "vgain [lindex $value 0] -poseq"
+            set arguments [argparse -inline {
+                {-gain -required}
+            }]
+            set gainVal [dict get $arguments gain]
+            if {([llength $gainVal]>1) && ([lindex $gainVal 1]=="-eq")} {
+                lappend params "vgain [lindex $gainVal 0] -poseq"
             } else {
-                lappend paramList "vgain $value -pos"
+                lappend params "vgain $gainVal -pos"
             }
-            next e$name [list "np $npNode" "nm $nmNode" "ncp $ncpNode" "ncm $ncmNode"] $paramList
+            next e$name [list "np $npNode" "nm $nmNode" "ncp $ncpNode" "ncm $ncmNode"] $params
         }
     }
     # alias for Vcvs class
@@ -1273,55 +1196,43 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
   
     oo::class create Cccs {
         superclass ::SpiceGenTcl::Device
-        variable Vname
-        constructor {name npNode nmNode vname value args} {
+        constructor {name npNode nmNode args} {
             # Creates object of class `Cccs` that describes linear current-controlled current source. 
             #  name - name of the device without first-letter designator F
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  vname - name of controlling source
-            #  value - current gain 
-            #  args - optional argument -m: parallel source multiplicator
+            #  -consrc - name of controlling source
+            #  -gain - current gain 
+            #  -m - parallel source multiplicator
             # ```
             # FXXXXXXX N+ N- VNAM VALUE <m=val>
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Sources::Cccs new 1 net1 0 netc 0 10
+            # ::SpiceGenTcl::Ngspice::Sources::Cccs new 1 net1 0 netc 0 -consrc vc -gain 10 -m 1
             # ```
-            set arguments [argparse {
+            set arguments [argparse -inline {
+                {-consrc -required}
+                {-gain -required}
                 -m=
             }]
-            if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                lappend paramList "igain [lindex $value 0] -poseq"
+            set consrcVal [dict get $arguments consrc]
+            lappend params "consrc $consrcVal -posnocheck"
+            set gainVal [dict get $arguments gain]
+            if {([llength $gainVal]>1) && ([lindex $gainVal 1]=="-eq")} {
+                lappend params "igain [lindex $gainVal 0] -poseq"
             } else {
-                lappend paramList "igain $value -pos"
+                lappend params "igain $gainVal -pos"
             }
-            if {[info exists m]} {
-                if {([llength $m]>1) && ([lindex $m 1]=="-eq")} {
-                    lappend paramList "m [lindex $m 0] -eq"
+            if {[dict exists $arguments m]} {
+                set mVal [dict get $arguments m]
+                if {([llength $mVal]>1) && ([lindex $mVal 1]=="-eq")} {
+                    lappend params "m [lindex $mVal 0] -eq"
                 } else {
-                    lappend paramList "m $m"
+                    lappend params "m $mVal"
                 }
             }
-            set Vname [::SpiceGenTcl::ParameterPositionalNoCheck new vname $vname]
-            next f$name [list "np $npNode" "nm $nmNode"] $paramList
-        }
-        method genSPICEString {} {
-            my variable Pins
-            my variable Params
-            dict for {pinName pin} $Pins {
-                set error [catch {$pin genSPICEString} errStr] 
-                if {$error!=1} {
-                    lappend nodes [$pin genSPICEString]
-                } else {
-                    error "Device '[my configure -Name]' can't be netlisted because '$pinName' pin is floating"
-                }
-            }
-            dict for {paramName param} $Params {
-                lappend params [$param genSPICEString]
-            }
-            return "[my configure -Name] [join $nodes] [$Vname configure -Value] [join $params]"
+            next f$name [list "np $npNode" "nm $nmNode"] $params
         } 
     }
     # alias for Cccs class
@@ -1333,45 +1244,34 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
   
     oo::class create Ccvs {
         superclass ::SpiceGenTcl::Device
-        variable Vname
-        constructor {name npNode nmNode vname value args} {
+        constructor {name npNode nmNode args} {
             # Creates object of class `Ccvs` that describes linear current-controlled current source.
             #  name - name of the device without first-letter designator H
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  vname - name of controlling source
-            #  value - transresistance 
+            #  -consrc - name of controlling source
+            #  -transr - transresistance 
             # ```
             # HXXXXXXX N+ N- VNAM VALUE
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Sources::Ccvs new 1 net1 0 vc 10
+            # ::SpiceGenTcl::Ngspice::Sources::Ccvs new 1 net1 0 -consrc vc -transr {tres -eq}
             # ```
-            if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                lappend paramList "tres [lindex $value 0] -poseq"
+            set arguments [argparse -inline {
+                {-consrc -required}
+                {-transr -required}
+            }]
+            set consrcVal [dict get $arguments consrc]
+            lappend params "consrc $consrcVal -posnocheck"
+            set transrVal [dict get $arguments transr]
+            if {([llength $transrVal]>1) && ([lindex $transrVal 1]=="-eq")} {
+                lappend params "transr [lindex $transrVal 0] -poseq"
             } else {
-                lappend paramList "tres $value -pos"
+                lappend params "transr $transrVal -pos"
             }
-            set Vname [::SpiceGenTcl::ParameterPositionalNoCheck new vname $vname]
-            next h$name [list "np $npNode" "nm $nmNode"] $paramList
+            next h$name [list "np $npNode" "nm $nmNode"] $params
         }
-        method genSPICEString {} {
-            my variable Pins
-            my variable Params
-            dict for {pinName pin} $Pins {
-                set error [catch {$pin genSPICEString} errStr] 
-                if {$error!=1} {
-                    lappend nodes [$pin genSPICEString]
-                } else {
-                    error "Device '[my configure -Name]' can't be netlisted because '$pinName' pin is floating"
-                }
-            }
-            dict for {paramName param} $Params {
-                lappend params [$param genSPICEString]
-            }
-            return "[my configure -Name] [join $nodes] [$Vname configure -Value] [join $params]"
-        } 
     }
     # alias for Ccvs class
     oo::class create H {
@@ -1383,33 +1283,42 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
     oo::class create BehaviouralSource {
         superclass ::SpiceGenTcl::Device
         mixin ::SpiceGenTcl::KeyArgsBuilder
-        constructor {name npNode nmNode type expr args} {
+        constructor {name npNode nmNode args} {
             # Creates object of class `BehaviouralSource` that describes behavioural source.
             #  name - name of the device without first-letter designator R
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  rExpr - equation of resistance
-            #  args - keyword instance parameters
+            #  -i - current expression
+            #  -v - voltage expression
             # ```
             # BXXXXXXX n+ n- <i=expr> <v=expr> <tc1=value> <tc2=value> <dtemp=value> <temp=value>
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Sources::BehaviouralSource new 1 netp netm i "V(a)+V(b)+pow(V(c),2)" -tc1 1
+            # ::SpiceGenTcl::Ngspice::Sources::BehaviouralSource new 1 netp netm -v "V(a)+V(b)+pow(V(c),2)" -tc1 1
             # ```
-            set paramsNames [list tc1 tc2 noisy temp dtemp]
-            set paramDefList [my buildArgStr $paramsNames]
-            set arguments [argparse -inline "
-                $paramDefList
-            "]    
-            if {$type ni {i v I V}} {
-                error "Type '$type' in 'b${name}' source not 'i' or 'v'"
+            set arguments [argparse -inline {
+                {-i= -forbid {v}}
+                {-v= -forbid {i}}
+                -tc1=
+                -tc2=
+                -noisy=
+                -temp=
+                -dtemp=
+            }]
+            if {[dict exists $arguments i]} {
+                lappend params "i [dict get $arguments i] -eq"
+            } elseif {[dict exists $arguments v]} {
+                lappend params "v [dict get $arguments v] -eq"
+            } else {
+                error "Equation must be specified as argument to -i or -v"
             }
-            lappend paramList "$type $expr -eq"
             dict for {paramName value} $arguments {
-                lappend paramList "$paramName $value"
+                if {$paramName ni {i v}} {
+                    lappend params "$paramName $value"
+                }
             }
-            next b$name [list "np $npNode" "nm $nmNode"] $paramList
+            next b$name [list "np $npNode" "nm $nmNode"] $params
         }
     }
 

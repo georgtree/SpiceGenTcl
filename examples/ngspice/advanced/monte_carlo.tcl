@@ -58,7 +58,7 @@ variable pi
 # create top-level circuit
 set circuit [Circuit new {Monte-Carlo}]
 # add elements to circuit
-$circuit add [Vac new 1 n001 0 1]
+$circuit add [Vac new 1 n001 0 -ac 1]
 $circuit add [R new 1 n002 n001 -r 141]
 $circuit add [R new 2 0 out -r 141]
 C create c1 1 out 0 -c 1e-9

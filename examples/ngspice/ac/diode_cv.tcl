@@ -11,9 +11,9 @@ variable pi
 set circuit [Circuit new {diode CV}]
 # add elements to circuit
 $circuit add [D new 1 0 c diomod -area 1 -lm 1e-6]
-set vdc [Vdc new a c nin 0]
+set vdc [Vdc new a c nin -dc 0]
 $circuit add $vdc
-$circuit add [Vac new b nin 0 1]
+$circuit add [Vac new b nin 0 -ac 1]
 $circuit add [DiodeModel new diomod -is 1e-12 -n 1.2 -rs 0.01 -cj0 1e-9 -trs1 0.001 -xti 5]
 $circuit add [Ac new lin 1 1e5 1e5]
 # add voltage sweep

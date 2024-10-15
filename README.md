@@ -109,7 +109,7 @@ The only argument we provide is the name of the circuit, which will be printed o
 
 The next step is building netlist by addding elements to top circuit object:
 ```tcl
-$circuit add [Vdc new 1 in 0 1]
+$circuit add [Vdc new 1 in 0 -dc 1]
 $circuit add [R new 1 in out -r 1e3]
 $circuit add [R new 2 out 0 -r 2e3]
 $circuit add [Dc new v1 0 5 0.1]

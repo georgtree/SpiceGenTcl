@@ -6,10 +6,10 @@ importNgspice
 # create top-level circuit
 set circuit [Circuit new {simple differential pair}]
 # add elements to circuit
-$circuit add [Vdc new cc 8 0 12]
-$circuit add [Vdc new ee 9 0 -12]
-$circuit add [Vac new cm 1 0 1]
-$circuit add [Vac new dm 1 11 1]
+$circuit add [Vdc new cc 8 0 -dc 12]
+$circuit add [Vdc new ee 9 0 -dc -12]
+$circuit add [Vac new cm 1 0 -ac 1]
+$circuit add [Vac new dm 1 11 -ac 1]
 $circuit add [Q new 1 4 2 6 qnr]
 $circuit add [Q new 2 5 3 6 qnl]
 $circuit add [R new s1 11 2 -r 1e3]

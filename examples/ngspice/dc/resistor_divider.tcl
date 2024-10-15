@@ -7,7 +7,7 @@ importNgspice
 # create top-level circuit
 set circuit [Circuit new {voltage divider netlist}]
 # add elements to circuit
-$circuit add [Vdc new 1 in 0 1]
+$circuit add [Vdc new 1 in 0 -dc 1]
 $circuit add [R new 1 in out -r 1e3]
 $circuit add [R new 2 out 0 -r 2e3]
 $circuit add [Dc new v1 0 5 0.1]

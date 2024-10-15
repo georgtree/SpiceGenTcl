@@ -21,7 +21,7 @@ namespace eval Advanced {
         # create top-level circuit
         set circuit [Circuit new {Monte-Carlo}]
         # add elements to circuit
-        $circuit add [Vac new 1 n001 0 1]
+        $circuit add [Vac new 1 n001 0 -ac 1]
         $circuit add [R new 1 n002 n001 -r 141]
         $circuit add [R new 2 0 out -r 141]
         C create c1 1 out 0 -c 1e-9
@@ -44,7 +44,7 @@ namespace eval Advanced {
         Here, we use a different method for creating a class instance: `create` instead of `new`. With `create`, we can directly 
         set a custom object reference name, rather than relying on the automatically generated one by Tcl.
         ```tcl
-        C create c1 1 out 0 1e-9
+        C create c1 1 out 0 -c 1e-9
         ```
         Keep in mind that `c1` is an object reference, not the name of a variable storing the reference. 
         Therefore, it can be used as an object command directly, without the need for a `$`.

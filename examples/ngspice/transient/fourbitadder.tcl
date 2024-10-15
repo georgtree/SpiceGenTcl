@@ -116,10 +116,10 @@ $circuit add [XAuto new $fourbit x18 {1 2 3 4 5 6 7 8 9 10 11 12 0 13 99}]
 set trtf 10e-9
 set tonStep 10e-9
 set perStep 50e-9
-$circuit add [Vdc new cc 99 0 5]
+$circuit add [Vdc new cc 99 0 -dc 5]
 set i 1
 foreach name [list in1a in1b in2a in2b in3a in3b in4a in4b] {
-    $circuit add [Vpulse new $name $i 0 0 3 0 $trtf $trtf [expr {$tonStep*pow(2,$i-1)}] [expr {$perStep*pow(2,$i-1)}]]
+    $circuit add [Vpulse new $name $i 0 -low 0 -high 3 -td 0 -tf $trtf -tr $trtf -pw [expr {$tonStep*pow(2,$i-1)}] -per [expr {$perStep*pow(2,$i-1)}]]
     incr i
 }
 

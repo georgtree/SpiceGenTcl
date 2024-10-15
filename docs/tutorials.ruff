@@ -20,7 +20,7 @@ namespace eval Tutorials {
         # incrementally build netlist by adding different elements
         $netlist add [R new 1 net1 net2 -r 10]
         $netlist add [R new 5 net1 net2 -model res_sem -l 10e-6 -w 100e-6]
-        $netlist add [RSemModel new rsem1mod -tc1 0.1 -tc2 0.4]
+        $netlist add [RModel new rsem1mod -tc1 0.1 -tc2 0.4]
         $netlist add [R new 2 net1 net2 -r {{r1+5/10} -eq}]
         $netlist add [C new 1 net2 net3 -c 1e-6]
         $netlist add [ParamStatement new {{r1 1} {r2 2}} -name ps1]
@@ -28,7 +28,7 @@ namespace eval Tutorials {
         $netlist add [Include new {/fold1/fold2/file.lib} -name inc1]
         $netlist add [Library new {/fold1/fold2/file.lib} fast -name lib1]
         $netlist add [RawString new {*comment in form of raw string} -name raw1]
-        $netlist add [Vdc new 1 net1 net3 5]
+        $netlist add [Vdc new 1 net1 net3 -dc 5]
         $netlist add [Tran new 1e-6 1e-3 -uic -name tran1]
         ```
         Here we can see the [::SpiceGenTcl::Netlist::add] method that adds elemements objects references to [::SpiceGenTcl::Netlist] object.
@@ -236,10 +236,10 @@ namespace eval Tutorials {
         # create top-level circuit
         set circuit [Circuit new {diode IV}]
         # add elements to circuit
-        $circuit add [D new 1 anode 0 diomod -area 1 -lm 1e-6]
-        $circuit add [Vdc new a anode 0 0]
-        $circuit add [DiodeModel new diomod -is 1e-12 -n 1.2 -rs 0.01 -cj0 1e-9 -trs1 0.001 -xti 5]
-        $circuit add [Dc new va 0 2 0.01]
+	$circuit add [D new 1 anode 0 diomod -area 1 -lm 1e-6]
+	$circuit add [Vdc new a anode 0 -dc 0]
+	$circuit add [DiodeModel new diomod -is 1e-12 -n 1.2 -rs 0.01 -cj0 1e-9 -trs1 0.001 -xti 5]
+	$circuit add [Dc new va 0 2 0.01]
         ```
         In the upper block of code, we add a diode instance using the [::SpiceGenTcl::Ngspice::SemiconductorDevices::D] command, create the corresponding diode model 
         with the [::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel] command, add a DC voltage source that will be swept, and include a DC analysis statement. 
@@ -329,14 +329,14 @@ namespace eval Tutorials {
         set circuit [Circuit new {diode CV}]
         # add elements to circuit
         $circuit add [D new 1 0 c diomod -area 1 -lm 1e-6]
-        set vdc [Vdc new a c nin 0]
+        set vdc [Vdc new a c nin -dc 0]
         $circuit add $vdc
-        $circuit add [Vac new b nin 0 1]
+        $circuit add [Vac new b nin 0 -ac 1]
         $circuit add [DiodeModel new diomod -is 1e-12 -n 1.2 -rs 0.01 -cj0 1e-9 -trs1 0.001 -xti 5]
         $circuit add [Ac new lin 1 1e5 1e5]
         ```
         What are new here:
-        - AC voltage source `[Vac new b nin 0 1]` - uses to generate AC signal
+        - AC voltage source `[Vac new b nin 0 -ac 1]` - uses to generate AC signal
         - AC analysis statement `[Ac new lin 1 1e5 1e5]` - uses to define AC frequency, 100 kHz in our case.
          
         The final circuit looks like this:
@@ -418,10 +418,10 @@ namespace eval Tutorials {
         # create top-level circuit
         set circuit [Circuit new {simple differential pair}]
         # add elements to circuit
-        $circuit add [Vdc new cc 8 0 12]
-        $circuit add [Vdc new ee 9 0 -12]
-        $circuit add [Vac new cm 1 0 1]
-        $circuit add [Vac new dm 1 11 1]
+        $circuit add [Vdc new cc 8 0 -dc 12]
+        $circuit add [Vdc new ee 9 0 -dc -12]
+        $circuit add [Vac new cm 1 0 -ac 1]
+        $circuit add [Vac new dm 1 11 -ac 1]
         $circuit add [Q new 1 4 2 6 qnr]
         $circuit add [Q new 2 5 3 6 qnl]
         $circuit add [R new s1 11 2 -r 1e3]
@@ -486,8 +486,8 @@ namespace eval Tutorials {
                 # add elements to subcircuit definition
                 my add [C new l out dgnd -c 0.1e-12]
                 my add [C new 2 out vdd -c 0.1e-12]
-                my add [VSwitch new p out vdd vdd in swswitch]
-                my add [VSwitch new n out dgnd in dgnd switchn]
+                my add [VSwitch new p out vdd vdd in -model swswitch]
+                my add [VSwitch new n out dgnd in dgnd -model switchn]
                 # pass name, list of pins and list of parameters to Subcircuit constructor
                 next inverter $pins $params
             }
@@ -505,8 +505,8 @@ namespace eval Tutorials {
         $circuit add [Options new {{method gear} {maxord 3}}]
         $circuit add [RawString new ".ic v(osc_out)=0.25"]
         $circuit add $inverter
-        $circuit add [Vdc new dd vdd2 0 3]
-        $circuit add [Vdc new measure vdd2 vdd 0]
+        $circuit add [Vdc new dd vdd2 0 -dc 3]
+        $circuit add [Vdc new measure vdd2 vdd -dc 0]
         $circuit add [C new vdd vdd 0 -c 1e-18]
         ```
         
@@ -704,10 +704,10 @@ namespace eval Tutorials {
         set trtf 10e-9
         set tonStep 10e-9
         set perStep 50e-9
-        $circuit add [Vdc new cc 99 0 5]
+        $circuit add [Vdc new cc 99 0 -dc 5]
         set i 1
         foreach name [list in1a in1b in2a in2b in3a in3b in4a in4b] {
-            $circuit add [Vpulse new $name $i 0 0 3 0 $trtf $trtf [expr {$tonStep*pow(2,$i-1)}] [expr {$perStep*pow(2,$i-1)}]]
+            $circuit add [Vpulse new $name $i 0 -low 0 -high 3 -td 0 -tf $trtf -tr $trtf -pw [expr {$tonStep*pow(2,$i-1)}] -per [expr {$perStep*pow(2,$i-1)}]]
             incr i
         }
         ```

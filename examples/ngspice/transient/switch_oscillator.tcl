@@ -19,8 +19,8 @@ oo::class create Inverter {
         # add elements to subcircuit definition
         my add [C new l out dgnd -c 0.1e-12]
         my add [C new 2 out vdd -c 0.1e-12]
-        my add [VSwitch new p out vdd vdd in swswitch]
-        my add [VSwitch new n out dgnd in dgnd switchn]
+        my add [VSwitch new p out vdd vdd in -model swswitch]
+        my add [VSwitch new n out dgnd in dgnd -model switchn]
         # pass name, list of pins and list of parameters to Subcircuit constructor
         next inverter $pins $params
     }
@@ -36,8 +36,8 @@ $circuit add [Tran new 50e-12 80e-9]
 $circuit add [Options new {{method gear} {maxord 3}}]
 $circuit add [RawString new ".ic v(osc_out)=0.25"]
 $circuit add $inverter
-$circuit add [Vdc new dd vdd2 0 3]
-$circuit add [Vdc new measure vdd2 vdd 0]
+$circuit add [Vdc new dd vdd2 0 -dc 3]
+$circuit add [Vdc new measure vdd2 vdd -dc 0]
 $circuit add [C new vdd vdd 0 -c 1e-18]
 
 # add multiple inverters in the cycle

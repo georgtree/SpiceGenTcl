@@ -28,7 +28,7 @@
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create top-level circuit</font></i>
 <b><font color=#923B23>set</font></b> circuit [<b><font color=#923B23>Circuit</font></b> new {Monte-Carlo}]
 <i><font color=#4b5d50># add elements to circuit</font></i>
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vac</font></b> new 1 n001 0 1]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vac</font></b> new 1 n001 0 <font color=#463e11>-ac</font> 1]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new 1 n002 n001 <font color=#463e11>-r</font> 141]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new 2 0 out <font color=#463e11>-r</font> 141]
 <b><font color=#923B23>C</font></b> create c1 1 out 0 <font color=#463e11>-c</font> 1e-9
@@ -50,7 +50,7 @@
 
 </figure><p class='ruff'>Here, we use a different method for creating a class instance: <code>create</code> instead of <code>new</code>. With <code>create</code>, we can directly set a custom object reference name, rather than relying on the automatically generated one by Tcl.</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>C</font></b> create c1 1 out 0 1e-9
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>C</font></b> create c1 1 out 0 <font color=#463e11>-c</font> 1e-9
 </pre>
 
 </figure><p class='ruff'>Keep in mind that <code>c1</code> is an object reference, not the name of a variable storing the reference. Therefore, it can be used as an object command directly, without the need for a <code>$</code>.</p>

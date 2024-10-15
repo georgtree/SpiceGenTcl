@@ -34,7 +34,7 @@
 <i><font color=#4b5d50># incrementally build netlist by adding different elements</font></i>
 <font color=#4A181B>$netlist</font> add [<b><font color=#923B23>R</font></b> new 1 net1 net2 <font color=#463e11>-r</font> 10]
 <font color=#4A181B>$netlist</font> add [<b><font color=#923B23>R</font></b> new 5 net1 net2 <font color=#463e11>-model</font> res_sem <font color=#463e11>-l</font> 10e-6 <font color=#463e11>-w</font> 100e-6]
-<font color=#4A181B>$netlist</font> add [RSemModel new rsem1mod <font color=#463e11>-tc1</font> 0.1 <font color=#463e11>-tc2</font> 0.4]
+<font color=#4A181B>$netlist</font> add [<b><font color=#923B23>RModel</font></b> new rsem1mod <font color=#463e11>-tc1</font> 0.1 <font color=#463e11>-tc2</font> 0.4]
 <font color=#4A181B>$netlist</font> add [<b><font color=#923B23>R</font></b> new 2 net1 net2 <font color=#463e11>-r</font> {{r1+5/10} <font color=#463e11>-eq</font>}]
 <font color=#4A181B>$netlist</font> add [<b><font color=#923B23>C</font></b> new 1 net2 net3 <font color=#463e11>-c</font> 1e-6]
 <font color=#4A181B>$netlist</font> add [<b><font color=#923B23>ParamStatement</font></b> new {{r1 1} {r2 2}} <font color=#463e11>-name</font> ps1]
@@ -42,7 +42,7 @@
 <font color=#4A181B>$netlist</font> add [<b><font color=#923B23>Include</font></b> new {/fold1/fold2/file.lib} <font color=#463e11>-name</font> inc1]
 <font color=#4A181B>$netlist</font> add [<b><font color=#923B23>Library</font></b> new {/fold1/fold2/file.lib} fast <font color=#463e11>-name</font> lib1]
 <font color=#4A181B>$netlist</font> add [<b><font color=#923B23>RawString</font></b> new {*comment in form of raw string} <font color=#463e11>-name</font> raw1]
-<font color=#4A181B>$netlist</font> add [<b><font color=#923B23>Vdc</font></b> new 1 net1 net3 5]
+<font color=#4A181B>$netlist</font> add [<b><font color=#923B23>Vdc</font></b> new 1 net1 net3 <font color=#463e11>-dc</font> 5]
 <font color=#4A181B>$netlist</font> add [<b><font color=#923B23>Tran</font></b> new 1e-6 1e-3 <font color=#463e11>-uic</font> <font color=#463e11>-name</font> tran1]
 </pre>
 
@@ -252,7 +252,7 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <b><font color=#923B23>set</font></b> circuit [<b><font color=#923B23>Circuit</font></b> new {diode IV}]
 <i><font color=#4b5d50># add elements to circuit</font></i>
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>D</font></b> new 1 anode 0 diomod <font color=#463e11>-area</font> 1 <font color=#463e11>-lm</font> 1e-6]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new a anode 0 0]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new a anode 0 <font color=#463e11>-dc</font> 0]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>DiodeModel</font></b> new diomod <font color=#463e11>-is</font> 1e-12 <font color=#463e11>-n</font> 1.2 <font color=#463e11>-rs</font> 0.01 <font color=#463e11>-cj0</font> 1e-9 <font color=#463e11>-trs1</font> 0.001 <font color=#463e11>-xti</font> 5]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Dc</font></b> new va 0 2 0.01]
 </pre>
@@ -334,16 +334,16 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <b><font color=#923B23>set</font></b> circuit [<b><font color=#923B23>Circuit</font></b> new {diode CV}]
 <i><font color=#4b5d50># add elements to circuit</font></i>
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>D</font></b> new 1 0 c diomod <font color=#463e11>-area</font> 1 <font color=#463e11>-lm</font> 1e-6]
-<b><font color=#923B23>set</font></b> vdc [<b><font color=#923B23>Vdc</font></b> new a c nin 0]
+<b><font color=#923B23>set</font></b> vdc [<b><font color=#923B23>Vdc</font></b> new a c nin <font color=#463e11>-dc</font> 0]
 <font color=#4A181B>$circuit</font> add <font color=#4A181B>$vdc</font>
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vac</font></b> new b nin 0 1]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vac</font></b> new b nin 0 <font color=#463e11>-ac</font> 1]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>DiodeModel</font></b> new diomod <font color=#463e11>-is</font> 1e-12 <font color=#463e11>-n</font> 1.2 <font color=#463e11>-rs</font> 0.01 <font color=#463e11>-cj0</font> 1e-9 <font color=#463e11>-trs1</font> 0.001 <font color=#463e11>-xti</font> 5]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Ac</font></b> new lin 1 1e5 1e5]
 </pre>
 
 </figure><p class='ruff'>What are new here:</p>
 <ul class='ruff'>
-<li>AC voltage source <code>[<b><font color=#923B23>Vac</font></b> new b nin 0 1]</code> - uses to generate AC signal</li>
+<li>AC voltage source <code>[<b><font color=#923B23>Vac</font></b> new b nin 0 <font color=#463e11>-ac</font> 1]</code> - uses to generate AC signal</li>
 <li>AC analysis statement <code>[<b><font color=#923B23>Ac</font></b> new lin 1 1e5 1e5]</code> - uses to define AC frequency, 100 kHz in our case.</li>
 </ul>
 <p class='ruff'>The final circuit looks like this:</p>
@@ -411,10 +411,10 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create top-level circuit</font></i>
 <b><font color=#923B23>set</font></b> circuit [<b><font color=#923B23>Circuit</font></b> new {simple differential pair}]
 <i><font color=#4b5d50># add elements to circuit</font></i>
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new cc 8 0 12]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new ee 9 0 -12]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vac</font></b> new cm 1 0 1]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vac</font></b> new dm 1 11 1]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new cc 8 0 <font color=#463e11>-dc</font> 12]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new ee 9 0 <font color=#463e11>-dc</font> -12]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vac</font></b> new cm 1 0 <font color=#463e11>-ac</font> 1]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vac</font></b> new dm 1 11 <font color=#463e11>-ac</font> 1]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Q</font></b> new 1 4 2 6 qnr]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Q</font></b> new 2 5 3 6 qnl]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new s1 11 2 <font color=#463e11>-r</font> 1e3]
@@ -474,8 +474,8 @@ vrc2=-6.032e-04
         <i><font color=#4b5d50># add elements to subcircuit definition</font></i>
         <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>C</font></b> new l out dgnd <font color=#463e11>-c</font> 0.1e-12]
         <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>C</font></b> new 2 out vdd <font color=#463e11>-c</font> 0.1e-12]
-        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>VSwitch</font></b> new p out vdd vdd in swswitch]
-        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>VSwitch</font></b> new n out dgnd in dgnd switchn]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>VSwitch</font></b> new p out vdd vdd in <font color=#463e11>-model</font> swswitch]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>VSwitch</font></b> new n out dgnd in dgnd <font color=#463e11>-model</font> switchn]
         <i><font color=#4b5d50># pass name, list of pins and list of parameters to Subcircuit constructor</font></i>
         <b><font color=#923B23>next</font></b> inverter <font color=#4A181B>$pins</font> <font color=#4A181B>$params</font>
     }
@@ -493,8 +493,8 @@ vrc2=-6.032e-04
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Options</font></b> new {{<b><font color=#ca14ca>method</font></b> gear} {maxord 3}}]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>RawString</font></b> new <font color=#035103>&quot;.ic v(osc_out)=0.25&quot;</font>]
 <font color=#4A181B>$circuit</font> add <font color=#4A181B>$inverter</font>
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new dd vdd2 0 3]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new measure vdd2 vdd 0]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new dd vdd2 0 <font color=#463e11>-dc</font> 3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new measure vdd2 vdd <font color=#463e11>-dc</font> 0]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>C</font></b> new vdd vdd 0 <font color=#463e11>-c</font> 1e-18]
 </pre>
 
@@ -682,10 +682,10 @@ vrc2=-6.032e-04
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> trtf 10e-9
 <b><font color=#923B23>set</font></b> tonStep 10e-9
 <b><font color=#923B23>set</font></b> perStep 50e-9
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new cc 99 0 5]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new cc 99 0 <font color=#463e11>-dc</font> 5]
 <b><font color=#923B23>set</font></b> i 1
 <b><font color=#923B23>foreach</font></b> name [<b><font color=#923B23>list</font></b> in1a in1b in2a in2b in3a in3b in4a in4b] {
-    <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vpulse</font></b> new <font color=#4A181B>$name</font> <font color=#4A181B>$i</font> 0 0 3 0 <font color=#4A181B>$trtf</font> <font color=#4A181B>$trtf</font> [<b><font color=#923B23>expr</font></b> {<font color=#4A181B>$tonStep</font>*pow(2,<font color=#4A181B>$i</font>-1)}] [<b><font color=#923B23>expr</font></b> {<font color=#4A181B>$perStep</font>*pow(2,<font color=#4A181B>$i</font>-1)}]]
+    <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vpulse</font></b> new <font color=#4A181B>$name</font> <font color=#4A181B>$i</font> 0 <font color=#463e11>-low</font> 0 <font color=#463e11>-high</font> 3 <font color=#463e11>-td</font> 0 <font color=#463e11>-tf</font> <font color=#4A181B>$trtf</font> <font color=#463e11>-tr</font> <font color=#4A181B>$trtf</font> <font color=#463e11>-pw</font> [<b><font color=#923B23>expr</font></b> {<font color=#4A181B>$tonStep</font>*pow(2,<font color=#4A181B>$i</font>-1)}] <font color=#463e11>-per</font> [<b><font color=#923B23>expr</font></b> {<font color=#4A181B>$perStep</font>*pow(2,<font color=#4A181B>$i</font>-1)}]]
     <b><font color=#923B23>incr</font></b> i
 }
 </pre>
