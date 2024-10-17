@@ -796,15 +796,15 @@
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
 <tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DeviceModel::genSPICEString" title="::SpiceGenTcl::DeviceModel.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::DeviceModel.genSPICEString</a></td></tr>
+<tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
 <tr><td><code>setParamValue</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setParamValue" title="::SpiceGenTcl::Device.setParamValue" class='ruff_cmd'>::SpiceGenTcl::Device.setParamValue</a></td></tr>
 <tr><td><code>setPinNodeName</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setPinNodeName" title="::SpiceGenTcl::Device.setPinNodeName" class='ruff_cmd'>::SpiceGenTcl::Device.setPinNodeName</a></td></tr>
 </table>
-<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#463e11>-ModelName</font></code>, <code><font color=#463e11>-Name</font></code></p>
-<p class='ruff'>Writable: <code><font color=#463e11>-ModelName</font></code>, <code><font color=#463e11>-Name</font></code></p>
-<h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::DeviceModel" title="::SpiceGenTcl::DeviceModel" class='ruff_cmd'>::SpiceGenTcl::DeviceModel</a></p>
+<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#463e11>-Name</font></code></p>
+<p class='ruff'>Writable: <code><font color=#463e11>-Name</font></code></p>
+<h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device" title="::SpiceGenTcl::Device" class='ruff_cmd'>::SpiceGenTcl::Device</a></p>
 <h5 class='ruff'>Subclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::X" title="X" class='ruff_cmd'>X</a></p>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstance::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstance" title="::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstance" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstance</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstance'>SubcircuitInstance</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
@@ -840,7 +840,8 @@
     <i><font color=#4b5d50># ```</font></i>
     <i><font color=#4b5d50># ::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar -eq}}</font></i>
     <i><font color=#4b5d50># ```</font></i>
-    <b><font color=#923B23>next</font></b> x<font color=#4A181B>$name</font> <font color=#4A181B>$pins</font> <font color=#4A181B>$subName</font> <font color=#4A181B>$params</font>
+    <b><font color=#923B23>set</font></b> params [<b><font color=#923B23>linsert</font></b> <font color=#4A181B>$params</font> 0 <font color=#035103>&quot;model <font color=#4A181B>$</font>subName -posnocheck&quot;</font>]
+    <b><font color=#923B23>next</font></b> x<font color=#4A181B>$name</font> <font color=#4A181B>$pins</font> <font color=#4A181B>$params</font>
 }</pre></div>
 </div><h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstanceAuto'>SubcircuitInstanceAuto</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices" title="::SpiceGenTcl::Ngspice::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
@@ -851,15 +852,15 @@
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
 <tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DeviceModel::genSPICEString" title="::SpiceGenTcl::DeviceModel.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::DeviceModel.genSPICEString</a></td></tr>
+<tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
 <tr><td><code>setParamValue</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setParamValue" title="::SpiceGenTcl::Device.setParamValue" class='ruff_cmd'>::SpiceGenTcl::Device.setParamValue</a></td></tr>
 <tr><td><code>setPinNodeName</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setPinNodeName" title="::SpiceGenTcl::Device.setPinNodeName" class='ruff_cmd'>::SpiceGenTcl::Device.setPinNodeName</a></td></tr>
 </table>
-<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#463e11>-ModelName</font></code>, <code><font color=#463e11>-Name</font></code></p>
-<p class='ruff'>Writable: <code><font color=#463e11>-ModelName</font></code>, <code><font color=#463e11>-Name</font></code></p>
-<h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::DeviceModel" title="::SpiceGenTcl::DeviceModel" class='ruff_cmd'>::SpiceGenTcl::DeviceModel</a></p>
+<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#463e11>-Name</font></code></p>
+<p class='ruff'>Writable: <code><font color=#463e11>-Name</font></code></p>
+<h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device" title="::SpiceGenTcl::Device" class='ruff_cmd'>::SpiceGenTcl::Device</a></p>
 <h5 class='ruff'>Subclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::XAuto" title="XAuto" class='ruff_cmd'>XAuto</a></p>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstanceAuto::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstanceAuto" title="::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstanceAuto" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstanceAuto</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstanceAuto'>SubcircuitInstanceAuto</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
@@ -924,12 +925,13 @@
 <font color=#035103>        &quot;</font>]
         <i><font color=#4b5d50># create list of parameters and values from which were supplied by args</font></i>
         <b><font color=#923B23>dict</font></b> for {paramName value} <font color=#4A181B>$arguments</font> {
-            <b><font color=#923B23>lappend</font></b> paramList <font color=#035103>&quot;<font color=#4A181B>$</font>paramName <font color=#4A181B>$</font>value&quot;</font>
+            <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;<font color=#4A181B>$</font>paramName <font color=#4A181B>$</font>value&quot;</font>
         }
     } <b><font color=#923B23>else</font></b> {
-        <b><font color=#923B23>set</font></b> paramList <font color=#035103>&quot;&quot;</font>
+        <b><font color=#923B23>set</font></b> params <font color=#035103>&quot;&quot;</font>
     }
-    <b><font color=#923B23>next</font></b> x<font color=#4A181B>$name</font> <font color=#4A181B>$pinsList</font> <font color=#4A181B>$subName</font> <font color=#4A181B>$paramList</font>
+    <b><font color=#923B23>set</font></b> params [<b><font color=#923B23>linsert</font></b> <font color=#4A181B>$params</font> 0 <font color=#035103>&quot;model <font color=#4A181B>$</font>subName -posnocheck&quot;</font>]
+    <b><font color=#923B23>next</font></b> x<font color=#4A181B>$name</font> <font color=#4A181B>$pinsList</font> <font color=#4A181B>$params</font>
 }</pre></div>
 </div><h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::BasicDevices::VSw'>VSw</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices" title="::SpiceGenTcl::Ngspice::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
@@ -1072,14 +1074,14 @@
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
 <tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DeviceModel::genSPICEString" title="::SpiceGenTcl::DeviceModel.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::DeviceModel.genSPICEString</a></td></tr>
+<tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
 <tr><td><code>setParamValue</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setParamValue" title="::SpiceGenTcl::Device.setParamValue" class='ruff_cmd'>::SpiceGenTcl::Device.setParamValue</a></td></tr>
 <tr><td><code>setPinNodeName</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setPinNodeName" title="::SpiceGenTcl::Device.setPinNodeName" class='ruff_cmd'>::SpiceGenTcl::Device.setPinNodeName</a></td></tr>
 </table>
-<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#463e11>-ModelName</font></code>, <code><font color=#463e11>-Name</font></code></p>
-<p class='ruff'>Writable: <code><font color=#463e11>-ModelName</font></code>, <code><font color=#463e11>-Name</font></code></p>
+<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#463e11>-Name</font></code></p>
+<p class='ruff'>Writable: <code><font color=#463e11>-Name</font></code></p>
 <h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstance" title="SubcircuitInstance" class='ruff_cmd'>SubcircuitInstance</a></p>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::BasicDevices::XAuto'>XAuto</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices" title="::SpiceGenTcl::Ngspice::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
@@ -1089,14 +1091,14 @@
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
 <tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DeviceModel::genSPICEString" title="::SpiceGenTcl::DeviceModel.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::DeviceModel.genSPICEString</a></td></tr>
+<tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
 <tr><td><code>setParamValue</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setParamValue" title="::SpiceGenTcl::Device.setParamValue" class='ruff_cmd'>::SpiceGenTcl::Device.setParamValue</a></td></tr>
 <tr><td><code>setPinNodeName</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setPinNodeName" title="::SpiceGenTcl::Device.setPinNodeName" class='ruff_cmd'>::SpiceGenTcl::Device.setPinNodeName</a></td></tr>
 </table>
-<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#463e11>-ModelName</font></code>, <code><font color=#463e11>-Name</font></code></p>
-<p class='ruff'>Writable: <code><font color=#463e11>-ModelName</font></code>, <code><font color=#463e11>-Name</font></code></p>
+<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#463e11>-Name</font></code></p>
+<p class='ruff'>Writable: <code><font color=#463e11>-Name</font></code></p>
 <h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstanceAuto" title="SubcircuitInstanceAuto" class='ruff_cmd'>SubcircuitInstanceAuto</a></p>
 </main><nav class='ruff-nav'><ul ><li class='ruff-toc1'><a style='padding-top:2px;' href='index.html'>Start page</a></li>
 <li class='ruff-toc1'><a href='index-docindex.html' accesskey='i'>Index</a></li>
