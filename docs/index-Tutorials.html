@@ -251,7 +251,7 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create top-level circuit</font></i>
 <b><font color=#923B23>set</font></b> circuit [<b><font color=#923B23>Circuit</font></b> new {diode IV}]
 <i><font color=#4b5d50># add elements to circuit</font></i>
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>D</font></b> new 1 anode 0 diomod <font color=#463e11>-area</font> 1 <font color=#463e11>-lm</font> 1e-6]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>D</font></b> new 1 anode 0 <font color=#463e11>-model</font> diomod <font color=#463e11>-area</font> 1 <font color=#463e11>-lm</font> 1e-6]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new a anode 0 <font color=#463e11>-dc</font> 0]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>DiodeModel</font></b> new diomod <font color=#463e11>-is</font> 1e-12 <font color=#463e11>-n</font> 1.2 <font color=#463e11>-rs</font> 0.01 <font color=#463e11>-cj0</font> 1e-9 <font color=#463e11>-trs1</font> 0.001 <font color=#463e11>-xti</font> 5]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Dc</font></b> new va 0 2 0.01]
@@ -333,7 +333,7 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create top-level circuit</font></i>
 <b><font color=#923B23>set</font></b> circuit [<b><font color=#923B23>Circuit</font></b> new {diode CV}]
 <i><font color=#4b5d50># add elements to circuit</font></i>
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>D</font></b> new 1 0 c diomod <font color=#463e11>-area</font> 1 <font color=#463e11>-lm</font> 1e-6]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>D</font></b> new 1 0 c <font color=#463e11>-model</font> diomod <font color=#463e11>-area</font> 1 <font color=#463e11>-lm</font> 1e-6]
 <b><font color=#923B23>set</font></b> vdc [<b><font color=#923B23>Vdc</font></b> new a c nin <font color=#463e11>-dc</font> 0]
 <font color=#4A181B>$circuit</font> add <font color=#4A181B>$vdc</font>
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vac</font></b> new b nin 0 <font color=#463e11>-ac</font> 1]
@@ -415,14 +415,14 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new ee 9 0 <font color=#463e11>-dc</font> -12]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vac</font></b> new cm 1 0 <font color=#463e11>-ac</font> 1]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vac</font></b> new dm 1 11 <font color=#463e11>-ac</font> 1]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Q</font></b> new 1 4 2 6 qnr]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Q</font></b> new 2 5 3 6 qnl]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Q</font></b> new 1 4 2 6 <font color=#463e11>-model</font> qnr]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Q</font></b> new 2 5 3 6 <font color=#463e11>-model</font> qnl]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new s1 11 2 <font color=#463e11>-r</font> 1e3]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new s2 3 1 <font color=#463e11>-r</font> 1e3]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new c1 4 8 <font color=#463e11>-r</font> 10e3]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new c2 5 8 <font color=#463e11>-r</font> 10e3]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Q</font></b> new 3 7 7 9 qnl]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Q</font></b> new 4 6 7 9 qnr]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Q</font></b> new 3 7 7 9 <font color=#463e11>-model</font> qnl]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Q</font></b> new 4 6 7 9 <font color=#463e11>-model</font> qnr]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new bias 7 8 <font color=#463e11>-r</font> 20e3]
 </pre>
 
@@ -574,18 +574,18 @@ vrc2=-6.032e-04
         <i><font color=#4b5d50># define input parameters of subcircuit</font></i>
         <b><font color=#923B23>set</font></b> params {}
         <i><font color=#4b5d50># add elements to subcircuit definition</font></i>
-        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>Q</font></b> new 1 9 5 1 qmod]
-        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>D</font></b> new 1clamp 0 1 dmod]
-        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>Q</font></b> new 2 9 5 2 qmod]
-        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>D</font></b> new 2clamp 0 2 dmod]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>Q</font></b> new 1 9 5 1 <font color=#463e11>-model</font> qmod]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>D</font></b> new 1clamp 0 1 <font color=#463e11>-model</font> dmod]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>Q</font></b> new 2 9 5 2 <font color=#463e11>-model</font> qmod]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>D</font></b> new 2clamp 0 2 <font color=#463e11>-model</font> dmod]
         <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new b 4 5 <font color=#463e11>-r</font> 4e3]
         <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new 1 4 6 <font color=#463e11>-r</font> 1.6e3]
-        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>Q</font></b> new 3 6 9 8 qmod]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>Q</font></b> new 3 6 9 8 <font color=#463e11>-model</font> qmod]
         <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new 2 8 0 <font color=#463e11>-r</font> 1e3]
         <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new c 4 7 <font color=#463e11>-r</font> 130]
-        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>Q</font></b> new 4 7 6 10 qmod]
-        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>D</font></b> new vbedrop 10 3 dmod]
-        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>Q</font></b> new 5 3 8 0 qmod]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>Q</font></b> new 4 7 6 10 <font color=#463e11>-model</font> qmod]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>D</font></b> new vbedrop 10 3 <font color=#463e11>-model</font> dmod]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>Q</font></b> new 5 3 8 0 <font color=#463e11>-model</font> qmod]
         <i><font color=#4b5d50># pass name, list of pins and list of parameters to Subcircuit constructor</font></i>
         <b><font color=#923B23>next</font></b> nand <font color=#4A181B>$pins</font> <font color=#4A181B>$params</font>
     }

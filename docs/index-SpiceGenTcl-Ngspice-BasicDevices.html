@@ -162,8 +162,8 @@
         {<font color=#463e11>-model</font>= <font color=#463e11>-forbid</font> {beh}}
         {<font color=#463e11>-m</font>= <font color=#463e11>-forbid</font> {beh}}
         {<font color=#463e11>-scale</font>= <font color=#463e11>-forbid</font> {beh}}
-        {<font color=#463e11>-temp</font>= <font color=#463e11>-forbid</font> {beh}}
-        {<font color=#463e11>-dtemp</font>= <font color=#463e11>-forbid</font> {beh}}
+        {<font color=#463e11>-temp</font>= <font color=#463e11>-forbid</font> {beh dtemp}}
+        {<font color=#463e11>-dtemp</font>= <font color=#463e11>-forbid</font> {beh temp}}
         {<font color=#463e11>-tc1</font>= <font color=#463e11>-forbid</font> {model}}
         {<font color=#463e11>-tc2</font>= <font color=#463e11>-forbid</font> {model}}
         {<font color=#463e11>-ic</font>= <font color=#463e11>-forbid</font> {beh}}
@@ -289,7 +289,9 @@
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator W.</td></tr>
 <tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
 <tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>args</code></td><td>On or off state parameter, optional.</td></tr>
+<tr><td><code><font color=#463e11>-icntrl</font></code></td><td>Source of control current.</td></tr>
+<tr><td><code><font color=#463e11>-model</font></code></td><td>Model name.</td></tr>
+<tr><td><code><font color=#463e11>-on</font>/-off</code></td><td>Initial state of switch.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>WYYYYYYY N+ N- VNAM MODEL &lt;ON&gt; &lt;OFF&gt;
@@ -307,7 +309,9 @@
     <i><font color=#4b5d50>#  name - name of the device without first-letter designator W</font></i>
     <i><font color=#4b5d50>#  npNode - name of node connected to positive pin</font></i>
     <i><font color=#4b5d50>#  nmNode - name of node connected to negative pin</font></i>
-    <i><font color=#4b5d50>#  args - on or off state parameter, optional</font></i>
+    <i><font color=#4b5d50>#  -icntrl - source of control current</font></i>
+    <i><font color=#4b5d50>#  -model - model name</font></i>
+    <i><font color=#4b5d50>#  -on/-off - initial state of switch</font></i>
     <i><font color=#4b5d50># ```</font></i>
     <i><font color=#4b5d50># WYYYYYYY N+ N- VNAM MODEL &lt;ON&gt; &lt;OFF&gt;</font></i>
     <i><font color=#4b5d50># ```</font></i>
@@ -485,8 +489,8 @@
         {<font color=#463e11>-model</font>= <font color=#463e11>-forbid</font> {beh}}
         {<font color=#463e11>-m</font>= <font color=#463e11>-forbid</font> {beh}}
         {<font color=#463e11>-scale</font>= <font color=#463e11>-forbid</font> {beh}}
-        {<font color=#463e11>-temp</font>= <font color=#463e11>-forbid</font> {beh}}
-        {<font color=#463e11>-dtemp</font>= <font color=#463e11>-forbid</font> {beh}}
+        {<font color=#463e11>-temp</font>= <font color=#463e11>-forbid</font> {beh dtemp}}
+        {<font color=#463e11>-dtemp</font>= <font color=#463e11>-forbid</font> {beh temp}}
         <font color=#463e11>-tc1</font>=
         <font color=#463e11>-tc2</font>=
         {<font color=#463e11>-nt</font>= <font color=#463e11>-require</font> {model}}
@@ -708,8 +712,8 @@
         {<font color=#463e11>-ac</font>= <font color=#463e11>-forbid</font> {model beh}}
         {<font color=#463e11>-m</font>= <font color=#463e11>-forbid</font> {beh}}
         {<font color=#463e11>-scale</font>= <font color=#463e11>-forbid</font> {beh}}
-        {<font color=#463e11>-temp</font>= <font color=#463e11>-forbid</font> {beh}}
-        {<font color=#463e11>-dtemp</font>= <font color=#463e11>-forbid</font> {beh}}
+        {<font color=#463e11>-temp</font>= <font color=#463e11>-forbid</font> {beh dtemp}}
+        {<font color=#463e11>-dtemp</font>= <font color=#463e11>-forbid</font> {beh temp}}
         {<font color=#463e11>-tc1</font>= <font color=#463e11>-forbid</font> {model}}
         {<font color=#463e11>-tc2</font>= <font color=#463e11>-forbid</font> {model}}
         {<font color=#463e11>-noisy</font>= <font color=#463e11>-enum</font> {0 1}}
@@ -973,7 +977,8 @@
 <tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
 <tr><td><code>ncpNode</code></td><td>Name of node connected to positive controlling pin.</td></tr>
 <tr><td><code>ncmNode</code></td><td>Name of node connected to negative controlling pin.</td></tr>
-<tr><td><code>args</code></td><td>On or off state parameter, optional.</td></tr>
+<tr><td><code><font color=#463e11>-model</font></code></td><td>Model name.</td></tr>
+<tr><td><code><font color=#463e11>-on</font>/-off</code></td><td>Initial state of switch.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>SXXXXXXX N+ N- NC+ NC- MODEL &lt;ON&gt; &lt;OFF&gt;
@@ -993,7 +998,8 @@
     <i><font color=#4b5d50>#  nmNode - name of node connected to negative pin</font></i>
     <i><font color=#4b5d50>#  ncpNode - name of node connected to positive controlling pin</font></i>
     <i><font color=#4b5d50>#  ncmNode - name of node connected to negative controlling pin</font></i>
-    <i><font color=#4b5d50>#  args - on or off state parameter, optional</font></i>
+    <i><font color=#4b5d50>#  -model - model name</font></i>
+    <i><font color=#4b5d50>#  -on/-off - initial state of switch</font></i>
     <i><font color=#4b5d50># ```</font></i>
     <i><font color=#4b5d50># SXXXXXXX N+ N- NC+ NC- MODEL &lt;ON&gt; &lt;OFF&gt;</font></i>
     <i><font color=#4b5d50># ```</font></i>

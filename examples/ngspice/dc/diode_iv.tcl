@@ -7,7 +7,7 @@ importNgspice
 # create top-level circuit
 set circuit [Circuit new {diode IV}]
 # add elements to circuit
-$circuit add [D new 1 anode 0 diomod -area 1 -lm 1e-6]
+$circuit add [D new 1 anode 0 -model diomod -area 1 -lm 1e-6]
 $circuit add [Vdc new a anode 0 -dc 0]
 $circuit add [DiodeModel new diomod -is 1e-12 -n 1.2 -rs 0.01 -cj0 1e-9 -trs1 0.001 -xti 5]
 $circuit add [Dc new va 0 2 0.01]

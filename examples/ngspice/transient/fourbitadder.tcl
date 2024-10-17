@@ -19,18 +19,18 @@ oo::class create NAND {
         # define input parameters of subcircuit
         set params {}
         # add elements to subcircuit definition
-        my add [Q new 1 9 5 1 qmod]
-        my add [D new 1clamp 0 1 dmod]
-        my add [Q new 2 9 5 2 qmod]
-        my add [D new 2clamp 0 2 dmod]
+        my add [Q new 1 9 5 1 -model qmod]
+        my add [D new 1clamp 0 1 -model dmod]
+        my add [Q new 2 9 5 2 -model qmod]
+        my add [D new 2clamp 0 2 -model dmod]
         my add [R new b 4 5 -r 4e3]
         my add [R new 1 4 6 -r 1.6e3]
-        my add [Q new 3 6 9 8 qmod]
+        my add [Q new 3 6 9 8 -model qmod]
         my add [R new 2 8 0 -r 1e3]
         my add [R new c 4 7 -r 130]
-        my add [Q new 4 7 6 10 qmod]
-        my add [D new vbedrop 10 3 dmod]
-        my add [Q new 5 3 8 0 qmod]
+        my add [Q new 4 7 6 10 -model qmod]
+        my add [D new vbedrop 10 3 -model dmod]
+        my add [Q new 5 3 8 0 -model qmod]
         # pass name, list of pins and list of parameters to Subcircuit constructor
         next nand $pins $params
     }

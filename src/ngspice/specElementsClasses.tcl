@@ -73,8 +73,8 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
                 {-ac= -forbid {model beh}}
                 {-m= -forbid {beh}}
                 {-scale= -forbid {beh}}
-                {-temp= -forbid {beh}}
-                {-dtemp= -forbid {beh}}
+                {-temp= -forbid {beh dtemp}}
+                {-dtemp= -forbid {beh temp}}
                 {-tc1= -forbid {model}}
                 {-tc2= -forbid {model}}
                 {-noisy= -enum {0 1}}
@@ -168,8 +168,8 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
                 {-model= -forbid {beh}}
                 {-m= -forbid {beh}}
                 {-scale= -forbid {beh}}
-                {-temp= -forbid {beh}}
-                {-dtemp= -forbid {beh}}
+                {-temp= -forbid {beh dtemp}}
+                {-dtemp= -forbid {beh temp}}
                 {-tc1= -forbid {model}}
                 {-tc2= -forbid {model}}
                 {-ic= -forbid {beh}}
@@ -264,8 +264,8 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
                 {-model= -forbid {beh}}
                 {-m= -forbid {beh}}
                 {-scale= -forbid {beh}}
-                {-temp= -forbid {beh}}
-                {-dtemp= -forbid {beh}}
+                {-temp= -forbid {beh dtemp}}
+                {-dtemp= -forbid {beh temp}}
                 -tc1=
                 -tc2=
                 {-nt= -require {model}}
@@ -314,7 +314,8 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             #  nmNode - name of node connected to negative pin
             #  ncpNode - name of node connected to positive controlling pin
             #  ncmNode - name of node connected to negative controlling pin
-            #  args - on or off state parameter, optional
+            #  -model - model name
+            #  -on/-off - initial state of switch
             # ```
             # SXXXXXXX N+ N- NC+ NC- MODEL <ON> <OFF>
             # ```
@@ -352,7 +353,9 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             #  name - name of the device without first-letter designator W
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  args - on or off state parameter, optional
+            #  -icntrl - source of control current
+            #  -model - model name
+            #  -on/-off - initial state of switch
             # ```
             # WYYYYYYY N+ N- VNAM MODEL <ON> <OFF>
             # ```
@@ -1303,8 +1306,8 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
                 -tc1=
                 -tc2=
                 -noisy=
-                -temp=
-                -dtemp=
+                {-temp= -forbid {dtemp}}
+                {-dtemp= -forbid {temp}}
             }]
             if {[dict exists $arguments i]} {
                 lappend params "i [dict get $arguments i] -eq"
@@ -1334,15 +1337,23 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
     ## ________________________ Diode class _________________________ ##
     
     oo::class create Diode {
-        superclass ::SpiceGenTcl::DeviceModel
-        mixin ::SpiceGenTcl::KeyArgsBuilder
-        constructor {name npNode nmNode modelName args} {
+        superclass ::SpiceGenTcl::Device
+        constructor {name npNode nmNode args} {
             # Creates object of class `Diode` that describes semiconductor diode device.
             #  name - name of the device without first-letter designator D
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  modelName - name of the model
-            #  args - keyword instance parameters, for details please see Ngspice manual, 7 chapter.
+            #  -model - name of the model
+            #  -area - area scale factor, optional
+            #  -m - multiplier of area and perimeter, optional
+            #  -pj - perimeter scale factor, optional
+            #  -ic - initial condition, optional
+            #  -temp - device temperature, optional
+            #  -dtemp - temperature offset, optional
+            #  -lm - length of metal capacitor, optional
+            #  -wm - width of metal capacitor, optional
+            #  -lp - length of polysilicon capacitor, optional
+            #  -wp - width of polysilicon capacitor, optional
             # ```
             # DXXXXXXX n+ n- mname <area=val> <m=val>
             # + <ic=vd> <temp=val> <dtemp=val>
@@ -1350,11 +1361,28 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Diode new 1 netp netm diomod -l 1e-6 -w 10e-6
+            # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Diode new 1 netp netm -model diomod -l 1e-6 -w 10e-6
             # ```
-            set paramsNames [list area pj ic temp dtemp lm wm lp wp]
-            set params [my argsPreprocess $paramsNames {*}$args]
-            next d$name [list "np $npNode" "nm $nmNode"] $modelName $params
+            set arguments [argparse -inline {
+                {-model= -required}
+                -area=
+                -pj=
+                -ic=
+                -m=
+                {-temp= -forbid {dtemp}}
+                {-dtemp= -forbid {temp}}
+                -lm=
+                -wm=
+                -lp=
+                -wp=
+            }]
+            lappend params "model [dict get $arguments model] -posnocheck"
+            dict for {paramName value} $arguments {
+                if {$paramName ni {model}} {
+                    lappend params "$paramName $value"
+                }
+            }
+            next d$name [list "np $npNode" "nm $nmNode"] $params
         }
     }
     # alias for Diode class
@@ -1365,19 +1393,23 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
     ## ________________________ Bjt class _________________________ ##
     
     oo::class create Bjt {
-        superclass ::SpiceGenTcl::DeviceModel
-        mixin ::SpiceGenTcl::KeyArgsBuilder
-        constructor {name ncNode nbNode neNode modelName args} {
+        superclass ::SpiceGenTcl::Device
+        constructor {name ncNode nbNode neNode args} {
             # Creates object of class `Bjt` that describes semiconductor bipolar junction transistor device.
             #  name - name of the device without first-letter designator Q
             #  ncNode - name of node connected to collector pin
             #  nbNode - name of node connected to base pin
             #  neNode - name of node connected to emitter pin
-            #  modelName - name of the model
-            #  args - keyword instance parameters, for details please see Ngspice manual, 8 chapter.
-            #  Optional nodes could be provided as additional arguments:
-            #  `-ns nodeName` name of node connected to substrate pin and
-            #  `-tj nodeName` name of node connected to thermal pin, requires `-ns` option
+            #  -model - name of the model
+            #  -area - emitter scale factor, optional
+            #  -areac - collector scale factor, optional
+            #  -areab - base scale factor, optional
+            #  -m - multiplier of area and perimeter, optional
+            #  -temp - device temperature, optional
+            #  -dtemp - temperature offset, optional
+            #  -ic - initial conditions for vds and vgs, in form of two element list, optional
+            #  -ns - name of node connected to substrate pin, optional
+            #  -tj - name of node connected to thermal pin, optional, requires -ns 
             # ```
             # QXXXXXXX nc nb ne <ns> <tj> mname <area=val> <areac=val>
             # + <areab=val> <m=val> <off> <ic=vbe,vce> <temp=val>
@@ -1385,19 +1417,27 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Bjt new 1 netc netb nete bjtmod -ns nets -area 1e-3
+            # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Bjt new 1 netc netb nete -model bjtmod -ns nets -area 1e-3
             # ```
-            set paramsNames [list area areac areab m temp dtemp]
-            set paramDefList [my buildArgStr $paramsNames]
-            set arguments [argparse -inline "
-                $paramDefList
+            set arguments [argparse -inline {
+                {-model= -required}
+                -area=
+                -areac=
+                -areab=
+                -m=
+                {-ic= -validate {[llength $arg]==2}}
+                {-temp= -forbid {dtemp}}
+                {-dtemp= -forbid {temp}}
                 -ns=
                 {-tj= -require {ns}}
-            "]
-            set paramList ""
+            }]            
+            lappend params "model [dict get $arguments model] -posnocheck"
+            if {[dict exists $arguments ic]} {
+                lappend params "ic [join [dict get $arguments ic] ,] -nocheck"
+            }
             dict for {paramName value} $arguments {
-                if {$paramName ni {ns tj}} {
-                    lappend paramList "$paramName $value"
+                if {$paramName ni {model ns tj ic}} {
+                    lappend params "$paramName $value"
                 }
             }
             set pinList [list "nc $ncNode" "nb $nbNode" "ne $neNode"]
@@ -1407,7 +1447,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
                     lappend pinList "tj [dict get $arguments tj]"
                 }
             }
-            next q$name $pinList $modelName $paramList
+            next q$name $pinList $params
         }
     }
     # alias for Bjt class
@@ -1418,42 +1458,53 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
     ## ________________________ Jfet class _________________________ ##
     
     oo::class create Jfet {
-        superclass ::SpiceGenTcl::DeviceModel
-        mixin ::SpiceGenTcl::KeyArgsBuilder
-        constructor {name ndNode ngNode nsNode modelName args} {
+        superclass ::SpiceGenTcl::Device
+        constructor {name ndNode ngNode nsNode args} {
             # Creates object of class `Jfet` that describes semiconductor junction FET device.
             #  name - name of the device without first-letter designator J
             #  ndNode - name of node connected to drain pin
             #  ngNode - name of node connected to gate pin
             #  nsNode - name of node connected to source pin
-            #  modelName - name of the model
-            #  args - keyword instance parameters, for details please see Ngspice manual, 9 chapter.
+            #  -model - name of the model
+            #  -area - emitter scale factor, optional
+            #  -temp - device temperature, optional
+            #  -ic - initial conditions for vds and vgs, in form of two element list, optional
+            #  -off - initial state, optional
             # ```
-            # JXXXXXXX nd ng ns mname <area> <temp=t>
+            # JXXXXXXX nd ng ns mname  <area> <off> <ic=vds,vgs> <temp =t>
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::SemiconductorDevices::J new 1 netd netg nets jfetmod -area {area*2 -eq} -temp 25
+            # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet new 1 netd netg nets -model jfetmod -area {area*2 -eq} -temp 25
             # ```
-            set paramsNames [list area temp]
-            set paramDefList [my buildArgStr $paramsNames]
-            set arguments [argparse -inline "
-                $paramDefList
-            "]
-            set paramList ""
-            dict for {paramName value} $arguments {
-                if {$paramName=="area"} {
-                    if {[lindex $value 1]=="-eq"} {
-                        lappend paramList "area [lindex $value 0] -poseq"
-                    } else {
-                        lappend paramList "area [lindex $value 0] -pos"
-                    }
-                    
+            set arguments [argparse -inline {
+                {-model= -required}
+                -area=
+                {-off -boolean}
+                {-ic= -validate {[llength $arg]==2}}
+                -temp=
+            }]
+            lappend params "model [dict get $arguments model] -posnocheck"
+            if {[dict exists $arguments area]} {
+                set areaVal [dict get $arguments area]
+                if {([llength $areaVal]>1) && ([lindex $areaVal 1]=="-eq")} {
+                    lappend params "area [lindex $areaVal 0] -poseq"
                 } else {
-                    lappend paramList "$paramName $value"
+                    lappend params "area $areaVal -pos"
                 }
             }
-            next j$name [list "nd $ndNode" "ng $ngNode" "ns $nsNode"] $modelName $paramList
+            if {[dict get $arguments off]==1} {
+                lappend params "off -sw"
+            }
+            if {[dict exists $arguments ic]} {
+                lappend params "ic [join [dict get $arguments ic] ,] -nocheck"
+            }
+            dict for {paramName value} $arguments {
+                if {$paramName ni {model area off ic}} {
+                    lappend params "$paramName $value"
+                }
+            }
+            next j$name [list "nd $ndNode" "ng $ngNode" "ns $nsNode"] $params
         }
     }
     # alias for Jfet class
@@ -1464,42 +1515,46 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
     ## ________________________ Mesfet class _________________________ ##
     
     oo::class create Mesfet {
-        superclass ::SpiceGenTcl::DeviceModel
-        mixin ::SpiceGenTcl::KeyArgsBuilder
-        constructor {name ndNode ngNode nsNode modelName args} {
+        superclass ::SpiceGenTcl::Device
+        constructor {name ndNode ngNode nsNode args} {
             # Creates object of class `Mesfet` that describes semiconductor MESFET device.
             #  name - name of the device without first-letter designator Z
             #  ndNode - name of node connected to drain pin
             #  ngNode - name of node connected to gate pin
             #  nsNode - name of node connected to source pin
-            #  modelName - name of the model
-            #  args - keyword instance parameters, for details please see Ngspice manual, 10 chapter.
+            #  -model - name of the model
+            #  -area - emitter scale factor, optional
+            #  -ic - initial conditions for vds and vgs, in form of two element list, optional
+            #  -off - initial state, optional
             # ```
-            # ZXXXXXXX ND NG NS MNAME <AREA>
+            # ZXXXXXXX ND NG NS MNAME <AREA> <OFF> <IC=VDS,VGS >
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet new 1 netd netg nets mesfetmod -area {area*2 -eq} -temp 25
+            # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet new 1 netd netg nets -model mesfetmod -area {area*2 -eq}
             # ```
-            set paramsNames [list area]
-            set paramDefList [my buildArgStr $paramsNames]
-            set arguments [argparse -inline "
-                $paramDefList
-            "]
-            set paramList ""
-            dict for {paramName value} $arguments {
-                if {$paramName=="area"} {
-                    if {[lindex $value 1]=="-eq"} {
-                        lappend paramList "area [lindex $value 0] -poseq"
-                    } else {
-                        lappend paramList "area [lindex $value 0] -pos"
-                    }
-                    
+            set arguments [argparse -inline {
+                {-model= -required}
+                -area=
+                {-off -boolean}
+                {-ic= -validate {[llength $arg]==2}}
+            }]
+            lappend params "model [dict get $arguments model] -posnocheck"
+            if {[dict exists $arguments area]} {
+                set areaVal [dict get $arguments area]
+                if {([llength $areaVal]>1) && ([lindex $areaVal 1]=="-eq")} {
+                    lappend params "area [lindex $areaVal 0] -poseq"
                 } else {
-                    lappend paramList "$paramName $value"
+                    lappend params "area $areaVal -pos"
                 }
             }
-            next z$name [list "nd $ndNode" "ng $ngNode" "ns $nsNode"] $modelName $paramList
+            if {[dict get $arguments off]==1} {
+                lappend params "off -sw"
+            }
+            if {[dict exists $arguments ic]} {
+                lappend params "ic [join [dict get $arguments ic] ,] -nocheck"
+            }
+            next z$name [list "nd $ndNode" "ng $ngNode" "ns $nsNode"] $params
             
         }
     }
@@ -1511,43 +1566,81 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
     ## ________________________ Mosfet class _________________________ ##
     
     oo::class create Mosfet {
-        superclass ::SpiceGenTcl::DeviceModel
-        mixin ::SpiceGenTcl::KeyArgsBuilder
-        constructor {name ndNode ngNode nsNode modelName args} {
+        superclass ::SpiceGenTcl::Device
+        constructor {name ndNode ngNode nsNode args} {
             # Creates object of class `Mosfet` that describes semiconductor MOSFET device.
             #  name - name of the device without first-letter designator M
             #  ndNode - name of node connected to drain pin
             #  ngNode - name of node connected to gate pin
             #  nsNode - name of node connected to source pin
-            #  modelName - name of the model
-            #  args - keyword instance parameters, for details please see Ngspice manual, 10 chapter.
-            # Optional nodes could be provided as additional arguments:
-            #  `-n4 nodeName` name of 4th node;
-            #  `-n5 nodeName` name of 5th node, requires `-n4` option;
-            #  `-n6 nodeName` name of 6th node, requires `-n5` option;
-            #  `-n7 nodeName` name of 7th node, requires `-n6` option;
+            #  -model - name of the model
+            #  -m - multiplier, optional
+            #  -l - length of channel, optional
+            #  -w - width of channel, optional
+            #  -ad - diffusion area of drain, optional, forbid -nrd
+            #  -as - diffusion area of source, optional,forbid -nrs
+            #  -pd - perimeter area of drain, optional
+            #  -ps - perimeter area of source, optional
+            #  -nrd - equivalent number of squares of the drain diffusions
+            #  -nrs - equivalent number of squares of the source diffusions
+            #  -temp - device temperature
+            #  -ic - initial conditions for vds, vgs and vbs, in form of two element list, optional, require 4th node
+            #  -off - initial state, optional
+            #  -n4 - name of 4th node;
+            #  -n5 - name of 5th node, require -n4, optional
+            #  n6 - name of 6th node, require -n5, optional
+            #  -n7 - name of 7th node, require -n6, optional
+            #  -custparams - key that collects all arguments at the end of device definition, to provide an ability
+            #  to add custom parameters in form `-custparams param1 param1Val param2 {param2eq -eq} param3 param3Val ...`
+            #  Must be specified after all others options. Optional.
             # ```
             # MXXXXXXX nd ng ns nb mname <m=val> <l=val> <w=val>
             # + <ad=val> <as=val> <pd=val> <ps=val> <nrd=val>
-            # + <nrs=val> <temp=t>
+            # + <nrs=val> <off> <ic=vds,vgs,vbs> <temp=t>
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Mosfet new 1 netd netg nets mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5
+            # ::SpiceGenTcl::Ngspice::Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5
             # ```
-            set paramsNames [list m l w ad as pd ps nrd nrs]
-            set paramDefList [my buildArgStr $paramsNames]
-            set arguments [argparse -inline "
-                $paramDefList
+            set arguments [argparse -inline {
+                {-model= -required}
+                -m=
+                -l=
+                -w=
+                {-ad= -forbid {nrd}}
+                {-as= -forbid {nrs}}
+                -pd=
+                -ps=
+                {-nrd= -forbid {ad}}
+                {-nrs= -forbid {as}}
+                -temp=
+                {-off -boolean}
+                {-ic= -validate {[llength $arg]==3}}
                 -n4=
                 {-n5= -require {n4}}
                 {-n6= -require {n5}}
                 {-n7= -require {n7}}
-            "]
-            set paramList ""
-            dict for {paramName value} $arguments { 
-                if {$paramName ni {n4 n5 n6 n7}} {
-                    lappend paramList "$paramName $value"
+                {-custparams -catchall}
+            }]
+            lappend params "model [dict get $arguments model] -posnocheck"
+            if {[dict get $arguments off]==1} {
+                lappend params "off -sw"
+            }
+            if {[dict exists $arguments ic]} {
+                lappend params "ic [join [dict get $arguments ic] ,] -nocheck"
+            }
+            dict for {paramName value} $arguments {
+                if {$paramName ni {model off ic n4 n5 n6 n7 custparams}} {
+                    lappend params "$paramName $value"
+                }
+            }
+            if {[dict get $arguments custparams]!=""} {
+                if {[llength [dict get $arguments custparams]]%2!=0} {
+                    error "Custom parameters list must be even length"
+                }
+                set custParamDict [dict create {*}[dict get $arguments custparams]]
+                dict for {paramName value} $custParamDict {
+                    lappend params "$paramName $value"
                 }
             }
             set pinList [list "nd $ndNode" "ng $ngNode" "ns $nsNode"]
@@ -1563,7 +1656,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
                     }
                 }
             }
-            next m$name $pinList $modelName $paramList
+            next m$name $pinList $params
         }
     }
     # alias for Mosfet class

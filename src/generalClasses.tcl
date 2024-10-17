@@ -486,6 +486,7 @@ namespace eval ::SpiceGenTcl {
                 {-eq -forbid {poseq}}
                 {-poseq -forbid {pos eq}}
                 {-posnocheck -forbid {poseq eq pos}}
+                {-nocheck -forbid {pos eq poseq}}
             }]
             # method adds new Parameter object to the list Params
             set paramName [string tolower $paramName]
@@ -507,6 +508,8 @@ namespace eval ::SpiceGenTcl {
                 dict append Params $paramName [::SpiceGenTcl::ParameterPositionalEquation new $paramName $value]
             } elseif {[info exists posnocheck]} {
                 dict append Params $paramName [::SpiceGenTcl::ParameterPositionalNoCheck new $paramName $value]
+            } elseif {[info exists nocheck]} {
+                dict append Params $paramName [::SpiceGenTcl::ParameterNoCheck new $paramName $value]
             } else {
                 dict append Params $paramName [::SpiceGenTcl::Parameter new $paramName $value]
             }

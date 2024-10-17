@@ -10,7 +10,7 @@ variable pi
 # create top-level circuit
 set circuit [Circuit new {diode CV}]
 # add elements to circuit
-$circuit add [D new 1 0 c diomod -area 1 -lm 1e-6]
+$circuit add [D new 1 0 c -model diomod -area 1 -lm 1e-6]
 set vdc [Vdc new a c nin -dc 0]
 $circuit add $vdc
 $circuit add [Vac new b nin 0 -ac 1]
