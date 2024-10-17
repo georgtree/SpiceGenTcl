@@ -32,13 +32,12 @@ namespace eval FAQ {
         ```
         
         The name of the parameter can be found in the documentation [here]([::SpiceGenTcl::Ngspice::BasicDevices::Resistor]).
-        In the parameter table, the entry for resistance is labeled `rVal`, so the name used for resistance is 'r'. 
-        This naming convention, `param_nameVal`, is applied to all elements in the package.
+        In the parameter table, the option for resistance is labeled `-r`, so the name used for resistance is 'r'. 
         
         Another option is to call the [::SpiceGenTcl::Device::getParams] method, which returns a list of all parameters with their values. For example:
         ```tcl
         # create resistor
-        set resistor [R new 1 net1 net2 10]
+        set resistor [R new 1 net1 net2 -r 10]
         puts [$resistor getParams]
         ```
         
@@ -64,7 +63,7 @@ namespace eval FAQ {
         Another option is to call the [::SpiceGenTcl::Device::getPins] method, which returns a list of all pins with their connected node names. For example:
         ```tcl
         # create resistor
-        set resistor [R new 1 net1 net2 10]
+        set resistor [R new 1 net1 net2 -r 10]
         puts [$resistor getPins]
         ```
         
@@ -77,8 +76,8 @@ namespace eval FAQ {
         
         ## How to find the list of optional parameters for elements?
         
-        The list of parameters in the documentation includes descriptions of the mandatory arguments but does not elaborate on the 
-        optional parameters found in `args`. This is because some elements, especially models, can have dozens of parameters, and I 
+        The list of parameters in the documentation includes descriptions of the mandatory arguments and availible options.
+        But for some elements, especially models, there could be dozens of parameters, and I 
         wanted to avoid cluttering the documentation.
         
         Typically, any optional parameters for elements are also optional in the simulator they relate to, so you can find a list of 
@@ -86,23 +85,41 @@ namespace eval FAQ {
         in Ngspice, you can provide values for the temperature coefficients, 'tc1' and 'tc2'. In SpiceGenTcl, these are added during the 
         initialization of the resistor like this:
         ```tcl
-        set resistor [R new 1 net1 net2 10 -tc1 0.1 -tc2 0.4]
+        set resistor [R new 1 net1 net2 -r 10 -tc1 0.1 -tc2 0.4]
         ```
         
         Here we provide the mandatory parameters:
         - name of device without 'R' designator: '1'
         - nets connected to pins: 'net1' and 'net2'
-        - value of resistance: '10'
+        - value of resistance: '-r 10'
         Parameters 'tc1' and 'tc2' are provided here as optional arguments.
         
         As a last resort, you can look directly at the source code in the documentation. Simply open the `Show source` option, and 
-        you'll find a line within the `constructor` method:
+        you'll find an arguments description within the `constructor` method:
         ```tcl
-        set paramsNames [list ac m scale temp dtemp tc1 tc2 noisy]
+        set arguments [argparse -inline {
+            -r=
+            {-beh -forbid {model} -require {r}}
+            {-model= -forbid {beh}}
+            {-ac= -forbid {model beh}}
+            {-m= -forbid {beh}}
+            {-scale= -forbid {beh}}
+            {-temp= -forbid {beh dtemp}}
+            {-dtemp= -forbid {beh temp}}
+            {-tc1= -forbid {model}}
+            {-tc2= -forbid {model}}
+            {-noisy= -enum {0 1}}
+            {-l= -require {model}}
+            {-w= -require {model}}
+        }]
         ```
         
-        So the possible optional parameters are: `-ac`, `-m`, `-scale`, `-temp`, `-dtemp`, `-tc1`, `-tc2`, `-noisy`.
-        The same applies to all elements in the package.
+        For models the parameters are defined in this list:
+        ```
+        set paramsNames [list tc1 tc2 rsh defw narrow short tnom kf af wf lf ef {r res}]
+        ```
+        
+        The same applies to all elements (devices and models) in the package.
                 
         ## How to get raw data after simulation?
         
