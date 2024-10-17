@@ -387,7 +387,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
     ## ________________________ SubcircuitInstance class _________________________ ##
 
     oo::class create SubcircuitInstance {
-        superclass ::SpiceGenTcl::DeviceModel
+        superclass ::SpiceGenTcl::Device
         constructor {name pins subName params} {
             # Creates object of class `CSwitch` that describes subcircuit instance.
             #  name - name of the device without first-letter designator X
@@ -401,7 +401,8 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # ::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar -eq}}
             # ```
-            next x$name $pins $subName $params
+            set params [linsert $params 0 "model $subName -posnocheck"]
+            next x$name $pins $params
         }
     }
     # alias for SubcircuitInstance class
@@ -412,7 +413,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
     ## ________________________ SubcircuitInstanceAuto class _________________________ ##
     
     oo::class create SubcircuitInstanceAuto {
-        superclass ::SpiceGenTcl::DeviceModel
+        superclass ::SpiceGenTcl::Device
         constructor {subcktObj name nodes args} {
             # Creates object of class `SubcircuitInstanceAuto` that describes subcircuit instance with already created subcircuit definition object.
             #  subcktObj - object of subcircuit that defines it's pins, subName and parameters
@@ -455,12 +456,13 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
                 "]
                 # create list of parameters and values from which were supplied by args
                 dict for {paramName value} $arguments {
-                    lappend paramList "$paramName $value"
+                    lappend params "$paramName $value"
                 }
             } else {
-                set paramList ""
+                set params ""
             }
-            next x$name $pinsList $subName $paramList
+            set params [linsert $params 0 "model $subName -posnocheck"]
+            next x$name $pinsList $params
         }
     }
     
@@ -989,7 +991,6 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
 
     oo::class create Isin {
         superclass ::SpiceGenTcl::Ngspice::Sources::sin
-        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name npNode nmNode args} {
             # Creates object of class `Isin` that describes sinusoidal current source.
             #  name - name of the device without first-letter designator I
@@ -1063,7 +1064,6 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
 
     oo::class create Isffm {
         superclass ::SpiceGenTcl::Ngspice::Sources::sffm
-        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name npNode nmNode args} {
             # Creates object of class `Isffm` that describes single-frequency FM current source.
             #  name - name of the device without first-letter designator I

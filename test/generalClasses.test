@@ -510,48 +510,6 @@ test testDeviceClass-2.11 {test creation of Device class instance and checkFloat
     unset elemInst result
 }
 
-    # ________________________ DeviceModel class tests _________________________ #
-
-test testDeviceModelClass-1.1 {test creation of DeviceModel class instance and getName interface} -setup {
-    set elemInst [DeviceModel new M1 {{d netg} {g netg} {s nets}} nmos1 {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
-} -body {
-    set result [$elemInst configure -Name]
-} -result m1 -cleanup {
-    unset elemInst result
-}
-
-test testDeviceModelClass-1.2 {test creation of DeviceModel class instance and getPins interface} -setup {
-    set elemInst [DeviceModel new M1 {{d netd} {g netg} {s nets}} nmos1 {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
-} -body {
-    set result [$elemInst getPins]
-} -result [dict create d netd g netg s nets] -cleanup {
-    unset elemInst result
-}
-
-test testDeviceModelClass-1.3 {test creation of DeviceModel class instance and getName interface} -setup {
-    set elemInst [DeviceModel new M1 {{d netd} {g netg} {s nets}} nmos1 {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
-} -body {
-    set result [$elemInst configure -ModelName]
-} -result nmos1 -cleanup {
-    unset elemInst result
-}
-
-test testDeviceModelClass-1.4 {test creation of DeviceModel class instance and getParams interface} -setup {
-    set elemInst [DeviceModel new M1 {{d netd} {g netg} {s nets}} nmos1 {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
-} -body {
-    set result [$elemInst getParams]
-} -result [dict create vth0 0.7 u0 100 k1 1.5e-3] -cleanup {
-    unset elemInst result
-}
-
-test testDeviceModelClass-2.1 {test creation of DeviceModel class instance and test string generation for SPICE netlist} -setup {
-    set elemInst [DeviceModel new M1 {{d netd} {g netg} {s nets}} nmos1 {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
-} -body {
-    set result [$elemInst genSPICEString]
-} -result "m1 netd netg nets nmos1 vth0=0.7 u0=100 k1=1.5e-3" -cleanup {
-    unset elemInst result
-}
-
     # ________________________ Model class tests _________________________ #
     
 test testModelClass-1.1 {test creation of Model class instance and getType interface} -setup {

@@ -3,7 +3,7 @@
 namespace eval ::SpiceGenTcl {
 
     namespace export Pin ParameterSwitch Parameter ParameterNoCheck ParameterPositional ParameterPositionalNoCheck \
-            ParameterDefault ParameterEquation ParameterPositionalEquation Device DeviceModel Model RawString Comment Include Options \
+            ParameterDefault ParameterEquation ParameterPositionalEquation Device Model RawString Comment Include Options \
             ParamStatement Temp Netlist Circuit Library Subcircuit Analysis Simulator Dataset Axis Trace EmptyTrace RawFile
     namespace export importNgspice
     
@@ -72,7 +72,7 @@ namespace eval ::SpiceGenTcl {
             return $paramDefStr
         }
         method argsPreprocess {paramsNames args} {
-            # Calls argparse and constructs list for passing to Device or DeviceModel constructor.
+            # Calls argparse and constructs list for passing to Device constructor.
             #  paramsNames - list of parameter names, define alias for parameter name by
             #  using two element list {paramName aliasName}
             #  args - argument list with key names and it's values
@@ -568,67 +568,6 @@ namespace eval ::SpiceGenTcl {
                 }
                 return "[my configure -Name] [join $nodes] [join $params]"
             }
-            
-        }
-    }
-
-     #________________________ DeviceModel class definition _________________________ #
-
-    oo::configurable create DeviceModel {
-        superclass Device
-        property ModelName -set {
-            if {$value==""} {
-                error "DeviceModel must have a name of the model, empty string was provided"
-            } elseif {[regexp {[^A-Za-z0-9_]+} $value]} {
-                error "Model name '$value' is not a valid name"
-            } 
-            set ModelName [string tolower $value]
-        }
-        variable ModelName
-        constructor {name pins modelName instParams} {
-            # Creates object of class `DeviceModel`.
-            #  name - name of the device
-            #  pins - list of pins in the order they appear in SPICE device's definition together
-            #   with connected node in form: `{{Name0 NodeName} {Name1 NodeName} {Name2 NodeName} ...}`
-            #   Node string value could be empty.
-            #  modelName - name of the model
-            #  instParams - list of instance parameters in form `{{Name Value ?-pos|eq|poseq?} {Name Value ?-pos|eq|poseq?} {Name Value ?-pos|eq|poseq?} ...}`
-            # Class is almost identical to the Deviceclass, but can model
-            # devices that requires model definition in the netlist.
-            my configure -ModelName $modelName
-            next $name $pins $instParams
-        }    
-        method CheckModelName {modelName} {
-            # Checks model name of device for forbidden symbols.
-            #  modelName - name of device model to check
-            if {$modelName==""} {
-                error "DeviceModel must have a name of the model, empty string was provided"
-            } elseif {[regexp {[^A-Za-z0-9_]+} $modelName]} {
-                error "Model name '$modelName' is not a valid name"
-            } 
-        }
-        method genSPICEString {} {
-            # Creates device string for SPICE netlist.
-            # Returns: string '$Name $Nodes $ModelName $Params'
-            my variable Params
-            my variable Pins
-            dict for {pinName pin} $Pins {
-                set error [catch {$pin genSPICEString} errStr] 
-                if {$error!=1} {
-                    lappend nodes [$pin genSPICEString]
-                } else {
-                    error "Device '[my configure -Name]' can't be netlisted because '$pinName' pin is floating"
-                }
-            }
-            if {$Params==""} {
-                lappend params ""
-                return "[my configure -Name] [join $nodes] [my configure -ModelName]"
-            } else {
-                dict for {paramName param} $Params {
-                    lappend params [$param genSPICEString]
-                }
-                return "[my configure -Name] [join $nodes] [my configure -ModelName] [join $params]"
-            } 
         }
     }
 
