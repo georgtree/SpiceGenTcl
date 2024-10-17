@@ -23,7 +23,7 @@ $circuit add [R new bias 7 8 -r 20e3]
 $circuit add [BjtGPModel new qnl npn -bf 80 -rb 100 -cjc 2e-12 -tf 0.3e-9 -tr 6e-9 -cje 3e-12 -cjc 2e-12 -va 50]
 $circuit add [BjtGPModel new qnr npn -bf 80 -rb 100 -cjc 2e-12 -tf 0.3e-9 -tr 6e-9 -cje 3e-12 -cjc 2e-12 -va 50]
 
-$circuit add [SensDc new v(5,4)]
+$circuit add [SensDc new -outvar v(5,4)]
 #set simulator with default 
 set simulator [Batch new {batch1} {/usr/local/bin/}]
 # attach simulator object to circuit

@@ -167,10 +167,14 @@
 
     <i><font color=#4b5d50># Creates analysis for SPICE netlist.</font></i>
     <i><font color=#4b5d50># Returns: string '.$Type $Params'</font></i>
-    <b><font color=#923B23>dict</font></b> for {paramName param} <font color=#4A181B>$Params</font> {
-        <b><font color=#923B23>lappend</font></b> params [<font color=#4A181B>$param</font> genSPICEString]
+    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> exists Params]} {
+        <b><font color=#923B23>dict</font></b> for {paramName param} <font color=#4A181B>$Params</font> {
+            <b><font color=#923B23>lappend</font></b> params [<font color=#4A181B>$param</font> genSPICEString]
+        }
+        <b><font color=#ca14ca>return</font></b> <font color=#035103>&quot;.<font color=#4A181B>[</font>my configure -Type<font color=#4A181B>]</font> <font color=#4A181B>[</font>join <font color=#4A181B>$</font>params<font color=#4A181B>]</font>&quot;</font>
+    } <b><font color=#923B23>else</font></b> {
+        <b><font color=#ca14ca>return</font></b> <font color=#035103>&quot;.<font color=#4A181B>[</font>my configure -Type<font color=#4A181B>]</font>&quot;</font>
     }
-    <b><font color=#ca14ca>return</font></b> <font color=#035103>&quot;.<font color=#4A181B>[</font>my configure -Type<font color=#4A181B>]</font> <font color=#4A181B>[</font>join <font color=#4A181B>$</font>params<font color=#4A181B>]</font>&quot;</font>
 }</pre></div>
 </div><h4 class='ruffmethod'><a name='::SpiceGenTcl::Analysis::getParams'>getParams</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis" title="::SpiceGenTcl::Analysis" class='ruff_cmd'>::SpiceGenTcl::Analysis</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Analysis'>Analysis</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>

@@ -105,7 +105,7 @@ set fourbit [FOURBIT new]
 # create top-level circuit
 set circuit [Circuit new {Four-bit adder}]
 # add elements to circuit
-$circuit add [Tran new 1e-9 10e-6]
+$circuit add [Tran new -tstep 1e-9 -tstop 10e-6]
 $circuit add [Options new {{noacct -sw}}]
 $circuit add $nand
 $circuit add $onebit

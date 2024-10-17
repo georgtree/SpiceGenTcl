@@ -43,7 +43,7 @@
 <font color=#4A181B>$netlist</font> add [<b><font color=#923B23>Library</font></b> new {/fold1/fold2/file.lib} fast <font color=#463e11>-name</font> lib1]
 <font color=#4A181B>$netlist</font> add [<b><font color=#923B23>RawString</font></b> new {*comment in form of raw string} <font color=#463e11>-name</font> raw1]
 <font color=#4A181B>$netlist</font> add [<b><font color=#923B23>Vdc</font></b> new 1 net1 net3 <font color=#463e11>-dc</font> 5]
-<font color=#4A181B>$netlist</font> add [<b><font color=#923B23>Tran</font></b> new 1e-6 1e-3 <font color=#463e11>-uic</font> <font color=#463e11>-name</font> tran1]
+<font color=#4A181B>$netlist</font> add [<b><font color=#923B23>Tran</font></b> new <font color=#463e11>-tstep</font> 1e-6 <font color=#463e11>-tstop</font> 1e-3 <font color=#463e11>-uic</font> <font color=#463e11>-name</font> tran1]
 </pre>
 
 </figure><p class='ruff'>Here we can see the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Netlist::add" title="::SpiceGenTcl::Netlist::add" class='ruff_cmd'>::SpiceGenTcl::Netlist::add</a> method that adds elemements objects references to <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Netlist" title="::SpiceGenTcl::Netlist" class='ruff_cmd'>::SpiceGenTcl::Netlist</a> object. To view netlist we can invoke method <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Netlist::genSPICEString" title="::SpiceGenTcl::Netlist::genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Netlist::genSPICEString</a> that have all circuit elements:</p>
@@ -254,7 +254,7 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>D</font></b> new 1 anode 0 <font color=#463e11>-model</font> diomod <font color=#463e11>-area</font> 1 <font color=#463e11>-lm</font> 1e-6]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new a anode 0 <font color=#463e11>-dc</font> 0]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>DiodeModel</font></b> new diomod <font color=#463e11>-is</font> 1e-12 <font color=#463e11>-n</font> 1.2 <font color=#463e11>-rs</font> 0.01 <font color=#463e11>-cj0</font> 1e-9 <font color=#463e11>-trs1</font> 0.001 <font color=#463e11>-xti</font> 5]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Dc</font></b> new va 0 2 0.01]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Dc</font></b> new <font color=#463e11>-src</font> va <font color=#463e11>-start</font> 0 <font color=#463e11>-step</font> 2 <font color=#463e11>-incr</font> 0.01]
 </pre>
 
 </figure><p class='ruff'>In the upper block of code, we add a diode instance using the <a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::D" title="::SpiceGenTcl::Ngspice::SemiconductorDevices::D" class='ruff_cmd'>::SpiceGenTcl::Ngspice::SemiconductorDevices::D</a> command, create the corresponding diode model with the <a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel" title="::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel" class='ruff_cmd'>::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel</a> command, add a DC voltage source that will be swept, and include a DC analysis statement. The voltage ranges from 0 to 2 volts to obtain the forward current characteristic.</p>
@@ -338,13 +338,13 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <font color=#4A181B>$circuit</font> add <font color=#4A181B>$vdc</font>
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vac</font></b> new b nin 0 <font color=#463e11>-ac</font> 1]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>DiodeModel</font></b> new diomod <font color=#463e11>-is</font> 1e-12 <font color=#463e11>-n</font> 1.2 <font color=#463e11>-rs</font> 0.01 <font color=#463e11>-cj0</font> 1e-9 <font color=#463e11>-trs1</font> 0.001 <font color=#463e11>-xti</font> 5]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Ac</font></b> new lin 1 1e5 1e5]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Ac</font></b> new <font color=#463e11>-variation</font> lin <font color=#463e11>-n</font> 1 <font color=#463e11>-fstart</font> 1e5 <font color=#463e11>-fstop</font> 1e5]
 </pre>
 
 </figure><p class='ruff'>What are new here:</p>
 <ul class='ruff'>
 <li>AC voltage source <code>[<b><font color=#923B23>Vac</font></b> new b nin 0 <font color=#463e11>-ac</font> 1]</code> - uses to generate AC signal</li>
-<li>AC analysis statement <code>[<b><font color=#923B23>Ac</font></b> new lin 1 1e5 1e5]</code> - uses to define AC frequency, 100 kHz in our case.</li>
+<li>AC analysis statement <code>[<b><font color=#923B23>Ac</font></b> new <font color=#463e11>-variation</font> lin <font color=#463e11>-n</font> 1 <font color=#463e11>-fstart</font> 1e5 <font color=#463e11>-fstop</font> 1e5]</code> - uses to define AC frequency, 100 kHz in our case.</li>
 </ul>
 <p class='ruff'>The final circuit looks like this:</p>
 <p class='ruff'><img src="assets/img/diode_cv_cir.png" alt="drawing" width="500"/></p>
@@ -434,7 +434,7 @@ x2 net1 net2 rcnet r=1 c={cpar}
 
 </figure><p class='ruff'>In DC sensistive analysis we add input voltage to which we sense ohter parameters in the circuit:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$circuit</font> add [<b><font color=#923B23>SensDc</font></b> new v(5,4)]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$circuit</font> add [<b><font color=#923B23>SensDc</font></b> new <font color=#463e11>-outvar</font> v(5,4)]
 </pre>
 
 </figure><p class='ruff'>We create simulator, run it and read data:</p>
@@ -489,7 +489,7 @@ vrc2=-6.032e-04
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create top-level circuit</font></i>
 <b><font color=#923B23>set</font></b> circuit [<b><font color=#923B23>Circuit</font></b> new {switch_oscillator}]
 <i><font color=#4b5d50># add elements to circuit</font></i>
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Tran</font></b> new 50e-12 80e-9]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Tran</font></b> new <font color=#463e11>-tstep</font> 50e-12 <font color=#463e11>-tstop</font> 80e-9]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Options</font></b> new {{<b><font color=#ca14ca>method</font></b> gear} {maxord 3}}]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>RawString</font></b> new <font color=#035103>&quot;.ic v(osc_out)=0.25&quot;</font>]
 <font color=#4A181B>$circuit</font> add <font color=#4A181B>$inverter</font>
@@ -668,7 +668,7 @@ vrc2=-6.032e-04
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create top-level circuit</font></i>
 <b><font color=#923B23>set</font></b> circuit [<b><font color=#923B23>Circuit</font></b> new {Four-bit adder}]
 <i><font color=#4b5d50># add elements to circuit</font></i>
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Tran</font></b> new 1e-9 10e-6]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Tran</font></b> new <font color=#463e11>-tstep</font> 1e-9 <font color=#463e11>-tstop</font> 10e-6]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Options</font></b> new {{noacct <font color=#463e11>-sw</font>}}]
 <font color=#4A181B>$circuit</font> add <font color=#4A181B>$nand</font>
 <font color=#4A181B>$circuit</font> add <font color=#4A181B>$onebit</font>

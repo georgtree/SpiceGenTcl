@@ -1489,10 +1489,14 @@ namespace eval ::SpiceGenTcl {
         method genSPICEString {} {
             # Creates analysis for SPICE netlist.
             # Returns: string '.$Type $Params'
-            dict for {paramName param} $Params {
-                lappend params [$param genSPICEString]
+            if {[info exists Params]} {
+                dict for {paramName param} $Params {
+                    lappend params [$param genSPICEString]
+                }
+                return ".[my configure -Type] [join $params]"
+            } else {
+                return ".[my configure -Type]"
             }
-            return ".[my configure -Type] [join $params]"
         }
     }
 

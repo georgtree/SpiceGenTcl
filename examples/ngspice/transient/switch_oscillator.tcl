@@ -32,7 +32,7 @@ set inverter [Inverter new]
 # create top-level circuit
 set circuit [Circuit new {switch_oscillator}]
 # add elements to circuit
-$circuit add [Tran new 50e-12 80e-9]
+$circuit add [Tran new -tstep 50e-12 -tstop 80e-9]
 $circuit add [Options new {{method gear} {maxord 3}}]
 $circuit add [RawString new ".ic v(osc_out)=0.25"]
 $circuit add $inverter

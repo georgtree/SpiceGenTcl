@@ -21,7 +21,7 @@ $netlist add [Include new {/fold1/fold2/file.lib} -name inc1]
 $netlist add [Library new {/fold1/fold2/file.lib} fast -name lib1]
 $netlist add [RawString new {*comment in form of raw string} -name raw1]
 $netlist add [Vdc new 1 net1 net3 -dc 5]
-$netlist add [Tran new 1e-6 1e-3 -uic -name tran1]
+$netlist add [Tran new -tstep 1e-6 -tstop 1e-3 -uic -name tran1]
 # generate SPICE netlist
 puts [$netlist genSPICEString]
 $netlist del c1

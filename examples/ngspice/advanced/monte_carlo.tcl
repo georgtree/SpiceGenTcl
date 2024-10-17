@@ -70,7 +70,7 @@ L create l3 3 n003 n002 -l 40e-6
 foreach elem [list c1 l1 c2 l2 c3 l3] {
     $circuit add $elem
 }
-$circuit add [Ac new oct 100 250e3 10e6]
+$circuit add [Ac new -variation oct -n 100 -fstart 250e3 -fstop 10e6]
 #set simulator with default 
 set simulator [Batch new {batch1} {/usr/local/bin/}]
 # attach simulator object to circuit
