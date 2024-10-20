@@ -3,7 +3,7 @@ lappend auto_path "../../../"
 package require SpiceGenTcl
 package require ticklecharts
 namespace import ::SpiceGenTcl::*
-importNgspice
+importXyce
 
 # create class that represents inverter subcircuit
 oo::class create Inverter {
@@ -44,21 +44,18 @@ for {set i 1} {$i<16} {incr i} {
 }
 $circuit add [SubcircuitInstanceAuto new $inverter x18 {osc_out n1 vdd 0}]
 $circuit add [SubcircuitInstanceAuto new $inverter x19 {n16 osc_out vdd 0}]
-$circuit add [VSwitchModel new swswitch -vt 1 -vh 0.1 -ron 1e3 -roff 1e12]
-$circuit add [VSwitchModel new switchn -vt 1 -vh 0.1 -ron 1e3 -roff 1e12]
+$circuit add [VSwitchModel new swswitch -von 1 -voff 0.9 -ron 1e3 -roff 1e12]
+$circuit add [VSwitchModel new switchn -von 1 -voff 0.9 -ron 1e3 -roff 1e12]
 
 #set simulator with default temporary directory
-set simulator [BatchLiveLog new {batch1} {/usr/local/bin/}]
+set simulator [Batch new {batch1} {/usr/local/bin/}]
 # attach simulator object to circuit
 $circuit configure -Simulator $simulator
 # run circuit, read log and data
 $circuit runAndRead
 # get data object
 set data [$circuit getDataDict]
-set time [dict get $data time]
-set vout [dict get $data v(osc_out)]
-set imeas [dict get $data i(vmeasure)]
-foreach time [dict get $data time] vout [dict get $data v(osc_out)] imeas [dict get $data i(vmeasure)] {
+foreach time [dict get $data time] vout [dict get $data osc_out] imeas [dict get $data vmeasure#branch] {
     lappend timeVout [list $time $vout]
     lappend timeImeas [list $time $imeas]
 }

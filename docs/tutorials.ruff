@@ -303,6 +303,18 @@ namespace eval Tutorials {
         
         ![diode_iv](assets/img/diode_iv.png)
         
+        This circuit works almost without modification in Xyce simulator, see "examples/xyce/dc/diode_iv.tcl" file.
+        The one of the differences is how we set the global temperature: in Xyce there is no .temp statement, for
+        setting global temperature we use `.options` statement with class [::SpiceGenTcl::Options]:
+        ```tcl
+        set tempSt [Options new {{device -sw} {temp 25}}]
+        ```
+        
+        and then modify this value in loop:
+        ```tcl
+        $tempSt setParamValue temp $temp
+        ```
+        
         ## Diode capacitance simualtion
         
         In this example, we measure the volt-farad (or capacitance-voltage) relationship of the diode's depletion charge. 

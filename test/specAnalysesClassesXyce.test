@@ -12,7 +12,7 @@ foreach nameSpc $xyceNameSpc {
     # ________________________ Dc class tests _________________________ #
     
 test testDcClass-1.1 {test Dc class} -setup {
-    set res [Dc new v1 {time1 -eq} 5 0.1 -name dc1]
+    set res [Dc new -src v1 -start {time1 -eq} -stop 5 -incr 0.1 -name dc1]
 } -body {
     set result [$res genSPICEString]
 } -result ".dc v1 \{time1\} 5 0.1" -cleanup {
@@ -20,7 +20,7 @@ test testDcClass-1.1 {test Dc class} -setup {
 }
 
 test testDcClass-1.2 {test Dc class} -setup {
-    set res [Dc new v1 0 5 0.1]
+    set res [Dc new -src v1 -start 0 -stop 5 -incr 0.1]
 } -body {
     set result [$res genSPICEString]
 } -result ".dc v1 0 5 0.1" -cleanup {
@@ -30,7 +30,7 @@ test testDcClass-1.2 {test Dc class} -setup {
     # ________________________ Ac class tests _________________________ #
     
 test testAcClass-1.1 {test Ac class} -setup {
-    set res [Ac new dec 10 {f1 -eq} 1e6 -name ac1]
+    set res [Ac new -variation dec -n 10 -fstart {f1 -eq} -fstop 1e6 -name ac1]
 } -body {
     set result [$res genSPICEString]
 } -result ".ac dec 10 \{f1\} 1e6" -cleanup {
@@ -38,26 +38,35 @@ test testAcClass-1.1 {test Ac class} -setup {
 }
 
 test testAcClass-1.2 {test Ac class} -setup {
-    set res [Ac new lin 1000 1 1e6]
+    set res [Ac new -variation lin -n 1000 -fstart 1 -fstop 1e6]
 } -body {
     set result [$res genSPICEString]
 } -result ".ac lin 1000 1 1e6" -cleanup {
     unset res result
 }
-
+        
+    # ________________________ Sens class tests _________________________ #
+    
+test testSensClass-1.1 {test SensDc class} -setup {
+    set res [Sens new -objfunc "0.5*(V(B)-3.0)**2.0" -param "R1:R,R2:R" -name sense1]
+} -body {
+    set result [$res genSPICEString]
+} -result ".sens objfunc={0.5*(V(B)-3.0)**2.0} param=R1:R,R2:R" -cleanup {
+    unset res result
+}
     
     # ________________________ Tran class tests _________________________ #
     
 test testTranClass-1.1 {test Tran class} -setup {
-    set res [Tran new 1e-6 1e-3 -uic -name tran1]
+    set res [Tran new -tstep 1e-6 -tstop 1e-3 -tstart 0.1e-6 -uic -name tran1]
 } -body {
     set result [$res genSPICEString]
-} -result ".tran 1e-6 1e-3 uic" -cleanup {
+} -result ".tran 1e-6 1e-3 0.1e-6 uic" -cleanup {
     unset res result
 }
 
 test testTranClass-1.2 {test Tran class} -setup {
-    set res [Tran new 1e-6 {tend -eq} -uic -name tran1]
+    set res [Tran new -tstep 1e-6 -tstop {tend -eq} -uic -name tran1]
 } -body {
     set result [$res genSPICEString]
 } -result ".tran 1e-6 \{tend\} uic" -cleanup {
@@ -65,29 +74,13 @@ test testTranClass-1.2 {test Tran class} -setup {
 }
 
 test testTranClass-1.3 {test Tran class} -setup {
-    set res [Tran new 1e-6 {tend -eq}]
+    set res [Tran new -tstep 1e-6 -tstop {tend -eq}]
 } -body {
     set result [$res genSPICEString]
 } -result ".tran 1e-6 \{tend\}" -cleanup {
     unset res result
 }
 
-test testTranClass-1.4 {test Tran class} -setup {
-    set res [Tran new 1e-6 {tend -eq} -starttime 0]
-} -body {
-    set result [$res genSPICEString]
-} -result ".tran 1e-6 \{tend\} 0" -cleanup {
-    unset res result
-}
-
-test testTranClass-1.5 {test Tran class} -setup {
-    set res [Tran new 1e-6 {tend -eq} -starttime 0 -maxstep 1e-9]
-} -body {
-    set result [$res genSPICEString]
-} -result ".tran 1e-6 \{tend\} 0 1e-9" -cleanup {
-    unset res result
-}    
-    
     # ________________________ Op class tests _________________________ #
     
 test testOpClass-1.1 {test Op class} -setup {

@@ -310,7 +310,17 @@ x2 net1 net2 rcnet r=1 c={cpar}
 
 </figure><p class='ruff'>In the picture, you can see how temperature affects the forward current of the diode. Because the series resistance has a temperature dependence, all the lines intersect near 1.8V, indicating the point of zero temperature coefficient:</p>
 <p class='ruff'><img src="assets/img/diode_iv.png" alt="diode_iv" /></p>
-<h2 class='ruff'><a name='::Tutorials-Diode capacitance simualtion'></a>Diode capacitance simualtion<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
+<p class='ruff'>This circuit works almost without modification in Xyce simulator, see &quot;examples/xyce/dc/diode_iv.tcl&quot; file. The one of the differences is how we set the global temperature: in Xyce there is no .temp statement, for setting global temperature we use <code>.options</code> statement with class <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Options" title="::SpiceGenTcl::Options" class='ruff_cmd'>::SpiceGenTcl::Options</a>:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> tempSt [<b><font color=#923B23>Options</font></b> new {{device <font color=#463e11>-sw</font>} {temp 25}}]
+</pre>
+
+</figure><p class='ruff'>and then modify this value in loop:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$tempSt</font> setParamValue temp <font color=#4A181B>$temp</font>
+</pre>
+
+</figure><h2 class='ruff'><a name='::Tutorials-Diode capacitance simualtion'></a>Diode capacitance simualtion<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
 <p class='ruff'>In this example, we measure the volt-farad (or capacitance-voltage) relationship of the diode's depletion charge. To achieve this, we need to apply a negative voltage bias to the anode and perform an AC simulation at a single frequency. We then repeat this process at different voltages, collect all the results, and finally plot the entire curve. We calculate the capacitance value using the following equation:</p>
 
@@ -754,15 +764,23 @@ vrc2=-6.032e-04
 </main><nav class='ruff-nav'><ul ><li class='ruff-toc1'><a style='padding-top:2px;' href='index.html'>Start page</a></li>
 <li class='ruff-toc1'><a href='index-docindex.html' accesskey='i'>Index</a></li>
 <hr>
+<li class='ruff-toc1'><a href='index-List-of-devices.html'>List of devices</a></li>
+<li class='ruff-toc1'><a href='index-General-Information.html'>General Information</a></li>
 <li class='ruff-toc1'><a href='index-FAQ.html'>FAQ</a></li>
 <li class='ruff-toc1'><a class='ruff-highlight' href='index-Tutorials.html'>Tutorials</a></li>
 <li class='ruff-toc1'><a href='index-Tips.html'>Tips</a></li>
 <li class='ruff-toc1'><a href='index-Advanced.html'>Advanced</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl.html'>SpiceGenTcl</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Common-BasicDevices.html'>SpiceGenTcl::Common::BasicDevices</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Common-Sources.html'>SpiceGenTcl::Common::Sources</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html'>SpiceGenTcl::Ngspice::BasicDevices</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-Sources.html'>SpiceGenTcl::Ngspice::Sources</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-SemiconductorDevices.html'>SpiceGenTcl::Ngspice::SemiconductorDevices</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-Analyses.html'>SpiceGenTcl::Ngspice::Analyses</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-Simulators.html'>SpiceGenTcl::Ngspice::Simulators</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html'>SpiceGenTcl::Xyce::BasicDevices</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-Sources.html'>SpiceGenTcl::Xyce::Sources</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html'>SpiceGenTcl::Xyce::SemiconductorDevices</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-Analyses.html'>SpiceGenTcl::Xyce::Analyses</a></li>
 <hr><li class='ruff-toc2'><a href='#::Tutorials-Netlist manipulations'>Netlist manipulations</a></li><li class='ruff-toc3'><a href='#::Tutorials-Delete element'>Delete element</a></li><li class='ruff-toc3'><a href='#::Tutorials-Get element'>Get element</a></li><li class='ruff-toc3'><a href='#::Tutorials-Print list of all elements'>Print list of all elements</a></li><li class='ruff-toc3'><a href='#::Tutorials-Temporarly remove of element'>Temporarly remove of element</a></li><li class='ruff-toc2'><a href='#::Tutorials-Subcircuit definition'>Subcircuit definition</a></li><li class='ruff-toc2'><a href='#::Tutorials-Diode current simualtion'>Diode current simualtion</a></li><li class='ruff-toc2'><a href='#::Tutorials-Diode capacitance simualtion'>Diode capacitance simualtion</a></li><li class='ruff-toc2'><a href='#::Tutorials-Sensitive analysis of differential pair'>Sensitive analysis of differential pair</a></li><li class='ruff-toc2'><a href='#::Tutorials-Transient simulation of ring oscillator'>Transient simulation of ring oscillator</a></li><li class='ruff-toc2'><a href='#::Tutorials-Transient simulation of four-bit adder'>Transient simulation of four-bit adder</a></li></ul></nav><footer class='ruff-layout-footer ruff-ft'><div style='float: right;'>Document generated by <a href='https://ruff.magicsplat.com'>Ruff!</a></div><div>&copy; George Yashin</div></footer>
 </div></body></html>

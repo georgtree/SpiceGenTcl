@@ -1,11 +1,11 @@
 
 namespace eval ::SpiceGenTcl {
-    namespace eval Ngspice::Analyses {
-        namespace export Dc Ac Tran Op Disto Noise Pz SensAc SensDc Sp Tf
+    namespace eval Xyce::Analyses {
+        namespace export Dc Ac Tran Op Sens
     }
 }
 
-namespace eval ::SpiceGenTcl::Ngspice::Analyses {
+namespace eval ::SpiceGenTcl::Xyce::Analyses {
     
     
     # ________________________ Dc class _________________________ #
@@ -20,11 +20,11 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             #  -incr - incrementing value
             #  -name - name argument, optional
             # ```
-            # .dc src start stop vincr
+            # .DC [LIN] <sweep variable name> <start> <stop> <step>
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Analyses::Dc new -src v1 -start {time1 -eq} -stop 5 -incr 0.1 -name dc1
+            # ::SpiceGenTcl::Xyce::Analyses::Dc new -src v1 -start {time1 -eq} -stop 5 -incr 0.1 -name dc1
             # ```
             set arguments [argparse -inline {
                 -name=
@@ -68,11 +68,12 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             #  -fstop - start frequency
             #  -name - name argument, optional
             # ```
-            # .ac variation n fstart fstop
+            # .AC <sweep type> <points value>
+            # + <start frequency value> <end frequency value>
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Analyses::Ac new -variation dec -n 10 -fstart 1 -fstop 1e6 -name dc1
+            # ::SpiceGenTcl::Xyce::Analyses::Ac new -variation dec -n 10 -fstart 1 -fstop 1e6 -name dc1
             # ```
             set arguments [argparse -inline {
                 -name=
@@ -106,81 +107,32 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
 
     # ________________________ SensAc class _________________________ #
 
-    oo::class create SensAc {
+    oo::class create Sens {
         superclass ::SpiceGenTcl::Analysis
         constructor {args} {
-            # Creates object of class `SensAc` that describes SENS ac analysis. 
-            #  -outvar - output variable
-            #  -variation - parameter that defines frequency scale, could be dec, oct or lin
-            #  -n - number of points
-            #  -fstart - start frequency
-            #  -fstop - start frequency
-            #  -name - name argument, optional
+            # Creates object of class `Sens` that describes SENS ac analysis. 
+            #  -objfunc - output expression
+            #  -param - circuit parameter(s)
+            #  -name - name argument, optional 
             # ```
-            # .sens outvar ac variation n fstart fstop
+            # .SENS objfunc=<output expression(s)> param=<circuit parameter(s)>
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Analyses::SensAc new -outvar v(1,out) -variation dec -n 10 -fstart 1 -fstop 1e6 -name dc1
+            # ::SpiceGenTcl::Analyses::Xyce::Sens new -objfunc "0.5*(V(B)-3.0)**2.0" -param "R1:R,R2:R" -name dc1
             # ```
             set arguments [argparse -inline {
                 -name=
-                {-outvar= -required}
-                {-variation= -required}
-                {-n= -required}
-                {-fstart= -required}
-                {-fstop= -required}
+                {-objfunc= -required}
+                {-param= -required}
             }]
             if {[dict exists $arguments name]} {
                 set name [dict get $arguments name]
             } else {
                 set name [self object]
             }
-            lappend params "outvar [dict get $arguments outvar] -posnocheck"
-            lappend params "ac -sw"
-            lappend params "variation [dict get $arguments variation] -posnocheck"
-            set paramsOrder [list n fstart fstop]
-            foreach param $paramsOrder {
-                if {[dict exists $arguments $param]} {
-                    dict append argsOrdered $param [dict get $arguments $param]
-                }
-            }
-            dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                    lappend params "$paramName [lindex $value 0] -poseq"
-                } else {
-                    lappend params "$paramName $value -pos"
-                }
-            }
-            next sens $params -name $name
-        }
-    }
-    
-    # ________________________ SensDc class _________________________ #
-
-    oo::class create SensDc {
-        superclass ::SpiceGenTcl::Analysis
-        constructor {args} {
-            # Creates object of class `SensDc` that describes SENS dc analysis. 
-            #  -outvar - output variable
-            #  -name - name argument, optional
-            # ```
-            # .senc variation n fstart fstop
-            # ```
-            # Example of class initialization:
-            # ```
-            # ::SpiceGenTcl::Ngspice::Analyses::SensDc new -outvar v(1,out) -name sensdc1
-            # ```
-            set arguments [argparse -inline {
-                -name=
-                {-outvar= -required}
-            }]
-            if {[dict exists $arguments name]} {
-                set name [dict get $arguments name]
-            } else {
-                set name [self object]
-            }
-            lappend params "outvar [dict get $arguments outvar] -posnocheck"
+            lappend params "objfunc [dict get $arguments objfunc] -eq" 
+            lappend params "param [dict get $arguments param] -nocheck"
             next sens $params -name $name
         }
     }
@@ -191,17 +143,19 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
         superclass ::SpiceGenTcl::Analysis
         constructor {args} {
             # Creates object of class `Tran` that describes TRAN analysis. 
-            #  -tstep - size of maximum time step for plotting
-            #  -tstop - stop time value
+            #  -tstep - initial step value
+            #  -tstop - final time value
             #  -tstart - start time of saving data, optional
-            #  -tstart - size of maximum time step in actual simulation, optional
+            #  -tstart - size of maximum time step in actual simulation, optional, require -tstart
+            #  -uic - skip initial operating point solution, optional
             #  -name - name argument, optional
             # ```
-            # .tran tstep tstop <tstart<tmax>> <uic>
+            # .TRAN <initial step value> <final time value>
+            # + [<start time value> [<step ceiling value>]] [NOOP] [UIC]
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Analyses::Tran new -tstep 1e-9 -tstop 10e-6 -name dc1
+            # ::SpiceGenTcl::Xyce::Analyses::Tran new -tstep 1e-9 -tstop 10e-6 -name dc1
             # ```
             set arguments [argparse -inline {
                 -name=
@@ -248,7 +202,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Analyses::Op new -name op1
+            # ::SpiceGenTcl::Xyce::Analyses::Op new -name op1
             # ```
             set arguments [argparse -inline {
                 -name=

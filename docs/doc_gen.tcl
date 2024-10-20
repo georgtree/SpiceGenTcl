@@ -7,15 +7,20 @@ package require fileutil
 set dir [file dirname [file normalize [info script]]]
 set sourceDir "${dir}/../src"
 source startPage.ruff
+source generalInformation.ruff
+source listOfDevices.ruff
 source tutorials.ruff
 source faq.ruff
 source tips.ruff
 source advanced.ruff
 source [file join $sourceDir generalClasses.tcl]
-source [file join $sourceDir ngspice/specElementsClasses.tcl]
-source [file join $sourceDir ngspice/specAnalysesClasses.tcl]
-source [file join $sourceDir ngspice/specModelsClasses.tcl]
-source [file join $sourceDir ngspice/specSimulatorClasses.tcl]
+source [file join $sourceDir specElementsClassesCommon.tcl]
+source [file join $sourceDir ngspice specElementsClassesNgspice.tcl]
+source [file join $sourceDir ngspice specAnalysesClassesNgspice.tcl]
+source [file join $sourceDir ngspice specModelsClassesNgspice.tcl]
+source [file join $sourceDir ngspice specSimulatorClassesNgspice.tcl]
+source [file join $sourceDir xyce specAnalysesClassesXyce.tcl]
+source [file join $sourceDir xyce specElementsClassesXyce.tcl]
 
 set packageVersion [package versions SpiceGenTcl]
 
@@ -37,9 +42,13 @@ set common [list \
                 -version $packageVersion \
                 -copyright "George Yashin" {*}$::argv
                ]
-set namespaces [list ::FAQ ::Tutorials ::Tips ::Advanced ::SpiceGenTcl ::SpiceGenTcl::Ngspice::BasicDevices \
+set namespaces [list "::List of devices" "::General Information" ::FAQ ::Tutorials ::Tips ::Advanced ::SpiceGenTcl ::SpiceGenTcl::Common::BasicDevices \
+                ::SpiceGenTcl::Common::Sources ::SpiceGenTcl::Ngspice::BasicDevices \
                 ::SpiceGenTcl::Ngspice::Sources ::SpiceGenTcl::Ngspice::SemiconductorDevices \
-                ::SpiceGenTcl::Ngspice::Analyses ::SpiceGenTcl::Ngspice::Simulators]
+                ::SpiceGenTcl::Ngspice::Analyses ::SpiceGenTcl::Ngspice::Simulators \
+                ::SpiceGenTcl::Xyce::BasicDevices ::SpiceGenTcl::Xyce::Sources \
+                ::SpiceGenTcl::Xyce::SemiconductorDevices ::SpiceGenTcl::Xyce::Analyses]
+                
 
 if {[llength $argv] == 0 || "html" in $argv} {
     ruff::document $namespaces \

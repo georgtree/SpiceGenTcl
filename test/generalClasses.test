@@ -757,6 +757,15 @@ test testParamStatementClass-1.5 {test creation of ParamStatement class instance
     unset errorStr
 }
 
+test testParamStatementClass-1.6 {test creation of ParamStatement class instance and setParamValue interface} -setup {
+    set elemInst [ParamStatement new {{U0T {rf+1} -eq} {vth0 10}}]
+} -body {
+    $elemInst setParamValue u0t 2
+    set result [$elemInst getParams]
+} -result [dict create u0t 2 vth0 10] -cleanup {
+    unset elemInst result
+}
+
     # ________________________ Netlist class tests _________________________ #
     
 test testNetlistClass-1.1 {test creation of Netlist class instance with add interface and genSPICEString interface} -setup {

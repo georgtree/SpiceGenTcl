@@ -5,7 +5,7 @@ namespace eval ::SpiceGenTcl {
     namespace export Pin ParameterSwitch Parameter ParameterNoCheck ParameterPositional ParameterPositionalNoCheck \
             ParameterDefault ParameterEquation ParameterPositionalEquation Device Model RawString Comment Include Options \
             ParamStatement Temp Netlist Circuit Library Subcircuit Analysis Simulator Dataset Axis Trace EmptyTrace RawFile
-    namespace export importNgspice
+    namespace export importNgspice importXyce
     
     proc importNgspice {} {
         # Imports all ::SpiceGenTcl::Ngspice commands to caller namespace
@@ -13,7 +13,13 @@ namespace eval ::SpiceGenTcl {
             namespace import ${nameSpc}::*
         }}
     }
-    
+
+    proc importXyce {} {
+        # Imports all ::SpiceGenTcl::Xyce commands to caller namespace
+        uplevel 1 {foreach nameSpc [namespace children ::SpiceGenTcl::Xyce] {
+            namespace import ${nameSpc}::*
+        }}
+    }
     
    # ________________________ SPICEElement class definition _________________________ #
     
@@ -479,8 +485,8 @@ namespace eval ::SpiceGenTcl {
             # Adds new parameter to device, and throws error on dublicated names.
             #  paramName - name of parameter
             #  value - value of parameter
-            #  args - optional arguments that adds qualificator to parameter: -pos - positional parameter,
-            #   -eq - equational parameter, -poseq - positional equation parameter
+            #  args - optional arguments that adds qualificator to parameter: -pos - positional parameter, -eq - 
+            #  equational parameter, -poseq - positional equation parameter
             set arguments [argparse {
                 {-pos -forbid {poseq}}
                 {-eq -forbid {poseq}}
@@ -953,7 +959,7 @@ namespace eval ::SpiceGenTcl {
             } else {
                 set param [dict get $Params $paramName]
             }
-            $param setValue $value
+            $param configure -Value $value
             return
         }
         method genSPICEString {} {
