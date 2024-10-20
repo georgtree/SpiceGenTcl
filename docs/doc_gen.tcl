@@ -21,6 +21,7 @@ source [file join $sourceDir ngspice specModelsClassesNgspice.tcl]
 source [file join $sourceDir ngspice specSimulatorClassesNgspice.tcl]
 source [file join $sourceDir xyce specAnalysesClassesXyce.tcl]
 source [file join $sourceDir xyce specElementsClassesXyce.tcl]
+source [file join $sourceDir xyce specSimulatorClassesXyce.tcl]
 
 set packageVersion [package versions SpiceGenTcl]
 
@@ -47,7 +48,8 @@ set namespaces [list "::List of devices" "::General Information" ::FAQ ::Tutoria
                 ::SpiceGenTcl::Ngspice::Sources ::SpiceGenTcl::Ngspice::SemiconductorDevices \
                 ::SpiceGenTcl::Ngspice::Analyses ::SpiceGenTcl::Ngspice::Simulators \
                 ::SpiceGenTcl::Xyce::BasicDevices ::SpiceGenTcl::Xyce::Sources \
-                ::SpiceGenTcl::Xyce::SemiconductorDevices ::SpiceGenTcl::Xyce::Analyses]
+                ::SpiceGenTcl::Xyce::SemiconductorDevices ::SpiceGenTcl::Xyce::Analyses \
+                ::SpiceGenTcl::Xyce::Simulators]
                 
 
 if {[llength $argv] == 0 || "html" in $argv} {

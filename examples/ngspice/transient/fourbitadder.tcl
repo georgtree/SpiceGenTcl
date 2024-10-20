@@ -4,10 +4,7 @@ package require SpiceGenTcl
 package require ticklecharts
 namespace import ::tcl::mathop::*
 namespace import ::SpiceGenTcl::*
-set ngspiceNameSpc [namespace children ::SpiceGenTcl::Ngspice]
-foreach nameSpc $ngspiceNameSpc {
-    namespace import ${nameSpc}::*
-}
+importNgspice
 
 
 # create class that represents NAND subcircuit
