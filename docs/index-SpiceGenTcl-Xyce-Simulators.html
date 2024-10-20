@@ -1,0 +1,151 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"/>
+<title>Tcl SpiceGenTcl package</title>
+<link rel='stylesheet' type='text/css' href='assets/ruff-min.css' />
+<script type='text/javascript' src='assets/ruff-min.js'></script>
+</head>
+<body>
+<div class='ruff-layout'>
+<header class='ruff-layout-header ruff-hd'>
+<a style='text-decoration:none;' href='index.html'>Tcl SpiceGenTcl package (v0.1)</a>
+
+
+            <div id="ruffButtonBar">
+            <button id="ruffNavMove" onclick="ruffMoveNavPane()"></button>
+            <button id="ruffToggleTheme" onclick="ruffNextTheme()"></button>
+            </div>
+        </header><main class='ruff-layout-main ruff-bd'><h1 class='ruff'><a name='::SpiceGenTcl::Xyce::Simulators'></a>::SpiceGenTcl::Xyce::Simulators<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h1>
+<div style='clear:both;'></div>
+<h2 class='ruff'><a name='::SpiceGenTcl::Xyce::Simulators-Classes'></a>Classes<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
+<div style='clear:both;'></div>
+<h3 class='ruffclass'><a name='::SpiceGenTcl::Xyce::Simulators::Batch'>Batch</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-Simulators.html#::SpiceGenTcl::Xyce::Simulators" title="::SpiceGenTcl::Xyce::Simulators" class='ruff_cmd'>::SpiceGenTcl::Xyce::Simulators</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
+<div style='clear:both;'></div>
+<h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
+<tr><td><a href="index-SpiceGenTcl-Xyce-Simulators.html#::SpiceGenTcl::Xyce::Simulators::Batch::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
+<tr><td><a href="index-SpiceGenTcl-Xyce-Simulators.html#::SpiceGenTcl::Xyce::Simulators::Batch::clearLog" title="clearLog" class='ruff_cmd'>clearLog</a></td><td>Clear saved log by unsetting Log variable.</td></tr>
+<tr><td><code>configure</code></td><td>Configure properties.</td></tr>
+<tr><td><code>getLog</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Simulator::getLog" title="::SpiceGenTcl::Simulator.getLog" class='ruff_cmd'>::SpiceGenTcl::Simulator.getLog</a></td></tr>
+<tr><td><a href="index-SpiceGenTcl-Xyce-Simulators.html#::SpiceGenTcl::Xyce::Simulators::Batch::readData" title="readData" class='ruff_cmd'>readData</a></td><td>Reads raw data file, create RawFile object and return it's reference name.</td></tr>
+<tr><td><a href="index-SpiceGenTcl-Xyce-Simulators.html#::SpiceGenTcl::Xyce::Simulators::Batch::readLog" title="readLog" class='ruff_cmd'>readLog</a></td><td>Reads log file of last simulation and save it's content to Log variable.</td></tr>
+<tr><td><code>run</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Simulator::run" title="::SpiceGenTcl::Simulator.run" class='ruff_cmd'>::SpiceGenTcl::Simulator.run</a></td></tr>
+<tr><td><a href="index-SpiceGenTcl-Xyce-Simulators.html#::SpiceGenTcl::Xyce::Simulators::Batch::runAndRead" title="runAndRead" class='ruff_cmd'>runAndRead</a></td><td>Runs netlist circuit file.</td></tr>
+</table>
+<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#463e11>-Command</font></code>, <code><font color=#463e11>-Data</font></code>, <code><font color=#463e11>-LastRunFileName</font></code>, <code><font color=#463e11>-Log</font></code>, <code><font color=#463e11>-Name</font></code>, <code><font color=#463e11>-Path</font></code>, <code><font color=#463e11>-RunLocation</font></code></p>
+<p class='ruff'>Writable: <code><font color=#463e11>-Command</font></code>, <code><font color=#463e11>-Data</font></code>, <code><font color=#463e11>-LastRunFileName</font></code>, <code><font color=#463e11>-Log</font></code>, <code><font color=#463e11>-Name</font></code>, <code><font color=#463e11>-Path</font></code>, <code><font color=#463e11>-RunLocation</font></code></p>
+<h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Simulator" title="::SpiceGenTcl::Simulator" class='ruff_cmd'>::SpiceGenTcl::Simulator</a></p>
+<h4 class='ruffmethod'><a name='::SpiceGenTcl::Xyce::Simulators::Batch::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-Simulators.html#::SpiceGenTcl::Xyce::Simulators::Batch" title="::SpiceGenTcl::Xyce::Simulators::Batch" class='ruff_cmd'>::SpiceGenTcl::Xyce::Simulators::Batch</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Xyce-Simulators.html#::SpiceGenTcl::Xyce::Simulators::Batch'>Batch</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
+<div style='clear:both;'></div>
+<p class='ruff'>Creates batch ngspice simulator that can be attached to top-level Circuit.</p>
+<div class='ruff_synopsis'><span class='ruff_cmd'>Batch create OBJNAME</span> <span class='ruff_arg'>name path ?runLocation?</span><br><span class='ruff_cmd'>Batch new</span> <span class='ruff_arg'>name path ?runLocation?</span></div>
+<h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
+<tr><td><code>name</code></td><td>Name of simulator object.</td></tr>
+<tr><td><code>path</code></td><td>Path of ngspice executable file.</td></tr>
+<tr><td><code>runLocation</code></td><td>Location at which input netlist is stored and all output files will be saved, default is system temporary folder at Linux system. Optional, default <code>/tmp</code>.</td></tr>
+</table>
+<div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Xyce_Simulators_Batch_constructor' href="javascript:toggleSource('SpiceGenTcl_Xyce_Simulators_Batch_constructor')">Show source</a></p>
+<div id='SpiceGenTcl_Xyce_Simulators_Batch_constructor' class='ruff_dyn_src'><pre><b><font color=#ca14ca>method</font></b> constructor {name path {runLocation /tmp}} {
+
+    <i><font color=#4b5d50># Creates batch ngspice simulator that can be attached to top-level Circuit.</font></i>
+    <i><font color=#4b5d50>#  name - name of simulator object</font></i>
+    <i><font color=#4b5d50>#  path - path of ngspice executable file</font></i>
+    <i><font color=#4b5d50>#  runLocation - location at which input netlist is stored and all output files will be saved,</font></i>
+    <i><font color=#4b5d50>#   default is system temporary folder at Linux system</font></i>
+    <b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-Name</font> <font color=#4A181B>$name</font>
+    <b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-Path</font> <font color=#4A181B>$path</font>
+    <b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-Command</font> Xyce
+    <b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-RunLocation</font> <font color=#4A181B>$runLocation</font>
+}</pre></div>
+</div><h4 class='ruffmethod'><a name='::SpiceGenTcl::Xyce::Simulators::Batch::clearLog'>clearLog</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-Simulators.html#::SpiceGenTcl::Xyce::Simulators::Batch" title="::SpiceGenTcl::Xyce::Simulators::Batch" class='ruff_cmd'>::SpiceGenTcl::Xyce::Simulators::Batch</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Xyce-Simulators.html#::SpiceGenTcl::Xyce::Simulators::Batch'>Batch</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
+<div style='clear:both;'></div>
+<p class='ruff'>Clear saved log by unsetting Log variable.</p>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT clearLog</span> </div>
+<div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Xyce_Simulators_Batch_clearLog' href="javascript:toggleSource('SpiceGenTcl_Xyce_Simulators_Batch_clearLog')">Show source</a></p>
+<div id='SpiceGenTcl_Xyce_Simulators_Batch_clearLog' class='ruff_dyn_src'><pre><b><font color=#ca14ca>method</font></b> clearLog {} {
+
+    <i><font color=#4b5d50># Clear saved log by unsetting Log variable.</font></i>
+    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> exists Log]} {
+        <b><font color=#923B23>unset</font></b> Log
+        <b><font color=#ca14ca>return</font></b>
+    } <b><font color=#923B23>else</font></b> {
+        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Log does not exists for simulator '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>'&quot;</font>
+    }
+}</pre></div>
+</div><h4 class='ruffmethod'><a name='::SpiceGenTcl::Xyce::Simulators::Batch::readData'>readData</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-Simulators.html#::SpiceGenTcl::Xyce::Simulators::Batch" title="::SpiceGenTcl::Xyce::Simulators::Batch" class='ruff_cmd'>::SpiceGenTcl::Xyce::Simulators::Batch</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Xyce-Simulators.html#::SpiceGenTcl::Xyce::Simulators::Batch'>Batch</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
+<div style='clear:both;'></div>
+<p class='ruff'>Reads raw data file, create RawFile object and return it's reference name.</p>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT readData</span> </div>
+<div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Xyce_Simulators_Batch_readData' href="javascript:toggleSource('SpiceGenTcl_Xyce_Simulators_Batch_readData')">Show source</a></p>
+<div id='SpiceGenTcl_Xyce_Simulators_Batch_readData' class='ruff_dyn_src'><pre><b><font color=#ca14ca>method</font></b> readData {} {
+
+    <i><font color=#4b5d50># Reads raw data file, create RawFile object and return it's reference name.</font></i>
+    <b><font color=#ca14ca>my</font></b> variable Data
+    <b><font color=#923B23>set</font></b> Data [::SpiceGenTcl::RawFile new <font color=#035103>&quot;<font color=#4A181B>[</font>my configure -RunLocation<font color=#4A181B>]</font>/<font color=#4A181B>[</font>my configure -LastRunFileName<font color=#4A181B>]</font>.raw&quot;</font>]
+    <b><font color=#ca14ca>return</font></b>
+}</pre></div>
+</div><h4 class='ruffmethod'><a name='::SpiceGenTcl::Xyce::Simulators::Batch::readLog'>readLog</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-Simulators.html#::SpiceGenTcl::Xyce::Simulators::Batch" title="::SpiceGenTcl::Xyce::Simulators::Batch" class='ruff_cmd'>::SpiceGenTcl::Xyce::Simulators::Batch</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Xyce-Simulators.html#::SpiceGenTcl::Xyce::Simulators::Batch'>Batch</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
+<div style='clear:both;'></div>
+<p class='ruff'>Reads log file of last simulation and save it's content to Log variable.</p>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT readLog</span> </div>
+<div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Xyce_Simulators_Batch_readLog' href="javascript:toggleSource('SpiceGenTcl_Xyce_Simulators_Batch_readLog')">Show source</a></p>
+<div id='SpiceGenTcl_Xyce_Simulators_Batch_readLog' class='ruff_dyn_src'><pre><b><font color=#ca14ca>method</font></b> readLog {} {
+
+    <i><font color=#4b5d50># Reads log file of last simulation and save it's content to Log variable.</font></i>
+    <b><font color=#923B23>set</font></b> logFile [<b><font color=#923B23>open</font></b> <font color=#035103>&quot;<font color=#4A181B>[</font>my configure -RunLocation<font color=#4A181B>]</font>/<font color=#4A181B>[</font>my configure -LastRunFileName<font color=#4A181B>]</font>.log&quot;</font> r+]
+    <b><font color=#923B23>set</font></b> Log [<b><font color=#923B23>read</font></b> <font color=#4A181B>$logFile</font>]
+    <b><font color=#923B23>close</font></b> <font color=#4A181B>$logFile</font>
+    <b><font color=#ca14ca>return</font></b>
+}</pre></div>
+</div><h4 class='ruffmethod'><a name='::SpiceGenTcl::Xyce::Simulators::Batch::runAndRead'>runAndRead</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-Simulators.html#::SpiceGenTcl::Xyce::Simulators::Batch" title="::SpiceGenTcl::Xyce::Simulators::Batch" class='ruff_cmd'>::SpiceGenTcl::Xyce::Simulators::Batch</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Xyce-Simulators.html#::SpiceGenTcl::Xyce::Simulators::Batch'>Batch</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
+<div style='clear:both;'></div>
+<p class='ruff'>Runs netlist circuit file.</p>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT runAndRead</span> <span class='ruff_arg'>circuitStr</span></div>
+<h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
+<tr><td><code>circuitStr</code></td><td>Top-level netlist string.</td></tr>
+</table>
+<div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Xyce_Simulators_Batch_runAndRead' href="javascript:toggleSource('SpiceGenTcl_Xyce_Simulators_Batch_runAndRead')">Show source</a></p>
+<div id='SpiceGenTcl_Xyce_Simulators_Batch_runAndRead' class='ruff_dyn_src'><pre><b><font color=#ca14ca>method</font></b> runAndRead {circuitStr} {
+
+    <i><font color=#4b5d50># Runs netlist circuit file.</font></i>
+    <i><font color=#4b5d50>#  circuitStr - top-level netlist string</font></i>
+    <b><font color=#923B23>set</font></b> firstLine [<b><font color=#923B23>lindex</font></b> [<b><font color=#923B23>split</font></b> <font color=#4A181B>$circuitStr</font> \n] 0]
+    <b><font color=#923B23>set</font></b> runLocation [<b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-RunLocation</font>]
+    <b><font color=#923B23>set</font></b> cirFile [<b><font color=#923B23>open</font></b> <font color=#035103>&quot;<font color=#4A181B>${</font>runLocation<font color=#4A181B>}</font>/<font color=#4A181B>${</font>firstLine<font color=#4A181B>}</font>.cir&quot;</font> w+]
+    <b><font color=#923B23>puts</font></b> <font color=#4A181B>$cirFile</font> <font color=#4A181B>$circuitStr</font>
+    <b><font color=#923B23>close</font></b> <font color=#4A181B>$cirFile</font>
+    <b><font color=#923B23>set</font></b> rawFileName <font color=#035103>&quot;<font color=#4A181B>${</font>runLocation<font color=#4A181B>}</font>/<font color=#4A181B>${</font>firstLine<font color=#4A181B>}</font>.raw&quot;</font>
+    <b><font color=#923B23>set</font></b> logFileName <font color=#035103>&quot;<font color=#4A181B>${</font>runLocation<font color=#4A181B>}</font>/<font color=#4A181B>${</font>firstLine<font color=#4A181B>}</font>.log&quot;</font>
+    <b><font color=#923B23>set</font></b> cirFileName <font color=#035103>&quot;<font color=#4A181B>${</font>runLocation<font color=#4A181B>}</font>/<font color=#4A181B>${</font>firstLine<font color=#4A181B>}</font>.cir&quot;</font>
+    <b><font color=#923B23>exec</font></b> <font color=#035103>&quot;<font color=#4A181B>[</font>my configure -Command<font color=#4A181B>]</font>&quot;</font> <font color=#463e11>-r</font> <font color=#4A181B>$rawFileName</font> <font color=#463e11>-l</font> <font color=#4A181B>$logFileName</font> <font color=#4A181B>$cirFileName</font>
+    <b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-LastRunFileName</font> <font color=#4A181B>${firstLine}</font>
+    <b><font color=#ca14ca>my</font></b> readLog
+    <b><font color=#ca14ca>my</font></b> readData
+}</pre></div>
+</div></main><nav class='ruff-nav'><ul ><li class='ruff-toc1'><a style='padding-top:2px;' href='index.html'>Start page</a></li>
+<li class='ruff-toc1'><a href='index-docindex.html' accesskey='i'>Index</a></li>
+<hr>
+<li class='ruff-toc1'><a href='index-List-of-devices.html'>List of devices</a></li>
+<li class='ruff-toc1'><a href='index-General-Information.html'>General Information</a></li>
+<li class='ruff-toc1'><a href='index-FAQ.html'>FAQ</a></li>
+<li class='ruff-toc1'><a href='index-Tutorials.html'>Tutorials</a></li>
+<li class='ruff-toc1'><a href='index-Tips.html'>Tips</a></li>
+<li class='ruff-toc1'><a href='index-Advanced.html'>Advanced</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl.html'>SpiceGenTcl</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Common-BasicDevices.html'>SpiceGenTcl::Common::BasicDevices</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Common-Sources.html'>SpiceGenTcl::Common::Sources</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html'>SpiceGenTcl::Ngspice::BasicDevices</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-Sources.html'>SpiceGenTcl::Ngspice::Sources</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-SemiconductorDevices.html'>SpiceGenTcl::Ngspice::SemiconductorDevices</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-Analyses.html'>SpiceGenTcl::Ngspice::Analyses</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-Simulators.html'>SpiceGenTcl::Ngspice::Simulators</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html'>SpiceGenTcl::Xyce::BasicDevices</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-Sources.html'>SpiceGenTcl::Xyce::Sources</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html'>SpiceGenTcl::Xyce::SemiconductorDevices</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-Analyses.html'>SpiceGenTcl::Xyce::Analyses</a></li>
+<li class='ruff-toc1'><a class='ruff-highlight' href='index-SpiceGenTcl-Xyce-Simulators.html'>SpiceGenTcl::Xyce::Simulators</a></li>
+<hr><li class='ruff-toc2'><a href='#::SpiceGenTcl::Xyce::Simulators-Classes'>Classes</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-Simulators.html#::SpiceGenTcl::Xyce::Simulators::Batch'>Batch</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-Simulators.html#::SpiceGenTcl::Xyce::Simulators::Batch::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>Batch</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name path ?runLocation?&lt;/span&gt;
+&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>Batch</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name path ?runLocation?&lt;/span&gt;</pre>Creates batch ngspice simulator that can be attached to top-level Circuit.
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-Simulators.html#::SpiceGenTcl::Xyce::Simulators::Batch::clearLog'>clearLog</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT clearLog&lt;/span&gt; </pre>Clear saved log by unsetting Log variable.
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-Simulators.html#::SpiceGenTcl::Xyce::Simulators::Batch::readData'>readData</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT readData&lt;/span&gt; </pre>Reads raw data file, create RawFile object and return it's reference name.
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-Simulators.html#::SpiceGenTcl::Xyce::Simulators::Batch::readLog'>readLog</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT readLog&lt;/span&gt; </pre>Reads log file of last simulation and save it's content to Log variable.
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-Simulators.html#::SpiceGenTcl::Xyce::Simulators::Batch::runAndRead'>runAndRead</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT runAndRead&lt;/span&gt; &lt;span class='ruff_arg'&gt;circuitStr&lt;/span&gt;</pre>Runs netlist circuit file.
+</span></li></ul></nav><footer class='ruff-layout-footer ruff-ft'><div style='float: right;'>Document generated by <a href='https://ruff.magicsplat.com'>Ruff!</a></div><div>&copy; George Yashin</div></footer>
+</div></body></html>

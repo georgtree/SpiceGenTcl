@@ -8,7 +8,7 @@ namespace eval ::SpiceGenTcl {
 namespace eval ::SpiceGenTcl::Xyce::Analyses {
     
     
-    # ________________________ Dc class _________________________ #
+### ________________________ Dc class _________________________ ###
 
     oo::class create Dc {
         superclass ::SpiceGenTcl::Analysis
@@ -56,7 +56,7 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
         }
     }
 
-    # ________________________ Ac class _________________________ #
+### ________________________ Ac class _________________________ ###
 
     oo::class create Ac {
         superclass ::SpiceGenTcl::Analysis
@@ -105,7 +105,7 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
         }
     }
 
-    # ________________________ SensAc class _________________________ #
+### ________________________ SensAc class _________________________ ###
 
     oo::class create Sens {
         superclass ::SpiceGenTcl::Analysis
@@ -137,7 +137,7 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
         }
     }
     
-    # ________________________ Tran class _________________________ #
+### ________________________ Tran class _________________________ ###
 
     oo::class create Tran {
         superclass ::SpiceGenTcl::Analysis
@@ -190,7 +190,7 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
         }
     }
     
-    # ________________________ Op class _________________________ #
+### ________________________ Op class _________________________ ###
 
     oo::class create Op {
         superclass ::SpiceGenTcl::Analysis

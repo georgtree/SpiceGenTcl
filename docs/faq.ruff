@@ -22,6 +22,20 @@ namespace eval FAQ {
         
         There, you can find a list of all available methods, a description of the arguments, an example of how the element string appears 
         in the netlist, and an example of creating an object of the Resistor class.
+
+        ## How to use different simulators for the same circuit (managing namespaces)?
+        Each supported simulator has it's own namespace, for example, `::SpiceGenTcl::Ngspice` for Ngspice, or, `::SpiceGenTcl::Xyce` for Xyce.
+        Also there is `::SpiceGenTcl::Common` namespace for devices that have the same syntax in most simulators.
+        
+        If you need to use particular simulator, you can call [::SpiceGenTcl::importNgspice] or [::SpiceGenTcl::importXyce] to import all commands
+        names into the current scope. It is convinient because you don't need to change code a lot. In case of full paths to command it would be much more difficult.
+        Many elements share the same interface (nodes and parameters), and so the same code works with different simulators almost without changes.
+        
+        Also, you an import elements commands individually like 
+        ```tcl
+        namespace import ::SpiceGenTcl::Ngspice::R
+        ```
+        and so import the right one in conditional statements depending on some global variable that defines simulator currently in use.
         
         ## How to change parameter of existing element?
         

@@ -21,7 +21,7 @@ namespace eval ::SpiceGenTcl {
         }}
     }
     
-   # ________________________ SPICEElement class definition _________________________ #
+### ________________________ SPICEElement class definition _________________________ ###
     
     oo::configurable create SPICEElement {
         self mixin -append oo::abstract
@@ -36,7 +36,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
     
-   # ________________________ DuplChecker class definition _________________________ #
+### ________________________ DuplChecker class definition _________________________ ###
    
     oo::configurable create DuplChecker {
         self mixin -append oo::abstract
@@ -58,7 +58,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-    # ________________________ KeyArgsBuilder class definition _________________________ #
+### ________________________ KeyArgsBuilder class definition _________________________ ###
 
     oo::class create KeyArgsBuilder {
         self mixin -append oo::abstract
@@ -95,7 +95,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
     
-    # ________________________ Pin class definition _________________________ #
+### ________________________ Pin class definition _________________________ ###
 
     oo::configurable create Pin {
         superclass SPICEElement
@@ -157,7 +157,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
     
-    # ________________________ ParameterSwitch class definition _________________________ #
+### ________________________ ParameterSwitch class definition _________________________ ###
 
     oo::configurable create ParameterSwitch {
         superclass SPICEElement
@@ -188,7 +188,7 @@ namespace eval ::SpiceGenTcl {
             return "[my configure -Name]"
         }
     }
-    # ________________________ Parameter class definition _________________________ #
+### ________________________ Parameter class definition _________________________ ###
 
     oo::configurable create Parameter {
         superclass ParameterSwitch 
@@ -217,7 +217,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-    # ________________________ ParameterNoCheck class definition _________________________ #
+### ________________________ ParameterNoCheck class definition _________________________ ###
 
     oo::configurable create ParameterNoCheck {
         superclass Parameter
@@ -237,7 +237,7 @@ namespace eval ::SpiceGenTcl {
         }
     }    
     
-    # ________________________ ParameterPositional class definition _________________________ #
+### ________________________ ParameterPositional class definition _________________________ ###
 
     oo::configurable create ParameterPositional {
         superclass Parameter
@@ -260,7 +260,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
     
-    # ________________________ ParameterPositionalNoCheck class definition _________________________ #
+### ________________________ ParameterPositionalNoCheck class definition _________________________ ###
 
     oo::configurable create ParameterPositionalNoCheck {
         superclass ParameterPositional
@@ -285,7 +285,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
     
-    # ________________________ ParameterDefault class definition _________________________ #
+### ________________________ ParameterDefault class definition _________________________ ###
 
     oo::configurable create ParameterDefault {
         superclass Parameter
@@ -316,7 +316,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
     
-    # ________________________ ParameterEquation class definition _________________________ #
+### ________________________ ParameterEquation class definition _________________________ ###
 
     oo::configurable create ParameterEquation {
         superclass Parameter
@@ -343,7 +343,7 @@ namespace eval ::SpiceGenTcl {
         }
     }  
 
-    # ________________________ ParameterPositionalEquation class definition _________________________ #
+### ________________________ ParameterPositionalEquation class definition _________________________ ###
 
     oo::configurable create ParameterPositionalEquation {
         superclass ParameterEquation
@@ -362,7 +362,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
     
-    # ________________________ Device class definition _________________________ #
+### ________________________ Device class definition _________________________ ###
 
     oo::configurable create Device {
         superclass SPICEElement
@@ -577,7 +577,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-    # ________________________ Model class definition _________________________ #
+### ________________________ Model class definition _________________________ ###
 
     oo::configurable create Model {
         superclass SPICEElement
@@ -659,7 +659,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-    # ________________________ RawString class definition _________________________ #
+### ________________________ RawString class definition _________________________ ###
 
     oo::configurable create RawString {
         superclass SPICEElement
@@ -695,7 +695,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-    # ________________________ Comment class definition _________________________ #
+### ________________________ Comment class definition _________________________ ###
 
     oo::configurable create Comment {
         superclass RawString
@@ -723,7 +723,7 @@ namespace eval ::SpiceGenTcl {
         }
     }    
     
-    # ________________________ Include class definition _________________________ #
+### ________________________ Include class definition _________________________ ###
 
     oo::configurable create Include {
         superclass RawString
@@ -749,7 +749,7 @@ namespace eval ::SpiceGenTcl {
         }
     }   
     
-    # ________________________ Library class definition _________________________ #    
+### ________________________ Library class definition _________________________ ###    
     
     oo::configurable create Library {
         superclass RawString
@@ -782,7 +782,7 @@ namespace eval ::SpiceGenTcl {
         }
     }   
     
-    # ________________________ Options class definition _________________________ #
+### ________________________ Options class definition _________________________ ###
     
     oo::configurable create Options {
         superclass SPICEElement
@@ -880,7 +880,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
     
-    # ________________________ ParamStatement class definition _________________________ #
+### ________________________ ParamStatement class definition _________________________ ###
     
     oo::configurable create ParamStatement {
         superclass SPICEElement
@@ -972,7 +972,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
     
-    # ________________________ Temp class definition _________________________ #
+### ________________________ Temp class definition _________________________ ###
     
     oo::configurable create Temp {
         superclass SPICEElement
@@ -1030,7 +1030,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
         
-    # ________________________ Netlist class definition _________________________ #
+### ________________________ Netlist class definition _________________________ ###
     
     oo::configurable create Netlist {
         superclass SPICEElement
@@ -1110,7 +1110,7 @@ namespace eval ::SpiceGenTcl {
     }
 
     
-    # ________________________ Circuit class definition _________________________ #
+### ________________________ Circuit class definition _________________________ ###
     
     oo::configurable create Circuit {
         superclass Netlist
@@ -1214,7 +1214,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
     
-    # ________________________ Subcircuit class definition _________________________ #
+### ________________________ Subcircuit class definition _________________________ ###
     
     oo::configurable create Subcircuit {
         superclass Netlist
@@ -1319,7 +1319,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
     
-    # ________________________ Analysis class definition _________________________ #
+### ________________________ Analysis class definition _________________________ ###
     
     oo::configurable create Analysis {
         superclass SPICEElement
@@ -1445,7 +1445,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-    # ________________________ Simulator class definition _________________________ #
+### ________________________ Simulator class definition _________________________ ###
     
     oo::configurable create Simulator {
         self mixin -append oo::abstract
@@ -1477,7 +1477,7 @@ namespace eval ::SpiceGenTcl {
         }
     }     
 
-    # ________________________ BinaryReader class definition _________________________ #
+### ________________________ BinaryReader class definition _________________________ ###
    
     oo::configurable create BinaryReader {
         self mixin -append oo::abstract
@@ -1525,7 +1525,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
     
-    # ________________________ Dataset class _________________________ #
+### ________________________ Dataset class _________________________ ###
     
     oo::configurable create Dataset {
         # This class models general raw dataset
@@ -1587,7 +1587,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
     
-    # ________________________ Axis class definition _________________________ #
+### ________________________ Axis class definition _________________________ ###
 
     oo::configurable create Axis {
         # class that represents axis in raw file
@@ -1602,7 +1602,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
     
-    # ________________________ Trace class definition _________________________ #
+### ________________________ Trace class definition _________________________ ###
 
     oo::configurable create Trace {
         # class that represents trace in raw file
@@ -1621,7 +1621,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
     
-    # ________________________ EmptyTrace class definition _________________________ #
+### ________________________ EmptyTrace class definition _________________________ ###
 
     oo::configurable create EmptyTrace {
         # Class represents empty trace (trace that was not readed) in raw file
@@ -1643,7 +1643,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
     
-    # ________________________ RawFile class definition _________________________ #
+### ________________________ RawFile class definition _________________________ ###
 
     oo::configurable create RawFile {
         # Class represents raw file
@@ -1686,7 +1686,7 @@ namespace eval ::SpiceGenTcl {
             set file [open $path r]
             fconfigure $file -translation binary
             
-            ## ________________________ read header _________________________ ##
+#### ________________________ read header _________________________ ####
 
             set ch [read $file 6]
             if {$ch=={Title:}} {
@@ -1720,8 +1720,8 @@ namespace eval ::SpiceGenTcl {
                     append line $ch
                 }
             }
-            
-            ## ________________________ save header parameters _________________________ ##
+
+#### ________________________ save header parameters _________________________ ####
 
             foreach line $header {
                 set lineList [split $line ":"]
@@ -1748,7 +1748,7 @@ namespace eval ::SpiceGenTcl {
                 }
             }
             
-            ## ________________________ parse variables _________________________ ##
+#### ________________________ parse variables _________________________ ####
             
             set i [lsearch $header "Variables:"]
             set ivar 0
@@ -1780,7 +1780,7 @@ namespace eval ::SpiceGenTcl {
                 return
             }
             
-            ## ________________________ read data _________________________ ##
+#### ________________________ read data _________________________ ####
             
             if {$rawType=="Binary:"} {
                 my configure -BlockSize [expr {($fileSize - $binaryStart)/$NPoints}]
