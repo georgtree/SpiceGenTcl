@@ -9,7 +9,7 @@ foreach nameSpc $ngspiceNameSpc {
 }
 
 
-    # ________________________ Dc class tests _________________________ #
+### ________________________ Dc class tests _________________________ ###
     
 test testDcClass-1.1 {test Dc class} -setup {
     set res [Dc new -src v1 -start {time1 -eq} -stop 5 -incr 0.1 -name dc1]
@@ -27,7 +27,7 @@ test testDcClass-1.2 {test Dc class} -setup {
     unset res result
 }
 
-    # ________________________ Ac class tests _________________________ #
+### ________________________ Ac class tests _________________________ ###
     
 test testAcClass-1.1 {test Ac class} -setup {
     set res [Ac new -variation dec -n 10 -fstart {f1 -eq} -fstop 1e6 -name ac1]
@@ -45,7 +45,7 @@ test testAcClass-1.2 {test Ac class} -setup {
     unset res result
 }
     
-    # ________________________ SensAc class tests _________________________ #
+### ________________________ SensAc class tests _________________________ ###
     
 test testSensAcClass-1.1 {test SensAc class} -setup {
     set res [SensAc new -outvar v(1,out) -variation dec -n 10 -fstart {f1 -eq} -fstop 1e6 -name sensac1]
@@ -63,7 +63,7 @@ test testSensAcClass-1.2 {test SensAc class} -setup {
     unset res result
 }
     
-    # ________________________ SensDc class tests _________________________ #
+### ________________________ SensDc class tests _________________________ ###
     
 test testSensDcClass-1.1 {test SensDc class} -setup {
     set res [SensDc new -outvar v(1,out) -name sensdc1]
@@ -73,7 +73,7 @@ test testSensDcClass-1.1 {test SensDc class} -setup {
     unset res result
 }
     
-    # ________________________ Tran class tests _________________________ #
+### ________________________ Tran class tests _________________________ ###
     
 test testTranClass-1.1 {test Tran class} -setup {
     set res [Tran new -tstep 1e-6 -tstop 1e-3 -tstart 0.1e-6 -uic -name tran1]
@@ -99,7 +99,7 @@ test testTranClass-1.3 {test Tran class} -setup {
     unset res result
 }
 
-    # ________________________ Op class tests _________________________ #
+### ________________________ Op class tests _________________________ ###
     
 test testOpClass-1.1 {test Op class} -setup {
     set res [Op new -name dc1]

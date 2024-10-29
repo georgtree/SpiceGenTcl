@@ -8,7 +8,7 @@ foreach nameSpc $ngspiceNameSpc {
     namespace import ${nameSpc}::*
 }
     
-    # ________________________ RModel class tests _________________________ #
+### ________________________ RModel class tests _________________________ ###
     
 test testRModelClass-1.1 {test RModel class} -setup {
     set mod [RModel new resmod -tc1 1 -tc2 2]
@@ -18,7 +18,7 @@ test testRModelClass-1.1 {test RModel class} -setup {
     unset mod result
 }
 
-    # ________________________ CModel class tests _________________________ #
+### ________________________ CModel class tests _________________________ ###
     
 test testCModelClass-1.1 {test CModel class} -setup {
     set mod [CModel new capmod -tc1 1 -tc2 2]
@@ -28,7 +28,7 @@ test testCModelClass-1.1 {test CModel class} -setup {
     unset mod result
 }
 
-    # ________________________ LModel class tests _________________________ #
+### ________________________ LModel class tests _________________________ ###
     
 test testLModelClass-1.1 {test LModel class} -setup {
     set mod [LModel new indmod -tc1 1 -tc2 2]
@@ -37,7 +37,7 @@ test testLModelClass-1.1 {test LModel class} -setup {
 } -result ".model indmod l(tc1=1 tc2=2)" -cleanup {
     unset mod result
 }
-    # ________________________ VSwitchModel class tests _________________________ #
+### ________________________ VSwitchModel class tests _________________________ ###
     
 test testVSwitchModelClass-1.1 {test VSwitchModel class} -setup {
     set mod [VSwitchModel new swmod -vt 1 -vh 0.5 -ron 1 -roff 1e6]
@@ -47,7 +47,7 @@ test testVSwitchModelClass-1.1 {test VSwitchModel class} -setup {
     unset mod result
 }
 
-    # ________________________ CSwitchModel class tests _________________________ #
+### ________________________ CSwitchModel class tests _________________________ ###
     
 test testCSwitchModelClass-1.1 {test CSwitchModel class} -setup {
     set mod [CSwitchModel new cswmod -it 1 -ih 0.5 -ron 1 -roff 1e6]
@@ -57,7 +57,7 @@ test testCSwitchModelClass-1.1 {test CSwitchModel class} -setup {
     unset mod result
 }
 
-    # ________________________ DiodeModel class tests _________________________ #
+### ________________________ DiodeModel class tests _________________________ ###
     
 test testDiodeModelClass-1.1 {test DiodeModel class} -setup {
     set mod [DiodeModel new diodemod -is 1e-14 -n 1.2 -rs 0.01 -cj0 1e-9]
@@ -67,7 +67,7 @@ test testDiodeModelClass-1.1 {test DiodeModel class} -setup {
     unset mod result
 }
 
-    # ________________________ BjtGPModel class tests _________________________ #
+### ________________________ BjtGPModel class tests _________________________ ###
     
 test testBjtGPModelClass-1.1 {test BjtGPModel class} -setup {
     set mod [BjtGPModel new bjtmod npn -is 1e-15 -bf 200 -vaf 100 -cje 1e-10]
@@ -77,7 +77,7 @@ test testBjtGPModelClass-1.1 {test BjtGPModel class} -setup {
     unset mod result
 }
 
-    # ________________________ Jfet1Model class tests _________________________ #
+### ________________________ Jfet1Model class tests _________________________ ###
     
 test testJfet1ModelClass-1.1 {test Jfet1Model class} -setup {
     set mod [Jfet1Model new jfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4 -cgd 1e-12]
@@ -87,7 +87,7 @@ test testJfet1ModelClass-1.1 {test Jfet1Model class} -setup {
     unset mod result
 }
 
-    # ________________________ Jfet2Model class tests _________________________ #
+### ________________________ Jfet2Model class tests _________________________ ###
     
 test testJfet2ModelClass-1.1 {test Jfet2Model class} -setup {
     set mod [Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4 -vbi 1.2]
@@ -97,7 +97,7 @@ test testJfet2ModelClass-1.1 {test Jfet2Model class} -setup {
     unset mod result
 }
     
-    # ________________________ Mesfet1Model class tests _________________________ #
+### ________________________ Mesfet1Model class tests _________________________ ###
     
 test testMesfet1ModelClass-1.1 {test Mesfet1Model class} -setup {
     set mod [Mesfet1Model new mesfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4 -cgd 1e-12]

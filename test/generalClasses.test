@@ -8,7 +8,7 @@ foreach nameSpc $ngspiceNameSpc {
     namespace import ${nameSpc}::*
 }
 
-    # ________________________ DuplChecker class tests _________________________ #
+### ________________________ DuplChecker class tests _________________________ ###
     
 test testDuplCheckerClass-1.1 {test of duplListCheck procedure} -setup {
     set checker [::SpiceGenTcl::DuplChecker new]
@@ -29,7 +29,7 @@ test testDuplCheckerClass-1.2 {test of duplListCheck procedure} -setup {
 }
 
     
-    # ________________________ Pin class tests _________________________ #
+### ________________________ Pin class tests _________________________ ###
 
 test testPinClass-1.1 {test creation of Pin class instance and getName interface} -setup {
     set pinInst [Pin new drain netd]
@@ -143,7 +143,7 @@ test testPinClass-3.4 {test creation of Pin class instance and getName interface
     unset pinInst result
 }
     
-    # ________________________ Parameter class tests _________________________ #
+### ________________________ Parameter class tests _________________________ ###
 
 test testParameterClass-1.1 {test creation of Parameter class instance and getName interface} -setup {
     set parInst [Parameter new VTH 0.7]
@@ -208,7 +208,7 @@ test testParameterClass-3.2 {test creation of Parameter class instance and setVa
     unset parInst errorStr
 }
 
-    # ________________________ ParameterNoCheck class tests _________________________ #
+### ________________________ ParameterNoCheck class tests _________________________ ###
 
 test testParameterNoCheckClass-1.0 {test creation of ParameterNoCheck class instance} -setup {
     set parInst [ParameterNoCheck new VTH 0.7]
@@ -219,7 +219,7 @@ test testParameterNoCheckClass-1.0 {test creation of ParameterNoCheck class inst
     unset parInst
 }    
     
-    # ________________________ ParameterDefault class tests _________________________ #
+### ________________________ ParameterDefault class tests _________________________ ###
 
 test testParameterDefaultClass-1.1 {test creation of ParameterDefault class instance and getName interface} -setup {
     set parInst [ParameterDefault new U0 100 200]
@@ -254,7 +254,7 @@ test testParameterDefaultClass-1.4 {test creation of ParameterDefault class inst
     unset parInst result
 }
     
-    # ________________________ ParameterSwitch class tests _________________________ #
+### ________________________ ParameterSwitch class tests _________________________ ###
 
 test testParameterSwitchClass-1.1 {test creation of ParameterSwitch class instance and getName interface} -setup {
     set parInst [ParameterSwitch new U0]
@@ -272,7 +272,7 @@ test testParameterSwitchClass-1.2 {test creation of ParameterSwitch class instan
     unset parInst result
 }
     
-    # ________________________ ParameterPositional class tests _________________________ #
+### ________________________ ParameterPositional class tests _________________________ ###
 
 test testParameterPositionalClass-1.1 {test creation of ParameterPositional class instance and getName interface} -setup {
     set parInst [ParameterPositional new U0 100]
@@ -290,7 +290,7 @@ test testParameterPositionalClass-1.2 {test creation of ParameterPositional clas
     unset parInst result
 }
 
-    # ________________________ ParameterPositionalNoCheck class tests _________________________ #
+### ________________________ ParameterPositionalNoCheck class tests _________________________ ###
 
 test testParameterPositionalNoCheckClass-1.0 {test creation of ParameterPositionalNoCheck class instance} -setup {
     set parInst [ParameterPositionalNoCheck new U0 100]
@@ -309,7 +309,7 @@ test testParameterPositionalNoCheckClass-1.1 {test creation of ParameterPosition
     unset parInst result
 }  
 
-    # ________________________ ParameterEquation class tests _________________________ #
+### ________________________ ParameterEquation class tests _________________________ ###
 
 test testParameterEquationClass-1.1 {test creation of ParameterEquation class instance and getValue interface} -setup {
     set parInst [ParameterEquation new U0T {temp*2.1+U0}]
@@ -334,7 +334,7 @@ test testParameterEquationClass-1.3 {test creation of ParameterEquation class in
     unset errorStr
 }
 
-    # ________________________ ParameterPositionalEquation class tests _________________________ #
+### ________________________ ParameterPositionalEquation class tests _________________________ ###
 
 test testParameterPositionalEquationClass-1.1 {test creation of ParameterPositionalEquation class instance and getValue interface} -setup {
     set parInst [ParameterPositionalEquation new U0T {temp*2.1+U0}]
@@ -344,7 +344,7 @@ test testParameterPositionalEquationClass-1.1 {test creation of ParameterPositio
     unset parInst result
 }
     
-    # ________________________ Device class tests _________________________ #
+### ________________________ Device class tests _________________________ ###
 
 test testDeviceClass-1.1 {test creation of Device class instance and getName interface} -setup {
     set elemInst [Device new M1 {{d netg} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
@@ -510,7 +510,7 @@ test testDeviceClass-2.11 {test creation of Device class instance and checkFloat
     unset elemInst result
 }
 
-    # ________________________ Model class tests _________________________ #
+### ________________________ Model class tests _________________________ ###
     
 test testModelClass-1.1 {test creation of Model class instance and getType interface} -setup {
     set modelInst [Model new MOD1 NMOS {{VTH0 0.7} {U0 100} {VTH1 1} {K1 1.5e-3}}]
@@ -544,7 +544,7 @@ test testModelClass-1.4 {test creation of Model class instance and genSPICEStrin
     unset modelInst result
 }
 
-    # ________________________ RawString class tests _________________________ #
+### ________________________ RawString class tests _________________________ ###
     
 test testRawStringClass-1.1 {test creation of RawString class instance and genSPICEString interface} -setup {
     set raw [RawString new {arbitary string}]
@@ -568,7 +568,7 @@ test testRawStringClass-1.2 {test creation of RawString class instance with -nam
 #    set result [$raw getName]
 #} -result $raw
 
-    # ________________________ Comment class tests _________________________ #
+### ________________________ Comment class tests _________________________ ###
     
 test testCommentClass-1.1 {test creation of Comment class instance and genSPICEString interface} -setup {
     set raw [Comment new {comment string}]
@@ -590,7 +590,7 @@ comment string3}]
     unset raw result
 }
 
-    # ________________________ Temp class tests _________________________ #
+### ________________________ Temp class tests _________________________ ###
     
 test testTempClass-1.1 {test creation of Temp class instance and genSPICEString interface} -setup {
     set temp [Temp new 10]
@@ -634,7 +634,7 @@ test testTempClass-1.5 {test creation of Temp class instance and setValue interf
     unset temp result
 }
     
-    # ________________________ Include class definition _________________________ #
+### ________________________ Include class definition _________________________ ###
 
 test testIncludeClass-1.1 {test creation of Include class instance and genSPICEString interface} -setup {
     set raw [Include new {./libs/mosfets/nmos1}]
@@ -644,7 +644,7 @@ test testIncludeClass-1.1 {test creation of Include class instance and genSPICES
     unset raw result
 }
     
-    # ________________________ Library class definition _________________________ #
+### ________________________ Library class definition _________________________ ###
 
 test testLibraryClass-1.1 {test creation of Library class instance and genSPICEString interface} -setup {
     set raw [Library new ./libs/mosfets/nmos1 slow_corner]
@@ -662,7 +662,7 @@ test testLibraryClass-1.2 {test creation of Library class instance and getLibVal
     unset raw result
 }
     
-    # ________________________ Options class tests _________________________ #
+### ________________________ Options class tests _________________________ ###
 
 test testOptionsClass-1.1 {test creation of Options class instance and getParams interface} -setup {
     set elemInst [Options new {{abstol 1e-12} {noopiter -sw} {gmin 1e-12}}]
@@ -714,7 +714,7 @@ test testOptionsClass-1.7 {test creation of Options class instance with switch p
     unset errorStr
 }
 
-    # ________________________ ParamStatement class tests _________________________ #
+### ________________________ ParamStatement class tests _________________________ ###
     
 test testParamStatementClass-1.1 {test creation of ParamStatement class instance and getParams interface} -setup {
     set elemInst [ParamStatement new {{U0T {rf+1} -eq} {vth0 10}}]
@@ -766,7 +766,7 @@ test testParamStatementClass-1.6 {test creation of ParamStatement class instance
     unset elemInst result
 }
 
-    # ________________________ Netlist class tests _________________________ #
+### ________________________ Netlist class tests _________________________ ###
     
 test testNetlistClass-1.1 {test creation of Netlist class instance with add interface and genSPICEString interface} -setup {
     set netlistInst [Netlist new newNetlist]
@@ -904,7 +904,7 @@ v1 net1 net3 5} -cleanup {
 }
 
     
-    # ________________________ Subcircuit class tests _________________________ #
+### ________________________ Subcircuit class tests _________________________ ###
 
 test testSubcircuitClass-1.1 {test creation of Subcircuit class instance with genSPICEString interface} -setup {
     oo::class create RCnet {
@@ -1060,7 +1060,7 @@ r5 net1 net2 res_sem l=10e-6 w=100e-6
     unset subcircuit result
 }
 
-    # ________________________ Analysis class tests _________________________ #
+### ________________________ Analysis class tests _________________________ ###
     
 test testAnalysisClass-1.1 {test creation of Analysis class instance and getParams interface} -setup {
     set anInst [Analysis new dc {{srcnam v1 -posnocheck} {vstart 0 -pos} {vstop 5 -pos} {vincr 0.1 -pos}}]

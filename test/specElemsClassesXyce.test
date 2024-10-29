@@ -9,9 +9,9 @@ foreach nameSpc $xyceNameSpc {
 }
 
 
-    # ________________________ Basic devices tests _________________________ #
+### ________________________ Basic devices tests _________________________ ###
 
-    ## ________________________ Resistor class tests _________________________ ##
+#### ________________________ Resistor class tests _________________________ ####
     
 test testResistorClass-1.1 {test Resistor class} -setup {
     set res [Resistor new 1 netp netm -r 1e3 -tc1 1 -temp 25]
@@ -109,7 +109,7 @@ test testRClass-1.3 {test R alias for Resistor class with model switch} -setup {
 } 
 
 
-    ## ________________________ Capacitor class tests _________________________ ##
+#### ________________________ Capacitor class tests _________________________ ####
     
 test testCapacitorClass-1.1 {test Capacitor class} -setup {
     set cap [Capacitor new 1 netp netm -c 1e-6 -tc1 1 -temp 25]
@@ -205,7 +205,7 @@ test testCClass-1.4 {test C alias for Capacitor class} -setup {
     unset cap result
 }
 
-    ## ________________________ Inductor class tests _________________________ ##
+#### ________________________ Inductor class tests _________________________ ####
     
 test testInductorClass-1.1 {test Inductor class} -setup {
     set ind [Inductor new 1 netp netm -l 1e-6 -tc1 1 -temp 25]
@@ -241,7 +241,7 @@ test testLClass-1.1 {test L alias for Inductor class} -setup {
 }
   
     
-    ## ________________________ VSwitch class tests _________________________ ##
+#### ________________________ VSwitch class tests _________________________ ####
     
 test testVSwitchClass-1.1 {test VSwitch class} -setup {
     set vsw [VSwitch new 1 net1 0 netc 0 -model sw1 -on]
@@ -274,7 +274,7 @@ test testVSwitchClass-1.3 {test VSwitch class} -body {
     unset errorStr
 }
 
-    ## ________________________ CSwitch class tests _________________________ ##
+#### ________________________ CSwitch class tests _________________________ ####
     
 test testCSwitchClass-1.1 {test CSwitch class} -setup {
     set csw [CSwitch new 1 net1 0 -icntrl v1 -model sw1 -on]
@@ -292,7 +292,7 @@ test testCSwitchClass-1.2 {test CSwitch class} -setup {
     unset csw result
 }
     
-    ## ________________________ GenSwitch class tests _________________________ ##
+#### ________________________ GenSwitch class tests _________________________ ####
     
 test testGenSwitchClass-1.1 {test GenSwitch class} -setup {
     set csw [GenSwitch new 1 net1 0 -model sw1 -control {I(VMON)}]
@@ -310,9 +310,9 @@ test testCSwitchClass-1.2 {test CSwitch class} -setup {
     unset csw result
 }    
     
-    # ________________________ Sources classes tests _________________________ #
+### ________________________ Sources classes tests _________________________ ###
     
-    ## ________________________ Vdc class test _________________________ ##
+#### ________________________ Vdc class test _________________________ ####
 
 test testVdcClass-1.1 {test Vdc class} -setup {
     set vdc [Vdc new 1 netp netm -dc 10]
@@ -330,7 +330,7 @@ test testVdcClass-1.2 {test Vdc class} -setup {
     unset vdc result
 }
 
-    ## ________________________ Vac class test _________________________ ##
+#### ________________________ Vac class test _________________________ ####
 
 test testVacClass-1.1 {test Vac class} -setup {
     set vac [Vac new 1 netp netm -ac 10]
@@ -364,7 +364,7 @@ test testVacClass-1.4 {test Vac class} -setup {
     unset vac result
 }
     
-    ## ________________________ Vpulse class test _________________________ ##
+#### ________________________ Vpulse class test _________________________ ####
 
 test testVpulseClass-1.1 {test Vpulse class} -setup {
     set vpulse [Vpulse new 1 net1 net2 -low 0 -high 1 -td 1e-9 -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6]
@@ -406,7 +406,7 @@ test testVpulseClass-1.5 {test Vpulse class with different order} -setup {
     unset vpulse result
 }
 
-    ## ________________________ Vsin class test _________________________ ##
+#### ________________________ Vsin class test _________________________ ####
 
 
 test testVsinClass-1.1 {test Vsin class} -setup {
@@ -449,7 +449,7 @@ test testVsinClass-1.5 {test Vsin class with different order} -setup {
     unset vsin result
 }
 
-    ## ________________________ Vexp class test _________________________ ##
+#### ________________________ Vexp class test _________________________ ####
 
 test testVexpClass-1.1 {test Vexp class} -setup {
     set vexp [Vexp new 1 net1 net2 -v1 0 -v2 1 -td1 1e-9 -tau1 1e-9 -td2 1e-9 -tau2 10e-6]
@@ -475,7 +475,7 @@ test testVexpClass-1.3 {test Vexp class with different order} -setup {
     unset vexp result
 }
     
-    ## ________________________ Vpwl class test _________________________ ##
+#### ________________________ Vpwl class test _________________________ ####
 
 test testVpwlClass-1.1 {test Vpwl class} -setup {
     set vpwl [Vpwl new 1 npNode nmNode -seq {0 0 {t1 -eq} 1 2 2 3 3 4 4}]
@@ -501,7 +501,7 @@ test testVpwlClass-1.3 {test Vpwl class} -setup {
     unset errorStr
 }
 
-    ## ________________________ Vsffm class test _________________________ ##
+#### ________________________ Vsffm class test _________________________ ####
                 
 test testVsffmClass-1.1 {test Vsffm class} -setup {
     set vsffm [Vsffm new 1 net1 net2 -v0 0 -va 1 -fc 1e6 -mdi 0 -fs 1e3]
@@ -543,7 +543,7 @@ test testVsffmClass-1.5 {test Vsffm class with different order} -setup {
     unset vsffm result
 }
     
-    ## ________________________ Idc class test _________________________ ##
+#### ________________________ Idc class test _________________________ ####
 
 test testIdcClass-1.1 {test Idc class} -setup {
     set idc [Idc new 1 netp netm -dc 10]
@@ -561,7 +561,7 @@ test testIdcClass-1.2 {test Idc class} -setup {
     unset idc result
 }
     
-    ## ________________________ Iac class test _________________________ ##
+#### ________________________ Iac class test _________________________ ####
     
 test testIacClass-1.1 {test Iac class} -setup {
     set iac [Iac new 1 netp netm -ac 10]
@@ -595,7 +595,7 @@ test testIacClass-1.4 {test Iac class} -setup {
     unset iac result
 }
 
-    ## ________________________ Ipulse class test _________________________ ##
+#### ________________________ Ipulse class test _________________________ ####
 
 test testIpulseClass-1.1 {test Ipulse class} -setup {
     set ipulse [Ipulse new 1 net1 net2 -low 0 -high 1 -td 1e-9 -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6]
@@ -637,7 +637,7 @@ test testIpulseClass-1.5 {test Ipulse class with different order} -setup {
     unset ipulse result
 }
 
-    ## ________________________ Isin class test _________________________ ##
+#### ________________________ Isin class test _________________________ ####
 
 
 test testIsinClass-1.1 {test Isin class} -setup {
@@ -680,7 +680,7 @@ test testIsinClass-1.5 {test Isin class with different order} -setup {
     unset isin result
 }
 
-    ## ________________________ Iexp class test _________________________ ##
+#### ________________________ Iexp class test _________________________ ####
 
 test testIexpClass-1.1 {test Iexp class} -setup {
     set iexp [Iexp new 1 net1 net2 -v1 0 -v2 1 -td1 1e-9 -tau1 1e-9 -td2 1e-9 -tau2 10e-6]
@@ -706,7 +706,7 @@ test testIexpClass-1.3 {test Iexp class with different order} -setup {
     unset iexp result
 }
     
-    ## ________________________ Ipwl class test _________________________ ##
+#### ________________________ Ipwl class test _________________________ ####
 
 test testIpwlClass-1.1 {test Ipwl class} -setup {
     set vpwl [Ipwl new 1 npNode nmNode -seq {0 0 {t1 -eq} 1 2 2 3 3 4 4}]
@@ -732,7 +732,7 @@ test testIpwlClass-1.3 {test Ipwl class} -setup {
     unset errorStr
 }
 
-    ## ________________________ Isffm class test _________________________ ##
+#### ________________________ Isffm class test _________________________ ####
                 
 test testIsffmClass-1.1 {test Isffm class} -setup {
     set isffm [Isffm new 1 net1 net2 -v0 0 -va 1 -fc 1e6 -mdi 0 -fs 1e3]
@@ -774,7 +774,7 @@ test testIsffmClass-1.5 {test Isffm class with different order} -setup {
     unset isffm result
 }
     
-    ## ________________________ Vccs class tests _________________________ ##
+#### ________________________ Vccs class tests _________________________ ####
     
 test testVccsClass-1.1 {test Vccs class} -setup {
     set vccs [Vccs new 1 net1 0 netc 0 -trcond 10 -m 1]
@@ -808,7 +808,7 @@ test testGClass-1.1 {test G class} -setup {
     unset g result
 }
     
-    ## ________________________ Vcvs class tests _________________________ ##
+#### ________________________ Vcvs class tests _________________________ ####
     
 test testVcvsClass-1.1 {test Vcvs class} -setup {
     set vcvs [Vcvs new 1 net1 0 netc 0 -gain 10]
@@ -842,7 +842,7 @@ test testEClass-1.1 {test G class} -setup {
     unset e result
 }
     
-    ## ________________________ Cccs class tests _________________________ ##
+#### ________________________ Cccs class tests _________________________ ####
     
 test testCccsClass-1.1 {test Cccs class} -setup {
     set cccs [Cccs new 1 net1 0 -consrc vc -gain 10 -m 1]
@@ -876,7 +876,7 @@ test testFClass-1.1 {test F class} -setup {
     unset f result
 }
     
-    ## ________________________ Ccvs class tests _________________________ ##
+#### ________________________ Ccvs class tests _________________________ ####
     
 test testCcvsClass-1.1 {test Ccvs class} -setup {
     set ccvs [Ccvs new 1 net1 0 -consrc vc -transr 10]
@@ -910,7 +910,7 @@ test testHClass-1.1 {test H class} -setup {
     unset h result
 }
 
-    ## ________________________ BehaviouralSource class tests _________________________ ##
+#### ________________________ BehaviouralSource class tests _________________________ ####
     
 test testBehaviouralSourceClass-1.1 {test BehaviouralSource class} -setup {
     set b [BehaviouralSource new 1 netp netm -i "V(a)+V(b)+pow(V(c),2)"]
@@ -944,9 +944,9 @@ test testBClass-1.1 {test B class} -setup {
     unset b result
 }
 
-    # ________________________ Semiconductor devices classes tests _________________________ #
+### ________________________ Semiconductor devices classes tests _________________________ ###
 
-    ## ________________________ Diode class tests _________________________ ##
+#### ________________________ Diode class tests _________________________ ####
     
 test testDiodeClass-1.1 {test Diode class} -setup {
     set dio [Diode new 1 netp netm -model diomod -area 1e-3 -temp 25]
@@ -988,7 +988,7 @@ test testDClass-1.1 {test RSem alias for Diode class} -setup {
     unset dio result
 }
     
-    ## ________________________ Bjt class tests _________________________ ##
+#### ________________________ Bjt class tests _________________________ ####
     
 test testBjtClass-1.1 {test Bjt class} -setup {
     set bjt [Bjt new 1 netc netb nete -model bjtmod -area 1e-3]
@@ -1032,7 +1032,7 @@ test testQClass-1.1 {test Q class} -setup {
 }
     
     
-    ## ________________________ Jfet class tests _________________________ ##
+#### ________________________ Jfet class tests _________________________ ####
     
 test testJfetClass-1.1 {test Jfet class} -setup {
     set jfet [Jfet new 1 netd netg nets -model jfetmod -area 1e-3 -temp 25]
@@ -1059,7 +1059,7 @@ test testJClass-1.4 {test J class} -setup {
     unset jfet result
 }
     
-    ## ________________________ Mesfet class tests _________________________ ##
+#### ________________________ Mesfet class tests _________________________ ####
     
 test testMesfetClass-1.1 {test Mesfet class} -setup {
     set mesfet [Mesfet new 1 netd netg nets -model mesfetmod -area 1e-3]
@@ -1085,7 +1085,7 @@ test testZClass-1.1 {test J class} -setup {
     unset mesfet result
 }
 
-    ## ________________________ Mosfet class tests _________________________ ##
+#### ________________________ Mosfet class tests _________________________ ####
     
 test testMosfetClass-1.1 {test Mosfet class} -setup {
     set mosfet [Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3]
