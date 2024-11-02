@@ -1,5 +1,5 @@
 # source main file
-lappend auto_path "../"
+lappend auto_path ../
 package require SpiceGenTcl
 
 # import class names to current namespace

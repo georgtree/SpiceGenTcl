@@ -1,5 +1,5 @@
 # example is from Ngspice example folder (/tests/transient/fourbitadder.cir)
-lappend auto_path "../../../"
+lappend auto_path ../../../
 package require SpiceGenTcl
 package require ticklecharts
 namespace import ::tcl::mathop::*

@@ -1,4 +1,4 @@
-lappend auto_path "../../../"
+lappend auto_path ../../../
 package require SpiceGenTcl
 package require ticklecharts
 namespace import ::SpiceGenTcl::*
@@ -25,7 +25,7 @@ foreach temp $temps {
     $circuit runAndRead
     puts [$circuit configure -Log]
     set data [$circuit getDataDict]
-    foreach x [dict get $data v(anode)] y [dict get $data i(va)]   {
+    foreach x [dict get $data v(anode)] y [dict get $data i(va)] {
         set xf [format "%.3f" $x]
         set yf [format "%.3f" [expr {-$y}]]
         lappend xydata [list $xf $yf]
