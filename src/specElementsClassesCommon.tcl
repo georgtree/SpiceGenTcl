@@ -12,12 +12,12 @@ namespace eval ::SpiceGenTcl {
 
 
 
-### ________________________ Basic devices _________________________ ###
+###  Basic devices 
 
 namespace eval ::SpiceGenTcl::Common::BasicDevices {
 
     
-#### ________________________ Resistor class _________________________ ####
+####  Resistor class 
 
     oo::class create Resistor {
         superclass ::SpiceGenTcl::Device
@@ -60,13 +60,13 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             next r$name [list "np $npNode" "nm $nmNode"] $params
         }
     }
-#### ________________________ R class _________________________ ####
+####  R class 
     # alias for Resistor class
     oo::class create R {
         superclass Resistor
     }
 
-#### ________________________ Capacitor class _________________________ ####
+####  Capacitor class 
 
     oo::class create Capacitor {
         superclass ::SpiceGenTcl::Device
@@ -111,14 +111,14 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             next c$name [list "np $npNode" "nm $nmNode"] $params
         }
     }
-#### ________________________ C class _________________________ ####
+####  C class 
     # alias for Capacitor class
     oo::class create C {
         superclass Capacitor
     }
 
 
-#### ________________________ Inductor class _________________________ ####
+####  Inductor class 
 
     oo::class create Inductor {
         superclass ::SpiceGenTcl::Device
@@ -163,14 +163,14 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
         }
     }
     
-#### ________________________ L class _________________________ ####
+####  L class 
     
     # alias for Inductor class
     oo::class create L {
         superclass Inductor
     }    
     
-#### ________________________ SubcircuitInstance class _________________________ ####
+####  SubcircuitInstance class 
 
     oo::class create SubcircuitInstance {
         superclass ::SpiceGenTcl::Device
@@ -192,14 +192,14 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
         }
     }
 
-#### ________________________ X class _________________________ ####
+####  X class 
     
     # alias for SubcircuitInstance class
     oo::class create X {
         superclass SubcircuitInstance
     }
     
-#### ________________________ VSwitch class _________________________ ####
+####  VSwitch class 
   
     oo::class create VSwitch {
         superclass ::SpiceGenTcl::Device
@@ -234,14 +234,14 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
         }
     }
 
-#### ________________________ VSw class _________________________ ####
+####  VSw class 
     
     # alias for VSwitch class
     oo::class create VSw {
         superclass VSwitch
     }    
     
-#### ________________________ CSwitch class _________________________ ####
+####  CSwitch class 
   
     oo::class create CSwitch {
         superclass ::SpiceGenTcl::Device
@@ -278,14 +278,14 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
         }
     }
 
-#### ________________________ W class _________________________ ####
+####  W class 
     
     # alias for CSwitch class
     oo::class create W {
         superclass CSwitch
     }
     
-#### ________________________ SubcircuitInstanceAuto class _________________________ ####
+####  SubcircuitInstanceAuto class 
     
     oo::class create SubcircuitInstanceAuto {
         superclass ::SpiceGenTcl::Device
@@ -341,7 +341,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
         }
     }
 
-#### ________________________ XAuto class _________________________ ####
+####  XAuto class 
     
     # alias for SubcircuitInstanceAuto class
     oo::class create XAuto {
@@ -349,11 +349,11 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
     }
 }
 
-### ________________________ Sources devices _________________________ ###
+###  Sources devices  
 
 namespace eval ::SpiceGenTcl::Common::Sources {
 
-#### ________________________ dc sources template class _________________________ ####
+####  dc sources template class 
     
     oo::abstract create dc {
         superclass ::SpiceGenTcl::Device
@@ -371,7 +371,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         }
     }
 
-#### ________________________ ac sources template class _________________________ ####
+####  ac sources template class 
 
     oo::abstract create ac {
         superclass ::SpiceGenTcl::Device
@@ -400,7 +400,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         }
     }   
     
-#### ________________________ pulse sources template class _________________________ ####
+####  pulse sources template class 
     
     oo::abstract create pulse {
         superclass ::SpiceGenTcl::Device
@@ -432,7 +432,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         }
     } 
     
-#### ________________________ sin sources template class _________________________ ####
+####  sin sources template class 
     
     oo::abstract create sin {
         superclass ::SpiceGenTcl::Device
@@ -463,7 +463,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         }
     }  
     
-#### ________________________ exp sources template class _________________________ ####
+####  exp sources template class 
     
     oo::abstract create exp {
         superclass ::SpiceGenTcl::Device
@@ -494,7 +494,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         }
     }    
     
-#### ________________________ pwl sources template class _________________________ ####
+####  pwl sources template class 
     
     oo::abstract create pwl {
         superclass ::SpiceGenTcl::Device
@@ -527,7 +527,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         }
     }
 
-#### ________________________ sffm sources template class _________________________ ####
+####  sffm sources template class 
     
     oo::abstract create sffm {
         superclass ::SpiceGenTcl::Device
@@ -557,7 +557,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         }
     }      
     
-#### ________________________ Vdc class _________________________ ####
+####  Vdc class 
         
     oo::class create Vdc {
         superclass ::SpiceGenTcl::Common::Sources::dc
@@ -578,7 +578,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         }
     }
 
-#### ________________________ Vac class _________________________ ####
+####  Vac class 
     
     oo::class create Vac {
         superclass ::SpiceGenTcl::Common::Sources::ac
@@ -601,7 +601,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         }
     }
     
-#### ________________________ Vpulse class _________________________ ####
+####  Vpulse class 
 
     oo::class create Vpulse {
         superclass ::SpiceGenTcl::Common::Sources::pulse
@@ -628,7 +628,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         }
     }  
     
-#### ________________________ Vsin class _________________________ ####
+####  Vsin class 
 
     oo::class create Vsin {
         superclass ::SpiceGenTcl::Common::Sources::sin
@@ -655,7 +655,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         }
     }
     
-#### ________________________ Vexp class _________________________ ####
+####  Vexp class 
 
     oo::class create Vexp {
         superclass ::SpiceGenTcl::Common::Sources::exp
@@ -681,7 +681,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         }
     }
     
-#### ________________________ Vpwl class _________________________ ####
+####  Vpwl class 
 
     oo::class create Vpwl {
         superclass ::SpiceGenTcl::Common::Sources::pwl
@@ -702,7 +702,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         }
     }    
     
-#### ________________________ Vsffm class _________________________ ####
+####  Vsffm class 
 
     oo::class create Vsffm {
         superclass ::SpiceGenTcl::Common::Sources::sffm
@@ -728,7 +728,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
     }
        
     
-#### ________________________ Idc class _________________________ ####
+####  Idc class 
 
     oo::class create Idc {
         superclass ::SpiceGenTcl::Common::Sources::dc
@@ -749,7 +749,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         }
     }
 
-#### ________________________ Iac class _________________________ ####
+####  Iac class 
 
     oo::class create Iac {
         superclass ::SpiceGenTcl::Common::Sources::ac
@@ -771,7 +771,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
     }
     
 
-#### ________________________ Ipulse class _________________________ ####
+####  Ipulse class 
 
     oo::class create Ipulse {
         superclass ::SpiceGenTcl::Common::Sources::pulse
@@ -798,7 +798,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         }
     }
     
-#### ________________________ Isin class _________________________ ####
+####  Isin class 
 
     oo::class create Isin {
         superclass ::SpiceGenTcl::Common::Sources::sin
@@ -824,7 +824,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         }
     }
     
-#### ________________________ Iexp class _________________________ ####
+####  Iexp class 
 
     oo::class create Iexp {
         superclass ::SpiceGenTcl::Common::Sources::exp
@@ -850,7 +850,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         }
     }
 
-#### ________________________ Ipwl class _________________________ ####
+####  Ipwl class 
 
     oo::class create Ipwl {
         superclass ::SpiceGenTcl::Common::Sources::pwl
@@ -871,7 +871,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         }
     }   
     
-#### ________________________ Isffm class _________________________ ####
+####  Isffm class 
 
     oo::class create Isffm {
         superclass ::SpiceGenTcl::Common::Sources::sffm
@@ -896,7 +896,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         }
     }
 
-#### ________________________ Vccs class _________________________ ####
+####  Vccs class 
   
     oo::class create Vccs {
         superclass ::SpiceGenTcl::Device
@@ -938,14 +938,14 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         }
     }
 
-#### ________________________ G class _________________________ ####
+####  G class 
     
     # alias for Vccs class
     oo::class create G {
         superclass Vccs
     }    
 
-#### ________________________ Vcvs class _________________________ ####
+####  Vcvs class 
   
     oo::class create Vcvs {
         superclass ::SpiceGenTcl::Device
@@ -977,14 +977,14 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         }
     }
 
-#### ________________________ E class _________________________ ####    
+####  E class 
     
     # alias for Vcvs class
     oo::class create E {
         superclass Vcvs
     } 
     
-#### ________________________ Cccs class _________________________ ####
+####  Cccs class 
   
     oo::class create Cccs {
         superclass ::SpiceGenTcl::Device
@@ -1028,14 +1028,14 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         } 
     }
 
-#### ________________________ F class _________________________ ####
+####  F class 
     
     # alias for Cccs class
     oo::class create F {
         superclass Cccs
     } 
         
-#### ________________________ Ccvs class _________________________ ####
+####  Ccvs class 
   
     oo::class create Ccvs {
         superclass ::SpiceGenTcl::Device
@@ -1069,7 +1069,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         }
     }
 
-#### ________________________ H class _________________________ ####
+####  H class 
     
     # alias for Ccvs class
     oo::class create H {

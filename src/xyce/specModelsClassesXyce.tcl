@@ -4,7 +4,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
     namespace export RModel CModel LModel VSwitchModel CSwitchModel 
 
     
-### ________________________ RModel class _________________________ ###
+###  RModel class 
     
     oo::class create RModel {
         superclass ::SpiceGenTcl::Model
@@ -20,9 +20,9 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             set paramsNames [list defw narrow r rsh tc1 tc2 tce tnom]
             next $name r [my argsPreprocess $paramsNames {*}$args]
         }
-    }
+    
 
-### ________________________ CModel class _________________________ ###
+###  CModel class 
     
     oo::class create CModel {
         superclass ::SpiceGenTcl::Model
@@ -40,7 +40,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
         }
     }
 
-### ________________________ LModel class _________________________ ###
+###  LModel class 
     
     oo::class create LModel {
         superclass ::SpiceGenTcl::Model
@@ -58,7 +58,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
         }
     }    
     
-### ________________________ VSwitchModel class _________________________ ###
+###  VSwitchModel class 
     
     oo::class create VSwitchModel {
         superclass ::SpiceGenTcl::Model
@@ -76,7 +76,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
         }
     }
 
-### ________________________ CSwitchModel class _________________________ ###
+###  CSwitchModel class 
     
     oo::class create CSwitchModel {
         superclass ::SpiceGenTcl::Model
@@ -99,7 +99,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
     
     namespace export DiodeModel BjtGPModel Jfet1Model Jfet2Model Mesfet1Model
     
-### ________________________ DiodeModel class _________________________ ###
+###  DiodeModel class 
     
     oo::class create DiodeModel {
         superclass ::SpiceGenTcl::Model
@@ -119,7 +119,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
         }
     }    
     
-### ________________________ BjtGPModel class _________________________ ###
+###  BjtGPModel class 
     
     oo::class create BjtGPModel {
         superclass ::SpiceGenTcl::Model
@@ -142,7 +142,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
         }
     } 
         
-### ________________________ Jfet1Model class _________________________ ###
+###  Jfet1Model class 
     
     oo::class create Jfet1Model {
         superclass ::SpiceGenTcl::Model
@@ -162,7 +162,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
         }
     }
     
-### ________________________ Jfet2Model class _________________________###
+###  Jfet2Model class 
     
     oo::class create Jfet2Model {
         superclass ::SpiceGenTcl::Model
@@ -182,7 +182,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
         }
     } 
     
-### ________________________ Mesfet1Model class _________________________ ###
+###  Mesfet1Model class 
     
     oo::class create Mesfet1Model {
         superclass ::SpiceGenTcl::Model
