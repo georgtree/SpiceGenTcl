@@ -20,7 +20,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             set paramsNames [list defw narrow r rsh tc1 tc2 tce tnom]
             next $name r [my argsPreprocess $paramsNames {*}$args]
         }
-    
+    }
 
 ###  CModel class 
     

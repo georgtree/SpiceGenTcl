@@ -10,7 +10,7 @@ foreach nameSpc $ngspiceNameSpc {
     
 ### ________________________ RModel class tests _________________________ ###
     
-test testRModelClass-1.1 {test RModel class} -setup {
+test testRModelClass-1 {test RModel class} -setup {
     set mod [RModel new resmod -tc1 1 -tc2 2]
 } -body {
     set result [$mod genSPICEString]
@@ -20,7 +20,7 @@ test testRModelClass-1.1 {test RModel class} -setup {
 
 ### ________________________ CModel class tests _________________________ ###
     
-test testCModelClass-1.1 {test CModel class} -setup {
+test testCModelClass-1 {test CModel class} -setup {
     set mod [CModel new capmod -tc1 1 -tc2 2]
 } -body {
     set result [$mod genSPICEString]
@@ -30,7 +30,7 @@ test testCModelClass-1.1 {test CModel class} -setup {
 
 ### ________________________ LModel class tests _________________________ ###
     
-test testLModelClass-1.1 {test LModel class} -setup {
+test testLModelClass-1 {test LModel class} -setup {
     set mod [LModel new indmod -tc1 1 -tc2 2]
 } -body {
     set result [$mod genSPICEString]
@@ -39,7 +39,7 @@ test testLModelClass-1.1 {test LModel class} -setup {
 }
 ### ________________________ VSwitchModel class tests _________________________ ###
     
-test testVSwitchModelClass-1.1 {test VSwitchModel class} -setup {
+test testVSwitchModelClass-1 {test VSwitchModel class} -setup {
     set mod [VSwitchModel new swmod -vt 1 -vh 0.5 -ron 1 -roff 1e6]
 } -body {
     set result [$mod genSPICEString]
@@ -49,7 +49,7 @@ test testVSwitchModelClass-1.1 {test VSwitchModel class} -setup {
 
 ### ________________________ CSwitchModel class tests _________________________ ###
     
-test testCSwitchModelClass-1.1 {test CSwitchModel class} -setup {
+test testCSwitchModelClass-1 {test CSwitchModel class} -setup {
     set mod [CSwitchModel new cswmod -it 1 -ih 0.5 -ron 1 -roff 1e6]
 } -body {
     set result [$mod genSPICEString]
@@ -59,7 +59,7 @@ test testCSwitchModelClass-1.1 {test CSwitchModel class} -setup {
 
 ### ________________________ DiodeModel class tests _________________________ ###
     
-test testDiodeModelClass-1.1 {test DiodeModel class} -setup {
+test testDiodeModelClass-1 {test DiodeModel class} -setup {
     set mod [DiodeModel new diodemod -is 1e-14 -n 1.2 -rs 0.01 -cj0 1e-9]
 } -body {
     set result [$mod genSPICEString]
@@ -69,7 +69,7 @@ test testDiodeModelClass-1.1 {test DiodeModel class} -setup {
 
 ### ________________________ BjtGPModel class tests _________________________ ###
     
-test testBjtGPModelClass-1.1 {test BjtGPModel class} -setup {
+test testBjtGPModelClass-1 {test BjtGPModel class} -setup {
     set mod [BjtGPModel new bjtmod npn -is 1e-15 -bf 200 -vaf 100 -cje 1e-10]
 } -body {
     set result [$mod genSPICEString]
@@ -77,9 +77,9 @@ test testBjtGPModelClass-1.1 {test BjtGPModel class} -setup {
     unset mod result
 }
 
-### ________________________ Jfet1Model class tests _________________________ ###
+###  Jfet1Model class tests 
     
-test testJfet1ModelClass-1.1 {test Jfet1Model class} -setup {
+test testJfet1ModelClass-1 {test Jfet1Model class} -setup {
     set mod [Jfet1Model new jfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4 -cgd 1e-12]
 } -body {
     set result [$mod genSPICEString]
@@ -87,9 +87,9 @@ test testJfet1ModelClass-1.1 {test Jfet1Model class} -setup {
     unset mod result
 }
 
-### ________________________ Jfet2Model class tests _________________________ ###
+###  Jfet2Model class tests 
     
-test testJfet2ModelClass-1.1 {test Jfet2Model class} -setup {
+test testJfet2ModelClass-1 {test Jfet2Model class} -setup {
     set mod [Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4 -vbi 1.2]
 } -body {
     set result [$mod genSPICEString]
@@ -97,9 +97,9 @@ test testJfet2ModelClass-1.1 {test Jfet2Model class} -setup {
     unset mod result
 }
     
-### ________________________ Mesfet1Model class tests _________________________ ###
+###  Mesfet1Model class tests 
     
-test testMesfet1ModelClass-1.1 {test Mesfet1Model class} -setup {
+test testMesfet1ModelClass-1 {test Mesfet1Model class} -setup {
     set mod [Mesfet1Model new mesfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4 -cgd 1e-12]
 } -body {
     set result [$mod genSPICEString]

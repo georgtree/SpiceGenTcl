@@ -9,11 +9,11 @@ foreach nameSpc $xyceNameSpc {
 }
 
 
-### ________________________ Basic devices tests _________________________ ###
+###  Basic devices tests 
 
-#### ________________________ Resistor class tests _________________________ ####
+####  Resistor class tests 
     
-test testResistorClass-1.1 {test Resistor class} -setup {
+test testResistorClass-1 {test Resistor class} -setup {
     set res [Resistor new 1 netp netm -r 1e3 -tc1 1 -temp 25]
 } -body {
     set result [$res genSPICEString]
@@ -21,7 +21,7 @@ test testResistorClass-1.1 {test Resistor class} -setup {
     unset res result
 }
 
-test testResistorClass-1.2 {test Resistor class} -setup {
+test testResistorClass-2 {test Resistor class} -setup {
     set res [Resistor new 1 netp netm -r 1e3]
 } -body {
     set result [$res genSPICEString]
@@ -29,7 +29,7 @@ test testResistorClass-1.2 {test Resistor class} -setup {
     unset res result
 }
 
-test testResistorClass-1.3 {test Resistor class with equation positional parameter} -setup {
+test testResistorClass-3 {test Resistor class with equation positional parameter} -setup {
     set res [Resistor new 1 netp netm -r {{6*x+y} -eq}]
 } -body {
     set result [$res genSPICEString]
@@ -37,7 +37,7 @@ test testResistorClass-1.3 {test Resistor class with equation positional paramet
     unset res result
 }
 
-test testResistorClass-1.4 {test Resistor class with equation positional parameter and combination of normal and equation parameters} -setup {
+test testResistorClass-4 {test Resistor class with equation positional parameter and combination of normal and equation parameters} -setup {
     set res [Resistor new 1 netp netm -r {{6*x+y} -eq} -tc1 7 -tc2 {"x^2" -eq}]
 } -body {
     set result [$res genSPICEString]
@@ -45,7 +45,7 @@ test testResistorClass-1.4 {test Resistor class with equation positional paramet
     unset res result
 }
 
-test testResistorClass-1.5 {test Resistor class with behavioural switch} -setup {
+test testResistorClass-5 {test Resistor class with behavioural switch} -setup {
     set res [Resistor new 1 netp netm -r "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1]
 } -body {
     set result [$res genSPICEString]
@@ -53,7 +53,7 @@ test testResistorClass-1.5 {test Resistor class with behavioural switch} -setup 
     unset res result
 }    
 
-test testResistorClass-1.6 {test Resistor class with model switch and resistance value} -setup {
+test testResistorClass-6 {test Resistor class with model switch and resistance value} -setup {
     set res [Resistor new 1 netp netm -r 1 -model resmod -l 1e-6 -temp 25]
 } -body {
     set result [$res genSPICEString]
@@ -61,7 +61,7 @@ test testResistorClass-1.6 {test Resistor class with model switch and resistance
     unset res result
 }
 
-test testResistorClass-1.7 {test Resistor class with model switch} -setup {
+test testResistorClass-7 {test Resistor class with model switch} -setup {
     set res [Resistor new 1 netp netm -model resmod -l 1e-6 -temp 25]
 } -body {
     set result [$res genSPICEString]
@@ -69,7 +69,7 @@ test testResistorClass-1.7 {test Resistor class with model switch} -setup {
     unset res result
 }
 
-test testResistorClass-1.9 {test Resistor class without -r pramater and -model switch} -body {
+test testResistorClass-9 {test Resistor class without -r pramater and -model switch} -body {
     catch {Resistor new 1 netp netm} errorStr
     return $errorStr
 } -result "Resistor value must be specified with '-r value'" -cleanup {
@@ -84,7 +84,9 @@ test testResistorClass-2.0 {test Resistor class with behavioural switch with dif
     unset res result
 } 
 
-test testRClass-1.1 {test R alias for Resistor class} -setup {
+####  R class tests 
+
+test testRClass-1 {test R alias for Resistor class} -setup {
     set res [R new 1 netp netm -r 1e3 -tc1 1 -temp 25]
 } -body {
     set result [$res genSPICEString]
@@ -92,7 +94,7 @@ test testRClass-1.1 {test R alias for Resistor class} -setup {
     unset res result
 }  
   
-test testRClass-1.2 {test R alias for Resistor class with behavioural switch} -setup {
+test testRClass-2 {test R alias for Resistor class with behavioural switch} -setup {
     set res [R new 1 netp netm -r "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1]
 } -body {
     set result [$res genSPICEString]
@@ -100,7 +102,7 @@ test testRClass-1.2 {test R alias for Resistor class with behavioural switch} -s
     unset res result
 }     
        
-test testRClass-1.3 {test R alias for Resistor class with model switch} -setup {
+test testRClass-3 {test R alias for Resistor class with model switch} -setup {
     set res [R new 1 netp netm -model resmod -l 1e-6 -temp 25]
 } -body {
     set result [$res genSPICEString]
@@ -109,9 +111,9 @@ test testRClass-1.3 {test R alias for Resistor class with model switch} -setup {
 } 
 
 
-#### ________________________ Capacitor class tests _________________________ ####
+####  Capacitor class tests 
     
-test testCapacitorClass-1.1 {test Capacitor class} -setup {
+test testCapacitorClass-1 {test Capacitor class} -setup {
     set cap [Capacitor new 1 netp netm -c 1e-6 -tc1 1 -temp 25]
 } -body {
     set result [$cap genSPICEString]
@@ -119,7 +121,7 @@ test testCapacitorClass-1.1 {test Capacitor class} -setup {
     unset cap result
 }
 
-test testCapacitorClass-1.2 {test Capacitor class} -setup {
+test testCapacitorClass-2 {test Capacitor class} -setup {
     set cap [Capacitor new 1 netp netm -c 1e-6]
 } -body {
     set result [$cap genSPICEString]
@@ -127,7 +129,7 @@ test testCapacitorClass-1.2 {test Capacitor class} -setup {
     unset cap result
 }
 
-test testCapacitorClass-1.3 {test Capacitor class witch C behavioural equation} -setup {
+test testCapacitorClass-3 {test Capacitor class witch C behavioural equation} -setup {
     set cap [Capacitor new 1 netp netm -c "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1]
 } -body {
     set result [$cap genSPICEString]
@@ -135,7 +137,7 @@ test testCapacitorClass-1.3 {test Capacitor class witch C behavioural equation} 
     unset cap result
 }
        
-test testCapacitorClass-1.4 {test Capacitor class witch Q behavioural equation} -setup {
+test testCapacitorClass-4 {test Capacitor class witch Q behavioural equation} -setup {
     set cap [Capacitor new 1 netp netm -q "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1]
 } -body {
     set result [$cap genSPICEString]
@@ -143,7 +145,7 @@ test testCapacitorClass-1.4 {test Capacitor class witch Q behavioural equation} 
     unset cap result
 }         
 
-test testCapacitorClass-1.5 {test Capacitor class with model switch} -setup {
+test testCapacitorClass-5 {test Capacitor class with model switch} -setup {
     set cap [Capacitor new 1 netp netm -model capmod -l 1e-6 -w 10e-6 -temp 25]
 } -body {
     set result [$cap genSPICEString]
@@ -151,7 +153,7 @@ test testCapacitorClass-1.5 {test Capacitor class with model switch} -setup {
     unset cap result
 }
 
-test testCapacitorClass-1.6 {test apacitor class with model switch and value} -setup {
+test testCapacitorClass-6 {test apacitor class with model switch and value} -setup {
     set cap [Capacitor new 1 netp netm -c 1 -model capmod -l 1e-6 -w 10e-6 -temp 25]
 } -body {
     set result [$cap genSPICEString]
@@ -159,21 +161,23 @@ test testCapacitorClass-1.6 {test apacitor class with model switch and value} -s
     unset cap result
 }  
 
-test testCapacitorClass-1.7 {test Capacitor class without capacitance value, error generated} -body {
+test testCapacitorClass-7 {test Capacitor class without capacitance value, error generated} -body {
     catch {Capacitor new 1 netp netm} errorStr
     return $errorStr
 } -result "Capacitor value must be specified with '-c value'" -cleanup {
     unset errorStr
 } 
 
-test testCapacitorClass-1.8 {test Capacitor class} -body {
+test testCapacitorClass-8 {test Capacitor class} -body {
     catch {Capacitor new 1 netp netm -beh} errorStr
     return $errorStr
 } -result "Capacitor value must be specified with '-c value'" -cleanup {
     unset errorStr
 } 
 
-test testCClass-1.1 {test C alias for Capacitor class witch C behavioural equation} -setup {
+####  C class tests 
+
+test testCClass-1 {test C alias for Capacitor class witch C behavioural equation} -setup {
     set cap [C new 1 netp netm -c "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1]
 } -body {
     set result [$cap genSPICEString]
@@ -181,7 +185,7 @@ test testCClass-1.1 {test C alias for Capacitor class witch C behavioural equati
     unset cap result
 }
 
-test testClass-1.2 {test C alias for Capacitor class with Q behavioural equation} -setup {
+test testClass-2 {test C alias for Capacitor class with Q behavioural equation} -setup {
     set cap [C new 1 netp netm -q "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1]
 } -body {
     set result [$cap genSPICEString]
@@ -189,7 +193,7 @@ test testClass-1.2 {test C alias for Capacitor class with Q behavioural equation
     unset cap result
 }         
 
-test testCClass-1.3 {test C alias for Capacitor class with model switch} -setup {
+test testCClass-3 {test C alias for Capacitor class with model switch} -setup {
     set cap [C new 1 netp netm -model capmod -l 1e-6 -w 10e-6 -temp 25]
 } -body {
     set result [$cap genSPICEString]
@@ -197,7 +201,7 @@ test testCClass-1.3 {test C alias for Capacitor class with model switch} -setup 
     unset cap result
 }
 
-test testCClass-1.4 {test C alias for Capacitor class} -setup {
+test testCClass-4 {test C alias for Capacitor class} -setup {
     set cap [C new 1 netp netm -c 1e-6 -tc1 1 -temp 25]
 } -body {
     set result [$cap genSPICEString]
@@ -205,9 +209,9 @@ test testCClass-1.4 {test C alias for Capacitor class} -setup {
     unset cap result
 }
 
-#### ________________________ Inductor class tests _________________________ ####
+####  Inductor class tests 
     
-test testInductorClass-1.1 {test Inductor class} -setup {
+test testInductorClass-1 {test Inductor class} -setup {
     set ind [Inductor new 1 netp netm -l 1e-6 -tc1 1 -temp 25]
 } -body {
     set result [$ind genSPICEString]
@@ -215,7 +219,7 @@ test testInductorClass-1.1 {test Inductor class} -setup {
     unset ind result
 }
 
-test testInductorClass-1.2 {test Inductor class} -setup {
+test testInductorClass-2 {test Inductor class} -setup {
     set ind [Inductor new 1 netp netm -l 1e-6]
 } -body {
     set result [$ind genSPICEString]
@@ -223,7 +227,7 @@ test testInductorClass-1.2 {test Inductor class} -setup {
     unset ind result
 }
 
-test testInductorClass-1.3 {test Inductor class with model switch} -setup {
+test testInductorClass-3 {test Inductor class with model switch} -setup {
     set ind [Inductor new 1 netp netm -l 1e-6 -model indm]
 } -body {
     set result [$ind genSPICEString]
@@ -231,8 +235,9 @@ test testInductorClass-1.3 {test Inductor class with model switch} -setup {
     unset ind result
 }
 
+####  L class tests 
 
-test testLClass-1.1 {test L alias for Inductor class} -setup {
+test testLClass-1 {test L alias for Inductor class} -setup {
     set ind [L new 1 netp netm -l 1e-6 -tc1 1 -temp 25]
 } -body {
     set result [$ind genSPICEString]
@@ -241,9 +246,9 @@ test testLClass-1.1 {test L alias for Inductor class} -setup {
 }
   
     
-#### ________________________ VSwitch class tests _________________________ ####
+####  VSwitch class tests 
     
-test testVSwitchClass-1.1 {test VSwitch class} -setup {
+test testVSwitchClass-1 {test VSwitch class} -setup {
     set vsw [VSwitch new 1 net1 0 netc 0 -model sw1 -on]
 } -body {
     set result [$vsw genSPICEString]
@@ -251,7 +256,7 @@ test testVSwitchClass-1.1 {test VSwitch class} -setup {
     unset vsw result
 }
 
-test testVSwitchClass-1.2 {test VSwitch class} -setup {
+test testVSwitchClass-2 {test VSwitch class} -setup {
     set vsw [VSwitch new 1 net1 0 netc 0 -model sw1]
 } -body {
     set result [$vsw genSPICEString]
@@ -259,7 +264,7 @@ test testVSwitchClass-1.2 {test VSwitch class} -setup {
     unset vsw result
 }
 
-test testVSwitchClass-1.3 {test VSwitch class with different arguments order} -setup {
+test testVSwitchClass-3 {test VSwitch class with different arguments order} -setup {
     set vsw [VSwitch new 1 net1 0 netc 0 -on -model sw1]
 } -body {
     set result [$vsw genSPICEString]
@@ -267,16 +272,16 @@ test testVSwitchClass-1.3 {test VSwitch class with different arguments order} -s
     unset vsw result
 }
 
-test testVSwitchClass-1.3 {test VSwitch class} -body {
+test testVSwitchClass-3 {test VSwitch class} -body {
     catch {set vsw [VSwitch new 1 net1 0 netc 0 -model sw1 -on -off]} errorStr
     return $errorStr
 } -result "-on conflicts with -off" -cleanup {
     unset errorStr
 }
 
-#### ________________________ CSwitch class tests _________________________ ####
+####  CSwitch class tests 
     
-test testCSwitchClass-1.1 {test CSwitch class} -setup {
+test testCSwitchClass-1 {test CSwitch class} -setup {
     set csw [CSwitch new 1 net1 0 -icntrl v1 -model sw1 -on]
 } -body {
     set result [$csw genSPICEString]
@@ -284,7 +289,7 @@ test testCSwitchClass-1.1 {test CSwitch class} -setup {
     unset csw result
 }
 
-test testCSwitchClass-1.2 {test CSwitch class} -setup {
+test testCSwitchClass-2 {test CSwitch class} -setup {
     set csw [CSwitch new 1 net1 0 -icntrl v1 -model sw1]
 } -body {
     set result [$csw genSPICEString]
@@ -292,9 +297,9 @@ test testCSwitchClass-1.2 {test CSwitch class} -setup {
     unset csw result
 }
     
-#### ________________________ GenSwitch class tests _________________________ ####
+####  GenSwitch class tests 
     
-test testGenSwitchClass-1.1 {test GenSwitch class} -setup {
+test testGenSwitchClass-1 {test GenSwitch class} -setup {
     set csw [GenSwitch new 1 net1 0 -model sw1 -control {I(VMON)}]
 } -body {
     set result [$csw genSPICEString]
@@ -302,7 +307,9 @@ test testGenSwitchClass-1.1 {test GenSwitch class} -setup {
     unset csw result
 }
 
-test testCSwitchClass-1.2 {test CSwitch class} -setup {
+####  GenS class tests 
+
+test testGenSClass-2 {test GenS class} -setup {
     set csw [GenS new 1 net1 0 -model sw1 -control {I(VMON)}]
 } -body {
     set result [$csw genSPICEString]
@@ -310,11 +317,11 @@ test testCSwitchClass-1.2 {test CSwitch class} -setup {
     unset csw result
 }    
     
-### ________________________ Sources classes tests _________________________ ###
+###  Sources classes tests 
     
-#### ________________________ Vdc class test _________________________ ####
+####  Vdc class test 
 
-test testVdcClass-1.1 {test Vdc class} -setup {
+test testVdcClass-1 {test Vdc class} -setup {
     set vdc [Vdc new 1 netp netm -dc 10]
 } -body {
     set result [$vdc genSPICEString]
@@ -322,7 +329,7 @@ test testVdcClass-1.1 {test Vdc class} -setup {
     unset vdc result
 }
 
-test testVdcClass-1.2 {test Vdc class} -setup {
+test testVdcClass-2 {test Vdc class} -setup {
     set vdc [Vdc new 1 netp netm -dc {vnom -eq}]
 } -body {
     set result [$vdc genSPICEString]
@@ -330,9 +337,9 @@ test testVdcClass-1.2 {test Vdc class} -setup {
     unset vdc result
 }
 
-#### ________________________ Vac class test _________________________ ####
+####  Vac class test 
 
-test testVacClass-1.1 {test Vac class} -setup {
+test testVacClass-1 {test Vac class} -setup {
     set vac [Vac new 1 netp netm -ac 10]
 } -body {
     set result [$vac genSPICEString]
@@ -340,7 +347,7 @@ test testVacClass-1.1 {test Vac class} -setup {
     unset vac result
 }
 
-test testVacClass-1.2 {test Vac class} -setup {
+test testVacClass-2 {test Vac class} -setup {
     set vac [Vac new 1 netp netm -ac 10 -acphase 45]
 } -body {
     set result [$vac genSPICEString]
@@ -348,7 +355,7 @@ test testVacClass-1.2 {test Vac class} -setup {
     unset vac result
 }
 
-test testVacClass-1.3 {test Vac class} -setup {
+test testVacClass-3 {test Vac class} -setup {
     set vac [Vac new 1 netp netm -ac 10 -acphase {phase -eq}]
 } -body {
     set result [$vac genSPICEString]
@@ -356,7 +363,7 @@ test testVacClass-1.3 {test Vac class} -setup {
     unset vac result
 }
 
-test testVacClass-1.4 {test Vac class} -setup {
+test testVacClass-4 {test Vac class} -setup {
     set vac [Vac new 1 netp netm -ac {acmag -eq} -acphase 45]
 } -body {
     set result [$vac genSPICEString]
@@ -364,9 +371,9 @@ test testVacClass-1.4 {test Vac class} -setup {
     unset vac result
 }
     
-#### ________________________ Vpulse class test _________________________ ####
+####  Vpulse class test 
 
-test testVpulseClass-1.1 {test Vpulse class} -setup {
+test testVpulseClass-1 {test Vpulse class} -setup {
     set vpulse [Vpulse new 1 net1 net2 -low 0 -high 1 -td 1e-9 -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6]
 } -body {
     set result [$vpulse genSPICEString]
@@ -374,7 +381,7 @@ test testVpulseClass-1.1 {test Vpulse class} -setup {
     unset vpulse result
 }
 
-test testVpulseClass-1.2 {test Vpulse class} -setup {
+test testVpulseClass-2 {test Vpulse class} -setup {
     set vpulse [Vpulse new 1 net1 net2 -low 0 -high 1 -td 1e-9 -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6]
 } -body {
     set result [$vpulse genSPICEString]
@@ -382,7 +389,7 @@ test testVpulseClass-1.2 {test Vpulse class} -setup {
     unset vpulse result
 }
 
-test testVpulseClass-1.3 {test Vpulse class} -setup {
+test testVpulseClass-3 {test Vpulse class} -setup {
     set vpulse [Vpulse new 1 net1 net2 -low 0 -high 1 -td {td -eq} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6]
 } -body {
     set result [$vpulse genSPICEString]
@@ -390,7 +397,7 @@ test testVpulseClass-1.3 {test Vpulse class} -setup {
     unset vpulse result
 }
 
-test testVpulseClass-1.4 {test Vpulse class} -setup {
+test testVpulseClass-4 {test Vpulse class} -setup {
     set vpulse [Vpulse new 1 net1 net2 -low 0 -high 1 -td {td -eq} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6]
 } -body {
     set result [$vpulse genSPICEString]
@@ -398,7 +405,7 @@ test testVpulseClass-1.4 {test Vpulse class} -setup {
     unset vpulse result
 }
 
-test testVpulseClass-1.5 {test Vpulse class with different order} -setup {
+test testVpulseClass-5 {test Vpulse class with different order} -setup {
     set vpulse [Vpulse new 1 net1 net2 -tf 1e-9 -pw 10e-6 -per 20e-6 -low 0 -high 1 -td 1e-9 -tr 1e-9]
 } -body {
     set result [$vpulse genSPICEString]
@@ -406,10 +413,10 @@ test testVpulseClass-1.5 {test Vpulse class with different order} -setup {
     unset vpulse result
 }
 
-#### ________________________ Vsin class test _________________________ ####
+####  Vsin class test 
 
 
-test testVsinClass-1.1 {test Vsin class} -setup {
+test testVsinClass-1 {test Vsin class} -setup {
     set vsin [Vsin new 1 net1 net2 -v0 0 -va 2 -freq 50 -td 1e-6]
 } -body {
     set result [$vsin genSPICEString]
@@ -417,7 +424,7 @@ test testVsinClass-1.1 {test Vsin class} -setup {
     unset vsin result
 }
 
-test testVsinClass-1.2 {test Vsin class} -setup {
+test testVsinClass-2 {test Vsin class} -setup {
     set vsin [Vsin new 1 net1 net2 -v0 0 -va 2 -freq 50 -td 1e-6 -theta {theta -eq}]
 } -body {
     set result [$vsin genSPICEString]
@@ -425,7 +432,7 @@ test testVsinClass-1.2 {test Vsin class} -setup {
     unset vsin result
 }
 
-test testVsinClass-1.3 {test Vsin class} -setup {
+test testVsinClass-3 {test Vsin class} -setup {
     set vsin [Vsin new 1 net1 net2 -v0 0 -va 2 -freq {freq -eq} -td 1e-6 -theta {theta -eq}]
 } -body {
     set result [$vsin genSPICEString]
@@ -433,7 +440,7 @@ test testVsinClass-1.3 {test Vsin class} -setup {
     unset vsin result
 }
 
-test testVsinClass-1.4 {test Vsin class} -setup {
+test testVsinClass-4 {test Vsin class} -setup {
     set vsin [Vsin new 1 net1 net2 -v0 0 -va 2 -freq 50]
 } -body {
     set result [$vsin genSPICEString]
@@ -441,7 +448,7 @@ test testVsinClass-1.4 {test Vsin class} -setup {
     unset vsin result
 }
 
-test testVsinClass-1.5 {test Vsin class with different order} -setup {
+test testVsinClass-5 {test Vsin class with different order} -setup {
     set vsin [Vsin new 1 net1 net2 -v0 0 -theta {theta -eq} -va 2 -freq 50 -td 1e-6 ]
 } -body {
     set result [$vsin genSPICEString]
@@ -449,9 +456,9 @@ test testVsinClass-1.5 {test Vsin class with different order} -setup {
     unset vsin result
 }
 
-#### ________________________ Vexp class test _________________________ ####
+####  Vexp class test 
 
-test testVexpClass-1.1 {test Vexp class} -setup {
+test testVexpClass-1 {test Vexp class} -setup {
     set vexp [Vexp new 1 net1 net2 -v1 0 -v2 1 -td1 1e-9 -tau1 1e-9 -td2 1e-9 -tau2 10e-6]
 } -body {
     set result [$vexp genSPICEString]
@@ -459,7 +466,7 @@ test testVexpClass-1.1 {test Vexp class} -setup {
     unset vexp result
 }
     
-test testVexpClass-1.2 {test Vexp class} -setup {
+test testVexpClass-2 {test Vexp class} -setup {
     set vexp [Vexp new 1 net1 net2 -v1 0 -v2 1 -td1 1e-9 -tau1 1e-9 -td2 {td2 -eq} -tau2 10e-6]
 } -body {
     set result [$vexp genSPICEString]
@@ -467,7 +474,7 @@ test testVexpClass-1.2 {test Vexp class} -setup {
     unset vexp result
 }
 
-test testVexpClass-1.3 {test Vexp class with different order} -setup {
+test testVexpClass-3 {test Vexp class with different order} -setup {
     set vexp [Vexp new 1 net1 net2 -v1 0 -tau1 1e-9 -v2 1 -td2 1e-9 -td1 1e-9 -tau2 10e-6]
 } -body {
     set result [$vexp genSPICEString]
@@ -475,9 +482,9 @@ test testVexpClass-1.3 {test Vexp class with different order} -setup {
     unset vexp result
 }
     
-#### ________________________ Vpwl class test _________________________ ####
+####  Vpwl class test 
 
-test testVpwlClass-1.1 {test Vpwl class} -setup {
+test testVpwlClass-1 {test Vpwl class} -setup {
     set vpwl [Vpwl new 1 npNode nmNode -seq {0 0 {t1 -eq} 1 2 2 3 3 4 4}]
 } -body {
     set result [$vpwl genSPICEString]
@@ -485,7 +492,7 @@ test testVpwlClass-1.1 {test Vpwl class} -setup {
     unset vpwl result
 }  
     
-test testVpwlClass-1.2 {test Vpwl class} -setup {
+test testVpwlClass-2 {test Vpwl class} -setup {
     catch {Vpwl new 1 npNode nmNode -seq {0 0 {t1 -eq} 1 2 2 3 3 4}} errorStr
 } -body {
     return $errorStr
@@ -493,7 +500,7 @@ test testVpwlClass-1.2 {test Vpwl class} -setup {
     unset errorStr
 }
 
-test testVpwlClass-1.3 {test Vpwl class} -setup {
+test testVpwlClass-3 {test Vpwl class} -setup {
     catch {Vpwl new 1 npNode nmNode -seq {0 0}} errorStr
 } -body {
     return $errorStr
@@ -501,9 +508,9 @@ test testVpwlClass-1.3 {test Vpwl class} -setup {
     unset errorStr
 }
 
-#### ________________________ Vsffm class test _________________________ ####
+####  Vsffm class test 
                 
-test testVsffmClass-1.1 {test Vsffm class} -setup {
+test testVsffmClass-1 {test Vsffm class} -setup {
     set vsffm [Vsffm new 1 net1 net2 -v0 0 -va 1 -fc 1e6 -mdi 0 -fs 1e3]
 } -body {
     set result [$vsffm genSPICEString]
@@ -511,7 +518,7 @@ test testVsffmClass-1.1 {test Vsffm class} -setup {
     unset vsffm result
 }
 
-test testVsffmClass-1.2 {test Vsffm class} -setup {
+test testVsffmClass-2 {test Vsffm class} -setup {
     set vsffm [Vsffm new 1 net1 net2 -v0 0 -va 1 -fc 1e6 -mdi 0 -fs 1e3]
 } -body {
     set result [$vsffm genSPICEString]
@@ -519,7 +526,7 @@ test testVsffmClass-1.2 {test Vsffm class} -setup {
     unset vsffm result
 }
 
-test testVsffmClass-1.3 {test Vsffm class} -setup {
+test testVsffmClass-3 {test Vsffm class} -setup {
     set vsffm [Vsffm new 1 net1 net2 -v0 0 -va 1 -fc {freq -eq} -mdi 0 -fs 1e3]
 } -body {
     set result [$vsffm genSPICEString]
@@ -527,7 +534,7 @@ test testVsffmClass-1.3 {test Vsffm class} -setup {
     unset vsffm result
 }
 
-test testVsffmClass-1.4 {test Vsffm class} -setup {
+test testVsffmClass-4 {test Vsffm class} -setup {
     set vsffm [Vsffm new 1 net1 net2 -v0 0 -va 1 -fc 1e6 -mdi 0 -fs 1e3]
 } -body {
     set result [$vsffm genSPICEString]
@@ -535,7 +542,7 @@ test testVsffmClass-1.4 {test Vsffm class} -setup {
     unset vsffm result
 }
 
-test testVsffmClass-1.5 {test Vsffm class with different order} -setup {
+test testVsffmClass-5 {test Vsffm class with different order} -setup {
     set vsffm [Vsffm new 1 net1 net2 -v0 0 -fs 1e3 -va 1 -fc {freq -eq} -mdi 0]
 } -body {
     set result [$vsffm genSPICEString]
@@ -543,9 +550,9 @@ test testVsffmClass-1.5 {test Vsffm class with different order} -setup {
     unset vsffm result
 }
     
-#### ________________________ Idc class test _________________________ ####
+####  Idc class test 
 
-test testIdcClass-1.1 {test Idc class} -setup {
+test testIdcClass-1 {test Idc class} -setup {
     set idc [Idc new 1 netp netm -dc 10]
 } -body {
     set result [$idc genSPICEString]
@@ -553,7 +560,7 @@ test testIdcClass-1.1 {test Idc class} -setup {
     unset idc result
 }
     
-test testIdcClass-1.2 {test Idc class} -setup {
+test testIdcClass-2 {test Idc class} -setup {
     set idc [Idc new 1 netp netm -dc {inom -eq}]
 } -body {
     set result [$idc genSPICEString]
@@ -561,9 +568,9 @@ test testIdcClass-1.2 {test Idc class} -setup {
     unset idc result
 }
     
-#### ________________________ Iac class test _________________________ ####
+####  Iac class test 
     
-test testIacClass-1.1 {test Iac class} -setup {
+test testIacClass-1 {test Iac class} -setup {
     set iac [Iac new 1 netp netm -ac 10]
 } -body {
     set result [$iac genSPICEString]
@@ -571,7 +578,7 @@ test testIacClass-1.1 {test Iac class} -setup {
     unset iac result
 }
 
-test testIacClass-1.2 {test Iac class} -setup {
+test testIacClass-2 {test Iac class} -setup {
     set iac [Iac new 1 netp netm -ac 10 -acphase 45]
 } -body {
     set result [$iac genSPICEString]
@@ -579,7 +586,7 @@ test testIacClass-1.2 {test Iac class} -setup {
     unset iac result
 }
 
-test testIacClass-1.3 {test Iac class} -setup {
+test testIacClass-3 {test Iac class} -setup {
     set iac [Iac new 1 netp netm -ac 10 -acphase {phase -eq}]
 } -body {
     set result [$iac genSPICEString]
@@ -587,7 +594,7 @@ test testIacClass-1.3 {test Iac class} -setup {
     unset iac result
 }
 
-test testIacClass-1.4 {test Iac class} -setup {
+test testIacClass-4 {test Iac class} -setup {
     set iac [Iac new 1 netp netm -ac {acmag -eq} -acphase 45]
 } -body {
     set result [$iac genSPICEString]
@@ -595,9 +602,9 @@ test testIacClass-1.4 {test Iac class} -setup {
     unset iac result
 }
 
-#### ________________________ Ipulse class test _________________________ ####
+####  Ipulse class test 
 
-test testIpulseClass-1.1 {test Ipulse class} -setup {
+test testIpulseClass-1 {test Ipulse class} -setup {
     set ipulse [Ipulse new 1 net1 net2 -low 0 -high 1 -td 1e-9 -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6]
 } -body {
     set result [$ipulse genSPICEString]
@@ -605,7 +612,7 @@ test testIpulseClass-1.1 {test Ipulse class} -setup {
     unset ipulse result
 }
 
-test testIpulseClass-1.2 {test Ipulse class} -setup {
+test testIpulseClass-2 {test Ipulse class} -setup {
     set ipulse [Ipulse new 1 net1 net2 -low 0 -high 1 -td 1e-9 -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6]
 } -body {
     set result [$ipulse genSPICEString]
@@ -613,7 +620,7 @@ test testIpulseClass-1.2 {test Ipulse class} -setup {
     unset ipulse result
 }
 
-test testIpulseClass-1.3 {test Ipulse class} -setup {
+test testIpulseClass-3 {test Ipulse class} -setup {
     set ipulse [Ipulse new 1 net1 net2 -low 0 -high 1 -td {td -eq} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6]
 } -body {
     set result [$ipulse genSPICEString]
@@ -621,7 +628,7 @@ test testIpulseClass-1.3 {test Ipulse class} -setup {
     unset ipulse result
 }
 
-test testIpulseClass-1.4 {test Ipulse class} -setup {
+test testIpulseClass-4 {test Ipulse class} -setup {
     set ipulse [Ipulse new 1 net1 net2 -low 0 -high 1 -td {td -eq} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6]
 } -body {
     set result [$ipulse genSPICEString]
@@ -629,7 +636,7 @@ test testIpulseClass-1.4 {test Ipulse class} -setup {
     unset ipulse result
 }
 
-test testIpulseClass-1.5 {test Ipulse class with different order} -setup {
+test testIpulseClass-5 {test Ipulse class with different order} -setup {
     set ipulse [Ipulse new 1 net1 net2 -tf 1e-9 -pw 10e-6 -per 20e-6 -low 0 -high 1 -td 1e-9 -tr 1e-9]
 } -body {
     set result [$ipulse genSPICEString]
@@ -637,10 +644,10 @@ test testIpulseClass-1.5 {test Ipulse class with different order} -setup {
     unset ipulse result
 }
 
-#### ________________________ Isin class test _________________________ ####
+####  Isin class test 
 
 
-test testIsinClass-1.1 {test Isin class} -setup {
+test testIsinClass-1 {test Isin class} -setup {
     set isin [Isin new 1 net1 net2 -v0 0 -va 2 -freq 50 -td 1e-6]
 } -body {
     set result [$isin genSPICEString]
@@ -648,7 +655,7 @@ test testIsinClass-1.1 {test Isin class} -setup {
     unset isin result
 }
 
-test testIsinClass-1.2 {test Isin class} -setup {
+test testIsinClass-2 {test Isin class} -setup {
     set isin [Isin new 1 net1 net2 -v0 0 -va 2 -freq 50 -td 1e-6 -theta {theta -eq}]
 } -body {
     set result [$isin genSPICEString]
@@ -656,7 +663,7 @@ test testIsinClass-1.2 {test Isin class} -setup {
     unset isin result
 }
 
-test testIsinClass-1.3 {test Isin class} -setup {
+test testIsinClass-3 {test Isin class} -setup {
     set isin [Isin new 1 net1 net2 -v0 0 -va 2 -freq {freq -eq} -td 1e-6 -theta {theta -eq}]
 } -body {
     set result [$isin genSPICEString]
@@ -664,7 +671,7 @@ test testIsinClass-1.3 {test Isin class} -setup {
     unset isin result
 }
 
-test testIsinClass-1.4 {test Isin class} -setup {
+test testIsinClass-4 {test Isin class} -setup {
     set isin [Isin new 1 net1 net2 -v0 0 -va 2 -freq 50]
 } -body {
     set result [$isin genSPICEString]
@@ -672,7 +679,7 @@ test testIsinClass-1.4 {test Isin class} -setup {
     unset isin result
 }
 
-test testIsinClass-1.5 {test Isin class with different order} -setup {
+test testIsinClass-5 {test Isin class with different order} -setup {
     set isin [Isin new 1 net1 net2 -v0 0 -theta {theta -eq} -va 2 -freq 50 -td 1e-6 ]
 } -body {
     set result [$isin genSPICEString]
@@ -680,9 +687,9 @@ test testIsinClass-1.5 {test Isin class with different order} -setup {
     unset isin result
 }
 
-#### ________________________ Iexp class test _________________________ ####
+####  Iexp class test 
 
-test testIexpClass-1.1 {test Iexp class} -setup {
+test testIexpClass-1 {test Iexp class} -setup {
     set iexp [Iexp new 1 net1 net2 -v1 0 -v2 1 -td1 1e-9 -tau1 1e-9 -td2 1e-9 -tau2 10e-6]
 } -body {
     set result [$iexp genSPICEString]
@@ -690,7 +697,7 @@ test testIexpClass-1.1 {test Iexp class} -setup {
     unset iexp result
 }
     
-test testIexpClass-1.2 {test Iexp class} -setup {
+test testIexpClass-2 {test Iexp class} -setup {
     set iexp [Iexp new 1 net1 net2 -v1 0 -v2 1 -td1 1e-9 -tau1 1e-9 -td2 {td2 -eq} -tau2 10e-6]
 } -body {
     set result [$iexp genSPICEString]
@@ -698,7 +705,7 @@ test testIexpClass-1.2 {test Iexp class} -setup {
     unset iexp result
 }
 
-test testIexpClass-1.3 {test Iexp class with different order} -setup {
+test testIexpClass-3 {test Iexp class with different order} -setup {
     set iexp [Iexp new 1 net1 net2 -v1 0 -tau1 1e-9 -v2 1 -td2 1e-9 -td1 1e-9 -tau2 10e-6]
 } -body {
     set result [$iexp genSPICEString]
@@ -706,9 +713,9 @@ test testIexpClass-1.3 {test Iexp class with different order} -setup {
     unset iexp result
 }
     
-#### ________________________ Ipwl class test _________________________ ####
+####  Ipwl class test 
 
-test testIpwlClass-1.1 {test Ipwl class} -setup {
+test testIpwlClass-1 {test Ipwl class} -setup {
     set vpwl [Ipwl new 1 npNode nmNode -seq {0 0 {t1 -eq} 1 2 2 3 3 4 4}]
 } -body {
     set result [$vpwl genSPICEString]
@@ -716,7 +723,7 @@ test testIpwlClass-1.1 {test Ipwl class} -setup {
     unset vpwl result
 }  
     
-test testIpwlClass-1.2 {test Ipwl class} -setup {
+test testIpwlClass-2 {test Ipwl class} -setup {
     catch {Ipwl new 1 npNode nmNode -seq {0 0 {t1 -eq} 1 2 2 3 3 4}} errorStr
 } -body {
     return $errorStr
@@ -724,7 +731,7 @@ test testIpwlClass-1.2 {test Ipwl class} -setup {
     unset errorStr
 }
 
-test testIpwlClass-1.3 {test Ipwl class} -setup {
+test testIpwlClass-3 {test Ipwl class} -setup {
     catch {Ipwl new 1 npNode nmNode -seq {0 0}} errorStr
 } -body {
     return $errorStr
@@ -732,9 +739,9 @@ test testIpwlClass-1.3 {test Ipwl class} -setup {
     unset errorStr
 }
 
-#### ________________________ Isffm class test _________________________ ####
+####  Isffm class test 
                 
-test testIsffmClass-1.1 {test Isffm class} -setup {
+test testIsffmClass-1 {test Isffm class} -setup {
     set isffm [Isffm new 1 net1 net2 -v0 0 -va 1 -fc 1e6 -mdi 0 -fs 1e3]
 } -body {
     set result [$isffm genSPICEString]
@@ -742,7 +749,7 @@ test testIsffmClass-1.1 {test Isffm class} -setup {
     unset isffm result
 }
 
-test testIsffmClass-1.2 {test Isffm class} -setup {
+test testIsffmClass-2 {test Isffm class} -setup {
     set isffm [Isffm new 1 net1 net2 -v0 0 -va 1 -fc 1e6 -mdi 0 -fs 1e3]
 } -body {
     set result [$isffm genSPICEString]
@@ -750,7 +757,7 @@ test testIsffmClass-1.2 {test Isffm class} -setup {
     unset isffm result
 }
 
-test testIsffmClass-1.3 {test Isffm class} -setup {
+test testIsffmClass-3 {test Isffm class} -setup {
     set isffm [Isffm new 1 net1 net2 -v0 0 -va 1 -fc {freq -eq} -mdi 0 -fs 1e3]
 } -body {
     set result [$isffm genSPICEString]
@@ -758,7 +765,7 @@ test testIsffmClass-1.3 {test Isffm class} -setup {
     unset isffm result
 }
 
-test testIsffmClass-1.4 {test Isffm class} -setup {
+test testIsffmClass-4 {test Isffm class} -setup {
     set isffm [Isffm new 1 net1 net2 -v0 0 -va 1 -fc 1e6 -mdi 0 -fs 1e3]
 } -body {
     set result [$isffm genSPICEString]
@@ -766,7 +773,7 @@ test testIsffmClass-1.4 {test Isffm class} -setup {
     unset isffm result
 }
 
-test testIsffmClass-1.5 {test Isffm class with different order} -setup {
+test testIsffmClass-5 {test Isffm class with different order} -setup {
     set isffm [Isffm new 1 net1 net2 -v0 0 -fs 1e3 -va 1 -fc {freq -eq} -mdi 0]
 } -body {
     set result [$isffm genSPICEString]
@@ -774,9 +781,9 @@ test testIsffmClass-1.5 {test Isffm class with different order} -setup {
     unset isffm result
 }
     
-#### ________________________ Vccs class tests _________________________ ####
+####  Vccs class tests 
     
-test testVccsClass-1.1 {test Vccs class} -setup {
+test testVccsClass-1 {test Vccs class} -setup {
     set vccs [Vccs new 1 net1 0 netc 0 -trcond 10 -m 1]
 } -body {
     set result [$vccs genSPICEString]
@@ -784,7 +791,7 @@ test testVccsClass-1.1 {test Vccs class} -setup {
     unset vccs result
 }
 
-test testVccsClass-1.2 {test Vccs class} -setup {
+test testVccsClass-2 {test Vccs class} -setup {
     set vccs [Vccs new 1 net1 0 netc 0 -trcond 10]
 } -body {
     set result [$vccs genSPICEString]
@@ -792,15 +799,17 @@ test testVccsClass-1.2 {test Vccs class} -setup {
     unset vccs result
 }
 
-test testVccsClass-1.2 {test Vccs class} -setup {
+test testVccsClass-2 {test Vccs class} -setup {
     set vccs [Vccs new 1 net1 0 netc 0 -trcond {trcond -eq}]
 } -body {
     set result [$vccs genSPICEString]
 } -result "g1 net1 0 netc 0 \{trcond\}" -cleanup {
     unset vccs result
 }
-        
-test testGClass-1.1 {test G class} -setup {
+
+####  G class tests 
+
+test testGClass-1 {test G class} -setup {
     set g [G new 1 net1 0 netc 0 -trcond 10 -m 1]
 } -body {
     set result [$g genSPICEString]
@@ -808,9 +817,9 @@ test testGClass-1.1 {test G class} -setup {
     unset g result
 }
     
-#### ________________________ Vcvs class tests _________________________ ####
+####  Vcvs class tests 
     
-test testVcvsClass-1.1 {test Vcvs class} -setup {
+test testVcvsClass-1 {test Vcvs class} -setup {
     set vcvs [Vcvs new 1 net1 0 netc 0 -gain 10]
 } -body {
     set result [$vcvs genSPICEString]
@@ -818,7 +827,7 @@ test testVcvsClass-1.1 {test Vcvs class} -setup {
     unset vcvs result
 }
 
-test testVcvsClass-1.2 {test Vcvs class} -setup {
+test testVcvsClass-2 {test Vcvs class} -setup {
     set vcvs [Vcvs new 1 net1 0 netc 0 -gain 10]
 } -body {
     set result [$vcvs genSPICEString]
@@ -826,15 +835,17 @@ test testVcvsClass-1.2 {test Vcvs class} -setup {
     unset vcvs result
 }
 
-test testVcvsClass-1.3 {test Vcvs class} -setup {
+test testVcvsClass-3 {test Vcvs class} -setup {
     set vcvs [Vcvs new 1 net1 0 netc 0 -gain {vgain -eq}]
 } -body {
     set result [$vcvs genSPICEString]
 } -result "e1 net1 0 netc 0 \{vgain\}" -cleanup {
     unset vcvs result
 }
-        
-test testEClass-1.1 {test G class} -setup {
+
+####  E class tests 
+
+test testEClass-1 {test G class} -setup {
     set e [E new 1 net1 0 netc 0 -gain 10]
 } -body {
     set result [$e genSPICEString]
@@ -842,9 +853,9 @@ test testEClass-1.1 {test G class} -setup {
     unset e result
 }
     
-#### ________________________ Cccs class tests _________________________ ####
+####  Cccs class tests 
     
-test testCccsClass-1.1 {test Cccs class} -setup {
+test testCccsClass-1 {test Cccs class} -setup {
     set cccs [Cccs new 1 net1 0 -consrc vc -gain 10 -m 1]
 } -body {
     set result [$cccs genSPICEString]
@@ -852,7 +863,7 @@ test testCccsClass-1.1 {test Cccs class} -setup {
     unset cccs result
 }
 
-test testCccsClass-1.2 {test Cccs class} -setup {
+test testCccsClass-2 {test Cccs class} -setup {
     set cccs [Cccs new 1 net1 0 -consrc vc -gain 10]
 } -body {
     set result [$cccs genSPICEString]
@@ -860,15 +871,17 @@ test testCccsClass-1.2 {test Cccs class} -setup {
     unset cccs result
 }
 
-test testCccsClass-1.3 {test Cccs class} -setup {
+test testCccsClass-3 {test Cccs class} -setup {
     set cccs [Cccs new 1 net1 0 -consrc vc -gain {gain -eq}]
 } -body {
     set result [$cccs genSPICEString]
 } -result "f1 net1 0 vc \{gain\}" -cleanup {
     unset cccs result
 }
-        
-test testFClass-1.1 {test F class} -setup {
+
+####  F class tests 
+
+test testFClass-1 {test F class} -setup {
     set f [F new 1 net1 0 -consrc vc -gain 10 -m 1]
 } -body {
     set result [$f genSPICEString]
@@ -876,9 +889,9 @@ test testFClass-1.1 {test F class} -setup {
     unset f result
 }
     
-#### ________________________ Ccvs class tests _________________________ ####
+####  Ccvs class tests 
     
-test testCcvsClass-1.1 {test Ccvs class} -setup {
+test testCcvsClass-1 {test Ccvs class} -setup {
     set ccvs [Ccvs new 1 net1 0 -consrc vc -transr 10]
 } -body {
     set result [$ccvs genSPICEString]
@@ -886,7 +899,7 @@ test testCcvsClass-1.1 {test Ccvs class} -setup {
     unset ccvs result
 }
 
-test testCcvsClass-1.2 {test Ccvs class} -setup {
+test testCcvsClass-2 {test Ccvs class} -setup {
     set ccvs [Ccvs new 1 net1 0 -consrc vc -transr 10]
 } -body {
     set result [$ccvs genSPICEString]
@@ -894,15 +907,17 @@ test testCcvsClass-1.2 {test Ccvs class} -setup {
     unset ccvs result
 }
 
-test testCcvsClass-1.3 {test Ccvs class} -setup {
+test testCcvsClass-3 {test Ccvs class} -setup {
     set ccvs [Ccvs new 1 net1 0 -consrc vc -transr {tres -eq}]
 } -body {
     set result [$ccvs genSPICEString]
 } -result "h1 net1 0 vc \{tres\}" -cleanup {
     unset ccvs result
 }
-        
-test testHClass-1.1 {test H class} -setup {
+
+####  H class tests 
+
+test testHClass-1 {test H class} -setup {
     set h [H new 1 net1 0 -consrc vc -transr 10]
 } -body {
     set result [$h genSPICEString]
@@ -910,9 +925,9 @@ test testHClass-1.1 {test H class} -setup {
     unset h result
 }
 
-#### ________________________ BehaviouralSource class tests _________________________ ####
+####  BehaviouralSource class tests 
     
-test testBehaviouralSourceClass-1.1 {test BehaviouralSource class} -setup {
+test testBehaviouralSourceClass-1 {test BehaviouralSource class} -setup {
     set b [BehaviouralSource new 1 netp netm -i "V(a)+V(b)+pow(V(c),2)"]
 } -body {
     set result [$b genSPICEString]
@@ -920,7 +935,7 @@ test testBehaviouralSourceClass-1.1 {test BehaviouralSource class} -setup {
     unset b result
 } 
     
-test testBehaviouralSourceClass-1.2 {test BehaviouralSource class} -setup {
+test testBehaviouralSourceClass-2 {test BehaviouralSource class} -setup {
     set b [BehaviouralSource new 1 netp netm -v "V(a)+V(b)+pow(V(c),2)" -smoothbsrc]
 } -body {
     set result [$b genSPICEString]
@@ -928,7 +943,7 @@ test testBehaviouralSourceClass-1.2 {test BehaviouralSource class} -setup {
     unset b result
 } 
 
-test testBehaviouralSourceClass-1.3 {test BehaviouralSource class with different argument order} -setup {
+test testBehaviouralSourceClass-3 {test BehaviouralSource class with different argument order} -setup {
     set b [BehaviouralSource new 1 netp netm -rcconst 1e-9 -v "V(a)+V(b)+pow(V(c),2)"]
 } -body {
     set result [$b genSPICEString]
@@ -936,7 +951,9 @@ test testBehaviouralSourceClass-1.3 {test BehaviouralSource class with different
     unset b result
 }  
 
-test testBClass-1.1 {test B class} -setup {
+####  B class tests 
+
+test testBClass-1 {test B class} -setup {
     set b [B new 1 netp netm -v "V(a)+V(b)+pow(V(c),2)" -smoothbsrc -rcconst 1e-9]
 } -body {
     set result [$b genSPICEString]
@@ -944,11 +961,11 @@ test testBClass-1.1 {test B class} -setup {
     unset b result
 }
 
-### ________________________ Semiconductor devices classes tests _________________________ ###
+###  Semiconductor devices classes tests 
 
-#### ________________________ Diode class tests _________________________ ####
+####  Diode class tests 
     
-test testDiodeClass-1.1 {test Diode class} -setup {
+test testDiodeClass-1 {test Diode class} -setup {
     set dio [Diode new 1 netp netm -model diomod -area 1e-3 -temp 25]
 } -body {
     set result [$dio genSPICEString]
@@ -956,7 +973,7 @@ test testDiodeClass-1.1 {test Diode class} -setup {
     unset dio result
 }
 
-test testDiodeClass-1.2 {test Diode class} -setup {
+test testDiodeClass-2 {test Diode class} -setup {
     set dio [Diode new 1 netp netm -model diomod -area 1e-3 -pj 1 -temp 25]
 } -body {
     set result [$dio genSPICEString]
@@ -964,7 +981,7 @@ test testDiodeClass-1.2 {test Diode class} -setup {
     unset dio result
 }
 
-test testDiodeClass-1.4 {test Diode class} -setup {
+test testDiodeClass-4 {test Diode class} -setup {
     set dio [Diode new 1 netp netm -model diomod -area {area -eq} -pj 1 -temp 25]
 } -body {
     set result [$dio genSPICEString]
@@ -972,7 +989,7 @@ test testDiodeClass-1.4 {test Diode class} -setup {
     unset dio result
 }
 
-test testDiodeClass-1.5 {test Diode class} -setup {
+test testDiodeClass-5 {test Diode class} -setup {
     set dio [Diode new 1 netp netm -model diomod -temp 25 -custparams ab 1e-12 lg {lg -eq} ls 1e-6]
 } -body {
     set result [$dio genSPICEString]
@@ -980,7 +997,9 @@ test testDiodeClass-1.5 {test Diode class} -setup {
     unset dio result
 }
 
-test testDClass-1.1 {test RSem alias for Diode class} -setup {
+####  D class tests 
+
+test testDClass-1 {test RSem alias for Diode class} -setup {
     set dio [D new 1 netp netm -model diomod -area 1e-3 -temp 25]
 } -body {
     set result [$dio genSPICEString]
@@ -988,9 +1007,9 @@ test testDClass-1.1 {test RSem alias for Diode class} -setup {
     unset dio result
 }
     
-#### ________________________ Bjt class tests _________________________ ####
+####  Bjt class tests 
     
-test testBjtClass-1.1 {test Bjt class} -setup {
+test testBjtClass-1 {test Bjt class} -setup {
     set bjt [Bjt new 1 netc netb nete -model bjtmod -area 1e-3]
 } -body {
     set result [$bjt genSPICEString]
@@ -998,7 +1017,7 @@ test testBjtClass-1.1 {test Bjt class} -setup {
     unset bjt result
 }
 
-test testBjtClass-1.2 {test Bjt class} -setup {
+test testBjtClass-2 {test Bjt class} -setup {
     set bjt [Bjt new 1 netc netb nete -model bjtmod -ns nets -area 1e-3]
 } -body {
     set result [$bjt genSPICEString]
@@ -1006,7 +1025,7 @@ test testBjtClass-1.2 {test Bjt class} -setup {
     unset bjt result
 }
 
-test testBjtClass-1.3 {test Bjt class} -setup {
+test testBjtClass-3 {test Bjt class} -setup {
     set bjt [Bjt new 1 netc netb nete -model bjtmod -ns nets -tj nettj -area 1e-3 -temp 25]
 } -body {
     set result [$bjt genSPICEString]
@@ -1014,7 +1033,7 @@ test testBjtClass-1.3 {test Bjt class} -setup {
     unset bjt result
 }
 
-test testBjtClass-1.4 {test Bjt class} -setup {
+test testBjtClass-4 {test Bjt class} -setup {
     set bjt [Bjt new 1 netc netb nete -model bjtmod -ns nets -tj nettj -area 1e-3 -temp 25 -ic1 1 -ic2 2]
 } -body {
     set result [$bjt genSPICEString]
@@ -1022,8 +1041,9 @@ test testBjtClass-1.4 {test Bjt class} -setup {
     unset bjt result
 }
 
+####  Q class tests 
 
-test testQClass-1.1 {test Q class} -setup {
+test testQClass-1 {test Q class} -setup {
     set bjt [Q new 1 netc netb nete -model bjtmod -area 1e-3 -temp 25]
 } -body {
     set result [$bjt genSPICEString]
@@ -1032,9 +1052,9 @@ test testQClass-1.1 {test Q class} -setup {
 }
     
     
-#### ________________________ Jfet class tests _________________________ ####
+####  Jfet class tests 
     
-test testJfetClass-1.1 {test Jfet class} -setup {
+test testJfetClass-1 {test Jfet class} -setup {
     set jfet [Jfet new 1 netd netg nets -model jfetmod -area 1e-3 -temp 25]
 } -body {
     set result [$jfet genSPICEString]
@@ -1042,7 +1062,9 @@ test testJfetClass-1.1 {test Jfet class} -setup {
     unset jfet result
 }
 
-test testJClass-1.2 {test J class} -setup {
+####  J class tests 
+
+test testJClass-1 {test J class} -setup {
     set jfet [J new 1 netd netg nets -model jfetmod -area {area*2 -eq} -temp 25]
 } -body {
     set result [$jfet genSPICEString]
@@ -1051,7 +1073,7 @@ test testJClass-1.2 {test J class} -setup {
 }
     
 
-test testJClass-1.4 {test J class} -setup {
+test testJClass-2 {test J class} -setup {
     set jfet [J new 1 netd netg nets -model jfetmod -area {area*2 -eq} -temp 25]
 } -body {
     set result [$jfet genSPICEString]
@@ -1059,9 +1081,9 @@ test testJClass-1.4 {test J class} -setup {
     unset jfet result
 }
     
-#### ________________________ Mesfet class tests _________________________ ####
+####  Mesfet class tests 
     
-test testMesfetClass-1.1 {test Mesfet class} -setup {
+test testMesfetClass-1 {test Mesfet class} -setup {
     set mesfet [Mesfet new 1 netd netg nets -model mesfetmod -area 1e-3]
 } -body {
     set result [$mesfet genSPICEString]
@@ -1069,7 +1091,7 @@ test testMesfetClass-1.1 {test Mesfet class} -setup {
     unset mesfet result
 }
 
-test testMesfetClass-1.2 {test Mesfet class} -setup {
+test testMesfetClass-2 {test Mesfet class} -setup {
     set mesfet [Mesfet new 1 netd netg nets -model mesfetmod -area {area -eq}]
 } -body {
     set result [$mesfet genSPICEString]
@@ -1077,7 +1099,9 @@ test testMesfetClass-1.2 {test Mesfet class} -setup {
     unset mesfet result
 }
 
-test testZClass-1.1 {test J class} -setup {
+####  Z class tests 
+
+test testZClass-1 {test J class} -setup {
     set mesfet [Z new 1 netd netg nets -model mesfetmod -area {area*2 -eq}]
 } -body {
     set result [$mesfet genSPICEString]
@@ -1085,9 +1109,9 @@ test testZClass-1.1 {test J class} -setup {
     unset mesfet result
 }
 
-#### ________________________ Mosfet class tests _________________________ ####
+####  Mosfet class tests 
     
-test testMosfetClass-1.1 {test Mosfet class} -setup {
+test testMosfetClass-1 {test Mosfet class} -setup {
     set mosfet [Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3]
 } -body {
     set result [$mosfet genSPICEString]
@@ -1095,7 +1119,7 @@ test testMosfetClass-1.1 {test Mosfet class} -setup {
     unset mosfet result
 }
 
-test testMosfetClass-1.2 {test Mosfet class} -setup {
+test testMosfetClass-2 {test Mosfet class} -setup {
     set mosfet [Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub]
 } -body {
     set result [$mosfet genSPICEString]
@@ -1103,7 +1127,7 @@ test testMosfetClass-1.2 {test Mosfet class} -setup {
     unset mosfet result
 }
 
-test testMosfetClass-1.3 {test Mosfet class} -setup {
+test testMosfetClass-3 {test Mosfet class} -setup {
     set mosfet [Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5]
 } -body {
     set result [$mosfet genSPICEString]
@@ -1111,7 +1135,7 @@ test testMosfetClass-1.3 {test Mosfet class} -setup {
     unset mosfet result
 }
 
-test testMosfetClass-1.4 {test Mosfet class} -setup {
+test testMosfetClass-4 {test Mosfet class} -setup {
     set mosfet [Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5 -n6 net6]
 } -body {
     set result [$mosfet genSPICEString]
@@ -1119,7 +1143,7 @@ test testMosfetClass-1.4 {test Mosfet class} -setup {
     unset mosfet result
 }
 
-test testMosfetClass-1.5 {test Mosfet class} -setup {
+test testMosfetClass-5 {test Mosfet class} -setup {
     set mosfet [Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5 -n6 net6 -n7 net7]
 } -body {
     set result [$mosfet genSPICEString]
@@ -1127,7 +1151,7 @@ test testMosfetClass-1.5 {test Mosfet class} -setup {
     unset mosfet result
 }
 
-test testMosfetClass-1.6 {test Mosfet class} -setup {
+test testMosfetClass-6 {test Mosfet class} -setup {
     catch {Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n6 net6 -n7 net7} errorStr
 } -body {
     set result $errorStr
@@ -1135,7 +1159,7 @@ test testMosfetClass-1.6 {test Mosfet class} -setup {
     unset result
 }
 
-test testMosfetClass-1.7 {test Mosfet class} -setup {
+test testMosfetClass-7 {test Mosfet class} -setup {
     catch {Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n5 net5 -n6 net6 -n7 net7} errorStr
 } -body {
     set result $errorStr
@@ -1143,7 +1167,7 @@ test testMosfetClass-1.7 {test Mosfet class} -setup {
     unset result
 }
 
-test testMosfetClass-1.8 {test Mosfet class} -setup {
+test testMosfetClass-8 {test Mosfet class} -setup {
     set mosfet [Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5 -n6 net6 -n7 net7 -ic {1 2 3}]
 } -body {
     set result [$mosfet genSPICEString]
@@ -1151,7 +1175,7 @@ test testMosfetClass-1.8 {test Mosfet class} -setup {
     unset mosfet result
 }
 
-test testMosfetClass-1.9 {test Mosfet class} -setup {
+test testMosfetClass-9 {test Mosfet class} -setup {
     set mosfet [Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5 -n6 net6 -n7 net7 -ic {1 2 3} -custparams a 1 b 2 c 3]
 } -body {
     set result [$mosfet genSPICEString]
@@ -1159,7 +1183,7 @@ test testMosfetClass-1.9 {test Mosfet class} -setup {
     unset mosfet result
 }
 
-test testMosfetClass-2.0 {test Mosfet class} -setup {
+test testMosfetClass-10 {test Mosfet class} -setup {
     set mosfet [Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5 -n6 net6 -n7 net7 -ic {1 2 3} -custparams a 1 b {beq -eq} c 3]
 } -body {
     set result [$mosfet genSPICEString]
@@ -1167,7 +1191,7 @@ test testMosfetClass-2.0 {test Mosfet class} -setup {
     unset mosfet result
 }
 
-test testMosfetClass-2.1 {test Mosfet class} -setup {
+test testMosfetClass-11 {test Mosfet class} -setup {
     catch {Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5 -n6 net6 -n7 net7 -ic {1 2 3} -custparams a 1 b {beq -eq} c 3 k} errorStr
 } -body {
     set result $errorStr
@@ -1175,7 +1199,9 @@ test testMosfetClass-2.1 {test Mosfet class} -setup {
     unset result
 }
 
-test testMClass-1.1 {test M class} -setup {
+####  M class tests 
+
+test testMClass-1 {test M class} -setup {
     set mosfet [M new 1 netd netg nets -model mosfetmod -l 1e-6 -w {w/nf -eq}]
 } -body {
     set result [$mosfet genSPICEString]
@@ -1183,9 +1209,9 @@ test testMClass-1.1 {test M class} -setup {
     unset mosfet result
 }
     
-    # ________________________ SubcircuitInstance class tests _________________________ #
+####  SubcircuitInstance class tests 
     
-test testSubcircuitInstanceClass-1.1 {test creation of SubcircuitInstance class instance with genSPICEString interface} -setup {
+test testSubcircuitInstanceClass-1 {test creation of SubcircuitInstance class instance with genSPICEString interface} -setup {
     set subInst [SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar -eq}}]
 } -body {
     set result [$subInst genSPICEString]
@@ -1193,7 +1219,9 @@ test testSubcircuitInstanceClass-1.1 {test creation of SubcircuitInstance class 
     unset subInst result
 }
 
-test testXClass-1.2 {test X alias for SubcircuitInstance class} -setup {
+####  X class tests 
+
+test testXClass-2 {test X alias for SubcircuitInstance class} -setup {
     set subInst [X new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar -eq}}]
 } -body {
     set result [$subInst genSPICEString]
@@ -1201,9 +1229,9 @@ test testXClass-1.2 {test X alias for SubcircuitInstance class} -setup {
     unset subInst result
 }
 
-    # ________________________ SubcircuitInstanceAuto class tests _________________________ #
+####  SubcircuitInstanceAuto class tests 
     
-test testSubcircuitInstanceAutoClass-1.1 {test creation of SubcircuitInstanceAuto class instance with genSPICEString interface} -setup {
+test testSubcircuitInstanceAutoClass-1 {test creation of SubcircuitInstanceAuto class instance with genSPICEString interface} -setup {
     oo::class create RCnet {
         superclass Subcircuit
         constructor {} {
@@ -1227,7 +1255,7 @@ test testSubcircuitInstanceAutoClass-1.1 {test creation of SubcircuitInstanceAut
     unset subcircuit subInst1 result
 }
 
-test testSubcircuitInstanceAutoClass-1.2 {test creation of SubcircuitInstanceAuto class instance with wrong number of nodes} -setup {
+test testSubcircuitInstanceAutoClass-2 {test creation of SubcircuitInstanceAuto class instance with wrong number of nodes} -setup {
     oo::class create RCnet {
         superclass Subcircuit
         constructor {} {
@@ -1251,7 +1279,7 @@ test testSubcircuitInstanceAutoClass-1.2 {test creation of SubcircuitInstanceAut
     unset subcircuit errorStr
 }
 
-test testSubcircuitInstanceAutoClass-1.3 {test creation of SubcircuitInstanceAuto class instance with wrong class of input object} -setup {
+test testSubcircuitInstanceAutoClass-3 {test creation of SubcircuitInstanceAuto class instance with wrong class of input object} -setup {
     oo::class create RCnet {
         superclass Subcircuit
         constructor {} {

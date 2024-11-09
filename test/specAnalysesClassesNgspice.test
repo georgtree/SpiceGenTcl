@@ -9,9 +9,9 @@ foreach nameSpc $ngspiceNameSpc {
 }
 
 
-### ________________________ Dc class tests _________________________ ###
+###  Dc class tests 
     
-test testDcClass-1.1 {test Dc class} -setup {
+test testDcClass-1 {test Dc class} -setup {
     set res [Dc new -src v1 -start {time1 -eq} -stop 5 -incr 0.1 -name dc1]
 } -body {
     set result [$res genSPICEString]
@@ -19,7 +19,7 @@ test testDcClass-1.1 {test Dc class} -setup {
     unset res result
 }
 
-test testDcClass-1.2 {test Dc class} -setup {
+test testDcClass-2 {test Dc class} -setup {
     set res [Dc new -src v1 -start 0 -stop 5 -incr 0.1]
 } -body {
     set result [$res genSPICEString]
@@ -27,9 +27,9 @@ test testDcClass-1.2 {test Dc class} -setup {
     unset res result
 }
 
-### ________________________ Ac class tests _________________________ ###
+###  Ac class tests 
     
-test testAcClass-1.1 {test Ac class} -setup {
+test testAcClass-1 {test Ac class} -setup {
     set res [Ac new -variation dec -n 10 -fstart {f1 -eq} -fstop 1e6 -name ac1]
 } -body {
     set result [$res genSPICEString]
@@ -37,7 +37,7 @@ test testAcClass-1.1 {test Ac class} -setup {
     unset res result
 }
 
-test testAcClass-1.2 {test Ac class} -setup {
+test testAcClass-2 {test Ac class} -setup {
     set res [Ac new -variation lin -n 1000 -fstart 1 -fstop 1e6]
 } -body {
     set result [$res genSPICEString]
@@ -45,9 +45,9 @@ test testAcClass-1.2 {test Ac class} -setup {
     unset res result
 }
     
-### ________________________ SensAc class tests _________________________ ###
+###  SensAc class tests 
     
-test testSensAcClass-1.1 {test SensAc class} -setup {
+test testSensAcClass-1 {test SensAc class} -setup {
     set res [SensAc new -outvar v(1,out) -variation dec -n 10 -fstart {f1 -eq} -fstop 1e6 -name sensac1]
 } -body {
     set result [$res genSPICEString]
@@ -55,7 +55,7 @@ test testSensAcClass-1.1 {test SensAc class} -setup {
     unset res result
 }
 
-test testSensAcClass-1.2 {test SensAc class} -setup {
+test testSensAcClass-2 {test SensAc class} -setup {
     set res [SensAc new -outvar v(1,out) -variation dec -n 10 -fstart 1 -fstop 1e6]
 } -body {
     set result [$res genSPICEString]
@@ -63,9 +63,9 @@ test testSensAcClass-1.2 {test SensAc class} -setup {
     unset res result
 }
     
-### ________________________ SensDc class tests _________________________ ###
+###  SensDc class tests 
     
-test testSensDcClass-1.1 {test SensDc class} -setup {
+test testSensDcClass-1 {test SensDc class} -setup {
     set res [SensDc new -outvar v(1,out) -name sensdc1]
 } -body {
     set result [$res genSPICEString]
@@ -73,9 +73,9 @@ test testSensDcClass-1.1 {test SensDc class} -setup {
     unset res result
 }
     
-### ________________________ Tran class tests _________________________ ###
+###  Tran class tests 
     
-test testTranClass-1.1 {test Tran class} -setup {
+test testTranClass-1 {test Tran class} -setup {
     set res [Tran new -tstep 1e-6 -tstop 1e-3 -tstart 0.1e-6 -uic -name tran1]
 } -body {
     set result [$res genSPICEString]
@@ -83,7 +83,7 @@ test testTranClass-1.1 {test Tran class} -setup {
     unset res result
 }
 
-test testTranClass-1.2 {test Tran class} -setup {
+test testTranClass-2 {test Tran class} -setup {
     set res [Tran new -tstep 1e-6 -tstop {tend -eq} -uic -name tran1]
 } -body {
     set result [$res genSPICEString]
@@ -91,7 +91,7 @@ test testTranClass-1.2 {test Tran class} -setup {
     unset res result
 }
 
-test testTranClass-1.3 {test Tran class} -setup {
+test testTranClass-3 {test Tran class} -setup {
     set res [Tran new -tstep 1e-6 -tstop {tend -eq}]
 } -body {
     set result [$res genSPICEString]
@@ -99,9 +99,9 @@ test testTranClass-1.3 {test Tran class} -setup {
     unset res result
 }
 
-### ________________________ Op class tests _________________________ ###
+###  Op class tests 
     
-test testOpClass-1.1 {test Op class} -setup {
+test testOpClass-1 {test Op class} -setup {
     set res [Op new -name dc1]
 } -body {
     set result [$res genSPICEString]
@@ -109,7 +109,7 @@ test testOpClass-1.1 {test Op class} -setup {
     unset res result
 }
 
-test testOpClass-1.2 {test Op class} -setup {
+test testOpClass-2 {test Op class} -setup {
     set res [Op new]
 } -body {
     set result [$res genSPICEString]

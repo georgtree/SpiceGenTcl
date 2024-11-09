@@ -41,9 +41,9 @@ proc readResultFile {path} {
     
 
 
-### ________________________ Data class tests _________________________ ###
+###  Data class tests 
     
-test testDataClass-1.1 {test Data class object construction and getStr interface} -setup {
+test testDataClass-1 {test Data class object construction and getStr interface} -setup {
     set data [Dataset new v1 voltage 100 real]
 } -body {
     set result [$data getStr]
@@ -51,14 +51,14 @@ test testDataClass-1.1 {test Data class object construction and getStr interface
     unset data result
 }
 
-test testDataClass-1.2 {test Data class object construction with wrong numerical type} -body {
+test testDataClass-2 {test Data class object construction with wrong numerical type} -body {
     catch {::SpiceGenTcl::Dataset new v1 voltage 100 doublereal} errorStr
     return $errorStr
 } -result "Unknown numerical type 'doublereal' of data" -cleanup {
     unset errorStr
 }
 
-test testDataClass-1.3 {test Data class object construction and set/getDataPoints interface} -setup {
+test testDataClass-3 {test Data class object construction and set/getDataPoints interface} -setup {
     set data [Dataset new v1 voltage 100 real]
     $data setDataPoints [list 0 1 2 3 4 5 6 7 8 9]
 } -body {
@@ -67,7 +67,7 @@ test testDataClass-1.3 {test Data class object construction and set/getDataPoint
     unset data result
 }
 
-test testDataClass-1.2 {test Data class object construction and getDataPoints interface error when access empty list of data points} -setup {
+test testDataClass-4 {test Data class object construction and getDataPoints interface error when access empty list of data points} -setup {
     set data [Dataset new v1 voltage 100 real]
 } -body {
     catch {$data getDataPoints} errorStr
@@ -76,9 +76,9 @@ test testDataClass-1.2 {test Data class object construction and getDataPoints in
     unset data errorStr
 }
 
-### ________________________ RawFile class tests _________________________ ###
+###  RawFile class tests 
     
-test testRawFileClass-1.1 {test RawFile class object construction and reading binary transient data, together with interface getTrace} -setup {
+test testRawFileClass-1 {test RawFile class object construction and reading binary transient data, together with interface getTrace} -setup {
     set data [RawFile new "${rawDataLoc}/tran.raw"]
     set traceTime [$data getTrace time]
     set trace [$data getTrace v(osc_out)]
@@ -97,7 +97,7 @@ test testRawFileClass-1.1 {test RawFile class object construction and reading bi
     unset data traceTime trace refData timeData traceData traceMatch result
 }
 
-test testRawFileClass-1.2 {test RawFile class object construction and reading ascii transient data, together with interface getTrace} -setup {
+test testRawFileClass-2 {test RawFile class object construction and reading ascii transient data, together with interface getTrace} -setup {
     set data [RawFile new "${rawDataLoc}/tran_ascii.raw"]
     set traceTime [$data getTrace time]
     set trace [$data getTrace v(osc_out)]
@@ -116,7 +116,7 @@ test testRawFileClass-1.2 {test RawFile class object construction and reading as
     unset data traceTime trace refData timeData traceData timeMatch traceMatch result
 }
 
-test testRawFileClass-1.3 {test RawFile class object construction and reading binary dc data, together with interfaces getTrace and getAxis} -setup {
+test testRawFileClass-3 {test RawFile class object construction and reading binary dc data, together with interfaces getTrace and getAxis} -setup {
     set data [RawFile new "${rawDataLoc}/dc.raw"]
     set traceAxis [$data configure -Axis]
     set trace [$data getTrace i(vs1)]
@@ -135,7 +135,7 @@ test testRawFileClass-1.3 {test RawFile class object construction and reading bi
     unset data traceAxis trace refData axisData traceData axisMatch traceMatch result
 }
 
-test testRawFileClass-1.4 {test RawFile class object construction and reading ascii dc data, together with interfaces getTrace and getAxis} -setup {
+test testRawFileClass-4 {test RawFile class object construction and reading ascii dc data, together with interfaces getTrace and getAxis} -setup {
     set data [RawFile new "${rawDataLoc}/dc_ascii.raw"]
     set traceAxis [$data configure -Axis]
     set trace [$data getTrace i(vs1)]
@@ -154,7 +154,7 @@ test testRawFileClass-1.4 {test RawFile class object construction and reading as
     unset data traceAxis trace refData axisData traceData axisMatch traceMatch result
 }
 
-test testRawFileClass-1.5 {test RawFile class object construction and reading binary ac data, together with interfaces getTrace and getAxis} -setup {
+test testRawFileClass-5 {test RawFile class object construction and reading binary ac data, together with interfaces getTrace and getAxis} -setup {
     set data [RawFile new "${rawDataLoc}/ac.raw"]
     set traceAxis [$data configure -Axis]
     set trace [$data getTrace i(vd)]
@@ -175,7 +175,7 @@ test testRawFileClass-1.5 {test RawFile class object construction and reading bi
     unset data traceAxis trace refData axisData traceData axisMatchRe traceMatchRe axisMatchIm traceMatchIm result
 }
 
-test testRawFileClass-1.6 {test RawFile class object construction and reading ascii ac data, together with interfaces getTrace and getAxis} -setup {
+test testRawFileClass-6 {test RawFile class object construction and reading ascii ac data, together with interfaces getTrace and getAxis} -setup {
     set data [RawFile new "${rawDataLoc}/ac_ascii.raw"]
     set traceAxis [$data configure -Axis]
     set trace [$data getTrace i(vd)]
@@ -196,7 +196,7 @@ test testRawFileClass-1.6 {test RawFile class object construction and reading as
     unset data traceAxis trace refData axisData traceData axisMatchRe traceMatchRe axisMatchIm traceMatchIm result
 }
 
-test testRawFileClass-1.7 {test RawFile class object construction and reading ascii transient data, together with interface getVariablesNames} -setup {
+test testRawFileClass-7 {test RawFile class object construction and reading ascii transient data, together with interface getVariablesNames} -setup {
     set data [RawFile new "${rawDataLoc}/tran.raw"]
 } -body {    
     set traceAxis [$data getVariablesNames]
@@ -204,7 +204,7 @@ test testRawFileClass-1.7 {test RawFile class object construction and reading as
     unset data traceAxis
 }
 
-test testRawFileClass-1.8 {test RawFile class object construction and reading ascii transient data, together with interface getVoltagesNames} -setup {
+test testRawFileClass-8 {test RawFile class object construction and reading ascii transient data, together with interface getVoltagesNames} -setup {
     set data [RawFile new "${rawDataLoc}/tran.raw"]
 } -body {    
     set traceAxis [$data getVoltagesNames]
@@ -212,7 +212,7 @@ test testRawFileClass-1.8 {test RawFile class object construction and reading as
     unset data traceAxis
 }
 
-test testRawFileClass-1.9 {test RawFile class object construction and reading ascii transient data, together with interface getCurrentsNames} -setup {
+test testRawFileClass-9 {test RawFile class object construction and reading ascii transient data, together with interface getCurrentsNames} -setup {
     set data [RawFile new "${rawDataLoc}/tran.raw"]
 } -body {    
     set traceAxis [$data getCurrentsNames]
@@ -220,7 +220,7 @@ test testRawFileClass-1.9 {test RawFile class object construction and reading as
     unset data traceAxis
 }
 
-test testRawFileClass-2.0 {test RawFile class object construction and reading ascii transient data, together with interface getRawProperties} -setup {
+test testRawFileClass-10 {test RawFile class object construction and reading ascii transient data, together with interface getRawProperties} -setup {
     set data [RawFile new "${rawDataLoc}/tran.raw"]
 } -body {    
     set traceAxis [$data configure -RawParams]
@@ -228,7 +228,7 @@ test testRawFileClass-2.0 {test RawFile class object construction and reading as
     unset data traceAxis
 }
 
-test testRawFileClass-2.1 {test RawFile class object construction and reading binary op data, together with interfaces getTrace and getAxis} -setup {
+test testRawFileClass-11 {test RawFile class object construction and reading binary op data, together with interfaces getTrace and getAxis} -setup {
     set data [RawFile new "${rawDataLoc}/op.raw"]
     set trace [$data getTrace v(out)]
     set refData 6.666666666666666e-01
@@ -244,7 +244,7 @@ test testRawFileClass-2.1 {test RawFile class object construction and reading bi
     unset data trace refData traceData traceMatch result
 }
 
-test testRawFileClass-2.2 {test RawFile class object construction and reading ascii op data, together with interfaces getTrace and getAxis} -setup {
+test testRawFileClass-12 {test RawFile class object construction and reading ascii op data, together with interfaces getTrace and getAxis} -setup {
     set data [RawFile new "${rawDataLoc}/op_ascii.raw"]
     set trace [$data getTrace v(out)]
     set refData 6.666666666666666e-01
@@ -260,7 +260,7 @@ test testRawFileClass-2.2 {test RawFile class object construction and reading as
     unset data trace refData traceData traceMatch result
 }
 
-test testRawFileClass-2.3 {test RawFile class object construction and reading binary transient data, together with interface getTracesStr} -setup {
+test testRawFileClass-13 {test RawFile class object construction and reading binary transient data, together with interface getTracesStr} -setup {
     set data [RawFile new "${rawDataLoc}/tran.raw"]
 } -body {    
     set traces [$data getTracesStr]
@@ -268,7 +268,7 @@ test testRawFileClass-2.3 {test RawFile class object construction and reading bi
     unset data traces
 }
 
-test testRawFileClass-2.4 {test RawFile class object construction and reading binary op data, together with interface getTracesData} -setup {
+test testRawFileClass-14 {test RawFile class object construction and reading binary op data, together with interface getTracesData} -setup {
     set data [RawFile new "${rawDataLoc}/op.raw"] 
 } -body {
     set tracesData [$data getTracesData]
@@ -276,7 +276,7 @@ test testRawFileClass-2.4 {test RawFile class object construction and reading bi
     unset data tracesData
 }
 
-test testRawFileClass-2.5 {test RawFile class object construction and reading (with waveforms skip) binary transient data, together with interface getTracesStr} -setup {
+test testRawFileClass-15 {test RawFile class object construction and reading (with waveforms skip) binary transient data, together with interface getTracesStr} -setup {
     set data [RawFile new "${rawDataLoc}/tran.raw" v(n001)]
     set trace [$data getTrace v(osc_out)]
     for {set i 0} {$i<[llength $trace]} {incr i} {
