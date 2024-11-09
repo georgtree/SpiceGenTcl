@@ -188,6 +188,7 @@ namespace eval ::SpiceGenTcl {
             return "[my configure -Name]"
         }
     }
+    
 ###  Parameter class definition 
 
     oo::configurable create Parameter {
@@ -196,7 +197,24 @@ namespace eval ::SpiceGenTcl {
             if {[string is double -strict $value]} {
                 set Value $value
             } else {
-                error "Value '$value' is not a valid value"
+                if {[string tolower [string range $value end-2 end]]=={meg}} {
+                    if {[string is double -strict [string range $value 0 end-3]]} {
+                        set Value [string tolower $value]
+                    } else {
+                        error "Value '$value' is not a valid value"
+                    } 
+                } else {
+                    set suffix [string tolower [string index $value end]]
+                    if {$suffix in {f p n u m k g t}} {
+                        if {[string is double -strict [string range $value 0 end-1]]} {
+                            set Value [string tolower $value]
+                        } else {
+                            error "Value '$value' is not a valid value"
+                        } 
+                    } else {
+                        error "Value '$value' is not a valid value"
+                    }
+                }
             }
         }
         variable Value
@@ -293,7 +311,24 @@ namespace eval ::SpiceGenTcl {
             if {[string is double -strict $value]} {
                 set DefValue $value
             } else {
-                error "Default value '$value' is not a valid value"
+                if {[string tolower [string range $value end-2 end]]=={meg}} {
+                    if {[string is double -strict [string range $value 0 end-3]]} {
+                        set DefValue [string tolower $value]
+                    } else {
+                        error "Default value '$value' is not a valid value"
+                    } 
+                } else {
+                    set suffix [string tolower [string index $value end]]
+                    if {$suffix in {f p n u m k g t}} {
+                        if {[string is double -strict [string range $value 0 end-1]]} {
+                            set DefValue [string tolower $value]
+                        } else {
+                            error "Default value '$value' is not a valid value"
+                        } 
+                    } else {
+                        error "Default value '$value' is not a valid value"
+                    }
+                }
             }
         }
         variable DefValue Value

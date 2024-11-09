@@ -208,6 +208,60 @@ test testParameterClass-8 {test creation of Parameter class instance and setValu
     unset parInst errorStr
 }
 
+test testParameterClass-9 {test creation of Parameter class instance and getName interface} -setup {
+    set parInst [Parameter new VTH 700u]
+} -body {
+    set result [$parInst configure -Name]
+} -result vth -cleanup {
+    unset parInst result
+}
+
+test testParameterClass-10 {test creation of Parameter class instance and getName interface} -setup {
+    set parInst [Parameter new VTH 700U]
+} -body {
+    set result [$parInst configure -Name]
+} -result vth -cleanup {
+    unset parInst result
+}
+
+test testParameterClass-11 {test creation of Parameter class instance} -setup {
+    set parInst [Parameter new GMIN 1.0T]
+} -body {
+    set result [$parInst configure -Value]
+} -result 1.0t -cleanup {
+    unset parInst result
+}
+
+test testParameterClass-12 {test creation of Parameter class instance} -setup {
+    set parInst [Parameter new GMIN 1.0meg]
+} -body {
+    set result [$parInst configure -Value]
+} -result 1.0meg -cleanup {
+    unset parInst result
+}
+
+test testParameterClass-13 {test creation of Parameter class instance} -setup {
+    set parInst [Parameter new GMIN 1e-6Meg]
+} -body {
+    set result [$parInst configure -Value]
+} -result 1e-6meg -cleanup {
+    unset parInst result
+}
+
+test testParameterClass-14 {test creation of Parameter class instance and handling wrong form of the value}  -body {
+    catch {set parInst [Parameter new VTH 700uV]} errorStr
+    return $errorStr
+} -result "Value '700uV' is not a valid value" -cleanup {
+    unset errorStr
+}
+
+test testParameterClass-15 {test creation of Parameter class instance and handling wrong form of the value}  -body {
+    catch {set parInst [Parameter new VTH 700vu]} errorStr
+    return $errorStr
+} -result "Value '700vu' is not a valid value" -cleanup {
+    unset errorStr
+}
+
 ###  ParameterNoCheck class tests 
 
 test testParameterNoCheckClass-1 {test creation of ParameterNoCheck class instance} -setup {
