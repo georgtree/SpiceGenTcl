@@ -6,7 +6,7 @@
 <body>
 <div class='ruff-layout'>
 <header class='ruff-layout-header ruff-hd'>
-<a style='text-decoration:none;' href='index.html'>Tcl SpiceGenTcl package (v0.1)</a>
+<a style='text-decoration:none;' href='index.html'>Tcl SpiceGenTcl package (v0.5)</a>
 
 
             <div id="ruffButtonBar">
@@ -15,7 +15,17 @@
             </div>
         </header><main class='ruff-layout-main ruff-bd'><h1 class='ruff'><a name='SpiceGenTcl'></a>SpiceGenTcl<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h1>
 <div style='clear:both;'></div>
-<p class='ruff'>This package provides Tcl interface to different SPICE and SPICE-like simulator, Ngspice, Xyce. It was inspired by <a href="https://github.com/PySpice-org/PySpice" >PySpice</a> project, object-oriented interface to SPICE-like simulators written in Python.</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>  .|'''.|            ||                   ..|'''.|                   |''||''|         '||  
+  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||  
+   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||  
+ .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||  
+ |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||. 
+            ||                                                                             
+           ''''                                                                            
+</pre>
+
+</figure><p class='ruff'>This package provides Tcl interface to different SPICE and SPICE-like simulator, Ngspice, Xyce. It was inspired by <a href="https://github.com/PySpice-org/PySpice" >PySpice</a> project, object-oriented interface to SPICE-like simulators written in Python.</p>
 <h2 class='ruff'><a name='General concept'></a>General concept<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
 <p class='ruff'>The general concept of the package is to build a netlist using Tcl scripts. It is based on the TclOO object-oriented system, where everything is represented by objects, including elements, models, analyses, waveforms, and netlists. After defining the netlist, you can run the simulation, read the resulting data, and then process or display the data using the Tcl scripting language.</p>
@@ -40,6 +50,7 @@
 </figure><p class='ruff'>Package is written in pure Tcl with relying on Tcllib and ticklecharts, tcl version is 9.0. The only necessary external dependency is the simulator itself.</p>
 <ul class='ruff'>
 <li><a href="https://ngspice.sourceforge.io/download.html" >Ngspice</a></li>
+<li><a href="https://xyce.sandia.gov/downloads/executables/" >Xyce</a></li>
 <li><a href="https://www.tcl.tk/software/tcllib/" >Tcllib</a></li>
 <li><a href="https://github.com/nico-robert/ticklecharts" >ticklecharts</a></li>
 </ul>
@@ -52,12 +63,12 @@
 <p class='ruff'>Tcl syntax highlightning was done with <a href="https://github.com/aplsimple/hl_tcl" >hl_tcl</a>.</p>
 <h2 class='ruff'><a name='Supported platforms'></a>Supported platforms<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
-<p class='ruff'>I personally use Kubuntu 22.04, and I haven't tested this on different platforms. However, Tcl is a cross-platform language, and because this package is written in pure Tcl, you can practically run it on any platform, including Windows, Linux (all flavors), and FreeBSD. Ngspice is available as pre-compiled binaries for Linux and Windows, but it can also be compiled on FreeBSD.</p>
+<p class='ruff'>I personally use Kubuntu 22.04, and I haven't tested this on different platforms. However, Tcl is a cross-platform language, and because this package is written in pure Tcl, you can practically run it on any platform, including Windows, Linux (all flavors), and FreeBSD. Ngspice is available as pre-compiled binaries for Linux and Windows, but it can also be compiled on FreeBSD. Xyce is availible as pre-compiled for Windows, RHEL and MacOS, but can be compiled to any other platform.</p>
 <h2 class='ruff'><a name='Quick start'></a>Quick start<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
 <ul class='ruff'>
-<li><font color="red"> <strong>Important note 1</strong></font>: internally, all device names, parameters, nodes, types, reference names, and data vector names are converted to lowercase after object instantiation. While you can enter them in any case, they can only be accessed by their lowercase names. This approach aligns with the fact that most SPICE simulators are case-insensitive. To prevent ambiguity in Tcl code, where the simulator treats mixed-case names as identical, we convert everything to lowercase. This ensures that we can detect and resolve any duplicate names in the top-level circuit before generating the netlist.</li>
-<li><font color="red"> <strong>Important note 2</strong></font>: this package is not designed to be used with the <code>.control</code> section in Ngspice, the .step statement in LTspice, or multiple DC sweeps, and it does not support reading parametric sweeps from raw data. The idea of the package is to handle all such tasks within a Tcl script, eliminating the need to use the simulator's internal scripting capabilities.</li>
+<li><font color="red"> <strong>Important note 1</strong></font>: internally, all device names, parameters, nodes, types, reference names, and data vector's names are converted to lowercase after object instantiation. While you can enter them in any case, they can only be accessed by their lowercase names. This approach aligns with the fact that most SPICE simulators are case-insensitive. To prevent ambiguity in Tcl code, where the simulator treats mixed-case names as identical, we convert everything to lowercase. This ensures that we can detect and resolve any duplicate names in the top-level circuit before generating the netlist.</li>
+<li><font color="red"> <strong>Important note 2</strong></font>: this package is not designed to be used with the <code>.control</code> section in Ngspice, the .step statement in LTspice, or multiple DC sweeps, and it does not support reading parametric sweeps from raw data. The idea of the package is to handle all such tasks within a Tcl script, eliminating the need to use the simulator's internal scripting capabilities, and dependence on each simulator unique ways of handling parametric sweeps, that compromises compatibility. But it is could be done easily in principle to realize special objects and reading of raw files with parametric sweeps.</li>
 </ul>
 <h3 class='ruff'><a name='Packages imports'></a>Packages imports<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>

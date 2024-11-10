@@ -4,14 +4,15 @@ namespace eval Advanced {
         Rather than focusing on basic operations, we highlight advanced use cases that showcase the full 
         capabilities of both the package and the Tcl language.
         List of availible examples:
-        - [Monte-Carlo simulation] - "examples/ngspice/advanced/monte_carlo.tcl" and "examples/xyce/advanced/monte_carlo.tcl" file
+        - [Monte-Carlo simulation] - "examples/ngspice/advanced/monte_carlo.tcl" and
+          "examples/xyce/advanced/monte_carlo.tcl" file
                 
                 
         ## Monte-Carlo simulation
         
-        This example demonstrates multiple runs of a simple filter circuit and the collection of the resulting statistical 
-        distribution of frequency bandwidths. The original circuit source is from the ngspice source distribution.
-        The target filter circuit is:
+        This example demonstrates multiple runs of a simple filter circuit and the collection of the resulting
+        statistical distribution of frequency bandwidths. The original circuit source is from the ngspice source
+        distribution. The target filter circuit is:
         
         <img src="assets/img/monte_carlo_cir.png" alt="drawing" width="700"/>
         
@@ -41,15 +42,16 @@ namespace eval Advanced {
         
         ```
         
-        Here, we use a different method for creating a class instance: `create` instead of `new`. With `create`, we can directly 
-        set a custom object reference name, rather than relying on the automatically generated one by Tcl.
+        Here, we use a different method for creating a class instance: `create` instead of `new`. With `create`, we can
+        directly set a custom object reference name, rather than relying on the automatically generated one by Tcl.
         ```tcl
         C create c1 1 out 0 -c 1e-9
         ```
         Keep in mind that `c1` is an object reference, not the name of a variable storing the reference. 
         Therefore, it can be used as an object command directly, without the need for a `$`.
         
-        To calculate the magnitude of the transfer function in dB scale from the output voltage phasor, we create a procedure:
+        To calculate the magnitude of the transfer function in dB scale from the output voltage phasor, we create a
+        procedure:
         ```tcl
         proc calcDbMag {re im} {
             set mag [expr {sqrt($re*$re+$im*$im)}]
@@ -80,8 +82,8 @@ namespace eval Advanced {
         set chartTransMag [ticklecharts::chart new]
         $chartTransMag Xaxis -name "Frequency, Hz" -minorTick {show "True"} -type "log"
         $chartTransMag Yaxis -name "Magnitude, dB" -minorTick {show "True"} -type "value"
-        $chartTransMag SetOptions -title {} -tooltip {} -animation "False" -toolbox {feature {dataZoom {yAxisIndex "none"}}}\
-                -grid {left "10%" right "15%"}
+        $chartTransMag SetOptions -title {} -tooltip {} -animation "False"\
+                -toolbox {feature {dataZoom {yAxisIndex "none"}}} -grid {left "10%" right "15%"}
         $chartTransMag Add "lineSeries" -data $xydata -showAllSymbol "nothing" -symbolSize "1"
         set fbasename [file rootname [file tail [info script]]]
 
@@ -116,10 +118,11 @@ namespace eval Advanced {
         The value is 1.086255 Mhz.
         
         Our goal is to obtain a distribution of bandwidths by varying the filter parameters. 
-        To generate random values for these parameters, we use the built-in functions of the `math::statistics` package from Tcllib. 
-        The parameters can be distributed either normally or uniformly. For uniform distribution, we use 
-        `::math::statistics::random-uniform xmin xmax number`; for normal distribution, we use `::math::statistics::random-normal 
-        mean stdev number`. For uniform distribution, we define the following min and max limits for each C and L element:
+        To generate random values for these parameters, we use the built-in functions of the `math::statistics` package
+        from Tcllib. The parameters can be distributed either normally or uniformly. For uniform distribution, we use 
+        `::math::statistics::random-uniform xmin xmax number`; for normal distribution, we use
+        `::math::statistics::random-normal mean stdev number`. For uniform distribution, we define the following min
+        and max limits for each C and L element:
         ```tcl
         set distLimits [dict create c1 [dict create min 0.9e-9 max 1.1e-9]\
                 l1 [dict create min 9e-6 max 11e-6]\
@@ -129,8 +132,9 @@ namespace eval Advanced {
                 l3 [dict create min 36e-6 max 44e-6]]
         ```
         
-        We can specify different numbers of simulations; the more runs we perform, the more accurate the representation becomes. 
-        For example, we set the number of simulations to 1,000 runs with 15 intervals for constructing a boxplot:
+        We can specify different numbers of simulations; the more runs we perform, the more accurate the representation
+        becomes. For example, we set the number of simulations to 1,000 runs with 15 intervals for constructing a
+        boxplot:
         ```tcl
         # set number of simulations
         set mcRuns 100
@@ -143,7 +147,8 @@ namespace eval Advanced {
         for {set i 0} {$i<$mcRuns} {incr i} {
             #set elements values according to uniform distribution
             foreach elem [list c1 l1 c2 l2 c3 l3] {
-                $elem setParamValue [string index $elem 0] [random-uniform {*}[dict values [dict get $distLimits $elem]] 1]
+                $elem setParamValue [string index $elem 0]\
+                        [random-uniform {*}[dict values [dict get $distLimits $elem]] 1]
             }
             # run simulation
             $circuit runAndRead
@@ -177,9 +182,10 @@ namespace eval Advanced {
         }
         ```
         
-        Here, we use the dedicated procedure from the statistics package: `::math::statistics::minmax-histogram-limits min max number`. 
-        Additionally, we construct strings in form `leftVal-rightVal` that represent the intervals on the boxplot chart. 
-        We call this procedure and store the results:
+        Here, we use the dedicated procedure from the statistics package:
+        `::math::statistics::minmax-histogram-limits min max number`. 
+        Additionally, we construct strings in form `leftVal-rightVal` that represent the intervals on the boxplot
+        chart. We call this procedure and store the results:
         ```tcl
         set uniIntervals [createIntervals $bwsUni $numOfIntervals]
         ```
@@ -193,7 +199,8 @@ namespace eval Advanced {
         }
         ```
         
-        Call the `createDist` procedure to calculate the histogram y-axis values, which correspond to the number of bandwidths within each interval:
+        Call the `createDist` procedure to calculate the histogram y-axis values, which correspond to the number of
+        bandwidths within each interval:
         ```tcl
         set normDist [createDist $bwsNorm [dict get $normIntervals intervals]]
         ```
@@ -213,7 +220,8 @@ namespace eval Advanced {
         for {set i 0} {$i<$mcRuns} {incr i} {
             #set elements values according to normal distribution
             foreach elem [list c1 l1 c2 l2 c3 l3] {
-                $elem setParamValue [string index $elem 0] [random-normal {*}[dict values [dict get $normalLimits $elem]] 1]
+                $elem setParamValue [string index $elem 0]\
+                        [random-normal {*}[dict values [dict get $normalLimits $elem]] 1]
             }
             # run simulation
             $circuit runAndRead
@@ -265,7 +273,8 @@ namespace eval Advanced {
         ![dists plot](assets/img/monte_carlo_dists.png)
         
         We can clearly see the difference between normal and uniform distributions; 
-        the intervals are close due to setting the standard deviation of the normal distribution as std = (xmax - xmin) / 6.
+        the intervals are close due to setting the standard deviation of the normal distribution as
+        std = (xmax - xmin) / 6.
 
         We can also take the uniform intervals and calculate the normal distribution values at these intervals:
         ```tcl
@@ -279,7 +288,8 @@ namespace eval Advanced {
                 -toolbox {feature {dataZoom {yAxisIndex "none"}}} -grid {left "10%" right "15%"}       
         $chartCombined Add "barSeries" -data [list $uniDist] -name "Uniform"
         $chartCombined Add "barSeries" -data [list $normDistWithUniIntervals] -name "Normal"
-        $chartCombined Render -outfile [file normalize [file join html_charts ${fbasename}_combined.html]] -height 800px -width 1200px
+        $chartCombined Render -outfile [file normalize [file join html_charts ${fbasename}_combined.html]]\
+                -height 800px -width 1200px
         ```
         
         ![dists comb plot](assets/img/monte_carlo_dists_comb.png)

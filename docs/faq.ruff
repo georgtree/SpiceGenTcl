@@ -12,8 +12,8 @@ namespace eval FAQ {
         - [How to get log file after simulation?]
         
         ## Where to find list of availible arguments for devices, models and analyses?
-        For the selected simulator, you need to open the documentation for the corresponding namespace, such as Ngspice. 
-        Then, select the category you are interested in:
+        For the selected simulator, you need to open the documentation for the corresponding namespace, such as
+        Ngspice. Then, select the category you are interested in:
         - [::SpiceGenTcl::Ngspice::BasicDevices] - for basic devices like resistors, capacitors, etc.
         - [::SpiceGenTcl::Ngspice::Sources] - for current and voltage sources.
         - [::SpiceGenTcl::Ngspice::SemiconductorDevices] - for semiconductor devices like diodes, transistors, etc.
@@ -21,36 +21,42 @@ namespace eval FAQ {
         
         Check out [::SpiceGenTcl::Ngspice::BasicDevices::Resistor] as an example.
         
-        There, you can find a list of all available methods, a description of the arguments, an example of how the element string appears 
-        in the netlist, and an example of creating an object of the Resistor class.
+        There, you can find a list of all available methods, a description of the arguments, an example of how the
+        element string appears in the netlist, and an example of creating an object of the Resistor class.
 
         ## How to use different simulators for the same circuit (managing namespaces)?
-        Each supported simulator has it's own namespace, for example, `::SpiceGenTcl::Ngspice` for Ngspice, or, `::SpiceGenTcl::Xyce` for Xyce.
-        Also there is `::SpiceGenTcl::Common` namespace for devices that have the same syntax in most simulators.
-        
-        If you need to use particular simulator, you can call [::SpiceGenTcl::importNgspice] or [::SpiceGenTcl::importXyce] to import all commands
-        names into the current scope. It is convinient because you don't need to change code a lot. In case of full paths to command it would be much more difficult.
-        Many elements share the same interface (nodes and parameters), and so the same code works with different simulators almost without changes.
-        
-        Also, you an import elements commands individually like 
+        Each supported simulator has its own namespace. For example, `::SpiceGenTcl::Ngspice` is used for Ngspice,
+        and `::SpiceGenTcl::Xyce` is used for Xyce. Additionally, there is the `::SpiceGenTcl::Common` namespace for
+        devices with syntax that is compatible across most simulators.
+
+        To use a particular simulator, you can call [::SpiceGenTcl::importNgspice] or [::SpiceGenTcl::importXyce] to
+        import all command names into the current scope. This approach is convenient because it minimizes code changes.
+        Using full command paths would be more cumbersome. Many elements share the same interface (such as nodes and
+        parameters), so the same code works with different simulators with minimal modifications.
+
+        You can also import element commands individually, like this:
         ```tcl
         namespace import ::SpiceGenTcl::Ngspice::R
         ```
-        and so import the right one in conditional statements depending on some global variable that defines simulator currently in use.
+        This allows you to import the appropriate simulator in conditional statements, depending on a global variable
+        that defines the simulator currently in use.
         
         ## How to change parameter of existing element?
         
-        For all elements with parameters you can change parameter value by its name with method [::SpiceGenTcl::Device::setParamValue].
+        For all elements with parameters you can change parameter value by its name with method
+        [::SpiceGenTcl::Device::setParamValue].
         
         For example here we change the resistance value of basic resistor:
         ```tcl
         $resistor setParamValue r 100
         ```
         
-        The name of the parameter can be found in the documentation [here]([::SpiceGenTcl::Ngspice::BasicDevices::Resistor]).
+        The name of the parameter can be found in the documentation
+        [here]([::SpiceGenTcl::Ngspice::BasicDevices::Resistor]).
         In the parameter table, the option for resistance is labeled `-r`, so the name used for resistance is 'r'. 
         
-        Another option is to call the [::SpiceGenTcl::Device::getParams] method, which returns a list of all parameters with their values. For example:
+        Another option is to call the [::SpiceGenTcl::Device::getParams] method, which returns a list of all parameters
+        with their values. For example:
         ```tcl
         # create resistor
         set resistor [R new 1 net1 net2 -r 10]
@@ -69,7 +75,8 @@ namespace eval FAQ {
         
         ## How to change node name connected to pin of existing element?
         
-        For all elements with pins, you can change the connected node's name by using the pin name with the method [::SpiceGenTcl::Device::setPinNodeName].
+        For all elements with pins, you can change the connected node's name by using the pin name with the method
+        [::SpiceGenTcl::Device::setPinNodeName].
         
         For example, here we change the node name of the basic resistor's positive pin:
         ```tcl
@@ -77,10 +84,12 @@ namespace eval FAQ {
         ```
         
         The pin name can be found in the documentation [here]([::SpiceGenTcl::Ngspice::BasicDevices::Resistor]).
-        In the parameter table, the pins are listed as `npNode` and `nmNode`, so the names used for the positive and negative 
-        pins are 'np' and 'nm', respectively. This `pin_nameNode` convention applies to all elements in the package.
+        In the parameter table, the pins are listed as `npNode` and `nmNode`, so the names used for the positive and
+        negative pins are 'np' and 'nm', respectively. This `pin_nameNode` convention applies to all elements in the
+        package.
         
-        Another option is to call the [::SpiceGenTcl::Device::getPins] method, which returns a list of all pins with their connected node names. For example:
+        Another option is to call the [::SpiceGenTcl::Device::getPins] method, which returns a list of all pins with
+        their connected node names. For example:
         ```tcl
         # create resistor
         set resistor [R new 1 net1 net2 -r 10]
@@ -96,14 +105,14 @@ namespace eval FAQ {
         
         ## How to find the list of optional parameters for elements?
         
-        The list of parameters in the documentation includes descriptions of the mandatory arguments and availible options.
-        But for some elements, especially models, there could be dozens of parameters, and I 
-        wanted to avoid cluttering the documentation.
+        The list of parameters in the documentation includes descriptions of the mandatory arguments and availible
+        options. But for some elements, especially models, there could be dozens of parameters, and I wanted to avoid
+        cluttering the documentation.
         
-        Typically, any optional parameters for elements are also optional in the simulator they relate to, so you can find a list of 
-        them in the simulator's manual. The convention for these parameters is `-nameOfParam value`. For example, for a basic resistor 
-        in Ngspice, you can provide values for the temperature coefficients, 'tc1' and 'tc2'. In SpiceGenTcl, these are added during the 
-        initialization of the resistor like this:
+        Typically, any optional parameters for elements are also optional in the simulator they relate to, so you can
+        find a list of them in the simulator's manual. The convention for these parameters is `-nameOfParam value`.
+        For example, for a basic resistor in Ngspice, you can provide values for the temperature coefficients, 'tc1'
+        and 'tc2'. In SpiceGenTcl, these are added during the initialization of the resistor like this:
         ```tcl
         set resistor [R new 1 net1 net2 -r 10 -tc1 0.1 -tc2 0.4]
         ```
@@ -114,8 +123,8 @@ namespace eval FAQ {
         - value of resistance: '-r 10'
         Parameters 'tc1' and 'tc2' are provided here as optional arguments.
         
-        As a last resort, you can look directly at the source code in the documentation. Simply open the `Show source` option, and 
-        you'll find an arguments description within the `constructor` method:
+        As a last resort, you can look directly at the source code in the documentation. Simply open the `Show source`
+        option, and you'll find an arguments description within the `constructor` method:
         ```tcl
         set arguments [argparse -inline {
             -r=
@@ -143,10 +152,11 @@ namespace eval FAQ {
                 
         ## How to get raw data after simulation?
         
-        After a successful simulation, an object of the [::SpiceGenTcl::RawFile] class is created and attached to the top-level [::SpiceGenTcl::Circuit] object. 
-        To retrieve the result vectors, simply call the [::SpiceGenTcl::Circuit::getDataDict] method on the [::SpiceGenTcl::Circuit] object. This method returns the result 
-        vectors as a dictionary, with vector names as keys and the vectors themselves as values. You can then access these vectors 
-        using the `dict get` command.
+        After a successful simulation, an object of the [::SpiceGenTcl::RawFile] class is created and attached to the
+        top-level [::SpiceGenTcl::Circuit] object. To retrieve the result vectors, simply call the
+        [::SpiceGenTcl::Circuit::getDataDict] method on the [::SpiceGenTcl::Circuit] object. This method returns the
+        result vectors as a dictionary, with vector names as keys and the vectors themselves as values. You can then
+        access these vectors using the `dict get` command.
         
         Example:
         ```tcl
@@ -157,8 +167,9 @@ namespace eval FAQ {
         
         ## How to get the names of all vectors in raw file?
         
-        For this task, you should first retrieve the [::SpiceGenTcl::RawFile] object reference from the [::SpiceGenTcl::Circuit] object using the `configure -Data` method. 
-        Then, call the [::SpiceGenTcl::RawFile::getVariablesNames] method, which returns a list of all variable names.
+        For this task, you should first retrieve the [::SpiceGenTcl::RawFile] object reference from the
+        [::SpiceGenTcl::Circuit] object using the `configure -Data` method. Then, call the
+        [::SpiceGenTcl::RawFile::getVariablesNames] method, which returns a list of all variable names.
         
         Example:
         ```tcl
@@ -166,12 +177,13 @@ namespace eval FAQ {
         puts [$rawFileObj getVariablesNames]
         ```
         
-        There are also methods for retrieve all voltages and currents names separated from each other: [::SpiceGenTcl::RawFile::getVoltagesNames] and 
-        [::SpiceGenTcl::RawFile::getCurrentsNames].
+        There are also methods for retrieve all voltages and currents names separated from each other:
+        [::SpiceGenTcl::RawFile::getVoltagesNames] and [::SpiceGenTcl::RawFile::getCurrentsNames].
         
         ## How to get log file after simulation?
         
-        There is a property method for it in object of [::SpiceGenTcl::Circuit] class - `configure -Log`, it returns string containing log file.
+        There is a property method for it in object of [::SpiceGenTcl::Circuit] class - `configure -Log`, it returns
+        string containing log file.
         
         Example:
         ```tcl

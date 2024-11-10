@@ -24,7 +24,7 @@ source [file join $sourceDir xyce specElementsClassesXyce.tcl]
 source [file join $sourceDir xyce specSimulatorClassesXyce.tcl]
 
 set packageVersion [package versions SpiceGenTcl]
-
+puts $packageVersion
 set title "Tcl SpiceGenTcl package"
 
 set common [list \

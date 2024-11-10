@@ -1,8 +1,24 @@
+#  .|'''.|            ||                   ..|'''.|                   |''||''|         '||  
+#  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||  
+#   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||  
+# .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||  
+# |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||. 
+#            ||                                                                             
+#           ''''                                                                            
+# SpiceGenTcl.tcl
+# Main file of SpiceGenTcl package
+#
+# Copyright (c) 2024 George Yashin, georgtree@gmail.com
+#
+# MIT License
+# See the file "LICENSE.txt" for information on usage and redistribution
+# of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+
 package require Tcl 9.0
 package require textutil::split
 namespace import ::tcl::mathop::*
 
-package provide SpiceGenTcl 0.1
+package provide SpiceGenTcl 0.5
 
 set dir [file dirname [file normalize [info script]]]
 set libDir "${dir}/lib"

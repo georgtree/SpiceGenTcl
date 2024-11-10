@@ -64,7 +64,8 @@ namespace eval Tips {
         endmodule
         ```
         
-        This model is taken from [designers-guide](https://designers-guide.org/modeling/jilath.va), that contains many Verilog-AMS models.
+        This model is taken from [designers-guide](https://designers-guide.org/modeling/jilath.va), that contains many
+        Verilog-AMS models.
         
         ```tcl
         oo::class create Core {
@@ -101,15 +102,16 @@ namespace eval Tips {
         superclass SpiceGenTcl::Device
         ```
         
-        We use mixin class [::SpiceGenTcl::KeyArgsBuilder] to add it's method [::SpiceGenTcl::KeyArgsBuilder::buildArgStr], that helps to build arguments
-        list for [argparse](https://wiki.tcl-lang.org/page/argparse) package.
+        We use mixin class [::SpiceGenTcl::KeyArgsBuilder] to add it's method
+        [::SpiceGenTcl::KeyArgsBuilder::buildArgStr], that helps to build arguments list for
+        [argparse](https://wiki.tcl-lang.org/page/argparse) package.
         
         In next line we define arguments for constructor:
         ```tcl
         constructor {name pNode nNode args}
         ```
-        First argument is name of instance, then positive node and negative node names, `args` accepts model value after `-model` key and all optional
-        parameters of device.
+        First argument is name of instance, then positive node and negative node names, `args` accepts model value
+        after `-model` key and all optional parameters of device.
         
         In these few lines we process `args` variable with `argparse` package:
         ```tcl
@@ -125,7 +127,8 @@ namespace eval Tips {
         Due to these line we can pass parameters to element in forms `-paramName $paramValue $paramQual`, for example:
         `-area 1e-4` or `-area l*m -eq`.
         
-        Possible qualificator is -eq - it means that parameter should be inserted into SPICE netlist as `paramName={expression}`
+        Possible qualificator is -eq - it means that parameter should be inserted into SPICE netlist as
+        `paramName={expression}`
         
         In the next few lines we build parameter list that will be passed to [::SpiceGenTcl::Device] constructor:      
         ```tcl
@@ -144,8 +147,10 @@ namespace eval Tips {
         
         This superclass accept arguments in form `constructor {name pins modelName instParams}`.
         So, we pass string `n$name` as device name, `n` is reference designator for verilog-a devices in ngspice.
-        Secondly we pass list of nodes `[list "p $pNode" "n $nNode"]` in form of `{{Name0 NodeName} {Name1 NodeName} {Name2 NodeName} ...}`.
-        And the last is list of parameters in form `{{model Value -posnocheck} {Name Value ?-eq?} {Name Value ?-eq?} {Name Value ?-eq?} ...}`.
+        Secondly we pass list of nodes `[list "p $pNode" "n $nNode"]` in form of `{{Name0 NodeName} {Name1 NodeName}
+        {Name2 NodeName} ...}`.
+        And the last is list of parameters in form `{{model Value -posnocheck} {Name Value ?-eq?} {Name Value ?-eq?}
+        {Name Value ?-eq?} ...}`.
         
         So, after that we can create a new instance of newly created class:
         ```tcl

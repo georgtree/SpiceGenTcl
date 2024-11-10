@@ -1,3 +1,18 @@
+#  .|'''.|            ||                   ..|'''.|                   |''||''|         '||  
+#  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||  
+#   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||  
+# .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||  
+# |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||. 
+#            ||                                                                             
+#           ''''                                                                            
+# specElementsClassesCommon.tcl
+# Describes common elements classes
+#
+# Copyright (c) 2024 George Yashin, georgtree@gmail.com
+#
+# MIT License
+# See the file "LICENSE.txt" for information on usage and redistribution
+# of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 
 namespace eval ::SpiceGenTcl {
     namespace eval Common::BasicDevices {

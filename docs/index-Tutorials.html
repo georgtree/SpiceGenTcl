@@ -6,7 +6,7 @@
 <body>
 <div class='ruff-layout'>
 <header class='ruff-layout-header ruff-hd'>
-<a style='text-decoration:none;' href='index.html'>Tcl SpiceGenTcl package (v0.1)</a>
+<a style='text-decoration:none;' href='index.html'>Tcl SpiceGenTcl package (v0.5)</a>
 
 
             <div id="ruffButtonBar">
@@ -23,7 +23,7 @@
 <li><a href="index-Tutorials.html#::Tutorials-Diode capacitance simualtion" title="Diode capacitance simualtion" >Diode capacitance simualtion</a> - &quot;examples/ngspice/ac/diode_cv.tcl&quot; and &quot;examples/xyce/ac/diode_cv.tcl&quot; files.</li>
 <li><a href="index-Tutorials.html#::Tutorials-Sensitive analysis of differential pair" title="Sensitive analysis of differential pair" >Sensitive analysis of differential pair</a> - &quot;examples/ngspice/sens/diffpair_sens.tcl&quot; file</li>
 <li><a href="index-Tutorials.html#::Tutorials-Transient simulation of ring oscillator" title="Transient simulation of ring oscillator" >Transient simulation of ring oscillator</a> - &quot;examples/ngspice/transient/switch_oscillator.tcl&quot; and &quot;examples/xyce/transient/switch_oscillator.tcl&quot; files.</li>
-<li><a href="index-Tutorials.html#::Tutorials-Transient simulation of four-bit adder" title="Transient simulation of four-bit adder" >Transient simulation of four-bit adder</a> - &quot;examples/ngspice/transient/fourbitadder.tcl&quot; and &quot;examples/xyce/transient/fourbitadder.tcl&quot;file</li>
+<li><a href="index-Tutorials.html#::Tutorials-Transient simulation of four-bit adder" title="Transient simulation of four-bit adder" >Transient simulation of four-bit adder</a> - &quot;examples/ngspice/transient/fourbitadder.tcl&quot; and &quot;examples/xyce/transient/fourbitadder.tcl&quot;files</li>
 </ul>
 <h2 class='ruff'><a name='::Tutorials-Netlist manipulations'></a>Netlist manipulations<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
@@ -299,7 +299,7 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <b><font color=#923B23>set</font></b> chart [ticklecharts::chart new]
 <font color=#4A181B>$chart</font> Xaxis <font color=#463e11>-name</font> <font color=#035103>&quot;v(anode), V&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>}  <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
 <font color=#4A181B>$chart</font> Yaxis <font color=#463e11>-name</font> <font color=#035103>&quot;Idiode, A&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>}  <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
-<font color=#4A181B>$chart</font> SetOptions <font color=#463e11>-title</font> {} <font color=#463e11>-tooltip</font> {} <font color=#463e11>-animation</font> <font color=#035103>&quot;False&quot;</font> <font color=#463e11>-legend</font>  {} <font color=#463e11>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#035103>&quot;none&quot;</font>}}}  <font color=#463e11>-grid</font> {left <font color=#035103>&quot;5%&quot;</font> right <font color=#035103>&quot;15%&quot;</font>}
+<font color=#4A181B>$chart</font> SetOptions <font color=#463e11>-title</font> {} <font color=#463e11>-tooltip</font> {} <font color=#463e11>-animation</font> <font color=#035103>&quot;False&quot;</font> <font color=#463e11>-legend</font>  {}  <font color=#463e11>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#035103>&quot;none&quot;</font>}}} <font color=#463e11>-grid</font> {left <font color=#035103>&quot;5%&quot;</font> right <font color=#035103>&quot;15%&quot;</font>}
 <b><font color=#923B23>foreach</font></b> data <font color=#4A181B>$dataList</font> temp <font color=#4A181B>$temps</font> {
     <font color=#4A181B>$chart</font> Add <font color=#035103>&quot;lineSeries&quot;</font> <font color=#463e11>-data</font> <font color=#4A181B>$data</font> <font color=#463e11>-showAllSymbol</font> <font color=#035103>&quot;nothing&quot;</font> <font color=#463e11>-name</font> <font color=#035103>&quot;<font color=#4A181B>${</font>temp<font color=#4A181B>}</font>°C&quot;</font> <font color=#463e11>-symbolSize</font> <font color=#035103>&quot;1&quot;</font>
 }
@@ -557,7 +557,7 @@ vrc2=-6.032e-04
 <b><font color=#923B23>set</font></b> chartImeas [ticklecharts::chart new]
 <font color=#4A181B>$chartImeas</font> Xaxis <font color=#463e11>-name</font> <font color=#035103>&quot;time, s&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
 <font color=#4A181B>$chartImeas</font> Yaxis <font color=#463e11>-name</font> <font color=#035103>&quot;Current, I&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
-<font color=#4A181B>$chartImeas</font> SetOptions <font color=#463e11>-title</font> {} <font color=#463e11>-tooltip</font> {} <font color=#463e11>-animation</font> <font color=#035103>&quot;False&quot;</font> <font color=#463e11>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#035103>&quot;none&quot;</font>}}}
+<font color=#4A181B>$chartImeas</font> SetOptions <font color=#463e11>-title</font> {} <font color=#463e11>-tooltip</font> {} <font color=#463e11>-animation</font> <font color=#035103>&quot;False&quot;</font>  <font color=#463e11>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#035103>&quot;none&quot;</font>}}}
 <font color=#4A181B>$chartImeas</font> Add <font color=#035103>&quot;lineSeries&quot;</font> <font color=#463e11>-data</font> <font color=#4A181B>$timeImeas</font> <font color=#463e11>-showAllSymbol</font> <font color=#035103>&quot;nothing&quot;</font> <font color=#463e11>-symbolSize</font> <font color=#035103>&quot;0&quot;</font>
 <i><font color=#4b5d50># create multiplot</font></i>
 <b><font color=#923B23>set</font></b> layout [ticklecharts::Gridlayout new]
