@@ -23,7 +23,7 @@ namespace eval ::SpiceGenTcl {
     }
     namespace eval Ngspice::Sources {
         namespace export Vdc Idc Vac Iac Vpulse Ipulse Vsin Isin Vexp Iexp Vpwl Ipwl Vsffm Isffm Vam Iam Vccs G \
-                Vcvs E Cccs F Ccvs H BehaviouralSource B
+                Vcvs E Cccs F Ccvs H BehaviouralSource B Vport
     }
     namespace eval Ngspice::SemiconductorDevices {
         namespace export Diode D Bjt Q Jfet J Mesfet Z Mosfet M
@@ -540,6 +540,44 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
     
     oo::class create Vac {
         superclass ::SpiceGenTcl::Common::Sources::Vac
+    }
+
+####  Vport class     
+
+    oo::class create Vport {
+        superclass ::SpiceGenTcl::Device
+        constructor {name npNode nmNode args} {
+            # Creates object of class `Vport` that describes simple constant voltage source.
+            #  name - name of the device without first-letter designator V
+            #  npNode - name of node connected to positive pin
+            #  nmNode - name of node connected to negative pin
+            #  -dc - DC voltage value
+            #  -ac - AC voltage value
+            #  -portnum - number of port
+            #  -z0 - internal source impedance
+            # ```
+            # VYYYYYYY n+ n- DC 0 AC 1 portnum n1 <z0 n2>
+            # ```
+            # Example of class initialization:
+            # ```
+            # ::SpiceGenTcl::Ngspice::Sources::Vport new 1 netp netm -dc 1 -ac 1 -portnum 1 -z0 100
+            # ```
+            set arguments [argparse -inline {
+                {-dc= -required}
+                {-ac= -required}
+                {-portnum= -required}
+                {-z0=}
+            }]
+            dict for {paramName value} $arguments {
+                lappend params "$paramName -sw"
+                if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
+                    lappend params "${paramName}val [lindex $value 0] -poseq"
+                } else {
+                    lappend params "${paramName}val $value -pos"
+                }
+            }
+            next v$name [list "np $npNode" "nm $nmNode"] $params
+        }
     }
     
 ####  Vpulse class 

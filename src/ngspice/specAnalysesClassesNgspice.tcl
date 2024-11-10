@@ -16,7 +16,7 @@
 
 namespace eval ::SpiceGenTcl {
     namespace eval Ngspice::Analyses {
-        namespace export Dc Ac Tran Op SensAc SensDc
+        namespace export Dc Ac Tran Op SensAc SensDc Sp
     }
 }
 
@@ -119,6 +119,59 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
         }
     }
 
+###  Sp class 
+
+    oo::class create Sp {
+        superclass ::SpiceGenTcl::Analysis
+        constructor {args} {
+            # Creates object of class `Sp` that describes s-parameter analysis. 
+            #  -variation - parameter that defines frequency scale, could be dec, oct or lin
+            #  -n - number of points
+            #  -fstart - start frequency
+            #  -fstop - start frequency
+            #  -name - name argument, optional
+            #  -donoise - activate s-parameter noise
+            # ```
+            # .ac variation n fstart fstop <donoise>
+            # ```
+            # Example of class initialization:
+            # ```
+            # ::SpiceGenTcl::Ngspice::Analyses::Sp new -variation dec -n 10 -fstart 1 -fstop 1e6 -name sp1 -donoise
+            # ```
+            set arguments [argparse -inline {
+                -name=
+                {-variation= -required}
+                {-n= -required}
+                {-fstart= -required}
+                {-fstop= -required}
+                {-donoise}
+            }]
+            if {[dict exists $arguments name]} {
+                set name [dict get $arguments name]
+            } else {
+                set name [self object]
+            }
+            lappend params "variation [dict get $arguments variation] -posnocheck"
+            set paramsOrder [list n fstart fstop]
+            foreach param $paramsOrder {
+                if {[dict exists $arguments $param]} {
+                    dict append argsOrdered $param [dict get $arguments $param]
+                }
+            }
+            dict for {paramName value} $argsOrdered {
+                if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
+                    lappend params "$paramName [lindex $value 0] -poseq"
+                } else {
+                    lappend params "$paramName $value -pos"
+                }
+            }
+            if {[dict exists $arguments donoise]} {
+                lappend params "donoise 1 -pos" 
+            }
+            next sp $params -name $name
+        }
+    }
+    
 ###  SensAc class 
 
     oo::class create SensAc {

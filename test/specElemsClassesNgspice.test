@@ -404,7 +404,33 @@ test testVacClass-4 {test Vac class} -setup {
 } -result "v1 netp netm ac {acmag} 45" -cleanup {
     unset vac result
 }
-    
+
+####  Vport class test 
+
+test testVportClass-1 {test Vport class} -setup {
+    set vport [Vport new 1 netp netm -dc 1 -ac 1 -portnum 1 -z0 50]
+} -body {
+    set result [$vport genSPICEString]
+} -result "v1 netp netm dc 1 ac 1 portnum 1 z0 50" -cleanup {
+    unset vport result
+}
+
+test testVportClass-2 {test Vport class} -setup {
+    set vport [Vport new 1 netp netm -dc 1 -ac 1 -portnum 1]
+} -body {
+    set result [$vport genSPICEString]
+} -result "v1 netp netm dc 1 ac 1 portnum 1" -cleanup {
+    unset vport result
+}
+
+test testVportClass-3 {test Vport class} -setup {
+    set vport [Vport new 1 netp netm -dc 1 -ac 1 -portnum 2 -z0 {z0 -eq}]
+} -body {
+    set result [$vport genSPICEString]
+} -result "v1 netp netm dc 1 ac 1 portnum 2 z0 \{z0\}" -cleanup {
+    unset vport result
+}
+
 ####  Vpulse class test 
 
 test testVpulseClass-1 {test Vpulse class} -setup {

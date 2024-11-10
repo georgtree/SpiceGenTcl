@@ -60,6 +60,32 @@ test testAcClass-2 {test Ac class} -setup {
 } -result ".ac lin 1000 1 1e6" -cleanup {
     unset res result
 }
+
+###  Sp class tests 
+    
+test testSpClass-1 {test Sp class} -setup {
+    set res [Sp new -variation dec -n 10 -fstart {f1 -eq} -fstop 1e6 -name ac1]
+} -body {
+    set result [$res genSPICEString]
+} -result ".sp dec 10 \{f1\} 1e6" -cleanup {
+    unset res result
+}
+
+test testSpClass-2 {test Sp class} -setup {
+    set res [Sp new -variation lin -n 1000 -fstart 1 -fstop 1e6]
+} -body {
+    set result [$res genSPICEString]
+} -result ".sp lin 1000 1 1e6" -cleanup {
+    unset res result
+}
+
+test testSpClass-3 {test Sp class} -setup {
+    set res [Sp new -variation lin -n 1000 -fstart 1 -fstop 1e6 -donoise]
+} -body {
+    set result [$res genSPICEString]
+} -result ".sp lin 1000 1 1e6 1" -cleanup {
+    unset res result
+}
     
 ###  SensAc class tests 
     
