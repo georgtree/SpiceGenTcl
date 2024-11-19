@@ -6,7 +6,7 @@
 <body>
 <div class='ruff-layout'>
 <header class='ruff-layout-header ruff-hd'>
-<a style='text-decoration:none;' href='index.html'>Tcl SpiceGenTcl package (v)</a>
+<a style='text-decoration:none;' href='index.html'>Tcl SpiceGenTcl package (v0.51)</a>
 
 
             <div id="ruffButtonBar">
@@ -172,7 +172,7 @@ v1 net1 net3 5
         <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new 1 net1 plus <font color=#463e11>-r</font> {r <font color=#463e11>-eq</font>}]
         <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>C</font></b> new 1 net2 net3 <font color=#463e11>-r</font> {c <font color=#463e11>-eq</font>}]
         <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new 5 minus net2 <font color=#463e11>-model</font> res_sem <font color=#463e11>-l</font> 10e-6 <font color=#463e11>-w</font> 100e-6]
-        <b><font color=#ca14ca>my</font></b> add [RSemModel new rsem1mod <font color=#463e11>-tc1</font> 0.1 <font color=#463e11>-tc2</font> 0.4]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>RModel</font></b> new rsem1mod <font color=#463e11>-tc1</font> 0.1 <font color=#463e11>-tc2</font> 0.4]
         <i><font color=#4b5d50># pass name, list of pins and list of parameters to Subcircuit constructor</font></i>
         <b><font color=#923B23>next</font></b> rcnet <font color=#4A181B>$pins</font> <font color=#4A181B>$params</font>
     }
@@ -194,7 +194,7 @@ v1 net1 net3 5
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new 1 net1 plus <font color=#463e11>-r</font> {r <font color=#463e11>-eq</font>}]
 <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>C</font></b> new 1 net2 net3 <font color=#463e11>-c</font> {c <font color=#463e11>-eq</font>}]
 <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new 5 minus net2 <font color=#463e11>-model</font> res_sem <font color=#463e11>-l</font> 10e-6 <font color=#463e11>-w</font> 100e-6]
-<b><font color=#ca14ca>my</font></b> add [RSemModel new rsem1mod <font color=#463e11>-tc1</font> 0.1 <font color=#463e11>-tc2</font> 0.4]
+<b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>RModel</font></b> new rsem1mod <font color=#463e11>-tc1</font> 0.1 <font color=#463e11>-tc2</font> 0.4]
 </pre>
 
 </figure><p class='ruff'>The last action is to pass name of subcircuit, list of pins and parameters to constructor of superclass:</p>
@@ -253,7 +253,7 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <i><font color=#4b5d50># add elements to circuit</font></i>
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>D</font></b> new 1 anode 0 <font color=#463e11>-model</font> diomod <font color=#463e11>-area</font> 1 <font color=#463e11>-lm</font> 1e-6]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new a anode 0 <font color=#463e11>-dc</font> 0]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>DiodeModel</font></b> new diomod <font color=#463e11>-is</font> 1e-12 <font color=#463e11>-n</font> 1.2 <font color=#463e11>-rs</font> 0.01 <font color=#463e11>-cj0</font> 1e-9 <font color=#463e11>-trs1</font> 0.001 <font color=#463e11>-xti</font> 5]
+<font color=#4A181B>$circuit</font> add [DiodeModel new diomod <font color=#463e11>-is</font> 1e-12 <font color=#463e11>-n</font> 1.2 <font color=#463e11>-rs</font> 0.01 <font color=#463e11>-cj0</font> 1e-9 <font color=#463e11>-trs1</font> 0.001 <font color=#463e11>-xti</font> 5]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Dc</font></b> new <font color=#463e11>-src</font> va <font color=#463e11>-start</font> 0 <font color=#463e11>-step</font> 2 <font color=#463e11>-incr</font> 0.01]
 </pre>
 
@@ -347,7 +347,7 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <b><font color=#923B23>set</font></b> vdc [<b><font color=#923B23>Vdc</font></b> new a c nin <font color=#463e11>-dc</font> 0]
 <font color=#4A181B>$circuit</font> add <font color=#4A181B>$vdc</font>
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vac</font></b> new b nin 0 <font color=#463e11>-ac</font> 1]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>DiodeModel</font></b> new diomod <font color=#463e11>-is</font> 1e-12 <font color=#463e11>-n</font> 1.2 <font color=#463e11>-rs</font> 0.01 <font color=#463e11>-cj0</font> 1e-9 <font color=#463e11>-trs1</font> 0.001 <font color=#463e11>-xti</font> 5]
+<font color=#4A181B>$circuit</font> add [DiodeModel new diomod <font color=#463e11>-is</font> 1e-12 <font color=#463e11>-n</font> 1.2 <font color=#463e11>-rs</font> 0.01 <font color=#463e11>-cj0</font> 1e-9 <font color=#463e11>-trs1</font> 0.001 <font color=#463e11>-xti</font> 5]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Ac</font></b> new <font color=#463e11>-variation</font> lin <font color=#463e11>-n</font> 1 <font color=#463e11>-fstart</font> 1e5 <font color=#463e11>-fstop</font> 1e5]
 </pre>
 
@@ -438,8 +438,8 @@ x2 net1 net2 rcnet r=1 c={cpar}
 
 </figure><p class='ruff'>Then we add models for NPN and PNP bipolar transistors:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$circuit</font> add [<b><font color=#923B23>BjtGPModel</font></b> new qnl npn <font color=#463e11>-bf</font> 80 <font color=#463e11>-rb</font> 100 <font color=#463e11>-cjc</font> 2e-12 <font color=#463e11>-tf</font> 0.3e-9 <font color=#463e11>-tr</font> 6e-9 <font color=#463e11>-cje</font> 3e-12 <font color=#463e11>-cjc</font> 2e-12 <font color=#463e11>-va</font> 50]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>BjtGPModel</font></b> new qnr npn <font color=#463e11>-bf</font> 80 <font color=#463e11>-rb</font> 100 <font color=#463e11>-cjc</font> 2e-12 <font color=#463e11>-tf</font> 0.3e-9 <font color=#463e11>-tr</font> 6e-9 <font color=#463e11>-cje</font> 3e-12 <font color=#463e11>-cjc</font> 2e-12 <font color=#463e11>-va</font> 50]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$circuit</font> add [BjtGPModel new qnl npn <font color=#463e11>-bf</font> 80 <font color=#463e11>-rb</font> 100 <font color=#463e11>-cjc</font> 2e-12 <font color=#463e11>-tf</font> 0.3e-9 <font color=#463e11>-tr</font> 6e-9 <font color=#463e11>-cje</font> 3e-12 <font color=#463e11>-cjc</font> 2e-12 <font color=#463e11>-va</font> 50]
+<font color=#4A181B>$circuit</font> add [BjtGPModel new qnr npn <font color=#463e11>-bf</font> 80 <font color=#463e11>-rb</font> 100 <font color=#463e11>-cjc</font> 2e-12 <font color=#463e11>-tf</font> 0.3e-9 <font color=#463e11>-tr</font> 6e-9 <font color=#463e11>-cje</font> 3e-12 <font color=#463e11>-cjc</font> 2e-12 <font color=#463e11>-va</font> 50]
 </pre>
 
 </figure><p class='ruff'>In DC sensistive analysis we add input voltage to which we sense ohter parameters in the circuit:</p>
@@ -711,8 +711,8 @@ vrc2=-6.032e-04
 
 </figure><p class='ruff'>Add semiconductor devices models:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$circuit</font> add [<b><font color=#923B23>DiodeModel</font></b> new dmod]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>BjtGPModel</font></b> new qmod npn <font color=#463e11>-bf</font> 75 <font color=#463e11>-rb</font> 100 <font color=#463e11>-cje</font> 1e-12 <font color=#463e11>-cjc</font> 3e-12]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$circuit</font> add [DiodeModel new dmod]
+<font color=#4A181B>$circuit</font> add [BjtGPModel new qmod npn <font color=#463e11>-bf</font> 75 <font color=#463e11>-rb</font> 100 <font color=#463e11>-cje</font> 1e-12 <font color=#463e11>-cjc</font> 3e-12]
 </pre>
 
 </figure><p class='ruff'>Now we can create simulator and run circuit:</p>
