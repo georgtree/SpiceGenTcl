@@ -19,8 +19,6 @@ package require tcltest
 package require SpiceGenTcl
 namespace import ::tcltest::*
 
-set ngspicePath {/usr/local/bin/}
-
 set epsilon 1e-8
 
 namespace import ::SpiceGenTcl::*
@@ -50,7 +48,7 @@ test testSimulations-1 {test creation of circuit, run it with NgspiceBatch and r
     $circuit add [R new 1 in out -r 1e3]
     $circuit add [R new 2 out 0 -r 2e3]
     $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1]
-    set simulator [Batch new batch1]
+    set simulator [Batch new batch1 .]
     $circuit configure -Simulator $simulator
     $circuit runAndRead
     set data [[$circuit configure -Data] getTracesData]
@@ -59,6 +57,9 @@ test testSimulations-1 {test creation of circuit, run it with NgspiceBatch and r
             2.6666666666666665 3.333333333333333} [dict get $data v(out)]]
     return $traceMatch
 } -result 1 -cleanup {
+    file delete {./voltage divider netlist.cir}
+    file delete {./voltage divider netlist.raw}
+    file delete {./voltage divider netlist.log}
     unset circuit simulator data traceMatch
 }
 
