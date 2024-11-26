@@ -48,6 +48,8 @@ external dependency is the simulator itself.
 - [Tcllib](https://www.tcl.tk/software/tcllib/)
 - [ticklecharts](https://github.com/nico-robert/ticklecharts)
 
+After simulator installation add path to executable to `PATH` environment variable.
+
 ## Documentation and tutorials
 
 Documentation could be found [here](https://georgtree.github.io/SpiceGenTcl/). 
