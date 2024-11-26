@@ -25,7 +25,7 @@ $circuit add [BjtGPModel new qnr npn -bf 80 -rb 100 -cjc 2e-12 -tf 0.3e-9 -tr 6e
 
 $circuit add [SensDc new -outvar v(5,4)]
 #set simulator with default 
-set simulator [Batch new {batch1} {/usr/local/bin/}]
+set simulator [Batch new {batch1}]
 # attach simulator object to circuit
 $circuit configure -Simulator $simulator
 # run circuit, read log and data

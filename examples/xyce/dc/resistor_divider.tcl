@@ -12,7 +12,7 @@ $circuit add [R new 1 in out -r 1e3]
 $circuit add [R new 2 out 0 -r 2e3]
 $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 0.1]
 #set simulator with default 
-set simulator [Batch new {batch1} {/usr/local/bin/}]
+set simulator [Batch new {batch1}]
 # attach simulator object to circuit
 $circuit configure -Simulator $simulator
 # run circuit, read log and data

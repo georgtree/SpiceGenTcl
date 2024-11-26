@@ -34,7 +34,7 @@ $circuit add [Vport new l out 0 -dc 0 -ac 0 -portnum 2]
 
 $circuit add [Sp new -variation lin -n 500 -fstart 10meg -fstop 200meg]
 #set simulator with default 
-set simulator [BatchLiveLog new {batch1} {/usr/local/bin/}]
+set simulator [BatchLiveLog new {batch1}]
 # attach simulator object to circuit
 $circuit configure -Simulator $simulator
 $circuit runAndRead

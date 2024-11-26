@@ -48,7 +48,7 @@ $circuit add [VSwitchModel new swswitch -vt 1 -vh 0.1 -ron 1e3 -roff 1e12]
 $circuit add [VSwitchModel new switchn -vt 1 -vh 0.1 -ron 1e3 -roff 1e12]
 
 #set simulator with default temporary directory
-set simulator [BatchLiveLog new {batch1} {/usr/local/bin/}]
+set simulator [BatchLiveLog new {batch1}]
 # attach simulator object to circuit
 $circuit configure -Simulator $simulator
 # run circuit, read log and data

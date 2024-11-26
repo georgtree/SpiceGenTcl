@@ -19,7 +19,7 @@ $circuit add [Ac new -variation lin -n 1 -fstart 1e5 -fstop 1e5]
 # add voltage sweep
 set voltSweep [lseq 0 20.0 0.1]
 #set simulator with default 
-set simulator [Batch new {batch1} {/usr/local/bin/}]
+set simulator [Batch new {batch1}]
 # attach simulator object to circuit
 $circuit configure -Simulator $simulator
 # loop in which we run simulation, change reverse bias and read the results

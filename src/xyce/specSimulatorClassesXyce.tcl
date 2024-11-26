@@ -37,14 +37,13 @@ namespace eval ::SpiceGenTcl::Xyce::Simulators {
         # the name of last ran file
         property LastRunFileName
         variable LastRunFileName
-        constructor {name path {runLocation /tmp}} {
+        constructor {name {runLocation /tmp}} {
             # Creates batch ngspice simulator that can be attached to top-level Circuit.
             #  name - name of simulator object
-            #  path - path of ngspice executable file
             #  runLocation - location at which input netlist is stored and all output files will be saved,
             #   default is system temporary folder at Linux system
             my configure -Name $name
-            my configure -Path $path
+
             my configure -Command Xyce
             my configure -RunLocation $runLocation
         }

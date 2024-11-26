@@ -72,7 +72,7 @@ foreach elem [list c1 l1 c2 l2 c3 l3] {
 }
 $circuit add [Ac new -variation oct -n 100 -fstart 250e3 -fstop 10e6]
 #set simulator with default 
-set simulator [Batch new {batch1} {/usr/local/bin/}]
+set simulator [Batch new {batch1}]
 # attach simulator object to circuit
 $circuit configure -Simulator $simulator
 

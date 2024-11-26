@@ -1513,8 +1513,6 @@ namespace eval ::SpiceGenTcl {
         variable Name
         property Command
         variable Command
-        property Path
-        variable Path
         property Log
         variable Log
         property Data

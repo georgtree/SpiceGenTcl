@@ -50,7 +50,7 @@ test testSimulations-1 {test creation of circuit, run it with NgspiceBatch and r
     $circuit add [R new 1 in out -r 1e3]
     $circuit add [R new 2 out 0 -r 2e3]
     $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1]
-    set simulator [Batch new batch1 $ngspicePath]
+    set simulator [Batch new batch1]
     $circuit configure -Simulator $simulator
     $circuit runAndRead
     set data [[$circuit configure -Data] getTracesData]
