@@ -391,9 +391,11 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
     oo::class create SubcircuitInstanceAuto {
         superclass ::SpiceGenTcl::Device
         constructor {subcktObj name nodes args} {
-            # Creates object of class `SubcircuitInstanceAuto` that describes subcircuit instance with already created subcircuit definition object.
+            # Creates object of class `SubcircuitInstanceAuto` that describes subcircuit instance with already created
+            # subcircuit definition object.
             #  subcktObj - object of subcircuit that defines it's pins, subName and parameters
-            #  nodes - list of nodes connected to pins in the same order as pins in subcircuit definition {nodeName1 nodeName2 ...}
+            #  nodes - list of nodes connected to pins in the same order as pins in subcircuit definition
+            #   {nodeName1 nodeName2 ...}
             #  args - parameters as argument in form : -paramName {paramValue ?-eq?} -paramName {paramValue ?-eq?}
             # ```
             # X<name> [nodes] <subcircuit name> [PARAMS: [<name> = <value>] ...]

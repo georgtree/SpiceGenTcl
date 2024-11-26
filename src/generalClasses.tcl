@@ -16,9 +16,10 @@
 
 namespace eval ::SpiceGenTcl {
 
-    namespace export Pin ParameterSwitch Parameter ParameterNoCheck ParameterPositional ParameterPositionalNoCheck \
-            ParameterDefault ParameterEquation ParameterPositionalEquation Device Model RawString Comment Include Options \
-            ParamStatement Temp Netlist Circuit Library Subcircuit Analysis Simulator Dataset Axis Trace EmptyTrace RawFile
+    namespace export Pin ParameterSwitch Parameter ParameterNoCheck ParameterPositional ParameterPositionalNoCheck\
+            ParameterDefault ParameterEquation ParameterPositionalEquation Device Model RawString Comment Include\
+            Options ParamStatement Temp Netlist Circuit Library Subcircuit Analysis Simulator Dataset Axis Trace\
+            EmptyTrace RawFile
     namespace export importNgspice importXyce
     
     proc importNgspice {} {
@@ -397,7 +398,8 @@ namespace eval ::SpiceGenTcl {
     oo::configurable create ParameterPositionalEquation {
         superclass ParameterEquation
         constructor {name value} {
-            # Creates object of class `ParameterPositionalEquation` with parameter name and value as an equation in positional form.
+            # Creates object of class `ParameterPositionalEquation` with parameter name and value as an equation in
+            # positional form.
             #  name - name of the parameter
             #  value - value of the parameter
             # Class models parameter that has representation as an equation, but in form of
@@ -436,19 +438,21 @@ namespace eval ::SpiceGenTcl {
             #  pins - list of pins in the order they appear in SPICE device's definition together
             #   with connected node in form: `{{Name0 NodeName} {Name1 NodeName} {Name2 NodeName} ...}`
             #   Nodes string values could be empty.
-            #  params - list of instance parameters in form `{{Name Value ?-pos|eq|poseq?} {Name Value ?-pos|eq|poseq?} {Name Value ?-pos|eq|poseq?} ...}`
-            #   Parameter list can be empty if device doesn't have instance parameters.
+            #  params - list of instance parameters in form `{{Name Value ?-pos|eq|poseq?} {Name Value ?-pos|eq|poseq?}
+            #   {Name Value ?-pos|eq|poseq?} ...}` Parameter list can be empty if device doesn't have instance
+            #   parameters.
             # Class models general device in SPICE, number of which 
             # must be assembled (connected) to get the circuit to simulate. This class provides basic machinery
             # for creating any device that can be connected to net in circuit. It can be instantiated to create
             # device that contains: 
             #  - reference name, like R1, L1, M1, etc;
-            #  - list of pins in the order of appearence of device's definition, for example, 'drain gate source' for MOS
-            #     transistor;
-            #  - list of parameters, that could be positional (+equation), keyword (+equation) parameters, like `R1 nm np 100 tc1=1 tc2={tc0*tc12}`,
-            #     where 100 - positional parameter, tc1 - keyword parameters and tc2 - keyword parameter with equation
-            # This class accept definition that contains elements listed above, and generates classes: Pin, Parameter, PositionalParameter
-            # with compositional relationship (has a).
+            #  - list of pins in the order of appearence of device's definition, for example, 'drain gate source' for 
+            #     MOS transistor;
+            #  - list of parameters, that could be positional (+equation), keyword (+equation) parameters, like
+            #     `R1 nm np 100 tc1=1 tc2={tc0*tc12}`, where 100 - positional parameter, tc1 - keyword parameters and
+            #     tc2 - keyword parameter with equation
+            # This class accept definition that contains elements listed above, and generates classes: Pin, Parameter, 
+            # PositionalParameter with compositional relationship (has a).
             
             my configure -Name $name
             # create Pins objects
@@ -493,7 +497,8 @@ namespace eval ::SpiceGenTcl {
             #  nodeName - name of the node that we want connect to pin
             set error [catch {dict get $Pins $pinName}]
             if {$error>0} {
-                error "Pin with name '$pinName' was not found in device's '[my configure -Name]' list of pins '[dict keys [my getPins]]'"
+                error "Pin with name '$pinName' was not found in device's '[my configure -Name]' list of pins\
+                        '[dict keys [my getPins]]'"
             } else {
                 set pin [dict get $Pins $pinName]
             }
@@ -507,7 +512,8 @@ namespace eval ::SpiceGenTcl {
             set paramName [string tolower $paramName]
             set error [catch {dict get $Params $paramName}]
             if {$error>0} {
-                error "Parameter with name '$paramName' was not found in device's '[my configure -Name]' list of parameters '[dict keys [my getParams]]'"
+                error "Parameter with name '$paramName' was not found in device's '[my configure -Name]' list of\
+                        parameters '[dict keys [my getParams]]'"
             } else {
                 set param [dict get $Params $paramName]
             }
@@ -576,7 +582,8 @@ namespace eval ::SpiceGenTcl {
             set paramName [string tolower $paramName]
             set error [catch {dict get $Params $paramName}]
             if {$error>0} {
-                error "Parameter with name '$paramName' was not found in device's '[my configure -Name]' list of parameters '[dict keys [my getParams]]'"
+                error "Parameter with name '$paramName' was not found in device's '[my configure -Name]' list of\
+                        parameters '[dict keys [my getParams]]'"
             } else {
                 set Params [dict remove $Params $paramName]
             }
@@ -658,7 +665,8 @@ namespace eval ::SpiceGenTcl {
             # Creates object of class `Model`.
             #  name - name of the model
             #  type - type of model, for example, diode, npn, etc
-            #  instParams - list of instance parameters in form `{{Name Value ?-pos|eq|poseq?} {Name Value ?-pos|eq|poseq?} {Name Value ?-pos|eq|poseq?} ...}`
+            #  instParams - list of instance parameters in form `{{Name Value ?-pos|eq|poseq?}
+            #   {Name Value ?-pos|eq|poseq?} {Name Value ?-pos|eq|poseq?} ...}`
             # Class represents model card in SPICE netlist.
             my configure -Name $name
             my configure -Type $type
@@ -845,7 +853,8 @@ namespace eval ::SpiceGenTcl {
         constructor {params args} {
             # Creates object of class `Options`.
             #  name - name of the parameter
-            #  params - list of instance parameters in form `{{Name Value ?-sw?} {Name Value ?-sw?} {Name Value ?-sw?} ...}`
+            #  params - list of instance parameters in form `{{Name Value ?-sw?} {Name Value ?-sw?}
+            #   {Name Value ?-sw?} ...}`
             #  args - optional argument -name - represent name of library statement
             # This class represent .options statement.
             set arguments [argparse {
@@ -912,7 +921,8 @@ namespace eval ::SpiceGenTcl {
             set paramName [string tolower $paramName]
             set error [catch {dict get $Params $paramName}]
             if {$error>0} {
-                error "Parameter with name '$paramName' was not found in options's '[my configure -Name]' list of parameters '[dict keys [my getParams]]'"
+                error "Parameter with name '$paramName' was not found in options's '[my configure -Name]' list of\
+                        parameters '[dict keys [my getParams]]'"
             } else {
                 set param [dict get $Params $paramName]
             }
@@ -1004,7 +1014,8 @@ namespace eval ::SpiceGenTcl {
             set paramName [string tolower $paramName]
             set error [catch {dict get $Params $paramName}]
             if {$error>0} {
-                error "Parameter with name '$paramName' was not found in parameter statement's '[my configure -Name]' list of parameters '[dict keys [my getParams]]'"
+                error "Parameter with name '$paramName' was not found in parameter statement's '[my configure -Name]'\
+                        list of parameters '[dict keys [my getParams]]'"
             } else {
                 set param [dict get $Params $paramName]
             }
@@ -1178,8 +1189,8 @@ namespace eval ::SpiceGenTcl {
             # Creates object of class `CircuitNetlist`.
             #  name - name of the tol-level circuit
             # Class implements a top level netlist which is run in SPICE. We should add `Simulator`
-            # object reference to make it able to run simulation. Results of last simulation attached as `RawData` class object
-            # and can be retrieved by `getData` method.
+            # object reference to make it able to run simulation. Results of last simulation attached as `RawData`
+            # class object and can be retrieved by `getData` method.
             next $name
         }
         method add {element} {
@@ -1328,9 +1339,8 @@ namespace eval ::SpiceGenTcl {
         }
         
         method add {element} {
-            # Add element object reference to `Netlist`,
-            # it extends add method to add check of element class because subcircuit can't contain particular elements inside,
-            # like `Include`, `Library`, `Options` and `Anslysis`.
+            # Add element object reference to `Netlist`, it extends add method to add check of element class because
+            # subcircuit can't contain particular elements inside, like `Include`, `Library`, `Options` and `Analysis`.
             #  element - element object reference
             set elementClass [info object class $element]
             set elementClassSuperclass [info class superclasses $elementClass]
@@ -1473,7 +1483,8 @@ namespace eval ::SpiceGenTcl {
             set paramName [string tolower $paramName]
             set error [catch {dict get $Params $paramName}]
             if {$error>0} {
-                error "Parameter with name '$paramName' was not found in parameter analysis's '[my configure -Name]' list of parameters '[dict keys [my getParams]]'"
+                error "Parameter with name '$paramName' was not found in parameter analysis's '[my configure -Name]'\
+                        list of parameters '[dict keys [my getParams]]'"
             } else {
                 set param [dict get $Params $paramName]
             }
@@ -1814,7 +1825,8 @@ namespace eval ::SpiceGenTcl {
                     set trace $Axis
                 } elseif {($traces2read=="*") || ($name in $traces2read)} {
                     if {$hasAxis} {
-                        set trace [::SpiceGenTcl::Trace new $name $varType $NPoints [[my configure -Axis] configure -Name] $numType]
+                        set trace [::SpiceGenTcl::Trace new $name $varType $NPoints\
+                                           [[my configure -Axis] configure -Name] $numType]
                     } else {
                         set trace [::SpiceGenTcl::Trace new $name $varType $NPoints {} $numType]
                     }
@@ -1863,7 +1875,8 @@ namespace eval ::SpiceGenTcl {
                     lappend scanFunctions $fun
                 }
                 if {$calcBlockSize!=[my configure -BlockSize]} {
-                    error "Error in calculating the block size. Expected '[my configure -BlockSize]' bytes, but found '$calcBlockSize' bytes"
+                    error "Error in calculating the block size. Expected '[my configure -BlockSize]' bytes, but found\
+                            '$calcBlockSize' bytes"
                 }
                  for {set i 0} {$i<$NPoints} {incr i} {
                     for {set j 0} {$j<[llength [my configure -Traces]]} {incr j} {
