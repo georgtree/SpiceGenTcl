@@ -1896,6 +1896,9 @@ namespace eval ::SpiceGenTcl {
                             continue
                         }
                         set lineList [textutil::split::splitx $line]
+                        if {[lindex $lineList 1]=={}} {
+                            continue
+                        }
                         if {$firstVar=="true"} {
                             set firstVar false
                             set sPoint [lindex $lineList 1]
