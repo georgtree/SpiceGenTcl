@@ -1888,25 +1888,24 @@ namespace eval ::SpiceGenTcl {
             } elseif {$rawType=="Values:"} {
                 for {set i 0} {$i<$NPoints} {incr i} {
                     set firstVar true
-                    for {set j 0} {$j<[+ [llength [my configure -Traces]] 1]} {incr j} {
+                    for {set j 0} {$j<[llength [my configure -Traces]]} {incr j} {
                         set line [gets $file]
                         if {$line==""} {
                             continue
                         }
                         set lineList [textutil::split::splitx $line]
-                        if {[lindex $lineList 1]=={}} {
-                            continue
-                        }
+                        #puts $lineList
                         if {$firstVar=="true"} {
                             set firstVar false
-                            set sPoint [lindex $lineList 1]
+                            set sPoint [lindex $lineList 0]
+                            #puts "$sPoint $i"
                             if {$i!=int($sPoint)} {
                                 error "Error reading file"
                             }
                             if {$numType=="complex"} {
-                                set value [split [lindex $lineList 2] ","]
+                                set value [split [lindex $lineList 1] ","]
                             } else {
-                                set value [lindex $lineList 2]
+                                set value [lindex $lineList 1]
                             } 
                         } else {
                             if {$numType=="complex"} {

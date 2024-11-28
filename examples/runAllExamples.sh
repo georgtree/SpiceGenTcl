@@ -10,10 +10,13 @@ tclsh ./switch_oscillator.tcl
 tclsh ./fourbitadder.tcl
 cd ../advanced
 tclsh ./monte_carlo.tcl
-cd xyce/dc
+cd ../xyce/dc
 tclsh ./resistor_divider.tcl
 tclsh ./diode_iv.tcl
 cd ../ac
 tclsh ./diode_cv.tcl
 cd ../transient
 tclsh ./switch_oscillator.tcl
+tclsh ./fourbitadder.tcl
+cd ../advanced
+tclsh ./monte_carlo.tcl

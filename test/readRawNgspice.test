@@ -120,9 +120,11 @@ test testRawFileClass-2 {test RawFile class object construction and reading asci
     set refData [readResultFile "${rawDataLoc}/vosc.csv"]
     set timeData [$traceTime getDataPoints]
     set traceData [$trace getDataPoints]
+    #puts $timeData
+    #puts [llength [lindex $refData 0]]
 } -body {
-    set timeMatch [matchList [lrange [lindex $refData 0] 0 end-1] $timeData]
-    set traceMatch [matchList [lrange [lindex $refData 1] 0 end-1] $traceData]
+    set timeMatch [matchList [lindex $refData 0] $timeData]
+    set traceMatch [matchList [lindex $refData 1] $traceData]
     if {$timeMatch && $traceMatch} {
         set result pass
     } else {
@@ -135,13 +137,13 @@ test testRawFileClass-2 {test RawFile class object construction and reading asci
 test testRawFileClass-3 {test RawFile class object construction and reading binary dc data, together with interfaces getTrace and getAxis} -setup {
     set data [RawFile new "${rawDataLoc}/dc.raw"]
     set traceAxis [$data configure -Axis]
-    set trace [$data getTrace i(vs1)]
-    set refData [readResultFile "${rawDataLoc}/ivs1.csv"]
+    set trace [$data getTrace v(out)]
+    set refData [readResultFile "${rawDataLoc}/vout.csv"]
     set axisData [$traceAxis getDataPoints]
     set traceData [$trace getDataPoints]
 } -body {
-    set axisMatch [matchList [lrange [lindex $refData 0] 0 end-1] $axisData]
-    set traceMatch [matchList [lrange [lindex $refData 1] 0 end-1] $traceData]
+    set axisMatch [matchList [lindex $refData 0] $axisData]
+    set traceMatch [matchList [lindex $refData 1] $traceData]
     if {$axisMatch && $traceMatch} {
         set result pass
     } else {
@@ -154,13 +156,13 @@ test testRawFileClass-3 {test RawFile class object construction and reading bina
 test testRawFileClass-4 {test RawFile class object construction and reading ascii dc data, together with interfaces getTrace and getAxis} -setup {
     set data [RawFile new "${rawDataLoc}/dc_ascii.raw"]
     set traceAxis [$data configure -Axis]
-    set trace [$data getTrace i(vs1)]
-    set refData [readResultFile "${rawDataLoc}/ivs1.csv"]
+    set trace [$data getTrace v(out)]
+    set refData [readResultFile "${rawDataLoc}/vout.csv"]
     set axisData [$traceAxis getDataPoints]
     set traceData [$trace getDataPoints]
 } -body {
-    set axisMatch [matchList [lrange [lindex $refData 0] 0 end-1] $axisData]
-    set traceMatch [matchList [lrange [lindex $refData 1] 0 end-1] $traceData]
+    set axisMatch [matchList [lindex $refData 0] $axisData]
+    set traceMatch [matchList [lindex $refData 1] $traceData]
     if {$axisMatch && $traceMatch} {
         set result pass
     } else {
@@ -178,10 +180,10 @@ test testRawFileClass-5 {test RawFile class object construction and reading bina
     set axisData [$traceAxis getDataPoints]
     set traceData [$trace getDataPoints]
 } -body {    
-    set axisMatchRe [matchList [lrange [lindex $refData 0 0] 0 end-1] [lindex $axisData 0]]
-    set traceMatchRe [matchList [lrange [lindex $refData 1 0] 0 end-1] [lindex $traceData 0]]
-    set axisMatchIm [matchList [lrange [lindex $refData 0 1] 0 end-1] [lindex $axisData 1]]
-    set traceMatchIm [matchList [lrange [lindex $refData 1 1] 0 end-1] [lindex $traceData 1]]
+    set axisMatchRe [matchList [lindex $refData 0 0] [lindex $axisData 0]]
+    set traceMatchRe [matchList [lindex $refData 1 0] [lindex $traceData 0]]
+    set axisMatchIm [matchList [lindex $refData 0 1] [lindex $axisData 1]]
+    set traceMatchIm [matchList [lindex $refData 1 1] [lindex $traceData 1]]
     if {$axisMatchRe && $traceMatchRe && $axisMatchIm && $traceMatchIm} {
         set result pass
     } else {
@@ -199,10 +201,10 @@ test testRawFileClass-6 {test RawFile class object construction and reading asci
     set axisData [$traceAxis getDataPoints]
     set traceData [$trace getDataPoints]
 } -body {    
-    set axisMatchRe [matchList [lrange [lindex $refData 0 0] 0 end-1] [lindex $axisData 0]]
-    set traceMatchRe [matchList [lrange [lindex $refData 1 0] 0 end-1] [lindex $traceData 0]]
-    set axisMatchIm [matchList [lrange [lindex $refData 0 1] 0 end-1] [lindex $axisData 1]]
-    set traceMatchIm [matchList [lrange [lindex $refData 1 1] 0 end-1] [lindex $traceData 1]]
+    set axisMatchRe [matchList [lindex $refData 0 0] [lindex $axisData 0]]
+    set traceMatchRe [matchList [lindex $refData 1 0] [lindex $traceData 0]]
+    set axisMatchIm [matchList [lindex $refData 0 1] [lindex $axisData 1]]
+    set traceMatchIm [matchList [lindex $refData 1 1] [lindex $traceData 1]]
     if {$axisMatchRe && $traceMatchRe && $axisMatchIm && $traceMatchIm} {
         set result pass
     } else {
@@ -216,7 +218,7 @@ test testRawFileClass-7 {test RawFile class object construction and reading asci
     set data [RawFile new "${rawDataLoc}/tran.raw"]
 } -body {    
     set traceAxis [$data getVariablesNames]
-} -result [list time v(n001) v(n002) v(n003) v(n004) v(n005) v(n006) v(n007) v(n008) v(n009) v(n010) v(n011) v(n012) v(n013) v(n014) v(n015) v(n016) v(osc_out) speedcheck v(vdd) i(vdd) v(vdd2) i(vmeasure)] -cleanup {
+} -result [list time v(vdd2) v(vdd) v(n2) v(n1) v(n3) v(n4) v(n5) v(n6) v(n7) v(n8) v(n9) v(n10) v(n11) v(n12) v(n13) v(n14) v(n15) v(n16) v(osc_out) i(vmeasure) i(vdd)] -cleanup {
     unset data traceAxis
 }
 
@@ -224,7 +226,7 @@ test testRawFileClass-8 {test RawFile class object construction and reading asci
     set data [RawFile new "${rawDataLoc}/tran.raw"]
 } -body {    
     set traceAxis [$data getVoltagesNames]
-} -result [list v(n001) v(n002) v(n003) v(n004) v(n005) v(n006) v(n007) v(n008) v(n009) v(n010) v(n011) v(n012) v(n013) v(n014) v(n015) v(n016) v(osc_out) v(vdd) v(vdd2)] -cleanup {
+} -result [list v(vdd2) v(vdd) v(n2) v(n1) v(n3) v(n4) v(n5) v(n6) v(n7) v(n8) v(n9) v(n10) v(n11) v(n12) v(n13) v(n14) v(n15) v(n16) v(osc_out)] -cleanup {
     unset data traceAxis
 }
 
@@ -232,7 +234,7 @@ test testRawFileClass-9 {test RawFile class object construction and reading asci
     set data [RawFile new "${rawDataLoc}/tran.raw"]
 } -body {    
     set traceAxis [$data getCurrentsNames]
-} -result [list i(vdd) i(vmeasure)] -cleanup {
+} -result [list i(vmeasure) i(vdd)] -cleanup {
     unset data traceAxis
 }
 
@@ -240,7 +242,7 @@ test testRawFileClass-10 {test RawFile class object construction and reading asc
     set data [RawFile new "${rawDataLoc}/tran.raw"]
 } -body {    
     set traceAxis [$data configure -RawParams]
-} -result [dict create Filename ${rawDataLoc}/tran.raw Title {* sw ring-oscillators} Date {Fri Aug  2 15} Plotname {Transient Analysis} Flags real {No. Variables} 23 {No. Points} 7488] -cleanup {
+} -result [dict create Filename ./raw_data_ngspice/tran.raw Title switch_oscillator Date {Thu Nov 28 21} Plotname {Transient Analysis} Flags real {No. Variables} 22 {No. Points} 7497] -cleanup {
     unset data traceAxis
 }
 
@@ -280,7 +282,7 @@ test testRawFileClass-13 {test RawFile class object construction and reading bin
     set data [RawFile new "${rawDataLoc}/tran.raw"]
 } -body {    
     set traces [$data getTracesStr]
-} -result [list {time time double} {v(n001) voltage double} {v(n002) voltage double} {v(n003) voltage double} {v(n004) voltage double} {v(n005) voltage double} {v(n006) voltage double} {v(n007) voltage double} {v(n008) voltage double} {v(n009) voltage double} {v(n010) voltage double} {v(n011) voltage double} {v(n012) voltage double} {v(n013) voltage double} {v(n014) voltage double} {v(n015) voltage double} {v(n016) voltage double} {v(osc_out) voltage double} {speedcheck time double} {v(vdd) voltage double} {i(vdd) current double} {v(vdd2) voltage double} {i(vmeasure) current double}] -cleanup {
+} -result [list {time time double} {v(vdd2) voltage double} {v(vdd) voltage double} {v(n2) voltage double} {v(n1) voltage double} {v(n3) voltage double} {v(n4) voltage double} {v(n5) voltage double} {v(n6) voltage double} {v(n7) voltage double} {v(n8) voltage double} {v(n9) voltage double} {v(n10) voltage double} {v(n11) voltage double} {v(n12) voltage double} {v(n13) voltage double} {v(n14) voltage double} {v(n15) voltage double} {v(n16) voltage double} {v(osc_out) voltage double} {i(vmeasure) current double} {i(vdd) current double}] -cleanup {
     unset data traces
 }
 
@@ -300,7 +302,7 @@ test testRawFileClass-15 {test RawFile class object construction and reading (wi
     }
     set vOscOut [dict get [$data getTracesData] v(osc_out)]
 } -body {    
-    set traceMatch [matchList [lrange [lindex $refData 0] 0 end-1] $vOscOut]
+    set traceMatch [matchList [lindex $refData 0] $vOscOut]
     if {$traceMatch} {
         set result pass
     } else {
