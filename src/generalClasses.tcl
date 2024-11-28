@@ -1263,12 +1263,20 @@ namespace eval ::SpiceGenTcl {
             }
             return [join $totalStr \n]
         }
-        method runAndRead {} {
+        method runAndRead {args} {
             # Invokes 'runAndRead', 'configure -Log' and 'configure -Data' methods from attached simulator.
+            #  -nodelete - flag to forbid simulation file deletion
+            set arguments [argparse {
+                -nodelete
+            }]
             if {[info exists Simulator]==0} {
                 error "Simulator is not attached to '[my configure -Name]' circuit"
             }
-            $Simulator runAndRead [my genSPICEString]
+            if {[info exists nodelete]} {
+                $Simulator runAndRead [my genSPICEString] -nodelete
+            } else {
+                $Simulator runAndRead [my genSPICEString]
+            }
             my configure -Log [$Simulator configure -Log]
             my configure -Data [$Simulator configure -Data]
         }

@@ -37,19 +37,23 @@ namespace eval ::SpiceGenTcl::Xyce::Simulators {
         # the name of last ran file
         property LastRunFileName
         variable LastRunFileName
-        constructor {name {runLocation /tmp}} {
+        constructor {name {runLocation .}} {
             # Creates batch ngspice simulator that can be attached to top-level Circuit.
             #  name - name of simulator object
             #  runLocation - location at which input netlist is stored and all output files will be saved,
-            #   default is system temporary folder at Linux system
+            #   default is current directory
             my configure -Name $name
 
             my configure -Command Xyce
             my configure -RunLocation $runLocation
         }
-        method runAndRead {circuitStr} {
+        method runAndRead {circuitStr args} {
             # Runs netlist circuit file.
             #  circuitStr - top-level netlist string
+            #  -nodelete - flag to forbid simulation file deletion
+            set arguments [argparse {
+                -nodelete
+            }]
             set firstLine [lindex [split $circuitStr \n] 0]
             set runLocation [my configure -RunLocation]
             set cirFile [open "${runLocation}/${firstLine}.cir" w+]
@@ -62,6 +66,11 @@ namespace eval ::SpiceGenTcl::Xyce::Simulators {
             my configure -LastRunFileName ${firstLine}
             my readLog
             my readData
+            if {[info exists nodelete]==0} {
+                file delete $rawFileName
+                file delete $logFileName
+                file delete $cirFileName
+            }
         }
         method readLog {} {
             # Reads log file of last simulation and save it's content to Log variable.
