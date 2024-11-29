@@ -1,15 +1,6 @@
-# SpiceGenTcl
 
-```ascii
-     .|'''.|            ||                   ..|'''.|                   |''||''|         '||'  
-     ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||  
-      ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||  
-    .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||  
-    |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||. 
-               ||                                                                             
-              ''''                                                                            
-```
-    
+<img src="docs/assets/img/spicegentcl_logo.svg" alt="drawing" width="700"/>
+
 This package provides Tcl interface to different SPICE and SPICE-like simulator, Ngspice, Xyce.
 It was inspired by [PySpice](https://github.com/PySpice-org/PySpice) project, object-oriented interface to
 SPICE-like simulators written in Python.
@@ -50,6 +41,7 @@ external dependency is the simulator itself.
 
 After simulator installation add path to executable to `PATH` environment variable.
 
+
 ## Documentation and tutorials
 
 Documentation could be found [here](https://georgtree.github.io/SpiceGenTcl/). 
@@ -64,8 +56,12 @@ Tcl syntax highlightning was done with [hl_tcl](https://github.com/aplsimple/hl_
 
 ## Supported platforms
 
-I personally use Kubuntu 22.04, and I haven't tested this on different platforms. 
-However, Tcl is a cross-platform language, and because this package is written in pure Tcl, 
+I personally use Kubuntu 24.04, and I also tested package on Windows 11. 
+On Kubuntu I use Tcl/Tk 9.0 compiled from sources, as well as Ngspice and Xyce.
+On Windows I use [Magicsplat](https://www.magicsplat.com/tcl-installer/) distribution of Tcl/Tk 9.0. For
+Ngspice and Xyce I use precompilled binaries.
+
+Tcl is a cross-platform language, and because this package is written in pure Tcl, 
 you can practically run it on any platform, including Windows, Linux (all flavors), and FreeBSD. 
 Ngspice is available as pre-compiled binaries for Linux and Windows, but it can also be compiled on FreeBSD.
 Xyce is availible as pre-compiled for Windows, RHEL and MacOS, but can be compiled to any other platform.
