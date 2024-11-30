@@ -17,15 +17,15 @@
 lappend auto_path "../"
 package require tcltest
 package require SpiceGenTcl
+package require math::constants
 namespace import ::tcltest::*
+::math::constants::constants radtodeg degtorad pi
+variable pi
 
 set epsilon 1e-8
 
 namespace import ::SpiceGenTcl::*
-set ngspiceNameSpc [namespace children ::SpiceGenTcl::Ngspice]
-foreach nameSpc $ngspiceNameSpc {
-    namespace import ${nameSpc}::*
-}
+importNgspice
 
 proc matchList {expected actual} {
     variable epsilon
@@ -53,14 +53,189 @@ test testSimulations-1 {test creation of circuit, run it with NgspiceBatch and r
     $circuit runAndRead
     set data [[$circuit configure -Data] getTracesData]
 } -body {
-    set traceMatch [matchList {0.0 0.6666666666666666 1.3333333333333333 2.0 \
-            2.6666666666666665 3.333333333333333} [dict get $data v(out)]]
-    return $traceMatch
-} -result 1 -cleanup {
+    lappend result [lmap voutVal [dict get $data v(out)] {format "%.3e" $voutVal}]
+    return $result
+} -result "{0.000e+00 6.667e-01 1.333e+00 2.000e+00 2.667e+00 3.333e+00}" -cleanup {
     file delete {./voltage divider netlist.cir}
     file delete {./voltage divider netlist.raw}
     file delete {./voltage divider netlist.log}
-    unset circuit simulator data traceMatch
+    unset circuit simulator data result
+}
+
+test testSimulations-2 {test diode IV simulation} -setup {
+    set circuit [Circuit new {diode IV}]
+    # add elements to circuit
+    $circuit add [D new 1 anode 0 -model diomod -area 1 -lm 1e-6]
+    $circuit add [Vdc new a anode 0 -dc 0]
+    $circuit add [DiodeModel new diomod -is 1e-12 -n 1.2 -rs 0.01 -cj0 1e-9 -trs1 0.001 -xti 5]
+    $circuit add [Dc new -src va -start 0 -stop 2 -incr 0.1]
+    set tempSt [Temp new 25]
+    $circuit add $tempSt
+    # add temperature sweep
+    set temps [list -55 25 85 125 175]
+    #set simulator with default 
+    set simulator [Batch new {batch1}]
+    # attach simulator object to circuit
+    $circuit configure -Simulator $simulator
+    # run circuit, change temperature, read log and data
+    foreach temp $temps {
+        $tempSt configure -Value $temp
+        $circuit runAndRead
+        set data [$circuit getDataDict]
+        foreach x [dict get $data v(anode)] y [dict get $data i(va)] {
+            set xf [format "%.3f" $x]
+            set yf [format "%.3f" [expr {-$y}]]
+            lappend xydata [list $xf $yf]
+        }    
+        lappend dataList $xydata
+        unset xydata
+    }
+} -body {
+    return $dataList
+} -result "{{0.000 -0.000} {0.100 0.000} {0.200 0.000} {0.300 0.000} {0.400 0.000} {0.500 0.000} {0.600 0.000}\
+{0.700 0.000} {0.800 0.001} {0.900 0.079} {1.000 2.490} {1.100 9.972} {1.200 19.251} {1.300 29.126} {1.400 39.270}\
+{1.500 49.598} {1.600 60.028} {1.700 70.526} {1.800 81.077} {1.900 91.669} {2.000 102.293}} {{0.000 -0.000}\
+{0.100 0.000} {0.200 0.000} {0.300 0.000} {0.400 0.000} {0.500 0.000} {0.600 0.000} {0.700 0.006} {0.800 0.136}\
+{0.900 1.941} {1.000 7.705} {1.100 15.555} {1.200 24.207} {1.300 33.227} {1.400 42.499} {1.500 51.909} {1.600 61.411}\
+{1.700 70.985} {1.800 80.612} {1.900 90.282} {2.000 99.987}} {{0.000 0.000} {0.100 0.000} {0.200 0.000} {0.300 0.000}\
+{0.400 0.000} {0.500 0.000} {0.600 0.007} {0.700 0.107} {0.800 1.175} {0.900 5.330} {1.000 11.959} {1.100 19.667}\
+{1.200 27.897} {1.300 36.405} {1.400 45.112} {1.500 53.942} {1.600 62.859} {1.700 71.844} {1.800 80.881} {1.900 89.961}\
+{2.000 99.075}} {{0.000 -0.000} {0.100 0.000} {0.200 0.000} {0.300 0.000} {0.400 0.000} {0.500 0.004} {0.600 0.045}\
+{0.700 0.462} {0.800 2.805} {0.900 7.988} {1.000 14.780} {1.100 22.346} {1.200 30.292} {1.300 38.510} {1.400 46.886}\
+{1.500 55.372} {1.600 63.941} {1.700 72.574} {1.800 81.257} {1.900 89.983} {2.000 98.742}} {{0.000 -0.000}\
+{0.100 0.000} {0.200 0.000} {0.300 0.000} {0.400 0.004} {0.500 0.034} {0.600 0.280} {0.700 1.704} {0.800 5.606}\
+{0.900 11.428} {1.000 18.259} {1.100 25.606} {1.200 33.251} {1.300 41.111} {1.400 49.108} {1.500 57.204} {1.600 65.376}\
+{1.700 73.608} {1.800 81.889} {1.900 90.209} {2.000 98.563}}" -cleanup {
+    file delete {./diode IV.cir}
+    file delete {./diode IV.raw}
+    file delete {./diode IV.log}
+    unset circuit simulator data tempSt
+}
+
+test testSimulations-3 {test diode CV simulation} -setup {
+    set circuit [Circuit new {diode CV}]
+    # add elements to circuit
+    $circuit add [D new 1 0 c -model diomod -area 1 -lm 1e-6]
+    set vdc [Vdc new a c nin -dc 0]
+    $circuit add $vdc
+    $circuit add [Vac new b nin 0 -ac 1]
+    $circuit add [DiodeModel new diomod -is 1e-12 -n 1.2 -rs 0.01 -cj0 1e-9 -trs1 0.001 -xti 5]
+    $circuit add [Ac new -variation lin -n 1 -fstart 1e5 -fstop 1e5]
+    # add voltage sweep
+    set voltSweep [lseq 0 20.0 1]
+    #set simulator with default 
+    set simulator [Batch new {batch1}]
+    # attach simulator object to circuit
+    $circuit configure -Simulator $simulator
+    # loop in which we run simulation, change reverse bias and read the results
+    foreach volt $voltSweep {
+        #set reverse voltage bias
+        $vdc setParamValue dc $volt
+        # run simulation
+        $circuit runAndRead
+        # get data object
+        set data [$circuit getDataDict]
+        set x $volt
+        # get imaginary part of current
+        set y [lindex [dict get $data i(va)] 0 1]
+        set xf [format "%.3e" $x]
+        set yf [format "%.2e" [expr {-$y/(2*$pi*1e5*1e-9)}]]
+        lappend xydata [list $xf $yf]
+    }
+} -body {
+    return $xydata
+} -result "{0.000e+00 1.00e+00} {1.000e+00 7.07e-01} {2.000e+00 5.77e-01} {3.000e+00 5.00e-01} {4.000e+00 4.47e-01}\
+{5.000e+00 4.08e-01} {6.000e+00 3.78e-01} {7.000e+00 3.54e-01} {8.000e+00 3.33e-01} {9.000e+00 3.16e-01}\
+{1.000e+01 3.02e-01} {1.100e+01 2.89e-01} {1.200e+01 2.77e-01} {1.300e+01 2.67e-01} {1.400e+01 2.58e-01}\
+{1.500e+01 2.50e-01} {1.600e+01 2.43e-01} {1.700e+01 2.36e-01} {1.800e+01 2.29e-01} {1.900e+01 2.24e-01}\
+{2.000e+01 2.18e-01}" -cleanup {
+    file delete {./diode CV.cir}
+    file delete {./diode CV.raw}
+    file delete {./diode CV.log}
+    unset circuit simulator data voltSweep vdc x xf y yf xydata
+}
+
+test testSimulations-4 {test simple differential pair simulation} -setup {
+    set circuit [Circuit new {simple differential pair}]
+    $circuit add [Vdc new cc 8 0 -dc 12]
+    $circuit add [Vdc new ee 9 0 -dc -12]
+    $circuit add [Vac new cm 1 0 -ac 1]
+    $circuit add [Vac new dm 1 11 -ac 1]
+    $circuit add [Q new 1 4 2 6 -model qnr]
+    $circuit add [Q new 2 5 3 6 -model qnl]
+    $circuit add [R new s1 11 2 -r 1e3]
+    $circuit add [R new s2 3 1 -r 1e3]
+    $circuit add [R new c1 4 8 -r 10e3]
+    $circuit add [R new c2 5 8 -r 10e3]
+    $circuit add [Q new 3 7 7 9 -model qnl]
+    $circuit add [Q new 4 6 7 9 -model qnr]
+    $circuit add [R new bias 7 8 -r 20e3]
+    $circuit add [BjtGPModel new qnl npn -bf 80 -rb 100 -cjc 2e-12 -tf 0.3e-9 -tr 6e-9 -cje 3e-12 -cjc 2e-12 -va 50]
+    $circuit add [BjtGPModel new qnr npn -bf 80 -rb 100 -cjc 2e-12 -tf 0.3e-9 -tr 6e-9 -cje 3e-12 -cjc 2e-12 -va 50]
+    $circuit add [SensDc new -outvar v(5,4)]
+    set simulator [Batch new {batch1}]
+    $circuit configure -Simulator $simulator
+    $circuit runAndRead
+    set data [$circuit getDataDict]
+    set vrc1 [dict get $data v(rc1)]
+    set vrc2 [dict get $data v(rc2)]
+} -body {
+    return [format "vrc1=%.3e vrc2=%.3e" $vrc1 $vrc2]
+} -result {vrc1=6.032e-04 vrc2=-6.032e-04} -cleanup {
+    file delete {./simple differential pair.cir}
+    file delete {./simple differential pair.raw}
+    file delete {./simple differential pair.log}
+    unset circuit simulator data vrc1 vrc2
+}
+
+test testSimulations-5 {test filter simulation} -setup {
+    set circuit [Circuit new {filter s-parameters}]
+    $circuit add [Vport new gen 1 0 -dc 0 -ac 1 -portnum 1]
+    $circuit add [L new 1 1 2 -l 0.058u]
+    $circuit add [C new 2 2 0 -c 40.84p]
+    $circuit add [L new 3 2 3 -l 0.128u]
+    $circuit add [C new 4 3 0 -c 47.91p]
+    $circuit add [L new 5 3 4 -l 0.128u]
+    $circuit add [C new 6 4 0 -c 40.48p]
+    $circuit add [L new 7 4 5 -l 0.058u]
+    $circuit add [L new a 5 6 -l 0.044u]
+    $circuit add [L new b 6 a -l 0.078u]
+    $circuit add [C new b a 0 -c 17.61p]
+    $circuit add [L new c 6 b -l 0.151u]
+    $circuit add [C new c b 0 -c 34.12p]
+    $circuit add [C new 7 6 7 -c 26.035p]
+    $circuit add [L new 8 7 0 -l 0.0653u]
+    $circuit add [C new 8 7 8 -c 20.8p]
+    $circuit add [L new 9 8 0 -l 0.055u]
+    $circuit add [C new 9 8 9 -c 20.8p]
+    $circuit add [L new 10 9 0 -l 0.653u]
+    $circuit add [C new 10 9 out -c 45.64p]
+    $circuit add [Vport new l out 0 -dc 0 -ac 0 -portnum 2]
+    $circuit add [Sp new -variation lin -n 10 -fstart 10meg -fstop 200meg]
+    set simulator [Batch new {batch1}]
+    $circuit configure -Simulator $simulator
+    $circuit runAndRead
+    set data [$circuit getDataDict]
+    set freq [dict get $data frequency]
+    set s11 [dict get $data v(s_1_1)]
+    set s21 [dict get $data v(s_2_1)]
+    set freq [lmap val $freq {lindex $val 0}]
+    set s11Mag [lmap s11Re [lmap val $s11 {lindex $val 0}] s11Im [lmap val $s11 {lindex $val 1}]\
+                        {expr {sqrt($s11Re**2+$s11Im**2)}}]
+    set s21Mag [lmap s21Re [lmap val $s21 {lindex $val 0}] s21Im [lmap val $s21 {lindex $val 1}]\
+                        {expr {sqrt($s21Re**2+$s21Im**2)}}]
+} -body {
+    lappend result [lmap freqVal $freq {format "%.3e" $freqVal}]
+    lappend result [lmap s11MagVal $s11Mag {format "%.3e" $s11MagVal}]
+    lappend result [lmap s21MagVal $s21Mag {format "%.3e" $s21MagVal}]
+    return $result
+} -result "{1.000e+07 3.111e+07 5.222e+07 7.333e+07 9.444e+07 1.156e+08 1.367e+08 1.578e+08 1.789e+08 2.000e+08}\
+{1.000e+00 1.000e+00 9.999e-01 9.984e-01 7.393e-01 9.085e-01 1.000e+00 9.997e-01 1.000e+00 1.000e+00}\
+{5.704e-07 1.902e-03 1.192e-02 5.649e-02 6.734e-01 4.180e-01 5.601e-03 2.238e-02 6.791e-03 2.550e-03}" -cleanup {
+    file delete {./filter s-parameters.cir}
+    file delete {./filter s-parameters.raw}
+    file delete {./filter s-parameters.log}
+    unset circuit simulator data freq s11 s21 s11Mag s21Mag result
 }
 
 cleanupTests
