@@ -26,7 +26,7 @@ lappend auto_path $libDir
 set sourceDir "${dir}/src"
 
 source [file join $libDir argparse argparse.tcl]
-source [file join $sourceDir generalClasses.tcl_i]
+source [file join $sourceDir generalClasses.tcl]
 source [file join $sourceDir specElementsClassesCommon.tcl]
 source [file join $sourceDir ngspice specElementsClassesNgspice.tcl]
 source [file join $sourceDir ngspice specAnalysesClassesNgspice.tcl]

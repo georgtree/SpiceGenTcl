@@ -43,6 +43,14 @@ test testDcClass-2 {test Dc class} -setup {
     unset res result
 }
 
+test testDcClass-3 {test Dc class} -setup {
+    set res [Dc new -stop 5 -start 0 -incr 0.1 -src v1]
+} -body {
+    set result [$res genSPICEString]
+} -result ".dc v1 0 5 0.1" -cleanup {
+    unset res result
+}
+
 ###  Ac class tests 
     
 test testAcClass-1 {test Ac class} -setup {
