@@ -31,13 +31,41 @@ set srcList [list generalClasses.tcl specElementsClassesCommon.tcl\
 foreach file $srcList {
     exec [file join ${nagelfarPath} nagelfar.tcl] -instrument [file join ${currentDir} .. src {*}$file]
 }
+# rename initial source files, then rename instrument files to the original name of the source file
+foreach file $srcList {
+    if {[llength $file]>1} {
+        file rename [file join ${currentDir} .. src [lindex $file 0] "[lindex $file 1]"]\
+                [file join ${currentDir} .. src [lindex $file 0] "[lindex $file 1]_orig"]
+        file rename [file join ${currentDir} .. src [lindex $file 0] "[lindex $file 1]_i"]\
+                [file join ${currentDir} .. src [lindex $file 0] "[lindex $file 1]"]
+    } else {
+        file rename [file join ${currentDir} .. src "[lindex $file 0]"]\
+                [file join ${currentDir} .. src "[lindex $file 0]_orig"]
+        file rename [file join ${currentDir} .. src "[lindex $file 0]_i"]\
+                [file join ${currentDir} .. src "[lindex $file 0]"]
+    }
+}
+
 # tests run
 exec tclsh [file join ${currentDir} testAll.tcl]
+# revert renaming
+foreach file $srcList {
+    if {[llength $file]>1} {
+        file rename [file join ${currentDir} .. src [lindex $file 0] "[lindex $file 1]"]\
+                [file join ${currentDir} .. src [lindex $file 0] "[lindex $file 1]_i"]
+        file rename [file join ${currentDir} .. src [lindex $file 0] "[lindex $file 1]_orig"]\
+                [file join ${currentDir} .. src [lindex $file 0] "[lindex $file 1]"]
+    } else {
+        file rename [file join ${currentDir} .. src "[lindex $file 0]"]\
+                [file join ${currentDir} .. src "[lindex $file 0]_i"]
+        file rename [file join ${currentDir} .. src "[lindex $file 0]_orig"]\
+                [file join ${currentDir} .. src "[lindex $file 0]"]
+    }
+}
 # create markup files
 foreach file $srcList {
     lappend results [exec [file join ${nagelfarPath} nagelfar.tcl] -markup [file join ${currentDir} .. src {*}$file]]
 }
-
 # view results
 foreach file $srcList {
     if {[llength $file]>1} {
