@@ -183,11 +183,7 @@
     }
     <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dict</font></b> exists <font color=#4A181B>$arguments</font> q]} {
         <b><font color=#923B23>set</font></b> qVal [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$arguments</font> q]
-        <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dict</font></b> exists <font color=#4A181B>$arguments</font> beh]} {
-            <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;q <font color=#4A181B>$</font>qVal -eq&quot;</font>
-        } <b><font color=#923B23>else</font></b> {
-            <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Charge of capacitor can't be specified without '-beh' switch&quot;</font>
-        }
+        <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;q <font color=#4A181B>$</font>qVal -eq&quot;</font>
     }
     <b><font color=#923B23>dict</font></b> for {paramName value} <font color=#4A181B>$arguments</font> {
         <b><font color=#923B23>if</font></b> {<font color=#4A181B>$paramName</font> ni {c q beh model}} {
@@ -740,7 +736,9 @@
         <b><font color=#923B23>set</font></b> params <font color=#035103>&quot;&quot;</font>
     }
     <b><font color=#923B23>set</font></b> params [<b><font color=#923B23>linsert</font></b> <font color=#4A181B>$params</font> 0 <font color=#035103>&quot;model <font color=#4A181B>$</font>subName -posnocheck&quot;</font>]
-    <b><font color=#923B23>set</font></b> params [<b><font color=#923B23>linsert</font></b> <font color=#4A181B>$params</font> 1 <font color=#035103>&quot;params PARAMS: -posnocheck&quot;</font>]
+    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> exists paramDefList]} {
+        <b><font color=#923B23>set</font></b> params [<b><font color=#923B23>linsert</font></b> <font color=#4A181B>$params</font> 1 <font color=#035103>&quot;params PARAMS: -posnocheck&quot;</font>]
+    }
     <b><font color=#923B23>next</font></b> x<font color=#4A181B>$name</font> <font color=#4A181B>$pinsList</font> <font color=#4A181B>$params</font>
 }</pre></div>
 </div><h3 class='ruffclass'><a name='::SpiceGenTcl::Xyce::BasicDevices::VSw'>VSw</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices" title="::SpiceGenTcl::Xyce::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>

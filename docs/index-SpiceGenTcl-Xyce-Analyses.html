@@ -85,9 +85,7 @@
     <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;variation <font color=#4A181B>[</font>dict get <font color=#4A181B>$</font>arguments variation<font color=#4A181B>]</font> -posnocheck&quot;</font>
     <b><font color=#923B23>set</font></b> paramsOrder [<b><font color=#923B23>list</font></b> n fstart fstop]
     <b><font color=#923B23>foreach</font></b> param <font color=#4A181B>$paramsOrder</font> {
-        <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dict</font></b> exists <font color=#4A181B>$arguments</font> <font color=#4A181B>$param</font>]} {
-            <b><font color=#923B23>dict</font></b> append argsOrdered <font color=#4A181B>$param</font> [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$arguments</font> <font color=#4A181B>$param</font>]
-        }
+        <b><font color=#923B23>dict</font></b> append argsOrdered <font color=#4A181B>$param</font> [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$arguments</font> <font color=#4A181B>$param</font>]
     }
     <b><font color=#923B23>dict</font></b> for {paramName value} <font color=#4A181B>$argsOrdered</font> {
         <b><font color=#923B23>if</font></b> {([<b><font color=#923B23>llength</font></b> <font color=#4A181B>$value</font>]&gt;1) && ([<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$value</font> 1]==<font color=#035103>&quot;-eq&quot;</font>)} {
@@ -164,9 +162,7 @@
     <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;src <font color=#4A181B>[</font>dict get <font color=#4A181B>$</font>arguments src<font color=#4A181B>]</font> -posnocheck&quot;</font>
     <b><font color=#923B23>set</font></b> paramsOrder [<b><font color=#923B23>list</font></b> start stop incr]
     <b><font color=#923B23>foreach</font></b> param <font color=#4A181B>$paramsOrder</font> {
-        <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dict</font></b> exists <font color=#4A181B>$arguments</font> <font color=#4A181B>$param</font>]} {
-            <b><font color=#923B23>dict</font></b> append argsOrdered <font color=#4A181B>$param</font> [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$arguments</font> <font color=#4A181B>$param</font>]
-        }
+        <b><font color=#923B23>dict</font></b> append argsOrdered <font color=#4A181B>$param</font> [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$arguments</font> <font color=#4A181B>$param</font>]
     }
     <b><font color=#923B23>dict</font></b> for {paramName value} <font color=#4A181B>$argsOrdered</font> {
         <b><font color=#923B23>if</font></b> {([<b><font color=#923B23>llength</font></b> <font color=#4A181B>$value</font>]&gt;1) && ([<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$value</font> 1]==<font color=#035103>&quot;-eq&quot;</font>)} {

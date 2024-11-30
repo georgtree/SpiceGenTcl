@@ -180,11 +180,7 @@
     }
     <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dict</font></b> exists <font color=#4A181B>$arguments</font> q]} {
         <b><font color=#923B23>set</font></b> qVal [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$arguments</font> q]
-        <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dict</font></b> exists <font color=#4A181B>$arguments</font> beh]} {
-            <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;q <font color=#4A181B>$</font>qVal -eq&quot;</font>
-        } <b><font color=#923B23>else</font></b> {
-            <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Charge of capacitor can't be specified without '-beh' switch&quot;</font>
-        }
+        <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;q <font color=#4A181B>$</font>qVal -eq&quot;</font>
     }
     <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dict</font></b> exists <font color=#4A181B>$arguments</font> model]} {
         <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;model <font color=#4A181B>[</font>dict get <font color=#4A181B>$</font>arguments model<font color=#4A181B>]</font> -posnocheck&quot;</font>
