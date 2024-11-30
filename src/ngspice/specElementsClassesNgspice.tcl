@@ -199,11 +199,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             }
             if {[dict exists $arguments q]} {
                 set qVal [dict get $arguments q]
-                if {[dict exists $arguments beh]} {
-                    lappend params "q $qVal -eq"
-                } else {
-                    error "Charge of capacitor can't be specified without '-beh' switch"
-                }
+                lappend params "q $qVal -eq"
             }
             if {[dict exists $arguments model]} {
                 lappend params "model [dict get $arguments model] -posnocheck"

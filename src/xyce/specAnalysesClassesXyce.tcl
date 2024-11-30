@@ -56,9 +56,7 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
             lappend params "src [dict get $arguments src] -posnocheck"
             set paramsOrder [list start stop incr]
             foreach param $paramsOrder {
-                if {[dict exists $arguments $param]} {
-                    dict append argsOrdered $param [dict get $arguments $param]
-                }
+                dict append argsOrdered $param [dict get $arguments $param]
             }
             dict for {paramName value} $argsOrdered {
                 if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
@@ -105,9 +103,7 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
             lappend params "variation [dict get $arguments variation] -posnocheck"
             set paramsOrder [list n fstart fstop]
             foreach param $paramsOrder {
-                if {[dict exists $arguments $param]} {
-                    dict append argsOrdered $param [dict get $arguments $param]
-                }
+                dict append argsOrdered $param [dict get $arguments $param]
             }
             dict for {paramName value} $argsOrdered {
                 if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {

@@ -1,0 +1,259 @@
+#  .|'''.|            ||                   ..|'''.|                   |''||''|         '||'
+#  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||  
+#   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||  
+# .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||  
+# |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||. 
+#            ||                                                                             
+#           ''''                                                                            
+# specElemsClassesNgspice.test
+# Tests Ngspice elements classes
+#
+# Copyright (c) 2024 George Yashin, georgtree@gmail.com
+#
+# MIT License
+# See the file "LICENSE.txt" for information on usage and redistribution
+# of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+
+lappend auto_path "../"
+package require tcltest
+package require SpiceGenTcl
+namespace import ::tcltest::*
+namespace import ::SpiceGenTcl::*
+importCommon
+
+
+###  Basic devices tests 
+
+####  Resistor class tests 
+    
+test testResistorClass-1 {test Resistor class} -setup {
+    set res [Resistor new 1 netp netm -r 1e3 -tc1 1 -temp 25]
+} -body {
+    set result [$res genSPICEString]
+} -result "r1 netp netm 1e3 tc1=1 temp=25" -cleanup {
+    unset res result
+}
+
+test testResistorClass-2 {test Resistor class} -setup {
+    set res [Resistor new 1 netp netm -r 1e3]
+} -body {
+    set result [$res genSPICEString]
+} -result "r1 netp netm 1e3" -cleanup {
+    unset res result
+}
+
+test testResistorClass-3 {test Resistor class with equation positional parameter} -setup {
+    set res [Resistor new 1 netp netm -r {{6*x+y} -eq}]
+} -body {
+    set result [$res genSPICEString]
+} -result "r1 netp netm \{6*x+y\}" -cleanup {
+    unset res result
+}
+
+test testResistorClass-4 {test Resistor class with equation positional parameter and combination of normal and equation parameters} -setup {
+    set res [Resistor new 1 netp netm -r {{6*x+y} -eq} -tc1 7 -tc2 {"x^2" -eq}]
+} -body {
+    set result [$res genSPICEString]
+} -result "r1 netp netm \{6*x+y\} tc1=7 tc2=\{x^2\}" -cleanup {
+    unset res result
+}
+
+test testRClass-5 {test R alias for Resistor class} -setup {
+    set res [R new 1 netp netm -r 1e3 -tc1 1 -temp 25]
+} -body {
+    set result [$res genSPICEString]
+} -result "r1 netp netm 1e3 tc1=1 temp=25" -cleanup {
+    unset res result
+}  
+      
+test testRClass-6 {test R alias for Resistor class with model switch} -setup {
+    set res [R new 1 netp netm -r 1 -temp 25]
+} -body {
+    set result [$res genSPICEString]
+} -result "r1 netp netm 1 temp=25" -cleanup {
+    unset res result
+} 
+
+
+####  Capacitor class tests
+    
+test testCapacitorClass-1 {test Capacitor class} -setup {
+    set cap [Capacitor new 1 netp netm -c 1e-6 -tc1 1 -temp 25]
+} -body {
+    set result [$cap genSPICEString]
+} -result "c1 netp netm 1e-6 tc1=1 temp=25" -cleanup {
+    unset cap result
+}
+
+test testCapacitorClass-2 {test Capacitor class} -setup {
+    set cap [Capacitor new 1 netp netm -c 1e-6]
+} -body {
+    set result [$cap genSPICEString]
+} -result "c1 netp netm 1e-6" -cleanup {
+    unset cap result
+}       
+  
+
+####  C class tests
+
+test testCClass-1 {test C alias for Capacitor class with model switch} -setup {
+    set cap [C new 1 netp netm -c 1e-6 -temp 25]
+} -body {
+    set result [$cap genSPICEString]
+} -result "c1 netp netm 1e-6 temp=25" -cleanup {
+    unset cap result
+}
+
+test testCClass-2 {test C alias for Capacitor class} -setup {
+    set cap [C new 1 netp netm -c 1e-6 -tc1 1 -temp 25]
+} -body {
+    set result [$cap genSPICEString]
+} -result "c1 netp netm 1e-6 tc1=1 temp=25" -cleanup {
+    unset cap result
+}
+
+####  Inductor class tests 
+    
+test testInductorClass-1 {test Inductor class} -setup {
+    set ind [Inductor new 1 netp netm -l 1e-6 -tc1 1 -temp 25]
+} -body {
+    set result [$ind genSPICEString]
+} -result "l1 netp netm 1e-6 tc1=1 temp=25" -cleanup {
+    unset ind result
+}
+
+test testInductorClass-2 {test Inductor class} -setup {
+    set ind [Inductor new 1 netp netm -l 1e-6]
+} -body {
+    set result [$ind genSPICEString]
+} -result "l1 netp netm 1e-6" -cleanup {
+    unset ind result
+}
+
+test testInductorClass-8 {test Inductor class with l as equation} -setup {
+    set ind [Inductor new 1 netp netm -l "l1*l2 -eq" -tc1 1]
+} -body {
+    set result [$ind genSPICEString]
+} -result "l1 netp netm {l1*l2} tc1=1" -cleanup {
+    unset ind result
+}
+
+###  Subcircuits classes tests
+
+####  SubcircuitInstance class tests 
+    
+test testSubcircuitInstanceClass-1 {test creation of SubcircuitInstance class instance with genSPICEString interface} -setup {
+    set subInst [SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar -eq}}]
+} -body {
+    set result [$subInst genSPICEString]
+} -result {x1 net1 net2 rcnet r=1 c={cpar}} -cleanup {
+    unset subInst result
+}
+
+####  X class tests 
+
+test testXClass-1 {test X alias for SubcircuitInstance class} -setup {
+    set subInst [X new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar -eq}}]
+} -body {
+    set result [$subInst genSPICEString]
+} -result {x1 net1 net2 rcnet r=1 c={cpar}} -cleanup {
+    unset subInst result
+}
+####  SubcircuitInstanceAuto class tests 
+    
+test testSubcircuitInstanceAutoClass-1 {test creation of SubcircuitInstanceAuto class instance with genSPICEString interface} -setup {
+    oo::class create RCnet {
+        superclass Subcircuit
+        constructor {} {
+            # define external pins of subcircuit
+            set pins {plus minus}
+            # define input parameters of subcircuit
+            set params {{r 100} {c 1e-6}}
+            # add elements to subcircuit definition
+            my add [R new 1 net1 net2 -r {r -eq}]
+            my add [C new 1 net2 net3 -c {c -eq}]
+            # pass name, list of pins and list of parameters to Subcircuit constructor
+            next rcnet $pins $params
+        }
+    }
+    set subcircuit [RCnet new]
+} -body {
+    set subInst1 [SubcircuitInstanceAuto new $subcircuit 2 {net1 net2} -r 1 -c {cpar -eq}]
+    set result [$subInst1 genSPICEString]   
+} -result {x2 net1 net2 rcnet r=1 c={cpar}} -cleanup {
+    rename RCnet ""
+    unset subcircuit subInst1 result
+}
+
+test testSubcircuitInstanceAutoClass-2 {test creation of SubcircuitInstanceAuto class instance with wrong number of nodes} -setup {
+    oo::class create RCnet {
+        superclass Subcircuit
+        constructor {} {
+            # define external pins of subcircuit
+            set pins {plus minus}
+            # define input parameters of subcircuit
+            set params {{r 100} {c 1e-6}}
+            # add elements to subcircuit definition
+            my add [R new 1 net1 net2 -r {r -eq}]
+            my add [C new 1 net2 net3 -c {c -eq}]
+            # pass name, list of pins and list of parameters to Subcircuit constructor
+            next rcnet $pins $params
+        }
+    }
+    set subcircuit [RCnet new]
+} -body {
+    catch {SubcircuitInstanceAuto new $subcircuit 2 {net1 net2 net3} -r 1 -c {cpar -eq}} errorStr
+    return $errorStr  
+} -result {Wrong number of nodes '3' in definition, should be '2'} -cleanup {
+    rename RCnet ""
+    unset subcircuit errorStr
+}
+
+test testSubcircuitInstanceAutoClass-3 {test creation of SubcircuitInstanceAuto class instance with wrong class of input object} -setup {
+    oo::class create RCnet {
+        superclass Subcircuit
+        constructor {} {
+            # define external pins of subcircuit
+            set pins {plus minus}
+            # define input parameters of subcircuit
+            set params {{r 100} {c 1e-6}}
+            # add elements to subcircuit definition
+            my add [R new 1 net1 net2 -r {r -eq}]
+            my add [C new 1 net2 net3 -c {c -eq}]
+            # pass name, list of pins and list of parameters to Subcircuit constructor
+            next rcnet $pins $params
+        }
+    }
+    set subcircuit [RCnet new]
+    set res [R new 1 netp netm -r 1e3 -tc1 1 -temp 25]
+} -body {
+    catch {SubcircuitInstanceAuto new $res 2 {net1 net2 net3} -r 1 -c {cpar -eq}} errorStr
+    return $errorStr  
+} -result {Wrong object class '::SpiceGenTcl::Common::BasicDevices::R' is passed as subcktObj, should be '::SpiceGenTcl::Subcircuit'} -cleanup {
+    rename RCnet ""
+    unset subcircuit res errorStr
+}
+
+test testSubcircuitInstanceAutoClass-4 {test creation of SubcircuitInstanceAuto class instance with genSPICEString interface without parameters} -setup {
+    oo::class create RCnet {
+        superclass Subcircuit
+        constructor {} {
+            # define external pins of subcircuit
+            set pins {plus minus}
+            # add elements to subcircuit definition
+            my add [R new 1 net1 net2 -r {r -eq}]
+            my add [C new 1 net2 net3 -c {c -eq}]
+            # pass name, list of pins and list of parameters to Subcircuit constructor
+            next rcnet $pins ""
+        }
+    }
+    set subcircuit [RCnet new]
+} -body {
+    set subInst1 [SubcircuitInstanceAuto new $subcircuit 2 {net1 net2}]
+    set result [$subInst1 genSPICEString]   
+} -result {x2 net1 net2 rcnet} -cleanup {
+    rename RCnet ""
+    unset subcircuit subInst1 result
+}
+
+cleanupTests

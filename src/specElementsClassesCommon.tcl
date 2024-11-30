@@ -112,6 +112,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 -tc2=
                 -ic=
             }]
+            set cVal [dict get $arguments c]
             if {([llength $cVal]>1) && ([lindex $cVal 1]=="-eq")} {
                 lappend params "c [lindex $cVal 0] -poseq"
             } else {

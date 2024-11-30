@@ -251,6 +251,14 @@ test testInductorClass-3 {test Inductor class with model switch} -setup {
     unset ind result
 }
 
+test testInductorClass-4 {test Inductor class with l as equation} -setup {
+    set ind [Inductor new 1 netp netm -l "l1*l2 -eq" -tc1 1]
+} -body {
+    set result [$ind genSPICEString]
+} -result "l1 netp netm {l1*l2} tc1=1" -cleanup {
+    unset ind result
+}
+
 ####  L class tests 
 
 test testLClass-1 {test L alias for Inductor class} -setup {
@@ -320,6 +328,22 @@ test testGenSwitchClass-1 {test GenSwitch class} -setup {
 } -body {
     set result [$csw genSPICEString]
 } -result "s1 net1 0 sw1 control={I(VMON)}" -cleanup {
+    unset csw result
+}
+
+test testGenSwitchClass-2 {test GenSwitch class} -setup {
+    set csw [GenSwitch new 1 net1 0 -model sw1 -on -control {I(VMON)}]
+} -body {
+    set result [$csw genSPICEString]
+} -result "s1 net1 0 sw1 on control={I(VMON)}" -cleanup {
+    unset csw result
+}
+
+test testGenSwitchClass-3 {test GenSwitch class} -setup {
+    set csw [GenSwitch new 1 net1 0 -model sw1 -off -control {I(VMON)}]
+} -body {
+    set result [$csw genSPICEString]
+} -result "s1 net1 0 sw1 off control={I(VMON)}" -cleanup {
     unset csw result
 }
 
@@ -967,6 +991,14 @@ test testBehaviouralSourceClass-3 {test BehaviouralSource class with different a
     unset b result
 }  
 
+test testBehaviouralSourceClass-4 {test BehaviouralSource class with equation in parameter} -setup {
+    catch {BehaviouralSource new 1 netp netm} errorStr
+} -body {
+    return $errorStr
+} -result "Equation must be specified as argument to -i or -v" -cleanup {
+    unset errorStr
+}
+
 ####  B class tests 
 
 test testBClass-1 {test B class} -setup {
@@ -1013,6 +1045,22 @@ test testDiodeClass-5 {test Diode class} -setup {
     unset dio result
 }
 
+test testDiodeClass-6 {test Diode class} -setup {
+    set dio [Diode new 1 netp netm -model diomod -area {area -eq} -pj {pj -eq} -temp 25]
+} -body {
+    set result [$dio genSPICEString]
+} -result "d1 netp netm diomod {area} {pj} temp=25" -cleanup {
+    unset dio result
+}
+
+test testDiodeClass-7 {test Diode class} -setup {
+    catch {Diode new 1 netp netm -model diomod -temp 25 -custparams ab 1e-12 lg {lg -eq} ls} errorStr
+} -body {
+    return $errorStr
+} -result "Custom parameters list must be even length" -cleanup {
+    unset errorStr
+}
+
 ####  D class tests 
 
 test testDClass-1 {test RSem alias for Diode class} -setup {
@@ -1057,6 +1105,22 @@ test testBjtClass-4 {test Bjt class} -setup {
     unset bjt result
 }
 
+test testBjtClass-5 {test Bjt class} -setup {
+    set bjt [Bjt new 1 netc netb nete -model bjtmod -ns nets -tj nettj -area {area -eq} -temp 25]
+} -body {
+    set result [$bjt genSPICEString]
+} -result "q1 netc netb nete \[nets\] nettj bjtmod {area} temp=25" -cleanup {
+    unset bjt result
+}
+
+test testBjtClass-6 {test Bjt class} -setup {
+    set bjt [Bjt new 1 netc netb nete -model bjtmod]
+} -body {
+    set result [$bjt genSPICEString]
+} -result "q1 netc netb nete bjtmod" -cleanup {
+    unset bjt result
+}
+
 ####  Q class tests 
 
 test testQClass-1 {test Q class} -setup {
@@ -1075,6 +1139,22 @@ test testJfetClass-1 {test Jfet class} -setup {
 } -body {
     set result [$jfet genSPICEString]
 } -result "j1 netd netg nets jfetmod 1e-3 temp=25" -cleanup {
+    unset jfet result
+}
+
+test testJfetClass-2 {test Jfet class} -setup {
+    set jfet [Jfet new 1 netd netg nets -model jfetmod -area {area -eq} -temp 25]
+} -body {
+    set result [$jfet genSPICEString]
+} -result "j1 netd netg nets jfetmod {area} temp=25" -cleanup {
+    unset jfet result
+}
+
+test testJfetClass-3 {test Jfet class} -setup {
+    set jfet [Jfet new 1 netd netg nets -model jfetmod]
+} -body {
+    set result [$jfet genSPICEString]
+} -result "j1 netd netg nets jfetmod" -cleanup {
     unset jfet result
 }
 
@@ -1112,6 +1192,22 @@ test testMesfetClass-2 {test Mesfet class} -setup {
 } -body {
     set result [$mesfet genSPICEString]
 } -result "z1 netd netg nets mesfetmod {area}" -cleanup {
+    unset mesfet result
+}
+
+test testMesfetClass-3 {test Mesfet class} -setup {
+    set mesfet [Mesfet new 1 netd netg nets -model mesfetmod -area 1e-3 -temp 25]
+} -body {
+    set result [$mesfet genSPICEString]
+} -result "z1 netd netg nets mesfetmod 1e-3 temp=25" -cleanup {
+    unset mesfet result
+}
+
+test testMesfetClass-4 {test Mesfet class} -setup {
+    set mesfet [Mesfet new 1 netd netg nets -model mesfetmod]
+} -body {
+    set result [$mesfet genSPICEString]
+} -result "z1 netd netg nets mesfetmod" -cleanup {
     unset mesfet result
 }
 
@@ -1224,7 +1320,7 @@ test testMClass-1 {test M class} -setup {
 } -result "m1 netd netg nets mosfetmod l=1e-6 w={w/nf}" -cleanup {
     unset mosfet result
 }
-    
+###  Subcircuits classes tests    
 ####  SubcircuitInstance class tests 
     
 test testSubcircuitInstanceClass-1 {test creation of SubcircuitInstance class instance with genSPICEString interface} -setup {
@@ -1320,6 +1416,26 @@ test testSubcircuitInstanceAutoClass-3 {test creation of SubcircuitInstanceAuto 
     unset subcircuit res errorStr
 }
 
-
+test testSubcircuitInstanceAutoClass-4 {test creation of SubcircuitInstanceAuto class instance with genSPICEString interface without parameters} -setup {
+    oo::class create RCnet {
+        superclass Subcircuit
+        constructor {} {
+            # define external pins of subcircuit
+            set pins {plus minus}
+            # add elements to subcircuit definition
+            my add [R new 1 net1 net2 -r {r -eq}]
+            my add [C new 1 net2 net3 -c {c -eq}]
+            # pass name, list of pins and list of parameters to Subcircuit constructor
+            next rcnet $pins ""
+        }
+    }
+    set subcircuit [RCnet new]
+} -body {
+    set subInst1 [SubcircuitInstanceAuto new $subcircuit 2 {net1 net2}]
+    set result [$subInst1 genSPICEString]   
+} -result {x2 net1 net2 rcnet} -cleanup {
+    rename RCnet ""
+    unset subcircuit subInst1 result
+}
 
 cleanupTests

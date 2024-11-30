@@ -194,11 +194,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             }
             if {[dict exists $arguments q]} {
                 set qVal [dict get $arguments q]
-                if {[dict exists $arguments beh]} {
-                    lappend params "q $qVal -eq"
-                } else {
-                    error "Charge of capacitor can't be specified without '-beh' switch"
-                }
+                lappend params "q $qVal -eq"
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {c q beh model}} {
@@ -440,7 +436,9 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
                 set params ""
             }
             set params [linsert $params 0 "model $subName -posnocheck"]
-            set params [linsert $params 1 "params PARAMS: -posnocheck"]
+            if {[info exists paramDefList]} {
+                set params [linsert $params 1 "params PARAMS: -posnocheck"]
+            }
             next x$name $pinsList $params
         }
     }

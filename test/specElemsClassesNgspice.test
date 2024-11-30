@@ -150,7 +150,7 @@ test testCapacitorClass-3 {test Capacitor class witch C behavioural equation} -s
     unset cap result
 }
        
-test testCapacitorClass-4 {test Capacitor class witch Q behavioural equation} -setup {
+test testCapacitorClass-4 {test Capacitor class with Q behavioural equation} -setup {
     set cap [Capacitor new 1 netp netm -q "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1]
 } -body {
     set result [$cap genSPICEString]
@@ -187,6 +187,7 @@ test testCapacitorClass-8 {test Capacitor class} -body {
 } -result "Capacitor value must be specified with '-c value'" -cleanup {
     unset errorStr
 }
+  
 
 ####  C class tests
 
@@ -270,6 +271,30 @@ test testInductorClass-6 {test Inductor class with beh switch with different arg
     set result [$ind genSPICEString]
 } -result "l1 netp netm l={V(a)+V(b)+pow(V(c),2)} tc1=1" -cleanup {
     unset ind result
+}
+
+test testInductorClass-7 {test Inductor class with l as equation} -setup {
+    set ind [Inductor new 1 netp netm -l "l1*l2 -eq" -beh -tc1 1]
+} -body {
+    set result [$ind genSPICEString]
+} -result "l1 netp netm l={l1*l2} tc1=1" -cleanup {
+    unset ind result
+}
+
+test testInductorClass-8 {test Inductor class with l as equation} -setup {
+    set ind [Inductor new 1 netp netm -l "l1*l2 -eq" -tc1 1]
+} -body {
+    set result [$ind genSPICEString]
+} -result "l1 netp netm {l1*l2} tc1=1" -cleanup {
+    unset ind result
+}
+
+test testInductorClass-9 {test Inductor class without specified l, error generated} -setup {
+    catch {Inductor new 1 netp netm -tc1 1} errorStr
+} -body {
+    return $errorStr
+} -result "Inductor value must be specified with '-l value'" -cleanup {
+    unset errorStr
 } 
 
 ####  L class tests
@@ -323,6 +348,14 @@ test testVSwitchClass-4 {test VSwitch class} -body {
     unset errorStr
 }
 
+test testVSwitchClass-5 {test VSwitch class} -setup {
+    set vsw [VSwitch new 1 net1 0 netc 0 -model sw1 -off]
+} -body {
+    set result [$vsw genSPICEString]
+} -result "s1 net1 0 netc 0 sw1 off" -cleanup {
+    unset vsw result
+}
+
 ####  CSwitch class tests 
     
 test testCSwitchClass-1 {test CSwitch class} -setup {
@@ -338,6 +371,14 @@ test testCSwitchClass-2 {test CSwitch class} -setup {
 } -body {
     set result [$csw genSPICEString]
 } -result "w1 net1 0 v1 sw1" -cleanup {
+    unset csw result
+}
+
+test testCSwitchClass-3 {test CSwitch class} -setup {
+    set csw [CSwitch new 1 net1 0 -icntrl v1 -model sw1 -off]
+} -body {
+    set result [$csw genSPICEString]
+} -result "w1 net1 0 v1 sw1 off" -cleanup {
     unset csw result
 }
 
@@ -943,11 +984,19 @@ test testVccsClass-2 {test Vccs class} -setup {
     unset vccs result
 }
 
-test testVccsClass-2 {test Vccs class} -setup {
+test testVccsClass-3 {test Vccs class} -setup {
     set vccs [Vccs new 1 net1 0 netc 0 -trcond {trcond -eq}]
 } -body {
     set result [$vccs genSPICEString]
 } -result "g1 net1 0 netc 0 \{trcond\}" -cleanup {
+    unset vccs result
+}
+
+test testVccsClass-4 {test Vccs class} -setup {
+    set vccs [Vccs new 1 net1 0 netc 0 -trcond 10 -m {m -eq}]
+} -body {
+    set result [$vccs genSPICEString]
+} -result "g1 net1 0 netc 0 10 m={m}" -cleanup {
     unset vccs result
 }
 
@@ -1020,6 +1069,14 @@ test testCccsClass-3 {test Cccs class} -setup {
 } -body {
     set result [$cccs genSPICEString]
 } -result "f1 net1 0 vc \{gain\}" -cleanup {
+    unset cccs result
+}
+
+test testCccsClass-4 {test Cccs class} -setup {
+    set cccs [Cccs new 1 net1 0 -consrc vc -gain 10 -m {m -eq}]
+} -body {
+    set result [$cccs genSPICEString]
+} -result "f1 net1 0 vc 10 m={m}" -cleanup {
     unset cccs result
 }
 
@@ -1101,6 +1158,14 @@ test testBehaviouralSourceClass-4 {test BehaviouralSource class with equation in
     set result [$b genSPICEString]
 } -result "b1 netp netm v={V(a)+V(b)+pow(V(c),2)} tc1={tc1}" -cleanup {
     unset b result
+}
+
+test testBehaviouralSourceClass-5 {test BehaviouralSource class with equation in parameter} -setup {
+    catch {BehaviouralSource new 1 netp netm -tc1 {tc1 -eq}} errorStr
+} -body {
+    return $errorStr
+} -result "Equation must be specified as argument to -i or -v" -cleanup {
+    unset errorStr
 }
 
 ####  B class tests 
@@ -1195,6 +1260,30 @@ test testJfetClass-1 {test Jfet class} -setup {
     unset jfet result
 }
 
+test testJfetClass-2 {test Jfet class} -setup {
+    set jfet [Jfet new 1 netd netg nets -model jfetmod -area {area*area -eq} -temp 25]
+} -body {
+    set result [$jfet genSPICEString]
+} -result "j1 netd netg nets jfetmod {area*area} temp=25" -cleanup {
+    unset jfet result
+}
+
+test testJfetClass-3 {test Jfet class} -setup {
+    set jfet [Jfet new 1 netd netg nets -model jfetmod -area 1e-3 -temp 25 -off]
+} -body {
+    set result [$jfet genSPICEString]
+} -result "j1 netd netg nets jfetmod 1e-3 off temp=25" -cleanup {
+    unset jfet result
+}
+
+test testJfetClass-4 {test Jfet class} -setup {
+    set jfet [Jfet new 1 netd netg nets -model jfetmod -temp 25]
+} -body {
+    set result [$jfet genSPICEString]
+} -result "j1 netd netg nets jfetmod temp=25" -cleanup {
+    unset jfet result
+}
+
 ####  J class tests 
 
 test testJClass-1 {test J class} -setup {
@@ -1236,6 +1325,22 @@ test testMesfetClass-2 {test Mesfet class} -setup {
 } -body {
     set result [$mesfet genSPICEString]
 } -result "z1 netd netg nets mesfetmod {area} off ic=1,2" -cleanup {
+    unset mesfet result
+}
+
+test testMesfetClass-3 {test Mesfet class} -setup {
+    set mesfet [Mesfet new 1 netd netg nets -model mesfetmod -area 1e-3 -off]
+} -body {
+    set result [$mesfet genSPICEString]
+} -result "z1 netd netg nets mesfetmod 1e-3 off" -cleanup {
+    unset mesfet result
+}
+
+test testMesfetClass-4 {test Mesfet class} -setup {
+    set mesfet [Mesfet new 1 netd netg nets -model mesfetmod]
+} -body {
+    set result [$mesfet genSPICEString]
+} -result "z1 netd netg nets mesfetmod" -cleanup {
     unset mesfet result
 }
 
@@ -1337,6 +1442,14 @@ test testMosfetClass-11 {test Mosfet class} -setup {
     set result $errorStr
 } -result "Custom parameters list must be even length" -cleanup {
     unset result
+}
+
+test testMosfetClass-12 {test Mosfet class} -setup {
+    set mosfet [Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -off]
+} -body {
+    set result [$mosfet genSPICEString]
+} -result "m1 netd netg nets mosfetmod off l=1e-6 w=10e-3" -cleanup {
+    unset mosfet result
 }
 
 ####  M class tests 
@@ -1446,6 +1559,26 @@ test testSubcircuitInstanceAutoClass-3 {test creation of SubcircuitInstanceAuto 
     unset subcircuit res errorStr
 }
 
-
+test testSubcircuitInstanceAutoClass-4 {test creation of SubcircuitInstanceAuto class instance with genSPICEString interface without parameters} -setup {
+    oo::class create RCnet {
+        superclass Subcircuit
+        constructor {} {
+            # define external pins of subcircuit
+            set pins {plus minus}
+            # add elements to subcircuit definition
+            my add [R new 1 net1 net2 -r {r -eq}]
+            my add [C new 1 net2 net3 -c {c -eq}]
+            # pass name, list of pins and list of parameters to Subcircuit constructor
+            next rcnet $pins ""
+        }
+    }
+    set subcircuit [RCnet new]
+} -body {
+    set subInst1 [SubcircuitInstanceAuto new $subcircuit 2 {net1 net2}]
+    set result [$subInst1 genSPICEString]   
+} -result {x2 net1 net2 rcnet} -cleanup {
+    rename RCnet ""
+    unset subcircuit subInst1 result
+}
 
 cleanupTests

@@ -70,6 +70,14 @@ test testSensClass-1 {test SensDc class} -setup {
 } -result ".sens objfunc={0.5*(V(B)-3.0)**2.0} param=R1:R,R2:R" -cleanup {
     unset res result
 }
+
+test testSensClass-2 {test SensDc class} -setup {
+    set res [Sens new -objfunc "0.5*(V(B)-3.0)**2.0" -param "R1:R,R2:R"]
+} -body {
+    set result [$res genSPICEString]
+} -result ".sens objfunc={0.5*(V(B)-3.0)**2.0} param=R1:R,R2:R" -cleanup {
+    unset res result
+}
     
 ###  Tran class tests 
     

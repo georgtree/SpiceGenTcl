@@ -69,6 +69,14 @@ test testAcClass-2 {test Ac class} -setup {
     unset res result
 }
 
+test testAcClass-3 {test Ac class} -setup {
+    set res [Ac new -fstop 1e6 -n 1000 -fstart 1 -variation lin]
+} -body {
+    set result [$res genSPICEString]
+} -result ".ac lin 1000 1 1e6" -cleanup {
+    unset res result
+}
+
 ###  Sp class tests 
     
 test testSpClass-1 {test Sp class} -setup {
@@ -89,6 +97,14 @@ test testSpClass-2 {test Sp class} -setup {
 
 test testSpClass-3 {test Sp class} -setup {
     set res [Sp new -variation lin -n 1000 -fstart 1 -fstop 1e6 -donoise]
+} -body {
+    set result [$res genSPICEString]
+} -result ".sp lin 1000 1 1e6 1" -cleanup {
+    unset res result
+}
+
+test testSpClass-4 {test Sp class} -setup {
+    set res [Sp new -n 1000 -fstart 1 -fstop 1e6 -donoise -variation lin]
 } -body {
     set result [$res genSPICEString]
 } -result ".sp lin 1000 1 1e6 1" -cleanup {

@@ -20,7 +20,14 @@ namespace eval ::SpiceGenTcl {
             ParameterDefault ParameterEquation ParameterPositionalEquation Device Model RawString Comment Include\
             Options ParamStatement Temp Netlist Circuit Library Subcircuit Analysis Simulator Dataset Axis Trace\
             EmptyTrace RawFile
-    namespace export importNgspice importXyce
+    namespace export importNgspice importXyce importCommon
+    
+    proc importCommon {} {
+        # Imports all ::SpiceGenTcl::Common commands to caller namespace
+        uplevel 1 {foreach nameSpc [namespace children ::SpiceGenTcl::Common] {
+            namespace import ${nameSpc}::*
+        }}
+    }
     
     proc importNgspice {} {
         # Imports all ::SpiceGenTcl::Ngspice commands to caller namespace
