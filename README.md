@@ -52,6 +52,7 @@ external dependency is the simulator itself.
 After simulator installation add path to executable to `PATH` environment variable.
 
 For code coverage test [nagelfar](https://nagelfar.sourceforge.net/) is used, commit 845924 of master branch.
+
 For view test coverage diffs [eskil](http://eskil.tcl.tk/index.html/doc/trunk/htdocs/index.html) is used.
 
 ## Documentation and tutorials
