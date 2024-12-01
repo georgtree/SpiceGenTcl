@@ -76,6 +76,13 @@ On Kubuntu I use Tcl/Tk 9.0 compiled from sources, as well as Ngspice and Xyce.
 On Windows I use [Magicsplat](https://www.magicsplat.com/tcl-installer/) distribution of Tcl/Tk 9.0. For
 Ngspice and Xyce I use precompilled binaries.
 
+<font color="red">**Note**</font>: on Windows by default Ngspice save raw file into ascii format, to pass all tests
+(because of different numbers formatting - scientific by default) you need to set binary format by default in .spiceinit
+by this line:
+```spice
+set filetype=binary
+```
+
 Tcl is a cross-platform language, and because this package is written in pure Tcl, 
 you can practically run it on any platform, including Windows, Linux (all flavors), and FreeBSD. 
 Ngspice is available as pre-compiled binaries for Linux and Windows, but it can also be compiled on FreeBSD.
