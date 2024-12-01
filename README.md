@@ -9,6 +9,8 @@ SPICE-like simulators written in Python.
 
 ![Static Badge](https://img.shields.io/badge/license-MIT-blue)
 
+![Static Badge](https://img.shields.io/badge/Tcl_version-9.0-blue)
+
 ![Static Badge](https://img.shields.io/badge/Kubuntu_24.04-pass-green)
 
 ![Static Badge](https://img.shields.io/badge/Windows_11-pass-green)
