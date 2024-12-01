@@ -16,9 +16,10 @@
 
 package require Tcl 9.0
 package require textutil::split
+package require csv
 namespace import ::tcl::mathop::*
 
-package provide SpiceGenTcl 0.52
+package provide SpiceGenTcl 0.53
 
 set dir [file dirname [file normalize [info script]]]
 set libDir "${dir}/lib"

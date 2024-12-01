@@ -10,6 +10,7 @@ namespace eval FAQ {
         - [How to get raw data after simulation?]
         - [How to get the names of all vectors in raw file?]
         - [How to get log file after simulation?]
+        - [How to save result traces in comma-separated file format (csv)?]
         
         ## Where to find list of availible arguments for devices, models and analyses?
         For the selected simulator, you need to open the documentation for the corresponding namespace, such as
@@ -188,6 +189,44 @@ namespace eval FAQ {
         Example:
         ```tcl
         puts [$circuit configure -Log]
+        ```
+
+        ## How to save result traces in comma-separated file format (csv)?
+
+        After simulation is done, you can use [::SpiceGenTcl::Circuit] class method [::SpiceGenTcl::Circuit::getDataCsv]
+        to get string formatted with csv. You can get all traces with the flag `-all`, or select individual traces
+        by providing name after `-traces` switch. Also you can define column separator after the flag `-sep`.
+
+        For example, we modify `resistor_divider.tcl` example and convert `v(in)` and `v(out)` traces to csv string:
+        ```tcl
+        set circuit [Circuit new {voltage divider netlist}]
+        $circuit add [Vdc new 1 in 0 -dc 1]
+        $circuit add [R new 1 in out -r 1e3]
+        $circuit add [R new 2 out 0 -r 2e3]
+        $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1]
+        set simulator [Batch new {batch1}]
+        $circuit configure -Simulator $simulator
+        $circuit runAndRead
+        set data [$circuit getDataCsv -traces v(in) v(out)]
+        puts $data
+        ```
+
+        Resulted string is:
+        ```csv
+        v(in),v(out)
+        0.0,0.0
+        1.0,0.6666666666666666
+        2.0,1.3333333333333333
+        3.0,2.0
+        4.0,2.6666666666666665
+        5.0,3.333333333333333
+        ```
+
+        Then we can save this string to file:
+        ```tcl
+        set file [open file.csv w+]
+        puts $file $data
+        close $file
         ```
     }
 

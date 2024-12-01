@@ -6,7 +6,7 @@
 <body>
 <div class='ruff-layout'>
 <header class='ruff-layout-header ruff-hd'>
-<a style='text-decoration:none;' href='index.html'>Tcl SpiceGenTcl package (v0.52)</a>
+<a style='text-decoration:none;' href='index.html'>Tcl SpiceGenTcl package (v0.53)</a>
 
 
             <div id="ruffButtonBar">
@@ -26,6 +26,7 @@
 <li><a href="index-FAQ.html#::FAQ-How to get raw data after simulation?" title="How to get raw data after simulation?" >How to get raw data after simulation?</a></li>
 <li><a href="index-FAQ.html#::FAQ-How to get the names of all vectors in raw file?" title="How to get the names of all vectors in raw file?" >How to get the names of all vectors in raw file?</a></li>
 <li><a href="index-FAQ.html#::FAQ-How to get log file after simulation?" title="How to get log file after simulation?" >How to get log file after simulation?</a></li>
+<li><a href="index-FAQ.html#::FAQ-How to save result traces in comma-separated file format (csv)?" title="How to save result traces in comma-separated file format (csv)?" >How to save result traces in comma-separated file format (csv)?</a></li>
 </ul>
 <h2 class='ruff'><a name='::FAQ-Where to find list of availible arguments for devices, models and analyses?'></a>Where to find list of availible arguments for devices, models and analyses?<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
@@ -162,6 +163,41 @@
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>puts</font></b> [<font color=#4A181B>$circuit</font> configure <font color=#463e11>-Log</font>]
 </pre>
 
+</figure><h2 class='ruff'><a name='::FAQ-How to save result traces in comma-separated file format (csv)?'></a>How to save result traces in comma-separated file format (csv)?<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
+<div style='clear:both;'></div>
+<p class='ruff'>After simulation is done, you can use <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> class method <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::getDataCsv" title="::SpiceGenTcl::Circuit::getDataCsv" class='ruff_cmd'>::SpiceGenTcl::Circuit::getDataCsv</a> to get string formatted with csv. You can get all traces with the flag <code><font color=#463e11>-all</font></code>, or select individual traces by providing name after <code><font color=#463e11>-traces</font></code> switch. Also you can define column separator after the flag <code><font color=#463e11>-sep</font></code>.</p>
+<p class='ruff'>For example, we modify <code>resistor_divider.tcl</code> example and convert <code>v(in)</code> and <code>v(out)</code> traces to csv string:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> circuit [<b><font color=#923B23>Circuit</font></b> new {voltage divider netlist}]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new 1 in 0 <font color=#463e11>-dc</font> 1]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new 1 in out <font color=#463e11>-r</font> 1e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new 2 out 0 <font color=#463e11>-r</font> 2e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Dc</font></b> new <font color=#463e11>-src</font> v1 <font color=#463e11>-start</font> 0 <font color=#463e11>-stop</font> 5 <font color=#463e11>-incr</font> 1]
+<b><font color=#923B23>set</font></b> simulator [<b><font color=#923B23>Batch</font></b> new {batch1}]
+<font color=#4A181B>$circuit</font> configure <font color=#463e11>-Simulator</font> <font color=#4A181B>$simulator</font>
+<font color=#4A181B>$circuit</font> runAndRead
+<b><font color=#923B23>set</font></b> data [<font color=#4A181B>$circuit</font> getDataCsv <font color=#463e11>-traces</font> v(in) v(out)]
+<b><font color=#923B23>puts</font></b> <font color=#4A181B>$data</font>
+</pre>
+
+</figure><p class='ruff'>Resulted string is:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>v(in),v(out)
+0.0,0.0
+1.0,0.6666666666666666
+2.0,1.3333333333333333
+3.0,2.0
+4.0,2.6666666666666665
+5.0,3.333333333333333
+</pre>
+
+</figure><p class='ruff'>Then we can save this string to file:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> file [<b><font color=#923B23>open</font></b> file.csv w+]
+<b><font color=#923B23>puts</font></b> <font color=#4A181B>$file</font> <font color=#4A181B>$data</font>
+<b><font color=#923B23>close</font></b> <font color=#4A181B>$file</font>
+</pre>
+
 </figure></main><nav class='ruff-nav'><ul ><li class='ruff-toc1'><a style='padding-top:2px;' href='index.html'>Start page</a></li>
 <li class='ruff-toc1'><a href='index-docindex.html' accesskey='i'>Index</a></li>
 <hr>
@@ -183,5 +219,5 @@
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html'>SpiceGenTcl::Xyce::SemiconductorDevices</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-Analyses.html'>SpiceGenTcl::Xyce::Analyses</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-Simulators.html'>SpiceGenTcl::Xyce::Simulators</a></li>
-<hr><li class='ruff-toc2'><a href='#::FAQ-Where to find list of availible arguments for devices, models and analyses?'>Where to find list of availible arguments for devices, models and analyses?</a></li><li class='ruff-toc2'><a href='#::FAQ-How to use different simulators for the same circuit (managing namespaces)?'>How to use different simulators for the same circuit (managing namespaces)?</a></li><li class='ruff-toc2'><a href='#::FAQ-How to change parameter of existing element?'>How to change parameter of existing element?</a></li><li class='ruff-toc2'><a href='#::FAQ-Is scaling suffixes allowed?'>Is scaling suffixes allowed?</a></li><li class='ruff-toc2'><a href='#::FAQ-How to change node name connected to pin of existing element?'>How to change node name connected to pin of existing element?</a></li><li class='ruff-toc2'><a href='#::FAQ-How to find the list of optional parameters for elements?'>How to find the list of optional parameters for elements?</a></li><li class='ruff-toc2'><a href='#::FAQ-How to get raw data after simulation?'>How to get raw data after simulation?</a></li><li class='ruff-toc2'><a href='#::FAQ-How to get the names of all vectors in raw file?'>How to get the names of all vectors in raw file?</a></li><li class='ruff-toc2'><a href='#::FAQ-How to get log file after simulation?'>How to get log file after simulation?</a></li></ul></nav><footer class='ruff-layout-footer ruff-ft'><div style='float: right;'>Document generated by <a href='https://ruff.magicsplat.com'>Ruff!</a></div><div>&copy; George Yashin</div></footer>
+<hr><li class='ruff-toc2'><a href='#::FAQ-Where to find list of availible arguments for devices, models and analyses?'>Where to find list of availible arguments for devices, models and analyses?</a></li><li class='ruff-toc2'><a href='#::FAQ-How to use different simulators for the same circuit (managing namespaces)?'>How to use different simulators for the same circuit (managing namespaces)?</a></li><li class='ruff-toc2'><a href='#::FAQ-How to change parameter of existing element?'>How to change parameter of existing element?</a></li><li class='ruff-toc2'><a href='#::FAQ-Is scaling suffixes allowed?'>Is scaling suffixes allowed?</a></li><li class='ruff-toc2'><a href='#::FAQ-How to change node name connected to pin of existing element?'>How to change node name connected to pin of existing element?</a></li><li class='ruff-toc2'><a href='#::FAQ-How to find the list of optional parameters for elements?'>How to find the list of optional parameters for elements?</a></li><li class='ruff-toc2'><a href='#::FAQ-How to get raw data after simulation?'>How to get raw data after simulation?</a></li><li class='ruff-toc2'><a href='#::FAQ-How to get the names of all vectors in raw file?'>How to get the names of all vectors in raw file?</a></li><li class='ruff-toc2'><a href='#::FAQ-How to get log file after simulation?'>How to get log file after simulation?</a></li><li class='ruff-toc2'><a href='#::FAQ-How to save result traces in comma-separated file format (csv)?'>How to save result traces in comma-separated file format (csv)?</a></li></ul></nav><footer class='ruff-layout-footer ruff-ft'><div style='float: right;'>Document generated by <a href='https://ruff.magicsplat.com'>Ruff!</a></div><div>&copy; George Yashin</div></footer>
 </div></body></html>

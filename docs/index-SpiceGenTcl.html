@@ -6,7 +6,7 @@
 <body>
 <div class='ruff-layout'>
 <header class='ruff-layout-header ruff-hd'>
-<a style='text-decoration:none;' href='index.html'>Tcl SpiceGenTcl package (v0.52)</a>
+<a style='text-decoration:none;' href='index.html'>Tcl SpiceGenTcl package (v0.53)</a>
 
 
             <div id="ruffButtonBar">
@@ -396,6 +396,7 @@
 <tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="DuplChecker.duplListCheck" class='ruff_cmd'>DuplChecker.duplListCheck</a></td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::genSPICEString" title="genSPICEString" class='ruff_cmd'>genSPICEString</a></td><td>Creates circuit string for SPICE netlist.</td></tr>
 <tr><td><code>getAllElemNames</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Netlist::getAllElemNames" title="Netlist.getAllElemNames" class='ruff_cmd'>Netlist.getAllElemNames</a></td></tr>
+<tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::getDataCsv" title="getDataCsv" class='ruff_cmd'>getDataCsv</a></td><td>Returns string with csv formatting containing all data.</td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::getDataDict" title="getDataDict" class='ruff_cmd'>getDataDict</a></td><td>Method to get dictionary with raw data vectors.</td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::getElement" title="getElement" class='ruff_cmd'>getElement</a></td><td>Gets particular element object reference by its name.</td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::runAndRead" title="runAndRead" class='ruff_cmd'>runAndRead</a></td><td>Invokes 'runAndRead', 'configure -Log' and 'configure -Data' methods from attached simulator.</td></tr>
@@ -502,6 +503,25 @@
         <b><font color=#923B23>lappend</font></b> totalStr [<font color=#4A181B>$element</font> genSPICEString]
     }
     <b><font color=#ca14ca>return</font></b> [<b><font color=#923B23>join</font></b> <font color=#4A181B>$totalStr</font> \n]
+}</pre></div>
+</div><h4 class='ruffmethod'><a name='::SpiceGenTcl::Circuit::getDataCsv'>getDataCsv</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Circuit'>Circuit</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
+<div style='clear:both;'></div>
+<p class='ruff'>Returns string with csv formatting containing all data</p>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT getDataCsv</span> <span class='ruff_arg'>?args?</span></div>
+<h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
+<tr><td><code><font color=#463e11>-all</font></code></td><td>Select all traces.</td></tr>
+<tr><td><code><font color=#463e11>-sep</font></code></td><td>Separator of columns, default is comma.</td></tr>
+<tr><td><code><font color=#463e11>-traces</font></code></td><td>Select names of traces to return.</td></tr>
+</table>
+<h5 class='ruff'>Return value</h5><p class='ruff'>Returns string with csv formatting containing all data</p>
+<div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Circuit_getDataCsv' href="javascript:toggleSource('SpiceGenTcl_Circuit_getDataCsv')">Show source</a></p>
+<div id='SpiceGenTcl_Circuit_getDataCsv' class='ruff_dyn_src'><pre><b><font color=#ca14ca>method</font></b> getDataCsv {args} {
+
+    <i><font color=#4b5d50># Returns string with csv formatting containing all data</font></i>
+    <i><font color=#4b5d50>#  -all - select all traces</font></i>
+    <i><font color=#4b5d50>#  -traces - select names of traces to return</font></i>
+    <i><font color=#4b5d50>#  -sep - separator of columns, default is comma</font></i>
+    <b><font color=#ca14ca>return</font></b> [[<b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-Data</font>] getTracesCsv {<b><font color=#923B23>*</font></b>}<font color=#4A181B>$args</font>]
 }</pre></div>
 </div><h4 class='ruffmethod'><a name='::SpiceGenTcl::Circuit::getDataDict'>getDataDict</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Circuit'>Circuit</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
@@ -2293,6 +2313,7 @@
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile::getCurrentsNames" title="getCurrentsNames" class='ruff_cmd'>getCurrentsNames</a></td><td>Returns list that contains names of all current variables.</td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile::getTrace" title="getTrace" class='ruff_cmd'>getTrace</a></td><td>Returns trace object reference by it's name.</td></tr>
+<tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile::getTracesCsv" title="getTracesCsv" class='ruff_cmd'>getTracesCsv</a></td><td>Returns string with csv formatting containing all data.</td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile::getTracesData" title="getTracesData" class='ruff_cmd'>getTracesData</a></td><td>Returns dictionary that contains all data in value and name as a key.</td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile::getTracesStr" title="getTracesStr" class='ruff_cmd'>getTracesStr</a></td><td>Returns information about all Traces in raw file in form of string.</td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile::getVariablesNames" title="getVariablesNames" class='ruff_cmd'>getVariablesNames</a></td><td>Returns list that contains names of all variables.</td></tr>
@@ -2544,6 +2565,56 @@
         <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Trace with name '<font color=#4A181B>$</font>traceName' was not found in raw file '<font color=#4A181B>[</font>my configure -Path<font color=#4A181B>]</font>' list of traces&quot;</font>
     }
     <b><font color=#ca14ca>return</font></b> <font color=#4A181B>$traceFound</font>
+}</pre></div>
+</div><h4 class='ruffmethod'><a name='::SpiceGenTcl::RawFile::getTracesCsv'>getTracesCsv</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile" title="::SpiceGenTcl::RawFile" class='ruff_cmd'>::SpiceGenTcl::RawFile</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawFile'>RawFile</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
+<div style='clear:both;'></div>
+<p class='ruff'>Returns string with csv formatting containing all data</p>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT getTracesCsv</span> <span class='ruff_arg'>?args?</span></div>
+<h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
+<tr><td><code><font color=#463e11>-all</font></code></td><td>Select all traces.</td></tr>
+<tr><td><code><font color=#463e11>-sep</font></code></td><td>Separator of columns, default is comma.</td></tr>
+<tr><td><code><font color=#463e11>-traces</font></code></td><td>Select names of traces to return.</td></tr>
+</table>
+<h5 class='ruff'>Return value</h5><p class='ruff'>Returns string with csv formatting containing all data</p>
+<div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_RawFile_getTracesCsv' href="javascript:toggleSource('SpiceGenTcl_RawFile_getTracesCsv')">Show source</a></p>
+<div id='SpiceGenTcl_RawFile_getTracesCsv' class='ruff_dyn_src'><pre><b><font color=#ca14ca>method</font></b> getTracesCsv {args} {
+
+    <i><font color=#4b5d50># Returns string with csv formatting containing all data</font></i>
+    <i><font color=#4b5d50>#  -all - select all traces</font></i>
+    <i><font color=#4b5d50>#  -traces - select names of traces to return</font></i>
+    <i><font color=#4b5d50>#  -sep - separator of columns, default is comma</font></i>
+    <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> {
+        {<font color=#463e11>-all</font> <font color=#463e11>-forbid</font> {traces}}
+        {<font color=#463e11>-traces</font> <font color=#463e11>-catchall</font> <font color=#463e11>-forbid</font> {all}}
+        {<font color=#463e11>-sep</font>= <font color=#463e11>-default</font> {,}}
+    }]
+    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dict</font></b> exists <font color=#4A181B>$arguments</font> all]} {
+        <b><font color=#923B23>set</font></b> tracesDict [<b><font color=#ca14ca>my</font></b> getTracesData]
+        <b><font color=#923B23>set</font></b> tracesList [<b><font color=#923B23>list</font></b> [<b><font color=#923B23>dict</font></b> keys <font color=#4A181B>$tracesDict</font>]]
+        <b><font color=#923B23>for</font></b> {<b><font color=#923B23>set</font></b> i 0} {<font color=#4A181B>$i</font>&lt;[<b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-NPoints</font>]} {<b><font color=#923B23>incr</font></b> i} {
+            <b><font color=#923B23>dict</font></b> for {traceName traceValues} <font color=#4A181B>$tracesDict</font> {
+                <b><font color=#923B23>lappend</font></b> row [<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$traceValues</font> <font color=#4A181B>$i</font>]
+            }
+            <b><font color=#923B23>lappend</font></b> tracesList <font color=#4A181B>$row</font>
+            <b><font color=#923B23>unset</font></b> row
+        }
+    } <b><font color=#923B23>elseif</font></b> {[<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$arguments</font> traces]!=<font color=#035103>&quot;&quot;</font>} {
+        <b><font color=#923B23>foreach</font></b> traceName [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$arguments</font> traces] {
+            <b><font color=#923B23>set</font></b> traceObj [<b><font color=#ca14ca>my</font></b> getTrace <font color=#4A181B>$traceName</font>]
+            <b><font color=#923B23>dict</font></b> append tracesDict [<font color=#4A181B>$traceObj</font> configure <font color=#463e11>-Name</font>] [<font color=#4A181B>$traceObj</font> getDataPoints]
+        }
+        <b><font color=#923B23>set</font></b> tracesList [<b><font color=#923B23>list</font></b> [<b><font color=#923B23>dict</font></b> keys <font color=#4A181B>$tracesDict</font>]]
+        <b><font color=#923B23>for</font></b> {<b><font color=#923B23>set</font></b> i 0} {<font color=#4A181B>$i</font>&lt;[<b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-NPoints</font>]} {<b><font color=#923B23>incr</font></b> i} {
+            <b><font color=#923B23>dict</font></b> for {traceName traceValues} <font color=#4A181B>$tracesDict</font> {
+                <b><font color=#923B23>lappend</font></b> row [<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$traceValues</font> <font color=#4A181B>$i</font>]
+            }
+            <b><font color=#923B23>lappend</font></b> tracesList <font color=#4A181B>$row</font>
+            <b><font color=#923B23>unset</font></b> row
+        }
+    } <b><font color=#923B23>else</font></b> {
+        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Arguments '-all' or '-traces traceName1 traceName2 ...' must be provided to 'getTracesCsv' method&quot;</font>
+    }
+    <b><font color=#ca14ca>return</font></b> [::csv::joinlist <font color=#4A181B>$tracesList</font> [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$arguments</font> sep]]
 }</pre></div>
 </div><h4 class='ruffmethod'><a name='::SpiceGenTcl::RawFile::getTracesData'>getTracesData</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile" title="::SpiceGenTcl::RawFile" class='ruff_cmd'>::SpiceGenTcl::RawFile</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawFile'>RawFile</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
@@ -3073,6 +3144,7 @@
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::del'>del</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT del&lt;/span&gt; &lt;span class='ruff_arg'&gt;elemName&lt;/span&gt;</pre>Deletes element from the circuit by its name.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::detachSimulator'>detachSimulator</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT detachSimulator&lt;/span&gt; </pre>Removes <code><b><font color=#923B23>Simulator</font></b></code> object reference from <code><b><font color=#923B23>Circuit</font></b></code>.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre>Creates circuit string for SPICE netlist.
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::getDataCsv'>getDataCsv</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getDataCsv&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Returns string with csv formatting containing all data
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::getDataDict'>getDataDict</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getDataDict&lt;/span&gt; </pre>Method to get dictionary with raw data vectors.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::getElement'>getElement</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getElement&lt;/span&gt; &lt;span class='ruff_arg'&gt;elemName&lt;/span&gt;</pre>Gets particular element object reference by its name.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::runAndRead'>runAndRead</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT runAndRead&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Invokes 'runAndRead', 'configure -Log' and 'configure -Data' methods from attached simulator.
@@ -3164,6 +3236,7 @@
 &lt;span class='ruff_cmd'&gt;<b><font color=#923B23>RawFile</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;path ?traces2read? ?simulator?&lt;/span&gt;</pre>Creates RawFile object.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawFile::getCurrentsNames'>getCurrentsNames</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getCurrentsNames&lt;/span&gt; </pre>Returns list that contains names of all current variables
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawFile::getTrace'>getTrace</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getTrace&lt;/span&gt; &lt;span class='ruff_arg'&gt;traceName&lt;/span&gt;</pre>Returns trace object reference by it's name
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawFile::getTracesCsv'>getTracesCsv</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getTracesCsv&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Returns string with csv formatting containing all data
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawFile::getTracesData'>getTracesData</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getTracesData&lt;/span&gt; </pre>Returns dictionary that contains all data in value and name as a key
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawFile::getTracesStr'>getTracesStr</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getTracesStr&lt;/span&gt; </pre>Returns information about all Traces in raw file in form of string
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawFile::getVariablesNames'>getVariablesNames</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getVariablesNames&lt;/span&gt; </pre>Returns list that contains names of all variables

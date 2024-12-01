@@ -5,7 +5,7 @@ This package provides Tcl interface to different SPICE and SPICE-like simulator,
 It was inspired by [PySpice](https://github.com/PySpice-org/PySpice) project, object-oriented interface to
 SPICE-like simulators written in Python.
 
-![Static Badge](https://img.shields.io/badge/version-0.52-blue)
+![Static Badge](https://img.shields.io/badge/version-0.53-blue)
 
 ![Static Badge](https://img.shields.io/badge/license-MIT-blue)
 

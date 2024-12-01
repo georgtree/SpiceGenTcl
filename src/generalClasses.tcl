@@ -1259,7 +1259,13 @@ namespace eval ::SpiceGenTcl {
             # Returns: dict with vectors data, keys - names of vectors
             return [[my configure -Data] getTracesData]
         }
-        
+        method getDataCsv {args} {
+            # Returns string with csv formatting containing all data
+            #  -all - select all traces
+            #  -traces - select names of traces to return
+            #  -sep - separator of columns, default is comma
+            return [[my configure -Data] getTracesCsv {*}$args]
+        }
         method genSPICEString {} {
             # Creates circuit string for SPICE netlist.
             # Returns: 'circuit string'
@@ -1990,6 +1996,45 @@ namespace eval ::SpiceGenTcl {
                 dict append dict [$trace configure -Name] [$trace getDataPoints]
             }
             return $dict
+        }
+        method getTracesCsv {args} {
+            # Returns string with csv formatting containing all data
+            #  -all - select all traces
+            #  -traces - select names of traces to return
+            #  -sep - separator of columns, default is comma
+            set arguments [argparse -inline {
+                {-all -forbid {traces}}
+                {-traces -catchall -forbid {all}}
+                {-sep= -default {,}}
+            }]
+            if {[dict exists $arguments all]} {
+                set tracesDict [my getTracesData]
+                set tracesList [list [dict keys $tracesDict]]
+                for {set i 0} {$i<[my configure -NPoints]} {incr i} {
+                    dict for {traceName traceValues} $tracesDict {
+                        lappend row [lindex $traceValues $i]
+                    }
+                    lappend tracesList $row
+                    unset row
+                }
+            } elseif {[dict get $arguments traces]!=""} {
+                foreach traceName [dict get $arguments traces] {
+                    set traceObj [my getTrace $traceName]
+                    dict append tracesDict [$traceObj configure -Name] [$traceObj getDataPoints]
+                }
+                set tracesList [list [dict keys $tracesDict]]
+                for {set i 0} {$i<[my configure -NPoints]} {incr i} {
+                    dict for {traceName traceValues} $tracesDict {
+                        lappend row [lindex $traceValues $i]
+                    }
+                    lappend tracesList $row
+                    unset row
+                }
+            } else {
+                error "Arguments '-all' or '-traces traceName1 traceName2 ...' must be provided to 'getTracesCsv'\
+                        method"
+            }
+            return [::csv::joinlist $tracesList [dict get $arguments sep]]
         }
     }
 }
