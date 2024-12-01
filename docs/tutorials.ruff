@@ -11,6 +11,7 @@ namespace eval Tutorials {
           "examples/xyce/transient/switch_oscillator.tcl" files.
         - [Transient simulation of four-bit adder] - "examples/ngspice/transient/fourbitadder.tcl" and
           "examples/xyce/transient/fourbitadder.tcl"files
+        - [S-parameter simulation of pass-band filter] - "examples/ngspice/sp/filter.tcl"
         
         ## Netlist manipulations
         
@@ -806,6 +807,102 @@ namespace eval Tutorials {
         Results:
         
         ![fourbit_adder](assets/img/four_bit_adder_wvfm.png)
+
+        ## S-parameter simulation of pass-band filter
+
+        This example demonstrates capability of AC simulation with S-parameter output in Ngspice. As the circuit
+        of interest we use band pass filter sourced from Ngspice examples (/examples/sp/filter.sp).
+
+        The circuit image is (from Novarianti, Dini. (2019). Design and Implementation of Chebyshev Band Pass Filter
+        with M-Derived Section in Frequency Band 88 - 108 MHz):
+
+        ![filter](assets/img/band_pass_filter.png)
+
+        The circuit is built with following code:
+        ```tcl
+        # create top-level circuit
+        set circuit [Circuit new {filter s-parameters}]
+        # add elements to circuit
+        $circuit add [Vport new gen 1 0 -dc 0 -ac 1 -portnum 1]
+        $circuit add [L new 1 1 2 -l 0.058u]
+        $circuit add [C new 2 2 0 -c 40.84p]
+        $circuit add [L new 3 2 3 -l 0.128u]
+        $circuit add [C new 4 3 0 -c 47.91p]
+        $circuit add [L new 5 3 4 -l 0.128u]
+        $circuit add [C new 6 4 0 -c 40.48p]
+        $circuit add [L new 7 4 5 -l 0.058u]
+        $circuit add [L new a 5 6 -l 0.044u]
+        $circuit add [L new b 6 a -l 0.078u]
+        $circuit add [C new b a 0 -c 17.61p]
+        $circuit add [L new c 6 b -l 0.151u]
+        $circuit add [C new c b 0 -c 34.12p]
+        $circuit add [C new 7 6 7 -c 26.035p]
+        $circuit add [L new 8 7 0 -l 0.0653u]
+        $circuit add [C new 8 7 8 -c 20.8p]
+        $circuit add [L new 9 8 0 -l 0.055u]
+        $circuit add [C new 9 8 9 -c 20.8p]
+        $circuit add [L new 10 9 0 -l 0.653u]
+        $circuit add [C new 10 9 out -c 45.64p]
+        $circuit add [Vport new l out 0 -dc 0 -ac 0 -portnum 2]
+        ```
+
+        You should draw attention to special voltage sources, [::SpiceGenTcl::Ngspice::Sources::Vport], that represents
+        RF-port with special parameter `-portnum` as a port number, so digits in S-parameters are refered to these
+        port numbers (i.e. S11, S12, S21, S22).
+
+        Special analysis object for S-parameter simulation is [::SpiceGenTcl::Ngspice::Analyses::Sp], parameters are the
+        same as for AC analysis:
+        ```tcl
+        $circuit add [Sp new -variation lin -n 500 -fstart 10meg -fstop 200meg]
+        ```
+
+        As usual, we create simulator, run the circuit and read the data:
+        ```tcl
+        set simulator [BatchLiveLog new {batch1}]
+        # attach simulator object to circuit
+        $circuit configure -Simulator $simulator
+        $circuit runAndRead
+        # get data object
+        set data [$circuit getDataDict]
+        ```
+
+        Next few lines of code is used to extract magnitude of S11 and S21 parameters:
+        ```tcl
+        # get frequency
+        set freq [dict get $data frequency]
+        # get s11
+        set s11 [dict get $data v(s_1_1)]
+        # get s21
+        set s21 [dict get $data v(s_2_1)]
+        # extract real/imaginary parts of S11 and S21, and calculate magnitude
+        set freq [lmap val $freq {lindex $val 0}]
+        set s11Mag [lmap s11Re [lmap val $s11 {lindex $val 0}] s11Im [lmap val $s11 {lindex $val 1}]\
+                            {expr {sqrt($s11Re**2+$s11Im**2)}}]
+        set s21Mag [lmap s21Re [lmap val $s21 {lindex $val 0}] s21Im [lmap val $s21 {lindex $val 1}]\
+                            {expr {sqrt($s21Re**2+$s21Im**2)}}]
+        # prepare data for ticklecharts
+        set freq_s11Mag [lmap freqVal $freq s11MagVal $s11Mag {list $freqVal $s11MagVal}]
+        set freq_s21Mag [lmap freqVal $freq s21MagVal $s21Mag {list $freqVal $s21MagVal}]
+        ```
+
+        Now we are ready to plot data:
+        ```tcl
+        set chart [ticklecharts::chart new]
+        $chart Xaxis -name "Frequency, Hz" -minorTick {show "True"} -type "value"
+        $chart Yaxis -name "mag(S)" -minorTick {show "True"} -type "value"
+        $chart SetOptions -title {} -tooltip {} -legend {} -animation "False" -toolbox {feature {dataZoom {yAxisIndex "none"}}}
+        $chart Add "lineSeries" -data $freq_s11Mag -showAllSymbol "nothing" -name "S11" -symbolSize "0"
+        $chart Add "lineSeries" -data $freq_s21Mag -showAllSymbol "nothing" -name "S21" -symbolSize "0"
+        set fbasename [file rootname [file tail [info script]]]
+
+        $chart Render -outfile [file normalize [file join .. html_charts $fbasename.html]]
+        ```
+
+        The result is:
+        
+        ![filter](assets/img/filter_results.png)
+
+        We can clearly see the band that spans from 80Mhz to 128Mhz.
     }
 
 }

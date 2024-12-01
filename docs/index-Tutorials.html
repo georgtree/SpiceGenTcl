@@ -24,6 +24,7 @@
 <li><a href="index-Tutorials.html#::Tutorials-Sensitive analysis of differential pair" title="Sensitive analysis of differential pair" >Sensitive analysis of differential pair</a> - &quot;examples/ngspice/sens/diffpair_sens.tcl&quot; file</li>
 <li><a href="index-Tutorials.html#::Tutorials-Transient simulation of ring oscillator" title="Transient simulation of ring oscillator" >Transient simulation of ring oscillator</a> - &quot;examples/ngspice/transient/switch_oscillator.tcl&quot; and &quot;examples/xyce/transient/switch_oscillator.tcl&quot; files.</li>
 <li><a href="index-Tutorials.html#::Tutorials-Transient simulation of four-bit adder" title="Transient simulation of four-bit adder" >Transient simulation of four-bit adder</a> - &quot;examples/ngspice/transient/fourbitadder.tcl&quot; and &quot;examples/xyce/transient/fourbitadder.tcl&quot;files</li>
+<li><a href="index-Tutorials.html#::Tutorials-S-parameter simulation of pass-band filter" title="S-parameter simulation of pass-band filter" >S-parameter simulation of pass-band filter</a> - &quot;examples/ngspice/sp/filter.tcl&quot;</li>
 </ul>
 <h2 class='ruff'><a name='::Tutorials-Netlist manipulations'></a>Netlist manipulations<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
@@ -761,11 +762,92 @@ vrc2=-6.032e-04
 
 </figure><p class='ruff'>Results:</p>
 <p class='ruff'><img src="assets/img/four_bit_adder_wvfm.png" alt="fourbit_adder" /></p>
+<h2 class='ruff'><a name='::Tutorials-S-parameter simulation of pass-band filter'></a>S-parameter simulation of pass-band filter<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
+<div style='clear:both;'></div>
+<p class='ruff'>This example demonstrates capability of AC simulation with S-parameter output in Ngspice. As the circuit of interest we use band pass filter sourced from Ngspice examples (/examples/sp/filter.sp).</p>
+<p class='ruff'>The circuit image is (from Novarianti, Dini. (2019). Design and Implementation of Chebyshev Band Pass Filter with M-Derived Section in Frequency Band 88 - 108 MHz):</p>
+<p class='ruff'><img src="assets/img/band_pass_filter.png" alt="filter" /></p>
+<p class='ruff'>The circuit is built with following code:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create top-level circuit</font></i>
+<b><font color=#923B23>set</font></b> circuit [<b><font color=#923B23>Circuit</font></b> new {filter s-parameters}]
+<i><font color=#4b5d50># add elements to circuit</font></i>
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vport</font></b> new gen 1 0 <font color=#463e11>-dc</font> 0 <font color=#463e11>-ac</font> 1 <font color=#463e11>-portnum</font> 1]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>L</font></b> new 1 1 2 <font color=#463e11>-l</font> 0.058u]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>C</font></b> new 2 2 0 <font color=#463e11>-c</font> 40.84p]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>L</font></b> new 3 2 3 <font color=#463e11>-l</font> 0.128u]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>C</font></b> new 4 3 0 <font color=#463e11>-c</font> 47.91p]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>L</font></b> new 5 3 4 <font color=#463e11>-l</font> 0.128u]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>C</font></b> new 6 4 0 <font color=#463e11>-c</font> 40.48p]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>L</font></b> new 7 4 5 <font color=#463e11>-l</font> 0.058u]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>L</font></b> new a 5 6 <font color=#463e11>-l</font> 0.044u]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>L</font></b> new b 6 a <font color=#463e11>-l</font> 0.078u]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>C</font></b> new b a 0 <font color=#463e11>-c</font> 17.61p]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>L</font></b> new c 6 b <font color=#463e11>-l</font> 0.151u]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>C</font></b> new c b 0 <font color=#463e11>-c</font> 34.12p]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>C</font></b> new 7 6 7 <font color=#463e11>-c</font> 26.035p]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>L</font></b> new 8 7 0 <font color=#463e11>-l</font> 0.0653u]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>C</font></b> new 8 7 8 <font color=#463e11>-c</font> 20.8p]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>L</font></b> new 9 8 0 <font color=#463e11>-l</font> 0.055u]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>C</font></b> new 9 8 9 <font color=#463e11>-c</font> 20.8p]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>L</font></b> new 10 9 0 <font color=#463e11>-l</font> 0.653u]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>C</font></b> new 10 9 out <font color=#463e11>-c</font> 45.64p]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vport</font></b> new l out 0 <font color=#463e11>-dc</font> 0 <font color=#463e11>-ac</font> 0 <font color=#463e11>-portnum</font> 2]
+</pre>
+
+</figure><p class='ruff'>You should draw attention to special voltage sources, <a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::Vport" title="::SpiceGenTcl::Ngspice::Sources::Vport" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources::Vport</a>, that represents RF-port with special parameter <code><font color=#463e11>-portnum</font></code> as a port number, so digits in S-parameters are refered to these port numbers (i.e. S11, S12, S21, S22).</p>
+<p class='ruff'>Special analysis object for S-parameter simulation is <a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Sp" title="::SpiceGenTcl::Ngspice::Analyses::Sp" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::Sp</a>, parameters are the same as for AC analysis:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Sp</font></b> new <font color=#463e11>-variation</font> lin <font color=#463e11>-n</font> 500 <font color=#463e11>-fstart</font> 10meg <font color=#463e11>-fstop</font> 200meg]
+</pre>
+
+</figure><p class='ruff'>As usual, we create simulator, run the circuit and read the data:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> simulator [<b><font color=#923B23>BatchLiveLog</font></b> new {batch1}]
+<i><font color=#4b5d50># attach simulator object to circuit</font></i>
+<font color=#4A181B>$circuit</font> configure <font color=#463e11>-Simulator</font> <font color=#4A181B>$simulator</font>
+<font color=#4A181B>$circuit</font> runAndRead
+<i><font color=#4b5d50># get data object</font></i>
+<b><font color=#923B23>set</font></b> data [<font color=#4A181B>$circuit</font> getDataDict]
+</pre>
+
+</figure><p class='ruff'>Next few lines of code is used to extract magnitude of S11 and S21 parameters:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># get frequency</font></i>
+<b><font color=#923B23>set</font></b> freq [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> frequency]
+<i><font color=#4b5d50># get s11</font></i>
+<b><font color=#923B23>set</font></b> s11 [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> v(s_1_1)]
+<i><font color=#4b5d50># get s21</font></i>
+<b><font color=#923B23>set</font></b> s21 [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> v(s_2_1)]
+<i><font color=#4b5d50># extract real/imaginary parts of S11 and S21, and calculate magnitude</font></i>
+<b><font color=#923B23>set</font></b> freq [<b><font color=#923B23>lmap</font></b> val <font color=#4A181B>$freq</font> {<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$val</font> 0}]
+<b><font color=#923B23>set</font></b> s11Mag [<b><font color=#923B23>lmap</font></b> s11Re [<b><font color=#923B23>lmap</font></b> val <font color=#4A181B>$s11</font> {<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$val</font> 0}] s11Im [<b><font color=#923B23>lmap</font></b> val <font color=#4A181B>$s11</font> {<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$val</font> 1}] {<b><font color=#923B23>expr</font></b> {sqrt(<font color=#4A181B>$s11Re</font>**2+<font color=#4A181B>$s11Im</font>**2)}}]
+<b><font color=#923B23>set</font></b> s21Mag [<b><font color=#923B23>lmap</font></b> s21Re [<b><font color=#923B23>lmap</font></b> val <font color=#4A181B>$s21</font> {<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$val</font> 0}] s21Im [<b><font color=#923B23>lmap</font></b> val <font color=#4A181B>$s21</font> {<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$val</font> 1}] {<b><font color=#923B23>expr</font></b> {sqrt(<font color=#4A181B>$s21Re</font>**2+<font color=#4A181B>$s21Im</font>**2)}}]
+<i><font color=#4b5d50># prepare data for ticklecharts</font></i>
+<b><font color=#923B23>set</font></b> freq_s11Mag [<b><font color=#923B23>lmap</font></b> freqVal <font color=#4A181B>$freq</font> s11MagVal <font color=#4A181B>$s11Mag</font> {<b><font color=#923B23>list</font></b> <font color=#4A181B>$freqVal</font> <font color=#4A181B>$s11MagVal</font>}]
+<b><font color=#923B23>set</font></b> freq_s21Mag [<b><font color=#923B23>lmap</font></b> freqVal <font color=#4A181B>$freq</font> s21MagVal <font color=#4A181B>$s21Mag</font> {<b><font color=#923B23>list</font></b> <font color=#4A181B>$freqVal</font> <font color=#4A181B>$s21MagVal</font>}]
+</pre>
+
+</figure><p class='ruff'>Now we are ready to plot data:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> chart [ticklecharts::chart new]
+<font color=#4A181B>$chart</font> Xaxis <font color=#463e11>-name</font> <font color=#035103>&quot;Frequency, Hz&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
+<font color=#4A181B>$chart</font> Yaxis <font color=#463e11>-name</font> <font color=#035103>&quot;mag(S)&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
+<font color=#4A181B>$chart</font> SetOptions <font color=#463e11>-title</font> {} <font color=#463e11>-tooltip</font> {} <font color=#463e11>-legend</font> {} <font color=#463e11>-animation</font> <font color=#035103>&quot;False&quot;</font> <font color=#463e11>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#035103>&quot;none&quot;</font>}}}
+<font color=#4A181B>$chart</font> Add <font color=#035103>&quot;lineSeries&quot;</font> <font color=#463e11>-data</font> <font color=#4A181B>$freq_s11Mag</font> <font color=#463e11>-showAllSymbol</font> <font color=#035103>&quot;nothing&quot;</font> <font color=#463e11>-name</font> <font color=#035103>&quot;S11&quot;</font> <font color=#463e11>-symbolSize</font> <font color=#035103>&quot;0&quot;</font>
+<font color=#4A181B>$chart</font> Add <font color=#035103>&quot;lineSeries&quot;</font> <font color=#463e11>-data</font> <font color=#4A181B>$freq_s21Mag</font> <font color=#463e11>-showAllSymbol</font> <font color=#035103>&quot;nothing&quot;</font> <font color=#463e11>-name</font> <font color=#035103>&quot;S21&quot;</font> <font color=#463e11>-symbolSize</font> <font color=#035103>&quot;0&quot;</font>
+<b><font color=#923B23>set</font></b> fbasename [<b><font color=#923B23>file</font></b> rootname [<b><font color=#923B23>file</font></b> tail [<b><font color=#923B23>info</font></b> script]]]
+
+<font color=#4A181B>$chart</font> Render <font color=#463e11>-outfile</font> [<b><font color=#923B23>file</font></b> normalize [<b><font color=#923B23>file</font></b> join .. html_charts <font color=#4A181B>$fbasename</font>.html]]
+</pre>
+
+</figure><p class='ruff'>The result is:</p>
+<p class='ruff'><img src="assets/img/filter_results.png" alt="filter" /></p>
+<p class='ruff'>We can clearly see the band that spans from 80Mhz to 128Mhz.</p>
 </main><nav class='ruff-nav'><ul ><li class='ruff-toc1'><a style='padding-top:2px;' href='index.html'>Start page</a></li>
 <li class='ruff-toc1'><a href='index-docindex.html' accesskey='i'>Index</a></li>
 <hr>
 <li class='ruff-toc1'><a href='index-List-of-devices.html'>List of devices</a></li>
-<li class='ruff-toc1'><a href='index-General-Information.html'>General Information</a></li>
 <li class='ruff-toc1'><a href='index-FAQ.html'>FAQ</a></li>
 <li class='ruff-toc1'><a class='ruff-highlight' href='index-Tutorials.html'>Tutorials</a></li>
 <li class='ruff-toc1'><a href='index-Tips.html'>Tips</a></li>
@@ -783,5 +865,5 @@ vrc2=-6.032e-04
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html'>SpiceGenTcl::Xyce::SemiconductorDevices</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-Analyses.html'>SpiceGenTcl::Xyce::Analyses</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-Simulators.html'>SpiceGenTcl::Xyce::Simulators</a></li>
-<hr><li class='ruff-toc2'><a href='#::Tutorials-Netlist manipulations'>Netlist manipulations</a></li><li class='ruff-toc3'><a href='#::Tutorials-Delete element'>Delete element</a></li><li class='ruff-toc3'><a href='#::Tutorials-Get element'>Get element</a></li><li class='ruff-toc3'><a href='#::Tutorials-Print list of all elements'>Print list of all elements</a></li><li class='ruff-toc3'><a href='#::Tutorials-Temporarly remove of element'>Temporarly remove of element</a></li><li class='ruff-toc2'><a href='#::Tutorials-Subcircuit definition'>Subcircuit definition</a></li><li class='ruff-toc2'><a href='#::Tutorials-Diode current simualtion'>Diode current simualtion</a></li><li class='ruff-toc2'><a href='#::Tutorials-Diode capacitance simualtion'>Diode capacitance simualtion</a></li><li class='ruff-toc2'><a href='#::Tutorials-Sensitive analysis of differential pair'>Sensitive analysis of differential pair</a></li><li class='ruff-toc2'><a href='#::Tutorials-Transient simulation of ring oscillator'>Transient simulation of ring oscillator</a></li><li class='ruff-toc2'><a href='#::Tutorials-Transient simulation of four-bit adder'>Transient simulation of four-bit adder</a></li></ul></nav><footer class='ruff-layout-footer ruff-ft'><div style='float: right;'>Document generated by <a href='https://ruff.magicsplat.com'>Ruff!</a></div><div>&copy; George Yashin</div></footer>
+<hr><li class='ruff-toc2'><a href='#::Tutorials-Netlist manipulations'>Netlist manipulations</a></li><li class='ruff-toc3'><a href='#::Tutorials-Delete element'>Delete element</a></li><li class='ruff-toc3'><a href='#::Tutorials-Get element'>Get element</a></li><li class='ruff-toc3'><a href='#::Tutorials-Print list of all elements'>Print list of all elements</a></li><li class='ruff-toc3'><a href='#::Tutorials-Temporarly remove of element'>Temporarly remove of element</a></li><li class='ruff-toc2'><a href='#::Tutorials-Subcircuit definition'>Subcircuit definition</a></li><li class='ruff-toc2'><a href='#::Tutorials-Diode current simualtion'>Diode current simualtion</a></li><li class='ruff-toc2'><a href='#::Tutorials-Diode capacitance simualtion'>Diode capacitance simualtion</a></li><li class='ruff-toc2'><a href='#::Tutorials-Sensitive analysis of differential pair'>Sensitive analysis of differential pair</a></li><li class='ruff-toc2'><a href='#::Tutorials-Transient simulation of ring oscillator'>Transient simulation of ring oscillator</a></li><li class='ruff-toc2'><a href='#::Tutorials-Transient simulation of four-bit adder'>Transient simulation of four-bit adder</a></li><li class='ruff-toc2'><a href='#::Tutorials-S-parameter simulation of pass-band filter'>S-parameter simulation of pass-band filter</a></li></ul></nav><footer class='ruff-layout-footer ruff-ft'><div style='float: right;'>Document generated by <a href='https://ruff.magicsplat.com'>Ruff!</a></div><div>&copy; George Yashin</div></footer>
 </div></body></html>

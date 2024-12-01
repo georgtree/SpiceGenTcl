@@ -43,7 +43,7 @@ set common [list \
                 -version $packageVersion \
                 -copyright "George Yashin" {*}$::argv
                ]
-set namespaces [list "::List of devices" "::General Information" ::FAQ ::Tutorials ::Tips ::Advanced ::SpiceGenTcl ::SpiceGenTcl::Common::BasicDevices \
+set namespaces [list "::List of devices" ::FAQ ::Tutorials ::Tips ::Advanced ::SpiceGenTcl ::SpiceGenTcl::Common::BasicDevices \
                 ::SpiceGenTcl::Common::Sources ::SpiceGenTcl::Ngspice::BasicDevices \
                 ::SpiceGenTcl::Ngspice::Sources ::SpiceGenTcl::Ngspice::SemiconductorDevices \
                 ::SpiceGenTcl::Ngspice::Analyses ::SpiceGenTcl::Ngspice::Simulators \

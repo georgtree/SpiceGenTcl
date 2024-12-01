@@ -40,17 +40,20 @@ $circuit configure -Simulator $simulator
 $circuit runAndRead
 # get data object
 set data [$circuit getDataDict]
-# get real part of S(11)
+# get frequency
 set freq [dict get $data frequency]
+# get s11
 set s11 [dict get $data v(s_1_1)]
+# get s21
 set s21 [dict get $data v(s_2_1)]
-
+# extract real/imaginary parts of S11 and S21, and calculate magnitude
 set freq [lmap val $freq {lindex $val 0}]
 set s11Mag [lmap s11Re [lmap val $s11 {lindex $val 0}] s11Im [lmap val $s11 {lindex $val 1}]\
-        {expr {sqrt($s11Re**2+$s11Im**2)}}]
-set freq_s11Mag [lmap freqVal $freq s11MagVal $s11Mag {list $freqVal $s11MagVal}]
+                    {expr {sqrt($s11Re**2+$s11Im**2)}}]
 set s21Mag [lmap s21Re [lmap val $s21 {lindex $val 0}] s21Im [lmap val $s21 {lindex $val 1}]\
-        {expr {sqrt($s21Re**2+$s21Im**2)}}]
+                    {expr {sqrt($s21Re**2+$s21Im**2)}}]
+# prepare data for ticklecharts
+set freq_s11Mag [lmap freqVal $freq s11MagVal $s11Mag {list $freqVal $s11MagVal}]
 set freq_s21Mag [lmap freqVal $freq s21MagVal $s21Mag {list $freqVal $s21MagVal}]
 
 set chart [ticklecharts::chart new]
