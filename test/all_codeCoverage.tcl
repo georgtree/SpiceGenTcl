@@ -5,7 +5,7 @@
 # |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||. 
 #            ||                                                                             
 #           ''''                                                                            
-# all.tcl
+# all_codeCoverage.tcl
 # Run all tests of SpiceGenTcl package
 #
 # Copyright (c) 2024 George Yashin, georgtree@gmail.com
@@ -17,6 +17,9 @@
 package require tcltest
 namespace import ::tcltest::*
 set testDir [file normalize [file dirname [info script]]]
-configure {*}$argv -testdir $testDir
-package require SpiceGenTcl
-runAllTests
+source [file join $testDir .. SpiceGenTcl.tcl]
+set testFiles [glob ./*.test]
+foreach file $testFiles {
+    puts $file
+    source [file join $testDir $file]
+}

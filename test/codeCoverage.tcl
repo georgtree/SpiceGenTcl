@@ -47,7 +47,7 @@ foreach file $srcList {
 }
 
 # tests run
-exec tclsh [file join ${currentDir} testAll.tcl]
+exec tclsh [file join ${currentDir} all_codeCoverage.tcl]
 # revert renaming
 foreach file $srcList {
     if {[llength $file]>1} {

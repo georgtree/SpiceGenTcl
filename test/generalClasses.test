@@ -1312,4 +1312,8 @@ test testCircuitClass-1 {test creation of Circuit class instance and getDataCsv 
     unset circuit data simulator
 }
 
+foreach nameSpc $ngspiceNameSpc {
+    namespace forget ${nameSpc}::*
+}
+
 cleanupTests

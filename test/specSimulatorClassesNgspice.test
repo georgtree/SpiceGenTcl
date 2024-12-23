@@ -24,7 +24,10 @@ variable pi
 set epsilon 1e-8
 
 namespace import ::SpiceGenTcl::*
-importNgspice
+set ngspiceNameSpc [namespace children ::SpiceGenTcl::Ngspice]
+foreach nameSpc $ngspiceNameSpc {
+    namespace import ${nameSpc}::*
+}
 
 proc matchList {expected actual} {
     variable epsilon
@@ -108,7 +111,7 @@ test testSimulations-2 {test diode IV simulation} -setup {
     file delete {./diode IV.cir}
     file delete {./diode IV.raw}
     file delete {./diode IV.log}
-    unset circuit simulator data tempSt
+    unset circuit simulator data tempSt xf yf dataList
 }
 
 test testSimulations-3 {test diode CV simulation} -setup {
@@ -235,6 +238,10 @@ test testSimulations-5 {test filter simulation} -setup {
     file delete {./filter s-parameters.raw}
     file delete {./filter s-parameters.log}
     unset circuit simulator data freq s11 s21 s11Mag s21Mag result
+}
+
+foreach nameSpc $ngspiceNameSpc {
+    namespace forget ${nameSpc}::*
 }
 
 cleanupTests

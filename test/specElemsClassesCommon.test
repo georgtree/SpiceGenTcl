@@ -17,7 +17,10 @@ package require tcltest
 namespace import ::tcltest::*
 package require SpiceGenTcl
 namespace import ::SpiceGenTcl::*
-importCommon
+set commonNameSpc [namespace children ::SpiceGenTcl::Common]
+foreach nameSpc $commonNameSpc {
+    namespace import ${nameSpc}::*
+}
 
 
 ###  Basic devices tests 
@@ -252,6 +255,10 @@ test testSubcircuitInstanceAutoClass-4 {test creation of SubcircuitInstanceAuto 
 } -result {x2 net1 net2 rcnet} -cleanup {
     rename RCnet ""
     unset subcircuit subInst1 result
+}
+
+foreach nameSpc $commonNameSpc {
+    namespace forget ${nameSpc}::*
 }
 
 cleanupTests

@@ -5,8 +5,8 @@
 # |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||. 
 #            ||                                                                             
 #           ''''                                                                            
-# specSimulatorClassesNgspice.test
-# Tests Ngspice simulators classes
+# specSimulatorClassesXyce.test
+# Tests Xyce simulators classes
 #
 # Copyright (c) 2024 George Yashin, georgtree@gmail.com
 #
@@ -24,7 +24,10 @@ variable pi
 set epsilon 1e-8
 
 namespace import ::SpiceGenTcl::*
-importXyce
+set xyceNameSpc [namespace children ::SpiceGenTcl::Xyce]
+foreach nameSpc $xyceNameSpc {
+    namespace import ${nameSpc}::*
+}
 
 proc matchList {expected actual} {
     variable epsilon
@@ -41,7 +44,7 @@ proc matchList {expected actual} {
     return $match
 }
 
-test testSimulations-1 {test creation of circuit, run it with NgspiceBatch and read result} -setup {
+test testSimulations-1 {test creation of circuit, run it with XyceBatch and read result} -setup {
     set circuit [Circuit new {voltage divider netlist}]
     $circuit add [Vdc new 1 in 0 -dc 1]
     $circuit add [R new 1 in out -r 1e3]
@@ -108,7 +111,7 @@ test testSimulations-2 {test diode IV simulation} -setup {
     file delete {./diode IV.cir}
     file delete {./diode IV.raw}
     file delete {./diode IV.log}
-    unset circuit simulator data tempSt
+    unset circuit simulator data tempSt dataList xf yf
 }
 
 test testSimulations-3 {test diode CV simulation} -setup {
@@ -154,5 +157,8 @@ test testSimulations-3 {test diode CV simulation} -setup {
     unset circuit simulator data voltSweep vdc x xf y yf xydata
 }
 
+foreach nameSpc $xyceNameSpc {
+    namespace forget ${nameSpc}::*
+}
 
 cleanupTests
