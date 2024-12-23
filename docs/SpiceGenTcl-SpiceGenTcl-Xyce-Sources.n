@@ -1,0 +1,1264 @@
+'\"
+'\" '\" Copyright (c) George Yashin
+'\"
+.TH "SpiceGenTcl::Xyce::Sources" 3tcl 0\&.54 "SpiceGenTcl" "Tcl SpiceGenTcl package"
+.SH NAME
+SpiceGenTcl::Xyce::Sources - Commands in namespace SpiceGenTcl::Xyce::Sources
+.SH SYNOPSIS
+\fBBehaviouralSource create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+.br
+\fBBehaviouralSource new\fP \fIname npNode nmNode ?args?\fP
+.br
+.SH ::SPICEGENTCL::XYCE::SOURCES
+.SH CLASSES
+.PP
+.RS -4n
+\fBB\fR (::SpiceGenTcl::Xyce::Sources)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+argsPreprocess
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fIBehaviouralSource\fP
+.PP
+.RS -4n
+\fBBehaviouralSource\fR (::SpiceGenTcl::Xyce::Sources)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+argsPreprocess
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Device\fP
+.PP
+\fBMixins\fR
+.PP
+\fI::SpiceGenTcl::KeyArgsBuilder\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fIB\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Xyce::Sources::BehaviouralSource)
+.RE
+.PP
+Creates object of class BehaviouralSource that describes behavioural source\&.
+.RS 4n\fBBehaviouralSource create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+.br
+\fBBehaviouralSource new\fP \fIname npNode nmNode ?args?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the device without first-letter designator R\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+-i
+Current expression\&.
+.TP
+-rcconst
+Rc constant of the RC network, optional, require -v\&.
+.TP
+-smoothbsrc
+Enables the smooth transitions, optional, require -v\&.
+.TP
+-v
+Voltage expression\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+.RS 4n
+.nf
+B<name> <(+) node> <(-) node> V={expression} [device parameters]
+B<name> <(+) node> <(-) node> I={expression}
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Xyce::Sources::BehaviouralSource new 1 netp netm -v "V(a)+V(b)+pow(V(c),2)"
+.fi
+.RE
+.PP
+.RS -4n
+\fBCccs\fR (::SpiceGenTcl::Xyce::Sources)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Common::Sources::Cccs\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fIF\fP
+.PP
+.RS -4n
+\fBCcvs\fR (::SpiceGenTcl::Xyce::Sources)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Common::Sources::Ccvs\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fIH\fP
+.PP
+.RS -4n
+\fBE\fR (::SpiceGenTcl::Xyce::Sources)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fIVcvs\fP
+.PP
+.RS -4n
+\fBF\fR (::SpiceGenTcl::Xyce::Sources)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fICccs\fP
+.PP
+.RS -4n
+\fBG\fR (::SpiceGenTcl::Xyce::Sources)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fIVccs\fP
+.PP
+.RS -4n
+\fBH\fR (::SpiceGenTcl::Xyce::Sources)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fICcvs\fP
+.PP
+.RS -4n
+\fBIac\fR (::SpiceGenTcl::Xyce::Sources)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Common::Sources::Iac\fP
+.PP
+.RS -4n
+\fBIdc\fR (::SpiceGenTcl::Xyce::Sources)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Common::Sources::Idc\fP
+.PP
+.RS -4n
+\fBIexp\fR (::SpiceGenTcl::Xyce::Sources)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Common::Sources::Iexp\fP
+.PP
+.RS -4n
+\fBIpulse\fR (::SpiceGenTcl::Xyce::Sources)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Common::Sources::Ipulse\fP
+.PP
+.RS -4n
+\fBIpwl\fR (::SpiceGenTcl::Xyce::Sources)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Common::Sources::Ipwl\fP
+.PP
+.RS -4n
+\fBIsffm\fR (::SpiceGenTcl::Xyce::Sources)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Common::Sources::Isffm\fP
+.PP
+.RS -4n
+\fBIsin\fR (::SpiceGenTcl::Xyce::Sources)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Common::Sources::Isin\fP
+.PP
+.RS -4n
+\fBVac\fR (::SpiceGenTcl::Xyce::Sources)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Common::Sources::Vac\fP
+.PP
+.RS -4n
+\fBVccs\fR (::SpiceGenTcl::Xyce::Sources)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Common::Sources::Vccs\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fIG\fP
+.PP
+.RS -4n
+\fBVcvs\fR (::SpiceGenTcl::Xyce::Sources)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Common::Sources::Vcvs\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fIE\fP
+.PP
+.RS -4n
+\fBVdc\fR (::SpiceGenTcl::Xyce::Sources)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Common::Sources::Vdc\fP
+.PP
+.RS -4n
+\fBVexp\fR (::SpiceGenTcl::Xyce::Sources)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Common::Sources::Vexp\fP
+.PP
+.RS -4n
+\fBVpulse\fR (::SpiceGenTcl::Xyce::Sources)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Common::Sources::Vpulse\fP
+.PP
+.RS -4n
+\fBVpwl\fR (::SpiceGenTcl::Xyce::Sources)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Common::Sources::Vpwl\fP
+.PP
+.RS -4n
+\fBVsffm\fR (::SpiceGenTcl::Xyce::Sources)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Common::Sources::Vsffm\fP
+.PP
+.RS -4n
+\fBVsin\fR (::SpiceGenTcl::Xyce::Sources)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+argsPreprocess
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Common::Sources::Vsin\fP
+

@@ -1,0 +1,275 @@
+'\"
+'\" '\" Copyright (c) George Yashin
+'\"
+.TH "SpiceGenTcl" 3tcl 0\&.54 "SpiceGenTcl" "Tcl SpiceGenTcl package"
+.SH NAME
+Introduction - Tcl SpiceGenTcl package
+.PP
+.PP
+This package provides Tcl interface to different SPICE and SPICE-like simulator, Ngspice, Xyce\&.
+It was inspired by \fIPySpice\fP [URL: https://github\&.com/PySpice-org/PySpice] project, object-oriented interface to
+SPICE-like simulators written in Python\&.
+.SH "GENERAL CONCEPT"
+.PP
+The general concept of the package is to build a netlist using Tcl scripts\&. It is based on the TclOO
+object-oriented system, where everything is represented by objects, including elements, models, analyses,
+waveforms, and netlists\&. After defining the netlist, you can run the simulation, read the resulting data, and then
+process or display the data using the Tcl scripting language\&.
+.PP
+This approach differs from the \fITclspice\fP [URL: https://ngspice\&.sourceforge\&.io/tclspice\&.html] extension, which comes
+bundled with Ngspice and is tightly bound to the simulator's internal structures\&. SpiceGenTcl offers a more
+flexible approach that can be extended to work with different simulators that use netlists with similar syntax\&.
+.SH "USAGE EXAMPLES"
+.PP
+SpiceGenTcl can be used if you need:
+.TP
+\(bu
+automate some repetitive simulation tasks, and you don't like \fINutmeg\fP [URL: https://ngspice\&.sourceforge\&.io/ngspice-control-language-tutorial\&.html] syntax (SPICE standard scripting language)
+.TP
+\(bu
+postprocess output waveforms and data
+.TP
+\(bu
+change netlist structure on the fly
+.TP
+\(bu
+simulate different models in the same circuit setup
+.TP
+\(bu
+run circuit optimization with parameters variations as well as variations in circuit topology
+.SH INSTALLING
+.PP
+You have two ways: install from git repo (convinient for Linux users) or from archive package release\&.
+.SS "FROM GIT REPO"
+.PP
+Run following commands:
+.TP
+\(bu
+git clone https://github\&.com/georgtree/SpiceGenTcl\&.git
+.TP
+\(bu
+\&./configure
+.TP
+\(bu
+sudo make install
+.PP
+During installing it installs manpages, and local html documentation in /usr/local/share/SpiceGenTcl/doc\&.
+.PP
+For test package in place run make test\&.
+.PP
+For package uninstall run sudo make uninstall\&.
+.SS "FROM ARCHIVE"
+.PP
+To install the package you should extract archive with source code and add path of the package folder to auto_path
+variable:
+.PP
+.RS 4n
+.nf
+lappend auto_path "path to SpiceGenTcl package"
+.fi
+.RE
+.SH DEPENDENCIES
+.PP
+Package is written in pure Tcl with relying on Tcllib and ticklecharts, tcl version is 9\&.0\&. The only necessary
+external dependency is the simulator itself\&.
+.TP
+\(bu
+\fINgspice\fP [URL: https://ngspice\&.sourceforge\&.io/download\&.html]
+.TP
+\(bu
+\fIXyce\fP [URL: https://xyce\&.sandia\&.gov/downloads/executables/]
+.TP
+\(bu
+\fITcllib\fP [URL: https://www\&.tcl\&.tk/software/tcllib/]
+.TP
+\(bu
+\fIticklecharts\fP [URL: https://github\&.com/nico-robert/ticklecharts]
+.PP
+After simulator installation add path to executable to PATH environment variable\&.
+.PP
+For code coverage test \fInagelfar\fP [URL: https://nagelfar\&.sourceforge\&.net/] is used, commit 845924 of master branch\&.
+.PP
+For view test coverage diffs \fIeskil\fP [URL: http://eskil\&.tcl\&.tk/index\&.html/doc/trunk/htdocs/index\&.html] is used\&.
+.SH "DOCUMENTATION AND TUTORIALS"
+.PP
+Documentation could be found \fIhere\fP [URL: https://georgtree\&.github\&.io/SpiceGenTcl/]\&.
+.PP
+Tutorials describing different examples could be found
+\fIhere\fP [URL: https://georgtree\&.github\&.io/SpiceGenTcl/index-Tutorials\&.html]\&.
+.PP
+Good tutorial for Tcl language could be found \fIhere\fP [URL: http://tcl\&.tk/man/tcltutorial/html/tcltutorial\&.html]
+.PP
+Documentation was generated with \fIruff!\fP [URL: https://ruff\&.magicsplat\&.com/]\&.
+.PP
+Tcl syntax highlightning was done with \fIhl_tcl\fP [URL: https://github\&.com/aplsimple/hl_tcl]\&.
+.SH "SUPPORTED PLATFORMS"
+.PP
+I personally use Kubuntu 24\&.04, and I also tested package on Windows 11\&.
+On Kubuntu I use Tcl/Tk 9\&.0 compiled from sources, as well as Ngspice and Xyce\&.
+On Windows I use \fIMagicsplat\fP [URL: https://www\&.magicsplat\&.com/tcl-installer/] distribution of Tcl/Tk 9\&.0\&. For
+Ngspice and Xyce I use precompilled binaries\&.
+.PP
+\fBNote\fP: on Windows by default Ngspice save raw file into ascii format, to pass all tests
+(because of different numbers formatting - scientific by default) you need to set binary format by default in \&.spiceinit
+by this line:
+.PP
+.RS 4n
+.nf
+set filetype=binary
+.fi
+.RE
+.PP
+Tcl is a cross-platform language, and because this package is written in pure Tcl,
+you can practically run it on any platform, including Windows, Linux (all flavors), and FreeBSD\&.
+Ngspice is available as pre-compiled binaries for Linux and Windows, but it can also be compiled on FreeBSD\&.
+Xyce is availible as pre-compiled for Windows, RHEL and MacOS, but can be compiled to any other platform\&.
+.SH "QUICK START"
+.TP
+\(bu
+\fBImportant note 1\fP: internally, all device names, parameters, nodes, types, reference names, and data vector's names are converted to lowercase after object instantiation\&. While you can enter them in any case, they can only be accessed by their lowercase names\&. This approach aligns with the fact that most SPICE simulators are case-insensitive\&. To prevent ambiguity in Tcl code, where the simulator treats mixed-case names as identical, we convert everything to lowercase\&. This ensures that we can detect and resolve any duplicate names in the top-level circuit before generating the netlist\&.
+.TP
+\(bu
+\fBImportant note 2\fP: this package is not designed to be used with the \&.control section in Ngspice, the \&.step statement in LTspice, or multiple DC sweeps, and it does not support reading parametric sweeps from raw data\&. The idea of the package is to handle all such tasks within a Tcl script, eliminating the need to use the simulator's internal scripting capabilities, and dependence on each simulator unique ways of handling parametric sweeps, that compromises compatibility\&. But it is could be done easily in principle to realize special objects and reading of raw files with parametric sweeps\&.
+.SS "PACKAGES IMPORTS"
+.PP
+The first step is import of package:
+.PP
+.RS 4n
+.nf
+package require SpiceGenTcl
+.fi
+.RE
+.PP
+Import all commands from ::SpiceGenTcl:
+.PP
+.RS 4n
+.nf
+namespace import ::SpiceGenTcl::*
+.fi
+.RE
+.PP
+One of the commands is \fI::SpiceGenTcl::importNgspice\fP\&. By calling this command, we can import all commands related
+to the Ngspice simulator, eliminating the need to add the ::SpiceGenTcl::Ngspice prefix before any command\&.
+Here's how to do it:
+.PP
+.RS 4n
+.nf
+importNgspice
+.fi
+.RE
+.PP
+To plot results of simulation we also import package ticklecharts:
+.PP
+.RS 4n
+.nf
+package require ticklecharts
+.fi
+.RE
+.SS "CIRCUIT DEFINITION"
+.PP
+Let's try to define simple resistor divider circuit with following netlist:
+.PP
+.RS 4n
+.nf
+voltage divider netlist
+v1 in 0 1
+r1 in out 1e3
+r2 out 0 2e3
+\&.dc v1 0 5 0\&.1
+.fi
+.RE
+.PP
+.PP
+First step is creating circuit object:
+.PP
+.RS 4n
+.nf
+set circuit [Circuit new {voltage divider netlist}]
+.fi
+.RE
+.PP
+The Circuit command creates a new object of the \fI::SpiceGenTcl::Circuit\fP class, which is imported from the
+::SpiceGenTcl namespace and represents the top-level circuit\&.
+The only argument we provide is the name of the circuit, which will be printed on the first line of the netlist\&.
+.PP
+The next step is building netlist by addding elements to top circuit object:
+.PP
+.RS 4n
+.nf
+$circuit add [Vdc new 1 in 0 -dc 1]
+$circuit add [R new 1 in out -r 1e3]
+$circuit add [R new 2 out 0 -r 2e3]
+$circuit add [Dc new -src v1 -start 0 -stop 5 -incr 0\&.1]
+.fi
+.RE
+.PP
+An instance of the \fI::SpiceGenTcl::Circuit\fP class, referenced by the circuit variable, has an
+\fI::SpiceGenTcl::Circuit::add\fP method that appends the references of argument objects to it\&. The object-creating
+commands Vdc, R, and Dc — which represent a DC voltage source, a basic resistor, and a DC analysis,
+respectively — are imported from the ::SpiceGenTcl::Ngspice::Sources, ::SpiceGenTcl::Ngspice::BasicElements,
+and ::SpiceGenTcl::Ngspice::Analyses namespaces\&.
+.PP
+When using the new subcommand, you provide the basic arguments for the element\&. For example, in the R command,
+you would supply the name '1', the name of the net connected to the positive node 'in', the name of the net
+connected to the negative node '0' (which is the global ground), and the resistance value '1e3'\&.
+.PP
+The last necessary step is to create \fI::SpiceGenTcl::Simulator\fP object with command Batch from
+::SpiceGenTcl::Ngspice namespace and attach it to \fI::SpiceGenTcl::Circuit\fP object:
+.PP
+.RS 4n
+.nf
+set simulator [Batch new {batch1} {/usr/local/bin/}]
+$circuit configure -Simulator $simulator
+.fi
+.RE
+.PP
+Now we are ready to run simulation:
+.PP
+.RS 4n
+.nf
+$circuit runAndRead
+.fi
+.RE
+.PP
+After the simulation, we can read the resulting data\&. We use the \fI::SpiceGenTcl::Circuit::getDataDict\fP method to
+obtain a dictionary where the keys are the names of the result vectors:
+.PP
+.RS 4n
+.nf
+set data [$circuit getDataDict]
+.fi
+.RE
+.PP
+The we can get vectors v(in) and v(out) from dictionary data:
+.PP
+.RS 4n
+.nf
+set axis [dict get $data v(in)]
+set trace [dict get $data v(out)]
+.fi
+.RE
+.SS "PLOTTING DATA"
+.PP
+To plot results we use \fIticklecharts\fP [URL: https://github\&.com/nico-robert/ticklecharts] package:
+.PP
+.RS 4n
+.nf
+foreach x $axis y $trace {
+    set x [format "%\&.3f" $x]
+    set y [format "%\&.3f" $y]
+    lappend xydata [list $x $y]
+}
+set chart [ticklecharts::chart new]
+$chart Xaxis -name "v(in), V" -minorTick {show "True"} -min 0 -max 5 -type "value"
+$chart Yaxis -name "v(out), V" -minorTick {show "True"} -min 0 -max 3\&.5 -type "value"
+$chart SetOptions -title {} -tooltip {} -animation "False"
+$chart Add "lineSeries" -data $xydata -showAllSymbol "nothing"
+set fbasename [file rootname [file tail [info script]]]
+$chart Render -outfile [file normalize [file join html_charts $fbasename\&.html]]
+.fi
+.RE
+.PP
+To view result, we should open rendered resistor_divider\&.html chart in browser\&.
+.PP
+resistor_divider [Image: assets/img/resistor_divider\&.png]
+

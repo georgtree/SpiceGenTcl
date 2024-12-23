@@ -1,0 +1,1291 @@
+'\"
+'\" '\" Copyright (c) George Yashin
+'\"
+.TH "SpiceGenTcl::Xyce::BasicDevices" 3tcl 0\&.54 "SpiceGenTcl" "Tcl SpiceGenTcl package"
+.SH NAME
+SpiceGenTcl::Xyce::BasicDevices - Commands in namespace SpiceGenTcl::Xyce::BasicDevices
+.SH SYNOPSIS
+\fBCapacitor create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+.br
+\fBCapacitor new\fP \fIname npNode nmNode ?args?\fP
+.br
+\fBGenSwitch create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+.br
+\fBGenSwitch new\fP \fIname npNode nmNode ?args?\fP
+.br
+\fBInductor create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+.br
+\fBInductor new\fP \fIname npNode nmNode ?args?\fP
+.br
+\fBResistor create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+.br
+\fBResistor new\fP \fIname npNode nmNode ?args?\fP
+.br
+\fBSubcircuitInstance create OBJNAME\fP \fIname pins subName params\fP
+.br
+\fBSubcircuitInstance new\fP \fIname pins subName params\fP
+.br
+\fBSubcircuitInstanceAuto create OBJNAME\fP \fIsubcktObj name nodes ?args?\fP
+.br
+\fBSubcircuitInstanceAuto new\fP \fIsubcktObj name nodes ?args?\fP
+.br
+.SH ::SPICEGENTCL::XYCE::BASICDEVICES
+.SH CLASSES
+.PP
+.RS -4n
+\fBC\fR (::SpiceGenTcl::Xyce::BasicDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+argsPreprocess
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fICapacitor\fP
+.PP
+.RS -4n
+\fBCapacitor\fR (::SpiceGenTcl::Xyce::BasicDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+argsPreprocess
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Device\fP
+.PP
+\fBMixins\fR
+.PP
+\fI::SpiceGenTcl::KeyArgsBuilder\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fIC\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Xyce::BasicDevices::Capacitor)
+.RE
+.PP
+Creates object of class Capacitor that describes capacitor\&.
+.RS 4n\fBCapacitor create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+.br
+\fBCapacitor new\fP \fIname npNode nmNode ?args?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the device without first-letter designator C\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+args
+Keyword instance parameters\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+Capacitor type could be specified with additional switches: -beh if we
+want to model circuit's variable dependent capacitor, or -model modelName
+if we want to simulate capacitor with model card\&.
+Simple capacitor:
+.PP
+.RS 4n
+.nf
+C<device name> <(+) node> <(-) node> <value> [device parameters]
+.fi
+.RE
+.PP
+Example of class initialization as a simple capacitor:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Xyce::BasicDevices::Capacitor new 1 netp netm 1e-6 -tc1 1 -temp {temp -eq}
+.fi
+.RE
+.PP
+Behavioral capacitor with C expression:
+.PP
+.RS 4n
+.nf
+C<device name> <(+) node> <(-) node> C={expression} [device parameters]
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Xyce::BasicDevices::Capacitor new 1 netp netm -c "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1
+.fi
+.RE
+.PP
+Behavioral capacitor with Q expression:
+.PP
+.RS 4n
+.nf
+C<device name> <(+) node> <(-) node> Q={expression} [device parameters]
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Xyce::BasicDevices::Capacitor new 1 netp netm -q "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1
+.fi
+.RE
+.PP
+Capacitor with model card:
+.PP
+.RS 4n
+.nf
+C<device name> <(+) node> <(-) node> <model name> [value] [device parameters]
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Xyce::BasicDevices::Capacitor new 1 netp netm -model capm -l 1e-6 -w 10e-6
+.fi
+.RE
+.PP
+.RS -4n
+\fBCSwitch\fR (::SpiceGenTcl::Xyce::BasicDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Common::BasicDevices::CSwitch\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fIW\fP
+.PP
+.RS -4n
+\fBGenS\fR (::SpiceGenTcl::Xyce::BasicDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fIGenSwitch\fP
+.PP
+.RS -4n
+\fBGenSwitch\fR (::SpiceGenTcl::Xyce::BasicDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Device\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fIGenS\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Xyce::BasicDevices::GenSwitch)
+.RE
+.PP
+Creates object of class GenSwitch that describes generic switch device\&.
+.RS 4n\fBGenSwitch create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+.br
+\fBGenSwitch new\fP \fIname npNode nmNode ?args?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the device without first-letter designator S\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+-control
+Control equation\&.
+.TP
+-model
+Model name\&.
+.TP
+-on/-off
+Initial state of switch\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+.RS 4n
+.nf
+S<name> <(+) switch node> <(-) switch node> <model name> [ON] [OFF] <control = expression>
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Xyce::BasicDevices::GenSwitch new 1 net1 0 -model sw1 -control {I(VMON)}
+.fi
+.RE
+.PP
+.RS -4n
+\fBInductor\fR (::SpiceGenTcl::Xyce::BasicDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+argsPreprocess
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Device\fP
+.PP
+\fBMixins\fR
+.PP
+\fI::SpiceGenTcl::KeyArgsBuilder\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fIL\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Xyce::BasicDevices::Inductor)
+.RE
+.PP
+Creates object of class Inductor that describes inductor\&.
+.RS 4n\fBInductor create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+.br
+\fBInductor new\fP \fIname npNode nmNode ?args?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the device without first-letter designator L\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+args
+Keyword instance parameters\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+Inductor type could be specified with additional switch -model modelName
+if we want to simulate inductor with model card\&.
+Simple inductor:
+.PP
+.RS 4n
+.nf
+L<name> <(+) node> <(-) node> <value> [device parameters]
+.fi
+.RE
+.PP
+Example of class initialization as a simple inductor:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Xyce::BasicDevices::Inductor new 1 netp netm -l 1e-6 -tc1 1 -temp {temp -eq}
+.fi
+.RE
+.PP
+Behavioral inductor:
+.PP
+.RS 4n
+.nf
+L<name> <(+) node> <(-) node> [model] <value> [device parameters]
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Xyce::BasicDevices::Inductor new 1 netp netm -l "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1
+.fi
+.RE
+.PP
+Inductor with model card:
+.PP
+.RS 4n
+.nf
+L<name> <(+) node> <(-) node> [model] <value> [device parameters]
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Xyce::BasicDevices::Inductor new 1 netp netm -l 1e-6 -model indm
+.fi
+.RE
+.PP
+.RS -4n
+\fBL\fR (::SpiceGenTcl::Xyce::BasicDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+argsPreprocess
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fIInductor\fP
+.PP
+.RS -4n
+\fBR\fR (::SpiceGenTcl::Xyce::BasicDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+argsPreprocess
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fIResistor\fP
+.PP
+.RS -4n
+\fBResistor\fR (::SpiceGenTcl::Xyce::BasicDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+argsPreprocess
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Device\fP
+.PP
+\fBMixins\fR
+.PP
+\fI::SpiceGenTcl::KeyArgsBuilder\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fIR\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Xyce::BasicDevices::Resistor)
+.RE
+.PP
+Creates object of class Resistor that describes resistor\&.
+.RS 4n\fBResistor create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+.br
+\fBResistor new\fP \fIname npNode nmNode ?args?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the device without first-letter designator R\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+args
+Keyword instance parameters\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+Resistor type could be specified with additional switches: -beh if we
+want to model circuit's variable dependent resistor, or -model modelName
+if we want to simulate resistor with model card\&.
+Simple resistor:
+.PP
+.RS 4n
+.nf
+R<name> <(+) node> <(-) node> <value> [device parameters]
+.fi
+.RE
+.PP
+Example of class initialization as a simple resistor:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Xyce::BasicDevices::Resistor new 1 netp netm -r 1e3 -tc1 1 -temp {temp_amb -eq}
+.fi
+.RE
+.PP
+Behavioral resistor:
+.PP
+.RS 4n
+.nf
+R<name> <(+) node> <(-) node> R ={expression} [device parameters]
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Xyce::BasicDevices::Resistor new 1 netp netm -r "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1
+.fi
+.RE
+.PP
+Resistor with model card:
+.PP
+.RS 4n
+.nf
+R<name> <(+) node> <(-) node> <model name> [value] [device parameters]
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Xyce::BasicDevices::Resistor new 1 netp netm -model resm -l 1e-6 -w 10e-6
+.fi
+.RE
+.PP
+.RS -4n
+\fBSubcircuitInstance\fR (::SpiceGenTcl::Xyce::BasicDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Device\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fIX\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstance)
+.RE
+.PP
+Creates object of class SubcircuitInstance that describes subcircuit instance\&.
+.RS 4n\fBSubcircuitInstance create OBJNAME\fP \fIname pins subName params\fP
+.br
+\fBSubcircuitInstance new\fP \fIname pins subName params\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the device without first-letter designator X\&.
+.TP
+pins
+List of pins {{pinName nodeName} {pinName nodeName} \&.\&.\&.}
+.TP
+subName
+Name of subcircuit definition\&.
+.TP
+params
+{{paramName paramValue ?-eq?} {paramName paramValue ?-eq?}}
+.RE
+.PP
+\fBDescription\fR
+.PP
+.RS 4n
+.nf
+X<name> [nodes] <subcircuit name> [PARAMS: [<name> = <value>] \&.\&.\&.]
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar -eq}}
+.fi
+.RE
+.PP
+.RS -4n
+\fBSubcircuitInstanceAuto\fR (::SpiceGenTcl::Xyce::BasicDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Device\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fIXAuto\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstanceAuto)
+.RE
+.PP
+Creates object of class SubcircuitInstanceAuto that describes subcircuit instance with already created
+subcircuit definition object\&.
+.RS 4n\fBSubcircuitInstanceAuto create OBJNAME\fP \fIsubcktObj name nodes ?args?\fP
+.br
+\fBSubcircuitInstanceAuto new\fP \fIsubcktObj name nodes ?args?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+subcktObj
+Object of subcircuit that defines it's pins, subName and parameters\&.
+.TP
+name
+Not documented\&.
+.TP
+nodes
+List of nodes connected to pins in the same order as pins in subcircuit definition {nodeName1 nodeName2 \&.\&.\&.}
+.TP
+args
+Parameters as argument in form : -paramName {paramValue ?-eq?} -paramName {paramValue ?-eq?}
+.RE
+.PP
+\fBDescription\fR
+.PP
+.RS 4n
+.nf
+X<name> [nodes] <subcircuit name> [PARAMS: [<name> = <value>] \&.\&.\&.]
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstanceAuto new $subcktObj 1 {net1 net2} -r 1 -c {cpar -eq}
+.fi
+.RE
+.PP
+.RS -4n
+\fBVSw\fR (::SpiceGenTcl::Xyce::BasicDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fIVSwitch\fP
+.PP
+.RS -4n
+\fBVSwitch\fR (::SpiceGenTcl::Xyce::BasicDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Common::BasicDevices::VSwitch\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fIVSw\fP
+.PP
+.RS -4n
+\fBW\fR (::SpiceGenTcl::Xyce::BasicDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fICSwitch\fP
+.PP
+.RS -4n
+\fBX\fR (::SpiceGenTcl::Xyce::BasicDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fISubcircuitInstance\fP
+.PP
+.RS -4n
+\fBXAuto\fR (::SpiceGenTcl::Xyce::BasicDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fISubcircuitInstanceAuto\fP
+

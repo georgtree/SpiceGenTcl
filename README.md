@@ -5,7 +5,7 @@ This package provides Tcl interface to different SPICE and SPICE-like simulator,
 It was inspired by [PySpice](https://github.com/PySpice-org/PySpice) project, object-oriented interface to
 SPICE-like simulators written in Python.
 
-![Static Badge](https://img.shields.io/badge/version-0.53-blue)
+![Static Badge](https://img.shields.io/badge/version-0.54-blue)
 
 ![Static Badge](https://img.shields.io/badge/license-MIT-blue)
 
@@ -37,12 +37,29 @@ SpiceGenTcl can be used if you need:
 - simulate different models in the same circuit setup
 - run circuit optimization with parameters variations as well as variations in circuit topology
 
-## Install and dependencies
+## Installing
+You have two ways: install from git repo (convinient for Linux users) or from archive package release.
+
+### From git repo
+Run following commands:
+- `git clone https://github.com/georgtree/SpiceGenTcl.git`
+- `./configure`
+- `sudo make install`
+
+During installing it installs manpages, and local html documentation in `/usr/local/share/SpiceGenTcl/doc`.
+
+For test package in place run `make test`.
+
+For package uninstall run `sudo make uninstall`.
+
+### From archive
 To install the package you should extract archive with source code and add path of the package folder to `auto_path`
 variable:
 ```tcl
 lappend auto_path "path to SpiceGenTcl package"
 ```
+
+## Dependencies
 Package is written in pure Tcl with relying on Tcllib and ticklecharts, tcl version is 9.0. The only necessary
 external dependency is the simulator itself.
 

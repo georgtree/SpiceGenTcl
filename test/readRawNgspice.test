@@ -13,11 +13,9 @@
 # MIT License
 # See the file "LICENSE.txt" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
-
-lappend auto_path "../"
 package require tcltest
-package require SpiceGenTcl
 namespace import ::tcltest::*
+package require SpiceGenTcl
 namespace import ::SpiceGenTcl::*
 set ngspiceNameSpc [namespace children ::SpiceGenTcl::Ngspice]
 foreach nameSpc $ngspiceNameSpc {
@@ -25,7 +23,8 @@ foreach nameSpc $ngspiceNameSpc {
 }
 
 set epsilon 1e-8
-set rawDataLoc "./raw_data_ngspice"
+set testDir [file dirname [info script]]
+set rawDataLoc [file join $testDir raw_data_ngspice]
 
 proc matchList {expected actual} {
     variable epsilon
@@ -242,7 +241,7 @@ test testRawFileClass-10 {test RawFile class object construction and reading asc
     set data [RawFile new "${rawDataLoc}/tran.raw"]
 } -body {    
     set traceAxis [$data configure -RawParams]
-} -result [dict create Filename ./raw_data_ngspice/tran.raw Title switch_oscillator Date {Thu Nov 28 21} Plotname {Transient Analysis} Flags real {No. Variables} 22 {No. Points} 7497] -cleanup {
+} -result [dict create Filename $rawDataLoc/tran.raw Title switch_oscillator Date {Thu Nov 28 21} Plotname {Transient Analysis} Flags real {No. Variables} 22 {No. Points} 7497] -cleanup {
     unset data traceAxis
 }
 

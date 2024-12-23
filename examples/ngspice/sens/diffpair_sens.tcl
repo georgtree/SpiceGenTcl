@@ -1,4 +1,4 @@
-lappend auto_path ../../../
+
 package require SpiceGenTcl
 namespace import ::SpiceGenTcl::*
 importNgspice

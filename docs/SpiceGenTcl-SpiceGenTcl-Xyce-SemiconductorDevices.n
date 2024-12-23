@@ -1,0 +1,894 @@
+'\"
+'\" '\" Copyright (c) George Yashin
+'\"
+.TH "SpiceGenTcl::Xyce::SemiconductorDevices" 3tcl 0\&.54 "SpiceGenTcl" "Tcl SpiceGenTcl package"
+.SH NAME
+SpiceGenTcl::Xyce::SemiconductorDevices - Commands in namespace SpiceGenTcl::Xyce::SemiconductorDevices
+.SH SYNOPSIS
+\fBBjt create OBJNAME\fP \fIname ncNode nbNode neNode ?args?\fP
+.br
+\fBBjt new\fP \fIname ncNode nbNode neNode ?args?\fP
+.br
+\fBOBJECT genSPICEString\fP
+.br
+\fBDiode create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+.br
+\fBDiode new\fP \fIname npNode nmNode ?args?\fP
+.br
+\fBJfet create OBJNAME\fP \fIname ndNode ngNode nsNode ?args?\fP
+.br
+\fBJfet new\fP \fIname ndNode ngNode nsNode ?args?\fP
+.br
+\fBMesfet create OBJNAME\fP \fIname ndNode ngNode nsNode ?args?\fP
+.br
+\fBMesfet new\fP \fIname ndNode ngNode nsNode ?args?\fP
+.br
+\fBMosfet create OBJNAME\fP \fIname ndNode ngNode nsNode ?args?\fP
+.br
+\fBMosfet new\fP \fIname ndNode ngNode nsNode ?args?\fP
+.br
+.SH ::SPICEGENTCL::XYCE::SEMICONDUCTORDEVICES
+.SH CLASSES
+.PP
+.RS -4n
+\fBBjt\fR (::SpiceGenTcl::Xyce::SemiconductorDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+Modify substrate pin string in order to complain square brackets enclosure, see BJT info in reference manual of Xyce\&.
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Device\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fIQ\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Xyce::SemiconductorDevices::Bjt)
+.RE
+.PP
+Creates object of class Bjt that describes semiconductor bipolar junction transistor device\&.
+.RS 4n\fBBjt create OBJNAME\fP \fIname ncNode nbNode neNode ?args?\fP
+.br
+\fBBjt new\fP \fIname ncNode nbNode neNode ?args?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the device without first-letter designator Q\&.
+.TP
+ncNode
+Name of node connected to collector pin\&.
+.TP
+nbNode
+Name of node connected to base pin\&.
+.TP
+neNode
+Name of node connected to emitter pin\&.
+.TP
+-area
+Scale factor, optional\&.
+.TP
+-ic1
+Initial conditions for vbe, optional\&.
+.TP
+-ic2
+Initial conditions for vce, optional\&.
+.TP
+-m
+Multiplier of area and perimeter, optional\&.
+.TP
+-model
+Name of the model\&.
+.TP
+-ns
+Name of node connected to substrate pin, optional\&.
+.TP
+-temp
+Device temperature, optional\&.
+.TP
+-tj
+Name of node connected to thermal pin, optional, requires -ns\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+.RS 4n
+.nf
+QXXXXXXX nc nb ne <ns> <tj> mname <area=val> <areac=val>
++ <areab=val> <m=val> <off> <ic=vbe,vce> <temp=val>
++ <dtemp=val>
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Xyce::SemiconductorDevices::Bjt new 1 netc netb nete -model bjtmod -ns nets -area 1e-3
+.fi
+.RE
+.PP
+.RS -4n
+\fBgenSPICEString\fR (::SpiceGenTcl::Xyce::SemiconductorDevices::Bjt)
+.RE
+.PP
+Modify substrate pin string in order to complain square brackets enclosure,
+see BJT info in reference manual of Xyce
+.RS 4n\fBOBJECT genSPICEString\fP
+.br
+.RE
+.PP
+.RS -4n
+\fBD\fR (::SpiceGenTcl::Xyce::SemiconductorDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fIDiode\fP
+.PP
+.RS -4n
+\fBDiode\fR (::SpiceGenTcl::Xyce::SemiconductorDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Device\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fID\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Xyce::SemiconductorDevices::Diode)
+.RE
+.PP
+Creates object of class Diode that describes semiconductor diode device\&.
+.RS 4n\fBDiode create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+.br
+\fBDiode new\fP \fIname npNode nmNode ?args?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the device without first-letter designator D\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+-area
+Area scale factor, optional\&.
+.TP
+-custparams
+Key that collects all arguments at the end of device definition, to provide an ability to add custom parameters in form -custparams param1 param1Val param2 {param2eq -eq} param3 param3Val \&.\&.\&. Must be specified after all others options\&. Optional\&.
+.TP
+-ic
+Initial condition, optional\&.
+.TP
+-m
+Multiplier of area and perimeter, optional\&.
+.TP
+-model
+Name of the model\&.
+.TP
+-pj
+Perimeter scale factor, optional\&.
+.TP
+-temp
+Device temperature, optional\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+.RS 4n
+.nf
+D<name> <(+) node> <(-) node> <model name> [device parameters]
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Xyce::SemiconductorDevices::Diode new 1 netp netm -model diomod -area 1e-6
+.fi
+.RE
+.PP
+.RS -4n
+\fBJ\fR (::SpiceGenTcl::Xyce::SemiconductorDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fIJfet\fP
+.PP
+.RS -4n
+\fBJfet\fR (::SpiceGenTcl::Xyce::SemiconductorDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Device\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fIJ\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet)
+.RE
+.PP
+Creates object of class Jfet that describes semiconductor junction FET device\&.
+.RS 4n\fBJfet create OBJNAME\fP \fIname ndNode ngNode nsNode ?args?\fP
+.br
+\fBJfet new\fP \fIname ndNode ngNode nsNode ?args?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the device without first-letter designator J\&.
+.TP
+ndNode
+Name of node connected to drain pin\&.
+.TP
+ngNode
+Name of node connected to gate pin\&.
+.TP
+nsNode
+Name of node connected to source pin\&.
+.TP
+-area
+Scale factor, optional\&.
+.TP
+-model
+Name of the model\&.
+.TP
+-temp
+Device temperature, optional\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+.RS 4n
+.nf
+J<name> <drain node> <gate node> <source node> <model name> [area value] [device parameters]
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet new 1 netd netg nets -model jfetmod -area {area*2 -eq} -temp 25
+.fi
+.RE
+.PP
+.RS -4n
+\fBM\fR (::SpiceGenTcl::Xyce::SemiconductorDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fIMosfet\fP
+.PP
+.RS -4n
+\fBMesfet\fR (::SpiceGenTcl::Xyce::SemiconductorDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Device\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fIZ\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet)
+.RE
+.PP
+Creates object of class Mesfet that describes semiconductor MESFET device\&.
+.RS 4n\fBMesfet create OBJNAME\fP \fIname ndNode ngNode nsNode ?args?\fP
+.br
+\fBMesfet new\fP \fIname ndNode ngNode nsNode ?args?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the device without first-letter designator Z\&.
+.TP
+ndNode
+Name of node connected to drain pin\&.
+.TP
+ngNode
+Name of node connected to gate pin\&.
+.TP
+nsNode
+Name of node connected to source pin\&.
+.TP
+-area
+Emitter scale factor, optional\&.
+.TP
+-model
+Name of the model\&.
+.TP
+-temp
+Device temperature, optional\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+.RS 4n
+.nf
+Z<name> < drain node> <gate node> <source node> <model name> [area value] [device parameters]
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet new 1 netd netg nets -model mesfetmod -area {area*2 -eq}
+.fi
+.RE
+.PP
+.RS -4n
+\fBMosfet\fR (::SpiceGenTcl::Xyce::SemiconductorDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Device\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fIM\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Xyce::SemiconductorDevices::Mosfet)
+.RE
+.PP
+Creates object of class Mosfet that describes semiconductor MOSFET device\&.
+.RS 4n\fBMosfet create OBJNAME\fP \fIname ndNode ngNode nsNode ?args?\fP
+.br
+\fBMosfet new\fP \fIname ndNode ngNode nsNode ?args?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the device without first-letter designator M\&.
+.TP
+ndNode
+Name of node connected to drain pin\&.
+.TP
+ngNode
+Name of node connected to gate pin\&.
+.TP
+nsNode
+Name of node connected to source pin\&.
+.TP
+-ad
+Diffusion area of drain, optional, forbid -nrd\&.
+.TP
+-as
+Diffusion area of source, optional,forbid -nrs\&.
+.TP
+-custparams
+Key that collects all arguments at the end of device definition, to provide an ability to add custom parameters in form -custparams param1 param1Val param2 {param2eq -eq} param3 param3Val \&.\&.\&. Must be specified after all others options\&. Optional\&.
+.TP
+-ic
+Initial conditions for vds, vgs and vbs, in form of two element list, optional, require 4th node\&.
+.TP
+-l
+Length of channel, optional\&.
+.TP
+-m
+Multiplier, optional\&.
+.TP
+-model
+Name of the model\&.
+.TP
+-n4
+Name of 4th node;
+.TP
+-n5
+Name of 5th node, require -n4, optional\&.
+.TP
+-n7
+Name of 7th node, require -n6, optional\&.
+.TP
+-nrd
+Equivalent number of squares of the drain diffusions\&.
+.TP
+-nrs
+Equivalent number of squares of the source diffusions\&.
+.TP
+-off
+Initial state, optional\&.
+.TP
+-pd
+Perimeter area of drain, optional\&.
+.TP
+-ps
+Perimeter area of source, optional\&.
+.TP
+-temp
+Device temperature\&.
+.TP
+-w
+Width of channel, optional\&.
+.TP
+n6
+Name of 6th node, require -n5, optional\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+.RS 4n
+.nf
+M<name> <drain node> <gate node> <source node>
++ <bulk/substrate node> <model name>
++ [L=<value>] [W=<value>]
++ [AD=<value>] [AS=<value>]
++ [PD=<value>] [PS=<value>]
++ [NRD=<value>] [NRS=<value>]
++ [M=<value] [IC=<value, \&.\&.\&.>]
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Xyce::Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5
+.fi
+.RE
+.PP
+.RS -4n
+\fBQ\fR (::SpiceGenTcl::Xyce::SemiconductorDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fIBjt\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fIBjt\fP
+.PP
+.RS -4n
+\fBZ\fR (::SpiceGenTcl::Xyce::SemiconductorDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fIMesfet\fP
+

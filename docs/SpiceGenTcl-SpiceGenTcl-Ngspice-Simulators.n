@@ -1,0 +1,195 @@
+'\"
+'\" '\" Copyright (c) George Yashin
+'\"
+.TH "SpiceGenTcl::Ngspice::Simulators" 3tcl 0\&.54 "SpiceGenTcl" "Tcl SpiceGenTcl package"
+.SH NAME
+SpiceGenTcl::Ngspice::Simulators - Commands in namespace SpiceGenTcl::Ngspice::Simulators
+.SH SYNOPSIS
+\fBBatch create OBJNAME\fP \fIname ?runLocation?\fP
+.br
+\fBBatch new\fP \fIname ?runLocation?\fP
+.br
+\fBOBJECT clearLog\fP
+.br
+\fBOBJECT readData\fP
+.br
+\fBOBJECT readLog\fP
+.br
+\fBOBJECT runAndRead\fP \fIcircuitStr ?args?\fP
+.br
+\fBOBJECT runAndRead\fP \fIcircuitStr ?args?\fP
+.br
+.SH ::SPICEGENTCL::NGSPICE::SIMULATORS
+.SH CLASSES
+.PP
+.RS -4n
+\fBBatch\fR (::SpiceGenTcl::Ngspice::Simulators)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+clearLog
+Clear saved log by unsetting Log variable\&.
+.TP
+configure
+Configure properties\&.
+.TP
+getLog
+See \fI::SpiceGenTcl::Simulator\&.getLog\fP
+.TP
+readData
+Reads raw data file, create RawFile object and return it's reference name\&.
+.TP
+readLog
+Reads log file of last simulation and save it's content to Log variable\&.
+.TP
+run
+See \fI::SpiceGenTcl::Simulator\&.run\fP
+.TP
+runAndRead
+Runs netlist circuit file\&.
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Command, -Data, -LastRunFileName, -Log, -Name, -RunLocation
+.PP
+Writable: -Command, -Data, -LastRunFileName, -Log, -Name, -RunLocation
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Simulator\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fIBatchLiveLog\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Ngspice::Simulators::Batch)
+.RE
+.PP
+Creates batch ngspice simulator that can be attached to top-level Circuit\&.
+.RS 4n\fBBatch create OBJNAME\fP \fIname ?runLocation?\fP
+.br
+\fBBatch new\fP \fIname ?runLocation?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of simulator object\&.
+.TP
+runLocation
+Location at which input netlist is stored and all output files will be saved, default is current directory\&. Optional, default \&.\&.
+.RE
+.PP
+.RS -4n
+\fBclearLog\fR (::SpiceGenTcl::Ngspice::Simulators::Batch)
+.RE
+.PP
+Clear saved log by unsetting Log variable\&.
+.RS 4n\fBOBJECT clearLog\fP
+.br
+.RE
+.PP
+.RS -4n
+\fBreadData\fR (::SpiceGenTcl::Ngspice::Simulators::Batch)
+.RE
+.PP
+Reads raw data file, create RawFile object and return it's reference name\&.
+.RS 4n\fBOBJECT readData\fP
+.br
+.RE
+.PP
+.RS -4n
+\fBreadLog\fR (::SpiceGenTcl::Ngspice::Simulators::Batch)
+.RE
+.PP
+Reads log file of last simulation and save it's content to Log variable\&.
+.RS 4n\fBOBJECT readLog\fP
+.br
+.RE
+.PP
+.RS -4n
+\fBrunAndRead\fR (::SpiceGenTcl::Ngspice::Simulators::Batch)
+.RE
+.PP
+Runs netlist circuit file\&.
+.RS 4n\fBOBJECT runAndRead\fP \fIcircuitStr ?args?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+circuitStr
+Top-level netlist string\&.
+.TP
+-nodelete
+Flag to forbid simulation file deletion\&.
+.RE
+.PP
+.RS -4n
+\fBBatchLiveLog\fR (::SpiceGenTcl::Ngspice::Simulators)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+clearLog
+See \fIBatch\&.clearLog\fP
+.TP
+configure
+Configure properties\&.
+.TP
+getLog
+See \fI::SpiceGenTcl::Simulator\&.getLog\fP
+.TP
+readData
+See \fIBatch\&.readData\fP
+.TP
+readLog
+See \fIBatch\&.readLog\fP
+.TP
+run
+See \fI::SpiceGenTcl::Simulator\&.run\fP
+.TP
+runAndRead
+Runs netlist circuit file\&.
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Command, -Data, -LastRunFileName, -Log, -Name, -RunLocation
+.PP
+Writable: -Command, -Data, -LastRunFileName, -Log, -Name, -RunLocation
+.PP
+\fBSuperclasses\fR
+.PP
+\fIBatch\fP
+.PP
+.RS -4n
+\fBrunAndRead\fR (::SpiceGenTcl::Ngspice::Simulators::BatchLiveLog)
+.RE
+.PP
+Runs netlist circuit file\&.
+.RS 4n\fBOBJECT runAndRead\fP \fIcircuitStr ?args?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+circuitStr
+Top-level netlist string\&.
+.TP
+-nodelete
+Flag to forbid simulation file deletion\&.
+.RE
+

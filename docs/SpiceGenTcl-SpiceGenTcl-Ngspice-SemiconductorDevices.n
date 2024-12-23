@@ -1,0 +1,1354 @@
+'\"
+'\" '\" Copyright (c) George Yashin
+'\"
+.TH "SpiceGenTcl::Ngspice::SemiconductorDevices" 3tcl 0\&.54 "SpiceGenTcl" "Tcl SpiceGenTcl package"
+.SH NAME
+SpiceGenTcl::Ngspice::SemiconductorDevices - Commands in namespace SpiceGenTcl::Ngspice::SemiconductorDevices
+.SH SYNOPSIS
+\fBBjt create OBJNAME\fP \fIname ncNode nbNode neNode ?args?\fP
+.br
+\fBBjt new\fP \fIname ncNode nbNode neNode ?args?\fP
+.br
+\fBBjtGPModel create OBJNAME\fP \fIname type ?args?\fP
+.br
+\fBBjtGPModel new\fP \fIname type ?args?\fP
+.br
+\fBDiode create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+.br
+\fBDiode new\fP \fIname npNode nmNode ?args?\fP
+.br
+\fBDiodeModel create OBJNAME\fP \fIname ?args?\fP
+.br
+\fBDiodeModel new\fP \fIname ?args?\fP
+.br
+\fBJfet create OBJNAME\fP \fIname ndNode ngNode nsNode ?args?\fP
+.br
+\fBJfet new\fP \fIname ndNode ngNode nsNode ?args?\fP
+.br
+\fBJfet1Model create OBJNAME\fP \fIname type ?args?\fP
+.br
+\fBJfet1Model new\fP \fIname type ?args?\fP
+.br
+\fBJfet2Model create OBJNAME\fP \fIname type ?args?\fP
+.br
+\fBJfet2Model new\fP \fIname type ?args?\fP
+.br
+\fBMesfet create OBJNAME\fP \fIname ndNode ngNode nsNode ?args?\fP
+.br
+\fBMesfet new\fP \fIname ndNode ngNode nsNode ?args?\fP
+.br
+\fBMesfet1Model create OBJNAME\fP \fIname type ?args?\fP
+.br
+\fBMesfet1Model new\fP \fIname type ?args?\fP
+.br
+\fBMosfet create OBJNAME\fP \fIname ndNode ngNode nsNode ?args?\fP
+.br
+\fBMosfet new\fP \fIname ndNode ngNode nsNode ?args?\fP
+.br
+.SH ::SPICEGENTCL::NGSPICE::SEMICONDUCTORDEVICES
+.SH CLASSES
+.PP
+.RS -4n
+\fBBjt\fR (::SpiceGenTcl::Ngspice::SemiconductorDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Device\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fIQ\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Ngspice::SemiconductorDevices::Bjt)
+.RE
+.PP
+Creates object of class Bjt that describes semiconductor bipolar junction transistor device\&.
+.RS 4n\fBBjt create OBJNAME\fP \fIname ncNode nbNode neNode ?args?\fP
+.br
+\fBBjt new\fP \fIname ncNode nbNode neNode ?args?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the device without first-letter designator Q\&.
+.TP
+ncNode
+Name of node connected to collector pin\&.
+.TP
+nbNode
+Name of node connected to base pin\&.
+.TP
+neNode
+Name of node connected to emitter pin\&.
+.TP
+-area
+Emitter scale factor, optional\&.
+.TP
+-areab
+Base scale factor, optional\&.
+.TP
+-areac
+Collector scale factor, optional\&.
+.TP
+-dtemp
+Temperature offset, optional\&.
+.TP
+-ic
+Initial conditions for vds and vgs, in form of two element list, optional\&.
+.TP
+-m
+Multiplier of area and perimeter, optional\&.
+.TP
+-model
+Name of the model\&.
+.TP
+-ns
+Name of node connected to substrate pin, optional\&.
+.TP
+-temp
+Device temperature, optional\&.
+.TP
+-tj
+Name of node connected to thermal pin, optional, requires -ns\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+.RS 4n
+.nf
+QXXXXXXX nc nb ne <ns> <tj> mname <area=val> <areac=val>
++ <areab=val> <m=val> <off> <ic=vbe,vce> <temp=val>
++ <dtemp=val>
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Ngspice::SemiconductorDevices::Bjt new 1 netc netb nete -model bjtmod -ns nets -area 1e-3
+.fi
+.RE
+.PP
+.RS -4n
+\fBBjtGPModel\fR (::SpiceGenTcl::Ngspice::SemiconductorDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Model\&.addParam\fP
+.TP
+argsPreprocess
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Model\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Model\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Model\&.getParams\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Model\&.setParamValue\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name, -Type
+.PP
+Writable: -Name, -Type
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Model\fP
+.PP
+\fBMixins\fR
+.PP
+\fI::SpiceGenTcl::KeyArgsBuilder\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Ngspice::SemiconductorDevices::BjtGPModel)
+.RE
+.PP
+Creates object of class BjtGPModel that describes Gummel-Poon model of semiconductor bipolar transistor\&.
+.RS 4n\fBBjtGPModel create OBJNAME\fP \fIname type ?args?\fP
+.br
+\fBBjtGPModel new\fP \fIname type ?args?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the model\&.
+.TP
+type
+Npn or pnp\&.
+.TP
+args
+Keyword model parameters, for details please see Ngspice manual, chapter 8\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel new bjtmod npn -is 1e-15 -bf 200 -vaf 100 -cje 1e-10
+.fi
+.RE
+.PP
+.RS -4n
+\fBD\fR (::SpiceGenTcl::Ngspice::SemiconductorDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fIDiode\fP
+.PP
+.RS -4n
+\fBDiode\fR (::SpiceGenTcl::Ngspice::SemiconductorDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Device\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fID\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Ngspice::SemiconductorDevices::Diode)
+.RE
+.PP
+Creates object of class Diode that describes semiconductor diode device\&.
+.RS 4n\fBDiode create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+.br
+\fBDiode new\fP \fIname npNode nmNode ?args?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the device without first-letter designator D\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+-area
+Area scale factor, optional\&.
+.TP
+-dtemp
+Temperature offset, optional\&.
+.TP
+-ic
+Initial condition, optional\&.
+.TP
+-lm
+Length of metal capacitor, optional\&.
+.TP
+-lp
+Length of polysilicon capacitor, optional\&.
+.TP
+-m
+Multiplier of area and perimeter, optional\&.
+.TP
+-model
+Name of the model\&.
+.TP
+-pj
+Perimeter scale factor, optional\&.
+.TP
+-temp
+Device temperature, optional\&.
+.TP
+-wm
+Width of metal capacitor, optional\&.
+.TP
+-wp
+Width of polysilicon capacitor, optional\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+.RS 4n
+.nf
+DXXXXXXX n+ n- mname <area=val> <m=val>
++ <ic=vd> <temp=val> <dtemp=val>
++ <lm=val> <wm=val> <lp=val> <wp=val> <pj=val>
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Ngspice::SemiconductorDevices::Diode new 1 netp netm -model diomod -l 1e-6 -w 10e-6
+.fi
+.RE
+.PP
+.RS -4n
+\fBDiodeModel\fR (::SpiceGenTcl::Ngspice::SemiconductorDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Model\&.addParam\fP
+.TP
+argsPreprocess
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Model\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Model\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Model\&.getParams\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Model\&.setParamValue\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name, -Type
+.PP
+Writable: -Name, -Type
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Model\fP
+.PP
+\fBMixins\fR
+.PP
+\fI::SpiceGenTcl::KeyArgsBuilder\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel)
+.RE
+.PP
+Creates object of class DiodeModel that describes semiconductor diode model\&.
+.RS 4n\fBDiodeModel create OBJNAME\fP \fIname ?args?\fP
+.br
+\fBDiodeModel new\fP \fIname ?args?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the model\&.
+.TP
+args
+Keyword model parameters, for details please see Ngspice manual, chapter 7\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel new diodemod -is 1e-14 -n 1\&.2 -rs 0\&.01 -cj0 1e-9
+.fi
+.RE
+.PP
+.RS -4n
+\fBJ\fR (::SpiceGenTcl::Ngspice::SemiconductorDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fIJfet\fP
+.PP
+.RS -4n
+\fBJfet\fR (::SpiceGenTcl::Ngspice::SemiconductorDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Device\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fIJ\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet)
+.RE
+.PP
+Creates object of class Jfet that describes semiconductor junction FET device\&.
+.RS 4n\fBJfet create OBJNAME\fP \fIname ndNode ngNode nsNode ?args?\fP
+.br
+\fBJfet new\fP \fIname ndNode ngNode nsNode ?args?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the device without first-letter designator J\&.
+.TP
+ndNode
+Name of node connected to drain pin\&.
+.TP
+ngNode
+Name of node connected to gate pin\&.
+.TP
+nsNode
+Name of node connected to source pin\&.
+.TP
+-area
+Emitter scale factor, optional\&.
+.TP
+-ic
+Initial conditions for vds and vgs, in form of two element list, optional\&.
+.TP
+-model
+Name of the model\&.
+.TP
+-off
+Initial state, optional\&.
+.TP
+-temp
+Device temperature, optional\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+.RS 4n
+.nf
+JXXXXXXX nd ng ns mname  <area> <off> <ic=vds,vgs> <temp =t>
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet new 1 netd netg nets -model jfetmod -area {area*2 -eq} -temp 25
+.fi
+.RE
+.PP
+.RS -4n
+\fBJfet1Model\fR (::SpiceGenTcl::Ngspice::SemiconductorDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Model\&.addParam\fP
+.TP
+argsPreprocess
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Model\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Model\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Model\&.getParams\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Model\&.setParamValue\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name, -Type
+.PP
+Writable: -Name, -Type
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Model\fP
+.PP
+\fBMixins\fR
+.PP
+\fI::SpiceGenTcl::KeyArgsBuilder\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet1Model)
+.RE
+.PP
+Creates object of class Jfet1Model that describes JFET level 1 model with Parker Skellern modification\&.
+.RS 4n\fBJfet1Model create OBJNAME\fP \fIname type ?args?\fP
+.br
+\fBJfet1Model new\fP \fIname type ?args?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the model\&.
+.TP
+type
+Njf or pjf\&.
+.TP
+args
+Keyword model parameters, for details please see Ngspice manual, chapter 9\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet1Model new jfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4 -cgd 1e-12
+.fi
+.RE
+.PP
+.RS -4n
+\fBJfet2Model\fR (::SpiceGenTcl::Ngspice::SemiconductorDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Model\&.addParam\fP
+.TP
+argsPreprocess
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Model\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Model\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Model\&.getParams\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Model\&.setParamValue\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name, -Type
+.PP
+Writable: -Name, -Type
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Model\fP
+.PP
+\fBMixins\fR
+.PP
+\fI::SpiceGenTcl::KeyArgsBuilder\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet2Model)
+.RE
+.PP
+Creates object of class Jfet2Model that describes JFET level 2 model with Parker Skellern modification\&.
+.RS 4n\fBJfet2Model create OBJNAME\fP \fIname type ?args?\fP
+.br
+\fBJfet2Model new\fP \fIname type ?args?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the model\&.
+.TP
+type
+Njf or pjf\&.
+.TP
+args
+Keyword model parameters, for details please see Ngspice manual, chapter 9\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4 -vbi 1\&.2
+.fi
+.RE
+.PP
+.RS -4n
+\fBM\fR (::SpiceGenTcl::Ngspice::SemiconductorDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fIMosfet\fP
+.PP
+.RS -4n
+\fBMesfet\fR (::SpiceGenTcl::Ngspice::SemiconductorDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Device\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fIZ\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet)
+.RE
+.PP
+Creates object of class Mesfet that describes semiconductor MESFET device\&.
+.RS 4n\fBMesfet create OBJNAME\fP \fIname ndNode ngNode nsNode ?args?\fP
+.br
+\fBMesfet new\fP \fIname ndNode ngNode nsNode ?args?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the device without first-letter designator Z\&.
+.TP
+ndNode
+Name of node connected to drain pin\&.
+.TP
+ngNode
+Name of node connected to gate pin\&.
+.TP
+nsNode
+Name of node connected to source pin\&.
+.TP
+-area
+Emitter scale factor, optional\&.
+.TP
+-ic
+Initial conditions for vds and vgs, in form of two element list, optional\&.
+.TP
+-model
+Name of the model\&.
+.TP
+-off
+Initial state, optional\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+.RS 4n
+.nf
+ZXXXXXXX ND NG NS MNAME <AREA> <OFF> <IC=VDS,VGS >
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet new 1 netd netg nets -model mesfetmod -area {area*2 -eq}
+.fi
+.RE
+.PP
+.RS -4n
+\fBMesfet1Model\fR (::SpiceGenTcl::Ngspice::SemiconductorDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Model\&.addParam\fP
+.TP
+argsPreprocess
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Model\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Model\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Model\&.getParams\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Model\&.setParamValue\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name, -Type
+.PP
+Writable: -Name, -Type
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Model\fP
+.PP
+\fBMixins\fR
+.PP
+\fI::SpiceGenTcl::KeyArgsBuilder\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet1Model)
+.RE
+.PP
+Creates object of class Mesfet1Model that describes MESFET model by Statz e\&.a\&.\&.
+.RS 4n\fBMesfet1Model create OBJNAME\fP \fIname type ?args?\fP
+.br
+\fBMesfet1Model new\fP \fIname type ?args?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the model\&.
+.TP
+type
+Nmf or pmf\&.
+.TP
+args
+Keyword model parameters, for details please see Ngspice manual, chapter 10\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4 -vbi 1\&.2
+.fi
+.RE
+.PP
+.RS -4n
+\fBMosfet\fR (::SpiceGenTcl::Ngspice::SemiconductorDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Device\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fIM\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Ngspice::SemiconductorDevices::Mosfet)
+.RE
+.PP
+Creates object of class Mosfet that describes semiconductor MOSFET device\&.
+.RS 4n\fBMosfet create OBJNAME\fP \fIname ndNode ngNode nsNode ?args?\fP
+.br
+\fBMosfet new\fP \fIname ndNode ngNode nsNode ?args?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the device without first-letter designator M\&.
+.TP
+ndNode
+Name of node connected to drain pin\&.
+.TP
+ngNode
+Name of node connected to gate pin\&.
+.TP
+nsNode
+Name of node connected to source pin\&.
+.TP
+-ad
+Diffusion area of drain, optional, forbid -nrd\&.
+.TP
+-as
+Diffusion area of source, optional,forbid -nrs\&.
+.TP
+-custparams
+Key that collects all arguments at the end of device definition, to provide an ability to add custom parameters in form -custparams param1 param1Val param2 {param2eq -eq} param3 param3Val \&.\&.\&. Must be specified after all others options\&. Optional\&.
+.TP
+-ic
+Initial conditions for vds, vgs and vbs, in form of two element list, optional, require 4th node\&.
+.TP
+-l
+Length of channel, optional\&.
+.TP
+-m
+Multiplier, optional\&.
+.TP
+-model
+Name of the model\&.
+.TP
+-n4
+Name of 4th node;
+.TP
+-n5
+Name of 5th node, require -n4, optional\&.
+.TP
+-n7
+Name of 7th node, require -n6, optional\&.
+.TP
+-nrd
+Equivalent number of squares of the drain diffusions\&.
+.TP
+-nrs
+Equivalent number of squares of the source diffusions\&.
+.TP
+-off
+Initial state, optional\&.
+.TP
+-pd
+Perimeter area of drain, optional\&.
+.TP
+-ps
+Perimeter area of source, optional\&.
+.TP
+-temp
+Device temperature\&.
+.TP
+-w
+Width of channel, optional\&.
+.TP
+n6
+Name of 6th node, require -n5, optional\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+.RS 4n
+.nf
+MXXXXXXX nd ng ns nb mname <m=val> <l=val> <w=val>
++ <ad=val> <as=val> <pd=val> <ps=val> <nrd=val>
++ <nrs=val> <off> <ic=vds,vgs,vbs> <temp=t>
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Ngspice::Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5
+.fi
+.RE
+.PP
+.RS -4n
+\fBQ\fR (::SpiceGenTcl::Ngspice::SemiconductorDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fIBjt\fP
+.PP
+.RS -4n
+\fBZ\fR (::SpiceGenTcl::Ngspice::SemiconductorDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name
+.PP
+Writable: -Name
+.PP
+\fBSuperclasses\fR
+.PP
+\fIMesfet\fP
+

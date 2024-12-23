@@ -16,4 +16,7 @@
 
 package require tcltest
 namespace import ::tcltest::*
+set testDir [file normalize [file dirname [info script]]]
+configure {*}$argv -testdir $testDir
+package require SpiceGenTcl
 runAllTests

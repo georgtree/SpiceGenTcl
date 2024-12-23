@@ -1,4 +1,4 @@
-lappend auto_path ../../../
+
 package require SpiceGenTcl
 package require ticklecharts
 package require math::statistics
