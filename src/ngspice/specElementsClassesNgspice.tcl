@@ -61,7 +61,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # Behavioral resistor:
             # ```
-            # RXXXXXXX n+ n- R ={expression} <tc1=value> <tc2=value> <noisy=0>
+            # RXXXXXXX n+ n- R ={=ession} <tc1=value> <tc2=value> <noisy=0>
             # ```
             # Example of class initialization:
             # ```
@@ -93,20 +93,20 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
                 {-w= -require {model}}
             }]
             set params ""
-            if {[dict exists $arguments r]} {
-                set rVal [dict get $arguments r]
-                if {[dict exists $arguments beh]} {
+            if {[dexist $arguments r]} {
+                set rVal [dget $arguments r]
+                if {[dexist $arguments beh]} {
                     lappend params "r $rVal -eq"
-                } elseif {([llength $rVal]>1) && ([lindex $rVal 1]=="-eq")} {
-                    lappend params "r [lindex $rVal 0] -poseq"
+                } elseif {([llength $rVal]>1) && ([@ $rVal 1]=="-eq")} {
+                    lappend params "r [@ $rVal 0] -poseq"
                 } else {
                     lappend params "r $rVal -pos"
                 }
-            } elseif {[dict exists $arguments model]==0} {
+            } elseif {[dexist $arguments model]==0} {
                 error "Resistor value must be specified with '-r value'"
             }
-            if {[dict exists $arguments model]} {
-                lappend params "model [dict get $arguments model] -posnocheck"
+            if {[dexist $arguments model]} {
+                lappend params "model [dget $arguments model] -posnocheck"
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {r beh model}} {
@@ -144,17 +144,17 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # ::SpiceGenTcl::Ngspice::BasicDevices::Capacitor new 1 netp netm 1e-6 -tc1 1 -temp {temp -eq}
             # ```
-            # Behavioral capacitor with C expression:
+            # Behavioral capacitor with C =ession:
             # ```
-            # CXXXXXXX n+ n- C={expression} <tc1=value> <tc2=value>
+            # CXXXXXXX n+ n- C={=ession} <tc1=value> <tc2=value>
             # ```
             # Example of class initialization:
             # ```
             # ::SpiceGenTcl::Ngspice::BasicDevices::Capacitor new 1 netp netm -c "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1
             # ```
-            # Behavioral capacitor with Q expression:
+            # Behavioral capacitor with Q =ession:
             # ```
-            # CXXXXXXX n+ n- Q={expression} <tc1=value> <tc2=value>
+            # CXXXXXXX n+ n- Q={=ession} <tc1=value> <tc2=value>
             # ```
             # Example of class initialization:
             # ```
@@ -185,24 +185,24 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
                 {-w= -require {model}}
             }]
             set params ""
-            if {[dict exists $arguments c]} {
-                set cVal [dict get $arguments c]
-                if {[dict exists $arguments beh]} {
+            if {[dexist $arguments c]} {
+                set cVal [dget $arguments c]
+                if {[dexist $arguments beh]} {
                     lappend params "c $cVal -eq"
-                } elseif {([llength $cVal]>1) && ([lindex $cVal 1]=="-eq")} {
-                    lappend params "c [lindex $cVal 0] -poseq"
+                } elseif {([llength $cVal]>1) && ([@ $cVal 1]=="-eq")} {
+                    lappend params "c [@ $cVal 0] -poseq"
                 } else {
                     lappend params "c $cVal -pos"
                 }
-            } elseif {([dict exists $arguments model]==0) && ([dict exists $arguments q]==0)} {
+            } elseif {([dexist $arguments model]==0) && ([dexist $arguments q]==0)} {
                 error "Capacitor value must be specified with '-c value'"
             }
-            if {[dict exists $arguments q]} {
-                set qVal [dict get $arguments q]
+            if {[dexist $arguments q]} {
+                set qVal [dget $arguments q]
                 lappend params "q $qVal -eq"
             }
-            if {[dict exists $arguments model]} {
-                lappend params "model [dict get $arguments model] -posnocheck"
+            if {[dexist $arguments model]} {
+                lappend params "model [dget $arguments model] -posnocheck"
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {c q beh model}} {
@@ -243,7 +243,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # Behavioral inductor:
             # ```
-            # LYYYYYYY n+ n- L={expression} <tc1=val> <tc2=val>
+            # LYYYYYYY n+ n- L={=ession} <tc1=val> <tc2=val>
             # ```
             # Example of class initialization:
             # ```
@@ -272,20 +272,20 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
                 {-nt= -require {model}}
             }]
             set params ""
-            if {[dict exists $arguments l]} {
-                set lVal [dict get $arguments l]
-                if {[dict exists $arguments beh]} {
+            if {[dexist $arguments l]} {
+                set lVal [dget $arguments l]
+                if {[dexist $arguments beh]} {
                     lappend params "l $lVal -eq"
-                } elseif {([llength $lVal]>1) && ([lindex $lVal 1]=="-eq")} {
-                    lappend params "l [lindex $lVal 0] -poseq"
+                } elseif {([llength $lVal]>1) && ([@ $lVal 1]=="-eq")} {
+                    lappend params "l [@ $lVal 0] -poseq"
                 } else {
                     lappend params "l $lVal -pos"
                 }
-            } elseif {[dict exists $arguments model]==0} {
+            } elseif {[dexist $arguments model]==0} {
                 error "Inductor value must be specified with '-l value'"
             }
-            if {[dict exists $arguments model]} {
-                lappend params "model [dict get $arguments model] -posnocheck"
+            if {[dexist $arguments model]} {
+                lappend params "model [dget $arguments model] -posnocheck"
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {l beh model}} {
@@ -447,14 +447,14 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             }]
             set paramsOrder [list low high td tr tf pw per np]
             foreach param $paramsOrder {
-                if {[dict exists $arguments $param]} {
-                    dict append argsOrdered $param [dict get $arguments $param]
+                if {[dexist $arguments $param]} {
+                    dict append argsOrdered $param [dget $arguments $param]
                 }
             }
             lappend params "model pulse -posnocheck"
             dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                    lappend params "$paramName [lindex $value 0] -poseq"
+                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
+                    lappend params "$paramName [@ $value 0] -poseq"
                 } else {
                     lappend params "$paramName $value -pos"
                 }
@@ -481,14 +481,14 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             }]
             set paramsOrder [list v0 va fc mdi fs phasec phases]
             foreach param $paramsOrder {
-                if {[dict exists $arguments $param]} {
-                    dict append argsOrdered $param [dict get $arguments $param]
+                if {[dexist $arguments $param]} {
+                    dict append argsOrdered $param [dget $arguments $param]
                 }
             }
             lappend params "model sffm -posnocheck"
             dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                    lappend params "$paramName [lindex $value 0] -poseq"
+                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
+                    lappend params "$paramName [@ $value 0] -poseq"
                 } else {
                     lappend params "$paramName $value -pos"
                 }
@@ -512,14 +512,14 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             }]
             set paramsOrder [list v0 va mf fc td phases]
             foreach param $paramsOrder {
-                if {[dict exists $arguments $param]} {
-                    dict append argsOrdered $param [dict get $arguments $param]
+                if {[dexist $arguments $param]} {
+                    dict append argsOrdered $param [dget $arguments $param]
                 }
             }
             lappend params "model am -posnocheck"
             dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                    lappend params "$paramName [lindex $value 0] -poseq"
+                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
+                    lappend params "$paramName [@ $value 0] -poseq"
                 } else {
                     lappend params "$paramName $value -pos"
                 }
@@ -568,8 +568,8 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             }]
             dict for {paramName value} $arguments {
                 lappend params "$paramName -sw"
-                if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                    lappend params "${paramName}val [lindex $value 0] -poseq"
+                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
+                    lappend params "${paramName}val [@ $value 0] -poseq"
                 } else {
                     lappend params "${paramName}val $value -pos"
                 }
@@ -852,10 +852,10 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             #  name - name of the device without first-letter designator R
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  -i - current expression
-            #  -v - voltage expression
+            #  -i - current =ession
+            #  -v - voltage =ession
             # ```
-            # BXXXXXXX n+ n- <i=expr> <v=expr> <tc1=value> <tc2=value> <dtemp=value> <temp=value>
+            # BXXXXXXX n+ n- <i==> <v==> <tc1=value> <tc2=value> <dtemp=value> <temp=value>
             # ```
             # Example of class initialization:
             # ```
@@ -870,10 +870,10 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
                 {-temp= -forbid {dtemp}}
                 {-dtemp= -forbid {temp}}
             }]
-            if {[dict exists $arguments i]} {
-                lappend params "i [dict get $arguments i] -eq"
-            } elseif {[dict exists $arguments v]} {
-                lappend params "v [dict get $arguments v] -eq"
+            if {[dexist $arguments i]} {
+                lappend params "i [dget $arguments i] -eq"
+            } elseif {[dexist $arguments v]} {
+                lappend params "v [dget $arguments v] -eq"
             } else {
                 error "Equation must be specified as argument to -i or -v"
             }
@@ -939,7 +939,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
                 -lp=
                 -wp=
             }]
-            lappend params "model [dict get $arguments model] -posnocheck"
+            lappend params "model [dget $arguments model] -posnocheck"
             dict for {paramName value} $arguments {
                 if {$paramName ni {model}} {
                     lappend params "$paramName $value"
@@ -997,9 +997,9 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
                 -ns=
                 {-tj= -require {ns}}
             }]            
-            lappend params "model [dict get $arguments model] -posnocheck"
-            if {[dict exists $arguments ic]} {
-                lappend params "ic [join [dict get $arguments ic] ,] -nocheck"
+            lappend params "model [dget $arguments model] -posnocheck"
+            if {[dexist $arguments ic]} {
+                lappend params "ic [join [dget $arguments ic] ,] -nocheck"
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {model ns tj ic}} {
@@ -1007,10 +1007,10 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
                 }
             }
             set pinList [list "nc $ncNode" "nb $nbNode" "ne $neNode"]
-            if {[dict exists $arguments ns]} {
-                lappend pinList "ns [dict get $arguments ns]"
-                if {[dict exists $arguments tj]} {
-                    lappend pinList "tj [dict get $arguments tj]"
+            if {[dexist $arguments ns]} {
+                lappend pinList "ns [dget $arguments ns]"
+                if {[dexist $arguments tj]} {
+                    lappend pinList "tj [dget $arguments tj]"
                 }
             }
             next q$name $pinList $params
@@ -1053,20 +1053,20 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
                 {-ic= -validate {[llength $arg]==2}}
                 -temp=
             }]
-            lappend params "model [dict get $arguments model] -posnocheck"
-            if {[dict exists $arguments area]} {
-                set areaVal [dict get $arguments area]
-                if {([llength $areaVal]>1) && ([lindex $areaVal 1]=="-eq")} {
-                    lappend params "area [lindex $areaVal 0] -poseq"
+            lappend params "model [dget $arguments model] -posnocheck"
+            if {[dexist $arguments area]} {
+                set areaVal [dget $arguments area]
+                if {([llength $areaVal]>1) && ([@ $areaVal 1]=="-eq")} {
+                    lappend params "area [@ $areaVal 0] -poseq"
                 } else {
                     lappend params "area $areaVal -pos"
                 }
             }
-            if {[dict get $arguments off]==1} {
+            if {[dget $arguments off]==1} {
                 lappend params "off -sw"
             }
-            if {[dict exists $arguments ic]} {
-                lappend params "ic [join [dict get $arguments ic] ,] -nocheck"
+            if {[dexist $arguments ic]} {
+                lappend params "ic [join [dget $arguments ic] ,] -nocheck"
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {model area off ic}} {
@@ -1111,20 +1111,20 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
                 {-off -boolean}
                 {-ic= -validate {[llength $arg]==2}}
             }]
-            lappend params "model [dict get $arguments model] -posnocheck"
-            if {[dict exists $arguments area]} {
-                set areaVal [dict get $arguments area]
-                if {([llength $areaVal]>1) && ([lindex $areaVal 1]=="-eq")} {
-                    lappend params "area [lindex $areaVal 0] -poseq"
+            lappend params "model [dget $arguments model] -posnocheck"
+            if {[dexist $arguments area]} {
+                set areaVal [dget $arguments area]
+                if {([llength $areaVal]>1) && ([@ $areaVal 1]=="-eq")} {
+                    lappend params "area [@ $areaVal 0] -poseq"
                 } else {
                     lappend params "area $areaVal -pos"
                 }
             }
-            if {[dict get $arguments off]==1} {
+            if {[dget $arguments off]==1} {
                 lappend params "off -sw"
             }
-            if {[dict exists $arguments ic]} {
-                lappend params "ic [join [dict get $arguments ic] ,] -nocheck"
+            if {[dexist $arguments ic]} {
+                lappend params "ic [join [dget $arguments ic] ,] -nocheck"
             }
             next z$name [list "nd $ndNode" "ng $ngNode" "ns $nsNode"] $params
             
@@ -1197,36 +1197,36 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
                 {-n7= -require {n7}}
                 {-custparams -catchall}
             }]
-            lappend params "model [dict get $arguments model] -posnocheck"
-            if {[dict get $arguments off]==1} {
+            lappend params "model [dget $arguments model] -posnocheck"
+            if {[dget $arguments off]==1} {
                 lappend params "off -sw"
             }
-            if {[dict exists $arguments ic]} {
-                lappend params "ic [join [dict get $arguments ic] ,] -nocheck"
+            if {[dexist $arguments ic]} {
+                lappend params "ic [join [dget $arguments ic] ,] -nocheck"
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {model off ic n4 n5 n6 n7 custparams}} {
                     lappend params "$paramName $value"
                 }
             }
-            if {[dict get $arguments custparams]!=""} {
-                if {[llength [dict get $arguments custparams]]%2!=0} {
+            if {[dget $arguments custparams]!=""} {
+                if {[llength [dget $arguments custparams]]%2!=0} {
                     error "Custom parameters list must be even length"
                 }
-                set custParamDict [dict create {*}[dict get $arguments custparams]]
+                set custParamDict [dcreate {*}[dget $arguments custparams]]
                 dict for {paramName value} $custParamDict {
                     lappend params "$paramName $value"
                 }
             }
             set pinList [list "nd $ndNode" "ng $ngNode" "ns $nsNode"]
-            if {[dict exists $arguments n4]} {
-                lappend pinList "n4 [dict get $arguments n4]"
-                if {[dict exists $arguments n5]} {
-                    lappend pinList "n5 [dict get $arguments n5]"
-                    if {[dict exists $arguments n6]} {
-                        lappend pinList "n6 [dict get $arguments n6]"
-                        if {[dict exists $arguments n7]} {
-                            lappend pinList "n7 [dict get $arguments n7]"
+            if {[dexist $arguments n4]} {
+                lappend pinList "n4 [dget $arguments n4]"
+                if {[dexist $arguments n5]} {
+                    lappend pinList "n5 [dget $arguments n5]"
+                    if {[dexist $arguments n6]} {
+                        lappend pinList "n6 [dget $arguments n6]"
+                        if {[dexist $arguments n7]} {
+                            lappend pinList "n7 [dget $arguments n7]"
                         }
                     }
                 }

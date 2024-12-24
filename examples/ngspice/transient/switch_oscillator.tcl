@@ -55,10 +55,10 @@ $circuit configure -Simulator $simulator
 $circuit runAndRead
 # get data object
 set data [$circuit getDataDict]
-set time [dict get $data time]
-set vout [dict get $data v(osc_out)]
-set imeas [dict get $data i(vmeasure)]
-foreach time [dict get $data time] vout [dict get $data v(osc_out)] imeas [dict get $data i(vmeasure)] {
+set time [dget $data time]
+set vout [dget $data v(osc_out)]
+set imeas [dget $data i(vmeasure)]
+foreach time [dget $data time] vout [dget $data v(osc_out)] imeas [dget $data i(vmeasure)] {
     lappend timeVout [list $time $vout]
     lappend timeImeas [list $time $imeas]
 }

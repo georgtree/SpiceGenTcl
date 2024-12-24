@@ -48,19 +48,19 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
                 {-stop= -required}
                 {-incr= -required}
             }]
-            if {[dict exists $arguments name]} {
-                set name [dict get $arguments name]
+            if {[dexist $arguments name]} {
+                set name [dget $arguments name]
             } else {
                 set name [self object]
             }
-            lappend params "src [dict get $arguments src] -posnocheck"
+            lappend params "src [dget $arguments src] -posnocheck"
             set paramsOrder [list start stop incr]
             foreach param $paramsOrder {
-                dict append argsOrdered $param [dict get $arguments $param]
+                dict append argsOrdered $param [dget $arguments $param]
             }
             dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                    lappend params "$paramName [lindex $value 0] -poseq"
+                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
+                    lappend params "$paramName [@ $value 0] -poseq"
                 } else {
                     lappend params "$paramName $value -pos"
                 }
@@ -95,19 +95,19 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
                 {-fstart= -required}
                 {-fstop= -required}
             }]
-            if {[dict exists $arguments name]} {
-                set name [dict get $arguments name]
+            if {[dexist $arguments name]} {
+                set name [dget $arguments name]
             } else {
                 set name [self object]
             }
-            lappend params "variation [dict get $arguments variation] -posnocheck"
+            lappend params "variation [dget $arguments variation] -posnocheck"
             set paramsOrder [list n fstart fstop]
             foreach param $paramsOrder {
-                dict append argsOrdered $param [dict get $arguments $param]
+                dict append argsOrdered $param [dget $arguments $param]
             }
             dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                    lappend params "$paramName [lindex $value 0] -poseq"
+                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
+                    lappend params "$paramName [@ $value 0] -poseq"
                 } else {
                     lappend params "$paramName $value -pos"
                 }
@@ -122,11 +122,11 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
         superclass ::SpiceGenTcl::Analysis
         constructor {args} {
             # Creates object of class `Sens` that describes SENS ac analysis. 
-            #  -objfunc - output expression
+            #  -objfunc - output =ession
             #  -param - circuit parameter(s)
             #  -name - name argument, optional 
             # ```
-            # .SENS objfunc=<output expression(s)> param=<circuit parameter(s)>
+            # .SENS objfunc=<output =ession(s)> param=<circuit parameter(s)>
             # ```
             # Example of class initialization:
             # ```
@@ -137,13 +137,13 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
                 {-objfunc= -required}
                 {-param= -required}
             }]
-            if {[dict exists $arguments name]} {
-                set name [dict get $arguments name]
+            if {[dexist $arguments name]} {
+                set name [dget $arguments name]
             } else {
                 set name [self object]
             }
-            lappend params "objfunc [dict get $arguments objfunc] -eq" 
-            lappend params "param [dict get $arguments param] -nocheck"
+            lappend params "objfunc [dget $arguments objfunc] -eq"
+            lappend params "param [dget $arguments param] -nocheck"
             next sens $params -name $name
         }
     }
@@ -176,25 +176,25 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
                 {-tmax= -require {tstart}}
                 {-uic -boolean}
             }]
-            if {[dict exists $arguments name]} {
-                set name [dict get $arguments name]
+            if {[dexist $arguments name]} {
+                set name [dget $arguments name]
             } else {
                 set name [self object]
             }
             set paramsOrder [list tstep tstop tstart tmax]
             foreach param $paramsOrder {
-                if {[dict exists $arguments $param]} {
-                    dict append argsOrdered $param [dict get $arguments $param]
+                if {[dexist $arguments $param]} {
+                    dict append argsOrdered $param [dget $arguments $param]
                 }
             }
             dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                    lappend params "$paramName [lindex $value 0] -poseq"
+                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
+                    lappend params "$paramName [@ $value 0] -poseq"
                 } else {
                     lappend params "$paramName $value -pos"
                 }
             }
-            if {[dict get $arguments uic]==1} {
+            if {[dget $arguments uic]==1} {
                 lappend params "uic -sw"
             }
             next tran $params -name $name
@@ -218,8 +218,8 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
             set arguments [argparse -inline {
                 -name=
             }]
-            if {[dict exists $arguments name]} {
-                set name [dict get $arguments name]
+            if {[dexist $arguments name]} {
+                set name [dget $arguments name]
             } else {
                 set name [self object]
             }

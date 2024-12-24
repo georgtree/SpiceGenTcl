@@ -147,13 +147,13 @@ set paramsNames [list tc1 tc2 rsh defw narrow short tnom kf af wf lf ef {r res}]
 </figure><p class='ruff'>The same applies to all elements (devices and models) in the package.</p>
 <h2 class='ruff'><a name='::FAQ-How to get raw data after simulation?'></a>How to get raw data after simulation?<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
-<p class='ruff'>After a successful simulation, an object of the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile" title="::SpiceGenTcl::RawFile" class='ruff_cmd'>::SpiceGenTcl::RawFile</a> class is created and attached to the top-level <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> object. To retrieve the result vectors, simply call the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::getDataDict" title="::SpiceGenTcl::Circuit::getDataDict" class='ruff_cmd'>::SpiceGenTcl::Circuit::getDataDict</a> method on the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> object. This method returns the result vectors as a dictionary, with vector names as keys and the vectors themselves as values. You can then access these vectors using the <code>dict get</code> command.</p>
+<p class='ruff'>After a successful simulation, an object of the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile" title="::SpiceGenTcl::RawFile" class='ruff_cmd'>::SpiceGenTcl::RawFile</a> class is created and attached to the top-level <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> object. To retrieve the result vectors, simply call the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::getDataDict" title="::SpiceGenTcl::Circuit::getDataDict" class='ruff_cmd'>::SpiceGenTcl::Circuit::getDataDict</a> method on the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> object. This method returns the result vectors as a dictionary, with vector names as keys and the vectors themselves as values. You can then access these vectors using the <code>dget</code> command.</p>
 <p class='ruff'>Example:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
 set data [$circuit getDataDict]
-set axisList [dict get $data v(anode)]
-set traceList [dict get $data i(va)]  
+set axisList [dget $data v(anode)]
+set traceList [dget $data i(va)]
 </pre>
 
 </figure><h2 class='ruff'><a name='::FAQ-How to get the names of all vectors in raw file?'></a>How to get the names of all vectors in raw file?<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>

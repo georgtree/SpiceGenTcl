@@ -78,7 +78,7 @@ namespace eval Tips {
                     {-model= -required}
                     $paramDefList
                 "]
-                lappend params "model [dict get $arguments model] -posnocheck"
+                lappend params "model [dget $arguments model] -posnocheck"
                 dict for {paramName value} $arguments {
                     if {$paramName!="model"} {
                         lappend params "$paramName $value"
@@ -128,11 +128,11 @@ namespace eval Tips {
         `-area 1e-4` or `-area l*m -eq`.
         
         Possible qualificator is -eq - it means that parameter should be inserted into SPICE netlist as
-        `paramName={expression}`
+        `paramName={=ession}`
         
         In the next few lines we build parameter list that will be passed to [::SpiceGenTcl::Device] constructor:      
         ```tcl
-        lappend params "model [dict get $arguments model] -posnocheck"
+        lappend params "model [dget $arguments model] -posnocheck"
         dict for {paramName value} $arguments {
             if {$paramName!="model"} {
                 lappend params "$paramName $value"

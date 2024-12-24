@@ -58,14 +58,14 @@
     }]
     set paramsOrder [list v0 va mf fc td phases]
     foreach param $paramsOrder {
-        if {[dict exists $arguments $param]} {
-            dict append argsOrdered $param [dict get $arguments $param]
+        if {[dexist $arguments $param]} {
+            dict append argsOrdered $param [dget $arguments $param]
         }
     }
     lappend params &quot;model am -posnocheck&quot;
     dict for {paramName value} $argsOrdered {
-        if {([llength $value]&gt;1) &amp;&amp; ([lindex $value 1]==&quot;-eq&quot;)} {
-            lappend params &quot;$paramName [lindex $value 0] -poseq&quot;
+        if {([llength $value]&gt;1) &amp;&amp; ([@ $value 1]==&quot;-eq&quot;)} {
+            lappend params &quot;$paramName [@ $value 0] -poseq&quot;
         } else {
             lappend params &quot;$paramName $value -pos&quot;
         }
@@ -121,12 +121,12 @@
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator R.</td></tr>
 <tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
 <tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>-i</code></td><td>Current expression.</td></tr>
-<tr><td><code>-v</code></td><td>Voltage expression.</td></tr>
+<tr><td><code>-i</code></td><td>Current =ession.</td></tr>
+<tr><td><code>-v</code></td><td>Voltage =ession.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-BXXXXXXX n+ n- &lt;i=expr&gt; &lt;v=expr&gt; &lt;tc1=value&gt; &lt;tc2=value&gt; &lt;dtemp=value&gt; &lt;temp=value&gt;
+BXXXXXXX n+ n- &lt;i==&gt; &lt;v==&gt; &lt;tc1=value&gt; &lt;tc2=value&gt; &lt;dtemp=value&gt; &lt;temp=value&gt;
 </pre>
 
 </figure><p class='ruff'>Example of class initialization:</p>
@@ -142,10 +142,10 @@ BXXXXXXX n+ n- &lt;i=expr&gt; &lt;v=expr&gt; &lt;tc1=value&gt; &lt;tc2=value&gt;
     #  name - name of the device without first-letter designator R
     #  npNode - name of node connected to positive pin
     #  nmNode - name of node connected to negative pin
-    #  -i - current expression
-    #  -v - voltage expression
+    #  -i - current =ession
+    #  -v - voltage =ession
     # ```
-    # BXXXXXXX n+ n- &lt;i=expr&gt; &lt;v=expr&gt; &lt;tc1=value&gt; &lt;tc2=value&gt; &lt;dtemp=value&gt; &lt;temp=value&gt;
+    # BXXXXXXX n+ n- &lt;i==&gt; &lt;v==&gt; &lt;tc1=value&gt; &lt;tc2=value&gt; &lt;dtemp=value&gt; &lt;temp=value&gt;
     # ```
     # Example of class initialization:
     # ```
@@ -160,10 +160,10 @@ BXXXXXXX n+ n- &lt;i=expr&gt; &lt;v=expr&gt; &lt;tc1=value&gt; &lt;tc2=value&gt;
         {-temp= -forbid {dtemp}}
         {-dtemp= -forbid {temp}}
     }]
-    if {[dict exists $arguments i]} {
-        lappend params &quot;i [dict get $arguments i] -eq&quot;
-    } elseif {[dict exists $arguments v]} {
-        lappend params &quot;v [dict get $arguments v] -eq&quot;
+    if {[dexist $arguments i]} {
+        lappend params &quot;i [dget $arguments i] -eq&quot;
+    } elseif {[dexist $arguments v]} {
+        lappend params &quot;v [dget $arguments v] -eq&quot;
     } else {
         error &quot;Equation must be specified as argument to -i or -v&quot;
     }
@@ -612,14 +612,14 @@ IYYYYYYY n+ n- SFFM(VO VA FC MDI FS PHASEC PHASES)
     }]
     set paramsOrder [list low high td tr tf pw per np]
     foreach param $paramsOrder {
-        if {[dict exists $arguments $param]} {
-            dict append argsOrdered $param [dict get $arguments $param]
+        if {[dexist $arguments $param]} {
+            dict append argsOrdered $param [dget $arguments $param]
         }
     }
     lappend params &quot;model pulse -posnocheck&quot;
     dict for {paramName value} $argsOrdered {
-        if {([llength $value]&gt;1) &amp;&amp; ([lindex $value 1]==&quot;-eq&quot;)} {
-            lappend params &quot;$paramName [lindex $value 0] -poseq&quot;
+        if {([llength $value]&gt;1) &amp;&amp; ([@ $value 1]==&quot;-eq&quot;)} {
+            lappend params &quot;$paramName [@ $value 0] -poseq&quot;
         } else {
             lappend params &quot;$paramName $value -pos&quot;
         }
@@ -671,14 +671,14 @@ IYYYYYYY n+ n- SFFM(VO VA FC MDI FS PHASEC PHASES)
     }]
     set paramsOrder [list v0 va fc mdi fs phasec phases]
     foreach param $paramsOrder {
-        if {[dict exists $arguments $param]} {
-            dict append argsOrdered $param [dict get $arguments $param]
+        if {[dexist $arguments $param]} {
+            dict append argsOrdered $param [dget $arguments $param]
         }
     }
     lappend params &quot;model sffm -posnocheck&quot;
     dict for {paramName value} $argsOrdered {
-        if {([llength $value]&gt;1) &amp;&amp; ([lindex $value 1]==&quot;-eq&quot;)} {
-            lappend params &quot;$paramName [lindex $value 0] -poseq&quot;
+        if {([llength $value]&gt;1) &amp;&amp; ([@ $value 1]==&quot;-eq&quot;)} {
+            lappend params &quot;$paramName [@ $value 0] -poseq&quot;
         } else {
             lappend params &quot;$paramName $value -pos&quot;
         }
@@ -906,8 +906,8 @@ VYYYYYYY n+ n- DC 0 AC 1 portnum n1 &lt;z0 n2&gt;
     }]
     dict for {paramName value} $arguments {
         lappend params &quot;$paramName -sw&quot;
-        if {([llength $value]&gt;1) &amp;&amp; ([lindex $value 1]==&quot;-eq&quot;)} {
-            lappend params &quot;${paramName}val [lindex $value 0] -poseq&quot;
+        if {([llength $value]&gt;1) &amp;&amp; ([@ $value 1]==&quot;-eq&quot;)} {
+            lappend params &quot;${paramName}val [@ $value 0] -poseq&quot;
         } else {
             lappend params &quot;${paramName}val $value -pos&quot;
         }

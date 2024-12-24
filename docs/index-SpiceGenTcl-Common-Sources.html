@@ -52,17 +52,17 @@
         {-ac= -required}
         -acphase=
     }]
-    set acVal [dict get $arguments ac]
+    set acVal [dget $arguments ac]
     lappend params &quot;ac -sw&quot;
-    if {([llength $acVal]&gt;1) &amp;&amp; ([lindex $acVal 1]==&quot;-eq&quot;)} {
-        lappend params &quot;acval [lindex $acVal 0] -poseq&quot;
+    if {([llength $acVal]&gt;1) &amp;&amp; ([@ $acVal 1]==&quot;-eq&quot;)} {
+        lappend params &quot;acval [@ $acVal 0] -poseq&quot;
     } else {
         lappend params &quot;acval $acVal -pos&quot;
     }
     dict for {paramName value} $arguments {
         if {$paramName ni {ac}} {
-            if {([llength $value]&gt;1) &amp;&amp; ([lindex $value 1]==&quot;-eq&quot;)} {
-                lappend params &quot;$paramName [lindex $value 0] -poseq&quot;
+            if {([llength $value]&gt;1) &amp;&amp; ([@ $value 1]==&quot;-eq&quot;)} {
+                lappend params &quot;$paramName [@ $value 0] -poseq&quot;
             } else {
                 lappend params &quot;$paramName $value -pos&quot;
             }
@@ -134,18 +134,18 @@ FXXXXXXX N+ N- VNAM VALUE &lt;m=val&gt;
         {-gain -required}
         -m=
     }]
-    set consrcVal [dict get $arguments consrc]
+    set consrcVal [dget $arguments consrc]
     lappend params &quot;consrc $consrcVal -posnocheck&quot;
-    set gainVal [dict get $arguments gain]
-    if {([llength $gainVal]&gt;1) &amp;&amp; ([lindex $gainVal 1]==&quot;-eq&quot;)} {
-        lappend params &quot;igain [lindex $gainVal 0] -poseq&quot;
+    set gainVal [dget $arguments gain]
+    if {([llength $gainVal]&gt;1) &amp;&amp; ([@ $gainVal 1]==&quot;-eq&quot;)} {
+        lappend params &quot;igain [@ $gainVal 0] -poseq&quot;
     } else {
         lappend params &quot;igain $gainVal -pos&quot;
     }
-    if {[dict exists $arguments m]} {
-        set mVal [dict get $arguments m]
-        if {([llength $mVal]&gt;1) &amp;&amp; ([lindex $mVal 1]==&quot;-eq&quot;)} {
-            lappend params &quot;m [lindex $mVal 0] -eq&quot;
+    if {[dexist $arguments m]} {
+        set mVal [dget $arguments m]
+        if {([llength $mVal]&gt;1) &amp;&amp; ([@ $mVal 1]==&quot;-eq&quot;)} {
+            lappend params &quot;m [@ $mVal 0] -eq&quot;
         } else {
             lappend params &quot;m $mVal&quot;
         }
@@ -213,11 +213,11 @@ HXXXXXXX N+ N- VNAM VALUE
         {-consrc -required}
         {-transr -required}
     }]
-    set consrcVal [dict get $arguments consrc]
+    set consrcVal [dget $arguments consrc]
     lappend params &quot;consrc $consrcVal -posnocheck&quot;
-    set transrVal [dict get $arguments transr]
-    if {([llength $transrVal]&gt;1) &amp;&amp; ([lindex $transrVal 1]==&quot;-eq&quot;)} {
-        lappend params &quot;transr [lindex $transrVal 0] -poseq&quot;
+    set transrVal [dget $arguments transr]
+    if {([llength $transrVal]&gt;1) &amp;&amp; ([@ $transrVal 1]==&quot;-eq&quot;)} {
+        lappend params &quot;transr [@ $transrVal 0] -poseq&quot;
     } else {
         lappend params &quot;transr $transrVal -pos&quot;
     }
@@ -257,9 +257,9 @@ HXXXXXXX N+ N- VNAM VALUE
     set arguments [argparse -inline {
         {-dc= -required}
     }]
-    set dcVal [dict get $arguments dc]
-    if {([llength $dcVal]&gt;1) &amp;&amp; ([lindex $dcVal 1]==&quot;-eq&quot;)} {
-        lappend params &quot;dc [lindex $dcVal 0] -poseq&quot;
+    set dcVal [dget $arguments dc]
+    if {([llength $dcVal]&gt;1) &amp;&amp; ([@ $dcVal 1]==&quot;-eq&quot;)} {
+        lappend params &quot;dc [@ $dcVal 0] -poseq&quot;
     } else {
         lappend params &quot;dc $dcVal -pos&quot;
     }
@@ -323,14 +323,14 @@ HXXXXXXX N+ N- VNAM VALUE
     }]
     set paramsOrder [list v1 v2 td1 tau1 td2 tau2]
     foreach param $paramsOrder {
-        if {[dict exists $arguments $param]} {
-            dict append argsOrdered $param [dict get $arguments $param]
+        if {[dexist $arguments $param]} {
+            dict append argsOrdered $param [dget $arguments $param]
         }
     }
     lappend params &quot;model exp -posnocheck&quot;
     dict for {paramName value} $argsOrdered {
-        if {([llength $value]&gt;1) &amp;&amp; ([lindex $value 1]==&quot;-eq&quot;)} {
-            lappend params &quot;$paramName [lindex $value 0] -poseq&quot;
+        if {([llength $value]&gt;1) &amp;&amp; ([@ $value 1]==&quot;-eq&quot;)} {
+            lappend params &quot;$paramName [@ $value 0] -poseq&quot;
         } else {
             lappend params &quot;$paramName $value -pos&quot;
         }
@@ -870,14 +870,14 @@ IYYYYYYY n+ n- SIN(VO VA FREQ TD THETA PHASE)
     }]
     set paramsOrder [list low high td tr tf pw per]
     foreach param $paramsOrder {
-        if {[dict exists $arguments $param]} {
-            dict append argsOrdered $param [dict get $arguments $param]
+        if {[dexist $arguments $param]} {
+            dict append argsOrdered $param [dget $arguments $param]
         }
     }
     lappend params &quot;model pulse -posnocheck&quot;
     dict for {paramName value} $argsOrdered {
-        if {([llength $value]&gt;1) &amp;&amp; ([lindex $value 1]==&quot;-eq&quot;)} {
-            lappend params &quot;$paramName [lindex $value 0] -poseq&quot;
+        if {([llength $value]&gt;1) &amp;&amp; ([@ $value 1]==&quot;-eq&quot;)} {
+            lappend params &quot;$paramName [@ $value 0] -poseq&quot;
         } else {
             lappend params &quot;$paramName $value -pos&quot;
         }
@@ -918,7 +918,7 @@ IYYYYYYY n+ n- SIN(VO VA FREQ TD THETA PHASE)
     set arguments [argparse -inline {
         {-seq= -required}
     }]
-    set pwlSeqVal [dict get $arguments seq]
+    set pwlSeqVal [dget $arguments seq]
     set pwlSeqLen [llength $pwlSeqVal]
     if {$pwlSeqLen%2} {
         error &quot;Number of elements '$pwlSeqLen' in pwl sequence is odd in element '$type$name', must be even&quot;
@@ -929,13 +929,13 @@ IYYYYYYY n+ n- SIN(VO VA FREQ TD THETA PHASE)
     for {set i 0} {$i&lt;[llength $pwlSeqVal]/2} {incr i} {
         set 2i [* 2 $i]
         set 2ip1 [+ $2i 1]
-        lappend params &quot;t$i [list [lindex $pwlSeqVal $2i]]&quot; &quot;$type$i [list [lindex $pwlSeqVal $2ip1]]&quot;
+        lappend params &quot;t$i [list [@ $pwlSeqVal $2i]]&quot; &quot;$type$i [list [@ $pwlSeqVal $2ip1]]&quot;
     }
     foreach param $params {
-        if {([llength [lindex $param 1]]&gt;1) &amp;&amp; ([lindex [lindex $param 1] 1]==&quot;-eq&quot;)} {
-            lappend paramList &quot;[lindex $param 0] [lindex [lindex $param 1] 0] -poseq&quot;
+        if {([llength [@ $param 1]]&gt;1) &amp;&amp; ([@ [@ $param 1] 1]==&quot;-eq&quot;)} {
+            lappend paramList &quot;[@ $param 0] [@ [@ $param 1] 0] -poseq&quot;
         } else {
-            lappend paramList &quot;[lindex $param 0] [lindex $param 1] -pos&quot;
+            lappend paramList &quot;[@ $param 0] [@ $param 1] -pos&quot;
         }
     }
     set paramList [linsert $paramList 0 &quot;model pwl -posnocheck&quot;]
@@ -981,14 +981,14 @@ IYYYYYYY n+ n- SIN(VO VA FREQ TD THETA PHASE)
     }]
     set paramsOrder [list v0 va fc mdi fs]
     foreach param $paramsOrder {
-        if {[dict exists $arguments $param]} {
-            dict append argsOrdered $param [dict get $arguments $param]
+        if {[dexist $arguments $param]} {
+            dict append argsOrdered $param [dget $arguments $param]
         }
     }
     lappend params &quot;model sffm -posnocheck&quot;
     dict for {paramName value} $argsOrdered {
-        if {([llength $value]&gt;1) &amp;&amp; ([lindex $value 1]==&quot;-eq&quot;)} {
-            lappend params &quot;$paramName [lindex $value 0] -poseq&quot;
+        if {([llength $value]&gt;1) &amp;&amp; ([@ $value 1]==&quot;-eq&quot;)} {
+            lappend params &quot;$paramName [@ $value 0] -poseq&quot;
         } else {
             lappend params &quot;$paramName $value -pos&quot;
         }
@@ -1036,14 +1036,14 @@ IYYYYYYY n+ n- SIN(VO VA FREQ TD THETA PHASE)
     }]
     set paramsOrder [list v0 va freq td theta phase]
     foreach param $paramsOrder {
-        if {[dict exists $arguments $param]} {
-            dict append argsOrdered $param [dict get $arguments $param]
+        if {[dexist $arguments $param]} {
+            dict append argsOrdered $param [dget $arguments $param]
         }
     }
     lappend params &quot;model sin -posnocheck&quot;
     dict for {paramName value} $argsOrdered {
-        if {([llength $value]&gt;1) &amp;&amp; ([lindex $value 1]==&quot;-eq&quot;)} {
-            lappend params &quot;$paramName [lindex $value 0] -poseq&quot;
+        if {([llength $value]&gt;1) &amp;&amp; ([@ $value 1]==&quot;-eq&quot;)} {
+            lappend params &quot;$paramName [@ $value 0] -poseq&quot;
         } else {
             lappend params &quot;$paramName $value -pos&quot;
         }
@@ -1174,16 +1174,16 @@ GXXXXXXX N+ N- NC+ NC- VALUE &lt;m=val&gt;
         {-trcond -required}
         -m=
     }]
-    set trcondVal [dict get $arguments trcond]
-    if {([llength $trcondVal]&gt;1) &amp;&amp; ([lindex $trcondVal 1]==&quot;-eq&quot;)} {
-        lappend params &quot;trcond [lindex $trcondVal 0] -poseq&quot;
+    set trcondVal [dget $arguments trcond]
+    if {([llength $trcondVal]&gt;1) &amp;&amp; ([@ $trcondVal 1]==&quot;-eq&quot;)} {
+        lappend params &quot;trcond [@ $trcondVal 0] -poseq&quot;
     } else {
         lappend params &quot;trcond $trcondVal -pos&quot;
     }
-    if {[dict exists $arguments m]} {
-        set mVal [dict get $arguments m]
-        if {([llength $mVal]&gt;1) &amp;&amp; ([lindex $mVal 1]==&quot;-eq&quot;)} {
-            lappend params &quot;m [lindex $mVal 0] -eq&quot;
+    if {[dexist $arguments m]} {
+        set mVal [dget $arguments m]
+        if {([llength $mVal]&gt;1) &amp;&amp; ([@ $mVal 1]==&quot;-eq&quot;)} {
+            lappend params &quot;m [@ $mVal 0] -eq&quot;
         } else {
             lappend params &quot;m $mVal&quot;
         }
@@ -1252,9 +1252,9 @@ EXXXXXXX N+ N- NC+ NC- VALUE
     set arguments [argparse -inline {
         {-gain -required}
     }]
-    set gainVal [dict get $arguments gain]
-    if {([llength $gainVal]&gt;1) &amp;&amp; ([lindex $gainVal 1]==&quot;-eq&quot;)} {
-        lappend params &quot;vgain [lindex $gainVal 0] -poseq&quot;
+    set gainVal [dget $arguments gain]
+    if {([llength $gainVal]&gt;1) &amp;&amp; ([@ $gainVal 1]==&quot;-eq&quot;)} {
+        lappend params &quot;vgain [@ $gainVal 0] -poseq&quot;
     } else {
         lappend params &quot;vgain $gainVal -pos&quot;
     }

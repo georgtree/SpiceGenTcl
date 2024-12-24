@@ -427,7 +427,7 @@ test testDeviceClass-2 {test creation of Device class instance and getPins inter
     set elemInst [Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
 } -body {
     set result [$elemInst getPins]
-} -result [dict create d netd g netg s nets] -cleanup {
+} -result [dcreate d netd g netg s nets] -cleanup {
     unset elemInst result
 }
 
@@ -442,7 +442,7 @@ test testDeviceClass-4 {test creation of Device class instance and getParams int
     set elemInst [Device new M1 {{d netg} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
 } -body {
     set result [$elemInst getParams]
-} -result [dict create vth0 0.7 u0 100 k1 1.5e-3] -cleanup {
+} -result [dcreate vth0 0.7 u0 100 k1 1.5e-3] -cleanup {
     unset elemInst result
 }
 
@@ -472,7 +472,7 @@ test testDeviceClass-8 {test creation of Device class instance and addParam inte
 } -body {
     $elemInst addParam K2 -1.2e-4
     set result [$elemInst getParams]
-} -result [dict create vth0 0.7 u0 100 k1 1.5e-3 k2 -1.2e-4] -cleanup {
+} -result [dcreate vth0 0.7 u0 100 k1 1.5e-3 k2 -1.2e-4] -cleanup {
     unset elemInst result
 }
 
@@ -481,7 +481,7 @@ test testDeviceClass-9 {test creation of Device class instance and deleteParam i
 } -body {
     $elemInst deleteParam vth0
     set result [$elemInst getParams]
-} -result [dict create u0 100 k1 1.5e-3] -cleanup {
+} -result [dcreate u0 100 k1 1.5e-3] -cleanup {
     unset elemInst result
 }
 
@@ -498,7 +498,7 @@ test testDeviceClass-11 {test creation of Device class instance and test setPinN
     $elemInst setPinNodeName g n123
 } -body {
     set result [$elemInst getPins]
-} -result [dict create d netd g n123 s nets] -cleanup {
+} -result [dcreate d netd g n123 s nets] -cleanup {
     unset elemInst result
 }
 
@@ -516,7 +516,7 @@ test testDeviceClass-13 {test creation of Device class instance and test setPara
     $elemInst setParamValue vth0 1.0
 } -body {
     set result [$elemInst getParams]
-} -result [dict create vth0 1.0 u0 100 k1 1.5e-3] -cleanup {
+} -result [dcreate vth0 1.0 u0 100 k1 1.5e-3] -cleanup {
     unset elemInst result
 }
 
@@ -593,7 +593,7 @@ test testModelClass-2 {test creation of Model class instance and getParams inter
     set modelInst [Model new MOD1 NMOS {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
 } -body {
     set result [$modelInst getParams]
-} -result [dict create vth0 0.7 u0 100 k1 1.5e-3] -cleanup {
+} -result [dcreate vth0 0.7 u0 100 k1 1.5e-3] -cleanup {
     unset modelInst result
 }
 
@@ -737,7 +737,7 @@ test testOptionsClass-1 {test creation of Options class instance and getParams i
     set elemInst [Options new {{abstol 1e-12} {noopiter -sw} {gmin 1e-12}}]
 } -body {
     set result [$elemInst getParams]
-} -result [dict create abstol 1e-12 noopiter {} gmin 1e-12] -cleanup {
+} -result [dcreate abstol 1e-12 noopiter {} gmin 1e-12] -cleanup {
     unset elemInst result
 }
 
@@ -754,7 +754,7 @@ test testOptionsClass-3 {test creation of Options class instance and addParam in
     $elemInst addParam vntol 1e-4
 } -body {
     set result [$elemInst getParams]
-} -result [dict create abstol 1e-12 noopiter "" gmin 1e-12 vntol 1e-4] -cleanup {
+} -result [dcreate abstol 1e-12 noopiter "" gmin 1e-12 vntol 1e-4] -cleanup {
     unset elemInst result
 }
 
@@ -763,7 +763,7 @@ test testOptionsClass-4 {test creation of Options class instance and addParam in
     $elemInst addParam noopiter -sw
 } -body {
     set result [$elemInst getParams]
-} -result [dict create abstol 1e-12 vntol 1e-4 gmin 1e-12  noopiter {}] -cleanup {
+} -result [dcreate abstol 1e-12 vntol 1e-4 gmin 1e-12  noopiter {}] -cleanup {
     unset elemInst result
 }
 
@@ -772,7 +772,7 @@ test testOptionsClass-5 {test creation of Options class instance and deleteParam
     $elemInst deleteParam gmin
 } -body {
     set result [$elemInst getParams]
-} -result [dict create abstol 1e-12 noopiter {}] -cleanup {
+} -result [dcreate abstol 1e-12 noopiter {}] -cleanup {
     unset elemInst result
 }
 
@@ -789,7 +789,7 @@ test testParamStatementClass-1 {test creation of ParamStatement class instance a
     set elemInst [ParamStatement new {{U0T {rf+1} -eq} {vth0 10}}]
 } -body {
     set result [$elemInst getParams]
-} -result [dict create u0t {rf+1} vth0 10] -cleanup {
+} -result [dcreate u0t {rf+1} vth0 10] -cleanup {
     unset elemInst result
 }
 
@@ -806,7 +806,7 @@ test testParamStatementClass-3 {test creation of ParamStatement class instance a
     $elemInst addParam k1 1e-4
 } -body {
     set result [$elemInst getParams]
-} -result [dict create u0t {rf+1} vth0 10 k1 1e-4] -cleanup {
+} -result [dcreate u0t {rf+1} vth0 10 k1 1e-4] -cleanup {
     unset elemInst result
 }
 
@@ -815,7 +815,7 @@ test testParamStatementClass-4 {test creation of ParamStatement class instance a
     $elemInst addParam U0T {rf+1} -eq
 } -body {
     set result [$elemInst getParams]
-} -result [dict create k1 1e-4 vth0 10 u0t {rf+1}] -cleanup {
+} -result [dcreate k1 1e-4 vth0 10 u0t {rf+1}] -cleanup {
     unset elemInst result
 }
 
@@ -831,7 +831,7 @@ test testParamStatementClass-6 {test creation of ParamStatement class instance a
 } -body {
     $elemInst setParamValue u0t 2
     set result [$elemInst getParams]
-} -result [dict create u0t 2 vth0 10] -cleanup {
+} -result [dcreate u0t 2 vth0 10] -cleanup {
     unset elemInst result
 }
 
@@ -1043,7 +1043,7 @@ test testSubcircuitClass-3 {test creation of Subcircuit class instance with getP
     set subcircuit [RCnet new]
 } -body {
     set result [$subcircuit getParams]
-} -result [dict create r 100 c 1e-6] -cleanup {
+} -result [dcreate r 100 c 1e-6] -cleanup {
     rename RCnet ""
     unset subcircuit result
 }
@@ -1135,7 +1135,7 @@ test testAnalysisClass-1 {test creation of Analysis class instance and getParams
     set anInst [Analysis new dc {{srcnam v1 -posnocheck} {vstart 0 -pos} {vstop 5 -pos} {vincr 0.1 -pos}}]
 } -body {
     set result [$anInst getParams]
-} -result [dict create srcnam v1 vstart 0 vstop 5 vincr 0.1] -cleanup {
+} -result [dcreate srcnam v1 vstart 0 vstop 5 vincr 0.1] -cleanup {
     unset anInst result
 }
 

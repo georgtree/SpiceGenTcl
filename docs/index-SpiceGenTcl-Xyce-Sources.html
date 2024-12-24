@@ -66,15 +66,15 @@
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator R.</td></tr>
 <tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
 <tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>-i</code></td><td>Current expression.</td></tr>
+<tr><td><code>-i</code></td><td>Current =ession.</td></tr>
 <tr><td><code>-rcconst</code></td><td>Rc constant of the RC network, optional, require -v.</td></tr>
 <tr><td><code>-smoothbsrc</code></td><td>Enables the smooth transitions, optional, require -v.</td></tr>
-<tr><td><code>-v</code></td><td>Voltage expression.</td></tr>
+<tr><td><code>-v</code></td><td>Voltage =ession.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-B&lt;name&gt; &lt;(+) node&gt; &lt;(-) node&gt; V={expression} [device parameters]
-B&lt;name&gt; &lt;(+) node&gt; &lt;(-) node&gt; I={expression}
+B&lt;name&gt; &lt;(+) node&gt; &lt;(-) node&gt; V={=ession} [device parameters]
+B&lt;name&gt; &lt;(+) node&gt; &lt;(-) node&gt; I={=ession}
 </pre>
 
 </figure><p class='ruff'>Example of class initialization:</p>
@@ -90,13 +90,13 @@ B&lt;name&gt; &lt;(+) node&gt; &lt;(-) node&gt; I={expression}
     #  name - name of the device without first-letter designator R
     #  npNode - name of node connected to positive pin
     #  nmNode - name of node connected to negative pin
-    #  -i - current expression
-    #  -v - voltage expression
+    #  -i - current =ession
+    #  -v - voltage =ession
     #  -smoothbsrc - enables the smooth transitions, optional, require -v
     #  -rcconst -  rc constant of the RC network, optional, require -v
     # ```
-    # B&lt;name&gt; &lt;(+) node&gt; &lt;(-) node&gt; V={expression} [device parameters]
-    # B&lt;name&gt; &lt;(+) node&gt; &lt;(-) node&gt; I={expression}
+    # B&lt;name&gt; &lt;(+) node&gt; &lt;(-) node&gt; V={=ession} [device parameters]
+    # B&lt;name&gt; &lt;(+) node&gt; &lt;(-) node&gt; I={=ession}
     # ```
     # Example of class initialization:
     # ```
@@ -108,18 +108,18 @@ B&lt;name&gt; &lt;(+) node&gt; &lt;(-) node&gt; I={expression}
         {-smoothbsrc -require {v}}
         {-rcconst= -require {v}}
     }]
-    if {[dict exists $arguments i]} {
-        lappend params &quot;i [dict get $arguments i] -eq&quot;
-    } elseif {[dict exists $arguments v]} {
-        lappend params &quot;v [dict get $arguments v] -eq&quot;
+    if {[dexist $arguments i]} {
+        lappend params &quot;i [dget $arguments i] -eq&quot;
+    } elseif {[dexist $arguments v]} {
+        lappend params &quot;v [dget $arguments v] -eq&quot;
     } else {
         error &quot;Equation must be specified as argument to -i or -v&quot;
     }
-    if {[dict exists $arguments smoothbsrc]} {
+    if {[dexist $arguments smoothbsrc]} {
         lappend params &quot;smoothbsrc 1&quot;
     }
-    if {[dict exists $arguments rcconst]} {
-        lappend params &quot;rcconst [dict get $arguments rcconst]&quot;
+    if {[dexist $arguments rcconst]} {
+        lappend params &quot;rcconst [dget $arguments rcconst]&quot;
     }
     next b$name [list &quot;np $npNode&quot; &quot;nm $nmNode&quot;] $params
 }</pre></div>

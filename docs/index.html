@@ -85,8 +85,18 @@ set filetype=binary
 <ul class='ruff'>
 <li><font color="red"> <strong>Important note 1</strong></font>: internally, all device names, parameters, nodes, types, reference names, and data vector's names are converted to lowercase after object instantiation. While you can enter them in any case, they can only be accessed by their lowercase names. This approach aligns with the fact that most SPICE simulators are case-insensitive. To prevent ambiguity in Tcl code, where the simulator treats mixed-case names as identical, we convert everything to lowercase. This ensures that we can detect and resolve any duplicate names in the top-level circuit before generating the netlist.</li>
 <li><font color="red"> <strong>Important note 2</strong></font>: this package is not designed to be used with the <code>.control</code> section in Ngspice, the .step statement in LTspice, or multiple DC sweeps, and it does not support reading parametric sweeps from raw data. The idea of the package is to handle all such tasks within a Tcl script, eliminating the need to use the simulator's internal scripting capabilities, and dependence on each simulator unique ways of handling parametric sweeps, that compromises compatibility. But it is could be done easily in principle to realize special objects and reading of raw files with parametric sweeps.</li>
+<li><font color="red"> <strong>Important note 3</strong></font>: in this package the following aliases for commands are defined:</li>
 </ul>
-<h3 class='ruff'><a name='Packages imports'></a>Packages imports<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
+interp alias {} dget {} dict get
+interp alias {} @ {} lindex
+interp alias {} = {} expr
+interp alias {} dexist {} dict exists
+interp alias {} dcreate {} dict create
+</pre>
+
+</figure><h3 class='ruff'><a name='Packages imports'></a>Packages imports<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
 <p class='ruff'>The first step is import of package:</p>
 
@@ -165,8 +175,8 @@ set data [$circuit getDataDict]
 </figure><p class='ruff'>The we can get vectors v(in) and v(out) from dictionary <code>data</code>:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-set axis [dict get $data v(in)]
-set trace [dict get $data v(out)]
+set axis [dget $data v(in)]
+set trace [dget $data v(out)]
 </pre>
 
 </figure><h3 class='ruff'><a name='Plotting data'></a>Plotting data<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>

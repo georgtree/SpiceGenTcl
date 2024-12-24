@@ -119,6 +119,14 @@ parametric sweeps from raw data. The idea of the package is to handle all such t
 eliminating the need to use the simulator's internal scripting capabilities, and dependence on each simulator
 unique ways of handling parametric sweeps, that compromises compatibility. But it is could be done easily in
 principle to realize special objects and reading of raw files with parametric sweeps.
+- <font color="red"> **Important note 3**</font>: in this package the following aliases for commands are defined:
+```tcl
+interp alias {} dget {} dict get
+interp alias {} @ {} lindex
+interp alias {} = {} expr
+interp alias {} dexist {} dict exists
+interp alias {} dcreate {} dict create
+```
 
 ### Packages imports
 
@@ -212,7 +220,7 @@ foreach x $axis y $trace {
 set chart [ticklecharts::chart new]
 $chart Xaxis -name "v(in), V" -minorTick {show "True"} -min 0 -max 5 -type "value"
 $chart Yaxis -name "v(out), V" -minorTick {show "True"} -min 0 -max 3.5 -type "value"
-$chart SetOptions -title {} -tooltip {} -animation "False" 
+$chart SetOptions -title {} -tooltip {} -animation "False"
 $chart Add "lineSeries" -data $xydata -showAllSymbol "nothing"
 set fbasename [file rootname [file tail [info script]]]
 $chart Render -outfile [file normalize [file join html_charts $fbasename.html]]

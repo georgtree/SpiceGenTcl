@@ -116,7 +116,7 @@ set perStep 50e-9
 $circuit add [Vdc new cc 99 0 -dc 5]
 set i 1
 foreach name [list in1a in1b in2a in2b in3a in3b in4a in4b] {
-    $circuit add [Vpulse new $name $i 0 -low 0 -high 3 -td 0 -tf $trtf -tr $trtf -pw [expr {$tonStep*pow(2,$i-1)}] -per [expr {$perStep*pow(2,$i-1)}]]
+    $circuit add [Vpulse new $name $i 0 -low 0 -high 3 -td 0 -tf $trtf -tr $trtf -pw [= {$tonStep*pow(2,$i-1)}] -per [= {$perStep*pow(2,$i-1)}]]
     incr i
 }
 
@@ -138,11 +138,11 @@ $circuit configure -Simulator $simulator
 $circuit runAndRead
 # get data dict
 set data [$circuit getDataDict]
-set timeList [dict get $data time]
-set v9List [dict get $data v(9)]
-set v10List [dict get $data v(10)]
-set v11List [dict get $data v(11)]
-set v12List [dict get $data v(12)]
+set timeList [dget $data time]
+set v9List [dget $data v(9)]
+set v10List [dget $data v(10)]
+set v11List [dget $data v(11)]
+set v12List [dget $data v(12)]
 
 foreach time $timeList v9 $v9List v10 $v10List v11 $v11List v12 $v12List {
     lappend timeV9 [list $time $v9]
@@ -161,7 +161,7 @@ foreach node $nodes {
     chartV$node Xaxis -name "time, s" -minorTick {show "True"} -type "value"
     chartV$node Yaxis -name "v(${node}), V" -minorTick {show "True"} -type "value"
     chartV$node Add "lineSeries" -data [subst $[subst timeV$node]] -showAllSymbol "nothing" -name "V(${node})" -symbolSize "0"
-    $layout Add chartV$node -bottom "[expr {4+24*$i}]%" -height "18%" -width "80%"
+    $layout Add chartV$node -bottom "[= {4+24*$i}]%" -height "18%" -width "80%"
     incr i
 }
 

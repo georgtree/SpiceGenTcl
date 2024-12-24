@@ -76,10 +76,10 @@ CXXXXXXX n+ n- &lt;value&gt; &lt;mname&gt; &lt;m=val&gt; &lt;scale=val&gt; &lt;t
 ::SpiceGenTcl::Ngspice::BasicDevices::Capacitor new 1 netp netm 1e-6 -tc1 1 -temp {temp -eq}
 </pre>
 
-</figure><p class='ruff'>Behavioral capacitor with C expression:</p>
+</figure><p class='ruff'>Behavioral capacitor with C =ession:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-CXXXXXXX n+ n- C={expression} &lt;tc1=value&gt; &lt;tc2=value&gt;
+CXXXXXXX n+ n- C={=ession} &lt;tc1=value&gt; &lt;tc2=value&gt;
 </pre>
 
 </figure><p class='ruff'>Example of class initialization:</p>
@@ -88,10 +88,10 @@ CXXXXXXX n+ n- C={expression} &lt;tc1=value&gt; &lt;tc2=value&gt;
 ::SpiceGenTcl::Ngspice::BasicDevices::Capacitor new 1 netp netm -c &quot;V(a)+V(b)+pow(V(c),2)&quot; -beh -tc1 1
 </pre>
 
-</figure><p class='ruff'>Behavioral capacitor with Q expression:</p>
+</figure><p class='ruff'>Behavioral capacitor with Q =ession:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-CXXXXXXX n+ n- Q={expression} &lt;tc1=value&gt; &lt;tc2=value&gt;
+CXXXXXXX n+ n- Q={=ession} &lt;tc1=value&gt; &lt;tc2=value&gt;
 </pre>
 
 </figure><p class='ruff'>Example of class initialization:</p>
@@ -133,17 +133,17 @@ CXXXXXXX n+ n- &lt;value&gt; &lt;mname&gt; &lt;l=length&gt; &lt;w=width&gt; &lt;
     # ```
     # ::SpiceGenTcl::Ngspice::BasicDevices::Capacitor new 1 netp netm 1e-6 -tc1 1 -temp {temp -eq}
     # ```
-    # Behavioral capacitor with C expression:
+    # Behavioral capacitor with C =ession:
     # ```
-    # CXXXXXXX n+ n- C={expression} &lt;tc1=value&gt; &lt;tc2=value&gt;
+    # CXXXXXXX n+ n- C={=ession} &lt;tc1=value&gt; &lt;tc2=value&gt;
     # ```
     # Example of class initialization:
     # ```
     # ::SpiceGenTcl::Ngspice::BasicDevices::Capacitor new 1 netp netm -c &quot;V(a)+V(b)+pow(V(c),2)&quot; -beh -tc1 1
     # ```
-    # Behavioral capacitor with Q expression:
+    # Behavioral capacitor with Q =ession:
     # ```
-    # CXXXXXXX n+ n- Q={expression} &lt;tc1=value&gt; &lt;tc2=value&gt;
+    # CXXXXXXX n+ n- Q={=ession} &lt;tc1=value&gt; &lt;tc2=value&gt;
     # ```
     # Example of class initialization:
     # ```
@@ -174,24 +174,24 @@ CXXXXXXX n+ n- &lt;value&gt; &lt;mname&gt; &lt;l=length&gt; &lt;w=width&gt; &lt;
         {-w= -require {model}}
     }]
     set params &quot;&quot;
-    if {[dict exists $arguments c]} {
-        set cVal [dict get $arguments c]
-        if {[dict exists $arguments beh]} {
+    if {[dexist $arguments c]} {
+        set cVal [dget $arguments c]
+        if {[dexist $arguments beh]} {
             lappend params &quot;c $cVal -eq&quot;
-        } elseif {([llength $cVal]&gt;1) &amp;&amp; ([lindex $cVal 1]==&quot;-eq&quot;)} {
-            lappend params &quot;c [lindex $cVal 0] -poseq&quot;
+        } elseif {([llength $cVal]&gt;1) &amp;&amp; ([@ $cVal 1]==&quot;-eq&quot;)} {
+            lappend params &quot;c [@ $cVal 0] -poseq&quot;
         } else {
             lappend params &quot;c $cVal -pos&quot;
         }
-    } elseif {([dict exists $arguments model]==0) &amp;&amp; ([dict exists $arguments q]==0)} {
+    } elseif {([dexist $arguments model]==0) &amp;&amp; ([dexist $arguments q]==0)} {
         error &quot;Capacitor value must be specified with '-c value'&quot;
     }
-    if {[dict exists $arguments q]} {
-        set qVal [dict get $arguments q]
+    if {[dexist $arguments q]} {
+        set qVal [dget $arguments q]
         lappend params &quot;q $qVal -eq&quot;
     }
-    if {[dict exists $arguments model]} {
-        lappend params &quot;model [dict get $arguments model] -posnocheck&quot;
+    if {[dexist $arguments model]} {
+        lappend params &quot;model [dget $arguments model] -posnocheck&quot;
     }
     dict for {paramName value} $arguments {
         if {$paramName ni {c q beh model}} {
@@ -354,7 +354,7 @@ LYYYYYYY n+ n- &lt;value&gt; &lt;m=val&gt;
 </figure><p class='ruff'>Behavioral inductor:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-LYYYYYYY n+ n- L={expression} &lt;tc1=val&gt; &lt;tc2=val&gt;
+LYYYYYYY n+ n- L={=ession} &lt;tc1=val&gt; &lt;tc2=val&gt;
 </pre>
 
 </figure><p class='ruff'>Example of class initialization:</p>
@@ -400,7 +400,7 @@ LYYYYYYY n+ n- &lt;value&gt; &lt;mname&gt; &lt;nt=val&gt; &lt;m=val&gt;
     # ```
     # Behavioral inductor:
     # ```
-    # LYYYYYYY n+ n- L={expression} &lt;tc1=val&gt; &lt;tc2=val&gt;
+    # LYYYYYYY n+ n- L={=ession} &lt;tc1=val&gt; &lt;tc2=val&gt;
     # ```
     # Example of class initialization:
     # ```
@@ -429,20 +429,20 @@ LYYYYYYY n+ n- &lt;value&gt; &lt;mname&gt; &lt;nt=val&gt; &lt;m=val&gt;
         {-nt= -require {model}}
     }]
     set params &quot;&quot;
-    if {[dict exists $arguments l]} {
-        set lVal [dict get $arguments l]
-        if {[dict exists $arguments beh]} {
+    if {[dexist $arguments l]} {
+        set lVal [dget $arguments l]
+        if {[dexist $arguments beh]} {
             lappend params &quot;l $lVal -eq&quot;
-        } elseif {([llength $lVal]&gt;1) &amp;&amp; ([lindex $lVal 1]==&quot;-eq&quot;)} {
-            lappend params &quot;l [lindex $lVal 0] -poseq&quot;
+        } elseif {([llength $lVal]&gt;1) &amp;&amp; ([@ $lVal 1]==&quot;-eq&quot;)} {
+            lappend params &quot;l [@ $lVal 0] -poseq&quot;
         } else {
             lappend params &quot;l $lVal -pos&quot;
         }
-    } elseif {[dict exists $arguments model]==0} {
+    } elseif {[dexist $arguments model]==0} {
         error &quot;Inductor value must be specified with '-l value'&quot;
     }
-    if {[dict exists $arguments model]} {
-        lappend params &quot;model [dict get $arguments model] -posnocheck&quot;
+    if {[dexist $arguments model]} {
+        lappend params &quot;model [dget $arguments model] -posnocheck&quot;
     }
     dict for {paramName value} $arguments {
         if {$paramName ni {l beh model}} {
@@ -576,7 +576,7 @@ RXXXXXXX n+ n- &lt;resistance|r=&gt;value &lt;ac=val&gt; &lt;m=val&gt;
 </figure><p class='ruff'>Behavioral resistor:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-RXXXXXXX n+ n- R ={expression} &lt;tc1=value&gt; &lt;tc2=value&gt; &lt;noisy=0&gt;
+RXXXXXXX n+ n- R ={=ession} &lt;tc1=value&gt; &lt;tc2=value&gt; &lt;noisy=0&gt;
 </pre>
 
 </figure><p class='ruff'>Example of class initialization:</p>
@@ -622,7 +622,7 @@ RXXXXXXX n+ n- &lt;value&gt; &lt;mname&gt; &lt;l=length&gt; &lt;w=width&gt;
     # ```
     # Behavioral resistor:
     # ```
-    # RXXXXXXX n+ n- R ={expression} &lt;tc1=value&gt; &lt;tc2=value&gt; &lt;noisy=0&gt;
+    # RXXXXXXX n+ n- R ={=ession} &lt;tc1=value&gt; &lt;tc2=value&gt; &lt;noisy=0&gt;
     # ```
     # Example of class initialization:
     # ```
@@ -654,20 +654,20 @@ RXXXXXXX n+ n- &lt;value&gt; &lt;mname&gt; &lt;l=length&gt; &lt;w=width&gt;
         {-w= -require {model}}
     }]
     set params &quot;&quot;
-    if {[dict exists $arguments r]} {
-        set rVal [dict get $arguments r]
-        if {[dict exists $arguments beh]} {
+    if {[dexist $arguments r]} {
+        set rVal [dget $arguments r]
+        if {[dexist $arguments beh]} {
             lappend params &quot;r $rVal -eq&quot;
-        } elseif {([llength $rVal]&gt;1) &amp;&amp; ([lindex $rVal 1]==&quot;-eq&quot;)} {
-            lappend params &quot;r [lindex $rVal 0] -poseq&quot;
+        } elseif {([llength $rVal]&gt;1) &amp;&amp; ([@ $rVal 1]==&quot;-eq&quot;)} {
+            lappend params &quot;r [@ $rVal 0] -poseq&quot;
         } else {
             lappend params &quot;r $rVal -pos&quot;
         }
-    } elseif {[dict exists $arguments model]==0} {
+    } elseif {[dexist $arguments model]==0} {
         error &quot;Resistor value must be specified with '-r value'&quot;
     }
-    if {[dict exists $arguments model]} {
-        lappend params &quot;model [dict get $arguments model] -posnocheck&quot;
+    if {[dexist $arguments model]} {
+        lappend params &quot;model [dget $arguments model] -posnocheck&quot;
     }
     dict for {paramName value} $arguments {
         if {$paramName ni {r beh model}} {

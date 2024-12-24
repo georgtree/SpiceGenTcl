@@ -90,7 +90,7 @@ oo::class create Core {
             {-model= -required}
             $paramDefList
         &quot;]
-        lappend params &quot;model [dict get $arguments model] -posnocheck&quot;
+        lappend params &quot;model [dget $arguments model] -posnocheck&quot;
         dict for {paramName value} $arguments {
             if {$paramName!=&quot;model&quot;} {
                 lappend params &quot;$paramName $value&quot;
@@ -134,11 +134,11 @@ set arguments [argparse -inline &quot;
 </pre>
 
 </figure><p class='ruff'>List <code>[list len area ms a k alpha c]</code> contains all parameters we have in core verilog-a model. Due to these line we can pass parameters to element in forms <code>-paramName $paramValue $paramQual</code>, for example: <code>-area 1e-4</code> or <code>-area l*m -eq</code>.</p>
-<p class='ruff'>Possible qualificator is -eq - it means that parameter should be inserted into SPICE netlist as <code>paramName={expression}</code></p>
+<p class='ruff'>Possible qualificator is -eq - it means that parameter should be inserted into SPICE netlist as <code>paramName={=ession}</code></p>
 <p class='ruff'>In the next few lines we build parameter list that will be passed to <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device" title="::SpiceGenTcl::Device" class='ruff_cmd'>::SpiceGenTcl::Device</a> constructor:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-lappend params &quot;model [dict get $arguments model] -posnocheck&quot;
+lappend params &quot;model [dget $arguments model] -posnocheck&quot;
 dict for {paramName value} $arguments {
     if {$paramName!=&quot;model&quot;} {
         lappend params &quot;$paramName $value&quot;

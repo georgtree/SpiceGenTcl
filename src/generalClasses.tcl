@@ -91,7 +91,7 @@ namespace eval ::SpiceGenTcl {
             # Returns: string in form *-paramName= \n {-paramName= -alias aliasName} \n ...*
             foreach paramName $paramsNames {
                 if {[llength $paramName]>1} { 
-                    lappend paramDefList "\{-[lindex $paramName 0]= -alias [lindex $paramName 1]\}"
+                    lappend paramDefList "\{-[@ $paramName 0]= -alias [@ $paramName 1]\}"
                 } else {
                     lappend paramDefList "-${paramName}="
                 }
@@ -464,7 +464,7 @@ namespace eval ::SpiceGenTcl {
             my configure -Name $name
             # create Pins objects
             foreach pin $pins {
-                my AddPin [lindex $pin 0] [lindex $pin 1]
+                my AddPin [@ $pin 0] [@ $pin 1]
             }
             #ruff
             # Each parameter definition could be modified by 
@@ -475,10 +475,10 @@ namespace eval ::SpiceGenTcl {
             #  - poseq - combination of both flags, print only '{$Equation}'
             if {$params!=""} {
                 foreach param $params {
-                    if {[lindex $param 2]=={}} {
-                        my addParam [lindex $param 0] [lindex $param 1] 
-                    } elseif {[lindex $param 1]=="-sw"} {
-                        my addParam [lindex $param 0] -sw 
+                    if {[@ $param 2]=={}} {
+                        my addParam [@ $param 0] [@ $param 1] 
+                    } elseif {[@ $param 1]=="-sw"} {
+                        my addParam [@ $param 0] -sw 
                     } else {
                         my addParam {*}$param
                     } 
@@ -491,7 +491,7 @@ namespace eval ::SpiceGenTcl {
             # Gets the dictionary that contains pin name as keys and
             #  connected node name as the values.
             # Returns: parameters dictionary
-            set tempDict [dict create]
+            set tempDict [dcreate]
             dict for {pinName pin} $Pins {
                 dict append tempDict $pinName [$pin configure -NodeName]
             }
@@ -502,12 +502,12 @@ namespace eval ::SpiceGenTcl {
             #  in other words, connect particular pin to particular node.
             #  pinName - name of the pin
             #  nodeName - name of the node that we want connect to pin
-            set error [catch {dict get $Pins $pinName}]
+            set error [catch {dget $Pins $pinName}]
             if {$error>0} {
                 error "Pin with name '$pinName' was not found in device's '[my configure -Name]' list of pins\
                         '[dict keys [my getPins]]'"
             } else {
-                set pin [dict get $Pins $pinName]
+                set pin [dget $Pins $pinName]
             }
             $pin configure -NodeName $nodeName
             return
@@ -517,12 +517,12 @@ namespace eval ::SpiceGenTcl {
             #  paramName - name of parameter
             #  value - new value of parameter
             set paramName [string tolower $paramName]
-            set error [catch {dict get $Params $paramName}]
+            set error [catch {dget $Params $paramName}]
             if {$error>0} {
                 error "Parameter with name '$paramName' was not found in device's '[my configure -Name]' list of\
                         parameters '[dict keys [my getParams]]'"
             } else {
-                set param [dict get $Params $paramName]
+                set param [dget $Params $paramName]
             }
             $param configure -Value $value
             return
@@ -587,7 +587,7 @@ namespace eval ::SpiceGenTcl {
             # Deletes existing `Parameter` object from list `Params`.
             #  paramName - name of parameter that will be deleted
             set paramName [string tolower $paramName]
-            set error [catch {dict get $Params $paramName}]
+            set error [catch {dget $Params $paramName}]
             if {$error>0} {
                 error "Parameter with name '$paramName' was not found in device's '[my configure -Name]' list of\
                         parameters '[dict keys [my getParams]]'"
@@ -611,7 +611,7 @@ namespace eval ::SpiceGenTcl {
             # Gets the dictionary that contains parameter name as keys and
             #  parameter values as the values.
             # Returns: parameters dictionary
-            set tempDict [dict create]
+            set tempDict [dcreate]
             dict for {paramName param} $Params {
                 dict append tempDict $paramName [$param configure -Value]
             }
@@ -680,10 +680,10 @@ namespace eval ::SpiceGenTcl {
             # create Params objects
             if {$params!=""} {
                 foreach param $params {
-                    if {[lindex $param 2]=={}} {
-                        my addParam [lindex $param 0] [lindex $param 1] 
-                    } elseif {[lindex $param 2]=="-eq"} {
-                        my addParam [lindex $param 0] [lindex $param 1] -eq
+                    if {[@ $param 2]=={}} {
+                        my addParam [@ $param 0] [@ $param 1] 
+                    } elseif {[@ $param 2]=="-eq"} {
+                        my addParam [@ $param 0] [@ $param 1] -eq
                     } else {
                         error "Wrong parameter definition in model $name"
                     }  
@@ -693,16 +693,16 @@ namespace eval ::SpiceGenTcl {
             }
         }
         set def [info class definition ::SpiceGenTcl::Device addParam]
-        method addParam [lindex $def 0] [lindex $def 1]
+        method addParam [@ $def 0] [@ $def 1]
         set def [info class definition ::SpiceGenTcl::Device deleteParam]
-        method deleteParam [lindex $def 0] [lindex $def 1]
+        method deleteParam [@ $def 0] [@ $def 1]
         set def [info class definition ::SpiceGenTcl::Device setParamValue]
-        method setParamValue [lindex $def 0] [lindex $def 1]            
+        method setParamValue [@ $def 0] [@ $def 1]            
         method getParams {} {
             # Gets the dictionary that contains parameter name as keys and
             #  parameter values as the values.
             # Returns: parameters dictionary
-            set tempDict [dict create]
+            set tempDict [dcreate]
             dict for {paramName param} $Params {
                 dict append tempDict $paramName [$param configure -Value]
             }
@@ -873,11 +873,11 @@ namespace eval ::SpiceGenTcl {
                 my configure -Name [self object]
             }
             foreach param $params {
-                if {[lindex $param 2]=={}} {
-                    if {[lindex $param 1]=="-sw"} {
-                        my addParam [lindex $param 0] -sw  
+                if {[@ $param 2]=={}} {
+                    if {[@ $param 1]=="-sw"} {
+                        my addParam [@ $param 0] -sw  
                     } else {
-                        my addParam [lindex $param 0] [lindex $param 1] 
+                        my addParam [@ $param 0] [@ $param 1] 
                     }
                 } else {
                     error "Wrong parameter definition in Options"
@@ -888,7 +888,7 @@ namespace eval ::SpiceGenTcl {
             # Gets the dictionary that contains parameter name as keys and
             #  parameter values as the values.
             # Returns: parameters dictionary
-            set tempDict [dict create]
+            set tempDict [dcreate]
             dict for {paramName param} $Params {
                 # check if parameter doesn't have value, it means that we return {} for switch parameter
                 if {[catch {$param configure -Value}]} {
@@ -919,19 +919,19 @@ namespace eval ::SpiceGenTcl {
             return
         }
         set def [info class definition ::SpiceGenTcl::Device deleteParam]
-        method deleteParam [lindex $def 0] [lindex $def 1]
+        method deleteParam [@ $def 0] [@ $def 1]
         method setParamValue {paramName value} {
             # Sets (or changes) value of particular parameter
             #  it throws a error if try to set a value of switch parameter.
             #  paramName - name of parameter
             #  value - new value of parameter
             set paramName [string tolower $paramName]
-            set error [catch {dict get $Params $paramName}]
+            set error [catch {dget $Params $paramName}]
             if {$error>0} {
                 error "Parameter with name '$paramName' was not found in options's '[my configure -Name]' list of\
                         parameters '[dict keys [my getParams]]'"
             } else {
-                set param [dict get $Params $paramName]
+                set param [dget $Params $paramName]
             }
             $param configure -Value $value
             return
@@ -970,10 +970,10 @@ namespace eval ::SpiceGenTcl {
                 my configure -Name [self object]
             }
             foreach param $params {
-                if {[lindex $param 2]=={}} {
-                    my addParam [lindex $param 0] [lindex $param 1]    
-                } elseif {[lindex $param 2]=="-eq"} {
-                    my addParam [lindex $param 0] [lindex $param 1] -eq  
+                if {[@ $param 2]=={}} {
+                    my addParam [@ $param 0] [@ $param 1]    
+                } elseif {[@ $param 2]=="-eq"} {
+                    my addParam [@ $param 0] [@ $param 1] -eq  
                 } else { 
                     error "Wrong parameter definition in ParamStatement"
                 }   
@@ -983,7 +983,7 @@ namespace eval ::SpiceGenTcl {
             # Gets the dictionary that contains parameter name as keys and
             #  parameter values as the values.
             # Returns: parameters dictionary
-            set tempDict [dict create]
+            set tempDict [dcreate]
             dict for {paramName param} $Params {
                 dict append tempDict $paramName [$param configure -Value]
             }
@@ -1013,18 +1013,18 @@ namespace eval ::SpiceGenTcl {
             return
         }
         set def [info class definition ::SpiceGenTcl::Device deleteParam]
-        method deleteParam [lindex $def 0] [lindex $def 1]
+        method deleteParam [@ $def 0] [@ $def 1]
         method setParamValue {paramName value} {
             # Sets (or changes) value of particular parameter.
             #  paramName - name of parameter
             #  value - new value of parameter
             set paramName [string tolower $paramName]
-            set error [catch {dict get $Params $paramName}]
+            set error [catch {dget $Params $paramName}]
             if {$error>0} {
                 error "Parameter with name '$paramName' was not found in parameter statement's '[my configure -Name]'\
                         list of parameters '[dict keys [my getParams]]'"
             } else {
-                set param [dict get $Params $paramName]
+                set param [dget $Params $paramName]
             }
             $param configure -Value $value
             return
@@ -1138,7 +1138,7 @@ namespace eval ::SpiceGenTcl {
             # Deletes element from the netlist by its name.
             #  elemName - name of element to delete
             set elemName [string tolower $elemName]
-            set error [catch {dict get $Elements $elemName}]
+            set error [catch {dget $Elements $elemName}]
             if {$error>0} {
                 error "Element with name '$elemName' was not found in netlist's '[my configure -Name]' list of elements"
             } else {
@@ -1150,11 +1150,11 @@ namespace eval ::SpiceGenTcl {
             # Gets particular element object reference by its name.
             #  elemName - name of element
             set elemName [string tolower $elemName]
-            set error [catch {dict get $Elements $elemName}]
+            set error [catch {dget $Elements $elemName}]
             if {$error>0} {
                 error "Element with name '$elemName' was not found in netlist's '[my configure -Name]' list of elements"
             } else {
-                set foundElem [dict get $Elements $elemName]
+                set foundElem [dget $Elements $elemName]
             }
             return $foundElem
         }
@@ -1225,12 +1225,12 @@ namespace eval ::SpiceGenTcl {
             #  elemName - name of element to delete
             my variable Elements
             set elemName [string tolower $elemName]
-            set error [catch {dict get $Elements $elemName}]
+            set error [catch {dget $Elements $elemName}]
             if {$error>0} {
                 error "Element with name '$elemName' was not found in device's '[my configure -Name]' list of elements"
             } else {
                 set Elements [dict remove $Elements $elemName]
-                if {[info object class [dict get $Elements $elemName] {::SpiceGenTcl::Analysis}]} {
+                if {[info object class [dget $Elements $elemName] {::SpiceGenTcl::Analysis}]} {
                     unset ContainAnalysis
                 }
             }
@@ -1241,11 +1241,11 @@ namespace eval ::SpiceGenTcl {
             #  elemName - name of element
             my variable Elements
             set elemName [string tolower $elemName]
-            set error [catch {dict get $Elements $elemName}]
+            set error [catch {dget $Elements $elemName}]
             if {$error>0} {
                 error "Element with name '$elemName' was not found in netlist's '[my configure -Name]' list of elements"
             } else {
-                set foundElem [dict get $Elements $elemName]
+                set foundElem [dget $Elements $elemName]
             }
             return $foundElem
         }
@@ -1314,15 +1314,15 @@ namespace eval ::SpiceGenTcl {
             
             # create Pins objects, nodes are set to empty line
             foreach pin $pins {
-                my AddPin [lindex $pin 0] {}
+                my AddPin [@ $pin 0] {}
             }
             # create Params objects that are input parameters of subcircuit
             if {$params!=""} {
                 foreach param $params {
                     if {[llength $param]<=2} {
-                        my addParam [lindex $param 0] [lindex $param 1] 
+                        my addParam [@ $param 0] [@ $param 1] 
                     } else {
-                        error "Wrong parameter '[lindex $param 0]' definition in subcircuit $name"
+                        error "Wrong parameter '[@ $param 0]' definition in subcircuit $name"
                     }  
                 }
             } else {
@@ -1333,15 +1333,15 @@ namespace eval ::SpiceGenTcl {
         }
         # copy methods of Device to manipulate header .subckt definition elements
         set def [info class definition ::SpiceGenTcl::Device AddPin]
-        method AddPin [lindex $def 0] [lindex $def 1]       
+        method AddPin [@ $def 0] [@ $def 1]       
         set def [info class definition ::SpiceGenTcl::Device getPins]
-        method getPins [lindex $def 0] [lindex $def 1] 
+        method getPins [@ $def 0] [@ $def 1] 
         set def [info class definition ::SpiceGenTcl::Device deleteParam]
-        method deleteParam [lindex $def 0] [lindex $def 1] 
+        method deleteParam [@ $def 0] [@ $def 1] 
         set def [info class definition ::SpiceGenTcl::Device setParamValue]
-        method setParamValue [lindex $def 0] [lindex $def 1]     
+        method setParamValue [@ $def 0] [@ $def 1]     
         set def [info class definition ::SpiceGenTcl::Device getParams]
-        method getParams [lindex $def 0] [lindex $def 1]  
+        method getParams [@ $def 0] [@ $def 1]  
         method addParam {paramName value} {
             # Adds new parameter to subcircuit, and throws error
             #  on dublicated names.
@@ -1439,10 +1439,10 @@ namespace eval ::SpiceGenTcl {
             my configure -Type $type
             # create Analysis objects
             foreach param $params {
-                if {[lindex $param 2]=={}} {
-                    my addParam [lindex $param 0] [lindex $param 1]    
-                } elseif {[lindex $param 1]=="-sw"} {
-                    my addParam [lindex $param 0] -sw 
+                if {[@ $param 2]=={}} {
+                    my addParam [@ $param 0] [@ $param 1]    
+                } elseif {[@ $param 1]=="-sw"} {
+                    my addParam [@ $param 0] -sw 
                 } else {
                     my addParam {*}$param
                 } 
@@ -1452,7 +1452,7 @@ namespace eval ::SpiceGenTcl {
             # Gets the dictionary that contains parameter name as keys and
             #  parameter values as the values
             # Returns: parameters dictionary
-            set tempDict [dict create]
+            set tempDict [dcreate]
             dict for {paramName param} $Params {
                 dict append tempDict $paramName [$param configure -Value]
             }
@@ -1496,18 +1496,18 @@ namespace eval ::SpiceGenTcl {
             return
         }
         set def [info class definition ::SpiceGenTcl::Device deleteParam]
-        method deleteParam [lindex $def 0] [lindex $def 1]
+        method deleteParam [@ $def 0] [@ $def 1]
         method setParamValue {paramName value} {
             # Sets (or changes) value of particular parameter.
             #  paramName - name of parameter
             #  value - the new value of parameter
             set paramName [string tolower $paramName]
-            set error [catch {dict get $Params $paramName}]
+            set error [catch {dget $Params $paramName}]
             if {$error>0} {
                 error "Parameter with name '$paramName' was not found in parameter analysis's '[my configure -Name]'\
                         list of parameters '[dict keys [my getParams]]'"
             } else {
-                set param [dict get $Params $paramName]
+                set param [dget $Params $paramName]
             }
             $param configure -Value $value
             return
@@ -1779,7 +1779,7 @@ namespace eval ::SpiceGenTcl {
             } else {
                 error "Unknown encoding"
             }
-            my configure -RawParams [dict create Filename $path]
+            my configure -RawParams [dcreate Filename $path]
             set header ""
             set binaryStart 6            
             while true {
@@ -1804,20 +1804,20 @@ namespace eval ::SpiceGenTcl {
 
             foreach line $header {
                 set lineList [split $line ":"]
-                if {[lindex $lineList 0]=="Variables"} {
+                if {[@ $lineList 0]=="Variables"} {
                     break
                 }
-                dict append RawParams [lindex $lineList 0] [string trim [lindex $lineList 1]]
+                dict append RawParams [@ $lineList 0] [string trim [@ $lineList 1]]
             }
-            my configure -NPoints [dict get [my configure -RawParams] "No. Points"]
-            my configure -NVariables [dict get [my configure -RawParams] "No. Variables"]
-            if {[dict get [my configure -RawParams] "Plotname"] in {"Operating Point" "Transfet Function"}} {
+            my configure -NPoints [dget [my configure -RawParams] "No. Points"]
+            my configure -NVariables [dget [my configure -RawParams] "No. Variables"]
+            if {[dget [my configure -RawParams] "Plotname"] in {"Operating Point" "Transfet Function"}} {
                 set hasAxis 0
             } else {
                 set hasAxis 1
             }
-            set flags [split [dict get [my configure -RawParams] "Flags"]]
-            if {("complex" in $flags) || ([dict get [my configure -RawParams] "Plotname"]=="AC Analysis")} {
+            set flags [split [dget [my configure -RawParams] "Flags"]]
+            if {("complex" in $flags) || ([dget [my configure -RawParams] "Plotname"]=="AC Analysis")} {
                 set numType complex
             } else {
                 if {("double" in $flags) || ($simulator=="ngspice")} {
@@ -1863,7 +1863,7 @@ namespace eval ::SpiceGenTcl {
 ####  read data 
             
             if {$rawType=="Binary:"} {
-                my configure -BlockSize [expr {($fileSize - $binaryStart)/$NPoints}]
+                my configure -BlockSize [= {($fileSize - $binaryStart)/$NPoints}]
                 set scanFunctions ""
                 set calcBlockSize 0
                 foreach trace [my configure -Traces] {
@@ -1899,8 +1899,8 @@ namespace eval ::SpiceGenTcl {
                 }
                  for {set i 0} {$i<$NPoints} {incr i} {
                     for {set j 0} {$j<[llength [my configure -Traces]]} {incr j} {
-                        set value [eval "my [lindex $scanFunctions $j]" $file] 
-                        set trace [lindex [my configure -Traces] $j]
+                        set value [eval "my [@ $scanFunctions $j]" $file] 
+                        set trace [@ [my configure -Traces] $j]
                         if {[info object class $trace]!="::SpiceGenTcl::EmptyTrace"} {
                             $trace appendDataPoints $value 
                         }  
@@ -1918,24 +1918,24 @@ namespace eval ::SpiceGenTcl {
                         #puts $lineList
                         if {$firstVar=="true"} {
                             set firstVar false
-                            set sPoint [lindex $lineList 0]
+                            set sPoint [@ $lineList 0]
                             #puts "$sPoint $i"
                             if {$i!=int($sPoint)} {
                                 error "Error reading file"
                             }
                             if {$numType=="complex"} {
-                                set value [split [lindex $lineList 1] ","]
+                                set value [split [@ $lineList 1] ","]
                             } else {
-                                set value [lindex $lineList 1]
+                                set value [@ $lineList 1]
                             } 
                         } else {
                             if {$numType=="complex"} {
-                                set value [split [lindex $lineList 1] ","]
+                                set value [split [@ $lineList 1] ","]
                             } else {
-                                set value [lindex $lineList 1]
+                                set value [@ $lineList 1]
                             }
                         }
-                        set trace [lindex [my configure -Traces] $j]
+                        set trace [@ [my configure -Traces] $j]
                         $trace appendDataPoints $value 
                     }
                 }
@@ -1991,7 +1991,7 @@ namespace eval ::SpiceGenTcl {
         }
         method getTracesData {} {
             # Returns dictionary that contains all data in value and name as a key
-            set dict [dict create]
+            set dict [dcreate]
             foreach trace [my configure -Traces] {
                 dict append dict [$trace configure -Name] [$trace getDataPoints]
             }
@@ -2007,25 +2007,25 @@ namespace eval ::SpiceGenTcl {
                 {-traces -catchall -forbid {all}}
                 {-sep= -default {,}}
             }]
-            if {[dict exists $arguments all]} {
+            if {[dexist $arguments all]} {
                 set tracesDict [my getTracesData]
                 set tracesList [list [dict keys $tracesDict]]
                 for {set i 0} {$i<[my configure -NPoints]} {incr i} {
                     dict for {traceName traceValues} $tracesDict {
-                        lappend row [lindex $traceValues $i]
+                        lappend row [@ $traceValues $i]
                     }
                     lappend tracesList $row
                     unset row
                 }
-            } elseif {[dict get $arguments traces]!=""} {
-                foreach traceName [dict get $arguments traces] {
+            } elseif {[dget $arguments traces]!=""} {
+                foreach traceName [dget $arguments traces] {
                     set traceObj [my getTrace $traceName]
                     dict append tracesDict [$traceObj configure -Name] [$traceObj getDataPoints]
                 }
                 set tracesList [list [dict keys $tracesDict]]
                 for {set i 0} {$i<[my configure -NPoints]} {incr i} {
                     dict for {traceName traceValues} $tracesDict {
-                        lappend row [lindex $traceValues $i]
+                        lappend row [@ $traceValues $i]
                     }
                     lappend tracesList $row
                     unset row
@@ -2034,7 +2034,7 @@ namespace eval ::SpiceGenTcl {
                 error "Arguments '-all' or '-traces traceName1 traceName2 ...' must be provided to 'getTracesCsv'\
                         method"
             }
-            return [::csv::joinlist $tracesList [dict get $arguments sep]]
+            return [::csv::joinlist $tracesList [dget $arguments sep]]
         }
     }
 }

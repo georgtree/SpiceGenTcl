@@ -32,9 +32,9 @@ foreach volt $voltSweep {
     set data [$circuit getDataDict]
     set x $volt
     # get imaginary part of current
-    set y [lindex [dict get $data va#branch] 0 1]
+    set y [@ [dget $data va#branch] 0 1]
     set xf [format "%.3e" $x]
-    set yf [format "%.2e" [expr {-$y/(2*$pi*1e5*1e-9)}]]
+    set yf [format "%.2e" [= {-$y/(2*$pi*1e5*1e-9)}]]
     lappend xydata [list $xf $yf]
 }
 

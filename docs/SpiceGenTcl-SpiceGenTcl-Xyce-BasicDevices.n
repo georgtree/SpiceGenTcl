@@ -9,6 +9,14 @@ SpiceGenTcl::Xyce::BasicDevices - Commands in namespace SpiceGenTcl::Xyce::Basic
 .br
 \fBCapacitor new\fP \fIname npNode nmNode ?args?\fP
 .br
+\fBCModel create OBJNAME\fP \fIname ?args?\fP
+.br
+\fBCModel new\fP \fIname ?args?\fP
+.br
+\fBCSwitchModel create OBJNAME\fP \fIname ?args?\fP
+.br
+\fBCSwitchModel new\fP \fIname ?args?\fP
+.br
 \fBGenSwitch create OBJNAME\fP \fIname npNode nmNode ?args?\fP
 .br
 \fBGenSwitch new\fP \fIname npNode nmNode ?args?\fP
@@ -17,9 +25,17 @@ SpiceGenTcl::Xyce::BasicDevices - Commands in namespace SpiceGenTcl::Xyce::Basic
 .br
 \fBInductor new\fP \fIname npNode nmNode ?args?\fP
 .br
+\fBLModel create OBJNAME\fP \fIname ?args?\fP
+.br
+\fBLModel new\fP \fIname ?args?\fP
+.br
 \fBResistor create OBJNAME\fP \fIname npNode nmNode ?args?\fP
 .br
 \fBResistor new\fP \fIname npNode nmNode ?args?\fP
+.br
+\fBRModel create OBJNAME\fP \fIname ?args?\fP
+.br
+\fBRModel new\fP \fIname ?args?\fP
 .br
 \fBSubcircuitInstance create OBJNAME\fP \fIname pins subName params\fP
 .br
@@ -28,6 +44,10 @@ SpiceGenTcl::Xyce::BasicDevices - Commands in namespace SpiceGenTcl::Xyce::Basic
 \fBSubcircuitInstanceAuto create OBJNAME\fP \fIsubcktObj name nodes ?args?\fP
 .br
 \fBSubcircuitInstanceAuto new\fP \fIsubcktObj name nodes ?args?\fP
+.br
+\fBVSwitchModel create OBJNAME\fP \fIname ?args?\fP
+.br
+\fBVSwitchModel new\fP \fIname ?args?\fP
 .br
 .SH ::SPICEGENTCL::XYCE::BASICDEVICES
 .SH CLASSES
@@ -199,11 +219,11 @@ Example of class initialization as a simple capacitor:
 .fi
 .RE
 .PP
-Behavioral capacitor with C expression:
+Behavioral capacitor with C =ession:
 .PP
 .RS 4n
 .nf
-C<device name> <(+) node> <(-) node> C={expression} [device parameters]
+C<device name> <(+) node> <(-) node> C={=ession} [device parameters]
 .fi
 .RE
 .PP
@@ -215,11 +235,11 @@ Example of class initialization:
 .fi
 .RE
 .PP
-Behavioral capacitor with Q expression:
+Behavioral capacitor with Q =ession:
 .PP
 .RS 4n
 .nf
-C<device name> <(+) node> <(-) node> Q={expression} [device parameters]
+C<device name> <(+) node> <(-) node> Q={=ession} [device parameters]
 .fi
 .RE
 .PP
@@ -244,6 +264,89 @@ Example of class initialization:
 .RS 4n
 .nf
 ::SpiceGenTcl::Xyce::BasicDevices::Capacitor new 1 netp netm -model capm -l 1e-6 -w 10e-6
+.fi
+.RE
+.PP
+.RS -4n
+\fBCModel\fR (::SpiceGenTcl::Xyce::BasicDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Model\&.addParam\fP
+.TP
+argsPreprocess
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Model\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Model\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Model\&.getParams\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Model\&.setParamValue\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name, -Type
+.PP
+Writable: -Name, -Type
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Model\fP
+.PP
+\fBMixins\fR
+.PP
+\fI::SpiceGenTcl::KeyArgsBuilder\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Xyce::BasicDevices::CModel)
+.RE
+.PP
+Creates object of class CModel that describes semiconductor capacitor model\&.
+.RS 4n\fBCModel create OBJNAME\fP \fIname ?args?\fP
+.br
+\fBCModel new\fP \fIname ?args?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the model\&.
+.TP
+args
+Keyword instance parameters, for details please refer to Xyce reference manual, 2\&.3\&.4 section\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Xyce::BasicDevices::CModel new capmod -tc1 1 -tc2 2
 .fi
 .RE
 .PP
@@ -298,6 +401,89 @@ Writable: -Name
 \fBSubclasses\fR
 .PP
 \fIW\fP
+.PP
+.RS -4n
+\fBCSwitchModel\fR (::SpiceGenTcl::Xyce::BasicDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Model\&.addParam\fP
+.TP
+argsPreprocess
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Model\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Model\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Model\&.getParams\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Model\&.setParamValue\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name, -Type
+.PP
+Writable: -Name, -Type
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Model\fP
+.PP
+\fBMixins\fR
+.PP
+\fI::SpiceGenTcl::KeyArgsBuilder\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Xyce::BasicDevices::CSwitchModel)
+.RE
+.PP
+Creates object of class CSwitchModel that describes current switch model\&.
+.RS 4n\fBCSwitchModel create OBJNAME\fP \fIname ?args?\fP
+.br
+\fBCSwitchModel new\fP \fIname ?args?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the model\&.
+.TP
+args
+Keyword instance parameters, for details please refer to Xyce reference manual, 2\&.3\&.22 section\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Ngspice::BasicDevices::CSwitchModel new cswmod -ion 1 -ioff 0\&.5 -ron 1 -roff 1e6
+.fi
+.RE
 .PP
 .RS -4n
 \fBGenS\fR (::SpiceGenTcl::Xyce::BasicDevices)
@@ -439,7 +625,7 @@ Initial state of switch\&.
 .PP
 .RS 4n
 .nf
-S<name> <(+) switch node> <(-) switch node> <model name> [ON] [OFF] <control = expression>
+S<name> <(+) switch node> <(-) switch node> <model name> [ON] [OFF] <control = =ession>
 .fi
 .RE
 .PP
@@ -650,6 +836,89 @@ Writable: -Name
 \fIInductor\fP
 .PP
 .RS -4n
+\fBLModel\fR (::SpiceGenTcl::Xyce::BasicDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Model\&.addParam\fP
+.TP
+argsPreprocess
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Model\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Model\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Model\&.getParams\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Model\&.setParamValue\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name, -Type
+.PP
+Writable: -Name, -Type
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Model\fP
+.PP
+\fBMixins\fR
+.PP
+\fI::SpiceGenTcl::KeyArgsBuilder\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Xyce::BasicDevices::LModel)
+.RE
+.PP
+Creates object of class LModel that describes inductor model\&.
+.RS 4n\fBLModel create OBJNAME\fP \fIname ?args?\fP
+.br
+\fBLModel new\fP \fIname ?args?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the model\&.
+.TP
+args
+Keyword instance parameters, for details please refer to Xyce reference manual, 2\&.3\&.5 section\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Xyce::BasicDevices::LModel new indmod -tc1 1 -tc2 2
+.fi
+.RE
+.PP
+.RS -4n
 \fBR\fR (::SpiceGenTcl::Xyce::BasicDevices)
 .RE
 .PP
@@ -820,7 +1089,7 @@ Behavioral resistor:
 .PP
 .RS 4n
 .nf
-R<name> <(+) node> <(-) node> R ={expression} [device parameters]
+R<name> <(+) node> <(-) node> R ={=ession} [device parameters]
 .fi
 .RE
 .PP
@@ -845,6 +1114,89 @@ Example of class initialization:
 .RS 4n
 .nf
 ::SpiceGenTcl::Xyce::BasicDevices::Resistor new 1 netp netm -model resm -l 1e-6 -w 10e-6
+.fi
+.RE
+.PP
+.RS -4n
+\fBRModel\fR (::SpiceGenTcl::Xyce::BasicDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Model\&.addParam\fP
+.TP
+argsPreprocess
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Model\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Model\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Model\&.getParams\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Model\&.setParamValue\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name, -Type
+.PP
+Writable: -Name, -Type
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Model\fP
+.PP
+\fBMixins\fR
+.PP
+\fI::SpiceGenTcl::KeyArgsBuilder\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Xyce::BasicDevices::RModel)
+.RE
+.PP
+Creates object of class RModel that describes semiconductor resistor model\&.
+.RS 4n\fBRModel create OBJNAME\fP \fIname ?args?\fP
+.br
+\fBRModel new\fP \fIname ?args?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the model\&.
+.TP
+args
+Keyword instance parameters, for details please refer to Xyce reference manual, 2\&.3\&.7 section\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Xyce::BasicDevices::RModel new resmod -tc1 1 -tc2 2
 .fi
 .RE
 .PP
@@ -1144,6 +1496,89 @@ Writable: -Name
 \fBSubclasses\fR
 .PP
 \fIVSw\fP
+.PP
+.RS -4n
+\fBVSwitchModel\fR (::SpiceGenTcl::Xyce::BasicDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Model\&.addParam\fP
+.TP
+argsPreprocess
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Model\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Model\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Model\&.getParams\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Model\&.setParamValue\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -Name, -Type
+.PP
+Writable: -Name, -Type
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Model\fP
+.PP
+\fBMixins\fR
+.PP
+\fI::SpiceGenTcl::KeyArgsBuilder\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Xyce::BasicDevices::VSwitchModel)
+.RE
+.PP
+Creates object of class VSwitchModel that describes voltage switch model\&.
+.RS 4n\fBVSwitchModel create OBJNAME\fP \fIname ?args?\fP
+.br
+\fBVSwitchModel new\fP \fIname ?args?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the model\&.
+.TP
+args
+Keyword instance parameters, for details please refer to Xyce reference manual, 2\&.3\&.22 section\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Ngspice::BasicDevices::VSwitchModel new swmod -von 1 -voff 0\&.5 -ron 1 -roff 1e6
+.fi
+.RE
 .PP
 .RS -4n
 \fBW\fR (::SpiceGenTcl::Xyce::BasicDevices)

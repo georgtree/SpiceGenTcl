@@ -60,14 +60,14 @@ C create c1 1 out 0 -c 1e-9
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
 proc calcDbMag {re im} {
-    set mag [expr {sqrt($re*$re+$im*$im)}]
-    set db [expr {10*log($mag)}]
+    set mag [= {sqrt($re*$re+$im*$im)}]
+    set db [= {10*log($mag)}]
     return $db
 }
 
 proc calcDbMagVec {vector} {
     foreach value $vector {
-        lappend db [calcDbMag [lindex $value 0] [lindex $value 1]]
+        lappend db [calcDbMag [@ $value 0] [@ $value 1]]
     }
     return $db
 }
@@ -83,10 +83,10 @@ proc calcDbMagVec {vector} {
 $circuit runAndRead
 # get data dictionary
 set data [$circuit getDataDict]
-set trace [calcDbMagVec [dict get $data v(out)]]
-set freqs [dict get $data frequency]
+set trace [calcDbMagVec [dget $data v(out)]]
+set freqs [dget $data frequency]
 foreach x $freqs y $trace {
-    lappend xydata [list [lindex $x 0] $y]
+    lappend xydata [list [@ $x 0] $y]
 }
 set chartTransMag [ticklecharts::chart new]
 $chartTransMag Xaxis -name &quot;Frequency, Hz&quot; -minorTick {show &quot;True&quot;} -type &quot;log&quot;
@@ -106,15 +106,15 @@ proc findBW {freqs vals trigVal} {
     # calculate bandwidth of results
     set freqsLen [llength $freqs]
     for {set i 0} {$i&lt;$freqsLen} {incr i} {
-        set iVal [lindex $vals $i]
-        set ip1Val [lindex $vals [+ $i 1]]
+        set iVal [@ $vals $i]
+        set ip1Val [@ $vals [+ $i 1]]
         if {($iVal&lt;=$trigVal) &amp;&amp; ($ip1Val&gt;=$trigVal)} {
-            set freqStart [lindex $freqs $i]
+            set freqStart [@ $freqs $i]
         } elseif {($iVal&gt;=$trigVal) &amp;&amp; ($ip1Val&lt;=$trigVal)} {
-            set freqEnd [lindex $freqs $i]
+            set freqEnd [@ $freqs $i]
         }
     }
-    set bw [expr {$freqEnd-$freqStart}]
+    set bw [= {$freqEnd-$freqStart}]
     return $bw
 }
 </pre>
@@ -122,14 +122,14 @@ proc findBW {freqs vals trigVal} {
 </figure><p class='ruff'>Find bandwidth:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-puts [findBW [lmap freq $freqs {lindex $freq 0}] $trace -10]
+puts [findBW [lmap freq $freqs {@ $freq 0}] $trace -10]
 </pre>
 
 </figure><p class='ruff'>The value is 1.086255 Mhz.</p>
 <p class='ruff'>Our goal is to obtain a distribution of bandwidths by varying the filter parameters. To generate random values for these parameters, we use the built-in functions of the <code>math::statistics</code> package from Tcllib. The parameters can be distributed either normally or uniformly. For uniform distribution, we use <code>::math::statistics::random-uniform xmin xmax number</code>; for normal distribution, we use <code>::math::statistics::random-normal mean stdev number</code>. For uniform distribution, we define the following min and max limits for each C and L element:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-set distLimits [dict create c1 [dict create min 0.9e-9 max 1.1e-9] l1 [dict create min 9e-6 max 11e-6] c2 [dict create min 0.9e-9 max 1.1e-9] l2 [dict create min 9e-6 max 11e-6] c3 [dict create min 225e-12 max 275e-12] l3 [dict create min 36e-6 max 44e-6]]
+set distLimits [dcreate c1 [dcreate min 0.9e-9 max 1.1e-9] l1 [dcreate min 9e-6 max 11e-6] c2 [dcreate min 0.9e-9 max 1.1e-9] l2 [dcreate min 9e-6 max 11e-6] c3 [dcreate min 225e-12 max 275e-12] l3 [dcreate min 36e-6 max 44e-6]]
 </pre>
 
 </figure><p class='ruff'>We can specify different numbers of simulations; the more runs we perform, the more accurate the representation becomes. For example, we set the number of simulations to 1,000 runs with 15 intervals for constructing a boxplot:</p>
@@ -147,7 +147,7 @@ set numOfIntervals 15
 for {set i 0} {$i&lt;$mcRuns} {incr i} {
     #set elements values according to uniform distribution
     foreach elem [list c1 l1 c2 l2 c3 l3] {
-        $elem setParamValue [string index $elem 0] [random-uniform {*}[dict values [dict get $distLimits $elem]] 1]
+        $elem setParamValue [string index $elem 0] [random-uniform {*}[dict values [dget $distLimits $elem]] 1]
     }
     # run simulation
     $circuit runAndRead
@@ -155,15 +155,15 @@ for {set i 0} {$i&lt;$mcRuns} {incr i} {
     set data [$circuit getDataDict]
     # get results
     if {$i==0} {
-        set freqs [dict get $data frequency]
+        set freqs [dget $data frequency]
         foreach freq $freqs {
-            lappend freqRes [lindex $freq 0]
+            lappend freqRes [@ $freq 0]
         }
     }
     # get vout frequency curve
-    lappend traceListUni [calcDbMagVec [dict get $data v(out)]]
+    lappend traceListUni [calcDbMagVec [dget $data v(out)]]
     # calculate bandwidths values
-    lappend bwsUni [findBW $freqRes [lindex $traceListUni end] -10]
+    lappend bwsUni [findBW $freqRes [@ $traceListUni end] -10]
 }
 </pre>
 
@@ -172,11 +172,11 @@ for {set i 0} {$i&lt;$mcRuns} {incr i} {
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
 proc createIntervals {data numOfIntervals} {
     set intervals [::math::statistics::minmax-histogram-limits [tcl::mathfunc::min {*}$data]  [tcl::mathfunc::max {*}$data] $numOfIntervals]
-    lappend intervalsStrings [format &quot;&lt;=%.2e&quot; [lindex $intervals 0]]
+    lappend intervalsStrings [format &quot;&lt;=%.2e&quot; [@ $intervals 0]]
     for {set i 0} {$i&lt;[- [llength $intervals] 1]} {incr i} {
-        lappend intervalsStrings [format &quot;%.2e-%.2e&quot; [lindex $intervals $i] [lindex $intervals [+ $i 1]]]
+        lappend intervalsStrings [format &quot;%.2e-%.2e&quot; [@ $intervals $i] [@ $intervals [+ $i 1]]]
     }
-    return [dict create intervals $intervals intervalsStr $intervalsStrings]
+    return [dcreate intervals $intervals intervalsStr $intervalsStrings]
 }
 </pre>
 
@@ -198,20 +198,20 @@ proc createDist {data intervals} {
 </figure><p class='ruff'>Call the <code>createDist</code> procedure to calculate the histogram y-axis values, which correspond to the number of bandwidths within each interval:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-set normDist [createDist $bwsNorm [dict get $normIntervals intervals]]
+set normDist [createDist $bwsNorm [dget $normIntervals intervals]]
 </pre>
 
 </figure><p class='ruff'>The same sequence of steps is applied for the normal distribution. We assume that <code>std = (xmax - xmin) / 6</code>, where <code>xmax</code> and <code>xmin</code> are the limits of the uniform distribution.</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
 # set parameter's normal distributions limits
-set normalLimits [dict create c1 [dict create mean 1e-9 std [/ 0.1e-9 3]] l1 [dict create mean 10e-6 std [/ 1e-6 3]] c2 [dict create mean 1e-9 std [/ 0.1e-9 3]] l2 [dict create mean 10e-6 std [/ 1e-6 3]] c3 [dict create mean 250e-12 std [/ 25e-12 3]] l3 [dict create mean 40e-6 std [/ 4e-6 3]]]
+set normalLimits [dcreate c1 [dcreate mean 1e-9 std [/ 0.1e-9 3]] l1 [dcreate mean 10e-6 std [/ 1e-6 3]] c2 [dcreate mean 1e-9 std [/ 0.1e-9 3]] l2 [dcreate mean 10e-6 std [/ 1e-6 3]] c3 [dcreate mean 250e-12 std [/ 25e-12 3]] l3 [dcreate mean 40e-6 std [/ 4e-6 3]]]
 
 ## loop in which we run simulation with normal distribution
 for {set i 0} {$i&lt;$mcRuns} {incr i} {
     #set elements values according to normal distribution
     foreach elem [list c1 l1 c2 l2 c3 l3] {
-        $elem setParamValue [string index $elem 0] [random-normal {*}[dict values [dict get $normalLimits $elem]] 1]
+        $elem setParamValue [string index $elem 0] [random-normal {*}[dict values [dget $normalLimits $elem]] 1]
     }
     # run simulation
     $circuit runAndRead
@@ -219,19 +219,19 @@ for {set i 0} {$i&lt;$mcRuns} {incr i} {
     set data [$circuit getDataDict]
     # get results
     if {$i==0} {
-        set freqs [dict get $data frequency]
+        set freqs [dget $data frequency]
         foreach freq $freqs {
-            lappend freqRes [lindex $freq 0]
+            lappend freqRes [@ $freq 0]
         }
     }
     # get vout frequency curve
-    lappend traceListNorm [calcDbMagVec [dict get $data v(out)]]
+    lappend traceListNorm [calcDbMagVec [dget $data v(out)]]
     # calculate bandwidths values
-    lappend bwsNorm [findBW $freqRes [lindex $traceListNorm end] -10]
+    lappend bwsNorm [findBW $freqRes [@ $traceListNorm end] -10]
 }
 # get distribution of bandwidths with normal parameters distribution
 set normIntervals [createIntervals $bwsNorm $numOfIntervals]
-set normDist [createDist $bwsNorm [dict get $normIntervals intervals]]
+set normDist [createDist $bwsNorm [dget $normIntervals intervals]]
 </pre>
 
 </figure><p class='ruff'>Finally, we plot resulted distributions:</p>
@@ -240,13 +240,13 @@ set normDist [createDist $bwsNorm [dict get $normIntervals intervals]]
 # plot results with ticklecharts
 # chart for uniformly distributed parameters
 set chartUni [ticklecharts::chart new]
-$chartUni Xaxis -name &quot;Frequency intervals, Hz&quot; -data [list [dict get $uniIntervals intervalsStr]] -axisTick {show &quot;True&quot; alignWithLabel &quot;True&quot;} -axisLabel {interval &quot;0&quot; rotate &quot;45&quot; fontSize &quot;8&quot;}
+$chartUni Xaxis -name &quot;Frequency intervals, Hz&quot; -data [list [dget $uniIntervals intervalsStr]] -axisTick {show &quot;True&quot; alignWithLabel &quot;True&quot;} -axisLabel {interval &quot;0&quot; rotate &quot;45&quot; fontSize &quot;8&quot;}
 $chartUni Yaxis -name &quot;Bandwidths per interval&quot; -minorTick {show &quot;True&quot;} -type &quot;value&quot;
 $chartUni SetOptions -title {} -tooltip {} -animation &quot;False&quot; -toolbox {feature {dataZoom {yAxisIndex &quot;none&quot;}}}
 $chartUni Add &quot;barSeries&quot; -data [list $uniDist]
 # chart for normally distributed parameters
 set chartNorm [ticklecharts::chart new]
-$chartNorm Xaxis -name &quot;Frequency intervals, Hz&quot; -data [list [dict get $normIntervals intervalsStr]] -axisTick {show &quot;True&quot; alignWithLabel &quot;True&quot;} -axisLabel {interval &quot;0&quot; rotate &quot;45&quot; fontSize &quot;8&quot;}
+$chartNorm Xaxis -name &quot;Frequency intervals, Hz&quot; -data [list [dget $normIntervals intervalsStr]] -axisTick {show &quot;True&quot; alignWithLabel &quot;True&quot;} -axisLabel {interval &quot;0&quot; rotate &quot;45&quot; fontSize &quot;8&quot;}
 $chartNorm Yaxis -name &quot;Bandwidths per interval&quot; -minorTick {show &quot;True&quot;} -type &quot;value&quot;
 $chartNorm SetOptions -title {} -tooltip {} -animation &quot;False&quot; -toolbox {feature {dataZoom {yAxisIndex &quot;none&quot;}}}
 $chartNorm Add &quot;barSeries&quot; -data [list $normDist]
@@ -265,9 +265,9 @@ $layout Render -outfile [file normalize [file join html_charts $fbasename.html]]
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
 # find distribution of normal distributed values in uniform intervals       
-set normDistWithUniIntervals [createDist $bwsNorm [dict get $uniIntervals intervals]]
+set normDistWithUniIntervals [createDist $bwsNorm [dget $uniIntervals intervals]]
 set chartCombined [ticklecharts::chart new]
-$chartCombined Xaxis -name &quot;Frequency intervals, Hz&quot; -data [list [dict get $uniIntervals intervalsStr]] -axisTick {show &quot;True&quot; alignWithLabel &quot;True&quot;} -axisLabel {interval &quot;0&quot; rotate &quot;45&quot; fontSize &quot;8&quot;}
+$chartCombined Xaxis -name &quot;Frequency intervals, Hz&quot; -data [list [dget $uniIntervals intervalsStr]] -axisTick {show &quot;True&quot; alignWithLabel &quot;True&quot;} -axisLabel {interval &quot;0&quot; rotate &quot;45&quot; fontSize &quot;8&quot;}
 $chartCombined Yaxis -name &quot;Bandwidths per interval&quot; -minorTick {show &quot;True&quot;} -type &quot;value&quot;
 $chartCombined SetOptions -title {} -legend  {} -tooltip {} -animation &quot;False&quot; -toolbox {feature {dataZoom {yAxisIndex &quot;none&quot;}}} -grid {left &quot;10%&quot; right &quot;15%&quot;}       
 $chartCombined Add &quot;barSeries&quot; -data [list $uniDist] -name &quot;Uniform&quot;

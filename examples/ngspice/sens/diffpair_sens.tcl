@@ -32,6 +32,6 @@ $circuit configure -Simulator $simulator
 $circuit runAndRead
 # get data object
 set data [$circuit getDataDict]
-set vrc1 [dict get $data v(rc1)]
-set vrc2 [dict get $data v(rc2)]
+set vrc1 [dget $data v(rc1)]
+set vrc2 [dget $data v(rc2)]
 puts [format "vrc1=%.3e vrc2=%.3e" $vrc1 $vrc2]

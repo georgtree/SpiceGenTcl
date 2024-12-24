@@ -108,9 +108,9 @@ QXXXXXXX nc nb ne &lt;ns&gt; &lt;tj&gt; mname &lt;area=val&gt; &lt;areac=val&gt;
         -ns=
         {-tj= -require {ns}}
     }]
-    lappend params &quot;model [dict get $arguments model] -posnocheck&quot;
-    if {[dict exists $arguments ic]} {
-        lappend params &quot;ic [join [dict get $arguments ic] ,] -nocheck&quot;
+    lappend params &quot;model [dget $arguments model] -posnocheck&quot;
+    if {[dexist $arguments ic]} {
+        lappend params &quot;ic [join [dget $arguments ic] ,] -nocheck&quot;
     }
     dict for {paramName value} $arguments {
         if {$paramName ni {model ns tj ic}} {
@@ -118,10 +118,10 @@ QXXXXXXX nc nb ne &lt;ns&gt; &lt;tj&gt; mname &lt;area=val&gt; &lt;areac=val&gt;
         }
     }
     set pinList [list &quot;nc $ncNode&quot; &quot;nb $nbNode&quot; &quot;ne $neNode&quot;]
-    if {[dict exists $arguments ns]} {
-        lappend pinList &quot;ns [dict get $arguments ns]&quot;
-        if {[dict exists $arguments tj]} {
-            lappend pinList &quot;tj [dict get $arguments tj]&quot;
+    if {[dexist $arguments ns]} {
+        lappend pinList &quot;ns [dget $arguments ns]&quot;
+        if {[dexist $arguments tj]} {
+            lappend pinList &quot;tj [dget $arguments tj]&quot;
         }
     }
     next q$name $pinList $params
@@ -283,7 +283,7 @@ DXXXXXXX n+ n- mname &lt;area=val&gt; &lt;m=val&gt;
         -lp=
         -wp=
     }]
-    lappend params &quot;model [dict get $arguments model] -posnocheck&quot;
+    lappend params &quot;model [dget $arguments model] -posnocheck&quot;
     dict for {paramName value} $arguments {
         if {$paramName ni {model}} {
             lappend params &quot;$paramName $value&quot;
@@ -425,20 +425,20 @@ JXXXXXXX nd ng ns mname  &lt;area&gt; &lt;off&gt; &lt;ic=vds,vgs&gt; &lt;temp =t
         {-ic= -validate {[llength $arg]==2}}
         -temp=
     }]
-    lappend params &quot;model [dict get $arguments model] -posnocheck&quot;
-    if {[dict exists $arguments area]} {
-        set areaVal [dict get $arguments area]
-        if {([llength $areaVal]&gt;1) &amp;&amp; ([lindex $areaVal 1]==&quot;-eq&quot;)} {
-            lappend params &quot;area [lindex $areaVal 0] -poseq&quot;
+    lappend params &quot;model [dget $arguments model] -posnocheck&quot;
+    if {[dexist $arguments area]} {
+        set areaVal [dget $arguments area]
+        if {([llength $areaVal]&gt;1) &amp;&amp; ([@ $areaVal 1]==&quot;-eq&quot;)} {
+            lappend params &quot;area [@ $areaVal 0] -poseq&quot;
         } else {
             lappend params &quot;area $areaVal -pos&quot;
         }
     }
-    if {[dict get $arguments off]==1} {
+    if {[dget $arguments off]==1} {
         lappend params &quot;off -sw&quot;
     }
-    if {[dict exists $arguments ic]} {
-        lappend params &quot;ic [join [dict get $arguments ic] ,] -nocheck&quot;
+    if {[dexist $arguments ic]} {
+        lappend params &quot;ic [join [dget $arguments ic] ,] -nocheck&quot;
     }
     dict for {paramName value} $arguments {
         if {$paramName ni {model area off ic}} {
@@ -629,20 +629,20 @@ ZXXXXXXX ND NG NS MNAME &lt;AREA&gt; &lt;OFF&gt; &lt;IC=VDS,VGS &gt;
         {-off -boolean}
         {-ic= -validate {[llength $arg]==2}}
     }]
-    lappend params &quot;model [dict get $arguments model] -posnocheck&quot;
-    if {[dict exists $arguments area]} {
-        set areaVal [dict get $arguments area]
-        if {([llength $areaVal]&gt;1) &amp;&amp; ([lindex $areaVal 1]==&quot;-eq&quot;)} {
-            lappend params &quot;area [lindex $areaVal 0] -poseq&quot;
+    lappend params &quot;model [dget $arguments model] -posnocheck&quot;
+    if {[dexist $arguments area]} {
+        set areaVal [dget $arguments area]
+        if {([llength $areaVal]&gt;1) &amp;&amp; ([@ $areaVal 1]==&quot;-eq&quot;)} {
+            lappend params &quot;area [@ $areaVal 0] -poseq&quot;
         } else {
             lappend params &quot;area $areaVal -pos&quot;
         }
     }
-    if {[dict get $arguments off]==1} {
+    if {[dget $arguments off]==1} {
         lappend params &quot;off -sw&quot;
     }
-    if {[dict exists $arguments ic]} {
-        lappend params &quot;ic [join [dict get $arguments ic] ,] -nocheck&quot;
+    if {[dexist $arguments ic]} {
+        lappend params &quot;ic [join [dget $arguments ic] ,] -nocheck&quot;
     }
     next z$name [list &quot;nd $ndNode&quot; &quot;ng $ngNode&quot; &quot;ns $nsNode&quot;] $params
 }</pre></div>
@@ -811,36 +811,36 @@ MXXXXXXX nd ng ns nb mname &lt;m=val&gt; &lt;l=val&gt; &lt;w=val&gt;
         {-n7= -require {n7}}
         {-custparams -catchall}
     }]
-    lappend params &quot;model [dict get $arguments model] -posnocheck&quot;
-    if {[dict get $arguments off]==1} {
+    lappend params &quot;model [dget $arguments model] -posnocheck&quot;
+    if {[dget $arguments off]==1} {
         lappend params &quot;off -sw&quot;
     }
-    if {[dict exists $arguments ic]} {
-        lappend params &quot;ic [join [dict get $arguments ic] ,] -nocheck&quot;
+    if {[dexist $arguments ic]} {
+        lappend params &quot;ic [join [dget $arguments ic] ,] -nocheck&quot;
     }
     dict for {paramName value} $arguments {
         if {$paramName ni {model off ic n4 n5 n6 n7 custparams}} {
             lappend params &quot;$paramName $value&quot;
         }
     }
-    if {[dict get $arguments custparams]!=&quot;&quot;} {
-        if {[llength [dict get $arguments custparams]]%2!=0} {
+    if {[dget $arguments custparams]!=&quot;&quot;} {
+        if {[llength [dget $arguments custparams]]%2!=0} {
             error &quot;Custom parameters list must be even length&quot;
         }
-        set custParamDict [dict create {*}[dict get $arguments custparams]]
+        set custParamDict [dcreate {*}[dget $arguments custparams]]
         dict for {paramName value} $custParamDict {
             lappend params &quot;$paramName $value&quot;
         }
     }
     set pinList [list &quot;nd $ndNode&quot; &quot;ng $ngNode&quot; &quot;ns $nsNode&quot;]
-    if {[dict exists $arguments n4]} {
-        lappend pinList &quot;n4 [dict get $arguments n4]&quot;
-        if {[dict exists $arguments n5]} {
-            lappend pinList &quot;n5 [dict get $arguments n5]&quot;
-            if {[dict exists $arguments n6]} {
-                lappend pinList &quot;n6 [dict get $arguments n6]&quot;
-                if {[dict exists $arguments n7]} {
-                    lappend pinList &quot;n7 [dict get $arguments n7]&quot;
+    if {[dexist $arguments n4]} {
+        lappend pinList &quot;n4 [dget $arguments n4]&quot;
+        if {[dexist $arguments n5]} {
+            lappend pinList &quot;n5 [dget $arguments n5]&quot;
+            if {[dexist $arguments n6]} {
+                lappend pinList &quot;n6 [dget $arguments n6]&quot;
+                if {[dexist $arguments n7]} {
+                    lappend pinList &quot;n7 [dget $arguments n7]&quot;
                 }
             }
         }

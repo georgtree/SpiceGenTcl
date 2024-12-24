@@ -34,15 +34,15 @@ foreach file $srcList {
 # rename initial source files, then rename instrument files to the original name of the source file
 foreach file $srcList {
     if {[llength $file]>1} {
-        file rename [file join ${currentDir} .. src [lindex $file 0] "[lindex $file 1]"]\
-                [file join ${currentDir} .. src [lindex $file 0] "[lindex $file 1]_orig"]
-        file rename [file join ${currentDir} .. src [lindex $file 0] "[lindex $file 1]_i"]\
-                [file join ${currentDir} .. src [lindex $file 0] "[lindex $file 1]"]
+        file rename [file join ${currentDir} .. src [@ $file 0] "[@ $file 1]"]\
+                [file join ${currentDir} .. src [@ $file 0] "[@ $file 1]_orig"]
+        file rename [file join ${currentDir} .. src [@ $file 0] "[@ $file 1]_i"]\
+                [file join ${currentDir} .. src [@ $file 0] "[@ $file 1]"]
     } else {
-        file rename [file join ${currentDir} .. src "[lindex $file 0]"]\
-                [file join ${currentDir} .. src "[lindex $file 0]_orig"]
-        file rename [file join ${currentDir} .. src "[lindex $file 0]_i"]\
-                [file join ${currentDir} .. src "[lindex $file 0]"]
+        file rename [file join ${currentDir} .. src "[@ $file 0]"]\
+                [file join ${currentDir} .. src "[@ $file 0]_orig"]
+        file rename [file join ${currentDir} .. src "[@ $file 0]_i"]\
+                [file join ${currentDir} .. src "[@ $file 0]"]
     }
 }
 
@@ -51,15 +51,15 @@ exec tclsh [file join ${currentDir} all_codeCoverage.tcl]
 # revert renaming
 foreach file $srcList {
     if {[llength $file]>1} {
-        file rename [file join ${currentDir} .. src [lindex $file 0] "[lindex $file 1]"]\
-                [file join ${currentDir} .. src [lindex $file 0] "[lindex $file 1]_i"]
-        file rename [file join ${currentDir} .. src [lindex $file 0] "[lindex $file 1]_orig"]\
-                [file join ${currentDir} .. src [lindex $file 0] "[lindex $file 1]"]
+        file rename [file join ${currentDir} .. src [@ $file 0] "[@ $file 1]"]\
+                [file join ${currentDir} .. src [@ $file 0] "[@ $file 1]_i"]
+        file rename [file join ${currentDir} .. src [@ $file 0] "[@ $file 1]_orig"]\
+                [file join ${currentDir} .. src [@ $file 0] "[@ $file 1]"]
     } else {
-        file rename [file join ${currentDir} .. src "[lindex $file 0]"]\
-                [file join ${currentDir} .. src "[lindex $file 0]_i"]
-        file rename [file join ${currentDir} .. src "[lindex $file 0]_orig"]\
-                [file join ${currentDir} .. src "[lindex $file 0]"]
+        file rename [file join ${currentDir} .. src "[@ $file 0]"]\
+                [file join ${currentDir} .. src "[@ $file 0]_i"]
+        file rename [file join ${currentDir} .. src "[@ $file 0]_orig"]\
+                [file join ${currentDir} .. src "[@ $file 0]"]
     }
 }
 # create markup files
@@ -69,23 +69,23 @@ foreach file $srcList {
 # view results
 foreach file $srcList {
     if {[llength $file]>1} {
-        exec eskil -noparse [file join ${currentDir} .. src [lindex $file 0] "[lindex $file 1]"]\
-                [file join ${currentDir} .. src [lindex $file 0] "[lindex $file 1]_m"]
+        exec eskil -noparse [file join ${currentDir} .. src [@ $file 0] "[@ $file 1]"]\
+                [file join ${currentDir} .. src [@ $file 0] "[@ $file 1]_m"]
     } else {
-        exec eskil -noparse [file join ${currentDir} .. src [lindex $file 0]]\
-                [file join ${currentDir} .. src "[lindex $file 0]_m"]
+        exec eskil -noparse [file join ${currentDir} .. src [@ $file 0]]\
+                [file join ${currentDir} .. src "[@ $file 0]_m"]
     }
 }
 puts [join $results "\n"]
 # remove tests files
 foreach file $srcList {
     if {[llength $file]>1} {
-        file delete [file join ${currentDir} .. src [lindex $file 0] "[lindex $file 1]_i"]
-        file delete [file join ${currentDir} .. src [lindex $file 0] "[lindex $file 1]_log"]
-        file delete [file join ${currentDir} .. src [lindex $file 0] "[lindex $file 1]_m"]
+        file delete [file join ${currentDir} .. src [@ $file 0] "[@ $file 1]_i"]
+        file delete [file join ${currentDir} .. src [@ $file 0] "[@ $file 1]_log"]
+        file delete [file join ${currentDir} .. src [@ $file 0] "[@ $file 1]_m"]
     } else {
-        file delete [file join ${currentDir} .. src "[lindex $file 0]_i"]
-        file delete [file join ${currentDir} .. src "[lindex $file 0]_log"]
-        file delete [file join ${currentDir} .. src "[lindex $file 0]_m"]
+        file delete [file join ${currentDir} .. src "[@ $file 0]_i"]
+        file delete [file join ${currentDir} .. src "[@ $file 0]_log"]
+        file delete [file join ${currentDir} .. src "[@ $file 0]_m"]
     }
 }

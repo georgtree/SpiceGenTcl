@@ -48,19 +48,19 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
                 {-stop= -required}
                 {-incr= -required}
             }]
-            if {[dict exists $arguments name]} {
-                set name [dict get $arguments name]
+            if {[dexist $arguments name]} {
+                set name [dget $arguments name]
             } else {
                 set name [self object]
             }
-            lappend params "src [dict get $arguments src] -posnocheck"
+            lappend params "src [dget $arguments src] -posnocheck"
             set paramsOrder [list start stop incr]
             foreach param $paramsOrder {
-                dict append argsOrdered $param [dict get $arguments $param]
+                dict append argsOrdered $param [dget $arguments $param]
             }
             dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                    lappend params "$paramName [lindex $value 0] -poseq"
+                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
+                    lappend params "$paramName [@ $value 0] -poseq"
                 } else {
                     lappend params "$paramName $value -pos"
                 }
@@ -94,19 +94,19 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
                 {-fstart= -required}
                 {-fstop= -required}
             }]
-            if {[dict exists $arguments name]} {
-                set name [dict get $arguments name]
+            if {[dexist $arguments name]} {
+                set name [dget $arguments name]
             } else {
                 set name [self object]
             }
-            lappend params "variation [dict get $arguments variation] -posnocheck"
+            lappend params "variation [dget $arguments variation] -posnocheck"
             set paramsOrder [list n fstart fstop]
             foreach param $paramsOrder {
-                dict append argsOrdered $param [dict get $arguments $param]
+                dict append argsOrdered $param [dget $arguments $param]
             }
             dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                    lappend params "$paramName [lindex $value 0] -poseq"
+                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
+                    lappend params "$paramName [@ $value 0] -poseq"
                 } else {
                     lappend params "$paramName $value -pos"
                 }
@@ -142,24 +142,24 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
                 {-fstop= -required}
                 {-donoise}
             }]
-            if {[dict exists $arguments name]} {
-                set name [dict get $arguments name]
+            if {[dexist $arguments name]} {
+                set name [dget $arguments name]
             } else {
                 set name [self object]
             }
-            lappend params "variation [dict get $arguments variation] -posnocheck"
+            lappend params "variation [dget $arguments variation] -posnocheck"
             set paramsOrder [list n fstart fstop]
             foreach param $paramsOrder {
-                dict append argsOrdered $param [dict get $arguments $param]
+                dict append argsOrdered $param [dget $arguments $param]
             }
             dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                    lappend params "$paramName [lindex $value 0] -poseq"
+                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
+                    lappend params "$paramName [@ $value 0] -poseq"
                 } else {
                     lappend params "$paramName $value -pos"
                 }
             }
-            if {[dict exists $arguments donoise]} {
+            if {[dexist $arguments donoise]} {
                 lappend params "donoise 1 -pos" 
             }
             next sp $params -name $name
@@ -193,21 +193,21 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
                 {-fstart= -required}
                 {-fstop= -required}
             }]
-            if {[dict exists $arguments name]} {
-                set name [dict get $arguments name]
+            if {[dexist $arguments name]} {
+                set name [dget $arguments name]
             } else {
                 set name [self object]
             }
-            lappend params "outvar [dict get $arguments outvar] -posnocheck"
+            lappend params "outvar [dget $arguments outvar] -posnocheck"
             lappend params "ac -sw"
-            lappend params "variation [dict get $arguments variation] -posnocheck"
+            lappend params "variation [dget $arguments variation] -posnocheck"
             set paramsOrder [list n fstart fstop]
             foreach param $paramsOrder {
-                dict append argsOrdered $param [dict get $arguments $param]
+                dict append argsOrdered $param [dget $arguments $param]
             }
             dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                    lappend params "$paramName [lindex $value 0] -poseq"
+                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
+                    lappend params "$paramName [@ $value 0] -poseq"
                 } else {
                     lappend params "$paramName $value -pos"
                 }
@@ -235,12 +235,12 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
                 -name=
                 {-outvar= -required}
             }]
-            if {[dict exists $arguments name]} {
-                set name [dict get $arguments name]
+            if {[dexist $arguments name]} {
+                set name [dget $arguments name]
             } else {
                 set name [self object]
             }
-            lappend params "outvar [dict get $arguments outvar] -posnocheck"
+            lappend params "outvar [dget $arguments outvar] -posnocheck"
             next sens $params -name $name
         }
     }
@@ -272,25 +272,25 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
                 {-tmax= -require {tstart}}
                 {-uic -boolean}
             }]
-            if {[dict exists $arguments name]} {
-                set name [dict get $arguments name]
+            if {[dexist $arguments name]} {
+                set name [dget $arguments name]
             } else {
                 set name [self object]
             }
             set paramsOrder [list tstep tstop tstart tmax]
             foreach param $paramsOrder {
-                if {[dict exists $arguments $param]} {
-                    dict append argsOrdered $param [dict get $arguments $param]
+                if {[dexist $arguments $param]} {
+                    dict append argsOrdered $param [dget $arguments $param]
                 }
             }
             dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                    lappend params "$paramName [lindex $value 0] -poseq"
+                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
+                    lappend params "$paramName [@ $value 0] -poseq"
                 } else {
                     lappend params "$paramName $value -pos"
                 }
             }
-            if {[dict get $arguments uic]==1} {
+            if {[dget $arguments uic]==1} {
                 lappend params "uic -sw"
             }
             next tran $params -name $name
@@ -314,8 +314,8 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             set arguments [argparse -inline {
                 -name=
             }]
-            if {[dict exists $arguments name]} {
-                set name [dict get $arguments name]
+            if {[dexist $arguments name]} {
+                set name [dget $arguments name]
             } else {
                 set name [self object]
             }

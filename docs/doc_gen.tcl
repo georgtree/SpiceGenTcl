@@ -2,24 +2,16 @@
 set path_to_hl_tcl "/home/georgtree/tcl/hl_tcl"
 package require ruff
 package require fileutil
-set dir [file dirname [file normalize [info script]]]
-set sourceDir "${dir}/../src"
-source [file join $dir startPage.ruff]
-source [file join $dir generalInformation.ruff]
-source [file join $dir listOfDevices.ruff]
-source [file join $dir tutorials.ruff]
-source [file join $dir faq.ruff]
-source [file join $dir tips.ruff]
-source [file join $dir advanced.ruff]
-source [file join $sourceDir generalClasses.tcl]
-source [file join $sourceDir specElementsClassesCommon.tcl]
-source [file join $sourceDir ngspice specElementsClassesNgspice.tcl]
-source [file join $sourceDir ngspice specAnalysesClassesNgspice.tcl]
-source [file join $sourceDir ngspice specModelsClassesNgspice.tcl]
-source [file join $sourceDir ngspice specSimulatorClassesNgspice.tcl]
-source [file join $sourceDir xyce specAnalysesClassesXyce.tcl]
-source [file join $sourceDir xyce specElementsClassesXyce.tcl]
-source [file join $sourceDir xyce specSimulatorClassesXyce.tcl]
+set docDir [file dirname [file normalize [info script]]]
+set sourceDir "${docDir}/../src"
+source [file join $docDir startPage.ruff]
+source [file join $docDir generalInformation.ruff]
+source [file join $docDir listOfDevices.ruff]
+source [file join $docDir tutorials.ruff]
+source [file join $docDir faq.ruff]
+source [file join $docDir tips.ruff]
+source [file join $docDir advanced.ruff]
+source [file join $docDir .. SpiceGenTcl.tcl]
 
 set packageVersion [package versions SpiceGenTcl]
 puts $packageVersion
@@ -50,8 +42,8 @@ set namespacesNroff [list "::List of devices" ::SpiceGenTcl ::SpiceGenTcl::Commo
                 ::SpiceGenTcl::Xyce::Simulators]                
 
 if {[llength $argv] == 0 || "html" in $argv} {
-    ruff::document $namespaces -outdir $dir -format html -outfile index.html {*}$common
-    ruff::document $namespacesNroff -outdir $dir -format nroff -outfile SpiceGenTcl.n {*}$commonNroff
+    ruff::document $namespaces -outdir $docDir -format html -outfile index.html {*}$common
+    ruff::document $namespacesNroff -outdir $docDir -format nroff -outfile SpiceGenTcl.n {*}$commonNroff
 }
 
 foreach file [glob *.html] {
@@ -62,5 +54,5 @@ proc processContents {fileContents} {
     return [string map {max-width:60rem max-width:100rem} $fileContents]
 }
 
-fileutil::updateInPlace [file join $dir assets ruff-min.css] processContents
+fileutil::updateInPlace [file join $docDir assets ruff-min.css] processContents
 

@@ -34,8 +34,8 @@ proc matchList {expected actual} {
     set match 1
     set len [llength $expected]
     for {set i 0} {$i<$len} {incr i} {
-        set exp [lindex $expected $i]
-        set act [lindex $actual $i]
+        set exp [@ $expected $i]
+        set act [@ $actual $i]
         if {(abs($act-$exp) > $epsilon) || (abs($act-$exp) > $epsilon)} {
             set match 0
             break
@@ -55,7 +55,7 @@ test testSimulations-1 {test creation of circuit, run it with NgspiceBatch and r
     $circuit runAndRead
     set data [[$circuit configure -Data] getTracesData]
 } -body {
-    lappend result [lmap voutVal [dict get $data v(out)] {format "%.3e" $voutVal}]
+    lappend result [lmap voutVal [dget $data v(out)] {format "%.3e" $voutVal}]
     return $result
 } -result "{0.000e+00 6.667e-01 1.333e+00 2.000e+00 2.667e+00 3.333e+00}" -cleanup {
     file delete {./voltage divider netlist.cir}
@@ -84,9 +84,9 @@ test testSimulations-2 {test diode IV simulation} -setup {
         $tempSt configure -Value $temp
         $circuit runAndRead
         set data [$circuit getDataDict]
-        foreach x [dict get $data v(anode)] y [dict get $data i(va)] {
+        foreach x [dget $data v(anode)] y [dget $data i(va)] {
             set xf [format "%.3f" $x]
-            set yf [format "%.3f" [expr {-$y}]]
+            set yf [format "%.3f" [= {-$y}]]
             lappend xydata [list $xf $yf]
         }    
         lappend dataList $xydata
@@ -139,9 +139,9 @@ test testSimulations-3 {test diode CV simulation} -setup {
         set data [$circuit getDataDict]
         set x $volt
         # get imaginary part of current
-        set y [lindex [dict get $data i(va)] 0 1]
+        set y [@ [dget $data i(va)] 0 1]
         set xf [format "%.3e" $x]
-        set yf [format "%.2e" [expr {-$y/(2*$pi*1e5*1e-9)}]]
+        set yf [format "%.2e" [= {-$y/(2*$pi*1e5*1e-9)}]]
         lappend xydata [list $xf $yf]
     }
 } -body {
@@ -179,8 +179,8 @@ test testSimulations-4 {test simple differential pair simulation} -setup {
     $circuit configure -Simulator $simulator
     $circuit runAndRead
     set data [$circuit getDataDict]
-    set vrc1 [dict get $data v(rc1)]
-    set vrc2 [dict get $data v(rc2)]
+    set vrc1 [dget $data v(rc1)]
+    set vrc2 [dget $data v(rc2)]
 } -body {
     return [format "vrc1=%.3e vrc2=%.3e" $vrc1 $vrc2]
 } -result {vrc1=6.032e-04 vrc2=-6.032e-04} -cleanup {
@@ -218,14 +218,14 @@ test testSimulations-5 {test filter simulation} -setup {
     $circuit configure -Simulator $simulator
     $circuit runAndRead
     set data [$circuit getDataDict]
-    set freq [dict get $data frequency]
-    set s11 [dict get $data v(s_1_1)]
-    set s21 [dict get $data v(s_2_1)]
-    set freq [lmap val $freq {lindex $val 0}]
-    set s11Mag [lmap s11Re [lmap val $s11 {lindex $val 0}] s11Im [lmap val $s11 {lindex $val 1}]\
-                        {expr {sqrt($s11Re**2+$s11Im**2)}}]
-    set s21Mag [lmap s21Re [lmap val $s21 {lindex $val 0}] s21Im [lmap val $s21 {lindex $val 1}]\
-                        {expr {sqrt($s21Re**2+$s21Im**2)}}]
+    set freq [dget $data frequency]
+    set s11 [dget $data v(s_1_1)]
+    set s21 [dget $data v(s_2_1)]
+    set freq [lmap val $freq {@ $val 0}]
+    set s11Mag [lmap s11Re [lmap val $s11 {@ $val 0}] s11Im [lmap val $s11 {@ $val 1}]\
+                        {= {sqrt($s11Re**2+$s11Im**2)}}]
+    set s21Mag [lmap s21Re [lmap val $s21 {@ $val 0}] s21Im [lmap val $s21 {@ $val 1}]\
+                        {= {sqrt($s21Re**2+$s21Im**2)}}]
 } -body {
     lappend result [lmap freqVal $freq {format "%.3e" $freqVal}]
     lappend result [lmap s11MagVal $s11Mag {format "%.3e" $s11MagVal}]

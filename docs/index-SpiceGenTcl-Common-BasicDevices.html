@@ -109,9 +109,9 @@ CXXXXXXX n+ n- &lt;value&gt; &lt;m=val&gt; &lt;temp=val&gt; &lt;tc1=val&gt; &lt;
         -tc2=
         -ic=
     }]
-    set cVal [dict get $arguments c]
-    if {([llength $cVal]&gt;1) &amp;&amp; ([lindex $cVal 1]==&quot;-eq&quot;)} {
-        lappend params &quot;c [lindex $cVal 0] -poseq&quot;
+    set cVal [dget $arguments c]
+    if {([llength $cVal]&gt;1) &amp;&amp; ([@ $cVal 1]==&quot;-eq&quot;)} {
+        lappend params &quot;c [@ $cVal 0] -poseq&quot;
     } else {
         lappend params &quot;c $cVal -pos&quot;
     }
@@ -188,11 +188,11 @@ WYYYYYYY N+ N- VNAM MODEL &lt;ON&gt; &lt;OFF&gt;
         {-on -forbid {off}}
         {-off -forbid {on}}
     }]
-    lappend params &quot;icntrl [dict get $arguments icntrl] -posnocheck&quot;
-    lappend params &quot;model [dict get $arguments model] -posnocheck&quot;
-    if {[dict exists $arguments on]} {
+    lappend params &quot;icntrl [dget $arguments icntrl] -posnocheck&quot;
+    lappend params &quot;model [dget $arguments model] -posnocheck&quot;
+    if {[dexist $arguments on]} {
         lappend params {on -sw}
-    } elseif {[dict exists $arguments off]} {
+    } elseif {[dexist $arguments off]} {
         lappend params {off -sw}
     }
     next w$name [list &quot;np $npNode&quot; &quot;nm $nmNode&quot;] $params
@@ -272,9 +272,9 @@ LXXXXXXX n+ n- &lt;value&gt; &lt;m=val&gt; &lt;temp=val&gt; &lt;tc1=val&gt; &lt;
         -tc1=
         -tc2=
     }]
-    set lVal [dict get $arguments l]
-    if {([llength $lVal]&gt;1) &amp;&amp; ([lindex $lVal 1]==&quot;-eq&quot;)} {
-        lappend params &quot;l [lindex $lVal 0] -poseq&quot;
+    set lVal [dget $arguments l]
+    if {([llength $lVal]&gt;1) &amp;&amp; ([@ $lVal 1]==&quot;-eq&quot;)} {
+        lappend params &quot;l [@ $lVal 0] -poseq&quot;
     } else {
         lappend params &quot;l $lVal -pos&quot;
     }
@@ -393,9 +393,9 @@ RXXXXXXX n+ n- &lt;value&gt; &lt;m=val&gt; &lt;temp=val&gt; &lt;tc1=val&gt; &lt;
         -tc1=
         -tc2=
     }]
-    set rVal [dict get $arguments r]
-    if {([llength $rVal]&gt;1) &amp;&amp; ([lindex $rVal 1]==&quot;-eq&quot;)} {
-        lappend params &quot;r [lindex $rVal 0] -poseq&quot;
+    set rVal [dget $arguments r]
+    if {([llength $rVal]&gt;1) &amp;&amp; ([@ $rVal 1]==&quot;-eq&quot;)} {
+        lappend params &quot;r [@ $rVal 0] -poseq&quot;
     } else {
         lappend params &quot;r $rVal -pos&quot;
     }
@@ -641,10 +641,10 @@ SXXXXXXX N+ N- NC+ NC- MODEL &lt;ON&gt; &lt;OFF&gt;
         {-on -forbid {off}}
         {-off -forbid {on}}
     }]
-    lappend params &quot;model [dict get $arguments model] -posnocheck&quot;
-    if {[dict exists $arguments on]} {
+    lappend params &quot;model [dget $arguments model] -posnocheck&quot;
+    if {[dexist $arguments on]} {
         lappend params {on -sw}
-    } elseif {[dict exists $arguments off]} {
+    } elseif {[dexist $arguments off]} {
         lappend params {off -sw}
     }
     next s$name [list &quot;np $npNode&quot; &quot;nm $nmNode&quot; &quot;ncp $ncpNode&quot; &quot;ncm $ncmNode&quot;] $params

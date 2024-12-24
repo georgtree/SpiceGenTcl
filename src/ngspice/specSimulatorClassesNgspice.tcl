@@ -58,7 +58,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
             set arguments [argparse {
                 -nodelete
             }]
-            set firstLine [lindex [split $circuitStr \n] 0]
+            set firstLine [@ [split $circuitStr \n] 0]
             set runLocation [my configure -RunLocation]
             set cirFile [open "${runLocation}/${firstLine}.cir" w+]
             puts $cirFile $circuitStr
@@ -110,7 +110,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
             set arguments [argparse {
                 -nodelete
             }]
-            set firstLine [lindex [split $circuitStr \n] 0]
+            set firstLine [@ [split $circuitStr \n] 0]
             set runLocation [my configure -RunLocation]
             set cirFile [open "${runLocation}/${firstLine}.cir" w+]
             puts $cirFile $circuitStr

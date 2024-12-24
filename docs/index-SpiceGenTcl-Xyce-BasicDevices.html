@@ -80,10 +80,10 @@ C&lt;device name&gt; &lt;(+) node&gt; &lt;(-) node&gt; &lt;value&gt; [device par
 ::SpiceGenTcl::Xyce::BasicDevices::Capacitor new 1 netp netm 1e-6 -tc1 1 -temp {temp -eq}
 </pre>
 
-</figure><p class='ruff'>Behavioral capacitor with C expression:</p>
+</figure><p class='ruff'>Behavioral capacitor with C =ession:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-C&lt;device name&gt; &lt;(+) node&gt; &lt;(-) node&gt; C={expression} [device parameters]
+C&lt;device name&gt; &lt;(+) node&gt; &lt;(-) node&gt; C={=ession} [device parameters]
 </pre>
 
 </figure><p class='ruff'>Example of class initialization:</p>
@@ -92,10 +92,10 @@ C&lt;device name&gt; &lt;(+) node&gt; &lt;(-) node&gt; C={expression} [device pa
 ::SpiceGenTcl::Xyce::BasicDevices::Capacitor new 1 netp netm -c &quot;V(a)+V(b)+pow(V(c),2)&quot; -beh -tc1 1
 </pre>
 
-</figure><p class='ruff'>Behavioral capacitor with Q expression:</p>
+</figure><p class='ruff'>Behavioral capacitor with Q =ession:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-C&lt;device name&gt; &lt;(+) node&gt; &lt;(-) node&gt; Q={expression} [device parameters]
+C&lt;device name&gt; &lt;(+) node&gt; &lt;(-) node&gt; Q={=ession} [device parameters]
 </pre>
 
 </figure><p class='ruff'>Example of class initialization:</p>
@@ -135,17 +135,17 @@ C&lt;device name&gt; &lt;(+) node&gt; &lt;(-) node&gt; &lt;model name&gt; [value
     # ```
     # ::SpiceGenTcl::Xyce::BasicDevices::Capacitor new 1 netp netm 1e-6 -tc1 1 -temp {temp -eq}
     # ```
-    # Behavioral capacitor with C expression:
+    # Behavioral capacitor with C =ession:
     # ```
-    # C&lt;device name&gt; &lt;(+) node&gt; &lt;(-) node&gt; C={expression} [device parameters]
+    # C&lt;device name&gt; &lt;(+) node&gt; &lt;(-) node&gt; C={=ession} [device parameters]
     # ```
     # Example of class initialization:
     # ```
     # ::SpiceGenTcl::Xyce::BasicDevices::Capacitor new 1 netp netm -c &quot;V(a)+V(b)+pow(V(c),2)&quot; -beh -tc1 1
     # ```
-    # Behavioral capacitor with Q expression:
+    # Behavioral capacitor with Q =ession:
     # ```
-    # C&lt;device name&gt; &lt;(+) node&gt; &lt;(-) node&gt; Q={expression} [device parameters]
+    # C&lt;device name&gt; &lt;(+) node&gt; &lt;(-) node&gt; Q={=ession} [device parameters]
     # ```
     # Example of class initialization:
     # ```
@@ -174,23 +174,23 @@ C&lt;device name&gt; &lt;(+) node&gt; &lt;(-) node&gt; &lt;model name&gt; [value
         {-l= -require {model}}
         {-w= -require {model}}
     }]
-    if {[dict exists $arguments model]} {
-        lappend params &quot;model [dict get $arguments model] -posnocheck&quot;
+    if {[dexist $arguments model]} {
+        lappend params &quot;model [dget $arguments model] -posnocheck&quot;
     }
-    if {[dict exists $arguments c]} {
-        set cVal [dict get $arguments c]
-        if {[dict exists $arguments beh]} {
+    if {[dexist $arguments c]} {
+        set cVal [dget $arguments c]
+        if {[dexist $arguments beh]} {
             lappend params &quot;c $cVal -eq&quot;
-        } elseif {([llength $cVal]&gt;1) &amp;&amp; ([lindex $cVal 1]==&quot;-eq&quot;)} {
-            lappend params &quot;c [lindex $cVal 0] -poseq&quot;
+        } elseif {([llength $cVal]&gt;1) &amp;&amp; ([@ $cVal 1]==&quot;-eq&quot;)} {
+            lappend params &quot;c [@ $cVal 0] -poseq&quot;
         } else {
             lappend params &quot;c $cVal -pos&quot;
         }
-    } elseif {([dict exists $arguments model]==0) &amp;&amp; ([dict exists $arguments q]==0)} {
+    } elseif {([dexist $arguments model]==0) &amp;&amp; ([dexist $arguments q]==0)} {
         error &quot;Capacitor value must be specified with '-c value'&quot;
     }
-    if {[dict exists $arguments q]} {
-        set qVal [dict get $arguments q]
+    if {[dexist $arguments q]} {
+        set qVal [dget $arguments q]
         lappend params &quot;q $qVal -eq&quot;
     }
     dict for {paramName value} $arguments {
@@ -199,6 +199,51 @@ C&lt;device name&gt; &lt;(+) node&gt; &lt;(-) node&gt; &lt;model name&gt; [value
         }
     }
     next c$name [list &quot;np $npNode&quot; &quot;nm $nmNode&quot;] $params
+}</pre></div>
+</div><h3 class='ruffclass'><a name='::SpiceGenTcl::Xyce::BasicDevices::CModel'>CModel</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices" title="::SpiceGenTcl::Xyce::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
+<div style='clear:both;'></div>
+<h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
+<tr><td><a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::CModel::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
+<tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::addParam" title="::SpiceGenTcl::Model.addParam" class='ruff_cmd'>::SpiceGenTcl::Model.addParam</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>configure</code></td><td>Configure properties.</td></tr>
+<tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::deleteParam" title="::SpiceGenTcl::Model.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Model.deleteParam</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
+<tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::genSPICEString" title="::SpiceGenTcl::Model.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Model.genSPICEString</a></td></tr>
+<tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::getParams" title="::SpiceGenTcl::Model.getParams" class='ruff_cmd'>::SpiceGenTcl::Model.getParams</a></td></tr>
+<tr><td><code>setParamValue</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::setParamValue" title="::SpiceGenTcl::Model.setParamValue" class='ruff_cmd'>::SpiceGenTcl::Model.setParamValue</a></td></tr>
+</table>
+<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code>-Name</code>, <code>-Type</code></p>
+<p class='ruff'>Writable: <code>-Name</code>, <code>-Type</code></p>
+<h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model" title="::SpiceGenTcl::Model" class='ruff_cmd'>::SpiceGenTcl::Model</a></p>
+<h5 class='ruff'>Mixins</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder" title="::SpiceGenTcl::KeyArgsBuilder" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder</a></p>
+<h4 class='ruffmethod'><a name='::SpiceGenTcl::Xyce::BasicDevices::CModel::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::CModel" title="::SpiceGenTcl::Xyce::BasicDevices::CModel" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices::CModel</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::CModel'>CModel</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
+<div style='clear:both;'></div>
+<p class='ruff'>Creates object of class <code>CModel</code> that describes semiconductor capacitor model.</p>
+<div class='ruff_synopsis'><span class='ruff_cmd'>CModel create OBJNAME</span> <span class='ruff_arg'>name ?args?</span><br><span class='ruff_cmd'>CModel new</span> <span class='ruff_arg'>name ?args?</span></div>
+<h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
+<tr><td><code>name</code></td><td>Name of the model.</td></tr>
+<tr><td><code>args</code></td><td>Keyword instance parameters, for details please refer to Xyce reference manual, 2.3.4 section.</td></tr>
+</table>
+<h5 class='ruff'>Description</h5><p class='ruff'>Example of class initialization:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
+::SpiceGenTcl::Xyce::BasicDevices::CModel new capmod -tc1 1 -tc2 2
+</pre>
+
+</figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Xyce_BasicDevices_CModel_constructor' href="javascript:toggleSource('SpiceGenTcl_Xyce_BasicDevices_CModel_constructor')">Show source</a></p>
+<div id='SpiceGenTcl_Xyce_BasicDevices_CModel_constructor' class='ruff_dyn_src'><pre>method constructor {name args} {
+
+    # Creates object of class `CModel` that describes semiconductor capacitor model.
+    #  name - name of the model
+    #  args - keyword instance parameters, for details please refer to Xyce reference manual, 2.3.4 section.
+    # Example of class initialization:
+    # ```
+    # ::SpiceGenTcl::Xyce::BasicDevices::CModel new capmod -tc1 1 -tc2 2
+    # ```
+    set paramsNames [list c cj cjsw defw narrow tc1 tc2 tnom]
+    next $name c [my argsPreprocess $paramsNames {*}$args]
 }</pre></div>
 </div><h3 class='ruffclass'><a name='::SpiceGenTcl::Xyce::BasicDevices::CSwitch'>CSwitch</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices" title="::SpiceGenTcl::Xyce::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
@@ -218,7 +263,52 @@ C&lt;device name&gt; &lt;(+) node&gt; &lt;(-) node&gt; &lt;model name&gt; [value
 <p class='ruff'>Writable: <code>-Name</code></p>
 <h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Common-BasicDevices.html#::SpiceGenTcl::Common::BasicDevices::CSwitch" title="::SpiceGenTcl::Common::BasicDevices::CSwitch" class='ruff_cmd'>::SpiceGenTcl::Common::BasicDevices::CSwitch</a></p>
 <h5 class='ruff'>Subclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::W" title="W" class='ruff_cmd'>W</a></p>
-<h3 class='ruffclass'><a name='::SpiceGenTcl::Xyce::BasicDevices::GenS'>GenS</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices" title="::SpiceGenTcl::Xyce::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
+<h3 class='ruffclass'><a name='::SpiceGenTcl::Xyce::BasicDevices::CSwitchModel'>CSwitchModel</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices" title="::SpiceGenTcl::Xyce::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
+<div style='clear:both;'></div>
+<h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
+<tr><td><a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::CSwitchModel::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
+<tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::addParam" title="::SpiceGenTcl::Model.addParam" class='ruff_cmd'>::SpiceGenTcl::Model.addParam</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>configure</code></td><td>Configure properties.</td></tr>
+<tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::deleteParam" title="::SpiceGenTcl::Model.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Model.deleteParam</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
+<tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::genSPICEString" title="::SpiceGenTcl::Model.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Model.genSPICEString</a></td></tr>
+<tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::getParams" title="::SpiceGenTcl::Model.getParams" class='ruff_cmd'>::SpiceGenTcl::Model.getParams</a></td></tr>
+<tr><td><code>setParamValue</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::setParamValue" title="::SpiceGenTcl::Model.setParamValue" class='ruff_cmd'>::SpiceGenTcl::Model.setParamValue</a></td></tr>
+</table>
+<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code>-Name</code>, <code>-Type</code></p>
+<p class='ruff'>Writable: <code>-Name</code>, <code>-Type</code></p>
+<h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model" title="::SpiceGenTcl::Model" class='ruff_cmd'>::SpiceGenTcl::Model</a></p>
+<h5 class='ruff'>Mixins</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder" title="::SpiceGenTcl::KeyArgsBuilder" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder</a></p>
+<h4 class='ruffmethod'><a name='::SpiceGenTcl::Xyce::BasicDevices::CSwitchModel::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::CSwitchModel" title="::SpiceGenTcl::Xyce::BasicDevices::CSwitchModel" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices::CSwitchModel</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::CSwitchModel'>CSwitchModel</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
+<div style='clear:both;'></div>
+<p class='ruff'>Creates object of class <code>CSwitchModel</code> that describes current switch model.</p>
+<div class='ruff_synopsis'><span class='ruff_cmd'>CSwitchModel create OBJNAME</span> <span class='ruff_arg'>name ?args?</span><br><span class='ruff_cmd'>CSwitchModel new</span> <span class='ruff_arg'>name ?args?</span></div>
+<h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
+<tr><td><code>name</code></td><td>Name of the model.</td></tr>
+<tr><td><code>args</code></td><td>Keyword instance parameters, for details please refer to Xyce reference manual, 2.3.22 section.</td></tr>
+</table>
+<h5 class='ruff'>Description</h5><p class='ruff'>Example of class initialization:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
+::SpiceGenTcl::Ngspice::BasicDevices::CSwitchModel new cswmod -ion 1 -ioff 0.5 -ron 1 -roff 1e6
+</pre>
+
+</figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Xyce_BasicDevices_CSwitchModel_constructor' href="javascript:toggleSource('SpiceGenTcl_Xyce_BasicDevices_CSwitchModel_constructor')">Show source</a></p>
+<div id='SpiceGenTcl_Xyce_BasicDevices_CSwitchModel_constructor' class='ruff_dyn_src'><pre>method constructor {name args} {
+
+    # Creates object of class `CSwitchModel` that describes current switch model.
+    #  name - name of the model
+    #  args - keyword instance parameters, for details please refer to Xyce reference manual, 2.3.22 section.
+    # Example of class initialization:
+    # ```
+    # ::SpiceGenTcl::Ngspice::BasicDevices::CSwitchModel new cswmod -ion 1 -ioff 0.5 -ron 1 -roff 1e6
+    # ```
+    set paramsNames [list ioff ion off on roff ron]
+    next $name iswitch [my argsPreprocess $paramsNames {*}$args]
+}</pre></div>
+</div><h3 class='ruffclass'><a name='::SpiceGenTcl::Xyce::BasicDevices::GenS'>GenS</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices" title="::SpiceGenTcl::Xyce::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
@@ -268,7 +358,7 @@ C&lt;device name&gt; &lt;(+) node&gt; &lt;(-) node&gt; &lt;model name&gt; [value
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-S&lt;name&gt; &lt;(+) switch node&gt; &lt;(-) switch node&gt; &lt;model name&gt; [ON] [OFF] &lt;control = expression&gt;
+S&lt;name&gt; &lt;(+) switch node&gt; &lt;(-) switch node&gt; &lt;model name&gt; [ON] [OFF] &lt;control = =ession&gt;
 </pre>
 
 </figure><p class='ruff'>Example of class initialization:</p>
@@ -288,7 +378,7 @@ S&lt;name&gt; &lt;(+) switch node&gt; &lt;(-) switch node&gt; &lt;model name&gt;
     #  -control - control equation
     #  -on/-off - initial state of switch
     # ```
-    # S&lt;name&gt; &lt;(+) switch node&gt; &lt;(-) switch node&gt; &lt;model name&gt; [ON] [OFF] &lt;control = expression&gt;
+    # S&lt;name&gt; &lt;(+) switch node&gt; &lt;(-) switch node&gt; &lt;model name&gt; [ON] [OFF] &lt;control = =ession&gt;
     # ```
     # Example of class initialization:
     # ```
@@ -300,13 +390,13 @@ S&lt;name&gt; &lt;(+) switch node&gt; &lt;(-) switch node&gt; &lt;model name&gt;
         {-on -forbid {off}}
         {-off -forbid {on}}
     }]
-    lappend params &quot;model [dict get $arguments model] -posnocheck&quot;
-    if {[dict exists $arguments on]} {
+    lappend params &quot;model [dget $arguments model] -posnocheck&quot;
+    if {[dexist $arguments on]} {
         lappend params {on -sw}
-    } elseif {[dict exists $arguments off]} {
+    } elseif {[dexist $arguments off]} {
         lappend params {off -sw}
     }
-    lappend params &quot;control [dict get $arguments control] -eq&quot;
+    lappend params &quot;control [dget $arguments control] -eq&quot;
     next s$name [list &quot;np $npNode&quot; &quot;nm $nmNode&quot;] $params
 }</pre></div>
 </div><h3 class='ruffclass'><a name='::SpiceGenTcl::Xyce::BasicDevices::Inductor'>Inductor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices" title="::SpiceGenTcl::Xyce::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -420,12 +510,12 @@ L&lt;name&gt; &lt;(+) node&gt; &lt;(-) node&gt; [model] &lt;value&gt; [device pa
         -tc2=
         -ic=
     }]
-    if {[dict exists $arguments model]} {
-        lappend params &quot;model [dict get $arguments model] -posnocheck&quot;
+    if {[dexist $arguments model]} {
+        lappend params &quot;model [dget $arguments model] -posnocheck&quot;
     }
-    set lVal [dict get $arguments l]
-    if {([llength $lVal]&gt;1) &amp;&amp; ([lindex $lVal 1]==&quot;-eq&quot;)} {
-        lappend params &quot;l [lindex $lVal 0] -poseq&quot;
+    set lVal [dget $arguments l]
+    if {([llength $lVal]&gt;1) &amp;&amp; ([@ $lVal 1]==&quot;-eq&quot;)} {
+        lappend params &quot;l [@ $lVal 0] -poseq&quot;
     } else {
         lappend params &quot;l $lVal -pos&quot;
     }
@@ -455,7 +545,52 @@ L&lt;name&gt; &lt;(+) node&gt; &lt;(-) node&gt; [model] &lt;value&gt; [device pa
 <h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code>-Name</code></p>
 <p class='ruff'>Writable: <code>-Name</code></p>
 <h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-List-of-devices.html#::List of devices-Inductor" title="Inductor" >Inductor</a></p>
-<h3 class='ruffclass'><a name='::SpiceGenTcl::Xyce::BasicDevices::R'>R</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices" title="::SpiceGenTcl::Xyce::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
+<h3 class='ruffclass'><a name='::SpiceGenTcl::Xyce::BasicDevices::LModel'>LModel</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices" title="::SpiceGenTcl::Xyce::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
+<div style='clear:both;'></div>
+<h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
+<tr><td><a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::LModel::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
+<tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::addParam" title="::SpiceGenTcl::Model.addParam" class='ruff_cmd'>::SpiceGenTcl::Model.addParam</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>configure</code></td><td>Configure properties.</td></tr>
+<tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::deleteParam" title="::SpiceGenTcl::Model.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Model.deleteParam</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
+<tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::genSPICEString" title="::SpiceGenTcl::Model.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Model.genSPICEString</a></td></tr>
+<tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::getParams" title="::SpiceGenTcl::Model.getParams" class='ruff_cmd'>::SpiceGenTcl::Model.getParams</a></td></tr>
+<tr><td><code>setParamValue</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::setParamValue" title="::SpiceGenTcl::Model.setParamValue" class='ruff_cmd'>::SpiceGenTcl::Model.setParamValue</a></td></tr>
+</table>
+<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code>-Name</code>, <code>-Type</code></p>
+<p class='ruff'>Writable: <code>-Name</code>, <code>-Type</code></p>
+<h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model" title="::SpiceGenTcl::Model" class='ruff_cmd'>::SpiceGenTcl::Model</a></p>
+<h5 class='ruff'>Mixins</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder" title="::SpiceGenTcl::KeyArgsBuilder" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder</a></p>
+<h4 class='ruffmethod'><a name='::SpiceGenTcl::Xyce::BasicDevices::LModel::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::LModel" title="::SpiceGenTcl::Xyce::BasicDevices::LModel" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices::LModel</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::LModel'>LModel</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
+<div style='clear:both;'></div>
+<p class='ruff'>Creates object of class <code>LModel</code> that describes inductor model.</p>
+<div class='ruff_synopsis'><span class='ruff_cmd'>LModel create OBJNAME</span> <span class='ruff_arg'>name ?args?</span><br><span class='ruff_cmd'>LModel new</span> <span class='ruff_arg'>name ?args?</span></div>
+<h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
+<tr><td><code>name</code></td><td>Name of the model.</td></tr>
+<tr><td><code>args</code></td><td>Keyword instance parameters, for details please refer to Xyce reference manual, 2.3.5 section.</td></tr>
+</table>
+<h5 class='ruff'>Description</h5><p class='ruff'>Example of class initialization:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
+::SpiceGenTcl::Xyce::BasicDevices::LModel new indmod -tc1 1 -tc2 2
+</pre>
+
+</figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Xyce_BasicDevices_LModel_constructor' href="javascript:toggleSource('SpiceGenTcl_Xyce_BasicDevices_LModel_constructor')">Show source</a></p>
+<div id='SpiceGenTcl_Xyce_BasicDevices_LModel_constructor' class='ruff_dyn_src'><pre>method constructor {name args} {
+
+    # Creates object of class `LModel` that describes inductor model.
+    #  name - name of the model
+    #  args - keyword instance parameters, for details please refer to Xyce reference manual, 2.3.5 section.
+    # Example of class initialization:
+    # ```
+    # ::SpiceGenTcl::Xyce::BasicDevices::LModel new indmod -tc1 1 -tc2 2
+    # ```
+    set paramsNames [list ic l tc1 tc2 tnom]
+    next $name l [my argsPreprocess $paramsNames {*}$args]
+}</pre></div>
+</div><h3 class='ruffclass'><a name='::SpiceGenTcl::Xyce::BasicDevices::R'>R</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices" title="::SpiceGenTcl::Xyce::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
@@ -521,7 +656,7 @@ R&lt;name&gt; &lt;(+) node&gt; &lt;(-) node&gt; &lt;value&gt; [device parameters
 </figure><p class='ruff'>Behavioral resistor:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-R&lt;name&gt; &lt;(+) node&gt; &lt;(-) node&gt; R ={expression} [device parameters]
+R&lt;name&gt; &lt;(+) node&gt; &lt;(-) node&gt; R ={=ession} [device parameters]
 </pre>
 
 </figure><p class='ruff'>Example of class initialization:</p>
@@ -563,7 +698,7 @@ R&lt;name&gt; &lt;(+) node&gt; &lt;(-) node&gt; &lt;model name&gt; [value] [devi
     # ```
     # Behavioral resistor:
     # ```
-    # R&lt;name&gt; &lt;(+) node&gt; &lt;(-) node&gt; R ={expression} [device parameters]
+    # R&lt;name&gt; &lt;(+) node&gt; &lt;(-) node&gt; R ={=ession} [device parameters]
     # ```
     # Example of class initialization:
     # ```
@@ -589,19 +724,19 @@ R&lt;name&gt; &lt;(+) node&gt; &lt;(-) node&gt; &lt;model name&gt; [value] [devi
         {-l= -require {model}}
         {-w= -require {model}}
     }]
-    if {[dict exists $arguments model]} {
-        lappend params &quot;model [dict get $arguments model] -posnocheck&quot;
+    if {[dexist $arguments model]} {
+        lappend params &quot;model [dget $arguments model] -posnocheck&quot;
     }
-    if {[dict exists $arguments r]} {
-        set rVal [dict get $arguments r]
-        if {[dict exists $arguments beh]} {
+    if {[dexist $arguments r]} {
+        set rVal [dget $arguments r]
+        if {[dexist $arguments beh]} {
             lappend params &quot;r $rVal -eq&quot;
-        } elseif {([llength $rVal]&gt;1) &amp;&amp; ([lindex $rVal 1]==&quot;-eq&quot;)} {
-            lappend params &quot;r [lindex $rVal 0] -poseq&quot;
+        } elseif {([llength $rVal]&gt;1) &amp;&amp; ([@ $rVal 1]==&quot;-eq&quot;)} {
+            lappend params &quot;r [@ $rVal 0] -poseq&quot;
         } else {
             lappend params &quot;r $rVal -pos&quot;
         }
-    } elseif {[dict exists $arguments model]==0} {
+    } elseif {[dexist $arguments model]==0} {
         error &quot;Resistor value must be specified with '-r value'&quot;
     }
     dict for {paramName value} $arguments {
@@ -610,6 +745,51 @@ R&lt;name&gt; &lt;(+) node&gt; &lt;(-) node&gt; &lt;model name&gt; [value] [devi
         }
     }
     next r$name [list &quot;np $npNode&quot; &quot;nm $nmNode&quot;] $params
+}</pre></div>
+</div><h3 class='ruffclass'><a name='::SpiceGenTcl::Xyce::BasicDevices::RModel'>RModel</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices" title="::SpiceGenTcl::Xyce::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
+<div style='clear:both;'></div>
+<h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
+<tr><td><a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::RModel::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
+<tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::addParam" title="::SpiceGenTcl::Model.addParam" class='ruff_cmd'>::SpiceGenTcl::Model.addParam</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>configure</code></td><td>Configure properties.</td></tr>
+<tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::deleteParam" title="::SpiceGenTcl::Model.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Model.deleteParam</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
+<tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::genSPICEString" title="::SpiceGenTcl::Model.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Model.genSPICEString</a></td></tr>
+<tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::getParams" title="::SpiceGenTcl::Model.getParams" class='ruff_cmd'>::SpiceGenTcl::Model.getParams</a></td></tr>
+<tr><td><code>setParamValue</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::setParamValue" title="::SpiceGenTcl::Model.setParamValue" class='ruff_cmd'>::SpiceGenTcl::Model.setParamValue</a></td></tr>
+</table>
+<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code>-Name</code>, <code>-Type</code></p>
+<p class='ruff'>Writable: <code>-Name</code>, <code>-Type</code></p>
+<h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model" title="::SpiceGenTcl::Model" class='ruff_cmd'>::SpiceGenTcl::Model</a></p>
+<h5 class='ruff'>Mixins</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder" title="::SpiceGenTcl::KeyArgsBuilder" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder</a></p>
+<h4 class='ruffmethod'><a name='::SpiceGenTcl::Xyce::BasicDevices::RModel::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::RModel" title="::SpiceGenTcl::Xyce::BasicDevices::RModel" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices::RModel</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::RModel'>RModel</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
+<div style='clear:both;'></div>
+<p class='ruff'>Creates object of class <code>RModel</code> that describes semiconductor resistor model.</p>
+<div class='ruff_synopsis'><span class='ruff_cmd'>RModel create OBJNAME</span> <span class='ruff_arg'>name ?args?</span><br><span class='ruff_cmd'>RModel new</span> <span class='ruff_arg'>name ?args?</span></div>
+<h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
+<tr><td><code>name</code></td><td>Name of the model.</td></tr>
+<tr><td><code>args</code></td><td>Keyword instance parameters, for details please refer to Xyce reference manual, 2.3.7 section.</td></tr>
+</table>
+<h5 class='ruff'>Description</h5><p class='ruff'>Example of class initialization:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
+::SpiceGenTcl::Xyce::BasicDevices::RModel new resmod -tc1 1 -tc2 2
+</pre>
+
+</figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Xyce_BasicDevices_RModel_constructor' href="javascript:toggleSource('SpiceGenTcl_Xyce_BasicDevices_RModel_constructor')">Show source</a></p>
+<div id='SpiceGenTcl_Xyce_BasicDevices_RModel_constructor' class='ruff_dyn_src'><pre>method constructor {name args} {
+
+    # Creates object of class `RModel` that describes semiconductor resistor model.
+    #  name - name of the model
+    #  args - keyword instance parameters, for details please refer to Xyce reference manual, 2.3.7 section.
+    # Example of class initialization:
+    # ```
+    # ::SpiceGenTcl::Xyce::BasicDevices::RModel new resmod -tc1 1 -tc2 2
+    # ```
+    set paramsNames [list defw narrow r rsh tc1 tc2 tce tnom]
+    next $name r [my argsPreprocess $paramsNames {*}$args]
 }</pre></div>
 </div><h3 class='ruffclass'><a name='::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstance'>SubcircuitInstance</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices" title="::SpiceGenTcl::Xyce::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
@@ -802,7 +982,52 @@ X&lt;name&gt; [nodes] &lt;subcircuit name&gt; [PARAMS: [&lt;name&gt; = &lt;value
 <p class='ruff'>Writable: <code>-Name</code></p>
 <h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Common-BasicDevices.html#::SpiceGenTcl::Common::BasicDevices::VSwitch" title="::SpiceGenTcl::Common::BasicDevices::VSwitch" class='ruff_cmd'>::SpiceGenTcl::Common::BasicDevices::VSwitch</a></p>
 <h5 class='ruff'>Subclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::VSw" title="VSw" class='ruff_cmd'>VSw</a></p>
-<h3 class='ruffclass'><a name='::SpiceGenTcl::Xyce::BasicDevices::W'>W</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices" title="::SpiceGenTcl::Xyce::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
+<h3 class='ruffclass'><a name='::SpiceGenTcl::Xyce::BasicDevices::VSwitchModel'>VSwitchModel</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices" title="::SpiceGenTcl::Xyce::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
+<div style='clear:both;'></div>
+<h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
+<tr><td><a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::VSwitchModel::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
+<tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::addParam" title="::SpiceGenTcl::Model.addParam" class='ruff_cmd'>::SpiceGenTcl::Model.addParam</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>configure</code></td><td>Configure properties.</td></tr>
+<tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::deleteParam" title="::SpiceGenTcl::Model.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Model.deleteParam</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
+<tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::genSPICEString" title="::SpiceGenTcl::Model.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Model.genSPICEString</a></td></tr>
+<tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::getParams" title="::SpiceGenTcl::Model.getParams" class='ruff_cmd'>::SpiceGenTcl::Model.getParams</a></td></tr>
+<tr><td><code>setParamValue</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::setParamValue" title="::SpiceGenTcl::Model.setParamValue" class='ruff_cmd'>::SpiceGenTcl::Model.setParamValue</a></td></tr>
+</table>
+<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code>-Name</code>, <code>-Type</code></p>
+<p class='ruff'>Writable: <code>-Name</code>, <code>-Type</code></p>
+<h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model" title="::SpiceGenTcl::Model" class='ruff_cmd'>::SpiceGenTcl::Model</a></p>
+<h5 class='ruff'>Mixins</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder" title="::SpiceGenTcl::KeyArgsBuilder" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder</a></p>
+<h4 class='ruffmethod'><a name='::SpiceGenTcl::Xyce::BasicDevices::VSwitchModel::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::VSwitchModel" title="::SpiceGenTcl::Xyce::BasicDevices::VSwitchModel" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices::VSwitchModel</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::VSwitchModel'>VSwitchModel</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
+<div style='clear:both;'></div>
+<p class='ruff'>Creates object of class <code>VSwitchModel</code> that describes voltage switch model.</p>
+<div class='ruff_synopsis'><span class='ruff_cmd'>VSwitchModel create OBJNAME</span> <span class='ruff_arg'>name ?args?</span><br><span class='ruff_cmd'>VSwitchModel new</span> <span class='ruff_arg'>name ?args?</span></div>
+<h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
+<tr><td><code>name</code></td><td>Name of the model.</td></tr>
+<tr><td><code>args</code></td><td>Keyword instance parameters, for details please refer to Xyce reference manual, 2.3.22 section.</td></tr>
+</table>
+<h5 class='ruff'>Description</h5><p class='ruff'>Example of class initialization:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
+::SpiceGenTcl::Ngspice::BasicDevices::VSwitchModel new swmod -von 1 -voff 0.5 -ron 1 -roff 1e6
+</pre>
+
+</figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Xyce_BasicDevices_VSwitchModel_constructor' href="javascript:toggleSource('SpiceGenTcl_Xyce_BasicDevices_VSwitchModel_constructor')">Show source</a></p>
+<div id='SpiceGenTcl_Xyce_BasicDevices_VSwitchModel_constructor' class='ruff_dyn_src'><pre>method constructor {name args} {
+
+    # Creates object of class `VSwitchModel` that describes voltage switch model.
+    #  name - name of the model
+    #  args - keyword instance parameters, for details please refer to Xyce reference manual, 2.3.22 section.
+    # Example of class initialization:
+    # ```
+    # ::SpiceGenTcl::Ngspice::BasicDevices::VSwitchModel new swmod -von 1 -voff 0.5 -ron 1 -roff 1e6
+    # ```
+    set paramsNames [list off on roff ron voff von]
+    next $name vswitch [my argsPreprocess $paramsNames {*}$args]
+}</pre></div>
+</div><h3 class='ruffclass'><a name='::SpiceGenTcl::Xyce::BasicDevices::W'>W</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices" title="::SpiceGenTcl::Xyce::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
@@ -876,15 +1101,25 @@ X&lt;name&gt; [nodes] &lt;subcircuit name&gt; [PARAMS: [&lt;name&gt; = &lt;value
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-Simulators.html'>SpiceGenTcl::Xyce::Simulators</a></li>
 <hr><li class='ruff-toc2'><a href='#::SpiceGenTcl::Xyce::BasicDevices-Classes'>Classes</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::C'>C</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::Capacitor'>Capacitor</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::Capacitor::constructor'>constructor</a><span class='ruff-tiptext'><pre><span class='ruff_cmd'>Capacitor create OBJNAME</span> <span class='ruff_arg'>name npNode nmNode ?args?</span>
 <span class='ruff_cmd'>Capacitor new</span> <span class='ruff_arg'>name npNode nmNode ?args?</span></pre>Creates object of class <code>Capacitor</code> that describes capacitor.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::CSwitch'>CSwitch</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::GenS'>GenS</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::GenSwitch'>GenSwitch</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::GenSwitch::constructor'>constructor</a><span class='ruff-tiptext'><pre><span class='ruff_cmd'>GenSwitch create OBJNAME</span> <span class='ruff_arg'>name npNode nmNode ?args?</span>
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::CModel'>CModel</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::CModel::constructor'>constructor</a><span class='ruff-tiptext'><pre><span class='ruff_cmd'>CModel create OBJNAME</span> <span class='ruff_arg'>name ?args?</span>
+<span class='ruff_cmd'>CModel new</span> <span class='ruff_arg'>name ?args?</span></pre>Creates object of class <code>CModel</code> that describes semiconductor capacitor model.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::CSwitch'>CSwitch</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::CSwitchModel'>CSwitchModel</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::CSwitchModel::constructor'>constructor</a><span class='ruff-tiptext'><pre><span class='ruff_cmd'>CSwitchModel create OBJNAME</span> <span class='ruff_arg'>name ?args?</span>
+<span class='ruff_cmd'>CSwitchModel new</span> <span class='ruff_arg'>name ?args?</span></pre>Creates object of class <code>CSwitchModel</code> that describes current switch model.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::GenS'>GenS</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::GenSwitch'>GenSwitch</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::GenSwitch::constructor'>constructor</a><span class='ruff-tiptext'><pre><span class='ruff_cmd'>GenSwitch create OBJNAME</span> <span class='ruff_arg'>name npNode nmNode ?args?</span>
 <span class='ruff_cmd'>GenSwitch new</span> <span class='ruff_arg'>name npNode nmNode ?args?</span></pre>Creates object of class <code>GenSwitch</code> that describes generic switch device.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::Inductor'>Inductor</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::Inductor::constructor'>constructor</a><span class='ruff-tiptext'><pre><span class='ruff_cmd'>Inductor create OBJNAME</span> <span class='ruff_arg'>name npNode nmNode ?args?</span>
 <span class='ruff_cmd'>Inductor new</span> <span class='ruff_arg'>name npNode nmNode ?args?</span></pre>Creates object of class <code>Inductor</code> that describes inductor.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::L'>L</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::R'>R</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::Resistor'>Resistor</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::Resistor::constructor'>constructor</a><span class='ruff-tiptext'><pre><span class='ruff_cmd'>Resistor create OBJNAME</span> <span class='ruff_arg'>name npNode nmNode ?args?</span>
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::L'>L</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::LModel'>LModel</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::LModel::constructor'>constructor</a><span class='ruff-tiptext'><pre><span class='ruff_cmd'>LModel create OBJNAME</span> <span class='ruff_arg'>name ?args?</span>
+<span class='ruff_cmd'>LModel new</span> <span class='ruff_arg'>name ?args?</span></pre>Creates object of class <code>LModel</code> that describes inductor model.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::R'>R</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::Resistor'>Resistor</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::Resistor::constructor'>constructor</a><span class='ruff-tiptext'><pre><span class='ruff_cmd'>Resistor create OBJNAME</span> <span class='ruff_arg'>name npNode nmNode ?args?</span>
 <span class='ruff_cmd'>Resistor new</span> <span class='ruff_arg'>name npNode nmNode ?args?</span></pre>Creates object of class <code>Resistor</code> that describes resistor.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::RModel'>RModel</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::RModel::constructor'>constructor</a><span class='ruff-tiptext'><pre><span class='ruff_cmd'>RModel create OBJNAME</span> <span class='ruff_arg'>name ?args?</span>
+<span class='ruff_cmd'>RModel new</span> <span class='ruff_arg'>name ?args?</span></pre>Creates object of class <code>RModel</code> that describes semiconductor resistor model.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstance'>SubcircuitInstance</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstance::constructor'>constructor</a><span class='ruff-tiptext'><pre><span class='ruff_cmd'>SubcircuitInstance create OBJNAME</span> <span class='ruff_arg'>name pins subName params</span>
 <span class='ruff_cmd'>SubcircuitInstance new</span> <span class='ruff_arg'>name pins subName params</span></pre>Creates object of class <code>SubcircuitInstance</code> that describes subcircuit instance.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstanceAuto'>SubcircuitInstanceAuto</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstanceAuto::constructor'>constructor</a><span class='ruff-tiptext'><pre><span class='ruff_cmd'>SubcircuitInstanceAuto create OBJNAME</span> <span class='ruff_arg'>subcktObj name nodes ?args?</span>
 <span class='ruff_cmd'>SubcircuitInstanceAuto new</span> <span class='ruff_arg'>subcktObj name nodes ?args?</span></pre>Creates object of class <code>SubcircuitInstanceAuto</code> that describes subcircuit instance with already created subcircuit definition object.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::VSw'>VSw</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::VSwitch'>VSwitch</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::W'>W</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::X'>X</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::XAuto'>XAuto</a></li></ul></nav><footer class='ruff-layout-footer ruff-ft'><div style='float: right;'>Document generated by <a href='https://ruff.magicsplat.com'>Ruff!</a></div><div>&copy; George Yashin</div></footer>
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::VSw'>VSw</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::VSwitch'>VSwitch</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::VSwitchModel'>VSwitchModel</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::VSwitchModel::constructor'>constructor</a><span class='ruff-tiptext'><pre><span class='ruff_cmd'>VSwitchModel create OBJNAME</span> <span class='ruff_arg'>name ?args?</span>
+<span class='ruff_cmd'>VSwitchModel new</span> <span class='ruff_arg'>name ?args?</span></pre>Creates object of class <code>VSwitchModel</code> that describes voltage switch model.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::W'>W</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::X'>X</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::XAuto'>XAuto</a></li></ul></nav><footer class='ruff-layout-footer ruff-ft'><div style='float: right;'>Document generated by <a href='https://ruff.magicsplat.com'>Ruff!</a></div><div>&copy; George Yashin</div></footer>
 </div></body></html>

@@ -103,10 +103,10 @@
     my configure -Type $type
     # create Analysis objects
     foreach param $params {
-        if {[lindex $param 2]=={}} {
-            my addParam [lindex $param 0] [lindex $param 1]
-        } elseif {[lindex $param 1]==&quot;-sw&quot;} {
-            my addParam [lindex $param 0] -sw
+        if {[@ $param 2]=={}} {
+            my addParam [@ $param 0] [@ $param 1]
+        } elseif {[@ $param 1]==&quot;-sw&quot;} {
+            my addParam [@ $param 0] -sw
         } else {
             my addParam {*}$param
         }
@@ -173,7 +173,7 @@
     # Deletes existing `Parameter` object from list `Params`.
     #  paramName - name of parameter that will be deleted
     set paramName [string tolower $paramName]
-    set error [catch {dict get $Params $paramName}]
+    set error [catch {dget $Params $paramName}]
     if {$error&gt;0} {
         error &quot;Parameter with name '$paramName' was not found in device's '[my configure -Name]' list of parameters '[dict keys [my getParams]]'&quot;
     } else {
@@ -211,7 +211,7 @@
     # Gets the dictionary that contains parameter name as keys and
     #  parameter values as the values
     # Returns: parameters dictionary
-    set tempDict [dict create]
+    set tempDict [dcreate]
     dict for {paramName param} $Params {
         dict append tempDict $paramName [$param configure -Value]
     }
@@ -232,11 +232,11 @@
     #  paramName - name of parameter
     #  value - the new value of parameter
     set paramName [string tolower $paramName]
-    set error [catch {dict get $Params $paramName}]
+    set error [catch {dget $Params $paramName}]
     if {$error&gt;0} {
         error &quot;Parameter with name '$paramName' was not found in parameter analysis's '[my configure -Name]' list of parameters '[dict keys [my getParams]]'&quot;
     } else {
-        set param [dict get $Params $paramName]
+        set param [dget $Params $paramName]
     }
     $param configure -Value $value
     return
@@ -465,12 +465,12 @@
     #  elemName - name of element to delete
     my variable Elements
     set elemName [string tolower $elemName]
-    set error [catch {dict get $Elements $elemName}]
+    set error [catch {dget $Elements $elemName}]
     if {$error&gt;0} {
         error &quot;Element with name '$elemName' was not found in device's '[my configure -Name]' list of elements&quot;
     } else {
         set Elements [dict remove $Elements $elemName]
-        if {[info object class [dict get $Elements $elemName] {::SpiceGenTcl::Analysis}]} {
+        if {[info object class [dget $Elements $elemName] {::SpiceGenTcl::Analysis}]} {
             unset ContainAnalysis
         }
     }
@@ -549,11 +549,11 @@
     #  elemName - name of element
     my variable Elements
     set elemName [string tolower $elemName]
-    set error [catch {dict get $Elements $elemName}]
+    set error [catch {dget $Elements $elemName}]
     if {$error&gt;0} {
         error &quot;Element with name '$elemName' was not found in netlist's '[my configure -Name]' list of elements&quot;
     } else {
-        set foundElem [dict get $Elements $elemName]
+        set foundElem [dget $Elements $elemName]
     }
     return $foundElem
 }</pre></div>
@@ -787,7 +787,7 @@
     my configure -Name $name
     # create Pins objects
     foreach pin $pins {
-        my AddPin [lindex $pin 0] [lindex $pin 1]
+        my AddPin [@ $pin 0] [@ $pin 1]
     }
     #ruff
     # Each parameter definition could be modified by
@@ -798,10 +798,10 @@
     #  - poseq - combination of both flags, print only '{$Equation}'
     if {$params!=&quot;&quot;} {
         foreach param $params {
-            if {[lindex $param 2]=={}} {
-                my addParam [lindex $param 0] [lindex $param 1]
-            } elseif {[lindex $param 1]==&quot;-sw&quot;} {
-                my addParam [lindex $param 0] -sw
+            if {[@ $param 2]=={}} {
+                my addParam [@ $param 0] [@ $param 1]
+            } elseif {[@ $param 1]==&quot;-sw&quot;} {
+                my addParam [@ $param 0] -sw
             } else {
                 my addParam {*}$param
             }
@@ -892,7 +892,7 @@
     # Deletes existing `Parameter` object from list `Params`.
     #  paramName - name of parameter that will be deleted
     set paramName [string tolower $paramName]
-    set error [catch {dict get $Params $paramName}]
+    set error [catch {dget $Params $paramName}]
     if {$error&gt;0} {
         error &quot;Parameter with name '$paramName' was not found in device's '[my configure -Name]' list of parameters '[dict keys [my getParams]]'&quot;
     } else {
@@ -939,7 +939,7 @@
     # Gets the dictionary that contains parameter name as keys and
     #  parameter values as the values.
     # Returns: parameters dictionary
-    set tempDict [dict create]
+    set tempDict [dcreate]
     dict for {paramName param} $Params {
         dict append tempDict $paramName [$param configure -Value]
     }
@@ -956,7 +956,7 @@
     # Gets the dictionary that contains pin name as keys and
     #  connected node name as the values.
     # Returns: parameters dictionary
-    set tempDict [dict create]
+    set tempDict [dcreate]
     dict for {pinName pin} $Pins {
         dict append tempDict $pinName [$pin configure -NodeName]
     }
@@ -977,11 +977,11 @@
     #  paramName - name of parameter
     #  value - new value of parameter
     set paramName [string tolower $paramName]
-    set error [catch {dict get $Params $paramName}]
+    set error [catch {dget $Params $paramName}]
     if {$error&gt;0} {
         error &quot;Parameter with name '$paramName' was not found in device's '[my configure -Name]' list of parameters '[dict keys [my getParams]]'&quot;
     } else {
-        set param [dict get $Params $paramName]
+        set param [dget $Params $paramName]
     }
     $param configure -Value $value
     return
@@ -1001,11 +1001,11 @@
     #  in other words, connect particular pin to particular node.
     #  pinName - name of the pin
     #  nodeName - name of the node that we want connect to pin
-    set error [catch {dict get $Pins $pinName}]
+    set error [catch {dget $Pins $pinName}]
     if {$error&gt;0} {
         error &quot;Pin with name '$pinName' was not found in device's '[my configure -Name]' list of pins '[dict keys [my getPins]]'&quot;
     } else {
-        set pin [dict get $Pins $pinName]
+        set pin [dget $Pins $pinName]
     }
     $pin configure -NodeName $nodeName
     return
@@ -1143,7 +1143,7 @@
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="argsPreprocess" class='ruff_cmd'>argsPreprocess</a></td><td>Calls argparse and constructs list for passing to Device constructor.</td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="buildArgStr" class='ruff_cmd'>buildArgStr</a></td><td>Builds argument list for argparse.</td></tr>
 </table>
-<h5 class='ruff'>Subclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Common-BasicDevices.html#::SpiceGenTcl::Common::BasicDevices::Inductor" title="::SpiceGenTcl::Common::BasicDevices::Inductor" class='ruff_cmd'>::SpiceGenTcl::Common::BasicDevices::Inductor</a>, <a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vsin" title="::SpiceGenTcl::Common::Sources::Vsin" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::Vsin</a>, <a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::sffm" title="::SpiceGenTcl::Ngspice::Sources::sffm" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources::sffm</a>, <a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::Vsffm" title="::SpiceGenTcl::Ngspice::Sources::Vsffm" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources::Vsffm</a>, <a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::BehaviouralSource" title="::SpiceGenTcl::Ngspice::Sources::BehaviouralSource" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources::BehaviouralSource</a>, <a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::RModel" title="::SpiceGenTcl::Ngspice::BasicDevices::RModel" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::RModel</a>, <a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CModel" title="::SpiceGenTcl::Ngspice::BasicDevices::CModel" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::CModel</a>, <a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::LModel" title="::SpiceGenTcl::Ngspice::BasicDevices::LModel" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::LModel</a>, <a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::VSwitchModel" title="::SpiceGenTcl::Ngspice::BasicDevices::VSwitchModel" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::VSwitchModel</a>, <a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CSwitchModel" title="::SpiceGenTcl::Ngspice::BasicDevices::CSwitchModel" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::CSwitchModel</a>, <a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel" title="::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel" class='ruff_cmd'>::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel</a>, <a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::BjtGPModel" title="::SpiceGenTcl::Ngspice::SemiconductorDevices::BjtGPModel" class='ruff_cmd'>::SpiceGenTcl::Ngspice::SemiconductorDevices::BjtGPModel</a>, <a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet1Model" title="::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet1Model" class='ruff_cmd'>::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet1Model</a>, <a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet2Model" title="::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet2Model" class='ruff_cmd'>::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet2Model</a>, <a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet1Model" title="::SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet1Model" class='ruff_cmd'>::SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet1Model</a>, <a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::Resistor" title="::SpiceGenTcl::Xyce::BasicDevices::Resistor" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices::Resistor</a>, <a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::Capacitor" title="::SpiceGenTcl::Xyce::BasicDevices::Capacitor" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices::Capacitor</a>, <a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::Inductor" title="::SpiceGenTcl::Xyce::BasicDevices::Inductor" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices::Inductor</a>, <a href="index-SpiceGenTcl-Xyce-Sources.html#::SpiceGenTcl::Xyce::Sources::BehaviouralSource" title="::SpiceGenTcl::Xyce::Sources::BehaviouralSource" class='ruff_cmd'>::SpiceGenTcl::Xyce::Sources::BehaviouralSource</a></p>
+<h5 class='ruff'>Subclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Common-BasicDevices.html#::SpiceGenTcl::Common::BasicDevices::Inductor" title="::SpiceGenTcl::Common::BasicDevices::Inductor" class='ruff_cmd'>::SpiceGenTcl::Common::BasicDevices::Inductor</a>, <a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vsin" title="::SpiceGenTcl::Common::Sources::Vsin" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::Vsin</a>, <a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::sffm" title="::SpiceGenTcl::Ngspice::Sources::sffm" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources::sffm</a>, <a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::Vsffm" title="::SpiceGenTcl::Ngspice::Sources::Vsffm" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources::Vsffm</a>, <a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::BehaviouralSource" title="::SpiceGenTcl::Ngspice::Sources::BehaviouralSource" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources::BehaviouralSource</a>, <a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::RModel" title="::SpiceGenTcl::Ngspice::BasicDevices::RModel" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::RModel</a>, <a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CModel" title="::SpiceGenTcl::Ngspice::BasicDevices::CModel" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::CModel</a>, <a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::LModel" title="::SpiceGenTcl::Ngspice::BasicDevices::LModel" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::LModel</a>, <a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::VSwitchModel" title="::SpiceGenTcl::Ngspice::BasicDevices::VSwitchModel" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::VSwitchModel</a>, <a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CSwitchModel" title="::SpiceGenTcl::Ngspice::BasicDevices::CSwitchModel" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::CSwitchModel</a>, <a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel" title="::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel" class='ruff_cmd'>::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel</a>, <a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::BjtGPModel" title="::SpiceGenTcl::Ngspice::SemiconductorDevices::BjtGPModel" class='ruff_cmd'>::SpiceGenTcl::Ngspice::SemiconductorDevices::BjtGPModel</a>, <a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet1Model" title="::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet1Model" class='ruff_cmd'>::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet1Model</a>, <a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet2Model" title="::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet2Model" class='ruff_cmd'>::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet2Model</a>, <a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet1Model" title="::SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet1Model" class='ruff_cmd'>::SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet1Model</a>, <a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::Resistor" title="::SpiceGenTcl::Xyce::BasicDevices::Resistor" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices::Resistor</a>, <a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::Capacitor" title="::SpiceGenTcl::Xyce::BasicDevices::Capacitor" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices::Capacitor</a>, <a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::Inductor" title="::SpiceGenTcl::Xyce::BasicDevices::Inductor" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices::Inductor</a>, <a href="index-SpiceGenTcl-Xyce-Sources.html#::SpiceGenTcl::Xyce::Sources::BehaviouralSource" title="::SpiceGenTcl::Xyce::Sources::BehaviouralSource" class='ruff_cmd'>::SpiceGenTcl::Xyce::Sources::BehaviouralSource</a>, <a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::RModel" title="::SpiceGenTcl::Xyce::BasicDevices::RModel" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices::RModel</a>, <a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::CModel" title="::SpiceGenTcl::Xyce::BasicDevices::CModel" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices::CModel</a>, <a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::LModel" title="::SpiceGenTcl::Xyce::BasicDevices::LModel" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices::LModel</a>, <a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::VSwitchModel" title="::SpiceGenTcl::Xyce::BasicDevices::VSwitchModel" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices::VSwitchModel</a>, <a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::CSwitchModel" title="::SpiceGenTcl::Xyce::BasicDevices::CSwitchModel" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices::CSwitchModel</a>, <a href="index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::DiodeModel" title="::SpiceGenTcl::Xyce::SemiconductorDevices::DiodeModel" class='ruff_cmd'>::SpiceGenTcl::Xyce::SemiconductorDevices::DiodeModel</a>, <a href="index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::BjtGPModel" title="::SpiceGenTcl::Xyce::SemiconductorDevices::BjtGPModel" class='ruff_cmd'>::SpiceGenTcl::Xyce::SemiconductorDevices::BjtGPModel</a>, <a href="index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet1Model" title="::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet1Model" class='ruff_cmd'>::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet1Model</a>, <a href="index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet2Model" title="::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet2Model" class='ruff_cmd'>::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet2Model</a>, <a href="index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet1Model" title="::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet1Model" class='ruff_cmd'>::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet1Model</a></p>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::KeyArgsBuilder::argsPreprocess'>argsPreprocess</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder" title="::SpiceGenTcl::KeyArgsBuilder" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder'>KeyArgsBuilder</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Calls argparse and constructs list for passing to Device constructor.</p>
@@ -1188,7 +1188,7 @@
     # Returns: string in form *-paramName= \n {-paramName= -alias aliasName} \n ...*
     foreach paramName $paramsNames {
         if {[llength $paramName]&gt;1} {
-            lappend paramDefList &quot;\{-[lindex $paramName 0]= -alias [lindex $paramName 1]\}&quot;
+            lappend paramDefList &quot;\{-[@ $paramName 0]= -alias [@ $paramName 1]\}&quot;
         } else {
             lappend paramDefList &quot;-${paramName}=&quot;
         }
@@ -1263,7 +1263,7 @@
 <p class='ruff'>Writable: <code>-Name</code>, <code>-Type</code></p>
 <h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::SPICEElement" title="SPICEElement" class='ruff_cmd'>SPICEElement</a></p>
 <h5 class='ruff'>Mixins</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker" title="DuplChecker" class='ruff_cmd'>DuplChecker</a></p>
-<h5 class='ruff'>Subclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::RModel" title="::SpiceGenTcl::Ngspice::BasicDevices::RModel" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::RModel</a>, <a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CModel" title="::SpiceGenTcl::Ngspice::BasicDevices::CModel" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::CModel</a>, <a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::LModel" title="::SpiceGenTcl::Ngspice::BasicDevices::LModel" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::LModel</a>, <a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::VSwitchModel" title="::SpiceGenTcl::Ngspice::BasicDevices::VSwitchModel" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::VSwitchModel</a>, <a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CSwitchModel" title="::SpiceGenTcl::Ngspice::BasicDevices::CSwitchModel" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::CSwitchModel</a>, <a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel" title="::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel" class='ruff_cmd'>::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel</a>, <a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::BjtGPModel" title="::SpiceGenTcl::Ngspice::SemiconductorDevices::BjtGPModel" class='ruff_cmd'>::SpiceGenTcl::Ngspice::SemiconductorDevices::BjtGPModel</a>, <a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet1Model" title="::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet1Model" class='ruff_cmd'>::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet1Model</a>, <a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet2Model" title="::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet2Model" class='ruff_cmd'>::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet2Model</a>, <a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet1Model" title="::SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet1Model" class='ruff_cmd'>::SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet1Model</a></p>
+<h5 class='ruff'>Subclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::RModel" title="::SpiceGenTcl::Ngspice::BasicDevices::RModel" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::RModel</a>, <a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CModel" title="::SpiceGenTcl::Ngspice::BasicDevices::CModel" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::CModel</a>, <a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::LModel" title="::SpiceGenTcl::Ngspice::BasicDevices::LModel" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::LModel</a>, <a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::VSwitchModel" title="::SpiceGenTcl::Ngspice::BasicDevices::VSwitchModel" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::VSwitchModel</a>, <a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CSwitchModel" title="::SpiceGenTcl::Ngspice::BasicDevices::CSwitchModel" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::CSwitchModel</a>, <a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel" title="::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel" class='ruff_cmd'>::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel</a>, <a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::BjtGPModel" title="::SpiceGenTcl::Ngspice::SemiconductorDevices::BjtGPModel" class='ruff_cmd'>::SpiceGenTcl::Ngspice::SemiconductorDevices::BjtGPModel</a>, <a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet1Model" title="::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet1Model" class='ruff_cmd'>::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet1Model</a>, <a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet2Model" title="::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet2Model" class='ruff_cmd'>::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet2Model</a>, <a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet1Model" title="::SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet1Model" class='ruff_cmd'>::SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet1Model</a>, <a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::RModel" title="::SpiceGenTcl::Xyce::BasicDevices::RModel" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices::RModel</a>, <a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::CModel" title="::SpiceGenTcl::Xyce::BasicDevices::CModel" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices::CModel</a>, <a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::LModel" title="::SpiceGenTcl::Xyce::BasicDevices::LModel" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices::LModel</a>, <a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::VSwitchModel" title="::SpiceGenTcl::Xyce::BasicDevices::VSwitchModel" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices::VSwitchModel</a>, <a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::CSwitchModel" title="::SpiceGenTcl::Xyce::BasicDevices::CSwitchModel" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices::CSwitchModel</a>, <a href="index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::DiodeModel" title="::SpiceGenTcl::Xyce::SemiconductorDevices::DiodeModel" class='ruff_cmd'>::SpiceGenTcl::Xyce::SemiconductorDevices::DiodeModel</a>, <a href="index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::BjtGPModel" title="::SpiceGenTcl::Xyce::SemiconductorDevices::BjtGPModel" class='ruff_cmd'>::SpiceGenTcl::Xyce::SemiconductorDevices::BjtGPModel</a>, <a href="index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet1Model" title="::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet1Model" class='ruff_cmd'>::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet1Model</a>, <a href="index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet2Model" title="::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet2Model" class='ruff_cmd'>::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet2Model</a>, <a href="index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet1Model" title="::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet1Model" class='ruff_cmd'>::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet1Model</a></p>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Model::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model" title="::SpiceGenTcl::Model" class='ruff_cmd'>::SpiceGenTcl::Model</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Model'>Model</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code>Model</code>.</p>
@@ -1289,10 +1289,10 @@
     # create Params objects
     if {$params!=&quot;&quot;} {
         foreach param $params {
-            if {[lindex $param 2]=={}} {
-                my addParam [lindex $param 0] [lindex $param 1]
-            } elseif {[lindex $param 2]==&quot;-eq&quot;} {
-                my addParam [lindex $param 0] [lindex $param 1] -eq
+            if {[@ $param 2]=={}} {
+                my addParam [@ $param 0] [@ $param 1]
+            } elseif {[@ $param 2]==&quot;-eq&quot;} {
+                my addParam [@ $param 0] [@ $param 1] -eq
             } else {
                 error &quot;Wrong parameter definition in model $name&quot;
             }
@@ -1365,7 +1365,7 @@
     # Deletes existing `Parameter` object from list `Params`.
     #  paramName - name of parameter that will be deleted
     set paramName [string tolower $paramName]
-    set error [catch {dict get $Params $paramName}]
+    set error [catch {dget $Params $paramName}]
     if {$error&gt;0} {
         error &quot;Parameter with name '$paramName' was not found in device's '[my configure -Name]' list of parameters '[dict keys [my getParams]]'&quot;
     } else {
@@ -1404,7 +1404,7 @@
     # Gets the dictionary that contains parameter name as keys and
     #  parameter values as the values.
     # Returns: parameters dictionary
-    set tempDict [dict create]
+    set tempDict [dcreate]
     dict for {paramName param} $Params {
         dict append tempDict $paramName [$param configure -Value]
     }
@@ -1425,11 +1425,11 @@
     #  paramName - name of parameter
     #  value - new value of parameter
     set paramName [string tolower $paramName]
-    set error [catch {dict get $Params $paramName}]
+    set error [catch {dget $Params $paramName}]
     if {$error&gt;0} {
         error &quot;Parameter with name '$paramName' was not found in device's '[my configure -Name]' list of parameters '[dict keys [my getParams]]'&quot;
     } else {
-        set param [dict get $Params $paramName]
+        set param [dget $Params $paramName]
     }
     $param configure -Value $value
     return
@@ -1510,7 +1510,7 @@
     # Deletes element from the netlist by its name.
     #  elemName - name of element to delete
     set elemName [string tolower $elemName]
-    set error [catch {dict get $Elements $elemName}]
+    set error [catch {dget $Elements $elemName}]
     if {$error&gt;0} {
         error &quot;Element with name '$elemName' was not found in netlist's '[my configure -Name]' list of elements&quot;
     } else {
@@ -1561,11 +1561,11 @@
     # Gets particular element object reference by its name.
     #  elemName - name of element
     set elemName [string tolower $elemName]
-    set error [catch {dict get $Elements $elemName}]
+    set error [catch {dget $Elements $elemName}]
     if {$error&gt;0} {
         error &quot;Element with name '$elemName' was not found in netlist's '[my configure -Name]' list of elements&quot;
     } else {
-        set foundElem [dict get $Elements $elemName]
+        set foundElem [dget $Elements $elemName]
     }
     return $foundElem
 }</pre></div>
@@ -1613,11 +1613,11 @@
         my configure -Name [self object]
     }
     foreach param $params {
-        if {[lindex $param 2]=={}} {
-            if {[lindex $param 1]==&quot;-sw&quot;} {
-                my addParam [lindex $param 0] -sw
+        if {[@ $param 2]=={}} {
+            if {[@ $param 1]==&quot;-sw&quot;} {
+                my addParam [@ $param 0] -sw
             } else {
-                my addParam [lindex $param 0] [lindex $param 1]
+                my addParam [@ $param 0] [@ $param 1]
             }
         } else {
             error &quot;Wrong parameter definition in Options&quot;
@@ -1666,7 +1666,7 @@
     # Deletes existing `Parameter` object from list `Params`.
     #  paramName - name of parameter that will be deleted
     set paramName [string tolower $paramName]
-    set error [catch {dict get $Params $paramName}]
+    set error [catch {dget $Params $paramName}]
     if {$error&gt;0} {
         error &quot;Parameter with name '$paramName' was not found in device's '[my configure -Name]' list of parameters '[dict keys [my getParams]]'&quot;
     } else {
@@ -1700,7 +1700,7 @@
     # Gets the dictionary that contains parameter name as keys and
     #  parameter values as the values.
     # Returns: parameters dictionary
-    set tempDict [dict create]
+    set tempDict [dcreate]
     dict for {paramName param} $Params {
         # check if parameter doesn't have value, it means that we return {} for switch parameter
         if {[catch {$param configure -Value}]} {
@@ -1727,11 +1727,11 @@
     #  paramName - name of parameter
     #  value - new value of parameter
     set paramName [string tolower $paramName]
-    set error [catch {dict get $Params $paramName}]
+    set error [catch {dget $Params $paramName}]
     if {$error&gt;0} {
         error &quot;Parameter with name '$paramName' was not found in options's '[my configure -Name]' list of parameters '[dict keys [my getParams]]'&quot;
     } else {
-        set param [dict get $Params $paramName]
+        set param [dget $Params $paramName]
     }
     $param configure -Value $value
     return
@@ -2105,10 +2105,10 @@
         my configure -Name [self object]
     }
     foreach param $params {
-        if {[lindex $param 2]=={}} {
-            my addParam [lindex $param 0] [lindex $param 1]
-        } elseif {[lindex $param 2]==&quot;-eq&quot;} {
-            my addParam [lindex $param 0] [lindex $param 1] -eq
+        if {[@ $param 2]=={}} {
+            my addParam [@ $param 0] [@ $param 1]
+        } elseif {[@ $param 2]==&quot;-eq&quot;} {
+            my addParam [@ $param 0] [@ $param 1] -eq
         } else {
             error &quot;Wrong parameter definition in ParamStatement&quot;
         }
@@ -2161,7 +2161,7 @@
     # Deletes existing `Parameter` object from list `Params`.
     #  paramName - name of parameter that will be deleted
     set paramName [string tolower $paramName]
-    set error [catch {dict get $Params $paramName}]
+    set error [catch {dget $Params $paramName}]
     if {$error&gt;0} {
         error &quot;Parameter with name '$paramName' was not found in device's '[my configure -Name]' list of parameters '[dict keys [my getParams]]'&quot;
     } else {
@@ -2195,7 +2195,7 @@
     # Gets the dictionary that contains parameter name as keys and
     #  parameter values as the values.
     # Returns: parameters dictionary
-    set tempDict [dict create]
+    set tempDict [dcreate]
     dict for {paramName param} $Params {
         dict append tempDict $paramName [$param configure -Value]
     }
@@ -2216,11 +2216,11 @@
     #  paramName - name of parameter
     #  value - new value of parameter
     set paramName [string tolower $paramName]
-    set error [catch {dict get $Params $paramName}]
+    set error [catch {dget $Params $paramName}]
     if {$error&gt;0} {
         error &quot;Parameter with name '$paramName' was not found in parameter statement's '[my configure -Name]' list of parameters '[dict keys [my getParams]]'&quot;
     } else {
-        set param [dict get $Params $paramName]
+        set param [dget $Params $paramName]
     }
     $param configure -Value $value
     return
@@ -2364,7 +2364,7 @@
                 } else {
                     error &quot;Unknown encoding&quot;
                 }
-                my configure -RawParams [dict create Filename $path]
+                my configure -RawParams [dcreate Filename $path]
                 set header &quot;&quot;
                 set binaryStart 6
                 while true {
@@ -2389,20 +2389,20 @@
 
                 foreach line $header {
                     set lineList [split $line &quot;:&quot;]
-                    if {[lindex $lineList 0]==&quot;Variables&quot;} {
+                    if {[@ $lineList 0]==&quot;Variables&quot;} {
                         break
                     }
-                    dict append RawParams [lindex $lineList 0] [string trim [lindex $lineList 1]]
+                    dict append RawParams [@ $lineList 0] [string trim [@ $lineList 1]]
                 }
-                my configure -NPoints [dict get [my configure -RawParams] &quot;No. Points&quot;]
-                my configure -NVariables [dict get [my configure -RawParams] &quot;No. Variables&quot;]
-                if {[dict get [my configure -RawParams] &quot;Plotname&quot;] in {&quot;Operating Point&quot; &quot;Transfet Function&quot;}} {
+                my configure -NPoints [dget [my configure -RawParams] &quot;No. Points&quot;]
+                my configure -NVariables [dget [my configure -RawParams] &quot;No. Variables&quot;]
+                if {[dget [my configure -RawParams] &quot;Plotname&quot;] in {&quot;Operating Point&quot; &quot;Transfet Function&quot;}} {
                     set hasAxis 0
                 } else {
                     set hasAxis 1
                 }
-                set flags [split [dict get [my configure -RawParams] &quot;Flags&quot;]]
-                if {(&quot;complex&quot; in $flags) || ([dict get [my configure -RawParams] &quot;Plotname&quot;]==&quot;AC Analysis&quot;)} {
+                set flags [split [dget [my configure -RawParams] &quot;Flags&quot;]]
+                if {(&quot;complex&quot; in $flags) || ([dget [my configure -RawParams] &quot;Plotname&quot;]==&quot;AC Analysis&quot;)} {
                     set numType complex
                 } else {
                     if {(&quot;double&quot; in $flags) || ($simulator==&quot;ngspice&quot;)} {
@@ -2447,7 +2447,7 @@
     ####  read data
 
                 if {$rawType==&quot;Binary:&quot;} {
-                    my configure -BlockSize [expr {($fileSize - $binaryStart)/$NPoints}]
+                    my configure -BlockSize [= {($fileSize - $binaryStart)/$NPoints}]
                     set scanFunctions &quot;&quot;
                     set calcBlockSize 0
                     foreach trace [my configure -Traces] {
@@ -2482,8 +2482,8 @@
                     }
                      for {set i 0} {$i&lt;$NPoints} {incr i} {
                         for {set j 0} {$j&lt;[llength [my configure -Traces]]} {incr j} {
-                            set value [eval &quot;my [lindex $scanFunctions $j]&quot; $file]
-                            set trace [lindex [my configure -Traces] $j]
+                            set value [eval &quot;my [@ $scanFunctions $j]&quot; $file]
+                            set trace [@ [my configure -Traces] $j]
                             if {[info object class $trace]!=&quot;::SpiceGenTcl::EmptyTrace&quot;} {
                                 $trace appendDataPoints $value
                             }
@@ -2501,24 +2501,24 @@
                             #puts $lineList
                             if {$firstVar==&quot;true&quot;} {
                                 set firstVar false
-                                set sPoint [lindex $lineList 0]
+                                set sPoint [@ $lineList 0]
                                 #puts &quot;$sPoint $i&quot;
                                 if {$i!=int($sPoint)} {
                                     error &quot;Error reading file&quot;
                                 }
                                 if {$numType==&quot;complex&quot;} {
-                                    set value [split [lindex $lineList 1] &quot;,&quot;]
+                                    set value [split [@ $lineList 1] &quot;,&quot;]
                                 } else {
-                                    set value [lindex $lineList 1]
+                                    set value [@ $lineList 1]
                                 }
                             } else {
                                 if {$numType==&quot;complex&quot;} {
-                                    set value [split [lindex $lineList 1] &quot;,&quot;]
+                                    set value [split [@ $lineList 1] &quot;,&quot;]
                                 } else {
-                                    set value [lindex $lineList 1]
+                                    set value [@ $lineList 1]
                                 }
                             }
-                            set trace [lindex [my configure -Traces] $j]
+                            set trace [@ [my configure -Traces] $j]
                             $trace appendDataPoints $value
                         }
                     }
@@ -2588,25 +2588,25 @@
         {-traces -catchall -forbid {all}}
         {-sep= -default {,}}
     }]
-    if {[dict exists $arguments all]} {
+    if {[dexist $arguments all]} {
         set tracesDict [my getTracesData]
         set tracesList [list [dict keys $tracesDict]]
         for {set i 0} {$i&lt;[my configure -NPoints]} {incr i} {
             dict for {traceName traceValues} $tracesDict {
-                lappend row [lindex $traceValues $i]
+                lappend row [@ $traceValues $i]
             }
             lappend tracesList $row
             unset row
         }
-    } elseif {[dict get $arguments traces]!=&quot;&quot;} {
-        foreach traceName [dict get $arguments traces] {
+    } elseif {[dget $arguments traces]!=&quot;&quot;} {
+        foreach traceName [dget $arguments traces] {
             set traceObj [my getTrace $traceName]
             dict append tracesDict [$traceObj configure -Name] [$traceObj getDataPoints]
         }
         set tracesList [list [dict keys $tracesDict]]
         for {set i 0} {$i&lt;[my configure -NPoints]} {incr i} {
             dict for {traceName traceValues} $tracesDict {
-                lappend row [lindex $traceValues $i]
+                lappend row [@ $traceValues $i]
             }
             lappend tracesList $row
             unset row
@@ -2614,7 +2614,7 @@
     } else {
         error &quot;Arguments '-all' or '-traces traceName1 traceName2 ...' must be provided to 'getTracesCsv' method&quot;
     }
-    return [::csv::joinlist $tracesList [dict get $arguments sep]]
+    return [::csv::joinlist $tracesList [dget $arguments sep]]
 }</pre></div>
 </div><h4 class='ruffmethod'><a name='::SpiceGenTcl::RawFile::getTracesData'>getTracesData</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile" title="::SpiceGenTcl::RawFile" class='ruff_cmd'>::SpiceGenTcl::RawFile</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawFile'>RawFile</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
@@ -2625,7 +2625,7 @@
 <div id='SpiceGenTcl_RawFile_getTracesData' class='ruff_dyn_src'><pre>method getTracesData {} {
 
     # Returns dictionary that contains all data in value and name as a key
-    set dict [dict create]
+    set dict [dcreate]
     foreach trace [my configure -Traces] {
         dict append dict [$trace configure -Name] [$trace getDataPoints]
     }
@@ -2839,15 +2839,15 @@
 
     # create Pins objects, nodes are set to empty line
     foreach pin $pins {
-        my AddPin [lindex $pin 0] {}
+        my AddPin [@ $pin 0] {}
     }
     # create Params objects that are input parameters of subcircuit
     if {$params!=&quot;&quot;} {
         foreach param $params {
             if {[llength $param]&lt;=2} {
-                my addParam [lindex $param 0] [lindex $param 1]
+                my addParam [@ $param 0] [@ $param 1]
             } else {
-                error &quot;Wrong parameter '[lindex $param 0]' definition in subcircuit $name&quot;
+                error &quot;Wrong parameter '[@ $param 0]' definition in subcircuit $name&quot;
             }
         }
     } else {
@@ -2921,7 +2921,7 @@
     # Deletes existing `Parameter` object from list `Params`.
     #  paramName - name of parameter that will be deleted
     set paramName [string tolower $paramName]
-    set error [catch {dict get $Params $paramName}]
+    set error [catch {dget $Params $paramName}]
     if {$error&gt;0} {
         error &quot;Parameter with name '$paramName' was not found in device's '[my configure -Name]' list of parameters '[dict keys [my getParams]]'&quot;
     } else {
@@ -2968,7 +2968,7 @@
     # Gets the dictionary that contains parameter name as keys and
     #  parameter values as the values.
     # Returns: parameters dictionary
-    set tempDict [dict create]
+    set tempDict [dcreate]
     dict for {paramName param} $Params {
         dict append tempDict $paramName [$param configure -Value]
     }
@@ -2985,7 +2985,7 @@
     # Gets the dictionary that contains pin name as keys and
     #  connected node name as the values.
     # Returns: parameters dictionary
-    set tempDict [dict create]
+    set tempDict [dcreate]
     dict for {pinName pin} $Pins {
         dict append tempDict $pinName [$pin configure -NodeName]
     }
@@ -3006,11 +3006,11 @@
     #  paramName - name of parameter
     #  value - new value of parameter
     set paramName [string tolower $paramName]
-    set error [catch {dict get $Params $paramName}]
+    set error [catch {dget $Params $paramName}]
     if {$error&gt;0} {
         error &quot;Parameter with name '$paramName' was not found in device's '[my configure -Name]' list of parameters '[dict keys [my getParams]]'&quot;
     } else {
-        set param [dict get $Params $paramName]
+        set param [dget $Params $paramName]
     }
     $param configure -Value $value
     return

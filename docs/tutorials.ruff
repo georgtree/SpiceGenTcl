@@ -284,9 +284,9 @@ namespace eval Tutorials {
             $circuit runAndRead
             puts [$circuit getLog]
             set data [$circuit getDataDict]
-            foreach x [dict get $data v(anode)] y [dict get $data i(va)]   {
+            foreach x [dget $data v(anode)] y [dget $data i(va)]   {
                 set xf [format "%.3f" $x]
-                set yf [format "%.3f" [expr {-$y}]]
+                set yf [format "%.3f" [= {-$y}]]
                 lappend xydata [list $xf $yf]
             }    
             lappend dataList $xydata
@@ -393,9 +393,9 @@ namespace eval Tutorials {
             set data [$circuit getDataDict]
             set x $volt
             # get imaginary part of current
-            set y [lindex [dict get $data i(va)] 0 1]
+            set y [@ [dget $data i(va)] 0 1]
             set xf [format "%.3e" $x]
-            set yf [format "%.2e" [expr {-$y/(2*$pi*1e5*1e-9)}]]
+            set yf [format "%.2e" [= {-$y/(2*$pi*1e5*1e-9)}]]
             lappend xydata [list $xf $yf]
         }
         ```
@@ -482,8 +482,8 @@ namespace eval Tutorials {
         $circuit runAndRead
         # get data object
         set data [$circuit getDataDict]
-        set vrc1 [dict get $data v(rc1)]
-        set vrc2 [dict get $data v(rc2)]
+        set vrc1 [dget $data v(rc1)]
+        set vrc2 [dget $data v(rc2)]
         ```
         
         To print resulted sensitivities we use `format` command where we specify the format of the number:
@@ -567,10 +567,10 @@ namespace eval Tutorials {
         $circuit runAndRead
         # get data object
         set data [$circuit getDataDict]
-       	set axis [dict get $data time]
-       	set vout [dict get $data v(osc_out)]
-       	set imeas [dict get $data i(vmeasure)]
-       	foreach time [dict get $data time] vout [dict get $data v(osc_out)] imeas [dict get $data i(vmeasure)] {
+       	set axis [dget $data time]
+       	set vout [dget $data v(osc_out)]
+       	set imeas [dget $data i(vmeasure)]
+       	foreach time [dget $data time] vout [dget $data v(osc_out)] imeas [dget $data i(vmeasure)] {
             lappend timeVout [list $time $vout]
             lappend timeImeas [list $time $imeas]
         }
@@ -739,7 +739,7 @@ namespace eval Tutorials {
         set i 1
         foreach name [list in1a in1b in2a in2b in3a in3b in4a in4b] {
             $circuit add [Vpulse new $name $i 0 -low 0 -high 3 -td 0 -tf $trtf -tr $trtf\
-                    -pw [expr {$tonStep*pow(2,$i-1)}] -per [expr {$perStep*pow(2,$i-1)}]]
+                    -pw [= {$tonStep*pow(2,$i-1)}] -per [= {$perStep*pow(2,$i-1)}]]
             incr i
         }
         ```
@@ -773,11 +773,11 @@ namespace eval Tutorials {
         ```tcl
         # get data dict
         set data [$circuit getDataDict]
-        set timeList [dict get $data time]
-        set v9List [dict get $data v(9)]
-        set v10List [dict get $data v(10)]
-        set v11List [dict get $data v(11)]
-        set v12List [dict get $data v(12)]
+        set timeList [dget $data time]
+        set v9List [dget $data v(9)]
+        set v10List [dget $data v(10)]
+        set v11List [dget $data v(11)]
+        set v12List [dget $data v(12)]
 
         foreach time $timeList v9 $v9List v10 $v10List v11 $v11List v12 $v12List {
             lappend timeV9 [list $time $v9]
@@ -797,7 +797,7 @@ namespace eval Tutorials {
             chartV$node Yaxis -name "v(${node}), V" -minorTick {show "True"} -type "value"
             chartV$node Add "lineSeries" -data [subst $[subst timeV$node]] -showAllSymbol "nothing" -name "V(${node})"\
                     -symbolSize "0"
-            $layout Add chartV$node -bottom "[expr {4+24*$i}]%" -height "18%" -width "80%"
+            $layout Add chartV$node -bottom "[= {4+24*$i}]%" -height "18%" -width "80%"
             incr i
         }
 
@@ -869,17 +869,17 @@ namespace eval Tutorials {
         Next few lines of code is used to extract magnitude of S11 and S21 parameters:
         ```tcl
         # get frequency
-        set freq [dict get $data frequency]
+        set freq [dget $data frequency]
         # get s11
-        set s11 [dict get $data v(s_1_1)]
+        set s11 [dget $data v(s_1_1)]
         # get s21
-        set s21 [dict get $data v(s_2_1)]
+        set s21 [dget $data v(s_2_1)]
         # extract real/imaginary parts of S11 and S21, and calculate magnitude
-        set freq [lmap val $freq {lindex $val 0}]
-        set s11Mag [lmap s11Re [lmap val $s11 {lindex $val 0}] s11Im [lmap val $s11 {lindex $val 1}]\
-                            {expr {sqrt($s11Re**2+$s11Im**2)}}]
-        set s21Mag [lmap s21Re [lmap val $s21 {lindex $val 0}] s21Im [lmap val $s21 {lindex $val 1}]\
-                            {expr {sqrt($s21Re**2+$s21Im**2)}}]
+        set freq [lmap val $freq {@ $val 0}]
+        set s11Mag [lmap s11Re [lmap val $s11 {@ $val 0}] s11Im [lmap val $s11 {@ $val 1}]\
+                            {= {sqrt($s11Re**2+$s11Im**2)}}]
+        set s21Mag [lmap s21Re [lmap val $s21 {@ $val 0}] s21Im [lmap val $s21 {@ $val 1}]\
+                            {= {sqrt($s21Re**2+$s21Im**2)}}]
         # prepare data for ticklecharts
         set freq_s11Mag [lmap freqVal $freq s11MagVal $s11Mag {list $freqVal $s11MagVal}]
         set freq_s21Mag [lmap freqVal $freq s21MagVal $s21Mag {list $freqVal $s21MagVal}]

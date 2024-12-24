@@ -61,9 +61,9 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 -tc1=
                 -tc2=
             }]
-            set rVal [dict get $arguments r]
-            if {([llength $rVal]>1) && ([lindex $rVal 1]=="-eq")} {
-                lappend params "r [lindex $rVal 0] -poseq"
+            set rVal [dget $arguments r]
+            if {([llength $rVal]>1) && ([@ $rVal 1]=="-eq")} {
+                lappend params "r [@ $rVal 0] -poseq"
             } else {
                 lappend params "r $rVal -pos"
             }
@@ -112,9 +112,9 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 -tc2=
                 -ic=
             }]
-            set cVal [dict get $arguments c]
-            if {([llength $cVal]>1) && ([lindex $cVal 1]=="-eq")} {
-                lappend params "c [lindex $cVal 0] -poseq"
+            set cVal [dget $arguments c]
+            if {([llength $cVal]>1) && ([@ $cVal 1]=="-eq")} {
+                lappend params "c [@ $cVal 0] -poseq"
             } else {
                 lappend params "c $cVal -pos"
             }
@@ -164,9 +164,9 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 -tc1=
                 -tc2=
             }]
-            set lVal [dict get $arguments l]
-            if {([llength $lVal]>1) && ([lindex $lVal 1]=="-eq")} {
-                lappend params "l [lindex $lVal 0] -poseq"
+            set lVal [dget $arguments l]
+            if {([llength $lVal]>1) && ([@ $lVal 1]=="-eq")} {
+                lappend params "l [@ $lVal 0] -poseq"
             } else {
                 lappend params "l $lVal -pos"
             }
@@ -240,10 +240,10 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 {-on -forbid {off}}
                 {-off -forbid {on}}
             }]
-            lappend params "model [dict get $arguments model] -posnocheck"
-            if {[dict exists $arguments on]} {
+            lappend params "model [dget $arguments model] -posnocheck"
+            if {[dexist $arguments on]} {
                 lappend params {on -sw}
-            } elseif {[dict exists $arguments off]} {
+            } elseif {[dexist $arguments off]} {
                 lappend params {off -sw}
             }
             next s$name [list "np $npNode" "nm $nmNode" "ncp $ncpNode" "ncm $ncmNode"] $params
@@ -283,11 +283,11 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 {-on -forbid {off}}
                 {-off -forbid {on}}
             }]
-            lappend params "icntrl [dict get $arguments icntrl] -posnocheck"
-            lappend params "model [dict get $arguments model] -posnocheck"
-            if {[dict exists $arguments on]} {
+            lappend params "icntrl [dget $arguments icntrl] -posnocheck"
+            lappend params "model [dget $arguments model] -posnocheck"
+            if {[dexist $arguments on]} {
                 lappend params {on -sw}
-            } elseif {[dict exists $arguments off]} {
+            } elseif {[dexist $arguments off]} {
                 lappend params {off -sw}
             }
             next w$name [list "np $npNode" "nm $nmNode"] $params
@@ -379,9 +379,9 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             set arguments [argparse -inline {
                 {-dc= -required}
             }]
-            set dcVal [dict get $arguments dc]
-            if {([llength $dcVal]>1) && ([lindex $dcVal 1]=="-eq")} {
-                lappend params "dc [lindex $dcVal 0] -poseq"
+            set dcVal [dget $arguments dc]
+            if {([llength $dcVal]>1) && ([@ $dcVal 1]=="-eq")} {
+                lappend params "dc [@ $dcVal 0] -poseq"
             } else {
                 lappend params "dc $dcVal -pos"
             }
@@ -398,17 +398,17 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {-ac= -required}
                 -acphase=
             }]
-            set acVal [dict get $arguments ac]
+            set acVal [dget $arguments ac]
             lappend params "ac -sw"
-            if {([llength $acVal]>1) && ([lindex $acVal 1]=="-eq")} {
-                lappend params "acval [lindex $acVal 0] -poseq"
+            if {([llength $acVal]>1) && ([@ $acVal 1]=="-eq")} {
+                lappend params "acval [@ $acVal 0] -poseq"
             } else {
                 lappend params "acval $acVal -pos"
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {ac}} {
-                    if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                        lappend params "$paramName [lindex $value 0] -poseq"
+                    if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
+                        lappend params "$paramName [@ $value 0] -poseq"
                     } else {
                         lappend params "$paramName $value -pos"
                     }
@@ -434,14 +434,14 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             }]
             set paramsOrder [list low high td tr tf pw per]
             foreach param $paramsOrder {
-                if {[dict exists $arguments $param]} {
-                    dict append argsOrdered $param [dict get $arguments $param]
+                if {[dexist $arguments $param]} {
+                    dict append argsOrdered $param [dget $arguments $param]
                 }
             }
             lappend params "model pulse -posnocheck"
             dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                    lappend params "$paramName [lindex $value 0] -poseq"
+                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
+                    lappend params "$paramName [@ $value 0] -poseq"
                 } else {
                     lappend params "$paramName $value -pos"
                 }
@@ -465,14 +465,14 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             }]
             set paramsOrder [list v0 va freq td theta phase]
             foreach param $paramsOrder {
-                if {[dict exists $arguments $param]} {
-                    dict append argsOrdered $param [dict get $arguments $param]
+                if {[dexist $arguments $param]} {
+                    dict append argsOrdered $param [dget $arguments $param]
                 }
             }
             lappend params "model sin -posnocheck"
             dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                    lappend params "$paramName [lindex $value 0] -poseq"
+                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
+                    lappend params "$paramName [@ $value 0] -poseq"
                 } else {
                     lappend params "$paramName $value -pos"
                 }
@@ -496,14 +496,14 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             }]
             set paramsOrder [list v1 v2 td1 tau1 td2 tau2]
             foreach param $paramsOrder {
-                if {[dict exists $arguments $param]} {
-                    dict append argsOrdered $param [dict get $arguments $param]
+                if {[dexist $arguments $param]} {
+                    dict append argsOrdered $param [dget $arguments $param]
                 }
             }
             lappend params "model exp -posnocheck"
             dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                    lappend params "$paramName [lindex $value 0] -poseq"
+                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
+                    lappend params "$paramName [@ $value 0] -poseq"
                 } else {
                     lappend params "$paramName $value -pos"
                 }
@@ -520,7 +520,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             set arguments [argparse -inline {
                 {-seq= -required}
             }]
-            set pwlSeqVal [dict get $arguments seq]
+            set pwlSeqVal [dget $arguments seq]
             set pwlSeqLen [llength $pwlSeqVal]
             if {$pwlSeqLen%2} {
                 error "Number of elements '$pwlSeqLen' in pwl sequence is odd in element '$type$name', must be even"
@@ -531,13 +531,13 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             for {set i 0} {$i<[llength $pwlSeqVal]/2} {incr i} {
                 set 2i [* 2 $i]
                 set 2ip1 [+ $2i 1]
-                lappend params "t$i [list [lindex $pwlSeqVal $2i]]" "$type$i [list [lindex $pwlSeqVal $2ip1]]"
+                lappend params "t$i [list [@ $pwlSeqVal $2i]]" "$type$i [list [@ $pwlSeqVal $2ip1]]"
             }
             foreach param $params {
-                if {([llength [lindex $param 1]]>1) && ([lindex [lindex $param 1] 1]=="-eq")} {
-                    lappend paramList "[lindex $param 0] [lindex [lindex $param 1] 0] -poseq"
+                if {([llength [@ $param 1]]>1) && ([@ [@ $param 1] 1]=="-eq")} {
+                    lappend paramList "[@ $param 0] [@ [@ $param 1] 0] -poseq"
                 } else {
-                    lappend paramList "[lindex $param 0] [lindex $param 1] -pos"
+                    lappend paramList "[@ $param 0] [@ $param 1] -pos"
                 }
             }
             set paramList [linsert $paramList 0 "model pwl -posnocheck"]
@@ -559,14 +559,14 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             }]
             set paramsOrder [list v0 va fc mdi fs]
             foreach param $paramsOrder {
-                if {[dict exists $arguments $param]} {
-                    dict append argsOrdered $param [dict get $arguments $param]
+                if {[dexist $arguments $param]} {
+                    dict append argsOrdered $param [dget $arguments $param]
                 }
             }
             lappend params "model sffm -posnocheck"
             dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([lindex $value 1]=="-eq")} {
-                    lappend params "$paramName [lindex $value 0] -poseq"
+                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
+                    lappend params "$paramName [@ $value 0] -poseq"
                 } else {
                     lappend params "$paramName $value -pos"
                 }
@@ -938,16 +938,16 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {-trcond -required}
                 -m=
             }]
-            set trcondVal [dict get $arguments trcond]
-            if {([llength $trcondVal]>1) && ([lindex $trcondVal 1]=="-eq")} {
-                lappend params "trcond [lindex $trcondVal 0] -poseq"
+            set trcondVal [dget $arguments trcond]
+            if {([llength $trcondVal]>1) && ([@ $trcondVal 1]=="-eq")} {
+                lappend params "trcond [@ $trcondVal 0] -poseq"
             } else {
                 lappend params "trcond $trcondVal -pos"
             }
-            if {[dict exists $arguments m]} {
-                set mVal [dict get $arguments m]
-                if {([llength $mVal]>1) && ([lindex $mVal 1]=="-eq")} {
-                    lappend params "m [lindex $mVal 0] -eq"
+            if {[dexist $arguments m]} {
+                set mVal [dget $arguments m]
+                if {([llength $mVal]>1) && ([@ $mVal 1]=="-eq")} {
+                    lappend params "m [@ $mVal 0] -eq"
                 } else {
                     lappend params "m $mVal"
                 }
@@ -985,9 +985,9 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             set arguments [argparse -inline {
                 {-gain -required}
             }]
-            set gainVal [dict get $arguments gain]
-            if {([llength $gainVal]>1) && ([lindex $gainVal 1]=="-eq")} {
-                lappend params "vgain [lindex $gainVal 0] -poseq"
+            set gainVal [dget $arguments gain]
+            if {([llength $gainVal]>1) && ([@ $gainVal 1]=="-eq")} {
+                lappend params "vgain [@ $gainVal 0] -poseq"
             } else {
                 lappend params "vgain $gainVal -pos"
             }
@@ -1026,18 +1026,18 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {-gain -required}
                 -m=
             }]
-            set consrcVal [dict get $arguments consrc]
+            set consrcVal [dget $arguments consrc]
             lappend params "consrc $consrcVal -posnocheck"
-            set gainVal [dict get $arguments gain]
-            if {([llength $gainVal]>1) && ([lindex $gainVal 1]=="-eq")} {
-                lappend params "igain [lindex $gainVal 0] -poseq"
+            set gainVal [dget $arguments gain]
+            if {([llength $gainVal]>1) && ([@ $gainVal 1]=="-eq")} {
+                lappend params "igain [@ $gainVal 0] -poseq"
             } else {
                 lappend params "igain $gainVal -pos"
             }
-            if {[dict exists $arguments m]} {
-                set mVal [dict get $arguments m]
-                if {([llength $mVal]>1) && ([lindex $mVal 1]=="-eq")} {
-                    lappend params "m [lindex $mVal 0] -eq"
+            if {[dexist $arguments m]} {
+                set mVal [dget $arguments m]
+                if {([llength $mVal]>1) && ([@ $mVal 1]=="-eq")} {
+                    lappend params "m [@ $mVal 0] -eq"
                 } else {
                     lappend params "m $mVal"
                 }
@@ -1075,11 +1075,11 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {-consrc -required}
                 {-transr -required}
             }]
-            set consrcVal [dict get $arguments consrc]
+            set consrcVal [dget $arguments consrc]
             lappend params "consrc $consrcVal -posnocheck"
-            set transrVal [dict get $arguments transr]
-            if {([llength $transrVal]>1) && ([lindex $transrVal 1]=="-eq")} {
-                lappend params "transr [lindex $transrVal 0] -poseq"
+            set transrVal [dget $arguments transr]
+            if {([llength $transrVal]>1) && ([@ $transrVal 1]=="-eq")} {
+                lappend params "transr [@ $transrVal 0] -poseq"
             } else {
                 lappend params "transr $transrVal -pos"
             }

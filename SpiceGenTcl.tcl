@@ -21,6 +21,12 @@ namespace import ::tcl::mathop::*
 
 package provide SpiceGenTcl 0.54
 
+interp alias {} dget {} dict get
+interp alias {} @ {} lindex
+interp alias {} = {} expr
+interp alias {} dexist {} dict exists
+interp alias {} dcreate {} dict create
+
 set dir [file dirname [file normalize [info script]]]
 set libDir "${dir}/lib"
 lappend auto_path $libDir

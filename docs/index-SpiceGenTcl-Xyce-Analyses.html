@@ -79,19 +79,19 @@
         {-fstart= -required}
         {-fstop= -required}
     }]
-    if {[dict exists $arguments name]} {
-        set name [dict get $arguments name]
+    if {[dexist $arguments name]} {
+        set name [dget $arguments name]
     } else {
         set name [self object]
     }
-    lappend params &quot;variation [dict get $arguments variation] -posnocheck&quot;
+    lappend params &quot;variation [dget $arguments variation] -posnocheck&quot;
     set paramsOrder [list n fstart fstop]
     foreach param $paramsOrder {
-        dict append argsOrdered $param [dict get $arguments $param]
+        dict append argsOrdered $param [dget $arguments $param]
     }
     dict for {paramName value} $argsOrdered {
-        if {([llength $value]&gt;1) &amp;&amp; ([lindex $value 1]==&quot;-eq&quot;)} {
-            lappend params &quot;$paramName [lindex $value 0] -poseq&quot;
+        if {([llength $value]&gt;1) &amp;&amp; ([@ $value 1]==&quot;-eq&quot;)} {
+            lappend params &quot;$paramName [@ $value 0] -poseq&quot;
         } else {
             lappend params &quot;$paramName $value -pos&quot;
         }
@@ -158,19 +158,19 @@
         {-stop= -required}
         {-incr= -required}
     }]
-    if {[dict exists $arguments name]} {
-        set name [dict get $arguments name]
+    if {[dexist $arguments name]} {
+        set name [dget $arguments name]
     } else {
         set name [self object]
     }
-    lappend params &quot;src [dict get $arguments src] -posnocheck&quot;
+    lappend params &quot;src [dget $arguments src] -posnocheck&quot;
     set paramsOrder [list start stop incr]
     foreach param $paramsOrder {
-        dict append argsOrdered $param [dict get $arguments $param]
+        dict append argsOrdered $param [dget $arguments $param]
     }
     dict for {paramName value} $argsOrdered {
-        if {([llength $value]&gt;1) &amp;&amp; ([lindex $value 1]==&quot;-eq&quot;)} {
-            lappend params &quot;$paramName [lindex $value 0] -poseq&quot;
+        if {([llength $value]&gt;1) &amp;&amp; ([@ $value 1]==&quot;-eq&quot;)} {
+            lappend params &quot;$paramName [@ $value 0] -poseq&quot;
         } else {
             lappend params &quot;$paramName $value -pos&quot;
         }
@@ -225,8 +225,8 @@
     set arguments [argparse -inline {
         -name=
     }]
-    if {[dict exists $arguments name]} {
-        set name [dict get $arguments name]
+    if {[dexist $arguments name]} {
+        set name [dget $arguments name]
     } else {
         set name [self object]
     }
@@ -253,12 +253,12 @@
 <div class='ruff_synopsis'><span class='ruff_cmd'>Sens create OBJNAME</span> <span class='ruff_arg'>?args?</span><br><span class='ruff_cmd'>Sens new</span> <span class='ruff_arg'>?args?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code>-name</code></td><td>Name argument, optional.</td></tr>
-<tr><td><code>-objfunc</code></td><td>Output expression.</td></tr>
+<tr><td><code>-objfunc</code></td><td>Output =ession.</td></tr>
 <tr><td><code>-param</code></td><td>Circuit parameter(s)</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-.SENS objfunc=&lt;output expression(s)&gt; param=&lt;circuit parameter(s)&gt;
+.SENS objfunc=&lt;output =ession(s)&gt; param=&lt;circuit parameter(s)&gt;
 </pre>
 
 </figure><p class='ruff'>Example of class initialization:</p>
@@ -271,11 +271,11 @@
 <div id='SpiceGenTcl_Xyce_Analyses_Sens_constructor' class='ruff_dyn_src'><pre>method constructor {args} {
 
     # Creates object of class `Sens` that describes SENS ac analysis.
-    #  -objfunc - output expression
+    #  -objfunc - output =ession
     #  -param - circuit parameter(s)
     #  -name - name argument, optional
     # ```
-    # .SENS objfunc=&lt;output expression(s)&gt; param=&lt;circuit parameter(s)&gt;
+    # .SENS objfunc=&lt;output =ession(s)&gt; param=&lt;circuit parameter(s)&gt;
     # ```
     # Example of class initialization:
     # ```
@@ -286,13 +286,13 @@
         {-objfunc= -required}
         {-param= -required}
     }]
-    if {[dict exists $arguments name]} {
-        set name [dict get $arguments name]
+    if {[dexist $arguments name]} {
+        set name [dget $arguments name]
     } else {
         set name [self object]
     }
-    lappend params &quot;objfunc [dict get $arguments objfunc] -eq&quot;
-    lappend params &quot;param [dict get $arguments param] -nocheck&quot;
+    lappend params &quot;objfunc [dget $arguments objfunc] -eq&quot;
+    lappend params &quot;param [dget $arguments param] -nocheck&quot;
     next sens $params -name $name
 }</pre></div>
 </div><h3 class='ruffclass'><a name='::SpiceGenTcl::Xyce::Analyses::Tran'>Tran</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses" title="::SpiceGenTcl::Xyce::Analyses" class='ruff_cmd'>::SpiceGenTcl::Xyce::Analyses</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -359,25 +359,25 @@
         {-tmax= -require {tstart}}
         {-uic -boolean}
     }]
-    if {[dict exists $arguments name]} {
-        set name [dict get $arguments name]
+    if {[dexist $arguments name]} {
+        set name [dget $arguments name]
     } else {
         set name [self object]
     }
     set paramsOrder [list tstep tstop tstart tmax]
     foreach param $paramsOrder {
-        if {[dict exists $arguments $param]} {
-            dict append argsOrdered $param [dict get $arguments $param]
+        if {[dexist $arguments $param]} {
+            dict append argsOrdered $param [dget $arguments $param]
         }
     }
     dict for {paramName value} $argsOrdered {
-        if {([llength $value]&gt;1) &amp;&amp; ([lindex $value 1]==&quot;-eq&quot;)} {
-            lappend params &quot;$paramName [lindex $value 0] -poseq&quot;
+        if {([llength $value]&gt;1) &amp;&amp; ([@ $value 1]==&quot;-eq&quot;)} {
+            lappend params &quot;$paramName [@ $value 0] -poseq&quot;
         } else {
             lappend params &quot;$paramName $value -pos&quot;
         }
     }
-    if {[dict get $arguments uic]==1} {
+    if {[dget $arguments uic]==1} {
         lappend params &quot;uic -sw&quot;
     }
     next tran $params -name $name

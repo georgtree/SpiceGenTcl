@@ -130,6 +130,19 @@ Xyce is availible as pre-compiled for Windows, RHEL and MacOS, but can be compil
 .TP
 \(bu
 \fBImportant note 2\fP: this package is not designed to be used with the \&.control section in Ngspice, the \&.step statement in LTspice, or multiple DC sweeps, and it does not support reading parametric sweeps from raw data\&. The idea of the package is to handle all such tasks within a Tcl script, eliminating the need to use the simulator's internal scripting capabilities, and dependence on each simulator unique ways of handling parametric sweeps, that compromises compatibility\&. But it is could be done easily in principle to realize special objects and reading of raw files with parametric sweeps\&.
+.TP
+\(bu
+\fBImportant note 3\fP: in this package the following aliases for commands are defined:
+.PP
+.RS 4n
+.nf
+interp alias {} dget {} dict get
+interp alias {} @ {} lindex
+interp alias {} = {} expr
+interp alias {} dexist {} dict exists
+interp alias {} dcreate {} dict create
+.fi
+.RE
 .SS "PACKAGES IMPORTS"
 .PP
 The first step is import of package:
@@ -244,8 +257,8 @@ The we can get vectors v(in) and v(out) from dictionary data:
 .PP
 .RS 4n
 .nf
-set axis [dict get $data v(in)]
-set trace [dict get $data v(out)]
+set axis [dget $data v(in)]
+set trace [dget $data v(out)]
 .fi
 .RE
 .SS "PLOTTING DATA"
