@@ -1,6 +1,7 @@
 
 package require SpiceGenTcl
 package require ticklecharts
+set ::ticklecharts::theme "dark"
 namespace import ::SpiceGenTcl::*
 importNgspice
 
@@ -40,7 +41,7 @@ set chart [ticklecharts::chart new]
 $chart Xaxis -name "v(anode), V" -minorTick {show "True"}  -type "value"
 $chart Yaxis -name "Idiode, A" -minorTick {show "True"}  -type "value"
 $chart SetOptions -title {} -tooltip {} -animation "False" -legend  {} -toolbox {feature {dataZoom {yAxisIndex "none"}}} \
-        -grid {left "5%" right "15%"}
+        -grid {left "5%" right "15%"} -backgroundColor "#212121"
 foreach data $dataList temp $temps {
     $chart Add "lineSeries" -data $data -showAllSymbol "nothing" -name "${temp}°C" -symbolSize "1"
 }

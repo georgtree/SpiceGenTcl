@@ -57,20 +57,20 @@ end
     endfunction
 // core model
     analog begin
-<b><font color=#923B23>H</font></b> = MMF(p,n) / len;
+<b><font color=#ffa500>H</font></b> = MMF(p,n) / len;
 MMF(Hdot) &lt;+ ddt(H);
 delta = sign(MMF(Hdot));
-<b><font color=#923B23>B</font></b> = Phi(p,n)/area;
-<b><font color=#923B23>M</font></b> = B/`P_U0 - H;
+<b><font color=#ffa500>B</font></b> = Phi(p,n)/area;
+<b><font color=#ffa500>M</font></b> = B/`P_U0 - H;
 Heff = H + alpha * M;
-<b><font color=#923B23>if</font></b> (abs(Heff) &gt; 0.001 * a) 
+<b><font color=#ffa500>if</font></b> (abs(Heff) &gt; 0.001 * a) 
     Manh = ms * (coth(Heff/a) - a/Heff);
-<b><font color=#923B23>else</font></b>
+<b><font color=#ffa500>else</font></b>
     Manh = ms * Heff/(3.0*a);   // Taylor series expansion of coth()
 dMirr = (Manh - M)/(delta*k - alpha*(Manh - M)) * MMF(Hdot);
 migrating = (delta &gt; 0) ^ (M &gt; Manh);
 Mirr = idt( migrating * dMirr, Manh );
-<b><font color=#923B23>M</font></b> = (1-c)*Mirr + c*Manh;
+<b><font color=#ffa500>M</font></b> = (1-c)*Mirr + c*Manh;
 Phi(p,n) &lt;+ area*`P_U0*(H+M);
     end
 endmodule
@@ -78,30 +78,30 @@ endmodule
 
 </figure><p class='ruff'>This model is taken from <a href="https://designers-guide.org/modeling/jilath.va" >designers-guide</a>, that contains many Verilog-AMS models.</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ca14ca>oo::class</font></b> create Core {
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#fe6efe>oo::class</font></b> create Core {
     superclass ::SpiceGenTcl::Device
-    <b><font color=#923B23>mixin</font></b> ::SpiceGenTcl::KeyArgsBuilder
-    <b><font color=#ca14ca>constructor</font></b> {name pNode nNode args} {
-        <b><font color=#923B23>set</font></b> paramsNames [<b><font color=#923B23>list</font></b> len area ms a k alpha c]
-        <b><font color=#923B23>set</font></b> paramDefList [<b><font color=#ca14ca>my</font></b> buildArgStr <font color=#4A181B>$paramsNames</font>]
-        <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> <font color=#035103>&quot;</font>
-<font color=#035103>            <font color=#4A181B>{</font>-model= -required<font color=#4A181B>}</font></font>
-<font color=#035103>            <font color=#4A181B>$</font>paramDefList</font>
-<font color=#035103>        &quot;</font>]
-        <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;model <font color=#4A181B>[</font>dget <font color=#4A181B>$</font>arguments model<font color=#4A181B>]</font> -posnocheck&quot;</font>
-        <b><font color=#923B23>dict</font></b> for {paramName value} <font color=#4A181B>$arguments</font> {
-            <b><font color=#923B23>if</font></b> {<font color=#4A181B>$paramName</font>!=&quot;model&quot;} {
-                <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;<font color=#4A181B>$</font>paramName <font color=#4A181B>$</font>value&quot;</font>
+    <b><font color=#ffa500>mixin</font></b> ::SpiceGenTcl::KeyArgsBuilder
+    <b><font color=#fe6efe>constructor</font></b> {name pNode nNode args} {
+        <b><font color=#ffa500>set</font></b> paramsNames [<b><font color=#ffa500>list</font></b> len area ms a k alpha c]
+        <b><font color=#ffa500>set</font></b> paramDefList [<b><font color=#fe6efe>my</font></b> buildArgStr <font color=#f1b479>$paramsNames</font>]
+        <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> <font color=#90ee90>&quot;</font>
+<font color=#90ee90>            <font color=#f1b479>{</font>-model= -required<font color=#f1b479>}</font></font>
+<font color=#90ee90>            <font color=#f1b479>$</font>paramDefList</font>
+<font color=#90ee90>        &quot;</font>]
+        <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;model <font color=#f1b479>[</font>dget <font color=#f1b479>$</font>arguments model<font color=#f1b479>]</font> -posnocheck&quot;</font>
+        <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$arguments</font> {
+            <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font>!=&quot;model&quot;} {
+                <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;<font color=#f1b479>$</font>paramName <font color=#f1b479>$</font>value&quot;</font>
             }
         }
-        <b><font color=#923B23>next</font></b> n<font color=#4A181B>$name</font> [<b><font color=#923B23>list</font></b> <font color=#035103>&quot;p <font color=#4A181B>$</font>pNode&quot;</font> <font color=#035103>&quot;n <font color=#4A181B>$</font>nNode&quot;</font>] <font color=#4A181B>$params</font>
+        <b><font color=#ffa500>next</font></b> n<font color=#f1b479>$name</font> [<b><font color=#ffa500>list</font></b> <font color=#90ee90>&quot;p <font color=#f1b479>$</font>pNode&quot;</font> <font color=#90ee90>&quot;n <font color=#f1b479>$</font>nNode&quot;</font>] <font color=#f1b479>$params</font>
     }
 }
 </pre>
 
 </figure><p class='ruff'>In this block of code we define instance class of core. Let's go through the each line. First line is class definition:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ca14ca>oo::class</font></b> create Core
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#fe6efe>oo::class</font></b> create Core
 </pre>
 
 </figure><p class='ruff'>It is good convention to start class name from capital letter.</p>
@@ -113,42 +113,42 @@ endmodule
 </figure><p class='ruff'>We use mixin class <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder" title="::SpiceGenTcl::KeyArgsBuilder" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder</a> to add it's method <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder::buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder::buildArgStr</a>, that helps to build arguments list for <a href="https://wiki.tcl-lang.org/page/argparse" >argparse</a> package.</p>
 <p class='ruff'>In next line we define arguments for constructor:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ca14ca>constructor</font></b> {name pNode nNode args}
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#fe6efe>constructor</font></b> {name pNode nNode args}
 </pre>
 
-</figure><p class='ruff'>First argument is name of instance, then positive node and negative node names, <code>args</code> accepts model value after <code><font color=#463e11>-model</font></code> key and all optional parameters of device.</p>
+</figure><p class='ruff'>First argument is name of instance, then positive node and negative node names, <code>args</code> accepts model value after <code><font color=#b9b96e>-model</font></code> key and all optional parameters of device.</p>
 <p class='ruff'>In these few lines we process <code>args</code> variable with <code>argparse</code> package:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> paramsNames [<b><font color=#923B23>list</font></b> len area ms a k alpha c]
-<b><font color=#923B23>set</font></b> paramDefList [<b><font color=#ca14ca>my</font></b> buildArgStr <font color=#4A181B>$paramsNames</font>]
-<b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> <font color=#035103>&quot;</font>
-<font color=#035103>    <font color=#4A181B>{</font>-model= -required<font color=#4A181B>}</font></font>
-<font color=#035103>    <font color=#4A181B>$</font>paramDefList</font>
-<font color=#035103>&quot;</font>]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>set</font></b> paramsNames [<b><font color=#ffa500>list</font></b> len area ms a k alpha c]
+<b><font color=#ffa500>set</font></b> paramDefList [<b><font color=#fe6efe>my</font></b> buildArgStr <font color=#f1b479>$paramsNames</font>]
+<b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> <font color=#90ee90>&quot;</font>
+<font color=#90ee90>    <font color=#f1b479>{</font>-model= -required<font color=#f1b479>}</font></font>
+<font color=#90ee90>    <font color=#f1b479>$</font>paramDefList</font>
+<font color=#90ee90>&quot;</font>]
 </pre>
 
-</figure><p class='ruff'>List <code>[<b><font color=#923B23>list</font></b> len area ms a k alpha c]</code> contains all parameters we have in core verilog-a model. Due to these line we can pass parameters to element in forms <code><font color=#463e11>-paramName</font> <font color=#4A181B>$paramValue</font> <font color=#4A181B>$paramQual</font></code>, for example: <code><font color=#463e11>-area</font> 1e-4</code> or <code><font color=#463e11>-area</font> l*m <font color=#463e11>-eq</font></code>.</p>
+</figure><p class='ruff'>List <code>[<b><font color=#ffa500>list</font></b> len area ms a k alpha c]</code> contains all parameters we have in core verilog-a model. Due to these line we can pass parameters to element in forms <code><font color=#b9b96e>-paramName</font> <font color=#f1b479>$paramValue</font> <font color=#f1b479>$paramQual</font></code>, for example: <code><font color=#b9b96e>-area</font> 1e-4</code> or <code><font color=#b9b96e>-area</font> l*m <font color=#b9b96e>-eq</font></code>.</p>
 <p class='ruff'>Possible qualificator is -eq - it means that parameter should be inserted into SPICE netlist as <code>paramName={=ession}</code></p>
 <p class='ruff'>In the next few lines we build parameter list that will be passed to <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device" title="::SpiceGenTcl::Device" class='ruff_cmd'>::SpiceGenTcl::Device</a> constructor:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;model <font color=#4A181B>[</font>dget <font color=#4A181B>$</font>arguments model<font color=#4A181B>]</font> -posnocheck&quot;</font>
-<b><font color=#923B23>dict</font></b> for {paramName value} <font color=#4A181B>$arguments</font> {
-    <b><font color=#923B23>if</font></b> {<font color=#4A181B>$paramName</font>!=&quot;model&quot;} {
-        <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;<font color=#4A181B>$</font>paramName <font color=#4A181B>$</font>value&quot;</font>
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;model <font color=#f1b479>[</font>dget <font color=#f1b479>$</font>arguments model<font color=#f1b479>]</font> -posnocheck&quot;</font>
+<b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$arguments</font> {
+    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font>!=&quot;model&quot;} {
+        <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;<font color=#f1b479>$</font>paramName <font color=#f1b479>$</font>value&quot;</font>
     }
 }
 </pre>
 
 </figure><p class='ruff'>The last but not the least is step of passing arguments to <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device" title="::SpiceGenTcl::Device" class='ruff_cmd'>::SpiceGenTcl::Device</a> constructor:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>next</font></b> n<font color=#4A181B>$name</font> [<b><font color=#923B23>list</font></b> <font color=#035103>&quot;p <font color=#4A181B>$</font>pNode&quot;</font> <font color=#035103>&quot;n <font color=#4A181B>$</font>nNode&quot;</font>] <font color=#4A181B>$params</font>
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>next</font></b> n<font color=#f1b479>$name</font> [<b><font color=#ffa500>list</font></b> <font color=#90ee90>&quot;p <font color=#f1b479>$</font>pNode&quot;</font> <font color=#90ee90>&quot;n <font color=#f1b479>$</font>nNode&quot;</font>] <font color=#f1b479>$params</font>
 </pre>
 
-</figure><p class='ruff'>This superclass accept arguments in form <code><b><font color=#ca14ca>constructor</font></b> {name pins modelName instParams}</code>. So, we pass string <code>n<font color=#4A181B>$name</font></code> as device name, <code>n</code> is reference designator for verilog-a devices in ngspice. Secondly we pass list of nodes <code>[<b><font color=#923B23>list</font></b> <font color=#035103>&quot;p <font color=#4A181B>$</font>pNode&quot;</font> <font color=#035103>&quot;n <font color=#4A181B>$</font>nNode&quot;</font>]</code> in form of <code>{{Name0 NodeName} {Name1 NodeName} {Name2 NodeName} ...}</code>. And the last is list of parameters in form <code>{{model Value <font color=#463e11>-posnocheck</font>} {Name Value ?-eq?} {Name Value ?-eq?} {Name Value ?-eq?} ...}</code>.</p>
+</figure><p class='ruff'>This superclass accept arguments in form <code><b><font color=#fe6efe>constructor</font></b> {name pins modelName instParams}</code>. So, we pass string <code>n<font color=#f1b479>$name</font></code> as device name, <code>n</code> is reference designator for verilog-a devices in ngspice. Secondly we pass list of nodes <code>[<b><font color=#ffa500>list</font></b> <font color=#90ee90>&quot;p <font color=#f1b479>$</font>pNode&quot;</font> <font color=#90ee90>&quot;n <font color=#f1b479>$</font>nNode&quot;</font>]</code> in form of <code>{{Name0 NodeName} {Name1 NodeName} {Name2 NodeName} ...}</code>. And the last is list of parameters in form <code>{{model Value <font color=#b9b96e>-posnocheck</font>} {Name Value ?-eq?} {Name Value ?-eq?} {Name Value ?-eq?} ...}</code>.</p>
 <p class='ruff'>So, after that we can create a new instance of newly created class:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> coreInst [Core new 1 p n <font color=#463e11>-model</font> coreModel <font color=#463e11>-area</font> 1e-4 <font color=#463e11>-len</font> {l*5 <font color=#463e11>-eq</font>}]
-<b><font color=#923B23>puts</font></b> [<font color=#4A181B>$coreInst</font> genSPICEString]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>set</font></b> coreInst [Core new 1 p n <font color=#b9b96e>-model</font> coreModel <font color=#b9b96e>-area</font> 1e-4 <font color=#b9b96e>-len</font> {l*5 <font color=#b9b96e>-eq</font>}]
+<b><font color=#ffa500>puts</font></b> [<font color=#f1b479>$coreInst</font> genSPICEString]
 </pre>
 
 </figure><p class='ruff'>Resulted SPICE string is:</p>

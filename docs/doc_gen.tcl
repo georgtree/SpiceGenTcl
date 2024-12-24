@@ -50,13 +50,43 @@ foreach file [glob ${docDir}/*.html] {
     exec tclsh "${path_to_hl_tcl}/tcl_html.tcl" [file join ${docDir} $file]
 }
 
+# change default width
 proc processContentsCss {fileContents} {
-    return [string map {max-width:60rem max-width:100rem currentTheme="v1" currentTheme="solar"} $fileContents]
+    return [string map {max-width:60rem max-width:100rem} $fileContents]
 }
-
+# change default theme 
 proc processContentsJs {fileContents} {
-    return [string map {currentTheme="v1" currentTheme="solar"} $fileContents]
+    return [string map {init()\{currentTheme=localStorage.ruff_theme init()\{currentTheme=currentTheme="dark"}\
+                    $fileContents]
 }
 
 fileutil::updateInPlace [file join $docDir assets ruff-min.css] processContentsCss
 fileutil::updateInPlace [file join $docDir assets ruff-min.js] processContentsJs
+
+# ticklechart graphs substitutions
+proc processContentsTutorial {fileContents} {
+    variable docDir
+    set fp [open [file join $docDir .. examples ngspice html_charts diode_iv.html] r]
+    set fileData [read $fp]
+    close $fp
+    set fileContents [string map [list !ticklechart_mark_diode_iv_ngspice! $fileData] $fileContents]
+    set fp [open [file join $docDir .. examples ngspice html_charts diode_cv.html] r]
+    set fileData [read $fp]
+    close $fp
+    set fileContents [string map [list !ticklechart_mark_diode_cv_ngspice! $fileData] $fileContents]
+    set fp [open [file join $docDir .. examples ngspice html_charts switch_oscillator.html] r]
+    set fileData [read $fp]
+    close $fp
+    set fileContents [string map [list !ticklechart_mark_switch_oscillator_ngspice! $fileData] $fileContents]
+    set fp [open [file join $docDir .. examples ngspice html_charts fourbitadder.html] r]
+    set fileData [read $fp]
+    close $fp
+    set fileContents [string map [list !ticklechart_mark_four_bit_adder_ngspice! $fileData] $fileContents]
+    set fp [open [file join $docDir .. examples ngspice html_charts filter.html] r]
+    set fileData [read $fp]
+    close $fp
+    set fileContents [string map [list !ticklechart_mark_filter_ngspice! $fileData] $fileContents]
+    return $fileContents
+}
+fileutil::updateInPlace [file join $docDir index-Tutorials.html] processContentsTutorial
+

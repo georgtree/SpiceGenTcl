@@ -2,6 +2,7 @@
 
 package require SpiceGenTcl
 package require ticklecharts
+set ::ticklecharts::theme "dark"
 namespace import ::tcl::mathop::*
 namespace import ::SpiceGenTcl::*
 importNgspice
@@ -116,7 +117,8 @@ set perStep 50e-9
 $circuit add [Vdc new cc 99 0 -dc 5]
 set i 1
 foreach name [list in1a in1b in2a in2b in3a in3b in4a in4b] {
-    $circuit add [Vpulse new $name $i 0 -low 0 -high 3 -td 0 -tf $trtf -tr $trtf -pw [= {$tonStep*pow(2,$i-1)}] -per [= {$perStep*pow(2,$i-1)}]]
+    $circuit add [Vpulse new $name $i 0 -low 0 -high 3 -td 0 -tf $trtf -tr $trtf -pw [= {$tonStep*pow(2,$i-1)}]\
+                          -per [= {$perStep*pow(2,$i-1)}]]
     incr i
 }
 
@@ -157,10 +159,12 @@ set layout [ticklecharts::Gridlayout new]
 set i 0
 foreach node $nodes {
     ticklecharts::chart create chartV$node
-    chartV$node SetOptions -title {} -tooltip {} -animation "False" -toolbox {feature {dataZoom {yAxisIndex "none"}}}
+    chartV$node SetOptions -title {} -tooltip {} -animation "False" -toolbox {feature {dataZoom {yAxisIndex "none"}}}\
+            -backgroundColor "#212121"
     chartV$node Xaxis -name "time, s" -minorTick {show "True"} -type "value"
     chartV$node Yaxis -name "v(${node}), V" -minorTick {show "True"} -type "value"
-    chartV$node Add "lineSeries" -data [subst $[subst timeV$node]] -showAllSymbol "nothing" -name "V(${node})" -symbolSize "0"
+    chartV$node Add "lineSeries" -data [subst $[subst timeV$node]] -showAllSymbol "nothing" -name "V(${node})"\
+            -symbolSize "0"
     $layout Add chartV$node -bottom "[= {4+24*$i}]%" -height "18%" -width "80%"
     incr i
 }
