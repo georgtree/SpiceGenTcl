@@ -29,72 +29,74 @@
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis::getParams" title="::SpiceGenTcl::Analysis.getParams" class='ruff_cmd'>::SpiceGenTcl::Analysis.getParams</a></td></tr>
 <tr><td><code>setParamValue</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis::setParamValue" title="::SpiceGenTcl::Analysis.setParamValue" class='ruff_cmd'>::SpiceGenTcl::Analysis.setParamValue</a></td></tr>
 </table>
-<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#463e11>-Name</font></code>, <code><font color=#463e11>-Type</font></code></p>
-<p class='ruff'>Writable: <code><font color=#463e11>-Name</font></code>, <code><font color=#463e11>-Type</font></code></p>
+<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code>-Name</code>, <code>-Type</code></p>
+<p class='ruff'>Writable: <code>-Name</code>, <code>-Type</code></p>
 <h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis" title="::SpiceGenTcl::Analysis" class='ruff_cmd'>::SpiceGenTcl::Analysis</a></p>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Xyce::Analyses::Ac::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Ac" title="::SpiceGenTcl::Xyce::Analyses::Ac" class='ruff_cmd'>::SpiceGenTcl::Xyce::Analyses::Ac</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Ac'>Ac</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
-<p class='ruff'>Creates object of class <code><b><font color=#923B23>Ac</font></b></code> that describes AC analysis.</p>
+<p class='ruff'>Creates object of class <code>Ac</code> that describes AC analysis.</p>
 <div class='ruff_synopsis'><span class='ruff_cmd'>Ac create OBJNAME</span> <span class='ruff_arg'>?args?</span><br><span class='ruff_cmd'>Ac new</span> <span class='ruff_arg'>?args?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
-<tr><td><code><font color=#463e11>-fstart</font></code></td><td>Start frequency.</td></tr>
-<tr><td><code><font color=#463e11>-fstop</font></code></td><td>Start frequency.</td></tr>
-<tr><td><code><font color=#463e11>-n</font></code></td><td>Number of points.</td></tr>
-<tr><td><code><font color=#463e11>-name</font></code></td><td>Name argument, optional.</td></tr>
-<tr><td><code><font color=#463e11>-variation</font></code></td><td>Parameter that defines frequency scale, could be dec, oct or lin.</td></tr>
+<tr><td><code>-fstart</code></td><td>Start frequency.</td></tr>
+<tr><td><code>-fstop</code></td><td>Start frequency.</td></tr>
+<tr><td><code>-n</code></td><td>Number of points.</td></tr>
+<tr><td><code>-name</code></td><td>Name argument, optional.</td></tr>
+<tr><td><code>-variation</code></td><td>Parameter that defines frequency scale, could be dec, oct or lin.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>.AC &lt;sweep type&gt; &lt;points value&gt;
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
+.AC &lt;sweep type&gt; &lt;points value&gt;
 + &lt;start frequency value&gt; &lt;end frequency value&gt;
 </pre>
 
 </figure><p class='ruff'>Example of class initialization:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Xyce::Analyses::Ac new <font color=#463e11>-variation</font> dec <font color=#463e11>-n</font> 10 <font color=#463e11>-fstart</font> 1 <font color=#463e11>-fstop</font> 1e6 <font color=#463e11>-name</font> dc1
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
+::SpiceGenTcl::Xyce::Analyses::Ac new -variation dec -n 10 -fstart 1 -fstop 1e6 -name dc1
 </pre>
 
 </figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Xyce_Analyses_Ac_constructor' href="javascript:toggleSource('SpiceGenTcl_Xyce_Analyses_Ac_constructor')">Show source</a></p>
-<div id='SpiceGenTcl_Xyce_Analyses_Ac_constructor' class='ruff_dyn_src'><pre><b><font color=#ca14ca>method</font></b> constructor {args} {
+<div id='SpiceGenTcl_Xyce_Analyses_Ac_constructor' class='ruff_dyn_src'><pre>method constructor {args} {
 
-    <i><font color=#4b5d50># Creates object of class `Ac` that describes AC analysis.</font></i>
-    <i><font color=#4b5d50>#  -variation - parameter that defines frequency scale, could be dec, oct or lin</font></i>
-    <i><font color=#4b5d50>#  -n - number of points</font></i>
-    <i><font color=#4b5d50>#  -fstart - start frequency</font></i>
-    <i><font color=#4b5d50>#  -fstop - start frequency</font></i>
-    <i><font color=#4b5d50>#  -name - name argument, optional</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># .AC &lt;sweep type&gt; &lt;points value&gt;</font></i>
-    <i><font color=#4b5d50># + &lt;start frequency value&gt; &lt;end frequency value&gt;</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># Example of class initialization:</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># ::SpiceGenTcl::Xyce::Analyses::Ac new -variation dec -n 10 -fstart 1 -fstop 1e6 -name dc1</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> {
-        <font color=#463e11>-name</font>=
-        {<font color=#463e11>-variation</font>= <font color=#463e11>-required</font>}
-        {<font color=#463e11>-n</font>= <font color=#463e11>-required</font>}
-        {<font color=#463e11>-fstart</font>= <font color=#463e11>-required</font>}
-        {<font color=#463e11>-fstop</font>= <font color=#463e11>-required</font>}
+    # Creates object of class `Ac` that describes AC analysis.
+    #  -variation - parameter that defines frequency scale, could be dec, oct or lin
+    #  -n - number of points
+    #  -fstart - start frequency
+    #  -fstop - start frequency
+    #  -name - name argument, optional
+    # ```
+    # .AC &lt;sweep type&gt; &lt;points value&gt;
+    # + &lt;start frequency value&gt; &lt;end frequency value&gt;
+    # ```
+    # Example of class initialization:
+    # ```
+    # ::SpiceGenTcl::Xyce::Analyses::Ac new -variation dec -n 10 -fstart 1 -fstop 1e6 -name dc1
+    # ```
+    set arguments [argparse -inline {
+        -name=
+        {-variation= -required}
+        {-n= -required}
+        {-fstart= -required}
+        {-fstop= -required}
     }]
-    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dict</font></b> exists <font color=#4A181B>$arguments</font> name]} {
-        <b><font color=#923B23>set</font></b> name [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$arguments</font> name]
-    } <b><font color=#923B23>else</font></b> {
-        <b><font color=#923B23>set</font></b> name [<b><font color=#ca14ca>self</font></b> object]
+    if {[dict exists $arguments name]} {
+        set name [dict get $arguments name]
+    } else {
+        set name [self object]
     }
-    <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;variation <font color=#4A181B>[</font>dict get <font color=#4A181B>$</font>arguments variation<font color=#4A181B>]</font> -posnocheck&quot;</font>
-    <b><font color=#923B23>set</font></b> paramsOrder [<b><font color=#923B23>list</font></b> n fstart fstop]
-    <b><font color=#923B23>foreach</font></b> param <font color=#4A181B>$paramsOrder</font> {
-        <b><font color=#923B23>dict</font></b> append argsOrdered <font color=#4A181B>$param</font> [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$arguments</font> <font color=#4A181B>$param</font>]
+    lappend params &quot;variation [dict get $arguments variation] -posnocheck&quot;
+    set paramsOrder [list n fstart fstop]
+    foreach param $paramsOrder {
+        dict append argsOrdered $param [dict get $arguments $param]
     }
-    <b><font color=#923B23>dict</font></b> for {paramName value} <font color=#4A181B>$argsOrdered</font> {
-        <b><font color=#923B23>if</font></b> {([<b><font color=#923B23>llength</font></b> <font color=#4A181B>$value</font>]&gt;1) && ([<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$value</font> 1]==<font color=#035103>&quot;-eq&quot;</font>)} {
-            <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;<font color=#4A181B>$</font>paramName <font color=#4A181B>[</font>lindex <font color=#4A181B>$</font>value 0<font color=#4A181B>]</font> -poseq&quot;</font>
-        } <b><font color=#923B23>else</font></b> {
-            <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;<font color=#4A181B>$</font>paramName <font color=#4A181B>$</font>value -pos&quot;</font>
+    dict for {paramName value} $argsOrdered {
+        if {([llength $value]&gt;1) &amp;&amp; ([lindex $value 1]==&quot;-eq&quot;)} {
+            lappend params &quot;$paramName [lindex $value 0] -poseq&quot;
+        } else {
+            lappend params &quot;$paramName $value -pos&quot;
         }
     }
-    <b><font color=#923B23>next</font></b> ac <font color=#4A181B>$params</font> <font color=#463e11>-name</font> <font color=#4A181B>$name</font>
+    next ac $params -name $name
 }</pre></div>
 </div><h3 class='ruffclass'><a name='::SpiceGenTcl::Xyce::Analyses::Dc'>Dc</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses" title="::SpiceGenTcl::Xyce::Analyses" class='ruff_cmd'>::SpiceGenTcl::Xyce::Analyses</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
@@ -108,70 +110,72 @@
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis::getParams" title="::SpiceGenTcl::Analysis.getParams" class='ruff_cmd'>::SpiceGenTcl::Analysis.getParams</a></td></tr>
 <tr><td><code>setParamValue</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis::setParamValue" title="::SpiceGenTcl::Analysis.setParamValue" class='ruff_cmd'>::SpiceGenTcl::Analysis.setParamValue</a></td></tr>
 </table>
-<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#463e11>-Name</font></code>, <code><font color=#463e11>-Type</font></code></p>
-<p class='ruff'>Writable: <code><font color=#463e11>-Name</font></code>, <code><font color=#463e11>-Type</font></code></p>
+<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code>-Name</code>, <code>-Type</code></p>
+<p class='ruff'>Writable: <code>-Name</code>, <code>-Type</code></p>
 <h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis" title="::SpiceGenTcl::Analysis" class='ruff_cmd'>::SpiceGenTcl::Analysis</a></p>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Xyce::Analyses::Dc::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Dc" title="::SpiceGenTcl::Xyce::Analyses::Dc" class='ruff_cmd'>::SpiceGenTcl::Xyce::Analyses::Dc</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Dc'>Dc</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
-<p class='ruff'>Creates object of class <code><b><font color=#923B23>Dc</font></b></code> that describes DC analysis.</p>
+<p class='ruff'>Creates object of class <code>Dc</code> that describes DC analysis.</p>
 <div class='ruff_synopsis'><span class='ruff_cmd'>Dc create OBJNAME</span> <span class='ruff_arg'>?args?</span><br><span class='ruff_cmd'>Dc new</span> <span class='ruff_arg'>?args?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
-<tr><td><code><font color=#463e11>-incr</font></code></td><td>Incrementing value.</td></tr>
-<tr><td><code><font color=#463e11>-name</font></code></td><td>Name argument, optional.</td></tr>
-<tr><td><code><font color=#463e11>-src</font></code></td><td>Name of independent voltage or current source, a resistor, or the circuit temperature.</td></tr>
-<tr><td><code><font color=#463e11>-start</font></code></td><td>Start value.</td></tr>
-<tr><td><code><font color=#463e11>-stop</font></code></td><td>Stop value.</td></tr>
+<tr><td><code>-incr</code></td><td>Incrementing value.</td></tr>
+<tr><td><code>-name</code></td><td>Name argument, optional.</td></tr>
+<tr><td><code>-src</code></td><td>Name of independent voltage or current source, a resistor, or the circuit temperature.</td></tr>
+<tr><td><code>-start</code></td><td>Start value.</td></tr>
+<tr><td><code>-stop</code></td><td>Stop value.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>.DC [LIN] &lt;sweep variable name&gt; &lt;start&gt; &lt;stop&gt; &lt;step&gt;
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
+.DC [LIN] &lt;sweep variable name&gt; &lt;start&gt; &lt;stop&gt; &lt;step&gt;
 </pre>
 
 </figure><p class='ruff'>Example of class initialization:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Xyce::Analyses::Dc new <font color=#463e11>-src</font> v1 <font color=#463e11>-start</font> {time1 <font color=#463e11>-eq</font>} <font color=#463e11>-stop</font> 5 <font color=#463e11>-incr</font> 0.1 <font color=#463e11>-name</font> dc1
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
+::SpiceGenTcl::Xyce::Analyses::Dc new -src v1 -start {time1 -eq} -stop 5 -incr 0.1 -name dc1
 </pre>
 
 </figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Xyce_Analyses_Dc_constructor' href="javascript:toggleSource('SpiceGenTcl_Xyce_Analyses_Dc_constructor')">Show source</a></p>
-<div id='SpiceGenTcl_Xyce_Analyses_Dc_constructor' class='ruff_dyn_src'><pre><b><font color=#ca14ca>method</font></b> constructor {args} {
+<div id='SpiceGenTcl_Xyce_Analyses_Dc_constructor' class='ruff_dyn_src'><pre>method constructor {args} {
 
-    <i><font color=#4b5d50># Creates object of class `Dc` that describes DC analysis.</font></i>
-    <i><font color=#4b5d50>#  -src - name of independent voltage or current source, a resistor, or the circuit temperature</font></i>
-    <i><font color=#4b5d50>#  -start - start value</font></i>
-    <i><font color=#4b5d50>#  -stop - stop value</font></i>
-    <i><font color=#4b5d50>#  -incr - incrementing value</font></i>
-    <i><font color=#4b5d50>#  -name - name argument, optional</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># .DC [LIN] &lt;sweep variable name&gt; &lt;start&gt; &lt;stop&gt; &lt;step&gt;</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># Example of class initialization:</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># ::SpiceGenTcl::Xyce::Analyses::Dc new -src v1 -start {time1 -eq} -stop 5 -incr 0.1 -name dc1</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> {
-        <font color=#463e11>-name</font>=
-        {<font color=#463e11>-src</font>= <font color=#463e11>-required</font>}
-        {<font color=#463e11>-start</font>= <font color=#463e11>-required</font>}
-        {<font color=#463e11>-stop</font>= <font color=#463e11>-required</font>}
-        {<font color=#463e11>-incr</font>= <font color=#463e11>-required</font>}
+    # Creates object of class `Dc` that describes DC analysis.
+    #  -src - name of independent voltage or current source, a resistor, or the circuit temperature
+    #  -start - start value
+    #  -stop - stop value
+    #  -incr - incrementing value
+    #  -name - name argument, optional
+    # ```
+    # .DC [LIN] &lt;sweep variable name&gt; &lt;start&gt; &lt;stop&gt; &lt;step&gt;
+    # ```
+    # Example of class initialization:
+    # ```
+    # ::SpiceGenTcl::Xyce::Analyses::Dc new -src v1 -start {time1 -eq} -stop 5 -incr 0.1 -name dc1
+    # ```
+    set arguments [argparse -inline {
+        -name=
+        {-src= -required}
+        {-start= -required}
+        {-stop= -required}
+        {-incr= -required}
     }]
-    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dict</font></b> exists <font color=#4A181B>$arguments</font> name]} {
-        <b><font color=#923B23>set</font></b> name [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$arguments</font> name]
-    } <b><font color=#923B23>else</font></b> {
-        <b><font color=#923B23>set</font></b> name [<b><font color=#ca14ca>self</font></b> object]
+    if {[dict exists $arguments name]} {
+        set name [dict get $arguments name]
+    } else {
+        set name [self object]
     }
-    <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;src <font color=#4A181B>[</font>dict get <font color=#4A181B>$</font>arguments src<font color=#4A181B>]</font> -posnocheck&quot;</font>
-    <b><font color=#923B23>set</font></b> paramsOrder [<b><font color=#923B23>list</font></b> start stop incr]
-    <b><font color=#923B23>foreach</font></b> param <font color=#4A181B>$paramsOrder</font> {
-        <b><font color=#923B23>dict</font></b> append argsOrdered <font color=#4A181B>$param</font> [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$arguments</font> <font color=#4A181B>$param</font>]
+    lappend params &quot;src [dict get $arguments src] -posnocheck&quot;
+    set paramsOrder [list start stop incr]
+    foreach param $paramsOrder {
+        dict append argsOrdered $param [dict get $arguments $param]
     }
-    <b><font color=#923B23>dict</font></b> for {paramName value} <font color=#4A181B>$argsOrdered</font> {
-        <b><font color=#923B23>if</font></b> {([<b><font color=#923B23>llength</font></b> <font color=#4A181B>$value</font>]&gt;1) && ([<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$value</font> 1]==<font color=#035103>&quot;-eq&quot;</font>)} {
-            <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;<font color=#4A181B>$</font>paramName <font color=#4A181B>[</font>lindex <font color=#4A181B>$</font>value 0<font color=#4A181B>]</font> -poseq&quot;</font>
-        } <b><font color=#923B23>else</font></b> {
-            <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;<font color=#4A181B>$</font>paramName <font color=#4A181B>$</font>value -pos&quot;</font>
+    dict for {paramName value} $argsOrdered {
+        if {([llength $value]&gt;1) &amp;&amp; ([lindex $value 1]==&quot;-eq&quot;)} {
+            lappend params &quot;$paramName [lindex $value 0] -poseq&quot;
+        } else {
+            lappend params &quot;$paramName $value -pos&quot;
         }
     }
-    <b><font color=#923B23>next</font></b> dc <font color=#4A181B>$params</font> <font color=#463e11>-name</font> <font color=#4A181B>$name</font>
+    next dc $params -name $name
 }</pre></div>
 </div><h3 class='ruffclass'><a name='::SpiceGenTcl::Xyce::Analyses::Op'>Op</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses" title="::SpiceGenTcl::Xyce::Analyses" class='ruff_cmd'>::SpiceGenTcl::Xyce::Analyses</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
@@ -185,46 +189,48 @@
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis::getParams" title="::SpiceGenTcl::Analysis.getParams" class='ruff_cmd'>::SpiceGenTcl::Analysis.getParams</a></td></tr>
 <tr><td><code>setParamValue</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis::setParamValue" title="::SpiceGenTcl::Analysis.setParamValue" class='ruff_cmd'>::SpiceGenTcl::Analysis.setParamValue</a></td></tr>
 </table>
-<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#463e11>-Name</font></code>, <code><font color=#463e11>-Type</font></code></p>
-<p class='ruff'>Writable: <code><font color=#463e11>-Name</font></code>, <code><font color=#463e11>-Type</font></code></p>
+<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code>-Name</code>, <code>-Type</code></p>
+<p class='ruff'>Writable: <code>-Name</code>, <code>-Type</code></p>
 <h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis" title="::SpiceGenTcl::Analysis" class='ruff_cmd'>::SpiceGenTcl::Analysis</a></p>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Xyce::Analyses::Op::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Op" title="::SpiceGenTcl::Xyce::Analyses::Op" class='ruff_cmd'>::SpiceGenTcl::Xyce::Analyses::Op</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Op'>Op</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
-<p class='ruff'>Creates object of class <code><b><font color=#923B23>Op</font></b></code> that describes OP analysis.</p>
+<p class='ruff'>Creates object of class <code>Op</code> that describes OP analysis.</p>
 <div class='ruff_synopsis'><span class='ruff_cmd'>Op create OBJNAME</span> <span class='ruff_arg'>?args?</span><br><span class='ruff_cmd'>Op new</span> <span class='ruff_arg'>?args?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
-<tr><td><code><font color=#463e11>-name</font></code></td><td>Name argument, optional.</td></tr>
+<tr><td><code>-name</code></td><td>Name argument, optional.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>.op
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
+.op
 </pre>
 
 </figure><p class='ruff'>Example of class initialization:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Xyce::Analyses::Op new <font color=#463e11>-name</font> op1
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
+::SpiceGenTcl::Xyce::Analyses::Op new -name op1
 </pre>
 
 </figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Xyce_Analyses_Op_constructor' href="javascript:toggleSource('SpiceGenTcl_Xyce_Analyses_Op_constructor')">Show source</a></p>
-<div id='SpiceGenTcl_Xyce_Analyses_Op_constructor' class='ruff_dyn_src'><pre><b><font color=#ca14ca>method</font></b> constructor {args} {
+<div id='SpiceGenTcl_Xyce_Analyses_Op_constructor' class='ruff_dyn_src'><pre>method constructor {args} {
 
-    <i><font color=#4b5d50># Creates object of class `Op` that describes OP analysis.</font></i>
-    <i><font color=#4b5d50>#  -name - name argument, optional</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># .op</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># Example of class initialization:</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># ::SpiceGenTcl::Xyce::Analyses::Op new -name op1</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> {
-        <font color=#463e11>-name</font>=
+    # Creates object of class `Op` that describes OP analysis.
+    #  -name - name argument, optional
+    # ```
+    # .op
+    # ```
+    # Example of class initialization:
+    # ```
+    # ::SpiceGenTcl::Xyce::Analyses::Op new -name op1
+    # ```
+    set arguments [argparse -inline {
+        -name=
     }]
-    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dict</font></b> exists <font color=#4A181B>$arguments</font> name]} {
-        <b><font color=#923B23>set</font></b> name [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$arguments</font> name]
-    } <b><font color=#923B23>else</font></b> {
-        <b><font color=#923B23>set</font></b> name [<b><font color=#ca14ca>self</font></b> object]
+    if {[dict exists $arguments name]} {
+        set name [dict get $arguments name]
+    } else {
+        set name [self object]
     }
-    <b><font color=#923B23>next</font></b> op <font color=#035103>&quot;&quot;</font> <font color=#463e11>-name</font> <font color=#4A181B>$name</font>
+    next op &quot;&quot; -name $name
 }</pre></div>
 </div><h3 class='ruffclass'><a name='::SpiceGenTcl::Xyce::Analyses::Sens'>Sens</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses" title="::SpiceGenTcl::Xyce::Analyses" class='ruff_cmd'>::SpiceGenTcl::Xyce::Analyses</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
@@ -238,54 +244,56 @@
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis::getParams" title="::SpiceGenTcl::Analysis.getParams" class='ruff_cmd'>::SpiceGenTcl::Analysis.getParams</a></td></tr>
 <tr><td><code>setParamValue</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis::setParamValue" title="::SpiceGenTcl::Analysis.setParamValue" class='ruff_cmd'>::SpiceGenTcl::Analysis.setParamValue</a></td></tr>
 </table>
-<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#463e11>-Name</font></code>, <code><font color=#463e11>-Type</font></code></p>
-<p class='ruff'>Writable: <code><font color=#463e11>-Name</font></code>, <code><font color=#463e11>-Type</font></code></p>
+<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code>-Name</code>, <code>-Type</code></p>
+<p class='ruff'>Writable: <code>-Name</code>, <code>-Type</code></p>
 <h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis" title="::SpiceGenTcl::Analysis" class='ruff_cmd'>::SpiceGenTcl::Analysis</a></p>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Xyce::Analyses::Sens::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Sens" title="::SpiceGenTcl::Xyce::Analyses::Sens" class='ruff_cmd'>::SpiceGenTcl::Xyce::Analyses::Sens</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Sens'>Sens</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code>Sens</code> that describes SENS ac analysis.</p>
 <div class='ruff_synopsis'><span class='ruff_cmd'>Sens create OBJNAME</span> <span class='ruff_arg'>?args?</span><br><span class='ruff_cmd'>Sens new</span> <span class='ruff_arg'>?args?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
-<tr><td><code><font color=#463e11>-name</font></code></td><td>Name argument, optional.</td></tr>
-<tr><td><code><font color=#463e11>-objfunc</font></code></td><td>Output expression.</td></tr>
-<tr><td><code><font color=#463e11>-param</font></code></td><td>Circuit parameter(s)</td></tr>
+<tr><td><code>-name</code></td><td>Name argument, optional.</td></tr>
+<tr><td><code>-objfunc</code></td><td>Output expression.</td></tr>
+<tr><td><code>-param</code></td><td>Circuit parameter(s)</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>.SENS objfunc=&lt;output expression(s)&gt; param=&lt;circuit parameter(s)&gt;
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
+.SENS objfunc=&lt;output expression(s)&gt; param=&lt;circuit parameter(s)&gt;
 </pre>
 
 </figure><p class='ruff'>Example of class initialization:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Analyses::Xyce::Sens new <font color=#463e11>-objfunc</font> <font color=#035103>&quot;0.5*(V(B)-3.0)**2.0&quot;</font> <font color=#463e11>-param</font> <font color=#035103>&quot;R1:R,R2:R&quot;</font> <font color=#463e11>-name</font> dc1
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
+::SpiceGenTcl::Analyses::Xyce::Sens new -objfunc &quot;0.5*(V(B)-3.0)**2.0&quot; -param &quot;R1:R,R2:R&quot; -name dc1
 </pre>
 
 </figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Xyce_Analyses_Sens_constructor' href="javascript:toggleSource('SpiceGenTcl_Xyce_Analyses_Sens_constructor')">Show source</a></p>
-<div id='SpiceGenTcl_Xyce_Analyses_Sens_constructor' class='ruff_dyn_src'><pre><b><font color=#ca14ca>method</font></b> constructor {args} {
+<div id='SpiceGenTcl_Xyce_Analyses_Sens_constructor' class='ruff_dyn_src'><pre>method constructor {args} {
 
-    <i><font color=#4b5d50># Creates object of class `Sens` that describes SENS ac analysis.</font></i>
-    <i><font color=#4b5d50>#  -objfunc - output expression</font></i>
-    <i><font color=#4b5d50>#  -param - circuit parameter(s)</font></i>
-    <i><font color=#4b5d50>#  -name - name argument, optional</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># .SENS objfunc=&lt;output expression(s)&gt; param=&lt;circuit parameter(s)&gt;</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># Example of class initialization:</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># ::SpiceGenTcl::Analyses::Xyce::Sens new -objfunc &quot;0.5*(V(B)-3.0)**2.0&quot; -param &quot;R1:R,R2:R&quot; -name dc1</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> {
-        <font color=#463e11>-name</font>=
-        {<font color=#463e11>-objfunc</font>= <font color=#463e11>-required</font>}
-        {<font color=#463e11>-param</font>= <font color=#463e11>-required</font>}
+    # Creates object of class `Sens` that describes SENS ac analysis.
+    #  -objfunc - output expression
+    #  -param - circuit parameter(s)
+    #  -name - name argument, optional
+    # ```
+    # .SENS objfunc=&lt;output expression(s)&gt; param=&lt;circuit parameter(s)&gt;
+    # ```
+    # Example of class initialization:
+    # ```
+    # ::SpiceGenTcl::Analyses::Xyce::Sens new -objfunc &quot;0.5*(V(B)-3.0)**2.0&quot; -param &quot;R1:R,R2:R&quot; -name dc1
+    # ```
+    set arguments [argparse -inline {
+        -name=
+        {-objfunc= -required}
+        {-param= -required}
     }]
-    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dict</font></b> exists <font color=#4A181B>$arguments</font> name]} {
-        <b><font color=#923B23>set</font></b> name [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$arguments</font> name]
-    } <b><font color=#923B23>else</font></b> {
-        <b><font color=#923B23>set</font></b> name [<b><font color=#ca14ca>self</font></b> object]
+    if {[dict exists $arguments name]} {
+        set name [dict get $arguments name]
+    } else {
+        set name [self object]
     }
-    <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;objfunc <font color=#4A181B>[</font>dict get <font color=#4A181B>$</font>arguments objfunc<font color=#4A181B>]</font> -eq&quot;</font>
-    <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;param <font color=#4A181B>[</font>dict get <font color=#4A181B>$</font>arguments param<font color=#4A181B>]</font> -nocheck&quot;</font>
-    <b><font color=#923B23>next</font></b> sens <font color=#4A181B>$params</font> <font color=#463e11>-name</font> <font color=#4A181B>$name</font>
+    lappend params &quot;objfunc [dict get $arguments objfunc] -eq&quot;
+    lappend params &quot;param [dict get $arguments param] -nocheck&quot;
+    next sens $params -name $name
 }</pre></div>
 </div><h3 class='ruffclass'><a name='::SpiceGenTcl::Xyce::Analyses::Tran'>Tran</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses" title="::SpiceGenTcl::Xyce::Analyses" class='ruff_cmd'>::SpiceGenTcl::Xyce::Analyses</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
@@ -299,78 +307,80 @@
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis::getParams" title="::SpiceGenTcl::Analysis.getParams" class='ruff_cmd'>::SpiceGenTcl::Analysis.getParams</a></td></tr>
 <tr><td><code>setParamValue</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis::setParamValue" title="::SpiceGenTcl::Analysis.setParamValue" class='ruff_cmd'>::SpiceGenTcl::Analysis.setParamValue</a></td></tr>
 </table>
-<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#463e11>-Name</font></code>, <code><font color=#463e11>-Type</font></code></p>
-<p class='ruff'>Writable: <code><font color=#463e11>-Name</font></code>, <code><font color=#463e11>-Type</font></code></p>
+<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code>-Name</code>, <code>-Type</code></p>
+<p class='ruff'>Writable: <code>-Name</code>, <code>-Type</code></p>
 <h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis" title="::SpiceGenTcl::Analysis" class='ruff_cmd'>::SpiceGenTcl::Analysis</a></p>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Xyce::Analyses::Tran::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Tran" title="::SpiceGenTcl::Xyce::Analyses::Tran" class='ruff_cmd'>::SpiceGenTcl::Xyce::Analyses::Tran</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Tran'>Tran</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
-<p class='ruff'>Creates object of class <code><b><font color=#923B23>Tran</font></b></code> that describes TRAN analysis.</p>
+<p class='ruff'>Creates object of class <code>Tran</code> that describes TRAN analysis.</p>
 <div class='ruff_synopsis'><span class='ruff_cmd'>Tran create OBJNAME</span> <span class='ruff_arg'>?args?</span><br><span class='ruff_cmd'>Tran new</span> <span class='ruff_arg'>?args?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
-<tr><td><code><font color=#463e11>-name</font></code></td><td>Name argument, optional.</td></tr>
-<tr><td><code><font color=#463e11>-tstart</font></code></td><td>Size of maximum time step in actual simulation, optional, require -tstart.</td></tr>
-<tr><td><code><font color=#463e11>-tstep</font></code></td><td>Initial step value.</td></tr>
-<tr><td><code><font color=#463e11>-tstop</font></code></td><td>Final time value.</td></tr>
-<tr><td><code><font color=#463e11>-uic</font></code></td><td>Skip initial operating point solution, optional.</td></tr>
+<tr><td><code>-name</code></td><td>Name argument, optional.</td></tr>
+<tr><td><code>-tstart</code></td><td>Size of maximum time step in actual simulation, optional, require -tstart.</td></tr>
+<tr><td><code>-tstep</code></td><td>Initial step value.</td></tr>
+<tr><td><code>-tstop</code></td><td>Final time value.</td></tr>
+<tr><td><code>-uic</code></td><td>Skip initial operating point solution, optional.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>.TRAN &lt;initial step value&gt; &lt;final time value&gt;
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
+.TRAN &lt;initial step value&gt; &lt;final time value&gt;
 + [&lt;start time value&gt; [&lt;step ceiling value&gt;]] [NOOP] [UIC]
 </pre>
 
 </figure><p class='ruff'>Example of class initialization:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Xyce::Analyses::Tran new <font color=#463e11>-tstep</font> 1e-9 <font color=#463e11>-tstop</font> 10e-6 <font color=#463e11>-name</font> dc1
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
+::SpiceGenTcl::Xyce::Analyses::Tran new -tstep 1e-9 -tstop 10e-6 -name dc1
 </pre>
 
 </figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Xyce_Analyses_Tran_constructor' href="javascript:toggleSource('SpiceGenTcl_Xyce_Analyses_Tran_constructor')">Show source</a></p>
-<div id='SpiceGenTcl_Xyce_Analyses_Tran_constructor' class='ruff_dyn_src'><pre><b><font color=#ca14ca>method</font></b> constructor {args} {
+<div id='SpiceGenTcl_Xyce_Analyses_Tran_constructor' class='ruff_dyn_src'><pre>method constructor {args} {
 
-    <i><font color=#4b5d50># Creates object of class `Tran` that describes TRAN analysis.</font></i>
-    <i><font color=#4b5d50>#  -tstep - initial step value</font></i>
-    <i><font color=#4b5d50>#  -tstop - final time value</font></i>
-    <i><font color=#4b5d50>#  -tstart - start time of saving data, optional</font></i>
-    <i><font color=#4b5d50>#  -tstart - size of maximum time step in actual simulation, optional, require -tstart</font></i>
-    <i><font color=#4b5d50>#  -uic - skip initial operating point solution, optional</font></i>
-    <i><font color=#4b5d50>#  -name - name argument, optional</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># .TRAN &lt;initial step value&gt; &lt;final time value&gt;</font></i>
-    <i><font color=#4b5d50># + [&lt;start time value&gt; [&lt;step ceiling value&gt;]] [NOOP] [UIC]</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># Example of class initialization:</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># ::SpiceGenTcl::Xyce::Analyses::Tran new -tstep 1e-9 -tstop 10e-6 -name dc1</font></i>
-    <i><font color=#4b5d50># ```</font></i>
-    <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> {
-        <font color=#463e11>-name</font>=
-        {<font color=#463e11>-tstep</font>= <font color=#463e11>-required</font>}
-        {<font color=#463e11>-tstop</font>= <font color=#463e11>-required</font>}
-        <font color=#463e11>-tstart</font>=
-        {<font color=#463e11>-tmax</font>= <font color=#463e11>-require</font> {tstart}}
-        {<font color=#463e11>-uic</font> <font color=#463e11>-boolean</font>}
+    # Creates object of class `Tran` that describes TRAN analysis.
+    #  -tstep - initial step value
+    #  -tstop - final time value
+    #  -tstart - start time of saving data, optional
+    #  -tstart - size of maximum time step in actual simulation, optional, require -tstart
+    #  -uic - skip initial operating point solution, optional
+    #  -name - name argument, optional
+    # ```
+    # .TRAN &lt;initial step value&gt; &lt;final time value&gt;
+    # + [&lt;start time value&gt; [&lt;step ceiling value&gt;]] [NOOP] [UIC]
+    # ```
+    # Example of class initialization:
+    # ```
+    # ::SpiceGenTcl::Xyce::Analyses::Tran new -tstep 1e-9 -tstop 10e-6 -name dc1
+    # ```
+    set arguments [argparse -inline {
+        -name=
+        {-tstep= -required}
+        {-tstop= -required}
+        -tstart=
+        {-tmax= -require {tstart}}
+        {-uic -boolean}
     }]
-    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dict</font></b> exists <font color=#4A181B>$arguments</font> name]} {
-        <b><font color=#923B23>set</font></b> name [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$arguments</font> name]
-    } <b><font color=#923B23>else</font></b> {
-        <b><font color=#923B23>set</font></b> name [<b><font color=#ca14ca>self</font></b> object]
+    if {[dict exists $arguments name]} {
+        set name [dict get $arguments name]
+    } else {
+        set name [self object]
     }
-    <b><font color=#923B23>set</font></b> paramsOrder [<b><font color=#923B23>list</font></b> tstep tstop tstart tmax]
-    <b><font color=#923B23>foreach</font></b> param <font color=#4A181B>$paramsOrder</font> {
-        <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dict</font></b> exists <font color=#4A181B>$arguments</font> <font color=#4A181B>$param</font>]} {
-            <b><font color=#923B23>dict</font></b> append argsOrdered <font color=#4A181B>$param</font> [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$arguments</font> <font color=#4A181B>$param</font>]
+    set paramsOrder [list tstep tstop tstart tmax]
+    foreach param $paramsOrder {
+        if {[dict exists $arguments $param]} {
+            dict append argsOrdered $param [dict get $arguments $param]
         }
     }
-    <b><font color=#923B23>dict</font></b> for {paramName value} <font color=#4A181B>$argsOrdered</font> {
-        <b><font color=#923B23>if</font></b> {([<b><font color=#923B23>llength</font></b> <font color=#4A181B>$value</font>]&gt;1) && ([<b><font color=#923B23>lindex</font></b> <font color=#4A181B>$value</font> 1]==<font color=#035103>&quot;-eq&quot;</font>)} {
-            <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;<font color=#4A181B>$</font>paramName <font color=#4A181B>[</font>lindex <font color=#4A181B>$</font>value 0<font color=#4A181B>]</font> -poseq&quot;</font>
-        } <b><font color=#923B23>else</font></b> {
-            <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;<font color=#4A181B>$</font>paramName <font color=#4A181B>$</font>value -pos&quot;</font>
+    dict for {paramName value} $argsOrdered {
+        if {([llength $value]&gt;1) &amp;&amp; ([lindex $value 1]==&quot;-eq&quot;)} {
+            lappend params &quot;$paramName [lindex $value 0] -poseq&quot;
+        } else {
+            lappend params &quot;$paramName $value -pos&quot;
         }
     }
-    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$arguments</font> uic]==1} {
-        <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;uic -sw&quot;</font>
+    if {[dict get $arguments uic]==1} {
+        lappend params &quot;uic -sw&quot;
     }
-    <b><font color=#923B23>next</font></b> tran <font color=#4A181B>$params</font> <font color=#463e11>-name</font> <font color=#4A181B>$name</font>
+    next tran $params -name $name
 }</pre></div>
 </div></main><nav class='ruff-nav'><ul ><li class='ruff-toc1'><a style='padding-top:2px;' href='index.html'>Start page</a></li>
 <li class='ruff-toc1'><a href='index-docindex.html' accesskey='i'>Index</a></li>
@@ -393,15 +403,15 @@
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html'>SpiceGenTcl::Xyce::SemiconductorDevices</a></li>
 <li class='ruff-toc1'><a class='ruff-highlight' href='index-SpiceGenTcl-Xyce-Analyses.html'>SpiceGenTcl::Xyce::Analyses</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-Simulators.html'>SpiceGenTcl::Xyce::Simulators</a></li>
-<hr><li class='ruff-toc2'><a href='#::SpiceGenTcl::Xyce::Analyses-Classes'>Classes</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Ac'>Ac</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Ac::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>Ac</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>Ac</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#923B23>Ac</font></b></code> that describes AC analysis.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Dc'>Dc</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Dc::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>Dc</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>Dc</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#923B23>Dc</font></b></code> that describes DC analysis.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Op'>Op</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Op::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>Op</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>Op</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#923B23>Op</font></b></code> that describes OP analysis.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Sens'>Sens</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Sens::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;Sens create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;Sens new&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Creates object of class <code>Sens</code> that describes SENS ac analysis.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Tran'>Tran</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Tran::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>Tran</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#923B23>Tran</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#923B23>Tran</font></b></code> that describes TRAN analysis.
+<hr><li class='ruff-toc2'><a href='#::SpiceGenTcl::Xyce::Analyses-Classes'>Classes</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Ac'>Ac</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Ac::constructor'>constructor</a><span class='ruff-tiptext'><pre><span class='ruff_cmd'>Ac create OBJNAME</span> <span class='ruff_arg'>?args?</span>
+<span class='ruff_cmd'>Ac new</span> <span class='ruff_arg'>?args?</span></pre>Creates object of class <code>Ac</code> that describes AC analysis.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Dc'>Dc</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Dc::constructor'>constructor</a><span class='ruff-tiptext'><pre><span class='ruff_cmd'>Dc create OBJNAME</span> <span class='ruff_arg'>?args?</span>
+<span class='ruff_cmd'>Dc new</span> <span class='ruff_arg'>?args?</span></pre>Creates object of class <code>Dc</code> that describes DC analysis.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Op'>Op</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Op::constructor'>constructor</a><span class='ruff-tiptext'><pre><span class='ruff_cmd'>Op create OBJNAME</span> <span class='ruff_arg'>?args?</span>
+<span class='ruff_cmd'>Op new</span> <span class='ruff_arg'>?args?</span></pre>Creates object of class <code>Op</code> that describes OP analysis.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Sens'>Sens</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Sens::constructor'>constructor</a><span class='ruff-tiptext'><pre><span class='ruff_cmd'>Sens create OBJNAME</span> <span class='ruff_arg'>?args?</span>
+<span class='ruff_cmd'>Sens new</span> <span class='ruff_arg'>?args?</span></pre>Creates object of class <code>Sens</code> that describes SENS ac analysis.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Tran'>Tran</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Tran::constructor'>constructor</a><span class='ruff-tiptext'><pre><span class='ruff_cmd'>Tran create OBJNAME</span> <span class='ruff_arg'>?args?</span>
+<span class='ruff_cmd'>Tran new</span> <span class='ruff_arg'>?args?</span></pre>Creates object of class <code>Tran</code> that describes TRAN analysis.
 </span></li></ul></nav><footer class='ruff-layout-footer ruff-ft'><div style='float: right;'>Document generated by <a href='https://ruff.magicsplat.com'>Ruff!</a></div><div>&copy; George Yashin</div></footer>
 </div></body></html>

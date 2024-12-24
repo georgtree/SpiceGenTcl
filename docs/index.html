@@ -47,7 +47,8 @@
 <div style='clear:both;'></div>
 <p class='ruff'>To install the package you should extract archive with source code and add path of the package folder to <code>auto_path</code> variable:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>lappend</font></b> auto_path <font color=#035103>&quot;path to SpiceGenTcl package&quot;</font>
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
+lappend auto_path &quot;path to SpiceGenTcl package&quot;
 </pre>
 
 </figure><h2 class='ruff'><a name='Dependencies'></a>Dependencies<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
@@ -74,7 +75,8 @@
 <p class='ruff'>I personally use Kubuntu 24.04, and I also tested package on Windows 11. On Kubuntu I use Tcl/Tk 9.0 compiled from sources, as well as Ngspice and Xyce. On Windows I use <a href="https://www.magicsplat.com/tcl-installer/" >Magicsplat</a> distribution of Tcl/Tk 9.0. For Ngspice and Xyce I use precompilled binaries.</p>
 <p class='ruff'><font color="red"><strong>Note</strong></font>: on Windows by default Ngspice save raw file into ascii format, to pass all tests (because of different numbers formatting - scientific by default) you need to set binary format by default in .spiceinit by this line:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> filetype=binary
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
+set filetype=binary
 </pre>
 
 </figure><p class='ruff'>Tcl is a cross-platform language, and because this package is written in pure Tcl, you can practically run it on any platform, including Windows, Linux (all flavors), and FreeBSD. Ngspice is available as pre-compiled binaries for Linux and Windows, but it can also be compiled on FreeBSD. Xyce is availible as pre-compiled for Windows, RHEL and MacOS, but can be compiled to any other platform.</p>
@@ -88,29 +90,34 @@
 <div style='clear:both;'></div>
 <p class='ruff'>The first step is import of package:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>package</font></b> require SpiceGenTcl
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
+package require SpiceGenTcl
 </pre>
 
 </figure><p class='ruff'>Import all commands from ::SpiceGenTcl:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>namespace</font></b> import ::SpiceGenTcl::*
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
+namespace import ::SpiceGenTcl::*
 </pre>
 
 </figure><p class='ruff'>One of the commands is <a href="index-SpiceGenTcl.html#::SpiceGenTcl::importNgspice" title="::SpiceGenTcl::importNgspice" class='ruff_cmd'>::SpiceGenTcl::importNgspice</a>. By calling this command, we can import all commands related to the Ngspice simulator, eliminating the need to add the <code>::SpiceGenTcl::Ngspice</code> prefix before any command. Here's how to do it:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>importNgspice
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
+importNgspice
 </pre>
 
 </figure><p class='ruff'>To plot results of simulation we also import package <code>ticklecharts</code>:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>package</font></b> require ticklecharts
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
+package require ticklecharts
 </pre>
 
 </figure><h3 class='ruff'><a name='Circuit definition'></a>Circuit definition<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
 <p class='ruff'>Let's try to define simple resistor divider circuit with following netlist:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>voltage divider netlist
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
+voltage divider netlist
 v1 in 0 1
 r1 in out 1e3
 r2 out 0 2e3
@@ -120,58 +127,65 @@ r2 out 0 2e3
 </figure><p class='ruff'><img src="assets/img/resistor_divider_cir.png" alt="drawing" width="300"/></p>
 <p class='ruff'>First step is creating circuit object:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> circuit [<b><font color=#923B23>Circuit</font></b> new {voltage divider netlist}]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
+set circuit [Circuit new {voltage divider netlist}]
 </pre>
 
-</figure><p class='ruff'>The <code><b><font color=#923B23>Circuit</font></b></code> command creates a new object of the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> class, which is imported from the <code>::SpiceGenTcl</code> namespace and represents the top-level circuit. The only argument we provide is the name of the circuit, which will be printed on the first line of the netlist.</p>
+</figure><p class='ruff'>The <code>Circuit</code> command creates a new object of the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> class, which is imported from the <code>::SpiceGenTcl</code> namespace and represents the top-level circuit. The only argument we provide is the name of the circuit, which will be printed on the first line of the netlist.</p>
 <p class='ruff'>The next step is building netlist by addding elements to top circuit object:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new 1 in 0 <font color=#463e11>-dc</font> 1]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new 1 in out <font color=#463e11>-r</font> 1e3]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new 2 out 0 <font color=#463e11>-r</font> 2e3]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Dc</font></b> new <font color=#463e11>-src</font> v1 <font color=#463e11>-start</font> 0 <font color=#463e11>-stop</font> 5 <font color=#463e11>-incr</font> 0.1]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
+$circuit add [Vdc new 1 in 0 -dc 1]
+$circuit add [R new 1 in out -r 1e3]
+$circuit add [R new 2 out 0 -r 2e3]
+$circuit add [Dc new -src v1 -start 0 -stop 5 -incr 0.1]
 </pre>
 
-</figure><p class='ruff'>An instance of the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> class, referenced by the <code>circuit</code> variable, has an <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::add" title="::SpiceGenTcl::Circuit::add" class='ruff_cmd'>::SpiceGenTcl::Circuit::add</a> method that appends the references of argument objects to it. The object-creating commands <code><b><font color=#923B23>Vdc</font></b></code>, <code><b><font color=#923B23>R</font></b></code>, and <code><b><font color=#923B23>Dc</font></b></code> — which represent a DC voltage source, a basic resistor, and a DC analysis, respectively — are imported from the <code>::SpiceGenTcl::Ngspice::Sources</code>, <code>::SpiceGenTcl::Ngspice::BasicElements</code>, and <code>::SpiceGenTcl::Ngspice::Analyses</code> namespaces.</p>
-<p class='ruff'>When using the <code>new</code> subcommand, you provide the basic arguments for the element. For example, in the <code><b><font color=#923B23>R</font></b></code> command, you would supply the name '1', the name of the net connected to the positive node 'in', the name of the net connected to the negative node '0' (which is the global ground), and the resistance value '1e3'.</p>
-<p class='ruff'>The last necessary step is to create <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Simulator" title="::SpiceGenTcl::Simulator" class='ruff_cmd'>::SpiceGenTcl::Simulator</a> object with command <code><b><font color=#923B23>Batch</font></b></code> from <code>::SpiceGenTcl::Ngspice</code> namespace and attach it to <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> object:</p>
+</figure><p class='ruff'>An instance of the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> class, referenced by the <code>circuit</code> variable, has an <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::add" title="::SpiceGenTcl::Circuit::add" class='ruff_cmd'>::SpiceGenTcl::Circuit::add</a> method that appends the references of argument objects to it. The object-creating commands <code>Vdc</code>, <code>R</code>, and <code>Dc</code> — which represent a DC voltage source, a basic resistor, and a DC analysis, respectively — are imported from the <code>::SpiceGenTcl::Ngspice::Sources</code>, <code>::SpiceGenTcl::Ngspice::BasicElements</code>, and <code>::SpiceGenTcl::Ngspice::Analyses</code> namespaces.</p>
+<p class='ruff'>When using the <code>new</code> subcommand, you provide the basic arguments for the element. For example, in the <code>R</code> command, you would supply the name '1', the name of the net connected to the positive node 'in', the name of the net connected to the negative node '0' (which is the global ground), and the resistance value '1e3'.</p>
+<p class='ruff'>The last necessary step is to create <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Simulator" title="::SpiceGenTcl::Simulator" class='ruff_cmd'>::SpiceGenTcl::Simulator</a> object with command <code>Batch</code> from <code>::SpiceGenTcl::Ngspice</code> namespace and attach it to <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> object:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> simulator [<b><font color=#923B23>Batch</font></b> new {batch1} {/usr/local/bin/}]
-<font color=#4A181B>$circuit</font> configure <font color=#463e11>-Simulator</font> <font color=#4A181B>$simulator</font>
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
+set simulator [Batch new {batch1} {/usr/local/bin/}]
+$circuit configure -Simulator $simulator
 </pre>
 
 </figure><p class='ruff'>Now we are ready to run simulation:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$circuit</font> runAndRead
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
+$circuit runAndRead
 </pre>
 
 </figure><p class='ruff'>After the simulation, we can read the resulting data. We use the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::getDataDict" title="::SpiceGenTcl::Circuit::getDataDict" class='ruff_cmd'>::SpiceGenTcl::Circuit::getDataDict</a> method to obtain a dictionary where the keys are the names of the result vectors:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> data [<font color=#4A181B>$circuit</font> getDataDict]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
+set data [$circuit getDataDict]
 </pre>
 
 </figure><p class='ruff'>The we can get vectors v(in) and v(out) from dictionary <code>data</code>:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> axis [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> v(in)]
-<b><font color=#923B23>set</font></b> trace [<b><font color=#923B23>dict</font></b> get <font color=#4A181B>$data</font> v(out)]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
+set axis [dict get $data v(in)]
+set trace [dict get $data v(out)]
 </pre>
 
 </figure><h3 class='ruff'><a name='Plotting data'></a>Plotting data<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
 <p class='ruff'>To plot results we use <a href="https://github.com/nico-robert/ticklecharts" ><code>ticklecharts</code></a> package:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>foreach</font></b> x <font color=#4A181B>$axis</font> y <font color=#4A181B>$trace</font> {
-    <b><font color=#923B23>set</font></b> x [<b><font color=#923B23>format</font></b> <font color=#035103>&quot;%.3f&quot;</font> <font color=#4A181B>$x</font>]
-    <b><font color=#923B23>set</font></b> y [<b><font color=#923B23>format</font></b> <font color=#035103>&quot;%.3f&quot;</font> <font color=#4A181B>$y</font>]
-    <b><font color=#923B23>lappend</font></b> xydata [<b><font color=#923B23>list</font></b> <font color=#4A181B>$x</font> <font color=#4A181B>$y</font>]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
+foreach x $axis y $trace {
+    set x [format &quot;%.3f&quot; $x]
+    set y [format &quot;%.3f&quot; $y]
+    lappend xydata [list $x $y]
 }
-<b><font color=#923B23>set</font></b> chart [ticklecharts::chart new]
-<font color=#4A181B>$chart</font> Xaxis <font color=#463e11>-name</font> <font color=#035103>&quot;v(in), V&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-min</font> 0 <font color=#463e11>-max</font> 5 <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
-<font color=#4A181B>$chart</font> Yaxis <font color=#463e11>-name</font> <font color=#035103>&quot;v(out), V&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-min</font> 0 <font color=#463e11>-max</font> 3.5 <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
-<font color=#4A181B>$chart</font> SetOptions <font color=#463e11>-title</font> {} <font color=#463e11>-tooltip</font> {} <font color=#463e11>-animation</font> <font color=#035103>&quot;False&quot;</font> 
-<font color=#4A181B>$chart</font> Add <font color=#035103>&quot;lineSeries&quot;</font> <font color=#463e11>-data</font> <font color=#4A181B>$xydata</font> <font color=#463e11>-showAllSymbol</font> <font color=#035103>&quot;nothing&quot;</font>
-<b><font color=#923B23>set</font></b> fbasename [<b><font color=#923B23>file</font></b> rootname [<b><font color=#923B23>file</font></b> tail [<b><font color=#923B23>info</font></b> script]]]
-<font color=#4A181B>$chart</font> Render <font color=#463e11>-outfile</font> [<b><font color=#923B23>file</font></b> normalize [<b><font color=#923B23>file</font></b> join html_charts <font color=#4A181B>$fbasename</font>.html]]
+set chart [ticklecharts::chart new]
+$chart Xaxis -name &quot;v(in), V&quot; -minorTick {show &quot;True&quot;} -min 0 -max 5 -type &quot;value&quot;
+$chart Yaxis -name &quot;v(out), V&quot; -minorTick {show &quot;True&quot;} -min 0 -max 3.5 -type &quot;value&quot;
+$chart SetOptions -title {} -tooltip {} -animation &quot;False&quot; 
+$chart Add &quot;lineSeries&quot; -data $xydata -showAllSymbol &quot;nothing&quot;
+set fbasename [file rootname [file tail [info script]]]
+$chart Render -outfile [file normalize [file join html_charts $fbasename.html]]
 </pre>
 
 </figure><p class='ruff'>To view result, we should open rendered resistor_divider.html chart in browser.</p>
