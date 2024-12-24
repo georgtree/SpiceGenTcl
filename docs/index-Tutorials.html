@@ -30,35 +30,32 @@
 <div style='clear:both;'></div>
 <p class='ruff'>In this example we will examine the availible actions that we can do on elements in netlist. First step is building the target netlist with variable elements:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-# create netlist 
-set netlist [Netlist new main_netlist]
-# incrementally build netlist by adding different elements
-$netlist add [R new 1 net1 net2 -r 10]
-$netlist add [R new 5 net1 net2 -model res_sem -l 10e-6 -w 100e-6]
-$netlist add [RModel new rsem1mod -tc1 0.1 -tc2 0.4]
-$netlist add [R new 2 net1 net2 -r {{r1+5/10} -eq}]
-$netlist add [C new 1 net2 net3 -c 1e-6]
-$netlist add [ParamStatement new {{r1 1} {r2 2}} -name ps1]
-$netlist add [Comment new {some random comment} -name com1]
-$netlist add [Include new {/fold1/fold2/file.lib} -name inc1]
-$netlist add [Library new {/fold1/fold2/file.lib} fast -name lib1]
-$netlist add [RawString new {*comment in form of raw string} -name raw1]
-$netlist add [Vdc new 1 net1 net3 -dc 5]
-$netlist add [Tran new -tstep 1e-6 -tstop 1e-3 -uic -name tran1]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create netlist </font></i>
+<b><font color=#923B23>set</font></b> netlist [<b><font color=#923B23>Netlist</font></b> new main_netlist]
+<i><font color=#4b5d50># incrementally build netlist by adding different elements</font></i>
+<font color=#4A181B>$netlist</font> add [<b><font color=#923B23>R</font></b> new 1 net1 net2 <font color=#463e11>-r</font> 10]
+<font color=#4A181B>$netlist</font> add [<b><font color=#923B23>R</font></b> new 5 net1 net2 <font color=#463e11>-model</font> res_sem <font color=#463e11>-l</font> 10e-6 <font color=#463e11>-w</font> 100e-6]
+<font color=#4A181B>$netlist</font> add [<b><font color=#923B23>RModel</font></b> new rsem1mod <font color=#463e11>-tc1</font> 0.1 <font color=#463e11>-tc2</font> 0.4]
+<font color=#4A181B>$netlist</font> add [<b><font color=#923B23>R</font></b> new 2 net1 net2 <font color=#463e11>-r</font> {{r1+5/10} <font color=#463e11>-eq</font>}]
+<font color=#4A181B>$netlist</font> add [<b><font color=#923B23>C</font></b> new 1 net2 net3 <font color=#463e11>-c</font> 1e-6]
+<font color=#4A181B>$netlist</font> add [<b><font color=#923B23>ParamStatement</font></b> new {{r1 1} {r2 2}} <font color=#463e11>-name</font> ps1]
+<font color=#4A181B>$netlist</font> add [<b><font color=#923B23>Comment</font></b> new {some random comment} <font color=#463e11>-name</font> com1]
+<font color=#4A181B>$netlist</font> add [<b><font color=#923B23>Include</font></b> new {/fold1/fold2/file.lib} <font color=#463e11>-name</font> inc1]
+<font color=#4A181B>$netlist</font> add [<b><font color=#923B23>Library</font></b> new {/fold1/fold2/file.lib} fast <font color=#463e11>-name</font> lib1]
+<font color=#4A181B>$netlist</font> add [<b><font color=#923B23>RawString</font></b> new {*comment in form of raw string} <font color=#463e11>-name</font> raw1]
+<font color=#4A181B>$netlist</font> add [<b><font color=#923B23>Vdc</font></b> new 1 net1 net3 <font color=#463e11>-dc</font> 5]
+<font color=#4A181B>$netlist</font> add [<b><font color=#923B23>Tran</font></b> new <font color=#463e11>-tstep</font> 1e-6 <font color=#463e11>-tstop</font> 1e-3 <font color=#463e11>-uic</font> <font color=#463e11>-name</font> tran1]
 </pre>
 
 </figure><p class='ruff'>Here we can see the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Netlist::add" title="::SpiceGenTcl::Netlist::add" class='ruff_cmd'>::SpiceGenTcl::Netlist::add</a> method that adds elemements objects references to <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Netlist" title="::SpiceGenTcl::Netlist" class='ruff_cmd'>::SpiceGenTcl::Netlist</a> object. To view netlist we can invoke method <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Netlist::genSPICEString" title="::SpiceGenTcl::Netlist::genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Netlist::genSPICEString</a> that have all circuit elements:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-# generate SPICE netlist
-puts [$netlist genSPICEString]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># generate SPICE netlist</font></i>
+<b><font color=#923B23>puts</font></b> [<font color=#4A181B>$netlist</font> genSPICEString]
 </pre>
 
 </figure><p class='ruff'>Result is:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-r1 net1 net2 10
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>r1 net1 net2 10
 r5 net1 net2 res_sem l=10e-6 w=100e-6
 .model rsem1mod r(tc1=0.1 tc2=0.4)
 r2 net1 net2 {r1+5/10}
@@ -76,15 +73,13 @@ v1 net1 net3 5
 <div style='clear:both;'></div>
 <p class='ruff'>The opposite action is to delete with the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Netlist::del" title="::SpiceGenTcl::Netlist::del" class='ruff_cmd'>::SpiceGenTcl::Netlist::del</a> method. For example, we can delete the 'c1' element from the netlist by specifying its name:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-$netlist del c1
-puts [$netlist genSPICEString]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$netlist</font> del c1
+<b><font color=#923B23>puts</font></b> [<font color=#4A181B>$netlist</font> genSPICEString]
 </pre>
 
 </figure><p class='ruff'>Result is:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-r1 net1 net2 10
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>r1 net1 net2 10
 r5 net1 net2 res_sem l=10e-6 w=100e-6
 .model rsem1mod r(tc1=0.1 tc2=0.4)
 r2 net1 net2 {r1+5/10}
@@ -102,30 +97,26 @@ v1 net1 net3 5
 <div style='clear:both;'></div>
 <p class='ruff'>Next important operation is getting reference of element in netlist. We can do it again by specifying its name:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-# get reference of resistor object
-set resistor [$netlist getElement r1]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># get reference of resistor object</font></i>
+<b><font color=#923B23>set</font></b> resistor [<font color=#4A181B>$netlist</font> getElement r1]
 </pre>
 
 </figure><p class='ruff'>After it, we can change the resistance parameter of element:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-# change the value of resistor in circuit
-$resistor setParamValue r 100
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># change the value of resistor in circuit</font></i>
+<font color=#4A181B>$resistor</font> setParamValue r 100
 </pre>
 
 </figure><p class='ruff'>We apply method <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setParamValue" title="::SpiceGenTcl::Device::setParamValue" class='ruff_cmd'>::SpiceGenTcl::Device::setParamValue</a> with two arguments: name of parameter 'r' and its new value '100'. The other action we can do is change the pin connection of element:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-# change the name of connected net to plus pin
-$resistor setPinNodeName np net10
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># change the name of connected net to plus pin</font></i>
+<font color=#4A181B>$resistor</font> setPinNodeName np net10
 </pre>
 
 </figure><p class='ruff'>We use method <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setPinNodeName" title="::SpiceGenTcl::Device::setPinNodeName" class='ruff_cmd'>::SpiceGenTcl::Device::setPinNodeName</a> with pin name and name of the net as arguments.</p>
 <p class='ruff'>Then we can again print netlist and see that value of parameter and name of connected name have been changed:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-r1 net10 net2 100
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>r1 net10 net2 100
 r5 net1 net2 res_sem l=10e-6 w=100e-6
 .model rsem1mod r(tc1=0.1 tc2=0.4)
 r2 net1 net2 {r1+5/10}
@@ -140,34 +131,30 @@ v1 net1 net3 5
 
 </figure><h3 class='ruff'><a name='::Tutorials-Print list of all elements'></a>Print list of all elements<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
-<p class='ruff'>We can get the list of all elements attached to <code>$netlist</code> object:</p>
+<p class='ruff'>We can get the list of all elements attached to <code><font color=#4A181B>$netlist</font></code> object:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-# get and print all names of elements attached to $netlist
-puts [$netlist getAllElemNames]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># get and print all names of elements attached to $netlist</font></i>
+<b><font color=#923B23>puts</font></b> [<font color=#4A181B>$netlist</font> getAllElemNames]
 </pre>
 
 </figure><p class='ruff'>Result:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-r1 r5 rsem1mod r2 ps1 com1 inc1 lib1 raw1 v1 tran1
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>r1 r5 rsem1mod r2 ps1 com1 inc1 lib1 raw1 v1 tran1
 </pre>
 
 </figure><h3 class='ruff'><a name='::Tutorials-Temporarly remove of element'></a>Temporarly remove of element<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
 <p class='ruff'>We can delete element from netlist and store reference to elements object, and then again add element to netlist:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-set r1 [$netlist getElement r1]
-$netlist del r1
-$netlist add $r1
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> r1 [<font color=#4A181B>$netlist</font> getElement r1]
+<font color=#4A181B>$netlist</font> del r1
+<font color=#4A181B>$netlist</font> add <font color=#4A181B>$r1</font>
 </pre>
 
 </figure><p class='ruff'>Also, we can save reference to object before adding to netlist in variable and only then add it to netlist:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-set r5 [R new 5 net1 net2 -r 10]
-$netlist add $r5
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> r5 [<b><font color=#923B23>R</font></b> new 5 net1 net2 <font color=#463e11>-r</font> 10]
+<font color=#4A181B>$netlist</font> add <font color=#4A181B>$r5</font>
 </pre>
 
 </figure><p class='ruff'>In this case we can directly modify 'r5' parameters without necessity to call <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Netlist::getElement" title="::SpiceGenTcl::Netlist::getElement" class='ruff_cmd'>::SpiceGenTcl::Netlist::getElement</a> method.</p>
@@ -175,60 +162,54 @@ $netlist add $r5
 <div style='clear:both;'></div>
 <p class='ruff'>To create subcircuit definition we use special <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Subcircuit" title="::SpiceGenTcl::Subcircuit" class='ruff_cmd'>::SpiceGenTcl::Subcircuit</a> class and make subcircuit by defining new class with it as superclass:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-oo::class create RCnet {
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ca14ca>oo::class</font></b> create RCnet {
     superclass Subcircuit
-    constructor {} {
-        # define external pins of subcircuit
-        set pins {plus minus}
-        # define input parameters of subcircuit
-        set params {{r 100} {c 1e-6}}
-        # add elements to subcircuit definition
-        my add [R new 1 net1 plus -r {r -eq}]
-        my add [C new 1 net2 net3 -r {c -eq}]
-        my add [R new 5 minus net2 -model res_sem -l 10e-6 -w 100e-6]
-        my add [RModel new rsem1mod -tc1 0.1 -tc2 0.4]
-        # pass name, list of pins and list of parameters to Subcircuit constructor
-        next rcnet $pins $params
+    <b><font color=#ca14ca>constructor</font></b> {} {
+        <i><font color=#4b5d50># define external pins of subcircuit</font></i>
+        <b><font color=#923B23>set</font></b> pins {plus minus}
+        <i><font color=#4b5d50># define input parameters of subcircuit</font></i>
+        <b><font color=#923B23>set</font></b> params {{r 100} {c 1e-6}}
+        <i><font color=#4b5d50># add elements to subcircuit definition</font></i>
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new 1 net1 plus <font color=#463e11>-r</font> {r <font color=#463e11>-eq</font>}]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>C</font></b> new 1 net2 net3 <font color=#463e11>-r</font> {c <font color=#463e11>-eq</font>}]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new 5 minus net2 <font color=#463e11>-model</font> res_sem <font color=#463e11>-l</font> 10e-6 <font color=#463e11>-w</font> 100e-6]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>RModel</font></b> new rsem1mod <font color=#463e11>-tc1</font> 0.1 <font color=#463e11>-tc2</font> 0.4]
+        <i><font color=#4b5d50># pass name, list of pins and list of parameters to Subcircuit constructor</font></i>
+        <b><font color=#923B23>next</font></b> rcnet <font color=#4A181B>$pins</font> <font color=#4A181B>$params</font>
     }
 }
 </pre>
 
 </figure><p class='ruff'>In constructor of this class we define pins as list with names in order of appearance in subcircuit header:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-set pins {plus minus}
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> pins {plus minus}
 </pre>
 
 </figure><p class='ruff'>Then we define parameters as list of two-elements list that contains name and default value of parameter:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-set params {{r 100} {c 1e-6}}
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> params {{r 100} {c 1e-6}}
 </pre>
 
 </figure><p class='ruff'>Next step is adding elements to subcircuit:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-my add [R new 1 net1 plus -r {r -eq}]
-my add [C new 1 net2 net3 -c {c -eq}]
-my add [R new 5 minus net2 -model res_sem -l 10e-6 -w 100e-6]
-my add [RModel new rsem1mod -tc1 0.1 -tc2 0.4]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new 1 net1 plus <font color=#463e11>-r</font> {r <font color=#463e11>-eq</font>}]
+<b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>C</font></b> new 1 net2 net3 <font color=#463e11>-c</font> {c <font color=#463e11>-eq</font>}]
+<b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new 5 minus net2 <font color=#463e11>-model</font> res_sem <font color=#463e11>-l</font> 10e-6 <font color=#463e11>-w</font> 100e-6]
+<b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>RModel</font></b> new rsem1mod <font color=#463e11>-tc1</font> 0.1 <font color=#463e11>-tc2</font> 0.4]
 </pre>
 
 </figure><p class='ruff'>The last action is to pass name of subcircuit, list of pins and parameters to constructor of superclass:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-next rcnet $pins $params
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>next</font></b> rcnet <font color=#4A181B>$pins</font> <font color=#4A181B>$params</font>
 </pre>
 
 </figure><p class='ruff'>Name passed to superclass constructor <code>rcnet</code> is not necessarily the same as name of the class, this name will be printed in subcircuit definition in netlist.</p>
 <p class='ruff'>To create and add this definition to netlist, we use name of the class <code>RCnet</code>:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-# create subcircuit definition
-set subcircuit [RCnet new]
-# add to netslit
-$netlist add $subcircuit
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create subcircuit definition</font></i>
+<b><font color=#923B23>set</font></b> subcircuit [RCnet new]
+<i><font color=#4b5d50># add to netslit</font></i>
+<font color=#4A181B>$netlist</font> add <font color=#4A181B>$subcircuit</font>
 </pre>
 
 </figure><p class='ruff'>But place definition of subcircuit is not enough - we need to place netlist instance of subcircuit. We can do it by using two mechanisms:</p>
@@ -238,23 +219,20 @@ $netlist add $subcircuit
 </ul>
 <p class='ruff'>First way is direct construction of element by providing pins and parameter lists:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-# create subcircuit instance
-set subInst [SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar -eq}}]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create subcircuit instance</font></i>
+<b><font color=#923B23>set</font></b> subInst [<b><font color=#923B23>SubcircuitInstance</font></b> new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar <font color=#463e11>-eq</font>}}]
 </pre>
 
 </figure><p class='ruff'>But the second way is simpler and allow to check if we have mistake in definition:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-# create subcircuit instance with help of already created subcircuit definition $subcircuit
-set subInst1 [SubcircuitInstanceAuto new $subcircuit 2 {net1 net2} -r 1 -c {cpar -eq}]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create subcircuit instance with help of already created subcircuit definition $subcircuit</font></i>
+<b><font color=#923B23>set</font></b> subInst1 [<b><font color=#923B23>SubcircuitInstanceAuto</font></b> new <font color=#4A181B>$subcircuit</font> 2 {net1 net2} <font color=#463e11>-r</font> 1 <font color=#463e11>-c</font> {cpar <font color=#463e11>-eq</font>}]
 </pre>
 
-</figure><p class='ruff'>In this approach, we pass the reference of our subcircuit as the first argument. Then, we only need to provide a list of nets connected to the pins, in the order defined in the subcircuit, and parameters in the form of <code>-paramName paramValue</code>. If you try to add a parameter that does not exist in the subcircuit definition, you'll receive an error.</p>
+</figure><p class='ruff'>In this approach, we pass the reference of our subcircuit as the first argument. Then, we only need to provide a list of nets connected to the pins, in the order defined in the subcircuit, and parameters in the form of <code><font color=#463e11>-paramName</font> paramValue</code>. If you try to add a parameter that does not exist in the subcircuit definition, you'll receive an error.</p>
 <p class='ruff'>The final circuit is:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-.subckt rcnet plus minus r=100 c=1e-6
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>.subckt rcnet plus minus r=100 c=1e-6
 r1 net1 plus {r}
 c1 net2 net3 {c}
 r5 minus net2 res_sem l=10e-6 w=100e-6
@@ -271,154 +249,142 @@ x2 net1 net2 rcnet r=1 c={cpar}
 <p class='ruff'><img src="assets/img/diode_iv_cir.png" alt="drawing" width="400"/></p>
 <p class='ruff'>As in previous examples, we start by creating the top circuit and adding elements to it:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-# create top-level circuit
-set circuit [Circuit new {diode IV}]
-# add elements to circuit
-$circuit add [D new 1 anode 0 -model diomod -area 1 -lm 1e-6]
-$circuit add [Vdc new a anode 0 -dc 0]
-$circuit add [DiodeModel new diomod -is 1e-12 -n 1.2 -rs 0.01 -cj0 1e-9 -trs1 0.001 -xti 5]
-$circuit add [Dc new -src va -start 0 -step 2 -incr 0.01]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create top-level circuit</font></i>
+<b><font color=#923B23>set</font></b> circuit [<b><font color=#923B23>Circuit</font></b> new {diode IV}]
+<i><font color=#4b5d50># add elements to circuit</font></i>
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>D</font></b> new 1 anode 0 <font color=#463e11>-model</font> diomod <font color=#463e11>-area</font> 1 <font color=#463e11>-lm</font> 1e-6]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new a anode 0 <font color=#463e11>-dc</font> 0]
+<font color=#4A181B>$circuit</font> add [DiodeModel new diomod <font color=#463e11>-is</font> 1e-12 <font color=#463e11>-n</font> 1.2 <font color=#463e11>-rs</font> 0.01 <font color=#463e11>-cj0</font> 1e-9 <font color=#463e11>-trs1</font> 0.001 <font color=#463e11>-xti</font> 5]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Dc</font></b> new <font color=#463e11>-src</font> va <font color=#463e11>-start</font> 0 <font color=#463e11>-step</font> 2 <font color=#463e11>-incr</font> 0.01]
 </pre>
 
 </figure><p class='ruff'>In the upper block of code, we add a diode instance using the <a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::D" title="::SpiceGenTcl::Ngspice::SemiconductorDevices::D" class='ruff_cmd'>::SpiceGenTcl::Ngspice::SemiconductorDevices::D</a> command, create the corresponding diode model with the <a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel" title="::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel" class='ruff_cmd'>::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel</a> command, add a DC voltage source that will be swept, and include a DC analysis statement. The voltage ranges from 0 to 2 volts to obtain the forward current characteristic.</p>
 <p class='ruff'>The temperature in Ngspice is set using the <code>.temp</code> statement. We create an instance with the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Temp" title="::SpiceGenTcl::Temp" class='ruff_cmd'>::SpiceGenTcl::Temp</a> command, save the object reference in the variable <code>tempSt</code>, and then add it to the circuit:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-# add .temp
-set tempSt [Temp new 25]
-$circuit add $tempSt
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># add .temp</font></i>
+<b><font color=#923B23>set</font></b> tempSt [<b><font color=#923B23>Temp</font></b> new 25]
+<font color=#4A181B>$circuit</font> add <font color=#4A181B>$tempSt</font>
 </pre>
 
 </figure><p class='ruff'>Next, we create an array containing the temperature values and instantiate an object of the <a href="index-SpiceGenTcl-Ngspice-Simulators.html#::SpiceGenTcl::Ngspice::Simulators::Batch" title="::SpiceGenTcl::Ngspice::Simulators::Batch" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Simulators::Batch</a> class.:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-# add temperature sweep
-set temps [list -55 25 85 125 175]
-# set simulator with default 
-set simulator [Batch new {batch1}]
-# attach simulator object to circuit
-$circuit configure -Simulator $simulator
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># add temperature sweep</font></i>
+<b><font color=#923B23>set</font></b> temps [<b><font color=#923B23>list</font></b> -55 25 85 125 175]
+<i><font color=#4b5d50># set simulator with default </font></i>
+<b><font color=#923B23>set</font></b> simulator [<b><font color=#923B23>Batch</font></b> new {batch1}]
+<i><font color=#4b5d50># attach simulator object to circuit</font></i>
+<font color=#4A181B>$circuit</font> configure <font color=#463e11>-Simulator</font> <font color=#4A181B>$simulator</font>
 </pre>
 
 </figure><p class='ruff'>The only thing left is to set the temperature value in the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Temp" title="::SpiceGenTcl::Temp" class='ruff_cmd'>::SpiceGenTcl::Temp</a> class object, run the circuit, save the data, and repeat this process multiple times:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-# run circuit, change temperature, read log and data
-foreach temp $temps {
-    $tempSt configure -Value $temp
-    $circuit runAndRead
-    puts [$circuit getLog]
-    set data [$circuit getDataDict]
-    foreach x [dget $data v(anode)] y [dget $data i(va)]   {
-        set xf [format &quot;%.3f&quot; $x]
-        set yf [format &quot;%.3f&quot; [= {-$y}]]
-        lappend xydata [list $xf $yf]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># run circuit, change temperature, read log and data</font></i>
+<b><font color=#923B23>foreach</font></b> temp <font color=#4A181B>$temps</font> {
+    <font color=#4A181B>$tempSt</font> configure <font color=#463e11>-Value</font> <font color=#4A181B>$temp</font>
+    <font color=#4A181B>$circuit</font> runAndRead
+    <b><font color=#923B23>puts</font></b> [<font color=#4A181B>$circuit</font> getLog]
+    <b><font color=#923B23>set</font></b> data [<font color=#4A181B>$circuit</font> getDataDict]
+    <b><font color=#923B23>foreach</font></b> x [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$data</font> v(anode)] y [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$data</font> i(va)]   {
+        <b><font color=#923B23>set</font></b> xf [<b><font color=#923B23>format</font></b> <font color=#035103>&quot;%.3f&quot;</font> <font color=#4A181B>$x</font>]
+        <b><font color=#923B23>set</font></b> yf [<b><font color=#923B23>format</font></b> <font color=#035103>&quot;%.3f&quot;</font> [= {-<font color=#4A181B>$y</font>}]]
+        <b><font color=#923B23>lappend</font></b> xydata [<b><font color=#923B23>list</font></b> <font color=#4A181B>$xf</font> <font color=#4A181B>$yf</font>]
     }    
-    lappend dataList $xydata
-    unset xydata
+    <b><font color=#923B23>lappend</font></b> dataList <font color=#4A181B>$xydata</font>
+    <b><font color=#923B23>unset</font></b> xydata
 }
 </pre>
 
 </figure><p class='ruff'>Plotting the results:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-# plot results with ticklecharts
-set chart [ticklecharts::chart new]
-$chart Xaxis -name &quot;v(anode), V&quot; -minorTick {show &quot;True&quot;}  -type &quot;value&quot;
-$chart Yaxis -name &quot;Idiode, A&quot; -minorTick {show &quot;True&quot;}  -type &quot;value&quot;
-$chart SetOptions -title {} -tooltip {} -animation &quot;False&quot; -legend  {}  -toolbox {feature {dataZoom {yAxisIndex &quot;none&quot;}}} -grid {left &quot;5%&quot; right &quot;15%&quot;}
-foreach data $dataList temp $temps {
-    $chart Add &quot;lineSeries&quot; -data $data -showAllSymbol &quot;nothing&quot; -name &quot;${temp}°C&quot; -symbolSize &quot;1&quot;
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># plot results with ticklecharts</font></i>
+<b><font color=#923B23>set</font></b> chart [ticklecharts::chart new]
+<font color=#4A181B>$chart</font> Xaxis <font color=#463e11>-name</font> <font color=#035103>&quot;v(anode), V&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>}  <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
+<font color=#4A181B>$chart</font> Yaxis <font color=#463e11>-name</font> <font color=#035103>&quot;Idiode, A&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>}  <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
+<font color=#4A181B>$chart</font> SetOptions <font color=#463e11>-title</font> {} <font color=#463e11>-tooltip</font> {} <font color=#463e11>-animation</font> <font color=#035103>&quot;False&quot;</font> <font color=#463e11>-legend</font>  {}  <font color=#463e11>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#035103>&quot;none&quot;</font>}}} <font color=#463e11>-grid</font> {left <font color=#035103>&quot;5%&quot;</font> right <font color=#035103>&quot;15%&quot;</font>}
+<b><font color=#923B23>foreach</font></b> data <font color=#4A181B>$dataList</font> temp <font color=#4A181B>$temps</font> {
+    <font color=#4A181B>$chart</font> Add <font color=#035103>&quot;lineSeries&quot;</font> <font color=#463e11>-data</font> <font color=#4A181B>$data</font> <font color=#463e11>-showAllSymbol</font> <font color=#035103>&quot;nothing&quot;</font> <font color=#463e11>-name</font> <font color=#035103>&quot;<font color=#4A181B>${</font>temp<font color=#4A181B>}</font>°C&quot;</font> <font color=#463e11>-symbolSize</font> <font color=#035103>&quot;1&quot;</font>
 }
-set fbasename [file rootname [file tail [info script]]]
+<b><font color=#923B23>set</font></b> fbasename [<b><font color=#923B23>file</font></b> rootname [<b><font color=#923B23>file</font></b> tail [<b><font color=#923B23>info</font></b> script]]]
 
-$chart Render -outfile [file normalize [file join html_charts $fbasename.html]]
+<font color=#4A181B>$chart</font> Render <font color=#463e11>-outfile</font> [<b><font color=#923B23>file</font></b> normalize [<b><font color=#923B23>file</font></b> join html_charts <font color=#4A181B>$fbasename</font>.html]]
 </pre>
 
 </figure><p class='ruff'>In the picture, you can see how temperature affects the forward current of the diode. Because the series resistance has a temperature dependence, all the lines intersect near 1.8V, indicating the point of zero temperature coefficient:</p>
 <p class='ruff'><img src="assets/img/diode_iv.png" alt="diode_iv" /></p>
 <p class='ruff'>This circuit works almost without modification in Xyce simulator, see &quot;examples/xyce/dc/diode_iv.tcl&quot; file. The one of the differences is how we set the global temperature: in Xyce there is no .temp statement, for setting global temperature we use <code>.options</code> statement with class <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Options" title="::SpiceGenTcl::Options" class='ruff_cmd'>::SpiceGenTcl::Options</a>:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-set tempSt [Options new {{device -sw} {temp 25}}]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> tempSt [<b><font color=#923B23>Options</font></b> new {{device <font color=#463e11>-sw</font>} {temp 25}}]
 </pre>
 
 </figure><p class='ruff'>and then modify this value in loop:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-$tempSt setParamValue temp $temp
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$tempSt</font> setParamValue temp <font color=#4A181B>$temp</font>
 </pre>
 
 </figure><h2 class='ruff'><a name='::Tutorials-Diode capacitance simualtion'></a>Diode capacitance simualtion<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
 <p class='ruff'>In this example, we measure the volt-farad (or capacitance-voltage) relationship of the diode's depletion charge. To achieve this, we need to apply a negative voltage bias to the anode and perform an AC simulation at a single frequency. We then repeat this process at different voltages, collect all the results, and finally plot the entire curve. We calculate the capacitance value using the following equation:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-          ⎛I⎞   
-      -Im ⎜─⎟   
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>          ⎛I⎞   
+      <font color=#463e11>-Im</font> ⎜─⎟   
           ⎝V⎠   
-C = ────────────
+<b><font color=#923B23>C</font></b> = ────────────
     2 ⋅ π ⋅ freq
 
 </pre>
 
 </figure><p class='ruff'>where I and V - voltage and current phasors, freq - frequency of applied AC signal. First, we can define π constant manually, or borrow the value from <code>::math::constants</code> library:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-package require math::constants
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>package</font></b> require math::constants
 ::math::constants::constants  pi
 </pre>
 
 </figure><p class='ruff'>We again go through the circuit building sequence:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-# create top-level circuit
-set circuit [Circuit new {diode CV}]
-# add elements to circuit
-$circuit add [D new 1 0 c -model diomod -area 1 -lm 1e-6]
-set vdc [Vdc new a c nin -dc 0]
-$circuit add $vdc
-$circuit add [Vac new b nin 0 -ac 1]
-$circuit add [DiodeModel new diomod -is 1e-12 -n 1.2 -rs 0.01 -cj0 1e-9 -trs1 0.001 -xti 5]
-$circuit add [Ac new -variation lin -n 1 -fstart 1e5 -fstop 1e5]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create top-level circuit</font></i>
+<b><font color=#923B23>set</font></b> circuit [<b><font color=#923B23>Circuit</font></b> new {diode CV}]
+<i><font color=#4b5d50># add elements to circuit</font></i>
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>D</font></b> new 1 0 c <font color=#463e11>-model</font> diomod <font color=#463e11>-area</font> 1 <font color=#463e11>-lm</font> 1e-6]
+<b><font color=#923B23>set</font></b> vdc [<b><font color=#923B23>Vdc</font></b> new a c nin <font color=#463e11>-dc</font> 0]
+<font color=#4A181B>$circuit</font> add <font color=#4A181B>$vdc</font>
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vac</font></b> new b nin 0 <font color=#463e11>-ac</font> 1]
+<font color=#4A181B>$circuit</font> add [DiodeModel new diomod <font color=#463e11>-is</font> 1e-12 <font color=#463e11>-n</font> 1.2 <font color=#463e11>-rs</font> 0.01 <font color=#463e11>-cj0</font> 1e-9 <font color=#463e11>-trs1</font> 0.001 <font color=#463e11>-xti</font> 5]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Ac</font></b> new <font color=#463e11>-variation</font> lin <font color=#463e11>-n</font> 1 <font color=#463e11>-fstart</font> 1e5 <font color=#463e11>-fstop</font> 1e5]
 </pre>
 
 </figure><p class='ruff'>What are new here:</p>
 <ul class='ruff'>
-<li>AC voltage source <code>[Vac new b nin 0 -ac 1]</code> - uses to generate AC signal</li>
-<li>AC analysis statement <code>[Ac new -variation lin -n 1 -fstart 1e5 -fstop 1e5]</code> - uses to define AC frequency, 100 kHz in our case.</li>
+<li>AC voltage source <code>[<b><font color=#923B23>Vac</font></b> new b nin 0 <font color=#463e11>-ac</font> 1]</code> - uses to generate AC signal</li>
+<li>AC analysis statement <code>[<b><font color=#923B23>Ac</font></b> new <font color=#463e11>-variation</font> lin <font color=#463e11>-n</font> 1 <font color=#463e11>-fstart</font> 1e5 <font color=#463e11>-fstop</font> 1e5]</code> - uses to define AC frequency, 100 kHz in our case.</li>
 </ul>
 <p class='ruff'>The final circuit looks like this:</p>
 <p class='ruff'><img src="assets/img/diode_cv_cir.png" alt="drawing" width="500"/></p>
 <p class='ruff'>Nest step is to add voltage sweep:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-# add voltage sweep
-set voltSweep [lseq 0 20.0 0.1]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># add voltage sweep</font></i>
+<b><font color=#923B23>set</font></b> voltSweep [lseq 0 20.0 0.1]
 </pre>
 
-</figure><p class='ruff'>Then we as usual, create <a href="index-SpiceGenTcl-Ngspice-Simulators.html#::SpiceGenTcl::Ngspice::Simulators::BatchLiveLog" title="::SpiceGenTcl::Ngspice::Simulators::BatchLiveLog" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Simulators::BatchLiveLog</a> class object, attach it to <code>$circuit</code>, run it multiple times, collect results and apply the equation to calculate the capacitance (with the voltage phasor set to 1, so it is omitted):</p>
+</figure><p class='ruff'>Then we as usual, create <a href="index-SpiceGenTcl-Ngspice-Simulators.html#::SpiceGenTcl::Ngspice::Simulators::BatchLiveLog" title="::SpiceGenTcl::Ngspice::Simulators::BatchLiveLog" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Simulators::BatchLiveLog</a> class object, attach it to <code><font color=#4A181B>$circuit</font></code>, run it multiple times, collect results and apply the equation to calculate the capacitance (with the voltage phasor set to 1, so it is omitted):</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-#set simulator with default 
-set simulator [BatchLiveLog new {batch1}]
-# attach simulator object to circuit
-$circuit configure -Simulator $simulator
-# loop in which we run simulation, change reverse bias and read the results
-foreach volt $voltSweep {
-    #set reverse voltage bias
-    $vdc setParamValue dc $volt
-    # run simulation
-    $circuit runAndRead
-    # get data object
-    set data [$circuit getDataDict]
-    set x $volt
-    # get imaginary part of current
-    set y [@ [dget $data i(va)] 0 1]
-    set xf [format &quot;%.3e&quot; $x]
-    set yf [format &quot;%.2e&quot; [= {-$y/(2*$pi*1e5*1e-9)}]]
-    lappend xydata [list $xf $yf]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50>#set simulator with default </font></i>
+<b><font color=#923B23>set</font></b> simulator [<b><font color=#923B23>BatchLiveLog</font></b> new {batch1}]
+<i><font color=#4b5d50># attach simulator object to circuit</font></i>
+<font color=#4A181B>$circuit</font> configure <font color=#463e11>-Simulator</font> <font color=#4A181B>$simulator</font>
+<i><font color=#4b5d50># loop in which we run simulation, change reverse bias and read the results</font></i>
+<b><font color=#923B23>foreach</font></b> volt <font color=#4A181B>$voltSweep</font> {
+    <i><font color=#4b5d50>#set reverse voltage bias</font></i>
+    <font color=#4A181B>$vdc</font> setParamValue dc <font color=#4A181B>$volt</font>
+    <i><font color=#4b5d50># run simulation</font></i>
+    <font color=#4A181B>$circuit</font> runAndRead
+    <i><font color=#4b5d50># get data object</font></i>
+    <b><font color=#923B23>set</font></b> data [<font color=#4A181B>$circuit</font> getDataDict]
+    <b><font color=#923B23>set</font></b> x <font color=#4A181B>$volt</font>
+    <i><font color=#4b5d50># get imaginary part of current</font></i>
+    <b><font color=#923B23>set</font></b> y [@ [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$data</font> i(va)] 0 1]
+    <b><font color=#923B23>set</font></b> xf [<b><font color=#923B23>format</font></b> <font color=#035103>&quot;%.3e&quot;</font> <font color=#4A181B>$x</font>]
+    <b><font color=#923B23>set</font></b> yf [<b><font color=#923B23>format</font></b> <font color=#035103>&quot;%.2e&quot;</font> [= {-<font color=#4A181B>$y</font>/(2*<font color=#4A181B>$pi</font>*1e5*1e-9)}]]
+    <b><font color=#923B23>lappend</font></b> xydata [<b><font color=#923B23>list</font></b> <font color=#4A181B>$xf</font> <font color=#4A181B>$yf</font>]
 }
 </pre>
 
@@ -428,23 +394,21 @@ foreach volt $voltSweep {
 <p class='ruff'>The answer is as follows: the first index extracts values from the list of values at different frequencies, while the second index retrieves the imaginary component.</p>
 <p class='ruff'>The AC data vectors are organized as follows:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-{{reVal0 imVal0} {reVal1 imVal1} {reVal2 imVal2} ...}
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>{{reVal0 imVal0} {reVal1 imVal1} {reVal2 imVal2} ...}
 </pre>
 
 </figure><p class='ruff'>Here, <code>reVal0</code> is the real value at frequency index 0, <code>imVal0</code>is the imaginary value at the same frequency, <code>reVal1</code> is the real value at frequency index 1, <code>imVal1</code> is the imaginary value at that frequency, and so on. Even if there is only one frequency in the AC analysis, you should still extract the value using index 0.</p>
 <p class='ruff'>Now we can plot the results:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-# plot results with ticklecharts
-set chart [ticklecharts::chart new]
-$chart Xaxis -name &quot;v(0,c), V&quot; -minorTick {show &quot;True&quot;} -type &quot;value&quot;
-$chart Yaxis -name &quot;Diode capacitance, nF&quot; -minorTick {show &quot;True&quot;} -type &quot;value&quot;
-$chart SetOptions -title {} -tooltip {} -animation &quot;False&quot; -toolbox {feature {dataZoom {yAxisIndex &quot;none&quot;}}}
-$chart Add &quot;lineSeries&quot; -data $xydata -showAllSymbol &quot;nothing&quot;
-set fbasename [file rootname [file tail [info script]]]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># plot results with ticklecharts</font></i>
+<b><font color=#923B23>set</font></b> chart [ticklecharts::chart new]
+<font color=#4A181B>$chart</font> Xaxis <font color=#463e11>-name</font> <font color=#035103>&quot;v(0,c), V&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
+<font color=#4A181B>$chart</font> Yaxis <font color=#463e11>-name</font> <font color=#035103>&quot;Diode capacitance, nF&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
+<font color=#4A181B>$chart</font> SetOptions <font color=#463e11>-title</font> {} <font color=#463e11>-tooltip</font> {} <font color=#463e11>-animation</font> <font color=#035103>&quot;False&quot;</font> <font color=#463e11>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#035103>&quot;none&quot;</font>}}}
+<font color=#4A181B>$chart</font> Add <font color=#035103>&quot;lineSeries&quot;</font> <font color=#463e11>-data</font> <font color=#4A181B>$xydata</font> <font color=#463e11>-showAllSymbol</font> <font color=#035103>&quot;nothing&quot;</font>
+<b><font color=#923B23>set</font></b> fbasename [<b><font color=#923B23>file</font></b> rootname [<b><font color=#923B23>file</font></b> tail [<b><font color=#923B23>info</font></b> script]]]
 
-$chart Render -outfile [file normalize [file join html_charts $fbasename.html]]
+<font color=#4A181B>$chart</font> Render <font color=#463e11>-outfile</font> [<b><font color=#923B23>file</font></b> normalize [<b><font color=#923B23>file</font></b> join html_charts <font color=#4A181B>$fbasename</font>.html]]
 </pre>
 
 </figure><p class='ruff'>As a result, we obtain the expected curve, showing a decrease in capacitance value with higher reverse voltage:</p>
@@ -455,57 +419,52 @@ $chart Render -outfile [file normalize [file join html_charts $fbasename.html]]
 <p class='ruff'><img src="assets/img/diff_pair_cir.png" alt="drawing" width="700"/></p>
 <p class='ruff'>We build circuit step by step:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-# create top-level circuit
-set circuit [Circuit new {simple differential pair}]
-# add elements to circuit
-$circuit add [Vdc new cc 8 0 -dc 12]
-$circuit add [Vdc new ee 9 0 -dc -12]
-$circuit add [Vac new cm 1 0 -ac 1]
-$circuit add [Vac new dm 1 11 -ac 1]
-$circuit add [Q new 1 4 2 6 -model qnr]
-$circuit add [Q new 2 5 3 6 -model qnl]
-$circuit add [R new s1 11 2 -r 1e3]
-$circuit add [R new s2 3 1 -r 1e3]
-$circuit add [R new c1 4 8 -r 10e3]
-$circuit add [R new c2 5 8 -r 10e3]
-$circuit add [Q new 3 7 7 9 -model qnl]
-$circuit add [Q new 4 6 7 9 -model qnr]
-$circuit add [R new bias 7 8 -r 20e3]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create top-level circuit</font></i>
+<b><font color=#923B23>set</font></b> circuit [<b><font color=#923B23>Circuit</font></b> new {simple differential pair}]
+<i><font color=#4b5d50># add elements to circuit</font></i>
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new cc 8 0 <font color=#463e11>-dc</font> 12]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new ee 9 0 <font color=#463e11>-dc</font> -12]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vac</font></b> new cm 1 0 <font color=#463e11>-ac</font> 1]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vac</font></b> new dm 1 11 <font color=#463e11>-ac</font> 1]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Q</font></b> new 1 4 2 6 <font color=#463e11>-model</font> qnr]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Q</font></b> new 2 5 3 6 <font color=#463e11>-model</font> qnl]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new s1 11 2 <font color=#463e11>-r</font> 1e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new s2 3 1 <font color=#463e11>-r</font> 1e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new c1 4 8 <font color=#463e11>-r</font> 10e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new c2 5 8 <font color=#463e11>-r</font> 10e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Q</font></b> new 3 7 7 9 <font color=#463e11>-model</font> qnl]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Q</font></b> new 4 6 7 9 <font color=#463e11>-model</font> qnr]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new bias 7 8 <font color=#463e11>-r</font> 20e3]
 </pre>
 
 </figure><p class='ruff'>Then we add models for NPN and PNP bipolar transistors:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-$circuit add [BjtGPModel new qnl npn -bf 80 -rb 100 -cjc 2e-12 -tf 0.3e-9 -tr 6e-9 -cje 3e-12 -cjc 2e-12 -va 50]
-$circuit add [BjtGPModel new qnr npn -bf 80 -rb 100 -cjc 2e-12 -tf 0.3e-9 -tr 6e-9 -cje 3e-12 -cjc 2e-12 -va 50]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$circuit</font> add [BjtGPModel new qnl npn <font color=#463e11>-bf</font> 80 <font color=#463e11>-rb</font> 100 <font color=#463e11>-cjc</font> 2e-12 <font color=#463e11>-tf</font> 0.3e-9 <font color=#463e11>-tr</font> 6e-9 <font color=#463e11>-cje</font> 3e-12 <font color=#463e11>-cjc</font> 2e-12 <font color=#463e11>-va</font> 50]
+<font color=#4A181B>$circuit</font> add [BjtGPModel new qnr npn <font color=#463e11>-bf</font> 80 <font color=#463e11>-rb</font> 100 <font color=#463e11>-cjc</font> 2e-12 <font color=#463e11>-tf</font> 0.3e-9 <font color=#463e11>-tr</font> 6e-9 <font color=#463e11>-cje</font> 3e-12 <font color=#463e11>-cjc</font> 2e-12 <font color=#463e11>-va</font> 50]
 </pre>
 
 </figure><p class='ruff'>In DC sensistive analysis we add input voltage to which we sense ohter parameters in the circuit:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-$circuit add [SensDc new -outvar v(5,4)]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$circuit</font> add [<b><font color=#923B23>SensDc</font></b> new <font color=#463e11>-outvar</font> v(5,4)]
 </pre>
 
 </figure><p class='ruff'>We create simulator, run it and read data:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-#set simulator with default 
-set simulator [Batch new {batch1}]
-# attach simulator object to circuit
-$circuit configure -Simulator $simulator
-# run circuit, read log and data
-$circuit runAndRead
-# get data object
-set data [$circuit getDataDict]
-set vrc1 [dget $data v(rc1)]
-set vrc2 [dget $data v(rc2)]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50>#set simulator with default </font></i>
+<b><font color=#923B23>set</font></b> simulator [<b><font color=#923B23>Batch</font></b> new {batch1}]
+<i><font color=#4b5d50># attach simulator object to circuit</font></i>
+<font color=#4A181B>$circuit</font> configure <font color=#463e11>-Simulator</font> <font color=#4A181B>$simulator</font>
+<i><font color=#4b5d50># run circuit, read log and data</font></i>
+<font color=#4A181B>$circuit</font> runAndRead
+<i><font color=#4b5d50># get data object</font></i>
+<b><font color=#923B23>set</font></b> data [<font color=#4A181B>$circuit</font> getDataDict]
+<b><font color=#923B23>set</font></b> vrc1 [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$data</font> v(rc1)]
+<b><font color=#923B23>set</font></b> vrc2 [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$data</font> v(rc2)]
 </pre>
 
-</figure><p class='ruff'>To print resulted sensitivities we use <code>format</code> command where we specify the format of the number:</p>
+</figure><p class='ruff'>To print resulted sensitivities we use <code><b><font color=#923B23>format</font></b></code> command where we specify the format of the number:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-vrc1=6.032e-04 
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>vrc1=6.032e-04 
 vrc2=-6.032e-04
 </pre>
 
@@ -515,105 +474,99 @@ vrc2=-6.032e-04
 <p class='ruff'>The circuit is a ring oscillator composed of voltage-controlled switches, based on an example from Ngspice (/examples/p-to-n-examples/switch-oscillators.cir). Each stage of the oscillator is a simple two-switch inverter, and the entire circuit consists of 17 stages.</p>
 <p class='ruff'>At the beginning, we create a class called <code>Inverter</code> to describe the inverter and then instantiate an object of this class:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-# create class that represents inverter subcircuit
-oo::class create Inverter {
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create class that represents inverter subcircuit</font></i>
+<b><font color=#ca14ca>oo::class</font></b> create Inverter {
     superclass Subcircuit
-    constructor {} {
-        # define external pins of subcircuit
-        set pins {in out vdd dgnd}
-        # define input parameters of subcircuit
-        set params {}
-        # add elements to subcircuit definition
-        my add [C new l out dgnd -c 0.1e-12]
-        my add [C new 2 out vdd -c 0.1e-12]
-        my add [VSwitch new p out vdd vdd in -model swswitch]
-        my add [VSwitch new n out dgnd in dgnd -model switchn]
-        # pass name, list of pins and list of parameters to Subcircuit constructor
-        next inverter $pins $params
+    <b><font color=#ca14ca>constructor</font></b> {} {
+        <i><font color=#4b5d50># define external pins of subcircuit</font></i>
+        <b><font color=#923B23>set</font></b> pins {in out vdd dgnd}
+        <i><font color=#4b5d50># define input parameters of subcircuit</font></i>
+        <b><font color=#923B23>set</font></b> params {}
+        <i><font color=#4b5d50># add elements to subcircuit definition</font></i>
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>C</font></b> new l out dgnd <font color=#463e11>-c</font> 0.1e-12]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>C</font></b> new 2 out vdd <font color=#463e11>-c</font> 0.1e-12]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>VSwitch</font></b> new p out vdd vdd in <font color=#463e11>-model</font> swswitch]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>VSwitch</font></b> new n out dgnd in dgnd <font color=#463e11>-model</font> switchn]
+        <i><font color=#4b5d50># pass name, list of pins and list of parameters to Subcircuit constructor</font></i>
+        <b><font color=#923B23>next</font></b> inverter <font color=#4A181B>$pins</font> <font color=#4A181B>$params</font>
     }
 }
-# create subcircuit definition instance
-set inverter [Inverter new]
+<i><font color=#4b5d50># create subcircuit definition instance</font></i>
+<b><font color=#923B23>set</font></b> inverter [Inverter new]
 </pre>
 
 </figure><p class='ruff'>Next, we define the other elements and the top-level circuit:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-# create top-level circuit
-set circuit [Circuit new {switch_oscillator}]
-# add elements to circuit
-$circuit add [Tran new -tstep 50e-12 -tstop 80e-9]
-$circuit add [Options new {{method gear} {maxord 3}}]
-$circuit add [RawString new &quot;.ic v(osc_out)=0.25&quot;]
-$circuit add $inverter
-$circuit add [Vdc new dd vdd2 0 -dc 3]
-$circuit add [Vdc new measure vdd2 vdd -dc 0]
-$circuit add [C new vdd vdd 0 -c 1e-18]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create top-level circuit</font></i>
+<b><font color=#923B23>set</font></b> circuit [<b><font color=#923B23>Circuit</font></b> new {switch_oscillator}]
+<i><font color=#4b5d50># add elements to circuit</font></i>
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Tran</font></b> new <font color=#463e11>-tstep</font> 50e-12 <font color=#463e11>-tstop</font> 80e-9]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Options</font></b> new {{<b><font color=#ca14ca>method</font></b> gear} {maxord 3}}]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>RawString</font></b> new <font color=#035103>&quot;.ic v(osc_out)=0.25&quot;</font>]
+<font color=#4A181B>$circuit</font> add <font color=#4A181B>$inverter</font>
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new dd vdd2 0 <font color=#463e11>-dc</font> 3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new measure vdd2 vdd <font color=#463e11>-dc</font> 0]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>C</font></b> new vdd vdd 0 <font color=#463e11>-c</font> 1e-18]
 </pre>
 
 </figure><p class='ruff'>We can add multiple stages of inverters using a loop, which saves many lines of code and allows us to dynamically adjust the number of stages:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-# add multiple inverters in the cycle
-for {set i 1} {$i&lt;16} {incr i} {
-    set ip1 [+ $i 1]
-    $circuit add [SubcircuitInstanceAuto new $inverter x${ip1} &quot;n${i} n${ip1} vdd 0&quot;]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># add multiple inverters in the cycle</font></i>
+<b><font color=#923B23>for</font></b> {<b><font color=#923B23>set</font></b> i 1} {<font color=#4A181B>$i</font>&lt;16} {<b><font color=#923B23>incr</font></b> i} {
+    <b><font color=#923B23>set</font></b> ip1 [+ <font color=#4A181B>$i</font> 1]
+    <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>SubcircuitInstanceAuto</font></b> new <font color=#4A181B>$inverter</font> x<font color=#4A181B>${ip1}</font> <font color=#035103>&quot;n<font color=#4A181B>${</font>i<font color=#4A181B>}</font> n<font color=#4A181B>${</font>ip1<font color=#4A181B>}</font> vdd 0&quot;</font>]
 }
 </pre>
 
 </figure><p class='ruff'>After that, we add the first and last stages, as well as the models of the switches:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-$circuit add [SubcircuitInstanceAuto new $inverter x18 {osc_out n1 vdd 0}]
-$circuit add [SubcircuitInstanceAuto new $inverter x19 {n16 osc_out vdd 0}]
-$circuit add [VSwitchModel new swswitch -vt 1 -vh 0.1 -ron 1e3 -roff 1e12]
-$circuit add [VSwitchModel new switchn -vt 1 -vh 0.1 -ron 1e3 -roff 1e12]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$circuit</font> add [<b><font color=#923B23>SubcircuitInstanceAuto</font></b> new <font color=#4A181B>$inverter</font> x18 {osc_out n1 vdd 0}]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>SubcircuitInstanceAuto</font></b> new <font color=#4A181B>$inverter</font> x19 {n16 osc_out vdd 0}]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>VSwitchModel</font></b> new swswitch <font color=#463e11>-vt</font> 1 <font color=#463e11>-vh</font> 0.1 <font color=#463e11>-ron</font> 1e3 <font color=#463e11>-roff</font> 1e12]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>VSwitchModel</font></b> new switchn <font color=#463e11>-vt</font> 1 <font color=#463e11>-vh</font> 0.1 <font color=#463e11>-ron</font> 1e3 <font color=#463e11>-roff</font> 1e12]
 </pre>
 
 </figure><p class='ruff'>Now we can run and read data:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-#set simulator with default temporary directory
-set simulator [BatchLiveLog new {batch1}]
-# attach simulator object to circuit
-$circuit configure -Simulator $simulator
-# run circuit, read log and data
-$circuit runAndRead
-# get data object
-set data [$circuit getDataDict]
-set axis [dget $data time]
-set vout [dget $data v(osc_out)]
-set imeas [dget $data i(vmeasure)]
-foreach time [dget $data time] vout [dget $data v(osc_out)] imeas [dget $data i(vmeasure)] {
-    lappend timeVout [list $time $vout]
-    lappend timeImeas [list $time $imeas]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50>#set simulator with default temporary directory</font></i>
+<b><font color=#923B23>set</font></b> simulator [<b><font color=#923B23>BatchLiveLog</font></b> new {batch1}]
+<i><font color=#4b5d50># attach simulator object to circuit</font></i>
+<font color=#4A181B>$circuit</font> configure <font color=#463e11>-Simulator</font> <font color=#4A181B>$simulator</font>
+<i><font color=#4b5d50># run circuit, read log and data</font></i>
+<font color=#4A181B>$circuit</font> runAndRead
+<i><font color=#4b5d50># get data object</font></i>
+<b><font color=#923B23>set</font></b> data [<font color=#4A181B>$circuit</font> getDataDict]
+<b><font color=#923B23>set</font></b> axis [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$data</font> time]
+<b><font color=#923B23>set</font></b> vout [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$data</font> v(osc_out)]
+<b><font color=#923B23>set</font></b> imeas [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$data</font> i(vmeasure)]
+<b><font color=#923B23>foreach</font></b> time [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$data</font> time] vout [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$data</font> v(osc_out)] imeas [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$data</font> i(vmeasure)] {
+    <b><font color=#923B23>lappend</font></b> timeVout [<b><font color=#923B23>list</font></b> <font color=#4A181B>$time</font> <font color=#4A181B>$vout</font>]
+    <b><font color=#923B23>lappend</font></b> timeImeas [<b><font color=#923B23>list</font></b> <font color=#4A181B>$time</font> <font color=#4A181B>$imeas</font>]
 }
 </pre>
 
 </figure><p class='ruff'>We save output waveform and power currents, and then plot it:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-# plot results with ticklecharts
-# chart for output voltage
-set chartVout [ticklecharts::chart new]
-$chartVout Xaxis -name &quot;time, s&quot; -minorTick {show &quot;True&quot;} -type &quot;value&quot;
-$chartVout Yaxis -name &quot;Output voltage, V&quot; -minorTick {show &quot;True&quot;} -type &quot;value&quot;
-$chartVout SetOptions -title {} -tooltip {} -animation &quot;False&quot; -toolbox {feature {dataZoom {yAxisIndex &quot;none&quot;}}}
-$chartVout Add &quot;lineSeries&quot; -data $timeVout -showAllSymbol &quot;nothing&quot; -symbolSize &quot;0&quot;
-# chart for measured current
-set chartImeas [ticklecharts::chart new]
-$chartImeas Xaxis -name &quot;time, s&quot; -minorTick {show &quot;True&quot;} -type &quot;value&quot;
-$chartImeas Yaxis -name &quot;Current, I&quot; -minorTick {show &quot;True&quot;} -type &quot;value&quot;
-$chartImeas SetOptions -title {} -tooltip {} -animation &quot;False&quot;  -toolbox {feature {dataZoom {yAxisIndex &quot;none&quot;}}}
-$chartImeas Add &quot;lineSeries&quot; -data $timeImeas -showAllSymbol &quot;nothing&quot; -symbolSize &quot;0&quot;
-# create multiplot
-set layout [ticklecharts::Gridlayout new]
-$layout Add $chartVout -bottom &quot;5%&quot; -height &quot;40%&quot; -width &quot;80%&quot;
-$layout Add $chartImeas -bottom &quot;55%&quot; -height &quot;40%&quot; -width &quot;80%&quot;
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># plot results with ticklecharts</font></i>
+<i><font color=#4b5d50># chart for output voltage</font></i>
+<b><font color=#923B23>set</font></b> chartVout [ticklecharts::chart new]
+<font color=#4A181B>$chartVout</font> Xaxis <font color=#463e11>-name</font> <font color=#035103>&quot;time, s&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
+<font color=#4A181B>$chartVout</font> Yaxis <font color=#463e11>-name</font> <font color=#035103>&quot;Output voltage, V&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
+<font color=#4A181B>$chartVout</font> SetOptions <font color=#463e11>-title</font> {} <font color=#463e11>-tooltip</font> {} <font color=#463e11>-animation</font> <font color=#035103>&quot;False&quot;</font> <font color=#463e11>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#035103>&quot;none&quot;</font>}}}
+<font color=#4A181B>$chartVout</font> Add <font color=#035103>&quot;lineSeries&quot;</font> <font color=#463e11>-data</font> <font color=#4A181B>$timeVout</font> <font color=#463e11>-showAllSymbol</font> <font color=#035103>&quot;nothing&quot;</font> <font color=#463e11>-symbolSize</font> <font color=#035103>&quot;0&quot;</font>
+<i><font color=#4b5d50># chart for measured current</font></i>
+<b><font color=#923B23>set</font></b> chartImeas [ticklecharts::chart new]
+<font color=#4A181B>$chartImeas</font> Xaxis <font color=#463e11>-name</font> <font color=#035103>&quot;time, s&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
+<font color=#4A181B>$chartImeas</font> Yaxis <font color=#463e11>-name</font> <font color=#035103>&quot;Current, I&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
+<font color=#4A181B>$chartImeas</font> SetOptions <font color=#463e11>-title</font> {} <font color=#463e11>-tooltip</font> {} <font color=#463e11>-animation</font> <font color=#035103>&quot;False&quot;</font>  <font color=#463e11>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#035103>&quot;none&quot;</font>}}}
+<font color=#4A181B>$chartImeas</font> Add <font color=#035103>&quot;lineSeries&quot;</font> <font color=#463e11>-data</font> <font color=#4A181B>$timeImeas</font> <font color=#463e11>-showAllSymbol</font> <font color=#035103>&quot;nothing&quot;</font> <font color=#463e11>-symbolSize</font> <font color=#035103>&quot;0&quot;</font>
+<i><font color=#4b5d50># create multiplot</font></i>
+<b><font color=#923B23>set</font></b> layout [ticklecharts::Gridlayout new]
+<font color=#4A181B>$layout</font> Add <font color=#4A181B>$chartVout</font> <font color=#463e11>-bottom</font> <font color=#035103>&quot;5%&quot;</font> <font color=#463e11>-height</font> <font color=#035103>&quot;40%&quot;</font> <font color=#463e11>-width</font> <font color=#035103>&quot;80%&quot;</font>
+<font color=#4A181B>$layout</font> Add <font color=#4A181B>$chartImeas</font> <font color=#463e11>-bottom</font> <font color=#035103>&quot;55%&quot;</font> <font color=#463e11>-height</font> <font color=#035103>&quot;40%&quot;</font> <font color=#463e11>-width</font> <font color=#035103>&quot;80%&quot;</font>
 
-set fbasename [file rootname [file tail [info script]]]
-$layout Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -height 800px
+<b><font color=#923B23>set</font></b> fbasename [<b><font color=#923B23>file</font></b> rootname [<b><font color=#923B23>file</font></b> tail [<b><font color=#923B23>info</font></b> script]]]
+<font color=#4A181B>$layout</font> Render <font color=#463e11>-outfile</font> [<b><font color=#923B23>file</font></b> normalize [<b><font color=#923B23>file</font></b> join .. html_charts <font color=#4A181B>$fbasename</font>.html]] <font color=#463e11>-height</font> 800px
 </pre>
 
 </figure><p class='ruff'><img src="assets/img/switch_oscillator.png" alt="switch_oscillator" /></p>
@@ -623,197 +576,188 @@ $layout Render -outfile [file normalize [file join .. html_charts $fbasename.htm
 <p class='ruff'>The circuit is a classic adder with 2 four-bit inputs, sourced from Ngspice tests (/tests/transient/fourbitadder.cir). We incrementally build it from the simplest NAND logic blocks up to the four-bit adder circuit.</p>
 <p class='ruff'>The NAND block itself is constructed from a combination of bipolar transistors, diodes, and resistors. Its definition is as follows:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-# create class that represents NAND subcircuit
-oo::class create NAND {
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create class that represents NAND subcircuit</font></i>
+<b><font color=#ca14ca>oo::class</font></b> create NAND {
     superclass Subcircuit
-    constructor {} {
-        # define external pins of subcircuit
-        set pins {1 2 3 4}
-        # define input parameters of subcircuit
-        set params {}
-        # add elements to subcircuit definition
-        my add [Q new 1 9 5 1 -model qmod]
-        my add [D new 1clamp 0 1 -model dmod]
-        my add [Q new 2 9 5 2 -model qmod]
-        my add [D new 2clamp 0 2 -model dmod]
-        my add [R new b 4 5 -r 4e3]
-        my add [R new 1 4 6 -r 1.6e3]
-        my add [Q new 3 6 9 8 -model qmod]
-        my add [R new 2 8 0 -r 1e3]
-        my add [R new c 4 7 -r 130]
-        my add [Q new 4 7 6 10 -model qmod]
-        my add [D new vbedrop 10 3 -model dmod]
-        my add [Q new 5 3 8 0 -model qmod]
-        # pass name, list of pins and list of parameters to Subcircuit constructor
-        next nand $pins $params
+    <b><font color=#ca14ca>constructor</font></b> {} {
+        <i><font color=#4b5d50># define external pins of subcircuit</font></i>
+        <b><font color=#923B23>set</font></b> pins {1 2 3 4}
+        <i><font color=#4b5d50># define input parameters of subcircuit</font></i>
+        <b><font color=#923B23>set</font></b> params {}
+        <i><font color=#4b5d50># add elements to subcircuit definition</font></i>
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>Q</font></b> new 1 9 5 1 <font color=#463e11>-model</font> qmod]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>D</font></b> new 1clamp 0 1 <font color=#463e11>-model</font> dmod]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>Q</font></b> new 2 9 5 2 <font color=#463e11>-model</font> qmod]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>D</font></b> new 2clamp 0 2 <font color=#463e11>-model</font> dmod]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new b 4 5 <font color=#463e11>-r</font> 4e3]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new 1 4 6 <font color=#463e11>-r</font> 1.6e3]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>Q</font></b> new 3 6 9 8 <font color=#463e11>-model</font> qmod]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new 2 8 0 <font color=#463e11>-r</font> 1e3]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>R</font></b> new c 4 7 <font color=#463e11>-r</font> 130]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>Q</font></b> new 4 7 6 10 <font color=#463e11>-model</font> qmod]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>D</font></b> new vbedrop 10 3 <font color=#463e11>-model</font> dmod]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>Q</font></b> new 5 3 8 0 <font color=#463e11>-model</font> qmod]
+        <i><font color=#4b5d50># pass name, list of pins and list of parameters to Subcircuit constructor</font></i>
+        <b><font color=#923B23>next</font></b> nand <font color=#4A181B>$pins</font> <font color=#4A181B>$params</font>
     }
 }
-# create NAND subcircuit definition instance
-set nand [NAND new]
+<i><font color=#4b5d50># create NAND subcircuit definition instance</font></i>
+<b><font color=#923B23>set</font></b> nand [NAND new]
 </pre>
 
 </figure><p class='ruff'>To build one-bit adder we use combination of NAND subcircuits:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-# create class that represents ONEBIT subcircuit
-oo::class create ONEBIT {
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create class that represents ONEBIT subcircuit</font></i>
+<b><font color=#ca14ca>oo::class</font></b> create ONEBIT {
     superclass Subcircuit
-    constructor {} {
-        # define external pins of subcircuit
-        set pins {1 2 3 4 5 6}
-        # define input parameters of subcircuit
-        set params {}
-        # add elements to subcircuit definition
-        global variable nand
-        my add [XAuto new $nand x1 &quot;1 2 7 6&quot;]
-        my add [XAuto new $nand x2 &quot;1 7 8 6&quot;]
-        my add [XAuto new $nand x3 &quot;2 7 9 6&quot;]
-        my add [XAuto new $nand x4 &quot;8 9 10 6&quot;]
-        my add [XAuto new $nand x5 &quot;3 10 11 6&quot;]
-        my add [XAuto new $nand x6 &quot;3 11 12 6&quot;]
-        my add [XAuto new $nand x7 &quot;10 11 13 6&quot;]
-        my add [XAuto new $nand x8 &quot;12 13 4 6&quot;]
-        my add [XAuto new $nand x9 &quot;11 7 5 6&quot;]
-        # pass name, list of pins and list of parameters to Subcircuit constructor
-        next onebit $pins $params
+    <b><font color=#ca14ca>constructor</font></b> {} {
+        <i><font color=#4b5d50># define external pins of subcircuit</font></i>
+        <b><font color=#923B23>set</font></b> pins {1 2 3 4 5 6}
+        <i><font color=#4b5d50># define input parameters of subcircuit</font></i>
+        <b><font color=#923B23>set</font></b> params {}
+        <i><font color=#4b5d50># add elements to subcircuit definition</font></i>
+        <b><font color=#923B23>global</font></b> variable nand
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>XAuto</font></b> new <font color=#4A181B>$nand</font> x1 <font color=#035103>&quot;1 2 7 6&quot;</font>]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>XAuto</font></b> new <font color=#4A181B>$nand</font> x2 <font color=#035103>&quot;1 7 8 6&quot;</font>]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>XAuto</font></b> new <font color=#4A181B>$nand</font> x3 <font color=#035103>&quot;2 7 9 6&quot;</font>]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>XAuto</font></b> new <font color=#4A181B>$nand</font> x4 <font color=#035103>&quot;8 9 10 6&quot;</font>]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>XAuto</font></b> new <font color=#4A181B>$nand</font> x5 <font color=#035103>&quot;3 10 11 6&quot;</font>]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>XAuto</font></b> new <font color=#4A181B>$nand</font> x6 <font color=#035103>&quot;3 11 12 6&quot;</font>]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>XAuto</font></b> new <font color=#4A181B>$nand</font> x7 <font color=#035103>&quot;10 11 13 6&quot;</font>]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>XAuto</font></b> new <font color=#4A181B>$nand</font> x8 <font color=#035103>&quot;12 13 4 6&quot;</font>]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>XAuto</font></b> new <font color=#4A181B>$nand</font> x9 <font color=#035103>&quot;11 7 5 6&quot;</font>]
+        <i><font color=#4b5d50># pass name, list of pins and list of parameters to Subcircuit constructor</font></i>
+        <b><font color=#923B23>next</font></b> onebit <font color=#4A181B>$pins</font> <font color=#4A181B>$params</font>
     }
 }
-# create ONEBIT subcircuit definition instance
-set onebit [ONEBIT new]
+<i><font color=#4b5d50># create ONEBIT subcircuit definition instance</font></i>
+<b><font color=#923B23>set</font></b> onebit [ONEBIT new]
 </pre>
 
 </figure><p class='ruff'>Previously, we built subcircuits, but here we demonstrate that subcircuits can be used within the definitions of other subcircuits, allowing us to create a multi-level hierarchy for building complex circuits. We start by combining one-bit adders to form two-bit adders, and then increase the level of grouping by connecting two two-bit subcircuits to create a four-bit adder:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-# create class that represents TWOBIT subcircuit
-oo::class create TWOBIT {
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create class that represents TWOBIT subcircuit</font></i>
+<b><font color=#ca14ca>oo::class</font></b> create TWOBIT {
     superclass Subcircuit
-    constructor {} {
-        # define external pins of subcircuit
-        set pins {1 2 3 4 5 6 7 8 9}
-        # define input parameters of subcircuit
-        set params {}
-        # add elements to subcircuit definition
-        global variable onebit
-        my add [XAuto new $onebit x1 &quot;1 2 7 5 10 9&quot;]
-        my add [XAuto new $onebit x2 &quot;3 4 10 6 8 9&quot;]
-        # pass name, list of pins and list of parameters to Subcircuit constructor
-        next twobit $pins $params
+    <b><font color=#ca14ca>constructor</font></b> {} {
+        <i><font color=#4b5d50># define external pins of subcircuit</font></i>
+        <b><font color=#923B23>set</font></b> pins {1 2 3 4 5 6 7 8 9}
+        <i><font color=#4b5d50># define input parameters of subcircuit</font></i>
+        <b><font color=#923B23>set</font></b> params {}
+        <i><font color=#4b5d50># add elements to subcircuit definition</font></i>
+        <b><font color=#923B23>global</font></b> variable onebit
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>XAuto</font></b> new <font color=#4A181B>$onebit</font> x1 <font color=#035103>&quot;1 2 7 5 10 9&quot;</font>]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>XAuto</font></b> new <font color=#4A181B>$onebit</font> x2 <font color=#035103>&quot;3 4 10 6 8 9&quot;</font>]
+        <i><font color=#4b5d50># pass name, list of pins and list of parameters to Subcircuit constructor</font></i>
+        <b><font color=#923B23>next</font></b> twobit <font color=#4A181B>$pins</font> <font color=#4A181B>$params</font>
     }
 }
-# create TWOBIT subcircuit definition instance
-set twobit [TWOBIT new]
-# create class that represents FOURBIT subcircuit
-oo::class create FOURBIT {
+<i><font color=#4b5d50># create TWOBIT subcircuit definition instance</font></i>
+<b><font color=#923B23>set</font></b> twobit [TWOBIT new]
+<i><font color=#4b5d50># create class that represents FOURBIT subcircuit</font></i>
+<b><font color=#ca14ca>oo::class</font></b> create FOURBIT {
     superclass Subcircuit
-    constructor {} {
-        # define external pins of subcircuit
-        set pins {1 2 3 4 5 6 7 8 9 10 11 12 13 14 15}
-        # define input parameters of subcircuit
-        set params {}
-        # add elements to subcircuit definition
-        global variable twobit
-        my add [XAuto new $twobit x1 &quot;1 2 3 4 9 10 13 16 15&quot;]
-        my add [XAuto new $twobit x2 &quot;5 6 7 8 11 12 16 14 15&quot;]
-        # pass name, list of pins and list of parameters to Subcircuit constructor
-        next fourbit $pins $params
+    <b><font color=#ca14ca>constructor</font></b> {} {
+        <i><font color=#4b5d50># define external pins of subcircuit</font></i>
+        <b><font color=#923B23>set</font></b> pins {1 2 3 4 5 6 7 8 9 10 11 12 13 14 15}
+        <i><font color=#4b5d50># define input parameters of subcircuit</font></i>
+        <b><font color=#923B23>set</font></b> params {}
+        <i><font color=#4b5d50># add elements to subcircuit definition</font></i>
+        <b><font color=#923B23>global</font></b> variable twobit
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>XAuto</font></b> new <font color=#4A181B>$twobit</font> x1 <font color=#035103>&quot;1 2 3 4 9 10 13 16 15&quot;</font>]
+        <b><font color=#ca14ca>my</font></b> add [<b><font color=#923B23>XAuto</font></b> new <font color=#4A181B>$twobit</font> x2 <font color=#035103>&quot;5 6 7 8 11 12 16 14 15&quot;</font>]
+        <i><font color=#4b5d50># pass name, list of pins and list of parameters to Subcircuit constructor</font></i>
+        <b><font color=#923B23>next</font></b> fourbit <font color=#4A181B>$pins</font> <font color=#4A181B>$params</font>
     }
 }
-# create FOURBIT subcircuit definition instance
-set fourbit [FOURBIT new]
+<i><font color=#4b5d50># create FOURBIT subcircuit definition instance</font></i>
+<b><font color=#923B23>set</font></b> fourbit [FOURBIT new]
 </pre>
 
 </figure><p class='ruff'>Next step is to initialize top circuit and add all subcircuit definitions to it:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-# create top-level circuit
-set circuit [Circuit new {Four-bit adder}]
-# add elements to circuit
-$circuit add [Tran new -tstep 1e-9 -tstop 10e-6]
-$circuit add [Options new {{noacct -sw}}]
-$circuit add $nand
-$circuit add $onebit
-$circuit add $twobit
-$circuit add $fourbit
-$circuit add [XAuto new $fourbit x18 {1 2 3 4 5 6 7 8 9 10 11 12 0 13 99}]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create top-level circuit</font></i>
+<b><font color=#923B23>set</font></b> circuit [<b><font color=#923B23>Circuit</font></b> new {Four-bit adder}]
+<i><font color=#4b5d50># add elements to circuit</font></i>
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Tran</font></b> new <font color=#463e11>-tstep</font> 1e-9 <font color=#463e11>-tstop</font> 10e-6]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Options</font></b> new {{noacct <font color=#463e11>-sw</font>}}]
+<font color=#4A181B>$circuit</font> add <font color=#4A181B>$nand</font>
+<font color=#4A181B>$circuit</font> add <font color=#4A181B>$onebit</font>
+<font color=#4A181B>$circuit</font> add <font color=#4A181B>$twobit</font>
+<font color=#4A181B>$circuit</font> add <font color=#4A181B>$fourbit</font>
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>XAuto</font></b> new <font color=#4A181B>$fourbit</font> x18 {1 2 3 4 5 6 7 8 9 10 11 12 0 13 99}]
 </pre>
 
 </figure><p class='ruff'>To properly see the circuit in action we define input signals to all eight inputs, as well as power:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-set trtf 10e-9
-set tonStep 10e-9
-set perStep 50e-9
-$circuit add [Vdc new cc 99 0 -dc 5]
-set i 1
-foreach name [list in1a in1b in2a in2b in3a in3b in4a in4b] {
-    $circuit add [Vpulse new $name $i 0 -low 0 -high 3 -td 0 -tf $trtf -tr $trtf -pw [= {$tonStep*pow(2,$i-1)}] -per [= {$perStep*pow(2,$i-1)}]]
-    incr i
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> trtf 10e-9
+<b><font color=#923B23>set</font></b> tonStep 10e-9
+<b><font color=#923B23>set</font></b> perStep 50e-9
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new cc 99 0 <font color=#463e11>-dc</font> 5]
+<b><font color=#923B23>set</font></b> i 1
+<b><font color=#923B23>foreach</font></b> name [<b><font color=#923B23>list</font></b> in1a in1b in2a in2b in3a in3b in4a in4b] {
+    <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vpulse</font></b> new <font color=#4A181B>$name</font> <font color=#4A181B>$i</font> 0 <font color=#463e11>-low</font> 0 <font color=#463e11>-high</font> 3 <font color=#463e11>-td</font> 0 <font color=#463e11>-tf</font> <font color=#4A181B>$trtf</font> <font color=#463e11>-tr</font> <font color=#4A181B>$trtf</font> <font color=#463e11>-pw</font> [= {<font color=#4A181B>$tonStep</font>*pow(2,<font color=#4A181B>$i</font>-1)}] <font color=#463e11>-per</font> [= {<font color=#4A181B>$perStep</font>*pow(2,<font color=#4A181B>$i</font>-1)}]]
+    <b><font color=#923B23>incr</font></b> i
 }
 </pre>
 
 </figure><p class='ruff'>Add load resistors:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-$circuit add [R new bit0 9 0 -r 1e3]
-$circuit add [R new bit1 10 0 -r 1e3]
-$circuit add [R new bit2 11 0 -r 1e3]
-$circuit add [R new bit3 12 0 -r 1e3]
-$circuit add [R new cout 13 0 -r 1e3]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new bit0 9 0 <font color=#463e11>-r</font> 1e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new bit1 10 0 <font color=#463e11>-r</font> 1e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new bit2 11 0 <font color=#463e11>-r</font> 1e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new bit3 12 0 <font color=#463e11>-r</font> 1e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new cout 13 0 <font color=#463e11>-r</font> 1e3]
 </pre>
 
 </figure><p class='ruff'>Add semiconductor devices models:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-$circuit add [DiodeModel new dmod]
-$circuit add [BjtGPModel new qmod npn -bf 75 -rb 100 -cje 1e-12 -cjc 3e-12]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$circuit</font> add [DiodeModel new dmod]
+<font color=#4A181B>$circuit</font> add [BjtGPModel new qmod npn <font color=#463e11>-bf</font> 75 <font color=#463e11>-rb</font> 100 <font color=#463e11>-cje</font> 1e-12 <font color=#463e11>-cjc</font> 3e-12]
 </pre>
 
 </figure><p class='ruff'>Now we can create simulator and run circuit:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-#set simulator with default temporary directory
-set simulator [BatchLiveLog new {batch1}]
-# attach simulator object to circuit
-$circuit configure -Simulator $simulator
-# run circuit, read log and data
-$circuit runAndRead
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50>#set simulator with default temporary directory</font></i>
+<b><font color=#923B23>set</font></b> simulator [<b><font color=#923B23>BatchLiveLog</font></b> new {batch1}]
+<i><font color=#4b5d50># attach simulator object to circuit</font></i>
+<font color=#4A181B>$circuit</font> configure <font color=#463e11>-Simulator</font> <font color=#4A181B>$simulator</font>
+<i><font color=#4b5d50># run circuit, read log and data</font></i>
+<font color=#4A181B>$circuit</font> runAndRead
 </pre>
 
 </figure><p class='ruff'>Finally we read the data and plot it as usual:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-# get data dict
-set data [$circuit getDataDict]
-set timeList [dget $data time]
-set v9List [dget $data v(9)]
-set v10List [dget $data v(10)]
-set v11List [dget $data v(11)]
-set v12List [dget $data v(12)]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># get data dict</font></i>
+<b><font color=#923B23>set</font></b> data [<font color=#4A181B>$circuit</font> getDataDict]
+<b><font color=#923B23>set</font></b> timeList [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$data</font> time]
+<b><font color=#923B23>set</font></b> v9List [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$data</font> v(9)]
+<b><font color=#923B23>set</font></b> v10List [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$data</font> v(10)]
+<b><font color=#923B23>set</font></b> v11List [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$data</font> v(11)]
+<b><font color=#923B23>set</font></b> v12List [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$data</font> v(12)]
 
-foreach time $timeList v9 $v9List v10 $v10List v11 $v11List v12 $v12List {
-    lappend timeV9 [list $time $v9]
-    lappend timeV10 [list $time $v10]
-    lappend timeV11 [list $time $v11]
-    lappend timeV12 [list $time $v12]
+<b><font color=#923B23>foreach</font></b> time <font color=#4A181B>$timeList</font> v9 <font color=#4A181B>$v9List</font> v10 <font color=#4A181B>$v10List</font> v11 <font color=#4A181B>$v11List</font> v12 <font color=#4A181B>$v12List</font> {
+    <b><font color=#923B23>lappend</font></b> timeV9 [<b><font color=#923B23>list</font></b> <font color=#4A181B>$time</font> <font color=#4A181B>$v9</font>]
+    <b><font color=#923B23>lappend</font></b> timeV10 [<b><font color=#923B23>list</font></b> <font color=#4A181B>$time</font> <font color=#4A181B>$v10</font>]
+    <b><font color=#923B23>lappend</font></b> timeV11 [<b><font color=#923B23>list</font></b> <font color=#4A181B>$time</font> <font color=#4A181B>$v11</font>]
+    <b><font color=#923B23>lappend</font></b> timeV12 [<b><font color=#923B23>list</font></b> <font color=#4A181B>$time</font> <font color=#4A181B>$v12</font>]
 }
-# plot data with ticklecharts
-set nodes [list 9 10 11 12]
-set layout [ticklecharts::Gridlayout new]
-set i 0
-foreach node $nodes {
-    ticklecharts::chart create chartV$node
-    chartV$node SetOptions -title {} -tooltip {} -animation &quot;False&quot; -toolbox {feature {dataZoom {yAxisIndex &quot;none&quot;}}}
-    chartV$node Xaxis -name &quot;time, s&quot; -minorTick {show &quot;True&quot;} -type &quot;value&quot;
-    chartV$node Yaxis -name &quot;v(${node}), V&quot; -minorTick {show &quot;True&quot;} -type &quot;value&quot;
-    chartV$node Add &quot;lineSeries&quot; -data [subst $[subst timeV$node]] -showAllSymbol &quot;nothing&quot; -name &quot;V(${node})&quot; -symbolSize &quot;0&quot;
-    $layout Add chartV$node -bottom &quot;[= {4+24*$i}]%&quot; -height &quot;18%&quot; -width &quot;80%&quot;
-    incr i
+<i><font color=#4b5d50># plot data with ticklecharts</font></i>
+<b><font color=#923B23>set</font></b> nodes [<b><font color=#923B23>list</font></b> 9 10 11 12]
+<b><font color=#923B23>set</font></b> layout [ticklecharts::Gridlayout new]
+<b><font color=#923B23>set</font></b> i 0
+<b><font color=#923B23>foreach</font></b> node <font color=#4A181B>$nodes</font> {
+    ticklecharts::chart create chartV<font color=#4A181B>$node</font>
+    chartV<font color=#4A181B>$node</font> SetOptions <font color=#463e11>-title</font> {} <font color=#463e11>-tooltip</font> {} <font color=#463e11>-animation</font> <font color=#035103>&quot;False&quot;</font> <font color=#463e11>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#035103>&quot;none&quot;</font>}}}
+    chartV<font color=#4A181B>$node</font> Xaxis <font color=#463e11>-name</font> <font color=#035103>&quot;time, s&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
+    chartV<font color=#4A181B>$node</font> Yaxis <font color=#463e11>-name</font> <font color=#035103>&quot;v(<font color=#4A181B>${</font>node<font color=#4A181B>}</font>), V&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
+    chartV<font color=#4A181B>$node</font> Add <font color=#035103>&quot;lineSeries&quot;</font> <font color=#463e11>-data</font> [<b><font color=#923B23>subst</font></b> $[<b><font color=#923B23>subst</font></b> timeV<font color=#4A181B>$node</font>]] <font color=#463e11>-showAllSymbol</font> <font color=#035103>&quot;nothing&quot;</font> <font color=#463e11>-name</font> <font color=#035103>&quot;V(<font color=#4A181B>${</font>node<font color=#4A181B>}</font>)&quot;</font> <font color=#463e11>-symbolSize</font> <font color=#035103>&quot;0&quot;</font>
+    <font color=#4A181B>$layout</font> Add chartV<font color=#4A181B>$node</font> <font color=#463e11>-bottom</font> <font color=#035103>&quot;<font color=#4A181B>[</font>= <font color=#4A181B>{</font>4+24*<font color=#4A181B>$</font>i<font color=#4A181B>}]</font>%&quot;</font> <font color=#463e11>-height</font> <font color=#035103>&quot;18%&quot;</font> <font color=#463e11>-width</font> <font color=#035103>&quot;80%&quot;</font>
+    <b><font color=#923B23>incr</font></b> i
 }
 
-set fbasename [file rootname [file tail [info script]]]
-$layout Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -height 800px
+<b><font color=#923B23>set</font></b> fbasename [<b><font color=#923B23>file</font></b> rootname [<b><font color=#923B23>file</font></b> tail [<b><font color=#923B23>info</font></b> script]]]
+<font color=#4A181B>$layout</font> Render <font color=#463e11>-outfile</font> [<b><font color=#923B23>file</font></b> normalize [<b><font color=#923B23>file</font></b> join .. html_charts <font color=#4A181B>$fbasename</font>.html]] <font color=#463e11>-height</font> 800px
 </pre>
 
 </figure><p class='ruff'>Results:</p>
@@ -825,81 +769,76 @@ $layout Render -outfile [file normalize [file join .. html_charts $fbasename.htm
 <p class='ruff'><img src="assets/img/band_pass_filter.png" alt="filter" /></p>
 <p class='ruff'>The circuit is built with following code:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-# create top-level circuit
-set circuit [Circuit new {filter s-parameters}]
-# add elements to circuit
-$circuit add [Vport new gen 1 0 -dc 0 -ac 1 -portnum 1]
-$circuit add [L new 1 1 2 -l 0.058u]
-$circuit add [C new 2 2 0 -c 40.84p]
-$circuit add [L new 3 2 3 -l 0.128u]
-$circuit add [C new 4 3 0 -c 47.91p]
-$circuit add [L new 5 3 4 -l 0.128u]
-$circuit add [C new 6 4 0 -c 40.48p]
-$circuit add [L new 7 4 5 -l 0.058u]
-$circuit add [L new a 5 6 -l 0.044u]
-$circuit add [L new b 6 a -l 0.078u]
-$circuit add [C new b a 0 -c 17.61p]
-$circuit add [L new c 6 b -l 0.151u]
-$circuit add [C new c b 0 -c 34.12p]
-$circuit add [C new 7 6 7 -c 26.035p]
-$circuit add [L new 8 7 0 -l 0.0653u]
-$circuit add [C new 8 7 8 -c 20.8p]
-$circuit add [L new 9 8 0 -l 0.055u]
-$circuit add [C new 9 8 9 -c 20.8p]
-$circuit add [L new 10 9 0 -l 0.653u]
-$circuit add [C new 10 9 out -c 45.64p]
-$circuit add [Vport new l out 0 -dc 0 -ac 0 -portnum 2]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create top-level circuit</font></i>
+<b><font color=#923B23>set</font></b> circuit [<b><font color=#923B23>Circuit</font></b> new {filter s-parameters}]
+<i><font color=#4b5d50># add elements to circuit</font></i>
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vport</font></b> new gen 1 0 <font color=#463e11>-dc</font> 0 <font color=#463e11>-ac</font> 1 <font color=#463e11>-portnum</font> 1]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>L</font></b> new 1 1 2 <font color=#463e11>-l</font> 0.058u]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>C</font></b> new 2 2 0 <font color=#463e11>-c</font> 40.84p]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>L</font></b> new 3 2 3 <font color=#463e11>-l</font> 0.128u]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>C</font></b> new 4 3 0 <font color=#463e11>-c</font> 47.91p]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>L</font></b> new 5 3 4 <font color=#463e11>-l</font> 0.128u]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>C</font></b> new 6 4 0 <font color=#463e11>-c</font> 40.48p]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>L</font></b> new 7 4 5 <font color=#463e11>-l</font> 0.058u]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>L</font></b> new a 5 6 <font color=#463e11>-l</font> 0.044u]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>L</font></b> new b 6 a <font color=#463e11>-l</font> 0.078u]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>C</font></b> new b a 0 <font color=#463e11>-c</font> 17.61p]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>L</font></b> new c 6 b <font color=#463e11>-l</font> 0.151u]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>C</font></b> new c b 0 <font color=#463e11>-c</font> 34.12p]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>C</font></b> new 7 6 7 <font color=#463e11>-c</font> 26.035p]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>L</font></b> new 8 7 0 <font color=#463e11>-l</font> 0.0653u]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>C</font></b> new 8 7 8 <font color=#463e11>-c</font> 20.8p]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>L</font></b> new 9 8 0 <font color=#463e11>-l</font> 0.055u]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>C</font></b> new 9 8 9 <font color=#463e11>-c</font> 20.8p]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>L</font></b> new 10 9 0 <font color=#463e11>-l</font> 0.653u]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>C</font></b> new 10 9 out <font color=#463e11>-c</font> 45.64p]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vport</font></b> new l out 0 <font color=#463e11>-dc</font> 0 <font color=#463e11>-ac</font> 0 <font color=#463e11>-portnum</font> 2]
 </pre>
 
-</figure><p class='ruff'>You should draw attention to special voltage sources, <a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::Vport" title="::SpiceGenTcl::Ngspice::Sources::Vport" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources::Vport</a>, that represents RF-port with special parameter <code>-portnum</code> as a port number, so digits in S-parameters are refered to these port numbers (i.e. S11, S12, S21, S22).</p>
+</figure><p class='ruff'>You should draw attention to special voltage sources, <a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::Vport" title="::SpiceGenTcl::Ngspice::Sources::Vport" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources::Vport</a>, that represents RF-port with special parameter <code><font color=#463e11>-portnum</font></code> as a port number, so digits in S-parameters are refered to these port numbers (i.e. S11, S12, S21, S22).</p>
 <p class='ruff'>Special analysis object for S-parameter simulation is <a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Sp" title="::SpiceGenTcl::Ngspice::Analyses::Sp" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::Sp</a>, parameters are the same as for AC analysis:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-$circuit add [Sp new -variation lin -n 500 -fstart 10meg -fstop 200meg]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Sp</font></b> new <font color=#463e11>-variation</font> lin <font color=#463e11>-n</font> 500 <font color=#463e11>-fstart</font> 10meg <font color=#463e11>-fstop</font> 200meg]
 </pre>
 
 </figure><p class='ruff'>As usual, we create simulator, run the circuit and read the data:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-set simulator [BatchLiveLog new {batch1}]
-# attach simulator object to circuit
-$circuit configure -Simulator $simulator
-$circuit runAndRead
-# get data object
-set data [$circuit getDataDict]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> simulator [<b><font color=#923B23>BatchLiveLog</font></b> new {batch1}]
+<i><font color=#4b5d50># attach simulator object to circuit</font></i>
+<font color=#4A181B>$circuit</font> configure <font color=#463e11>-Simulator</font> <font color=#4A181B>$simulator</font>
+<font color=#4A181B>$circuit</font> runAndRead
+<i><font color=#4b5d50># get data object</font></i>
+<b><font color=#923B23>set</font></b> data [<font color=#4A181B>$circuit</font> getDataDict]
 </pre>
 
 </figure><p class='ruff'>Next few lines of code is used to extract magnitude of S11 and S21 parameters:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-# get frequency
-set freq [dget $data frequency]
-# get s11
-set s11 [dget $data v(s_1_1)]
-# get s21
-set s21 [dget $data v(s_2_1)]
-# extract real/imaginary parts of S11 and S21, and calculate magnitude
-set freq [lmap val $freq {@ $val 0}]
-set s11Mag [lmap s11Re [lmap val $s11 {@ $val 0}] s11Im [lmap val $s11 {@ $val 1}] {= {sqrt($s11Re**2+$s11Im**2)}}]
-set s21Mag [lmap s21Re [lmap val $s21 {@ $val 0}] s21Im [lmap val $s21 {@ $val 1}] {= {sqrt($s21Re**2+$s21Im**2)}}]
-# prepare data for ticklecharts
-set freq_s11Mag [lmap freqVal $freq s11MagVal $s11Mag {list $freqVal $s11MagVal}]
-set freq_s21Mag [lmap freqVal $freq s21MagVal $s21Mag {list $freqVal $s21MagVal}]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># get frequency</font></i>
+<b><font color=#923B23>set</font></b> freq [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$data</font> frequency]
+<i><font color=#4b5d50># get s11</font></i>
+<b><font color=#923B23>set</font></b> s11 [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$data</font> v(s_1_1)]
+<i><font color=#4b5d50># get s21</font></i>
+<b><font color=#923B23>set</font></b> s21 [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$data</font> v(s_2_1)]
+<i><font color=#4b5d50># extract real/imaginary parts of S11 and S21, and calculate magnitude</font></i>
+<b><font color=#923B23>set</font></b> freq [<b><font color=#923B23>lmap</font></b> val <font color=#4A181B>$freq</font> {@ <font color=#4A181B>$val</font> 0}]
+<b><font color=#923B23>set</font></b> s11Mag [<b><font color=#923B23>lmap</font></b> s11Re [<b><font color=#923B23>lmap</font></b> val <font color=#4A181B>$s11</font> {@ <font color=#4A181B>$val</font> 0}] s11Im [<b><font color=#923B23>lmap</font></b> val <font color=#4A181B>$s11</font> {@ <font color=#4A181B>$val</font> 1}] {= {sqrt(<font color=#4A181B>$s11Re</font>**2+<font color=#4A181B>$s11Im</font>**2)}}]
+<b><font color=#923B23>set</font></b> s21Mag [<b><font color=#923B23>lmap</font></b> s21Re [<b><font color=#923B23>lmap</font></b> val <font color=#4A181B>$s21</font> {@ <font color=#4A181B>$val</font> 0}] s21Im [<b><font color=#923B23>lmap</font></b> val <font color=#4A181B>$s21</font> {@ <font color=#4A181B>$val</font> 1}] {= {sqrt(<font color=#4A181B>$s21Re</font>**2+<font color=#4A181B>$s21Im</font>**2)}}]
+<i><font color=#4b5d50># prepare data for ticklecharts</font></i>
+<b><font color=#923B23>set</font></b> freq_s11Mag [<b><font color=#923B23>lmap</font></b> freqVal <font color=#4A181B>$freq</font> s11MagVal <font color=#4A181B>$s11Mag</font> {<b><font color=#923B23>list</font></b> <font color=#4A181B>$freqVal</font> <font color=#4A181B>$s11MagVal</font>}]
+<b><font color=#923B23>set</font></b> freq_s21Mag [<b><font color=#923B23>lmap</font></b> freqVal <font color=#4A181B>$freq</font> s21MagVal <font color=#4A181B>$s21Mag</font> {<b><font color=#923B23>list</font></b> <font color=#4A181B>$freqVal</font> <font color=#4A181B>$s21MagVal</font>}]
 </pre>
 
 </figure><p class='ruff'>Now we are ready to plot data:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-set chart [ticklecharts::chart new]
-$chart Xaxis -name &quot;Frequency, Hz&quot; -minorTick {show &quot;True&quot;} -type &quot;value&quot;
-$chart Yaxis -name &quot;mag(S)&quot; -minorTick {show &quot;True&quot;} -type &quot;value&quot;
-$chart SetOptions -title {} -tooltip {} -legend {} -animation &quot;False&quot; -toolbox {feature {dataZoom {yAxisIndex &quot;none&quot;}}}
-$chart Add &quot;lineSeries&quot; -data $freq_s11Mag -showAllSymbol &quot;nothing&quot; -name &quot;S11&quot; -symbolSize &quot;0&quot;
-$chart Add &quot;lineSeries&quot; -data $freq_s21Mag -showAllSymbol &quot;nothing&quot; -name &quot;S21&quot; -symbolSize &quot;0&quot;
-set fbasename [file rootname [file tail [info script]]]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> chart [ticklecharts::chart new]
+<font color=#4A181B>$chart</font> Xaxis <font color=#463e11>-name</font> <font color=#035103>&quot;Frequency, Hz&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
+<font color=#4A181B>$chart</font> Yaxis <font color=#463e11>-name</font> <font color=#035103>&quot;mag(S)&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font>
+<font color=#4A181B>$chart</font> SetOptions <font color=#463e11>-title</font> {} <font color=#463e11>-tooltip</font> {} <font color=#463e11>-legend</font> {} <font color=#463e11>-animation</font> <font color=#035103>&quot;False&quot;</font> <font color=#463e11>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#035103>&quot;none&quot;</font>}}}
+<font color=#4A181B>$chart</font> Add <font color=#035103>&quot;lineSeries&quot;</font> <font color=#463e11>-data</font> <font color=#4A181B>$freq_s11Mag</font> <font color=#463e11>-showAllSymbol</font> <font color=#035103>&quot;nothing&quot;</font> <font color=#463e11>-name</font> <font color=#035103>&quot;S11&quot;</font> <font color=#463e11>-symbolSize</font> <font color=#035103>&quot;0&quot;</font>
+<font color=#4A181B>$chart</font> Add <font color=#035103>&quot;lineSeries&quot;</font> <font color=#463e11>-data</font> <font color=#4A181B>$freq_s21Mag</font> <font color=#463e11>-showAllSymbol</font> <font color=#035103>&quot;nothing&quot;</font> <font color=#463e11>-name</font> <font color=#035103>&quot;S21&quot;</font> <font color=#463e11>-symbolSize</font> <font color=#035103>&quot;0&quot;</font>
+<b><font color=#923B23>set</font></b> fbasename [<b><font color=#923B23>file</font></b> rootname [<b><font color=#923B23>file</font></b> tail [<b><font color=#923B23>info</font></b> script]]]
 
-$chart Render -outfile [file normalize [file join .. html_charts $fbasename.html]]
+<font color=#4A181B>$chart</font> Render <font color=#463e11>-outfile</font> [<b><font color=#923B23>file</font></b> normalize [<b><font color=#923B23>file</font></b> join .. html_charts <font color=#4A181B>$fbasename</font>.html]]
 </pre>
 
 </figure><p class='ruff'>The result is:</p>

@@ -46,8 +46,8 @@ if {[llength $argv] == 0 || "html" in $argv} {
     ruff::document $namespacesNroff -outdir $docDir -format nroff -outfile SpiceGenTcl.n {*}$commonNroff
 }
 
-foreach file [glob *.html] {
-    exec tclsh "${path_to_hl_tcl}/tcl_html.tcl" "./$file"
+foreach file [glob ${docDir}/*.html] {
+    exec tclsh "${path_to_hl_tcl}/tcl_html.tcl" [file join ${docDir} $file]
 }
 
 proc processContents {fileContents} {

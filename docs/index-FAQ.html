@@ -45,8 +45,7 @@
 <p class='ruff'>To use a particular simulator, you can call <a href="index-SpiceGenTcl.html#::SpiceGenTcl::importNgspice" title="::SpiceGenTcl::importNgspice" class='ruff_cmd'>::SpiceGenTcl::importNgspice</a> or <a href="index-SpiceGenTcl.html#::SpiceGenTcl::importXyce" title="::SpiceGenTcl::importXyce" class='ruff_cmd'>::SpiceGenTcl::importXyce</a> to import all command names into the current scope. This approach is convenient because it minimizes code changes. Using full command paths would be more cumbersome. Many elements share the same interface (such as nodes and parameters), so the same code works with different simulators with minimal modifications.</p>
 <p class='ruff'>You can also import element commands individually, like this:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-namespace import ::SpiceGenTcl::Ngspice::R
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>namespace</font></b> import ::SpiceGenTcl::Ngspice::R
 </pre>
 
 </figure><p class='ruff'>This allows you to import the appropriate simulator in conditional statements, depending on a global variable that defines the simulator currently in use.</p>
@@ -55,23 +54,20 @@ namespace import ::SpiceGenTcl::Ngspice::R
 <p class='ruff'>For all elements with parameters you can change parameter value by its name with method <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setParamValue" title="::SpiceGenTcl::Device::setParamValue" class='ruff_cmd'>::SpiceGenTcl::Device::setParamValue</a>.</p>
 <p class='ruff'>For example here we change the resistance value of basic resistor:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-$resistor setParamValue r 100
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$resistor</font> setParamValue r 100
 </pre>
 
-</figure><p class='ruff'>The name of the parameter can be found in the documentation <a href="[::SpiceGenTcl::Ngspice::BasicDevices::Resistor]" >here</a>. In the parameter table, the option for resistance is labeled <code>-r</code>, so the name used for resistance is 'r'.</p>
+</figure><p class='ruff'>The name of the parameter can be found in the documentation <a href="[::SpiceGenTcl::Ngspice::BasicDevices::Resistor]" >here</a>. In the parameter table, the option for resistance is labeled <code><font color=#463e11>-r</font></code>, so the name used for resistance is 'r'.</p>
 <p class='ruff'>Another option is to call the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device::getParams" class='ruff_cmd'>::SpiceGenTcl::Device::getParams</a> method, which returns a list of all parameters with their values. For example:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-# create resistor
-set resistor [R new 1 net1 net2 -r 10]
-puts [$resistor getParams]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create resistor</font></i>
+<b><font color=#923B23>set</font></b> resistor [<b><font color=#923B23>R</font></b> new 1 net1 net2 <font color=#463e11>-r</font> 10]
+<b><font color=#923B23>puts</font></b> [<font color=#4A181B>$resistor</font> getParams]
 </pre>
 
 </figure><p class='ruff'>It returns:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-r 10
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>r 10
 </pre>
 
 </figure><p class='ruff'>So parameter name is 'r' with value '10'.</p>
@@ -83,33 +79,29 @@ r 10
 <p class='ruff'>For all elements with pins, you can change the connected node's name by using the pin name with the method <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setPinNodeName" title="::SpiceGenTcl::Device::setPinNodeName" class='ruff_cmd'>::SpiceGenTcl::Device::setPinNodeName</a>.</p>
 <p class='ruff'>For example, here we change the node name of the basic resistor's positive pin:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-$resistor setPinNodeName np net10
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$resistor</font> setPinNodeName np net10
 </pre>
 
 </figure><p class='ruff'>The pin name can be found in the documentation <a href="[::SpiceGenTcl::Ngspice::BasicDevices::Resistor]" >here</a>. In the parameter table, the pins are listed as <code>npNode</code> and <code>nmNode</code>, so the names used for the positive and negative pins are 'np' and 'nm', respectively. This <code>pin_nameNode</code> convention applies to all elements in the package.</p>
 <p class='ruff'>Another option is to call the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device::getPins" class='ruff_cmd'>::SpiceGenTcl::Device::getPins</a> method, which returns a list of all pins with their connected node names. For example:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-# create resistor
-set resistor [R new 1 net1 net2 -r 10]
-puts [$resistor getPins]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#4b5d50># create resistor</font></i>
+<b><font color=#923B23>set</font></b> resistor [<b><font color=#923B23>R</font></b> new 1 net1 net2 <font color=#463e11>-r</font> 10]
+<b><font color=#923B23>puts</font></b> [<font color=#4A181B>$resistor</font> getPins]
 </pre>
 
 </figure><p class='ruff'>It returns:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-np net1 nm net2
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>np net1 nm net2
 </pre>
 
 </figure><p class='ruff'>So pins names are 'np' and 'nm' with connected nets 'net1' and 'net2'.</p>
 <h2 class='ruff'><a name='::FAQ-How to find the list of optional parameters for elements?'></a>How to find the list of optional parameters for elements?<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
 <p class='ruff'>The list of parameters in the documentation includes descriptions of the mandatory arguments and availible options. But for some elements, especially models, there could be dozens of parameters, and I wanted to avoid cluttering the documentation.</p>
-<p class='ruff'>Typically, any optional parameters for elements are also optional in the simulator they relate to, so you can find a list of them in the simulator's manual. The convention for these parameters is <code>-nameOfParam value</code>. For example, for a basic resistor in Ngspice, you can provide values for the temperature coefficients, 'tc1' and 'tc2'. In SpiceGenTcl, these are added during the initialization of the resistor like this:</p>
+<p class='ruff'>Typically, any optional parameters for elements are also optional in the simulator they relate to, so you can find a list of them in the simulator's manual. The convention for these parameters is <code><font color=#463e11>-nameOfParam</font> value</code>. For example, for a basic resistor in Ngspice, you can provide values for the temperature coefficients, 'tc1' and 'tc2'. In SpiceGenTcl, these are added during the initialization of the resistor like this:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-set resistor [R new 1 net1 net2 -r 10 -tc1 0.1 -tc2 0.4]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> resistor [<b><font color=#923B23>R</font></b> new 1 net1 net2 <font color=#463e11>-r</font> 10 <font color=#463e11>-tc1</font> 0.1 <font color=#463e11>-tc2</font> 0.4]
 </pre>
 
 </figure><p class='ruff'>Here we provide the mandatory parameters:</p>
@@ -118,86 +110,79 @@ set resistor [R new 1 net1 net2 -r 10 -tc1 0.1 -tc2 0.4]
 <li>nets connected to pins: 'net1' and 'net2'</li>
 <li>value of resistance: '-r 10' Parameters 'tc1' and 'tc2' are provided here as optional arguments.</li>
 </ul>
-<p class='ruff'>As a last resort, you can look directly at the source code in the documentation. Simply open the <code>Show source</code> option, and you'll find an arguments description within the <code>constructor</code> method:</p>
+<p class='ruff'>As a last resort, you can look directly at the source code in the documentation. Simply open the <code>Show source</code> option, and you'll find an arguments description within the <code><b><font color=#ca14ca>constructor</font></b></code> method:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-set arguments [argparse -inline {
-    -r=
-    {-beh -forbid {model} -require {r}}
-    {-model= -forbid {beh}}
-    {-ac= -forbid {model beh}}
-    {-m= -forbid {beh}}
-    {-scale= -forbid {beh}}
-    {-temp= -forbid {beh dtemp}}
-    {-dtemp= -forbid {beh temp}}
-    {-tc1= -forbid {model}}
-    {-tc2= -forbid {model}}
-    {-noisy= -enum {0 1}}
-    {-l= -require {model}}
-    {-w= -require {model}}
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> {
+    <font color=#463e11>-r</font>=
+    {<font color=#463e11>-beh</font> <font color=#463e11>-forbid</font> {model} <font color=#463e11>-require</font> {r}}
+    {<font color=#463e11>-model</font>= <font color=#463e11>-forbid</font> {beh}}
+    {<font color=#463e11>-ac</font>= <font color=#463e11>-forbid</font> {model beh}}
+    {<font color=#463e11>-m</font>= <font color=#463e11>-forbid</font> {beh}}
+    {<font color=#463e11>-scale</font>= <font color=#463e11>-forbid</font> {beh}}
+    {<font color=#463e11>-temp</font>= <font color=#463e11>-forbid</font> {beh dtemp}}
+    {<font color=#463e11>-dtemp</font>= <font color=#463e11>-forbid</font> {beh temp}}
+    {<font color=#463e11>-tc1</font>= <font color=#463e11>-forbid</font> {model}}
+    {<font color=#463e11>-tc2</font>= <font color=#463e11>-forbid</font> {model}}
+    {<font color=#463e11>-noisy</font>= <font color=#463e11>-enum</font> {0 1}}
+    {<font color=#463e11>-l</font>= <font color=#463e11>-require</font> {model}}
+    {<font color=#463e11>-w</font>= <font color=#463e11>-require</font> {model}}
 }]
 </pre>
 
 </figure><p class='ruff'>For models the parameters are defined in this list:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-set paramsNames [list tc1 tc2 rsh defw narrow short tnom kf af wf lf ef {r res}]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> paramsNames [<b><font color=#923B23>list</font></b> tc1 tc2 rsh defw narrow short tnom kf af wf lf ef {r res}]
 </pre>
 
 </figure><p class='ruff'>The same applies to all elements (devices and models) in the package.</p>
 <h2 class='ruff'><a name='::FAQ-How to get raw data after simulation?'></a>How to get raw data after simulation?<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
-<p class='ruff'>After a successful simulation, an object of the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile" title="::SpiceGenTcl::RawFile" class='ruff_cmd'>::SpiceGenTcl::RawFile</a> class is created and attached to the top-level <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> object. To retrieve the result vectors, simply call the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::getDataDict" title="::SpiceGenTcl::Circuit::getDataDict" class='ruff_cmd'>::SpiceGenTcl::Circuit::getDataDict</a> method on the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> object. This method returns the result vectors as a dictionary, with vector names as keys and the vectors themselves as values. You can then access these vectors using the <code>dget</code> command.</p>
+<p class='ruff'>After a successful simulation, an object of the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile" title="::SpiceGenTcl::RawFile" class='ruff_cmd'>::SpiceGenTcl::RawFile</a> class is created and attached to the top-level <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> object. To retrieve the result vectors, simply call the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::getDataDict" title="::SpiceGenTcl::Circuit::getDataDict" class='ruff_cmd'>::SpiceGenTcl::Circuit::getDataDict</a> method on the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> object. This method returns the result vectors as a dictionary, with vector names as keys and the vectors themselves as values. You can then access these vectors using the <code><b><font color=#923B23>dget</font></b></code> command.</p>
 <p class='ruff'>Example:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-set data [$circuit getDataDict]
-set axisList [dget $data v(anode)]
-set traceList [dget $data i(va)]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> data [<font color=#4A181B>$circuit</font> getDataDict]
+<b><font color=#923B23>set</font></b> axisList [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$data</font> v(anode)]
+<b><font color=#923B23>set</font></b> traceList [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$data</font> i(va)]
 </pre>
 
 </figure><h2 class='ruff'><a name='::FAQ-How to get the names of all vectors in raw file?'></a>How to get the names of all vectors in raw file?<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
-<p class='ruff'>For this task, you should first retrieve the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile" title="::SpiceGenTcl::RawFile" class='ruff_cmd'>::SpiceGenTcl::RawFile</a> object reference from the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> object using the <code>configure -Data</code> method. Then, call the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile::getVariablesNames" title="::SpiceGenTcl::RawFile::getVariablesNames" class='ruff_cmd'>::SpiceGenTcl::RawFile::getVariablesNames</a> method, which returns a list of all variable names.</p>
+<p class='ruff'>For this task, you should first retrieve the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile" title="::SpiceGenTcl::RawFile" class='ruff_cmd'>::SpiceGenTcl::RawFile</a> object reference from the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> object using the <code>configure <font color=#463e11>-Data</font></code> method. Then, call the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile::getVariablesNames" title="::SpiceGenTcl::RawFile::getVariablesNames" class='ruff_cmd'>::SpiceGenTcl::RawFile::getVariablesNames</a> method, which returns a list of all variable names.</p>
 <p class='ruff'>Example:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-set rawFileObj [$circuit configure -Data]
-puts [$rawFileObj getVariablesNames]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> rawFileObj [<font color=#4A181B>$circuit</font> configure <font color=#463e11>-Data</font>]
+<b><font color=#923B23>puts</font></b> [<font color=#4A181B>$rawFileObj</font> getVariablesNames]
 </pre>
 
 </figure><p class='ruff'>There are also methods for retrieve all voltages and currents names separated from each other: <a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile::getVoltagesNames" title="::SpiceGenTcl::RawFile::getVoltagesNames" class='ruff_cmd'>::SpiceGenTcl::RawFile::getVoltagesNames</a> and <a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile::getCurrentsNames" title="::SpiceGenTcl::RawFile::getCurrentsNames" class='ruff_cmd'>::SpiceGenTcl::RawFile::getCurrentsNames</a>.</p>
 <h2 class='ruff'><a name='::FAQ-How to get log file after simulation?'></a>How to get log file after simulation?<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
-<p class='ruff'>There is a property method for it in object of <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> class - <code>configure -Log</code>, it returns string containing log file.</p>
+<p class='ruff'>There is a property method for it in object of <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> class - <code>configure <font color=#463e11>-Log</font></code>, it returns string containing log file.</p>
 <p class='ruff'>Example:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-puts [$circuit configure -Log]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>puts</font></b> [<font color=#4A181B>$circuit</font> configure <font color=#463e11>-Log</font>]
 </pre>
 
 </figure><h2 class='ruff'><a name='::FAQ-How to save result traces in comma-separated file format (csv)?'></a>How to save result traces in comma-separated file format (csv)?<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
-<p class='ruff'>After simulation is done, you can use <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> class method <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::getDataCsv" title="::SpiceGenTcl::Circuit::getDataCsv" class='ruff_cmd'>::SpiceGenTcl::Circuit::getDataCsv</a> to get string formatted with csv. You can get all traces with the flag <code>-all</code>, or select individual traces by providing name after <code>-traces</code> switch. Also you can define column separator after the flag <code>-sep</code>.</p>
+<p class='ruff'>After simulation is done, you can use <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> class method <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::getDataCsv" title="::SpiceGenTcl::Circuit::getDataCsv" class='ruff_cmd'>::SpiceGenTcl::Circuit::getDataCsv</a> to get string formatted with csv. You can get all traces with the flag <code><font color=#463e11>-all</font></code>, or select individual traces by providing name after <code><font color=#463e11>-traces</font></code> switch. Also you can define column separator after the flag <code><font color=#463e11>-sep</font></code>.</p>
 <p class='ruff'>For example, we modify <code>resistor_divider.tcl</code> example and convert <code>v(in)</code> and <code>v(out)</code> traces to csv string:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-set circuit [Circuit new {voltage divider netlist}]
-$circuit add [Vdc new 1 in 0 -dc 1]
-$circuit add [R new 1 in out -r 1e3]
-$circuit add [R new 2 out 0 -r 2e3]
-$circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1]
-set simulator [Batch new {batch1}]
-$circuit configure -Simulator $simulator
-$circuit runAndRead
-set data [$circuit getDataCsv -traces v(in) v(out)]
-puts $data
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> circuit [<b><font color=#923B23>Circuit</font></b> new {voltage divider netlist}]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new 1 in 0 <font color=#463e11>-dc</font> 1]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new 1 in out <font color=#463e11>-r</font> 1e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new 2 out 0 <font color=#463e11>-r</font> 2e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Dc</font></b> new <font color=#463e11>-src</font> v1 <font color=#463e11>-start</font> 0 <font color=#463e11>-stop</font> 5 <font color=#463e11>-incr</font> 1]
+<b><font color=#923B23>set</font></b> simulator [<b><font color=#923B23>Batch</font></b> new {batch1}]
+<font color=#4A181B>$circuit</font> configure <font color=#463e11>-Simulator</font> <font color=#4A181B>$simulator</font>
+<font color=#4A181B>$circuit</font> runAndRead
+<b><font color=#923B23>set</font></b> data [<font color=#4A181B>$circuit</font> getDataCsv <font color=#463e11>-traces</font> v(in) v(out)]
+<b><font color=#923B23>puts</font></b> <font color=#4A181B>$data</font>
 </pre>
 
 </figure><p class='ruff'>Resulted string is:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-v(in),v(out)
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>v(in),v(out)
 0.0,0.0
 1.0,0.6666666666666666
 2.0,1.3333333333333333
@@ -208,10 +193,9 @@ v(in),v(out)
 
 </figure><p class='ruff'>Then we can save this string to file:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>
-set file [open file.csv w+]
-puts $file $data
-close $file
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> file [<b><font color=#923B23>open</font></b> file.csv w+]
+<b><font color=#923B23>puts</font></b> <font color=#4A181B>$file</font> <font color=#4A181B>$data</font>
+<b><font color=#923B23>close</font></b> <font color=#4A181B>$file</font>
 </pre>
 
 </figure></main><nav class='ruff-nav'><ul ><li class='ruff-toc1'><a style='padding-top:2px;' href='index.html'>Start page</a></li>
