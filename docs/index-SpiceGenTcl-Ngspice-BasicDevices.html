@@ -176,7 +176,7 @@
             <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;c <font color=#4A181B>$</font>cVal -pos&quot;</font>
         }
     } <b><font color=#923B23>elseif</font></b> {([<b><font color=#923B23>dexist</font></b> <font color=#4A181B>$arguments</font> model]==0) && ([<b><font color=#923B23>dexist</font></b> <font color=#4A181B>$arguments</font> q]==0)} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Capacitor value must be specified with '-c value'&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Capacitor value must be specified with '-c value'&quot;</font>
     }
     <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dexist</font></b> <font color=#4A181B>$arguments</font> q]} {
         <b><font color=#923B23>set</font></b> qVal [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$arguments</font> q]
@@ -423,7 +423,7 @@
             <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;l <font color=#4A181B>$</font>lVal -pos&quot;</font>
         }
     } <b><font color=#923B23>elseif</font></b> {[<b><font color=#923B23>dexist</font></b> <font color=#4A181B>$arguments</font> model]==0} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Inductor value must be specified with '-l value'&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Inductor value must be specified with '-l value'&quot;</font>
     }
     <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dexist</font></b> <font color=#4A181B>$arguments</font> model]} {
         <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;model <font color=#4A181B>[</font>dget <font color=#4A181B>$</font>arguments model<font color=#4A181B>]</font> -posnocheck&quot;</font>
@@ -641,7 +641,7 @@
             <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;r <font color=#4A181B>$</font>rVal -pos&quot;</font>
         }
     } <b><font color=#923B23>elseif</font></b> {[<b><font color=#923B23>dexist</font></b> <font color=#4A181B>$arguments</font> model]==0} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Resistor value must be specified with '-r value'&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Resistor value must be specified with '-r value'&quot;</font>
     }
     <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dexist</font></b> <font color=#4A181B>$arguments</font> model]} {
         <b><font color=#923B23>lappend</font></b> params <font color=#035103>&quot;model <font color=#4A181B>[</font>dget <font color=#4A181B>$</font>arguments model<font color=#4A181B>]</font> -posnocheck&quot;</font>
@@ -811,7 +811,7 @@
     <i><font color=#4b5d50># check that inputs object class is Subcircuit</font></i>
     <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> object class <font color=#4A181B>$subcktObj</font> <font color=#035103>&quot;::SpiceGenTcl::Subcircuit&quot;</font>]!=1} {
         <b><font color=#923B23>set</font></b> objClass [<b><font color=#923B23>info</font></b> object class <font color=#4A181B>$subcktObj</font>]
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Wrong object class '<font color=#4A181B>$</font>objClass' is passed as subcktObj, should be '::SpiceGenTcl::Subcircuit'&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Wrong object class '<font color=#4A181B>$</font>objClass' is passed as subcktObj, should be '::SpiceGenTcl::Subcircuit'&quot;</font>
     }
     <i><font color=#4b5d50># get name of subcircuit</font></i>
     <b><font color=#923B23>set</font></b> subName [<font color=#4A181B>$subcktObj</font> configure <font color=#463e11>-Name</font>]
@@ -819,7 +819,7 @@
     <b><font color=#923B23>set</font></b> pinsNames [<b><font color=#923B23>dict</font></b> keys [<font color=#4A181B>$subcktObj</font> getPins]]
     <i><font color=#4b5d50># check if number of pins in subcircuit definition matchs the number of supplied nodes</font></i>
     <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>llength</font></b> <font color=#4A181B>$pinsNames</font>]!=[<b><font color=#923B23>llength</font></b> <font color=#4A181B>$nodes</font>]} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Wrong number of nodes '<font color=#4A181B>[</font>llength <font color=#4A181B>$</font>nodes<font color=#4A181B>]</font>' in definition, should be '<font color=#4A181B>[</font>llength <font color=#4A181B>$</font>pinsNames<font color=#4A181B>]</font>'&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Wrong number of nodes '<font color=#4A181B>[</font>llength <font color=#4A181B>$</font>nodes<font color=#4A181B>]</font>' in definition, should be '<font color=#4A181B>[</font>llength <font color=#4A181B>$</font>pinsNames<font color=#4A181B>]</font>'&quot;</font>
     }
     <i><font color=#4b5d50># create list of pins and connected nodes</font></i>
     <b><font color=#923B23>foreach</font></b> pinName <font color=#4A181B>$pinsNames</font> node <font color=#4A181B>$nodes</font> {

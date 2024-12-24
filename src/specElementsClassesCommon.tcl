@@ -331,7 +331,8 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             set pinsNames [dict keys [$subcktObj getPins]]
             # check if number of pins in subcircuit definition matchs the number of supplied nodes
             if {[llength $pinsNames]!=[llength $nodes]} {
-                error "Wrong number of nodes '[llength $nodes]' in definition, should be '[llength $pinsNames]'"
+                return -code error "Wrong number of nodes '[llength $nodes]' in definition, should be\
+                        '[llength $pinsNames]'"
             }
             # create list of pins and connected nodes
             foreach pinName $pinsNames node $nodes {
@@ -523,9 +524,10 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             set pwlSeqVal [dget $arguments seq]
             set pwlSeqLen [llength $pwlSeqVal]
             if {$pwlSeqLen%2} {
-                error "Number of elements '$pwlSeqLen' in pwl sequence is odd in element '$type$name', must be even"
+                return -code error "Number of elements '$pwlSeqLen' in pwl sequence is odd in element '$type$name', must\
+                        be even"
             } elseif {$pwlSeqLen<4} {
-                error "Number of elements '$pwlSeqLen' in pwl sequence in element '$type$name' must be >=4"
+                return -code error "Number of elements '$pwlSeqLen' in pwl sequence in element '$type$name' must be >=4"
             }
             # parse pwlSeq argument
             for {set i 0} {$i<[llength $pwlSeqVal]/2} {incr i} {

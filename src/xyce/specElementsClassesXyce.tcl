@@ -98,7 +98,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
                     lappend params "r $rVal -pos"
                 }
             } elseif {[dexist $arguments model]==0} {
-                error "Resistor value must be specified with '-r value'"
+                return -code error "Resistor value must be specified with '-r value'"
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {r beh model}} {
@@ -190,7 +190,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
                     lappend params "c $cVal -pos"
                 }
             } elseif {([dexist $arguments model]==0) && ([dexist $arguments q]==0)} {
-                error "Capacitor value must be specified with '-c value'"
+                return -code error "Capacitor value must be specified with '-c value'"
             }
             if {[dexist $arguments q]} {
                 set qVal [dget $arguments q]
@@ -404,7 +404,8 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # check that inputs object class is Subcircuit
             if {[info object class $subcktObj "::SpiceGenTcl::Subcircuit"]!=1} {
                 set objClass [info object class $subcktObj]
-                error "Wrong object class '$objClass' is passed as subcktObj, should be '::SpiceGenTcl::Subcircuit'"
+                return -code error "Wrong object class '$objClass' is passed as subcktObj, should be\
+                        '::SpiceGenTcl::Subcircuit'"
             }
             # get name of subcircuit
             set subName [$subcktObj configure -Name] 
@@ -412,7 +413,8 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             set pinsNames [dict keys [$subcktObj getPins]]
             # check if number of pins in subcircuit definition matchs the number of supplied nodes
             if {[llength $pinsNames]!=[llength $nodes]} {
-                error "Wrong number of nodes '[llength $nodes]' in definition, should be '[llength $pinsNames]'"
+                return -code error "Wrong number of nodes '[llength $nodes]' in definition, should be\
+                        '[llength $pinsNames]'"
             }
             # create list of pins and connected nodes
             foreach pinName $pinsNames node $nodes {
@@ -625,7 +627,7 @@ namespace eval ::SpiceGenTcl::Xyce::Sources {
             } elseif {[dexist $arguments v]} {
                 lappend params "v [dget $arguments v] -eq"
             } else {
-                error "Equation must be specified as argument to -i or -v"
+                return -code error "Equation must be specified as argument to -i or -v"
             }
             if {[dexist $arguments smoothbsrc]} {
                 lappend params "smoothbsrc 1"
@@ -706,7 +708,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             }
             if {[dget $arguments custparams]!=""} {
                 if {[llength [dget $arguments custparams]]%2!=0} {
-                    error "Custom parameters list must be even length"
+                    return -code error "Custom parameters list must be even length"
                 }
                 set custParamDict [dcreate {*}[dget $arguments custparams]]
                 dict for {paramName value} $custParamDict {
@@ -977,7 +979,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             }
             if {[dget $arguments custparams]!=""} {
                 if {[llength [dget $arguments custparams]]%2!=0} {
-                    error "Custom parameters list must be even length"
+                    return -code error "Custom parameters list must be even length"
                 }
                 set custParamDict [dcreate {*}[dget $arguments custparams]]
                 dict for {paramName value} $custParamDict {

@@ -903,9 +903,9 @@
     <b><font color=#923B23>set</font></b> pwlSeqVal [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$arguments</font> seq]
     <b><font color=#923B23>set</font></b> pwlSeqLen [<b><font color=#923B23>llength</font></b> <font color=#4A181B>$pwlSeqVal</font>]
     <b><font color=#923B23>if</font></b> {<font color=#4A181B>$pwlSeqLen</font>%2} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Number of elements '<font color=#4A181B>$</font>pwlSeqLen' in pwl sequence is odd in element '<font color=#4A181B>$</font>type<font color=#4A181B>$</font>name', must be even&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Number of elements '<font color=#4A181B>$</font>pwlSeqLen' in pwl sequence is odd in element '<font color=#4A181B>$</font>type<font color=#4A181B>$</font>name', must be even&quot;</font>
     } <b><font color=#923B23>elseif</font></b> {<font color=#4A181B>$pwlSeqLen</font>&lt;4} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Number of elements '<font color=#4A181B>$</font>pwlSeqLen' in pwl sequence in element '<font color=#4A181B>$</font>type<font color=#4A181B>$</font>name' must be &gt;=4&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Number of elements '<font color=#4A181B>$</font>pwlSeqLen' in pwl sequence in element '<font color=#4A181B>$</font>type<font color=#4A181B>$</font>name' must be &gt;=4&quot;</font>
     }
     <i><font color=#4b5d50># parse pwlSeq argument</font></i>
     <b><font color=#923B23>for</font></b> {<b><font color=#923B23>set</font></b> i 0} {<font color=#4A181B>$i</font>&lt;[<b><font color=#923B23>llength</font></b> <font color=#4A181B>$pwlSeqVal</font>]/2} {<b><font color=#923B23>incr</font></b> i} {

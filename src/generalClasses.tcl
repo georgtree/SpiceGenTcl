@@ -124,15 +124,15 @@ namespace eval ::SpiceGenTcl {
         # name of the node connected to pin
         property NodeName -set {
             if {[regexp {[^A-Za-z0-9_]+} $value]} {
-                error "Node name '${value}' is not a valid name"
+                return -code error "Node name '${value}' is not a valid name"
             }
             set NodeName [string tolower $value]
         }
         property Name -set {
             if {$value==""} {
-                error "Pin must have a name, empty string was provided"
+                return -code error "Pin must have a name, empty string was provided"
             } elseif {[regexp {[^A-Za-z0-9_]+} $value]} {
-                error "Pin name '$value' is not a valid name"
+                return -code error "Pin name '$value' is not a valid name"
             }
             set Name [string tolower $value]
         } -get {
@@ -173,7 +173,7 @@ namespace eval ::SpiceGenTcl {
             # Creates string for SPICE netlist.
             # Returns: string '*$NodeName*'
             if {[my checkFloating]=="true"} {
-                error "Pin '[my configure -Name]' is not connected to the node so can't be netlisted"
+                return -code error "Pin '[my configure -Name]' is not connected to the node so can't be netlisted"
             }
             return "[my configure -NodeName]"
         }
@@ -185,13 +185,13 @@ namespace eval ::SpiceGenTcl {
         superclass SPICEElement
         property Name -set {
             if {$value==""} {
-                error "Parameter must have a name, empty string was provided"
+                return -code error "Parameter must have a name, empty string was provided"
             } elseif {[regexp {[^A-Za-z0-9_]+} $value]} {
-                error "Parameter name '$value' is not a valid name"
+                return -code error "Parameter name '$value' is not a valid name"
             } elseif {[regexp {^[A-Za-z][A-Za-z0-9_]*} $value]} {
                 set Name [string tolower $value]
             } else {
-                error "Parameter name '$value' is not a valid name"
+                return -code error "Parameter name '$value' is not a valid name"
             }
         }
         variable Name
@@ -223,7 +223,7 @@ namespace eval ::SpiceGenTcl {
                     if {[string is double -strict [string range $value 0 end-3]]} {
                         set Value [string tolower $value]
                     } else {
-                        error "Value '$value' is not a valid value"
+                        return -code error "Value '$value' is not a valid value"
                     } 
                 } else {
                     set suffix [string tolower [string index $value end]]
@@ -231,10 +231,10 @@ namespace eval ::SpiceGenTcl {
                         if {[string is double -strict [string range $value 0 end-1]]} {
                             set Value [string tolower $value]
                         } else {
-                            error "Value '$value' is not a valid value"
+                            return -code error "Value '$value' is not a valid value"
                         } 
                     } else {
-                        error "Value '$value' is not a valid value"
+                        return -code error "Value '$value' is not a valid value"
                     }
                 }
             }
@@ -263,7 +263,7 @@ namespace eval ::SpiceGenTcl {
         superclass Parameter
         property Value -set {
             if {$value==""} {
-                error "Value '$value' is not a valid value"
+                return -code error "Value '$value' is not a valid value"
             } 
             set Value $value
         }
@@ -306,7 +306,7 @@ namespace eval ::SpiceGenTcl {
         superclass ParameterPositional
         property Value -set {
             if {$value==""} {
-                error "Value '$value' is not a valid value"
+                return -code error "Value '$value' is not a valid value"
             } 
             set Value $value
         }
@@ -337,7 +337,7 @@ namespace eval ::SpiceGenTcl {
                     if {[string is double -strict [string range $value 0 end-3]]} {
                         set DefValue [string tolower $value]
                     } else {
-                        error "Default value '$value' is not a valid value"
+                        return -code error "Default value '$value' is not a valid value"
                     } 
                 } else {
                     set suffix [string tolower [string index $value end]]
@@ -345,10 +345,10 @@ namespace eval ::SpiceGenTcl {
                         if {[string is double -strict [string range $value 0 end-1]]} {
                             set DefValue [string tolower $value]
                         } else {
-                            error "Default value '$value' is not a valid value"
+                            return -code error "Default value '$value' is not a valid value"
                         } 
                     } else {
-                        error "Default value '$value' is not a valid value"
+                        return -code error "Default value '$value' is not a valid value"
                     }
                 }
             }
@@ -381,7 +381,7 @@ namespace eval ::SpiceGenTcl {
             if {$value!=""} {
                 set Value $value
             } else {
-                error "Parameter '[my configure -Name]' equation can't be empty"
+                return -code error "Parameter '[my configure -Name]' equation can't be empty"
             }
         }
         variable Value
@@ -427,11 +427,11 @@ namespace eval ::SpiceGenTcl {
         mixin DuplChecker
         property Name -set {
             if {[regexp {[^A-Za-z0-9_]+} $value]} {
-                error "Reference name '$value' is not a valid name"
+                return -code error "Reference name '$value' is not a valid name"
             } elseif {[regexp {^[A-Za-z][A-Za-z0-9]+} $value]} {
                 set Name [string tolower $value]
             } else {
-                error "Reference name '$value' is not a valid name"
+                return -code error "Reference name '$value' is not a valid name"
             }
         }
         variable Name
@@ -504,8 +504,8 @@ namespace eval ::SpiceGenTcl {
             #  nodeName - name of the node that we want connect to pin
             set error [catch {dget $Pins $pinName}]
             if {$error>0} {
-                error "Pin with name '$pinName' was not found in device's '[my configure -Name]' list of pins\
-                        '[dict keys [my getPins]]'"
+                return -code error "Pin with name '$pinName' was not found in device's '[my configure -Name]'\
+                        list of pins '[dict keys [my getPins]]'"
             } else {
                 set pin [dget $Pins $pinName]
             }
@@ -519,8 +519,8 @@ namespace eval ::SpiceGenTcl {
             set paramName [string tolower $paramName]
             set error [catch {dget $Params $paramName}]
             if {$error>0} {
-                error "Parameter with name '$paramName' was not found in device's '[my configure -Name]' list of\
-                        parameters '[dict keys [my getParams]]'"
+                return -code error "Parameter with name '$paramName' was not found in device's '[my configure -Name]'\
+                        list of parameters '[dict keys [my getParams]]'"
             } else {
                 set param [dget $Params $paramName]
             }
@@ -538,7 +538,7 @@ namespace eval ::SpiceGenTcl {
             }
             lappend pinList $pinName
             if {[my duplListCheck $pinList]} {
-                error "Pins list '$pinList' has already contains pin with name '$pinName'"
+                return -code error "Pins list '$pinList' has already contains pin with name '$pinName'"
             }
             dict append Pins $pinName [::SpiceGenTcl::Pin new $pinName $nodeName]
             return
@@ -563,7 +563,7 @@ namespace eval ::SpiceGenTcl {
             }
             lappend paramList $paramName
             if {[my duplListCheck $paramList]} {
-                error "Parameters list '$paramList' has already contains parameter with name '$paramName'"
+                return -code error "Parameters list '$paramList' has already contains parameter with name '$paramName'"
             }
             # select parameter object according to parameter qualificator
             if {$value=="-sw"} {
@@ -589,8 +589,8 @@ namespace eval ::SpiceGenTcl {
             set paramName [string tolower $paramName]
             set error [catch {dget $Params $paramName}]
             if {$error>0} {
-                error "Parameter with name '$paramName' was not found in device's '[my configure -Name]' list of\
-                        parameters '[dict keys [my getParams]]'"
+                return -code error "Parameter with name '$paramName' was not found in device's '[my configure -Name]'\
+                        list of parameters '[dict keys [my getParams]]'"
             } else {
                 set Params [dict remove $Params $paramName]
             }
@@ -625,7 +625,8 @@ namespace eval ::SpiceGenTcl {
                 if {$error!=1} {
                     lappend nodes [$pin genSPICEString]
                 } else {
-                    error "Device '[my configure -Name]' can't be netlisted because '$pinName' pin is floating"
+                    return -code error "Device '[my configure -Name]' can't be netlisted because '$pinName' pin is\
+                            floating"
                 }
             }
             if {($Params=="") || ([info exists Params]==0)} {
@@ -647,18 +648,18 @@ namespace eval ::SpiceGenTcl {
         mixin DuplChecker
         property Name -set {
             if {$value==""} {
-                error "Model must have a name, empty string was provided"
+                return -code error "Model must have a name, empty string was provided"
             } elseif {[regexp {[^A-Za-z0-9_]+} $value]} {
-                error "Model name '$value' is not a valid name"
+                return -code error "Model name '$value' is not a valid name"
             } else {
                 set Name [string tolower $value]
             }
         }
         property Type -set {
             if {$value==""} {
-                error "Model must have a type, empty string was provided"
+                return -code error "Model must have a type, empty string was provided"
             } elseif {[regexp {[^A-Za-z0-9]+} $value]} {
-                error "Model type '$value' is not a valid type"
+                return -code error "Model type '$value' is not a valid type"
             } else {
                 set Type [string tolower $value]
             }
@@ -880,7 +881,7 @@ namespace eval ::SpiceGenTcl {
                         my addParam [@ $param 0] [@ $param 1] 
                     }
                 } else {
-                    error "Wrong parameter definition in Options"
+                    return -code error "Wrong parameter definition in Options"
                 }   
             }
         }
@@ -909,7 +910,7 @@ namespace eval ::SpiceGenTcl {
             }
             lappend paramList $paramName
             if {[my duplListCheck $paramList]} {
-                error "Parameters list '$paramList' has already contains parameter with name '$paramName'"
+                return -code error "Parameters list '$paramList' has already contains parameter with name '$paramName'"
             }
             if {$value=="-sw"} {
                 dict append Params $paramName [::SpiceGenTcl::ParameterSwitch new $paramName]
@@ -928,8 +929,8 @@ namespace eval ::SpiceGenTcl {
             set paramName [string tolower $paramName]
             set error [catch {dget $Params $paramName}]
             if {$error>0} {
-                error "Parameter with name '$paramName' was not found in options's '[my configure -Name]' list of\
-                        parameters '[dict keys [my getParams]]'"
+                return -code error "Parameter with name '$paramName' was not found in options's '[my configure -Name]'\
+                        list of parameters '[dict keys [my getParams]]'"
             } else {
                 set param [dget $Params $paramName]
             }
@@ -1003,7 +1004,7 @@ namespace eval ::SpiceGenTcl {
             }
             lappend paramList $paramName
             if {[my duplListCheck $paramList]} {
-                error "Parameters list \{$paramList\} has already contains parameter with name \{$paramName\}"
+                return -code error "Parameters list '$paramList' has already contains parameter with name '$paramName'"
             }
             if {[info exists eq]} {
                 dict append Params $paramName [::SpiceGenTcl::ParameterEquation new $paramName $value]
@@ -1021,8 +1022,8 @@ namespace eval ::SpiceGenTcl {
             set paramName [string tolower $paramName]
             set error [catch {dget $Params $paramName}]
             if {$error>0} {
-                error "Parameter with name '$paramName' was not found in parameter statement's '[my configure -Name]'\
-                        list of parameters '[dict keys [my getParams]]'"
+                return -code error "Parameter with name '$paramName' was not found in parameter statement's\
+                        '[my configure -Name]' list of parameters '[dict keys [my getParams]]'"
             } else {
                 set param [dget $Params $paramName]
             }
@@ -1053,7 +1054,7 @@ namespace eval ::SpiceGenTcl {
             } elseif {$eq==""} {
                 my AddParam temp $value
             } else {
-                error "Wrong value '$eq' of qualifier"
+                return -code error "Wrong value '$eq' of qualifier"
             }
         } -get {
             return [$Value configure -Value]
@@ -1119,9 +1120,9 @@ namespace eval ::SpiceGenTcl {
             #  element - element object reference
             set elementClass [info object class $element]
             if {$elementClass=={::SpiceGenTcl::Options}} {
-                error "Options element can't be included in general netlist, only top-level Circuit"
+                return -code error "Options element can't be included in general netlist, only top-level Circuit"
             } elseif {$elementClass=={::SpiceGenTcl::Analysis}} {
-                error "Analysis element can't be included in general netlist, only top-level Circuit"
+                return -code error "Analysis element can't be included in general netlist, only top-level Circuit"
             }
             set elemName [string tolower [$element configure -Name]]
             if {[info exists Elements]} {
@@ -1129,7 +1130,7 @@ namespace eval ::SpiceGenTcl {
             }
             lappend elemList $elemName
             if {[my duplListCheck $elemList]} {
-                error "Netlist '[my configure -Name]' already contains element with name $elemName"
+                return -code error "Netlist '[my configure -Name]' already contains element with name $elemName"
             }
             dict append Elements [$element configure -Name] $element 
             return
@@ -1140,7 +1141,8 @@ namespace eval ::SpiceGenTcl {
             set elemName [string tolower $elemName]
             set error [catch {dget $Elements $elemName}]
             if {$error>0} {
-                error "Element with name '$elemName' was not found in netlist's '[my configure -Name]' list of elements"
+                return -code error "Element with name '$elemName' was not found in netlist's '[my configure -Name]'\
+                        list of elements"
             } else {
                 set Elements [dict remove $Elements $elemName]
             }
@@ -1152,7 +1154,8 @@ namespace eval ::SpiceGenTcl {
             set elemName [string tolower $elemName]
             set error [catch {dget $Elements $elemName}]
             if {$error>0} {
-                error "Element with name '$elemName' was not found in netlist's '[my configure -Name]' list of elements"
+                return -code error "Element with name '$elemName' was not found in netlist's '[my configure -Name]'\
+                        list of elements"
             } else {
                 set foundElem [dget $Elements $elemName]
             }
@@ -1206,7 +1209,7 @@ namespace eval ::SpiceGenTcl {
             my variable Elements
             set elemName [string tolower [$element configure -Name]]
             if {([info object class $element {::SpiceGenTcl::Analysis}]) && ([info exists ContainAnalysis])} {
-                error "Netlist '[my configure -Name]' already contains Analysis element"
+                return -code error "Netlist '[my configure -Name]' already contains Analysis element"
             } elseif {[info object class $element {::SpiceGenTcl::Analysis}]} {
                 set ContainAnalysis ""
             }
@@ -1215,7 +1218,7 @@ namespace eval ::SpiceGenTcl {
             }
             lappend elemList $elemName
             if {[my duplListCheck $elemList]} {
-                error "Netlist '[my configure -Name]' already contains element with name $elemName"
+                return -code error "Netlist '[my configure -Name]' already contains element with name $elemName"
             }
             dict append Elements [$element configure -Name] $element 
             return
@@ -1227,7 +1230,8 @@ namespace eval ::SpiceGenTcl {
             set elemName [string tolower $elemName]
             set error [catch {dget $Elements $elemName}]
             if {$error>0} {
-                error "Element with name '$elemName' was not found in device's '[my configure -Name]' list of elements"
+                return -code error "Element with name '$elemName' was not found in device's '[my configure -Name]'\
+                        list of elements"
             } else {
                 set Elements [dict remove $Elements $elemName]
                 if {[info object class [dget $Elements $elemName] {::SpiceGenTcl::Analysis}]} {
@@ -1243,7 +1247,8 @@ namespace eval ::SpiceGenTcl {
             set elemName [string tolower $elemName]
             set error [catch {dget $Elements $elemName}]
             if {$error>0} {
-                error "Element with name '$elemName' was not found in netlist's '[my configure -Name]' list of elements"
+                return -code error "Element with name '$elemName' was not found in netlist's '[my configure -Name]'\
+                        list of elements"
             } else {
                 set foundElem [dget $Elements $elemName]
             }
@@ -1283,7 +1288,7 @@ namespace eval ::SpiceGenTcl {
                 -nodelete
             }]
             if {[info exists Simulator]==0} {
-                error "Simulator is not attached to '[my configure -Name]' circuit"
+                return -code error "Simulator is not attached to '[my configure -Name]' circuit"
             }
             if {[info exists nodelete]} {
                 $Simulator runAndRead [my genSPICEString] -nodelete
@@ -1353,7 +1358,7 @@ namespace eval ::SpiceGenTcl {
             }
             lappend paramList $paramName
             if {[my duplListCheck $paramList]} {
-                error "Parameters list '$paramList' has already contains parameter with name '$paramName'"
+                return -code error "Parameters list '$paramList' has already contains parameter with name '$paramName'"
             }
             dict append Params $paramName [::SpiceGenTcl::Parameter new $paramName $value]
             return
@@ -1366,13 +1371,13 @@ namespace eval ::SpiceGenTcl {
             set elementClass [info object class $element]
             set elementClassSuperclass [info class superclasses $elementClass]
             if {$elementClass=={::SpiceGenTcl::Include}} {
-                error "Include element can't be included in subcircuit"
+                return -code error "Include element can't be included in subcircuit"
             } elseif {$elementClass=={::SpiceGenTcl::Library}} {
-                error "Library element can't be included in subcircuit"
+                return -code error "Library element can't be included in subcircuit"
             } elseif {$elementClass=={::SpiceGenTcl::Options}} {
-                error "Options element can't be included in subcircuit"
+                return -code error "Options element can't be included in subcircuit"
             } elseif {$elementClassSuperclass=={::SpiceGenTcl::Analysis}} {
-                error "Analysis element can't be included in subcircuit"
+                return -code error "Analysis element can't be included in subcircuit"
             }
             next $element
         }
@@ -1413,7 +1418,7 @@ namespace eval ::SpiceGenTcl {
             set type [string tolower $value]
             set suppAnalysis [list ac dc tran op disto noise pz sens sp tf]
             if {$value ni $suppAnalysis} {
-                error "Type '$value' is not in supported list of analysis, should be one of '$suppAnalysis'"
+                return -code error "Type '$value' is not in supported list of analysis, should be one of '$suppAnalysis'"
             }
             set Type $value
         }
@@ -1476,7 +1481,7 @@ namespace eval ::SpiceGenTcl {
             }
             lappend paramList $paramName
             if {[my duplListCheck $paramList]} {
-                error "Parameters list \{$paramList\} has already contains parameter with name \{$paramName\}"
+                return -code error "Parameters list '$paramList' has already contains parameter with name '$paramName'"
             }
             if {$value=="-sw"} {
                 dict append Params $paramName [::SpiceGenTcl::ParameterSwitch new $paramName]
@@ -1504,8 +1509,8 @@ namespace eval ::SpiceGenTcl {
             set paramName [string tolower $paramName]
             set error [catch {dget $Params $paramName}]
             if {$error>0} {
-                error "Parameter with name '$paramName' was not found in parameter analysis's '[my configure -Name]'\
-                        list of parameters '[dict keys [my getParams]]'"
+                return -code error "Parameter with name '$paramName' was not found in parameter analysis's\
+                        '[my configure -Name]' list of parameters '[dict keys [my getParams]]'"
             } else {
                 set param [dget $Params $paramName]
             }
@@ -1656,7 +1661,7 @@ namespace eval ::SpiceGenTcl {
             if {[info exists DataPoints]} {
                 return $DataPoints
             } else {
-                error "Dataset with name '[my configure -Name]' doesn't contain non-zero points"
+                return -code error "Dataset with name '[my configure -Name]' doesn't contain non-zero points"
             }
             return 
         }
@@ -1744,7 +1749,7 @@ namespace eval ::SpiceGenTcl {
             if {[info exists Axis]} {
                 return $Axis
             } else {
-                error "Raw file '[my configure -Path]' doesn't have an axis"
+                return -code error "Raw file '[my configure -Path]' doesn't have an axis"
             }
         }
         variable Axis 
@@ -1953,7 +1958,8 @@ namespace eval ::SpiceGenTcl {
                 }
             }
             if {$traceFoundFlag==false} {
-                error "Trace with name '$traceName' was not found in raw file '[my configure -Path]' list of traces"
+                return -code error "Trace with name '$traceName' was not found in raw file '[my configure -Path]' list\
+                        of traces"
             }
             return $traceFound
         }
@@ -2031,8 +2037,8 @@ namespace eval ::SpiceGenTcl {
                     unset row
                 }
             } else {
-                error "Arguments '-all' or '-traces traceName1 traceName2 ...' must be provided to 'getTracesCsv'\
-                        method"
+                return -code error "Arguments '-all' or '-traces traceName1 traceName2 ...' must be provided to\
+                        'getTracesCsv' method"
             }
             return [::csv::joinlist $tracesList [dget $arguments sep]]
         }

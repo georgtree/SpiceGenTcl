@@ -25,7 +25,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
             if {[info exists Log]!=0} {
                 return $Log
             } else {
-                error "Log does not exists for simulator '[my configure -Name]'" 
+                return -code error "Log does not exists for simulator '[my configure -Name]'" 
             }
         }
         variable Log
@@ -89,7 +89,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
                 unset Log
                 return
             } else {
-                error "Log does not exists for simulator '[my configure -Name]'" 
+                return -code error "Log does not exists for simulator '[my configure -Name]'" 
             }
         }
         method readData {} {

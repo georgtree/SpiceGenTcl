@@ -141,7 +141,7 @@
     }
     <b><font color=#923B23>lappend</font></b> paramList <font color=#4A181B>$paramName</font>
     <b><font color=#923B23>if</font></b> {[<b><font color=#ca14ca>my</font></b> duplListCheck <font color=#4A181B>$paramList</font>]} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Parameters list \{<font color=#4A181B>$</font>paramList\} has already contains parameter with name \{<font color=#4A181B>$</font>paramName\}&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Parameters list '<font color=#4A181B>$</font>paramList' has already contains parameter with name '<font color=#4A181B>$</font>paramName'&quot;</font>
     }
     <b><font color=#923B23>if</font></b> {<font color=#4A181B>$value</font>==&quot;-sw&quot;} {
         <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [::SpiceGenTcl::ParameterSwitch new <font color=#4A181B>$paramName</font>]
@@ -175,7 +175,7 @@
     <b><font color=#923B23>set</font></b> paramName [<b><font color=#923B23>string</font></b> tolower <font color=#4A181B>$paramName</font>]
     <b><font color=#923B23>set</font></b> error [<b><font color=#923B23>catch</font></b> {<b><font color=#923B23>dget</font></b> <font color=#4A181B>$Params</font> <font color=#4A181B>$paramName</font>}]
     <b><font color=#923B23>if</font></b> {<font color=#4A181B>$error</font>&gt;0} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Parameter with name '<font color=#4A181B>$</font>paramName' was not found in device's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of parameters '<font color=#4A181B>[</font>dict keys <font color=#4A181B>[</font>my getParams<font color=#4A181B>]]</font>'&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Parameter with name '<font color=#4A181B>$</font>paramName' was not found in device's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of parameters '<font color=#4A181B>[</font>dict keys <font color=#4A181B>[</font>my getParams<font color=#4A181B>]]</font>'&quot;</font>
     } <b><font color=#923B23>else</font></b> {
         <b><font color=#923B23>set</font></b> Params [<b><font color=#923B23>dict</font></b> remove <font color=#4A181B>$Params</font> <font color=#4A181B>$paramName</font>]
     }
@@ -234,7 +234,7 @@
     <b><font color=#923B23>set</font></b> paramName [<b><font color=#923B23>string</font></b> tolower <font color=#4A181B>$paramName</font>]
     <b><font color=#923B23>set</font></b> error [<b><font color=#923B23>catch</font></b> {<b><font color=#923B23>dget</font></b> <font color=#4A181B>$Params</font> <font color=#4A181B>$paramName</font>}]
     <b><font color=#923B23>if</font></b> {<font color=#4A181B>$error</font>&gt;0} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Parameter with name '<font color=#4A181B>$</font>paramName' was not found in parameter analysis's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of parameters '<font color=#4A181B>[</font>dict keys <font color=#4A181B>[</font>my getParams<font color=#4A181B>]]</font>'&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Parameter with name '<font color=#4A181B>$</font>paramName' was not found in parameter analysis's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of parameters '<font color=#4A181B>[</font>dict keys <font color=#4A181B>[</font>my getParams<font color=#4A181B>]]</font>'&quot;</font>
     } <b><font color=#923B23>else</font></b> {
         <b><font color=#923B23>set</font></b> param [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$Params</font> <font color=#4A181B>$paramName</font>]
     }
@@ -437,7 +437,7 @@
     <b><font color=#ca14ca>my</font></b> variable Elements
     <b><font color=#923B23>set</font></b> elemName [<b><font color=#923B23>string</font></b> tolower [<font color=#4A181B>$element</font> configure <font color=#463e11>-Name</font>]]
     <b><font color=#923B23>if</font></b> {([<b><font color=#923B23>info</font></b> object class <font color=#4A181B>$element</font> {::SpiceGenTcl::Analysis}]) && ([<b><font color=#923B23>info</font></b> exists ContainAnalysis])} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Netlist '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' already contains Analysis element&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Netlist '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' already contains Analysis element&quot;</font>
     } <b><font color=#923B23>elseif</font></b> {[<b><font color=#923B23>info</font></b> object class <font color=#4A181B>$element</font> {::SpiceGenTcl::Analysis}]} {
         <b><font color=#923B23>set</font></b> ContainAnalysis <font color=#035103>&quot;&quot;</font>
     }
@@ -446,7 +446,7 @@
     }
     <b><font color=#923B23>lappend</font></b> elemList <font color=#4A181B>$elemName</font>
     <b><font color=#923B23>if</font></b> {[<b><font color=#ca14ca>my</font></b> duplListCheck <font color=#4A181B>$elemList</font>]} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Netlist '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' already contains element with name <font color=#4A181B>$</font>elemName&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Netlist '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' already contains element with name <font color=#4A181B>$</font>elemName&quot;</font>
     }
     <b><font color=#923B23>dict</font></b> append Elements [<font color=#4A181B>$element</font> configure <font color=#463e11>-Name</font>] <font color=#4A181B>$element</font>
     <b><font color=#ca14ca>return</font></b>
@@ -467,7 +467,7 @@
     <b><font color=#923B23>set</font></b> elemName [<b><font color=#923B23>string</font></b> tolower <font color=#4A181B>$elemName</font>]
     <b><font color=#923B23>set</font></b> error [<b><font color=#923B23>catch</font></b> {<b><font color=#923B23>dget</font></b> <font color=#4A181B>$Elements</font> <font color=#4A181B>$elemName</font>}]
     <b><font color=#923B23>if</font></b> {<font color=#4A181B>$error</font>&gt;0} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Element with name '<font color=#4A181B>$</font>elemName' was not found in device's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of elements&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Element with name '<font color=#4A181B>$</font>elemName' was not found in device's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of elements&quot;</font>
     } <b><font color=#923B23>else</font></b> {
         <b><font color=#923B23>set</font></b> Elements [<b><font color=#923B23>dict</font></b> remove <font color=#4A181B>$Elements</font> <font color=#4A181B>$elemName</font>]
         <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> object class [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$Elements</font> <font color=#4A181B>$elemName</font>] {::SpiceGenTcl::Analysis}]} {
@@ -551,7 +551,7 @@
     <b><font color=#923B23>set</font></b> elemName [<b><font color=#923B23>string</font></b> tolower <font color=#4A181B>$elemName</font>]
     <b><font color=#923B23>set</font></b> error [<b><font color=#923B23>catch</font></b> {<b><font color=#923B23>dget</font></b> <font color=#4A181B>$Elements</font> <font color=#4A181B>$elemName</font>}]
     <b><font color=#923B23>if</font></b> {<font color=#4A181B>$error</font>&gt;0} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Element with name '<font color=#4A181B>$</font>elemName' was not found in netlist's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of elements&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Element with name '<font color=#4A181B>$</font>elemName' was not found in netlist's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of elements&quot;</font>
     } <b><font color=#923B23>else</font></b> {
         <b><font color=#923B23>set</font></b> foundElem [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$Elements</font> <font color=#4A181B>$elemName</font>]
     }
@@ -573,7 +573,7 @@
         <font color=#463e11>-nodelete</font>
     }]
     <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> exists Simulator]==0} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Simulator is not attached to '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' circuit&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Simulator is not attached to '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' circuit&quot;</font>
     }
     <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> exists nodelete]} {
         <font color=#4A181B>$Simulator</font> runAndRead [<b><font color=#ca14ca>my</font></b> genSPICEString] <font color=#463e11>-nodelete</font>
@@ -692,7 +692,7 @@
     <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> exists DataPoints]} {
         <b><font color=#ca14ca>return</font></b> <font color=#4A181B>$DataPoints</font>
     } <b><font color=#923B23>else</font></b> {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Dataset with name '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' doesn't contain non-zero points&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Dataset with name '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' doesn't contain non-zero points&quot;</font>
     }
     <b><font color=#ca14ca>return</font></b>
 }</pre></div>
@@ -841,7 +841,7 @@
     }
     <b><font color=#923B23>lappend</font></b> paramList <font color=#4A181B>$paramName</font>
     <b><font color=#923B23>if</font></b> {[<b><font color=#ca14ca>my</font></b> duplListCheck <font color=#4A181B>$paramList</font>]} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Parameters list '<font color=#4A181B>$</font>paramList' has already contains parameter with name '<font color=#4A181B>$</font>paramName'&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Parameters list '<font color=#4A181B>$</font>paramList' has already contains parameter with name '<font color=#4A181B>$</font>paramName'&quot;</font>
     }
     <i><font color=#4b5d50># select parameter object according to parameter qualificator</font></i>
     <b><font color=#923B23>if</font></b> {<font color=#4A181B>$value</font>==&quot;-sw&quot;} {
@@ -894,7 +894,7 @@
     <b><font color=#923B23>set</font></b> paramName [<b><font color=#923B23>string</font></b> tolower <font color=#4A181B>$paramName</font>]
     <b><font color=#923B23>set</font></b> error [<b><font color=#923B23>catch</font></b> {<b><font color=#923B23>dget</font></b> <font color=#4A181B>$Params</font> <font color=#4A181B>$paramName</font>}]
     <b><font color=#923B23>if</font></b> {<font color=#4A181B>$error</font>&gt;0} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Parameter with name '<font color=#4A181B>$</font>paramName' was not found in device's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of parameters '<font color=#4A181B>[</font>dict keys <font color=#4A181B>[</font>my getParams<font color=#4A181B>]]</font>'&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Parameter with name '<font color=#4A181B>$</font>paramName' was not found in device's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of parameters '<font color=#4A181B>[</font>dict keys <font color=#4A181B>[</font>my getParams<font color=#4A181B>]]</font>'&quot;</font>
     } <b><font color=#923B23>else</font></b> {
         <b><font color=#923B23>set</font></b> Params [<b><font color=#923B23>dict</font></b> remove <font color=#4A181B>$Params</font> <font color=#4A181B>$paramName</font>]
     }
@@ -915,7 +915,7 @@
         <b><font color=#923B23>if</font></b> {<font color=#4A181B>$error</font>!=1} {
             <b><font color=#923B23>lappend</font></b> nodes [<font color=#4A181B>$pin</font> genSPICEString]
         } <b><font color=#923B23>else</font></b> {
-            <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Device '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' can't be netlisted because '<font color=#4A181B>$</font>pinName' pin is floating&quot;</font>
+            <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Device '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' can't be netlisted because '<font color=#4A181B>$</font>pinName' pin is floating&quot;</font>
         }
     }
     <b><font color=#923B23>if</font></b> {(<font color=#4A181B>$Params</font>==&quot;&quot;) || ([<b><font color=#923B23>info</font></b> exists Params]==0)} {
@@ -979,7 +979,7 @@
     <b><font color=#923B23>set</font></b> paramName [<b><font color=#923B23>string</font></b> tolower <font color=#4A181B>$paramName</font>]
     <b><font color=#923B23>set</font></b> error [<b><font color=#923B23>catch</font></b> {<b><font color=#923B23>dget</font></b> <font color=#4A181B>$Params</font> <font color=#4A181B>$paramName</font>}]
     <b><font color=#923B23>if</font></b> {<font color=#4A181B>$error</font>&gt;0} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Parameter with name '<font color=#4A181B>$</font>paramName' was not found in device's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of parameters '<font color=#4A181B>[</font>dict keys <font color=#4A181B>[</font>my getParams<font color=#4A181B>]]</font>'&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Parameter with name '<font color=#4A181B>$</font>paramName' was not found in device's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of parameters '<font color=#4A181B>[</font>dict keys <font color=#4A181B>[</font>my getParams<font color=#4A181B>]]</font>'&quot;</font>
     } <b><font color=#923B23>else</font></b> {
         <b><font color=#923B23>set</font></b> param [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$Params</font> <font color=#4A181B>$paramName</font>]
     }
@@ -1003,7 +1003,7 @@
     <i><font color=#4b5d50>#  nodeName - name of the node that we want connect to pin</font></i>
     <b><font color=#923B23>set</font></b> error [<b><font color=#923B23>catch</font></b> {<b><font color=#923B23>dget</font></b> <font color=#4A181B>$Pins</font> <font color=#4A181B>$pinName</font>}]
     <b><font color=#923B23>if</font></b> {<font color=#4A181B>$error</font>&gt;0} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Pin with name '<font color=#4A181B>$</font>pinName' was not found in device's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of pins '<font color=#4A181B>[</font>dict keys <font color=#4A181B>[</font>my getPins<font color=#4A181B>]]</font>'&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Pin with name '<font color=#4A181B>$</font>pinName' was not found in device's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of pins '<font color=#4A181B>[</font>dict keys <font color=#4A181B>[</font>my getPins<font color=#4A181B>]]</font>'&quot;</font>
     } <b><font color=#923B23>else</font></b> {
         <b><font color=#923B23>set</font></b> pin [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$Pins</font> <font color=#4A181B>$pinName</font>]
     }
@@ -1332,7 +1332,7 @@
     }
     <b><font color=#923B23>lappend</font></b> paramList <font color=#4A181B>$paramName</font>
     <b><font color=#923B23>if</font></b> {[<b><font color=#ca14ca>my</font></b> duplListCheck <font color=#4A181B>$paramList</font>]} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Parameters list '<font color=#4A181B>$</font>paramList' has already contains parameter with name '<font color=#4A181B>$</font>paramName'&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Parameters list '<font color=#4A181B>$</font>paramList' has already contains parameter with name '<font color=#4A181B>$</font>paramName'&quot;</font>
     }
     <i><font color=#4b5d50># select parameter object according to parameter qualificator</font></i>
     <b><font color=#923B23>if</font></b> {<font color=#4A181B>$value</font>==&quot;-sw&quot;} {
@@ -1367,7 +1367,7 @@
     <b><font color=#923B23>set</font></b> paramName [<b><font color=#923B23>string</font></b> tolower <font color=#4A181B>$paramName</font>]
     <b><font color=#923B23>set</font></b> error [<b><font color=#923B23>catch</font></b> {<b><font color=#923B23>dget</font></b> <font color=#4A181B>$Params</font> <font color=#4A181B>$paramName</font>}]
     <b><font color=#923B23>if</font></b> {<font color=#4A181B>$error</font>&gt;0} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Parameter with name '<font color=#4A181B>$</font>paramName' was not found in device's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of parameters '<font color=#4A181B>[</font>dict keys <font color=#4A181B>[</font>my getParams<font color=#4A181B>]]</font>'&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Parameter with name '<font color=#4A181B>$</font>paramName' was not found in device's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of parameters '<font color=#4A181B>[</font>dict keys <font color=#4A181B>[</font>my getParams<font color=#4A181B>]]</font>'&quot;</font>
     } <b><font color=#923B23>else</font></b> {
         <b><font color=#923B23>set</font></b> Params [<b><font color=#923B23>dict</font></b> remove <font color=#4A181B>$Params</font> <font color=#4A181B>$paramName</font>]
     }
@@ -1427,7 +1427,7 @@
     <b><font color=#923B23>set</font></b> paramName [<b><font color=#923B23>string</font></b> tolower <font color=#4A181B>$paramName</font>]
     <b><font color=#923B23>set</font></b> error [<b><font color=#923B23>catch</font></b> {<b><font color=#923B23>dget</font></b> <font color=#4A181B>$Params</font> <font color=#4A181B>$paramName</font>}]
     <b><font color=#923B23>if</font></b> {<font color=#4A181B>$error</font>&gt;0} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Parameter with name '<font color=#4A181B>$</font>paramName' was not found in device's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of parameters '<font color=#4A181B>[</font>dict keys <font color=#4A181B>[</font>my getParams<font color=#4A181B>]]</font>'&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Parameter with name '<font color=#4A181B>$</font>paramName' was not found in device's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of parameters '<font color=#4A181B>[</font>dict keys <font color=#4A181B>[</font>my getParams<font color=#4A181B>]]</font>'&quot;</font>
     } <b><font color=#923B23>else</font></b> {
         <b><font color=#923B23>set</font></b> param [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$Params</font> <font color=#4A181B>$paramName</font>]
     }
@@ -1482,9 +1482,9 @@
     <i><font color=#4b5d50>#  element - element object reference</font></i>
     <b><font color=#923B23>set</font></b> elementClass [<b><font color=#923B23>info</font></b> object class <font color=#4A181B>$element</font>]
     <b><font color=#923B23>if</font></b> {<font color=#4A181B>$elementClass</font>=={::SpiceGenTcl::Options}} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Options element can't be included in general netlist, only top-level Circuit&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Options element can't be included in general netlist, only top-level Circuit&quot;</font>
     } <b><font color=#923B23>elseif</font></b> {<font color=#4A181B>$elementClass</font>=={::SpiceGenTcl::Analysis}} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Analysis element can't be included in general netlist, only top-level Circuit&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Analysis element can't be included in general netlist, only top-level Circuit&quot;</font>
     }
     <b><font color=#923B23>set</font></b> elemName [<b><font color=#923B23>string</font></b> tolower [<font color=#4A181B>$element</font> configure <font color=#463e11>-Name</font>]]
     <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> exists Elements]} {
@@ -1492,7 +1492,7 @@
     }
     <b><font color=#923B23>lappend</font></b> elemList <font color=#4A181B>$elemName</font>
     <b><font color=#923B23>if</font></b> {[<b><font color=#ca14ca>my</font></b> duplListCheck <font color=#4A181B>$elemList</font>]} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Netlist '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' already contains element with name <font color=#4A181B>$</font>elemName&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Netlist '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' already contains element with name <font color=#4A181B>$</font>elemName&quot;</font>
     }
     <b><font color=#923B23>dict</font></b> append Elements [<font color=#4A181B>$element</font> configure <font color=#463e11>-Name</font>] <font color=#4A181B>$element</font>
     <b><font color=#ca14ca>return</font></b>
@@ -1512,7 +1512,7 @@
     <b><font color=#923B23>set</font></b> elemName [<b><font color=#923B23>string</font></b> tolower <font color=#4A181B>$elemName</font>]
     <b><font color=#923B23>set</font></b> error [<b><font color=#923B23>catch</font></b> {<b><font color=#923B23>dget</font></b> <font color=#4A181B>$Elements</font> <font color=#4A181B>$elemName</font>}]
     <b><font color=#923B23>if</font></b> {<font color=#4A181B>$error</font>&gt;0} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Element with name '<font color=#4A181B>$</font>elemName' was not found in netlist's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of elements&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Element with name '<font color=#4A181B>$</font>elemName' was not found in netlist's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of elements&quot;</font>
     } <b><font color=#923B23>else</font></b> {
         <b><font color=#923B23>set</font></b> Elements [<b><font color=#923B23>dict</font></b> remove <font color=#4A181B>$Elements</font> <font color=#4A181B>$elemName</font>]
     }
@@ -1563,7 +1563,7 @@
     <b><font color=#923B23>set</font></b> elemName [<b><font color=#923B23>string</font></b> tolower <font color=#4A181B>$elemName</font>]
     <b><font color=#923B23>set</font></b> error [<b><font color=#923B23>catch</font></b> {<b><font color=#923B23>dget</font></b> <font color=#4A181B>$Elements</font> <font color=#4A181B>$elemName</font>}]
     <b><font color=#923B23>if</font></b> {<font color=#4A181B>$error</font>&gt;0} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Element with name '<font color=#4A181B>$</font>elemName' was not found in netlist's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of elements&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Element with name '<font color=#4A181B>$</font>elemName' was not found in netlist's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of elements&quot;</font>
     } <b><font color=#923B23>else</font></b> {
         <b><font color=#923B23>set</font></b> foundElem [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$Elements</font> <font color=#4A181B>$elemName</font>]
     }
@@ -1620,7 +1620,7 @@
                 <b><font color=#ca14ca>my</font></b> addParam [@ <font color=#4A181B>$param</font> 0] [@ <font color=#4A181B>$param</font> 1]
             }
         } <b><font color=#923B23>else</font></b> {
-            <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Wrong parameter definition in Options&quot;</font>
+            <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Wrong parameter definition in Options&quot;</font>
         }
     }
 }</pre></div>
@@ -1644,7 +1644,7 @@
     }
     <b><font color=#923B23>lappend</font></b> paramList <font color=#4A181B>$paramName</font>
     <b><font color=#923B23>if</font></b> {[<b><font color=#ca14ca>my</font></b> duplListCheck <font color=#4A181B>$paramList</font>]} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Parameters list '<font color=#4A181B>$</font>paramList' has already contains parameter with name '<font color=#4A181B>$</font>paramName'&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Parameters list '<font color=#4A181B>$</font>paramList' has already contains parameter with name '<font color=#4A181B>$</font>paramName'&quot;</font>
     }
     <b><font color=#923B23>if</font></b> {<font color=#4A181B>$value</font>==&quot;-sw&quot;} {
         <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [::SpiceGenTcl::ParameterSwitch new <font color=#4A181B>$paramName</font>]
@@ -1668,7 +1668,7 @@
     <b><font color=#923B23>set</font></b> paramName [<b><font color=#923B23>string</font></b> tolower <font color=#4A181B>$paramName</font>]
     <b><font color=#923B23>set</font></b> error [<b><font color=#923B23>catch</font></b> {<b><font color=#923B23>dget</font></b> <font color=#4A181B>$Params</font> <font color=#4A181B>$paramName</font>}]
     <b><font color=#923B23>if</font></b> {<font color=#4A181B>$error</font>&gt;0} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Parameter with name '<font color=#4A181B>$</font>paramName' was not found in device's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of parameters '<font color=#4A181B>[</font>dict keys <font color=#4A181B>[</font>my getParams<font color=#4A181B>]]</font>'&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Parameter with name '<font color=#4A181B>$</font>paramName' was not found in device's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of parameters '<font color=#4A181B>[</font>dict keys <font color=#4A181B>[</font>my getParams<font color=#4A181B>]]</font>'&quot;</font>
     } <b><font color=#923B23>else</font></b> {
         <b><font color=#923B23>set</font></b> Params [<b><font color=#923B23>dict</font></b> remove <font color=#4A181B>$Params</font> <font color=#4A181B>$paramName</font>]
     }
@@ -1729,7 +1729,7 @@
     <b><font color=#923B23>set</font></b> paramName [<b><font color=#923B23>string</font></b> tolower <font color=#4A181B>$paramName</font>]
     <b><font color=#923B23>set</font></b> error [<b><font color=#923B23>catch</font></b> {<b><font color=#923B23>dget</font></b> <font color=#4A181B>$Params</font> <font color=#4A181B>$paramName</font>}]
     <b><font color=#923B23>if</font></b> {<font color=#4A181B>$error</font>&gt;0} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Parameter with name '<font color=#4A181B>$</font>paramName' was not found in options's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of parameters '<font color=#4A181B>[</font>dict keys <font color=#4A181B>[</font>my getParams<font color=#4A181B>]]</font>'&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Parameter with name '<font color=#4A181B>$</font>paramName' was not found in options's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of parameters '<font color=#4A181B>[</font>dict keys <font color=#4A181B>[</font>my getParams<font color=#4A181B>]]</font>'&quot;</font>
     } <b><font color=#923B23>else</font></b> {
         <b><font color=#923B23>set</font></b> param [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$Params</font> <font color=#4A181B>$paramName</font>]
     }
@@ -2139,7 +2139,7 @@
     }
     <b><font color=#923B23>lappend</font></b> paramList <font color=#4A181B>$paramName</font>
     <b><font color=#923B23>if</font></b> {[<b><font color=#ca14ca>my</font></b> duplListCheck <font color=#4A181B>$paramList</font>]} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Parameters list \{<font color=#4A181B>$</font>paramList\} has already contains parameter with name \{<font color=#4A181B>$</font>paramName\}&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Parameters list '<font color=#4A181B>$</font>paramList' has already contains parameter with name '<font color=#4A181B>$</font>paramName'&quot;</font>
     }
     <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> exists eq]} {
         <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [::SpiceGenTcl::ParameterEquation new <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
@@ -2163,7 +2163,7 @@
     <b><font color=#923B23>set</font></b> paramName [<b><font color=#923B23>string</font></b> tolower <font color=#4A181B>$paramName</font>]
     <b><font color=#923B23>set</font></b> error [<b><font color=#923B23>catch</font></b> {<b><font color=#923B23>dget</font></b> <font color=#4A181B>$Params</font> <font color=#4A181B>$paramName</font>}]
     <b><font color=#923B23>if</font></b> {<font color=#4A181B>$error</font>&gt;0} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Parameter with name '<font color=#4A181B>$</font>paramName' was not found in device's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of parameters '<font color=#4A181B>[</font>dict keys <font color=#4A181B>[</font>my getParams<font color=#4A181B>]]</font>'&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Parameter with name '<font color=#4A181B>$</font>paramName' was not found in device's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of parameters '<font color=#4A181B>[</font>dict keys <font color=#4A181B>[</font>my getParams<font color=#4A181B>]]</font>'&quot;</font>
     } <b><font color=#923B23>else</font></b> {
         <b><font color=#923B23>set</font></b> Params [<b><font color=#923B23>dict</font></b> remove <font color=#4A181B>$Params</font> <font color=#4A181B>$paramName</font>]
     }
@@ -2218,7 +2218,7 @@
     <b><font color=#923B23>set</font></b> paramName [<b><font color=#923B23>string</font></b> tolower <font color=#4A181B>$paramName</font>]
     <b><font color=#923B23>set</font></b> error [<b><font color=#923B23>catch</font></b> {<b><font color=#923B23>dget</font></b> <font color=#4A181B>$Params</font> <font color=#4A181B>$paramName</font>}]
     <b><font color=#923B23>if</font></b> {<font color=#4A181B>$error</font>&gt;0} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Parameter with name '<font color=#4A181B>$</font>paramName' was not found in parameter statement's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of parameters '<font color=#4A181B>[</font>dict keys <font color=#4A181B>[</font>my getParams<font color=#4A181B>]]</font>'&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Parameter with name '<font color=#4A181B>$</font>paramName' was not found in parameter statement's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of parameters '<font color=#4A181B>[</font>dict keys <font color=#4A181B>[</font>my getParams<font color=#4A181B>]]</font>'&quot;</font>
     } <b><font color=#923B23>else</font></b> {
         <b><font color=#923B23>set</font></b> param [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$Params</font> <font color=#4A181B>$paramName</font>]
     }
@@ -2292,7 +2292,7 @@
     <i><font color=#4b5d50># Creates string for SPICE netlist.</font></i>
     <i><font color=#4b5d50># Returns: string '*$NodeName*'</font></i>
     <b><font color=#923B23>if</font></b> {[<b><font color=#ca14ca>my</font></b> checkFloating]==<font color=#035103>&quot;true&quot;</font>} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Pin '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' is not connected to the node so can't be netlisted&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Pin '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' is not connected to the node so can't be netlisted&quot;</font>
     }
     <b><font color=#ca14ca>return</font></b> <font color=#035103>&quot;<font color=#4A181B>[</font>my configure -NodeName<font color=#4A181B>]</font>&quot;</font>
 }</pre></div>
@@ -2562,7 +2562,7 @@
         }
     }
     <b><font color=#923B23>if</font></b> {<font color=#4A181B>$traceFoundFlag</font>==false} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Trace with name '<font color=#4A181B>$</font>traceName' was not found in raw file '<font color=#4A181B>[</font>my configure -Path<font color=#4A181B>]</font>' list of traces&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Trace with name '<font color=#4A181B>$</font>traceName' was not found in raw file '<font color=#4A181B>[</font>my configure -Path<font color=#4A181B>]</font>' list of traces&quot;</font>
     }
     <b><font color=#ca14ca>return</font></b> <font color=#4A181B>$traceFound</font>
 }</pre></div>
@@ -2612,7 +2612,7 @@
             <b><font color=#923B23>unset</font></b> row
         }
     } <b><font color=#923B23>else</font></b> {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Arguments '-all' or '-traces traceName1 traceName2 ...' must be provided to 'getTracesCsv' method&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Arguments '-all' or '-traces traceName1 traceName2 ...' must be provided to 'getTracesCsv' method&quot;</font>
     }
     <b><font color=#ca14ca>return</font></b> [::csv::joinlist <font color=#4A181B>$tracesList</font> [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$arguments</font> sep]]
 }</pre></div>
@@ -2872,13 +2872,13 @@
     <b><font color=#923B23>set</font></b> elementClass [<b><font color=#923B23>info</font></b> object class <font color=#4A181B>$element</font>]
     <b><font color=#923B23>set</font></b> elementClassSuperclass [<b><font color=#923B23>info</font></b> class superclasses <font color=#4A181B>$elementClass</font>]
     <b><font color=#923B23>if</font></b> {<font color=#4A181B>$elementClass</font>=={::SpiceGenTcl::Include}} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Include element can't be included in subcircuit&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Include element can't be included in subcircuit&quot;</font>
     } <b><font color=#923B23>elseif</font></b> {<font color=#4A181B>$elementClass</font>=={::SpiceGenTcl::Library}} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Library element can't be included in subcircuit&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Library element can't be included in subcircuit&quot;</font>
     } <b><font color=#923B23>elseif</font></b> {<font color=#4A181B>$elementClass</font>=={::SpiceGenTcl::Options}} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Options element can't be included in subcircuit&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Options element can't be included in subcircuit&quot;</font>
     } <b><font color=#923B23>elseif</font></b> {<font color=#4A181B>$elementClassSuperclass</font>=={::SpiceGenTcl::Analysis}} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Analysis element can't be included in subcircuit&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Analysis element can't be included in subcircuit&quot;</font>
     }
     <b><font color=#923B23>next</font></b> <font color=#4A181B>$element</font>
 }</pre></div>
@@ -2903,7 +2903,7 @@
     }
     <b><font color=#923B23>lappend</font></b> paramList <font color=#4A181B>$paramName</font>
     <b><font color=#923B23>if</font></b> {[<b><font color=#ca14ca>my</font></b> duplListCheck <font color=#4A181B>$paramList</font>]} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Parameters list '<font color=#4A181B>$</font>paramList' has already contains parameter with name '<font color=#4A181B>$</font>paramName'&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Parameters list '<font color=#4A181B>$</font>paramList' has already contains parameter with name '<font color=#4A181B>$</font>paramName'&quot;</font>
     }
     <b><font color=#923B23>dict</font></b> append Params <font color=#4A181B>$paramName</font> [::SpiceGenTcl::Parameter new <font color=#4A181B>$paramName</font> <font color=#4A181B>$value</font>]
     <b><font color=#ca14ca>return</font></b>
@@ -2923,7 +2923,7 @@
     <b><font color=#923B23>set</font></b> paramName [<b><font color=#923B23>string</font></b> tolower <font color=#4A181B>$paramName</font>]
     <b><font color=#923B23>set</font></b> error [<b><font color=#923B23>catch</font></b> {<b><font color=#923B23>dget</font></b> <font color=#4A181B>$Params</font> <font color=#4A181B>$paramName</font>}]
     <b><font color=#923B23>if</font></b> {<font color=#4A181B>$error</font>&gt;0} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Parameter with name '<font color=#4A181B>$</font>paramName' was not found in device's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of parameters '<font color=#4A181B>[</font>dict keys <font color=#4A181B>[</font>my getParams<font color=#4A181B>]]</font>'&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Parameter with name '<font color=#4A181B>$</font>paramName' was not found in device's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of parameters '<font color=#4A181B>[</font>dict keys <font color=#4A181B>[</font>my getParams<font color=#4A181B>]]</font>'&quot;</font>
     } <b><font color=#923B23>else</font></b> {
         <b><font color=#923B23>set</font></b> Params [<b><font color=#923B23>dict</font></b> remove <font color=#4A181B>$Params</font> <font color=#4A181B>$paramName</font>]
     }
@@ -3008,7 +3008,7 @@
     <b><font color=#923B23>set</font></b> paramName [<b><font color=#923B23>string</font></b> tolower <font color=#4A181B>$paramName</font>]
     <b><font color=#923B23>set</font></b> error [<b><font color=#923B23>catch</font></b> {<b><font color=#923B23>dget</font></b> <font color=#4A181B>$Params</font> <font color=#4A181B>$paramName</font>}]
     <b><font color=#923B23>if</font></b> {<font color=#4A181B>$error</font>&gt;0} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Parameter with name '<font color=#4A181B>$</font>paramName' was not found in device's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of parameters '<font color=#4A181B>[</font>dict keys <font color=#4A181B>[</font>my getParams<font color=#4A181B>]]</font>'&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Parameter with name '<font color=#4A181B>$</font>paramName' was not found in device's '<font color=#4A181B>[</font>my configure -Name<font color=#4A181B>]</font>' list of parameters '<font color=#4A181B>[</font>dict keys <font color=#4A181B>[</font>my getParams<font color=#4A181B>]]</font>'&quot;</font>
     } <b><font color=#923B23>else</font></b> {
         <b><font color=#923B23>set</font></b> param [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$Params</font> <font color=#4A181B>$paramName</font>]
     }

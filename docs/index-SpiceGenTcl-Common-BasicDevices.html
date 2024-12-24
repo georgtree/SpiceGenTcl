@@ -520,7 +520,7 @@
     <b><font color=#923B23>set</font></b> pinsNames [<b><font color=#923B23>dict</font></b> keys [<font color=#4A181B>$subcktObj</font> getPins]]
     <i><font color=#4b5d50># check if number of pins in subcircuit definition matchs the number of supplied nodes</font></i>
     <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>llength</font></b> <font color=#4A181B>$pinsNames</font>]!=[<b><font color=#923B23>llength</font></b> <font color=#4A181B>$nodes</font>]} {
-        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Wrong number of nodes '<font color=#4A181B>[</font>llength <font color=#4A181B>$</font>nodes<font color=#4A181B>]</font>' in definition, should be '<font color=#4A181B>[</font>llength <font color=#4A181B>$</font>pinsNames<font color=#4A181B>]</font>'&quot;</font>
+        <b><font color=#ca14ca>return</font></b> <font color=#463e11>-code</font> error <font color=#035103>&quot;Wrong number of nodes '<font color=#4A181B>[</font>llength <font color=#4A181B>$</font>nodes<font color=#4A181B>]</font>' in definition, should be '<font color=#4A181B>[</font>llength <font color=#4A181B>$</font>pinsNames<font color=#4A181B>]</font>'&quot;</font>
     }
     <i><font color=#4b5d50># create list of pins and connected nodes</font></i>
     <b><font color=#923B23>foreach</font></b> pinName <font color=#4A181B>$pinsNames</font> node <font color=#4A181B>$nodes</font> {

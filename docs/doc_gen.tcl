@@ -50,9 +50,13 @@ foreach file [glob ${docDir}/*.html] {
     exec tclsh "${path_to_hl_tcl}/tcl_html.tcl" [file join ${docDir} $file]
 }
 
-proc processContents {fileContents} {
-    return [string map {max-width:60rem max-width:100rem} $fileContents]
+proc processContentsCss {fileContents} {
+    return [string map {max-width:60rem max-width:100rem currentTheme="v1" currentTheme="solar"} $fileContents]
 }
 
-fileutil::updateInPlace [file join $docDir assets ruff-min.css] processContents
+proc processContentsJs {fileContents} {
+    return [string map {currentTheme="v1" currentTheme="solar"} $fileContents]
+}
 
+fileutil::updateInPlace [file join $docDir assets ruff-min.css] processContentsCss
+fileutil::updateInPlace [file join $docDir assets ruff-min.js] processContentsJs
