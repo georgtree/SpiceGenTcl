@@ -58,8 +58,8 @@ set freq_s11Mag [lmap freqVal $freq s11MagVal $s11Mag {list $freqVal $s11MagVal}
 set freq_s21Mag [lmap freqVal $freq s21MagVal $s21Mag {list $freqVal $s21MagVal}]
 
 set chart [ticklecharts::chart new]
-$chart Xaxis -name "Frequency, Hz" -minorTick {show "True"} -type "value"
-$chart Yaxis -name "mag(S)" -minorTick {show "True"} -type "value"
+$chart Xaxis -name "Frequency, Hz" -minorTick {show "True"} -type "value" -splitLine {show "True"}
+$chart Yaxis -name "mag(S)" -minorTick {show "True"} -type "value" -splitLine {show "True"}
 $chart SetOptions -title {} -tooltip {} -legend {} -animation "False" -toolbox {feature {dataZoom {yAxisIndex "none"}}}\
         -backgroundColor "#212121"
 $chart Add "lineSeries" -data $freq_s11Mag -showAllSymbol "nothing" -name "S11" -symbolSize "0"

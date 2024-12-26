@@ -298,8 +298,8 @@ namespace eval Tutorials {
         ```tcl
         # plot results with ticklecharts
         set chart [ticklecharts::chart new]
-        $chart Xaxis -name "v(anode), V" -minorTick {show "True"}  -type "value"
-        $chart Yaxis -name "Idiode, A" -minorTick {show "True"}  -type "value"
+        $chart Xaxis -name "v(anode), V" -minorTick {show "True"}  -type "value" -splitLine {show "True"}
+        $chart Yaxis -name "Idiode, A" -minorTick {show "True"}  -type "value" -splitLine {show "True"}
         $chart SetOptions -title {} -tooltip {} -animation "False" -legend  {} \
                 -toolbox {feature {dataZoom {yAxisIndex "none"}}} -grid {left "5%" right "15%"}
         foreach data $dataList temp $temps {
@@ -423,8 +423,8 @@ namespace eval Tutorials {
         ```tcl
         # plot results with ticklecharts
         set chart [ticklecharts::chart new]
-        $chart Xaxis -name "v(0,c), V" -minorTick {show "True"} -type "value"
-        $chart Yaxis -name "Diode capacitance, nF" -minorTick {show "True"} -type "value"
+        $chart Xaxis -name "v(0,c), V" -minorTick {show "True"} -type "value" -splitLine {show "True"}
+        $chart Yaxis -name "Diode capacitance, nF" -minorTick {show "True"} -type "value" -splitLine {show "True"}
         $chart SetOptions -title {} -tooltip {} -animation "False" -toolbox {feature {dataZoom {yAxisIndex "none"}}}
         $chart Add "lineSeries" -data $xydata -showAllSymbol "nothing"
         set fbasename [file rootname [file tail [info script]]]
@@ -581,14 +581,14 @@ namespace eval Tutorials {
         # plot results with ticklecharts
         # chart for output voltage
         set chartVout [ticklecharts::chart new]
-        $chartVout Xaxis -name "time, s" -minorTick {show "True"} -type "value"
-        $chartVout Yaxis -name "Output voltage, V" -minorTick {show "True"} -type "value"
+        $chartVout Xaxis -name "time, s" -minorTick {show "True"} -type "value" -splitLine {show "True"}
+        $chartVout Yaxis -name "Output voltage, V" -minorTick {show "True"} -type "value" -splitLine {show "True"}
         $chartVout SetOptions -title {} -tooltip {} -animation "False" -toolbox {feature {dataZoom {yAxisIndex "none"}}}
         $chartVout Add "lineSeries" -data $timeVout -showAllSymbol "nothing" -symbolSize "0"
         # chart for measured current
         set chartImeas [ticklecharts::chart new]
-        $chartImeas Xaxis -name "time, s" -minorTick {show "True"} -type "value"
-        $chartImeas Yaxis -name "Current, I" -minorTick {show "True"} -type "value"
+        $chartImeas Xaxis -name "time, s" -minorTick {show "True"} -type "value" -splitLine {show "True"}
+        $chartImeas Yaxis -name "Current, I" -minorTick {show "True"} -type "value" -splitLine {show "True"}
         $chartImeas SetOptions -title {} -tooltip {} -animation "False" \
                 -toolbox {feature {dataZoom {yAxisIndex "none"}}}
         $chartImeas Add "lineSeries" -data $timeImeas -showAllSymbol "nothing" -symbolSize "0"
@@ -793,8 +793,8 @@ namespace eval Tutorials {
             ticklecharts::chart create chartV$node
             chartV$node SetOptions -title {} -tooltip {} -animation "False"\
                     -toolbox {feature {dataZoom {yAxisIndex "none"}}}
-            chartV$node Xaxis -name "time, s" -minorTick {show "True"} -type "value"
-            chartV$node Yaxis -name "v(${node}), V" -minorTick {show "True"} -type "value"
+            chartV$node Xaxis -name "time, s" -minorTick {show "True"} -type "value" -splitLine {show "True"}
+            chartV$node Yaxis -name "v(${node}), V" -minorTick {show "True"} -type "value" -splitLine {show "True"}
             chartV$node Add "lineSeries" -data [subst $[subst timeV$node]] -showAllSymbol "nothing" -name "V(${node})"\
                     -symbolSize "0"
             $layout Add chartV$node -bottom "[= {4+24*$i}]%" -height "18%" -width "80%"
@@ -888,8 +888,8 @@ namespace eval Tutorials {
         Now we are ready to plot data:
         ```tcl
         set chart [ticklecharts::chart new]
-        $chart Xaxis -name "Frequency, Hz" -minorTick {show "True"} -type "value"
-        $chart Yaxis -name "mag(S)" -minorTick {show "True"} -type "value"
+        $chart Xaxis -name "Frequency, Hz" -minorTick {show "True"} -type "value" -splitLine {show "True"}
+        $chart Yaxis -name "mag(S)" -minorTick {show "True"} -type "value" -splitLine {show "True"}
         $chart SetOptions -title {} -tooltip {} -legend {} -animation "False" -toolbox {feature {dataZoom {yAxisIndex "none"}}}
         $chart Add "lineSeries" -data $freq_s11Mag -showAllSymbol "nothing" -name "S11" -symbolSize "0"
         $chart Add "lineSeries" -data $freq_s21Mag -showAllSymbol "nothing" -name "S21" -symbolSize "0"

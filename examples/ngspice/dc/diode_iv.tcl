@@ -38,8 +38,8 @@ foreach temp $temps {
 
 # plot results with ticklecharts
 set chart [ticklecharts::chart new]
-$chart Xaxis -name "v(anode), V" -minorTick {show "True"}  -type "value"
-$chart Yaxis -name "Idiode, A" -minorTick {show "True"}  -type "value"
+$chart Xaxis -name "v(anode), V" -minorTick {show "True"}  -type "value" -splitLine {show "True"}
+$chart Yaxis -name "Idiode, A" -minorTick {show "True"}  -type "value" -splitLine {show "True"}
 $chart SetOptions -title {} -tooltip {} -animation "False" -legend  {} -toolbox {feature {dataZoom {yAxisIndex "none"}}} \
         -grid {left "5%" right "15%"} -backgroundColor "#212121"
 foreach data $dataList temp $temps {

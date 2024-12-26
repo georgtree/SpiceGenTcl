@@ -90,8 +90,8 @@ foreach x $freqs y $trace {
 }
 puts [findBW [lmap freq $freqs {@ $freq 0}] $trace -10]
 set chartTransMag [ticklecharts::chart new]
-$chartTransMag Xaxis -name "Frequency, Hz" -minorTick {show "True"} -type "log"
-$chartTransMag Yaxis -name "Magnitude, dB" -minorTick {show "True"} -type "value"
+$chartTransMag Xaxis -name "Frequency, Hz" -minorTick {show "True"} -type "log" -splitLine {show "True"}
+$chartTransMag Yaxis -name "Magnitude, dB" -minorTick {show "True"} -type "value" -splitLine {show "True"}
 $chartTransMag SetOptions -title {} -tooltip {} -animation "False" -toolbox {feature {dataZoom {yAxisIndex "none"}}}\
         -grid {left "10%" right "15%"} -backgroundColor "#212121"
 $chartTransMag Add "lineSeries" -data $xydata -showAllSymbol "nothing" -symbolSize "1"

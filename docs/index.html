@@ -175,8 +175,8 @@ r2 out 0 2e3
     <b><font color=#ffa500>lappend</font></b> xydata [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$x</font> <font color=#f1b479>$y</font>]
 }
 <b><font color=#ffa500>set</font></b> chart [ticklecharts::chart new]
-<font color=#f1b479>$chart</font> Xaxis <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;v(in), V&quot;</font> <font color=#b9b96e>-minorTick</font> {show <font color=#90ee90>&quot;True&quot;</font>} <font color=#b9b96e>-min</font> 0 <font color=#b9b96e>-max</font> 5 <font color=#b9b96e>-type</font> <font color=#90ee90>&quot;value&quot;</font>
-<font color=#f1b479>$chart</font> Yaxis <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;v(out), V&quot;</font> <font color=#b9b96e>-minorTick</font> {show <font color=#90ee90>&quot;True&quot;</font>} <font color=#b9b96e>-min</font> 0 <font color=#b9b96e>-max</font> 3.5 <font color=#b9b96e>-type</font> <font color=#90ee90>&quot;value&quot;</font>
+<font color=#f1b479>$chart</font> Xaxis <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;v(in), V&quot;</font> <font color=#b9b96e>-minorTick</font> {show <font color=#90ee90>&quot;True&quot;</font>} <font color=#b9b96e>-min</font> 0 <font color=#b9b96e>-max</font> 5 <font color=#b9b96e>-type</font> <font color=#90ee90>&quot;value&quot;</font> <font color=#b9b96e>-splitLine</font> {show <font color=#90ee90>&quot;True&quot;</font>}
+<font color=#f1b479>$chart</font> Yaxis <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;v(out), V&quot;</font> <font color=#b9b96e>-minorTick</font> {show <font color=#90ee90>&quot;True&quot;</font>} <font color=#b9b96e>-min</font> 0 <font color=#b9b96e>-max</font> 3.5 <font color=#b9b96e>-type</font> <font color=#90ee90>&quot;value&quot;</font> <font color=#b9b96e>-splitLine</font> {show <font color=#90ee90>&quot;True&quot;</font>}
 <font color=#f1b479>$chart</font> SetOptions <font color=#b9b96e>-title</font> {} <font color=#b9b96e>-tooltip</font> {} <font color=#b9b96e>-animation</font> <font color=#90ee90>&quot;False&quot;</font> 
 <font color=#f1b479>$chart</font> Add <font color=#90ee90>&quot;lineSeries&quot;</font> <font color=#b9b96e>-data</font> <font color=#f1b479>$xydata</font> <font color=#b9b96e>-showAllSymbol</font> <font color=#90ee90>&quot;nothing&quot;</font>
 <b><font color=#ffa500>set</font></b> fbasename [<b><font color=#ffa500>file</font></b> rootname [<b><font color=#ffa500>file</font></b> tail [<b><font color=#ffa500>info</font></b> script]]]
@@ -192,10 +192,10 @@ r2 out 0 2e3
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
   </head>
   <body>
-    <div id="id_ba56633a3ce04ab5bb4486a07b2dddaa" class="chart-container" style="width:900px; height:500px;"></div>
+    <div id="id_56ea5cf8a76f49d18fd34b3e1411c985" class="chart-container" style="width:900px; height:500px;"></div>
     <script>
-      var chart_ba56633a3ce04ab5bb4486a07b2dddaa = echarts.init(document.getElementById("id_ba56633a3ce04ab5bb4486a07b2dddaa"), null, {renderer: "canvas"});
-      var option_ba56633a3ce04ab5bb4486a07b2dddaa = {
+      var chart_56ea5cf8a76f49d18fd34b3e1411c985 = echarts.init(document.getElementById("id_56ea5cf8a76f49d18fd34b3e1411c985"), null, {renderer: "canvas"});
+      var option_56ea5cf8a76f49d18fd34b3e1411c985 = {
   "xAxis": [{
       "show": true,
       "type": "value",
@@ -227,7 +227,9 @@ r2 out 0 2e3
       },
       "axisLabel": {"color": "#B9B8CE"},
       "splitLine": {
-        "show": false,
+        "show": true,
+        "onZero": true,
+        "symbol": null,
         "lineStyle": {
           "color": "#484753",
           "width": 1
@@ -269,7 +271,9 @@ r2 out 0 2e3
       },
       "axisLabel": {"color": "#B9B8CE"},
       "splitLine": {
-        "show": false,
+        "show": true,
+        "onZero": true,
+        "symbol": null,
         "lineStyle": {
           "color": "#484753",
           "width": 1
@@ -556,7 +560,7 @@ r2 out 0 2e3
       "silent": false
     }]
 };
-      chart_ba56633a3ce04ab5bb4486a07b2dddaa.setOption(option_ba56633a3ce04ab5bb4486a07b2dddaa);
+      chart_56ea5cf8a76f49d18fd34b3e1411c985.setOption(option_56ea5cf8a76f49d18fd34b3e1411c985);
     </script>
   </body>
 </html>
