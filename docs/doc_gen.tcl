@@ -64,29 +64,25 @@ fileutil::updateInPlace [file join $docDir assets ruff-min.css] processContentsC
 fileutil::updateInPlace [file join $docDir assets ruff-min.js] processContentsJs
 
 # ticklechart graphs substitutions
+
 proc processContentsTutorial {fileContents} {
-    variable docDir
-    set fp [open [file join $docDir .. examples ngspice html_charts diode_iv.html] r]
-    set fileData [read $fp]
-    close $fp
-    set fileContents [string map [list !ticklechart_mark_diode_iv_ngspice! $fileData] $fileContents]
-    set fp [open [file join $docDir .. examples ngspice html_charts diode_cv.html] r]
-    set fileData [read $fp]
-    close $fp
-    set fileContents [string map [list !ticklechart_mark_diode_cv_ngspice! $fileData] $fileContents]
-    set fp [open [file join $docDir .. examples ngspice html_charts switch_oscillator.html] r]
-    set fileData [read $fp]
-    close $fp
-    set fileContents [string map [list !ticklechart_mark_switch_oscillator_ngspice! $fileData] $fileContents]
-    set fp [open [file join $docDir .. examples ngspice html_charts fourbitadder.html] r]
-    set fileData [read $fp]
-    close $fp
-    set fileContents [string map [list !ticklechart_mark_four_bit_adder_ngspice! $fileData] $fileContents]
-    set fp [open [file join $docDir .. examples ngspice html_charts filter.html] r]
-    set fileData [read $fp]
-    close $fp
-    set fileContents [string map [list !ticklechart_mark_filter_ngspice! $fileData] $fileContents]
+    global path chartsMap
+    dict for {mark file} $chartsMap {
+        set fileData [fileutil::cat [file join $path $file]]
+        set fileContents [string map [list $mark $fileData] $fileContents]
+    }
     return $fileContents
 }
-fileutil::updateInPlace [file join $docDir index-Tutorials.html] processContentsTutorial
 
+set chartsMap [dcreate !ticklechart_mark_diode_iv_ngspice! diode_iv.html !ticklechart_mark_diode_cv_ngspice!\
+                       diode_cv.html !ticklechart_mark_switch_oscillator_ngspice! switch_oscillator.html\
+                       !ticklechart_mark_four_bit_adder_ngspice! fourbitadder.html !ticklechart_mark_filter_ngspice!\
+                       filter.html]
+set path [file join $docDir .. examples ngspice html_charts]
+fileutil::updateInPlace [file join $docDir index-Tutorials.html] processContentsTutorial
+set chartsMap [dcreate !ticklechart_mark_resistor_divider_ngspice! resistor_divider.html]
+fileutil::updateInPlace [file join $docDir index.html] processContentsTutorial
+set chartsMap [dcreate !ticklechart_mark_monte_carlo_typ_mag_ngspice! monte_carlo_typ.html\
+                       !ticklechart_mark_monte_carlo_dists_ngspice! monte_carlo.html\
+                       !ticklechart_mark_monte_carlo_dists_comb_ngspice! monte_carlo_combined.html]
+fileutil::updateInPlace [file join $docDir index-Advanced.html] processContentsTutorial

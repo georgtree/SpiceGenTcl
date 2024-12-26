@@ -43,7 +43,7 @@ $chart Yaxis -name "Idiode, A" -minorTick {show "True"}  -type "value"
 $chart SetOptions -title {} -tooltip {} -animation "False" -legend  {} -toolbox {feature {dataZoom {yAxisIndex "none"}}} \
         -grid {left "5%" right "15%"} -backgroundColor "#212121"
 foreach data $dataList temp $temps {
-    $chart Add "lineSeries" -data $data -showAllSymbol "nothing" -name "${temp}°C" -symbolSize "1"
+    $chart Add "lineSeries" -data $data -showAllSymbol "nothing" -name "${temp}°C" -symbolSize "2"
 }
 set fbasename [file rootname [file tail [info script]]]
 
