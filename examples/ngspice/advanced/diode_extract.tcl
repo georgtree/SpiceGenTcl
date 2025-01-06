@@ -20,16 +20,10 @@ set fileDataPath [file normalize [file join $scriptPath raw_data]]
 
 proc diodeIVcalc {xall pdata args} {
     dict with pdata {}
-    $model setParamValue is [@ $xall 0]
-    $model setParamValue n [@ $xall 1]
-    $model setParamValue rs [@ $xall 2]
-    $model setParamValue ikf [@ $xall 3]
-    $vSrc setParamValue start $vMin
-    $vSrc setParamValue stop $vMax
-    $vSrc setParamValue incr $vStep
+    $model setParamValue is [@ $xall 0] n [@ $xall 1] rs [@ $xall 2] ikf [@ $xall 3]
+    $vSrc setParamValue start $vMin stop $vMax incr $vStep
     $circuit runAndRead
     set data [$circuit getDataDict]
-
     foreach iVal $i iSim [dget $data i(va)] {
         lappend fvec [= {(log(abs($iVal))-log(abs($iSim)))}]
         lappend fval $iSim
@@ -39,12 +33,12 @@ proc diodeIVcalc {xall pdata args} {
 
 # define circuit, diode model and voltage source
 set diodeModel [DiodeModel new diomod -is 1e-12 -n 1.0 -rs 30 -cj0 1e-9 -trs1 0.001 -xti 5 -ikf 1e-4]
-set dcSrc [Dc new -src va -start 0 -stop 2 -incr 0.02]
+set vSrc [Dc new -src va -start 0 -stop 2 -incr 0.02]
 set circuit [Circuit new {diode IV}]
 $circuit add [D new 1 anode 0 -model diomod -area 1]
 $circuit add [Vdc new a anode 0 -dc 0]
 $circuit add $diodeModel
-$circuit add $dcSrc
+$circuit add $vSrc
 set tempSt [Temp new 25]
 $circuit add $tempSt
 $circuit configure -Simulator [Batch new {batch1}]
@@ -65,7 +59,7 @@ set vInterp [lseq $vMin to $vMax by $vStep]
 set iInterp [lin1d -x $vRaw -y $iRaw -xi $vInterp]
 set iniPars [list 1e-12 1.0 30 1e-4]
 # set data dictionary passed into function
-set pdata [dcreate v $vInterp i $iInterp circuit $circuit model $diodeModel vMin $vMin vMax $vMax vStep $vStep vSrc $dcSrc]
+set pdata [dcreate v $vInterp i $iInterp circuit $circuit model $diodeModel vMin $vMin vMax $vMax vStep $vStep vSrc $vSrc]
 # set fitting parameters
 set par0 [parCreate -parname is -lowlim 1e-15 -uplim 1e-8]
 set par1 [parCreate -parname n -lowlim 0.5 -uplim 2]
@@ -82,7 +76,10 @@ set vMin 0.65
 set vMax [max {*}$vRaw]
 set vInterp [lseq $vMin to $vMax by $vStep]
 set iInterp [lin1d -x $vRaw -y $iRaw -xi $vInterp]
-set pdata [dcreate v $vInterp i $iInterp circuit $circuit model $diodeModel vMin $vMin vMax $vMax vStep $vStep vSrc $dcSrc]
+dset pdata v $vInterp
+dset pdata i $iInterp
+dset pdata vMin $vMin
+dset pdata vMax $vMax
 set par0 [parCreate -fixed -parname is -lowlim 1e-15 -uplim 1e-10]
 set par1 [parCreate -fixed -parname n -lowlim 0.8 -uplim 2]
 set par2 [parCreate -parname rs -lowlim 1 -uplim 100]
@@ -98,8 +95,11 @@ set vMin [min {*}$vRaw]
 set vMax [max {*}$vRaw]
 set vInterp [lseq $vMin to $vMax by $vStep]
 set iInterp [lin1d -x $vRaw -y $iRaw -xi $vInterp]
-set pdata [dcreate v $vInterp i $iInterp circuit $circuit model $diodeModel vMin $vMin vMax $vMax vStep $vStep vSrc $dcSrc]
-set par0 [parCreate -parname is -lowlim 1e-16 -uplim 1e-5]
+dset pdata v $vInterp
+dset pdata i $iInterp
+dset pdata vMin $vMin
+dset pdata vMax $vMax
+set par0 [parCreate -parname is -lowlim [= {[@ $resPars 0]*0.9}] -uplim [= {[@ $resPars 0]*1.1}]]
 set par1 [parCreate -parname n -lowlim [= {[@ $resPars 1]*0.9}] -uplim [= {[@ $resPars 1]*1.1}]]
 set par2 [parCreate -parname rs -lowlim [= {[@ $resPars 2]*0.9}] -uplim [= {[@ $resPars 2]*1.1}]]
 set par3 [parCreate -parname ikf -lowlim [= {[@ $resPars 3]*0.9}] -uplim [= {[@ $resPars 3]*1.1}]]

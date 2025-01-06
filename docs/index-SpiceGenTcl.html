@@ -65,7 +65,7 @@
 <tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="DuplChecker.duplListCheck" class='ruff_cmd'>DuplChecker.duplListCheck</a></td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis::genSPICEString" title="genSPICEString" class='ruff_cmd'>genSPICEString</a></td><td>Creates analysis for SPICE netlist.</td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis::getParams" title="getParams" class='ruff_cmd'>getParams</a></td><td>Gets the dictionary that contains parameter name as keys and parameter values as the values.</td></tr>
-<tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis::setParamValue" title="setParamValue" class='ruff_cmd'>setParamValue</a></td><td>Sets (or changes) value of particular parameter.</td></tr>
+<tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis::setParamValue" title="setParamValue" class='ruff_cmd'>setParamValue</a></td><td>Sets (or change) value of particular parameters.</td></tr>
 </table>
 <h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#b9b96e>-Name</font></code>, <code><font color=#b9b96e>-Type</font></code></p>
 <p class='ruff'>Writable: <code><font color=#b9b96e>-Name</font></code>, <code><font color=#b9b96e>-Type</font></code></p>
@@ -202,14 +202,14 @@
 }</pre></div>
 </div><h4 class='ruffmethod'><a name='::SpiceGenTcl::Analysis::getParams'>getParams</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis" title="::SpiceGenTcl::Analysis" class='ruff_cmd'>::SpiceGenTcl::Analysis</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Analysis'>Analysis</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
-<p class='ruff'>Gets the dictionary that contains parameter name as keys and parameter values as the values</p>
+<p class='ruff'>Gets the dictionary that contains parameter name as keys and parameter values as the values.</p>
 <div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT getParams</span> </div>
 <h5 class='ruff'>Return value</h5><p class='ruff'>parameters dictionary</p>
 <div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Analysis_getParams' href="javascript:toggleSource('SpiceGenTcl_Analysis_getParams')">Show source</a></p>
 <div id='SpiceGenTcl_Analysis_getParams' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> getParams {} {
 
     <i><font color=#76a396># Gets the dictionary that contains parameter name as keys and</font></i>
-    <i><font color=#76a396>#  parameter values as the values</font></i>
+    <i><font color=#76a396>#  parameter values as the values.</font></i>
     <i><font color=#76a396># Returns: parameters dictionary</font></i>
     <b><font color=#ffa500>set</font></b> tempDict [<b><font color=#ffa500>dcreate</font></b>]
     <b><font color=#ffa500>dict</font></b> for {paramName param} <font color=#f1b479>$Params</font> {
@@ -219,26 +219,29 @@
 }</pre></div>
 </div><h4 class='ruffmethod'><a name='::SpiceGenTcl::Analysis::setParamValue'>setParamValue</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis" title="::SpiceGenTcl::Analysis" class='ruff_cmd'>::SpiceGenTcl::Analysis</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Analysis'>Analysis</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
-<p class='ruff'>Sets (or changes) value of particular parameter.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT setParamValue</span> <span class='ruff_arg'>paramName value</span></div>
+<p class='ruff'>Sets (or change) value of particular parameters.</p>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT setParamValue</span> <span class='ruff_arg'>?args?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
-<tr><td><code>paramName</code></td><td>Name of parameter.</td></tr>
-<tr><td><code>value</code></td><td>The new value of parameter.</td></tr>
+<tr><td><code>args</code></td><td>List with even number of elements with parameter name and value, {paramName0 paramValue0 #    paramName1 paramValue1 ...}</td></tr>
 </table>
 <div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Analysis_setParamValue' href="javascript:toggleSource('SpiceGenTcl_Analysis_setParamValue')">Show source</a></p>
-<div id='SpiceGenTcl_Analysis_setParamValue' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> setParamValue {paramName value} {
+<div id='SpiceGenTcl_Analysis_setParamValue' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> setParamValue {args} {
 
-    <i><font color=#76a396># Sets (or changes) value of particular parameter.</font></i>
-    <i><font color=#76a396>#  paramName - name of parameter</font></i>
-    <i><font color=#76a396>#  value - the new value of parameter</font></i>
-    <b><font color=#ffa500>set</font></b> paramName [<b><font color=#ffa500>string</font></b> tolower <font color=#f1b479>$paramName</font>]
-    <b><font color=#ffa500>set</font></b> error [<b><font color=#ffa500>catch</font></b> {<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>}]
-    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$error</font>&gt;0} {
-        <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Parameter with name '<font color=#f1b479>$</font>paramName' was not found in parameter analysis's '<font color=#f1b479>[</font>my configure -Name<font color=#f1b479>]</font>' list of parameters '<font color=#f1b479>[</font>dict keys <font color=#f1b479>[</font>my getParams<font color=#f1b479>]]</font>'&quot;</font>
-    } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>set</font></b> param [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>]
+    <i><font color=#76a396># Sets (or change) value of particular parameters.</font></i>
+    <i><font color=#76a396>#  args - list with even number of elements with parameter name and value, {paramName0 paramValue0 #    paramName1 paramValue1 ...}</font></i>
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$args</font>]%2!=0} {
+        <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Number of arguments to method '<font color=#f1b479>[</font>dict get <font color=#f1b479>[</font>info frame 0<font color=#f1b479>]</font> method<font color=#f1b479>]</font>' must be even&quot;</font>
     }
-    <font color=#f1b479>$param</font> configure <font color=#b9b96e>-Value</font> <font color=#f1b479>$value</font>
+    <b><font color=#ffa500>for</font></b> {<b><font color=#ffa500>set</font></b> i 0} {<font color=#f1b479>$i</font>&lt;[<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$args</font>]} {<b><font color=#ffa500>incr</font></b> i 2} {
+        <b><font color=#ffa500>set</font></b> paramName [<b><font color=#ffa500>string</font></b> tolower [@ <font color=#f1b479>$args</font> [= {<font color=#f1b479>$i</font>}]]]
+        <b><font color=#ffa500>set</font></b> paramValue [@ <font color=#f1b479>$args</font> [= {<font color=#f1b479>$i</font>+1}]]
+        <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>catch</font></b> {<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>}]} {
+            <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Parameter with name '<font color=#f1b479>$</font>paramName' was not found in element's '<font color=#f1b479>[</font>my configure -Name<font color=#f1b479>]</font>' list of parameters '<font color=#f1b479>[</font>dict keys <font color=#f1b479>[</font>my getParams<font color=#f1b479>]]</font>'&quot;</font>
+        } <b><font color=#ffa500>else</font></b> {
+            <b><font color=#ffa500>set</font></b> param [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>]
+        }
+        <font color=#f1b479>$param</font> configure <font color=#b9b96e>-Value</font> <font color=#f1b479>$paramValue</font>
+    }
     <b><font color=#fe6efe>return</font></b>
 }</pre></div>
 </div><h3 class='ruffclass'><a name='::SpiceGenTcl::Axis'>Axis</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl" title="::SpiceGenTcl" class='ruff_cmd'>::SpiceGenTcl</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -730,7 +733,7 @@
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="genSPICEString" class='ruff_cmd'>genSPICEString</a></td><td>Creates device string for SPICE netlist.</td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="getParams" class='ruff_cmd'>getParams</a></td><td>Gets the dictionary that contains parameter name as keys and parameter values as the values.</td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="getPins" class='ruff_cmd'>getPins</a></td><td>Gets the dictionary that contains pin name as keys and connected node name as the values.</td></tr>
-<tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setParamValue" title="setParamValue" class='ruff_cmd'>setParamValue</a></td><td>Sets (or change) value of particular parameter.</td></tr>
+<tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setParamValue" title="setParamValue" class='ruff_cmd'>setParamValue</a></td><td>Sets (or change) value of particular parameters.</td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setPinNodeName" title="setPinNodeName" class='ruff_cmd'>setPinNodeName</a></td><td>Sets node name of particular pin, so, in other words, connect particular pin to particular node.</td></tr>
 </table>
 <h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#b9b96e>-Name</font></code></p>
@@ -964,26 +967,29 @@
 }</pre></div>
 </div><h4 class='ruffmethod'><a name='::SpiceGenTcl::Device::setParamValue'>setParamValue</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device" title="::SpiceGenTcl::Device" class='ruff_cmd'>::SpiceGenTcl::Device</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Device'>Device</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
-<p class='ruff'>Sets (or change) value of particular parameter.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT setParamValue</span> <span class='ruff_arg'>paramName value</span></div>
+<p class='ruff'>Sets (or change) value of particular parameters.</p>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT setParamValue</span> <span class='ruff_arg'>?args?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
-<tr><td><code>paramName</code></td><td>Name of parameter.</td></tr>
-<tr><td><code>value</code></td><td>New value of parameter.</td></tr>
+<tr><td><code>args</code></td><td>List with even number of elements with parameter name and value, {paramName0 paramValue0 #    paramName1 paramValue1 ...}</td></tr>
 </table>
 <div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Device_setParamValue' href="javascript:toggleSource('SpiceGenTcl_Device_setParamValue')">Show source</a></p>
-<div id='SpiceGenTcl_Device_setParamValue' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> setParamValue {paramName value} {
+<div id='SpiceGenTcl_Device_setParamValue' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> setParamValue {args} {
 
-    <i><font color=#76a396># Sets (or change) value of particular parameter.</font></i>
-    <i><font color=#76a396>#  paramName - name of parameter</font></i>
-    <i><font color=#76a396>#  value - new value of parameter</font></i>
-    <b><font color=#ffa500>set</font></b> paramName [<b><font color=#ffa500>string</font></b> tolower <font color=#f1b479>$paramName</font>]
-    <b><font color=#ffa500>set</font></b> error [<b><font color=#ffa500>catch</font></b> {<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>}]
-    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$error</font>&gt;0} {
-        <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Parameter with name '<font color=#f1b479>$</font>paramName' was not found in device's '<font color=#f1b479>[</font>my configure -Name<font color=#f1b479>]</font>' list of parameters '<font color=#f1b479>[</font>dict keys <font color=#f1b479>[</font>my getParams<font color=#f1b479>]]</font>'&quot;</font>
-    } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>set</font></b> param [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>]
+    <i><font color=#76a396># Sets (or change) value of particular parameters.</font></i>
+    <i><font color=#76a396>#  args - list with even number of elements with parameter name and value, {paramName0 paramValue0 #    paramName1 paramValue1 ...}</font></i>
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$args</font>]%2!=0} {
+        <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Number of arguments to method '<font color=#f1b479>[</font>dict get <font color=#f1b479>[</font>info frame 0<font color=#f1b479>]</font> method<font color=#f1b479>]</font>' must be even&quot;</font>
     }
-    <font color=#f1b479>$param</font> configure <font color=#b9b96e>-Value</font> <font color=#f1b479>$value</font>
+    <b><font color=#ffa500>for</font></b> {<b><font color=#ffa500>set</font></b> i 0} {<font color=#f1b479>$i</font>&lt;[<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$args</font>]} {<b><font color=#ffa500>incr</font></b> i 2} {
+        <b><font color=#ffa500>set</font></b> paramName [<b><font color=#ffa500>string</font></b> tolower [@ <font color=#f1b479>$args</font> [= {<font color=#f1b479>$i</font>}]]]
+        <b><font color=#ffa500>set</font></b> paramValue [@ <font color=#f1b479>$args</font> [= {<font color=#f1b479>$i</font>+1}]]
+        <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>catch</font></b> {<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>}]} {
+            <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Parameter with name '<font color=#f1b479>$</font>paramName' was not found in element's '<font color=#f1b479>[</font>my configure -Name<font color=#f1b479>]</font>' list of parameters '<font color=#f1b479>[</font>dict keys <font color=#f1b479>[</font>my getParams<font color=#f1b479>]]</font>'&quot;</font>
+        } <b><font color=#ffa500>else</font></b> {
+            <b><font color=#ffa500>set</font></b> param [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>]
+        }
+        <font color=#f1b479>$param</font> configure <font color=#b9b96e>-Value</font> <font color=#f1b479>$paramValue</font>
+    }
     <b><font color=#fe6efe>return</font></b>
 }</pre></div>
 </div><h4 class='ruffmethod'><a name='::SpiceGenTcl::Device::setPinNodeName'>setPinNodeName</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device" title="::SpiceGenTcl::Device" class='ruff_cmd'>::SpiceGenTcl::Device</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Device'>Device</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
@@ -1257,7 +1263,7 @@
 <tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="DuplChecker.duplListCheck" class='ruff_cmd'>DuplChecker.duplListCheck</a></td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::genSPICEString" title="genSPICEString" class='ruff_cmd'>genSPICEString</a></td><td>Creates model string for SPICE netlist.</td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::getParams" title="getParams" class='ruff_cmd'>getParams</a></td><td>Gets the dictionary that contains parameter name as keys and parameter values as the values.</td></tr>
-<tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::setParamValue" title="setParamValue" class='ruff_cmd'>setParamValue</a></td><td>Sets (or change) value of particular parameter.</td></tr>
+<tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::setParamValue" title="setParamValue" class='ruff_cmd'>setParamValue</a></td><td>Sets (or change) value of particular parameters.</td></tr>
 </table>
 <h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#b9b96e>-Name</font></code>, <code><font color=#b9b96e>-Type</font></code></p>
 <p class='ruff'>Writable: <code><font color=#b9b96e>-Name</font></code>, <code><font color=#b9b96e>-Type</font></code></p>
@@ -1412,26 +1418,29 @@
 }</pre></div>
 </div><h4 class='ruffmethod'><a name='::SpiceGenTcl::Model::setParamValue'>setParamValue</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model" title="::SpiceGenTcl::Model" class='ruff_cmd'>::SpiceGenTcl::Model</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Model'>Model</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
-<p class='ruff'>Sets (or change) value of particular parameter.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT setParamValue</span> <span class='ruff_arg'>paramName value</span></div>
+<p class='ruff'>Sets (or change) value of particular parameters.</p>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT setParamValue</span> <span class='ruff_arg'>?args?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
-<tr><td><code>paramName</code></td><td>Name of parameter.</td></tr>
-<tr><td><code>value</code></td><td>New value of parameter.</td></tr>
+<tr><td><code>args</code></td><td>List with even number of elements with parameter name and value, {paramName0 paramValue0 #    paramName1 paramValue1 ...}</td></tr>
 </table>
 <div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Model_setParamValue' href="javascript:toggleSource('SpiceGenTcl_Model_setParamValue')">Show source</a></p>
-<div id='SpiceGenTcl_Model_setParamValue' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> setParamValue {paramName value} {
+<div id='SpiceGenTcl_Model_setParamValue' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> setParamValue {args} {
 
-    <i><font color=#76a396># Sets (or change) value of particular parameter.</font></i>
-    <i><font color=#76a396>#  paramName - name of parameter</font></i>
-    <i><font color=#76a396>#  value - new value of parameter</font></i>
-    <b><font color=#ffa500>set</font></b> paramName [<b><font color=#ffa500>string</font></b> tolower <font color=#f1b479>$paramName</font>]
-    <b><font color=#ffa500>set</font></b> error [<b><font color=#ffa500>catch</font></b> {<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>}]
-    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$error</font>&gt;0} {
-        <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Parameter with name '<font color=#f1b479>$</font>paramName' was not found in device's '<font color=#f1b479>[</font>my configure -Name<font color=#f1b479>]</font>' list of parameters '<font color=#f1b479>[</font>dict keys <font color=#f1b479>[</font>my getParams<font color=#f1b479>]]</font>'&quot;</font>
-    } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>set</font></b> param [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>]
+    <i><font color=#76a396># Sets (or change) value of particular parameters.</font></i>
+    <i><font color=#76a396>#  args - list with even number of elements with parameter name and value, {paramName0 paramValue0 #    paramName1 paramValue1 ...}</font></i>
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$args</font>]%2!=0} {
+        <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Number of arguments to method '<font color=#f1b479>[</font>dict get <font color=#f1b479>[</font>info frame 0<font color=#f1b479>]</font> method<font color=#f1b479>]</font>' must be even&quot;</font>
     }
-    <font color=#f1b479>$param</font> configure <font color=#b9b96e>-Value</font> <font color=#f1b479>$value</font>
+    <b><font color=#ffa500>for</font></b> {<b><font color=#ffa500>set</font></b> i 0} {<font color=#f1b479>$i</font>&lt;[<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$args</font>]} {<b><font color=#ffa500>incr</font></b> i 2} {
+        <b><font color=#ffa500>set</font></b> paramName [<b><font color=#ffa500>string</font></b> tolower [@ <font color=#f1b479>$args</font> [= {<font color=#f1b479>$i</font>}]]]
+        <b><font color=#ffa500>set</font></b> paramValue [@ <font color=#f1b479>$args</font> [= {<font color=#f1b479>$i</font>+1}]]
+        <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>catch</font></b> {<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>}]} {
+            <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Parameter with name '<font color=#f1b479>$</font>paramName' was not found in element's '<font color=#f1b479>[</font>my configure -Name<font color=#f1b479>]</font>' list of parameters '<font color=#f1b479>[</font>dict keys <font color=#f1b479>[</font>my getParams<font color=#f1b479>]]</font>'&quot;</font>
+        } <b><font color=#ffa500>else</font></b> {
+            <b><font color=#ffa500>set</font></b> param [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>]
+        }
+        <font color=#f1b479>$param</font> configure <font color=#b9b96e>-Value</font> <font color=#f1b479>$paramValue</font>
+    }
     <b><font color=#fe6efe>return</font></b>
 }</pre></div>
 </div><h3 class='ruffclass'><a name='::SpiceGenTcl::Netlist'>Netlist</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl" title="::SpiceGenTcl" class='ruff_cmd'>::SpiceGenTcl</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -1579,7 +1588,7 @@
 <tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="DuplChecker.duplListCheck" class='ruff_cmd'>DuplChecker.duplListCheck</a></td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Options::genSPICEString" title="genSPICEString" class='ruff_cmd'>genSPICEString</a></td><td>Creates options string for SPICE netlist.</td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Options::getParams" title="getParams" class='ruff_cmd'>getParams</a></td><td>Gets the dictionary that contains parameter name as keys and parameter values as the values.</td></tr>
-<tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Options::setParamValue" title="setParamValue" class='ruff_cmd'>setParamValue</a></td><td>Sets (or changes) value of particular parameter it throws a error if try to set a value of switch parameter.</td></tr>
+<tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Options::setParamValue" title="setParamValue" class='ruff_cmd'>setParamValue</a></td><td>Sets (or change) value of particular parameters.</td></tr>
 </table>
 <h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#b9b96e>-Name</font></code></p>
 <p class='ruff'>Writable: <code><font color=#b9b96e>-Name</font></code></p>
@@ -1713,27 +1722,29 @@
 }</pre></div>
 </div><h4 class='ruffmethod'><a name='::SpiceGenTcl::Options::setParamValue'>setParamValue</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Options" title="::SpiceGenTcl::Options" class='ruff_cmd'>::SpiceGenTcl::Options</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Options'>Options</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
-<p class='ruff'>Sets (or changes) value of particular parameter it throws a error if try to set a value of switch parameter.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT setParamValue</span> <span class='ruff_arg'>paramName value</span></div>
+<p class='ruff'>Sets (or change) value of particular parameters.</p>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT setParamValue</span> <span class='ruff_arg'>?args?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
-<tr><td><code>paramName</code></td><td>Name of parameter.</td></tr>
-<tr><td><code>value</code></td><td>New value of parameter.</td></tr>
+<tr><td><code>args</code></td><td>List with even number of elements with parameter name and value, {paramName0 paramValue0 #    paramName1 paramValue1 ...}</td></tr>
 </table>
 <div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Options_setParamValue' href="javascript:toggleSource('SpiceGenTcl_Options_setParamValue')">Show source</a></p>
-<div id='SpiceGenTcl_Options_setParamValue' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> setParamValue {paramName value} {
+<div id='SpiceGenTcl_Options_setParamValue' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> setParamValue {args} {
 
-    <i><font color=#76a396># Sets (or changes) value of particular parameter</font></i>
-    <i><font color=#76a396>#  it throws a error if try to set a value of switch parameter.</font></i>
-    <i><font color=#76a396>#  paramName - name of parameter</font></i>
-    <i><font color=#76a396>#  value - new value of parameter</font></i>
-    <b><font color=#ffa500>set</font></b> paramName [<b><font color=#ffa500>string</font></b> tolower <font color=#f1b479>$paramName</font>]
-    <b><font color=#ffa500>set</font></b> error [<b><font color=#ffa500>catch</font></b> {<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>}]
-    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$error</font>&gt;0} {
-        <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Parameter with name '<font color=#f1b479>$</font>paramName' was not found in options's '<font color=#f1b479>[</font>my configure -Name<font color=#f1b479>]</font>' list of parameters '<font color=#f1b479>[</font>dict keys <font color=#f1b479>[</font>my getParams<font color=#f1b479>]]</font>'&quot;</font>
-    } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>set</font></b> param [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>]
+    <i><font color=#76a396># Sets (or change) value of particular parameters.</font></i>
+    <i><font color=#76a396>#  args - list with even number of elements with parameter name and value, {paramName0 paramValue0 #    paramName1 paramValue1 ...}</font></i>
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$args</font>]%2!=0} {
+        <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Number of arguments to method '<font color=#f1b479>[</font>dict get <font color=#f1b479>[</font>info frame 0<font color=#f1b479>]</font> method<font color=#f1b479>]</font>' must be even&quot;</font>
     }
-    <font color=#f1b479>$param</font> configure <font color=#b9b96e>-Value</font> <font color=#f1b479>$value</font>
+    <b><font color=#ffa500>for</font></b> {<b><font color=#ffa500>set</font></b> i 0} {<font color=#f1b479>$i</font>&lt;[<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$args</font>]} {<b><font color=#ffa500>incr</font></b> i 2} {
+        <b><font color=#ffa500>set</font></b> paramName [<b><font color=#ffa500>string</font></b> tolower [@ <font color=#f1b479>$args</font> [= {<font color=#f1b479>$i</font>}]]]
+        <b><font color=#ffa500>set</font></b> paramValue [@ <font color=#f1b479>$args</font> [= {<font color=#f1b479>$i</font>+1}]]
+        <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>catch</font></b> {<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>}]} {
+            <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Parameter with name '<font color=#f1b479>$</font>paramName' was not found in element's '<font color=#f1b479>[</font>my configure -Name<font color=#f1b479>]</font>' list of parameters '<font color=#f1b479>[</font>dict keys <font color=#f1b479>[</font>my getParams<font color=#f1b479>]]</font>'&quot;</font>
+        } <b><font color=#ffa500>else</font></b> {
+            <b><font color=#ffa500>set</font></b> param [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>]
+        }
+        <font color=#f1b479>$param</font> configure <font color=#b9b96e>-Value</font> <font color=#f1b479>$paramValue</font>
+    }
     <b><font color=#fe6efe>return</font></b>
 }</pre></div>
 </div><h3 class='ruffclass'><a name='::SpiceGenTcl::Parameter'>Parameter</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl" title="::SpiceGenTcl" class='ruff_cmd'>::SpiceGenTcl</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -2074,7 +2085,7 @@
 <tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="DuplChecker.duplListCheck" class='ruff_cmd'>DuplChecker.duplListCheck</a></td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement::genSPICEString" title="genSPICEString" class='ruff_cmd'>genSPICEString</a></td><td>Creates parameter statement string for SPICE netlist.</td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement::getParams" title="getParams" class='ruff_cmd'>getParams</a></td><td>Gets the dictionary that contains parameter name as keys and parameter values as the values.</td></tr>
-<tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement::setParamValue" title="setParamValue" class='ruff_cmd'>setParamValue</a></td><td>Sets (or changes) value of particular parameter.</td></tr>
+<tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement::setParamValue" title="setParamValue" class='ruff_cmd'>setParamValue</a></td><td>Sets (or change) value of particular parameters.</td></tr>
 </table>
 <h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#b9b96e>-Name</font></code></p>
 <p class='ruff'>Writable: <code><font color=#b9b96e>-Name</font></code></p>
@@ -2203,26 +2214,29 @@
 }</pre></div>
 </div><h4 class='ruffmethod'><a name='::SpiceGenTcl::ParamStatement::setParamValue'>setParamValue</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement" title="::SpiceGenTcl::ParamStatement" class='ruff_cmd'>::SpiceGenTcl::ParamStatement</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement'>ParamStatement</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
-<p class='ruff'>Sets (or changes) value of particular parameter.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT setParamValue</span> <span class='ruff_arg'>paramName value</span></div>
+<p class='ruff'>Sets (or change) value of particular parameters.</p>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT setParamValue</span> <span class='ruff_arg'>?args?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
-<tr><td><code>paramName</code></td><td>Name of parameter.</td></tr>
-<tr><td><code>value</code></td><td>New value of parameter.</td></tr>
+<tr><td><code>args</code></td><td>List with even number of elements with parameter name and value, {paramName0 paramValue0 #    paramName1 paramValue1 ...}</td></tr>
 </table>
 <div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_ParamStatement_setParamValue' href="javascript:toggleSource('SpiceGenTcl_ParamStatement_setParamValue')">Show source</a></p>
-<div id='SpiceGenTcl_ParamStatement_setParamValue' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> setParamValue {paramName value} {
+<div id='SpiceGenTcl_ParamStatement_setParamValue' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> setParamValue {args} {
 
-    <i><font color=#76a396># Sets (or changes) value of particular parameter.</font></i>
-    <i><font color=#76a396>#  paramName - name of parameter</font></i>
-    <i><font color=#76a396>#  value - new value of parameter</font></i>
-    <b><font color=#ffa500>set</font></b> paramName [<b><font color=#ffa500>string</font></b> tolower <font color=#f1b479>$paramName</font>]
-    <b><font color=#ffa500>set</font></b> error [<b><font color=#ffa500>catch</font></b> {<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>}]
-    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$error</font>&gt;0} {
-        <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Parameter with name '<font color=#f1b479>$</font>paramName' was not found in parameter statement's '<font color=#f1b479>[</font>my configure -Name<font color=#f1b479>]</font>' list of parameters '<font color=#f1b479>[</font>dict keys <font color=#f1b479>[</font>my getParams<font color=#f1b479>]]</font>'&quot;</font>
-    } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>set</font></b> param [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>]
+    <i><font color=#76a396># Sets (or change) value of particular parameters.</font></i>
+    <i><font color=#76a396>#  args - list with even number of elements with parameter name and value, {paramName0 paramValue0 #    paramName1 paramValue1 ...}</font></i>
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$args</font>]%2!=0} {
+        <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Number of arguments to method '<font color=#f1b479>[</font>dict get <font color=#f1b479>[</font>info frame 0<font color=#f1b479>]</font> method<font color=#f1b479>]</font>' must be even&quot;</font>
     }
-    <font color=#f1b479>$param</font> configure <font color=#b9b96e>-Value</font> <font color=#f1b479>$value</font>
+    <b><font color=#ffa500>for</font></b> {<b><font color=#ffa500>set</font></b> i 0} {<font color=#f1b479>$i</font>&lt;[<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$args</font>]} {<b><font color=#ffa500>incr</font></b> i 2} {
+        <b><font color=#ffa500>set</font></b> paramName [<b><font color=#ffa500>string</font></b> tolower [@ <font color=#f1b479>$args</font> [= {<font color=#f1b479>$i</font>}]]]
+        <b><font color=#ffa500>set</font></b> paramValue [@ <font color=#f1b479>$args</font> [= {<font color=#f1b479>$i</font>+1}]]
+        <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>catch</font></b> {<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>}]} {
+            <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Parameter with name '<font color=#f1b479>$</font>paramName' was not found in element's '<font color=#f1b479>[</font>my configure -Name<font color=#f1b479>]</font>' list of parameters '<font color=#f1b479>[</font>dict keys <font color=#f1b479>[</font>my getParams<font color=#f1b479>]]</font>'&quot;</font>
+        } <b><font color=#ffa500>else</font></b> {
+            <b><font color=#ffa500>set</font></b> param [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>]
+        }
+        <font color=#f1b479>$param</font> configure <font color=#b9b96e>-Value</font> <font color=#f1b479>$paramValue</font>
+    }
     <b><font color=#fe6efe>return</font></b>
 }</pre></div>
 </div><h3 class='ruffclass'><a name='::SpiceGenTcl::Pin'>Pin</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl" title="::SpiceGenTcl" class='ruff_cmd'>::SpiceGenTcl</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -2811,7 +2825,7 @@
 <tr><td><code>getElement</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Netlist::getElement" title="Netlist.getElement" class='ruff_cmd'>Netlist.getElement</a></td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Subcircuit::getParams" title="getParams" class='ruff_cmd'>getParams</a></td><td>Gets the dictionary that contains parameter name as keys and parameter values as the values.</td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Subcircuit::getPins" title="getPins" class='ruff_cmd'>getPins</a></td><td>Gets the dictionary that contains pin name as keys and connected node name as the values.</td></tr>
-<tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Subcircuit::setParamValue" title="setParamValue" class='ruff_cmd'>setParamValue</a></td><td>Sets (or change) value of particular parameter.</td></tr>
+<tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Subcircuit::setParamValue" title="setParamValue" class='ruff_cmd'>setParamValue</a></td><td>Sets (or change) value of particular parameters.</td></tr>
 </table>
 <h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#b9b96e>-Name</font></code></p>
 <p class='ruff'>Writable: <code><font color=#b9b96e>-Name</font></code></p>
@@ -2993,26 +3007,29 @@
 }</pre></div>
 </div><h4 class='ruffmethod'><a name='::SpiceGenTcl::Subcircuit::setParamValue'>setParamValue</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Subcircuit" title="::SpiceGenTcl::Subcircuit" class='ruff_cmd'>::SpiceGenTcl::Subcircuit</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Subcircuit'>Subcircuit</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
-<p class='ruff'>Sets (or change) value of particular parameter.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT setParamValue</span> <span class='ruff_arg'>paramName value</span></div>
+<p class='ruff'>Sets (or change) value of particular parameters.</p>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT setParamValue</span> <span class='ruff_arg'>?args?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
-<tr><td><code>paramName</code></td><td>Name of parameter.</td></tr>
-<tr><td><code>value</code></td><td>New value of parameter.</td></tr>
+<tr><td><code>args</code></td><td>List with even number of elements with parameter name and value, {paramName0 paramValue0 #    paramName1 paramValue1 ...}</td></tr>
 </table>
 <div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Subcircuit_setParamValue' href="javascript:toggleSource('SpiceGenTcl_Subcircuit_setParamValue')">Show source</a></p>
-<div id='SpiceGenTcl_Subcircuit_setParamValue' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> setParamValue {paramName value} {
+<div id='SpiceGenTcl_Subcircuit_setParamValue' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> setParamValue {args} {
 
-    <i><font color=#76a396># Sets (or change) value of particular parameter.</font></i>
-    <i><font color=#76a396>#  paramName - name of parameter</font></i>
-    <i><font color=#76a396>#  value - new value of parameter</font></i>
-    <b><font color=#ffa500>set</font></b> paramName [<b><font color=#ffa500>string</font></b> tolower <font color=#f1b479>$paramName</font>]
-    <b><font color=#ffa500>set</font></b> error [<b><font color=#ffa500>catch</font></b> {<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>}]
-    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$error</font>&gt;0} {
-        <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Parameter with name '<font color=#f1b479>$</font>paramName' was not found in device's '<font color=#f1b479>[</font>my configure -Name<font color=#f1b479>]</font>' list of parameters '<font color=#f1b479>[</font>dict keys <font color=#f1b479>[</font>my getParams<font color=#f1b479>]]</font>'&quot;</font>
-    } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>set</font></b> param [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>]
+    <i><font color=#76a396># Sets (or change) value of particular parameters.</font></i>
+    <i><font color=#76a396>#  args - list with even number of elements with parameter name and value, {paramName0 paramValue0 #    paramName1 paramValue1 ...}</font></i>
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$args</font>]%2!=0} {
+        <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Number of arguments to method '<font color=#f1b479>[</font>dict get <font color=#f1b479>[</font>info frame 0<font color=#f1b479>]</font> method<font color=#f1b479>]</font>' must be even&quot;</font>
     }
-    <font color=#f1b479>$param</font> configure <font color=#b9b96e>-Value</font> <font color=#f1b479>$value</font>
+    <b><font color=#ffa500>for</font></b> {<b><font color=#ffa500>set</font></b> i 0} {<font color=#f1b479>$i</font>&lt;[<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$args</font>]} {<b><font color=#ffa500>incr</font></b> i 2} {
+        <b><font color=#ffa500>set</font></b> paramName [<b><font color=#ffa500>string</font></b> tolower [@ <font color=#f1b479>$args</font> [= {<font color=#f1b479>$i</font>}]]]
+        <b><font color=#ffa500>set</font></b> paramValue [@ <font color=#f1b479>$args</font> [= {<font color=#f1b479>$i</font>+1}]]
+        <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>catch</font></b> {<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>}]} {
+            <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Parameter with name '<font color=#f1b479>$</font>paramName' was not found in element's '<font color=#f1b479>[</font>my configure -Name<font color=#f1b479>]</font>' list of parameters '<font color=#f1b479>[</font>dict keys <font color=#f1b479>[</font>my getParams<font color=#f1b479>]]</font>'&quot;</font>
+        } <b><font color=#ffa500>else</font></b> {
+            <b><font color=#ffa500>set</font></b> param [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>]
+        }
+        <font color=#f1b479>$param</font> configure <font color=#b9b96e>-Value</font> <font color=#f1b479>$paramValue</font>
+    }
     <b><font color=#fe6efe>return</font></b>
 }</pre></div>
 </div><h3 class='ruffclass'><a name='::SpiceGenTcl::Temp'>Temp</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl" title="::SpiceGenTcl" class='ruff_cmd'>::SpiceGenTcl</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -3128,8 +3145,8 @@
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Analysis::addParam'>addParam</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT addParam&lt;/span&gt; &lt;span class='ruff_arg'&gt;paramName value ?args?&lt;/span&gt;</pre>Adds new Parameter object to the list <code>Params</code>.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Analysis::deleteParam'>deleteParam</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT deleteParam&lt;/span&gt; &lt;span class='ruff_arg'&gt;paramName&lt;/span&gt;</pre>Deletes existing <code><b><font color=#ffa500>Parameter</font></b></code> object from list <code>Params</code>.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Analysis::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre>Creates analysis for SPICE netlist.
-</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Analysis::getParams'>getParams</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getParams&lt;/span&gt; </pre>Gets the dictionary that contains parameter name as keys and parameter values as the values
-</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Analysis::setParamValue'>setParamValue</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT setParamValue&lt;/span&gt; &lt;span class='ruff_arg'&gt;paramName value&lt;/span&gt;</pre>Sets (or changes) value of particular parameter.
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Analysis::getParams'>getParams</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getParams&lt;/span&gt; </pre>Gets the dictionary that contains parameter name as keys and parameter values as the values.
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Analysis::setParamValue'>setParamValue</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT setParamValue&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Sets (or change) value of particular parameters.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Axis'>Axis</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Axis::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Axis</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name type len ?numType?&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Axis</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name type len ?numType?&lt;/span&gt;</pre>initialize axis
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::BinaryReader'>BinaryReader</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::BinaryReader::readComplex'>readComplex</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT readComplex&lt;/span&gt; &lt;span class='ruff_arg'&gt;<b><font color=#ffa500>file</font></b>&lt;/span&gt;</pre>Reads two 8 byte numbers from file.
@@ -3163,7 +3180,7 @@
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre>Creates device string for SPICE netlist.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams'>getParams</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getParams&lt;/span&gt; </pre>Gets the dictionary that contains parameter name as keys and parameter values as the values.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins'>getPins</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getPins&lt;/span&gt; </pre>Gets the dictionary that contains pin name as keys and connected node name as the values.
-</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Device::setParamValue'>setParamValue</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT setParamValue&lt;/span&gt; &lt;span class='ruff_arg'&gt;paramName value&lt;/span&gt;</pre>Sets (or change) value of particular parameter.
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Device::setParamValue'>setParamValue</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT setParamValue&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Sets (or change) value of particular parameters.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Device::setPinNodeName'>setPinNodeName</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT setPinNodeName&lt;/span&gt; &lt;span class='ruff_arg'&gt;pinName nodeName&lt;/span&gt;</pre>Sets node name of particular pin, so, in other words, connect particular pin to particular node.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker'>DuplChecker</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck'>duplListCheck</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT duplListCheck&lt;/span&gt; &lt;span class='ruff_arg'&gt;<b><font color=#ffa500>list</font></b>&lt;/span&gt;</pre>Checks if list contains duplicates.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::EmptyTrace'>EmptyTrace</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::EmptyTrace::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>EmptyTrace</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name type len ?numType?&lt;/span&gt;
@@ -3182,7 +3199,7 @@
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Model::deleteParam'>deleteParam</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT deleteParam&lt;/span&gt; &lt;span class='ruff_arg'&gt;paramName&lt;/span&gt;</pre>Deletes existing <code><b><font color=#ffa500>Parameter</font></b></code> object from list <code>Params</code>.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Model::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre>Creates model string for SPICE netlist.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Model::getParams'>getParams</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getParams&lt;/span&gt; </pre>Gets the dictionary that contains parameter name as keys and parameter values as the values.
-</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Model::setParamValue'>setParamValue</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT setParamValue&lt;/span&gt; &lt;span class='ruff_arg'&gt;paramName value&lt;/span&gt;</pre>Sets (or change) value of particular parameter.
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Model::setParamValue'>setParamValue</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT setParamValue&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Sets (or change) value of particular parameters.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Netlist'>Netlist</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Netlist::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Netlist</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Netlist</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Netlist</font></b></code>.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Netlist::add'>add</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT add&lt;/span&gt; &lt;span class='ruff_arg'&gt;element&lt;/span&gt;</pre>Adds elements object to Elements dictionary.
@@ -3196,7 +3213,7 @@
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Options::deleteParam'>deleteParam</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT deleteParam&lt;/span&gt; &lt;span class='ruff_arg'&gt;paramName&lt;/span&gt;</pre>Deletes existing <code><b><font color=#ffa500>Parameter</font></b></code> object from list <code>Params</code>.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Options::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre>Creates options string for SPICE netlist.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Options::getParams'>getParams</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getParams&lt;/span&gt; </pre>Gets the dictionary that contains parameter name as keys and parameter values as the values.
-</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Options::setParamValue'>setParamValue</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT setParamValue&lt;/span&gt; &lt;span class='ruff_arg'&gt;paramName value&lt;/span&gt;</pre>Sets (or changes) value of particular parameter it throws a error if try to set a value of switch parameter.
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Options::setParamValue'>setParamValue</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT setParamValue&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Sets (or change) value of particular parameters.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Parameter'>Parameter</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Parameter::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Parameter</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name value&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Parameter</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name value&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Parameter</font></b></code> with parameter name and value.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Parameter::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre>Creates string for SPICE netlist.
@@ -3226,7 +3243,7 @@
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement::deleteParam'>deleteParam</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT deleteParam&lt;/span&gt; &lt;span class='ruff_arg'&gt;paramName&lt;/span&gt;</pre>Deletes existing <code><b><font color=#ffa500>Parameter</font></b></code> object from list <code>Params</code>.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre>Creates parameter statement string for SPICE netlist.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement::getParams'>getParams</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getParams&lt;/span&gt; </pre>Gets the dictionary that contains parameter name as keys and parameter values as the values.
-</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement::setParamValue'>setParamValue</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT setParamValue&lt;/span&gt; &lt;span class='ruff_arg'&gt;paramName value&lt;/span&gt;</pre>Sets (or changes) value of particular parameter.
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement::setParamValue'>setParamValue</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT setParamValue&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Sets (or change) value of particular parameters.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Pin'>Pin</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Pin::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Pin</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name nodeName&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Pin</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name nodeName&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Pin</font></b></code> with name and connected node
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Pin::checkFloating'>checkFloating</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT checkFloating&lt;/span&gt; </pre>Determines if pin is connected to the node.
@@ -3257,7 +3274,7 @@
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Subcircuit::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre>Creates subcircuit string for SPICE subcircuit.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Subcircuit::getParams'>getParams</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getParams&lt;/span&gt; </pre>Gets the dictionary that contains parameter name as keys and parameter values as the values.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Subcircuit::getPins'>getPins</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getPins&lt;/span&gt; </pre>Gets the dictionary that contains pin name as keys and connected node name as the values.
-</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Subcircuit::setParamValue'>setParamValue</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT setParamValue&lt;/span&gt; &lt;span class='ruff_arg'&gt;paramName value&lt;/span&gt;</pre>Sets (or change) value of particular parameter.
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Subcircuit::setParamValue'>setParamValue</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT setParamValue&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Sets (or change) value of particular parameters.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Temp'>Temp</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Temp::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Temp</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;value ?args?&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Temp</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;value ?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Temp</font></b></code>.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Temp::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre>Creates .temp statement string for SPICE netlist.

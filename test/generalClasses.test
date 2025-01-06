@@ -525,7 +525,7 @@ test testDeviceClass-14 {test creation of Device class instance and test setPara
 } -body {
     catch {$elemInst setParamValue VTH01 1.0} errorStr
     return $errorStr
-} -result "Parameter with name 'vth01' was not found in device's 'm1' list of parameters 'vth0 u0 k1'" -cleanup {
+} -result "Parameter with name 'vth01' was not found in element's 'm1' list of parameters 'vth0 u0 k1'" -cleanup {
     unset elemInst errorStr
 }
 
@@ -577,6 +577,24 @@ test testDeviceClass-20 {test creation of Device class instance and checkFloatin
     set result [$elemInst checkFloatingPins]
 } -result [list g p] -cleanup {
     unset elemInst result
+}
+
+test testDeviceClass-21 {test creation of Device class instance and test setParamValue with multiple parameters} -setup {
+    set elemInst [Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
+} -body {
+    $elemInst setParamValue VTH0 1.0 U0 50
+    $elemInst genSPICEString
+} -result "m1 netd netg nets vth0=1.0 u0=50 k1=1.5e-3" -cleanup {
+    unset elemInst
+}
+
+test testDeviceClass-22 {test creation of Device class instance and test setParamValue with multiple parameters} -setup {
+    set elemInst [Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
+} -body {
+    catch {$elemInst setParamValue VTH0 1.0 U0 50 K1} errorStr
+    return $errorStr
+} -result "Number of arguments to method 'setParamValue' must be even" -cleanup {
+    unset elemInst errorStr
 }
 
 ###  Model class tests 

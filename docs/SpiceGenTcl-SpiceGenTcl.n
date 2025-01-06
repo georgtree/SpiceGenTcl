@@ -23,7 +23,7 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT getParams\fP
 .br
-\fBOBJECT setParamValue\fP \fIparamName value\fP
+\fBOBJECT setParamValue\fP \fI?args?\fP
 .br
 \fBAxis create OBJNAME\fP \fIname type len ?numType?\fP
 .br
@@ -95,7 +95,7 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT getPins\fP
 .br
-\fBOBJECT setParamValue\fP \fIparamName value\fP
+\fBOBJECT setParamValue\fP \fI?args?\fP
 .br
 \fBOBJECT setPinNodeName\fP \fIpinName nodeName\fP
 .br
@@ -135,7 +135,7 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT getParams\fP
 .br
-\fBOBJECT setParamValue\fP \fIparamName value\fP
+\fBOBJECT setParamValue\fP \fI?args?\fP
 .br
 \fBNetlist create OBJNAME\fP \fIname\fP
 .br
@@ -163,7 +163,7 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT getParams\fP
 .br
-\fBOBJECT setParamValue\fP \fIparamName value\fP
+\fBOBJECT setParamValue\fP \fI?args?\fP
 .br
 \fBParameter create OBJNAME\fP \fIname value\fP
 .br
@@ -223,7 +223,7 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT getParams\fP
 .br
-\fBOBJECT setParamValue\fP \fIparamName value\fP
+\fBOBJECT setParamValue\fP \fI?args?\fP
 .br
 \fBPin create OBJNAME\fP \fIname nodeName\fP
 .br
@@ -285,7 +285,7 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT getPins\fP
 .br
-\fBOBJECT setParamValue\fP \fIparamName value\fP
+\fBOBJECT setParamValue\fP \fI?args?\fP
 .br
 \fBTemp create OBJNAME\fP \fIvalue ?args?\fP
 .br
@@ -357,7 +357,7 @@ getParams
 Gets the dictionary that contains parameter name as keys and parameter values as the values\&.
 .TP
 setParamValue
-Sets (or changes) value of particular parameter\&.
+Sets (or change) value of particular parameters\&.
 .RE
 .PP
 \fBProperties\fR
@@ -462,7 +462,7 @@ string '\&.\fI$Type\fP \fI$Params\fP'
 .RE
 .PP
 Gets the dictionary that contains parameter name as keys and
-parameter values as the values
+parameter values as the values\&.
 .RS 4n\fBOBJECT getParams\fP
 .br
 .RE
@@ -475,19 +475,16 @@ parameters dictionary
 \fBsetParamValue\fR (::SpiceGenTcl::Analysis)
 .RE
 .PP
-Sets (or changes) value of particular parameter\&.
-.RS 4n\fBOBJECT setParamValue\fP \fIparamName value\fP
+Sets (or change) value of particular parameters\&.
+.RS 4n\fBOBJECT setParamValue\fP \fI?args?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
-paramName
-Name of parameter\&.
-.TP
-value
-The new value of parameter\&.
+args
+List with even number of elements with parameter name and value, {paramName0 paramValue0 #    paramName1 paramValue1 \&.\&.\&.}
 .RE
 .PP
 .RS -4n
@@ -1106,7 +1103,7 @@ getPins
 Gets the dictionary that contains pin name as keys and connected node name as the values\&.
 .TP
 setParamValue
-Sets (or change) value of particular parameter\&.
+Sets (or change) value of particular parameters\&.
 .TP
 setPinNodeName
 Sets node name of particular pin, so, in other words, connect particular pin to particular node\&.
@@ -1281,19 +1278,16 @@ parameters dictionary
 \fBsetParamValue\fR (::SpiceGenTcl::Device)
 .RE
 .PP
-Sets (or change) value of particular parameter\&.
-.RS 4n\fBOBJECT setParamValue\fP \fIparamName value\fP
+Sets (or change) value of particular parameters\&.
+.RS 4n\fBOBJECT setParamValue\fP \fI?args?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
-paramName
-Name of parameter\&.
-.TP
-value
-New value of parameter\&.
+args
+List with even number of elements with parameter name and value, {paramName0 paramValue0 #    paramName1 paramValue1 \&.\&.\&.}
 .RE
 .PP
 .RS -4n
@@ -1650,7 +1644,7 @@ getParams
 Gets the dictionary that contains parameter name as keys and parameter values as the values\&.
 .TP
 setParamValue
-Sets (or change) value of particular parameter\&.
+Sets (or change) value of particular parameters\&.
 .RE
 .PP
 \fBProperties\fR
@@ -1771,19 +1765,16 @@ parameters dictionary
 \fBsetParamValue\fR (::SpiceGenTcl::Model)
 .RE
 .PP
-Sets (or change) value of particular parameter\&.
-.RS 4n\fBOBJECT setParamValue\fP \fIparamName value\fP
+Sets (or change) value of particular parameters\&.
+.RS 4n\fBOBJECT setParamValue\fP \fI?args?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
-paramName
-Name of parameter\&.
-.TP
-value
-New value of parameter\&.
+args
+List with even number of elements with parameter name and value, {paramName0 paramValue0 #    paramName1 paramValue1 \&.\&.\&.}
 .RE
 .PP
 .RS -4n
@@ -1962,7 +1953,7 @@ getParams
 Gets the dictionary that contains parameter name as keys and parameter values as the values\&.
 .TP
 setParamValue
-Sets (or changes) value of particular parameter it throws a error if try to set a value of switch parameter\&.
+Sets (or change) value of particular parameters\&.
 .RE
 .PP
 \fBProperties\fR
@@ -2073,20 +2064,16 @@ parameters dictionary
 \fBsetParamValue\fR (::SpiceGenTcl::Options)
 .RE
 .PP
-Sets (or changes) value of particular parameter
-it throws a error if try to set a value of switch parameter\&.
-.RS 4n\fBOBJECT setParamValue\fP \fIparamName value\fP
+Sets (or change) value of particular parameters\&.
+.RS 4n\fBOBJECT setParamValue\fP \fI?args?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
-paramName
-Name of parameter\&.
-.TP
-value
-New value of parameter\&.
+args
+List with even number of elements with parameter name and value, {paramName0 paramValue0 #    paramName1 paramValue1 \&.\&.\&.}
 .RE
 .PP
 .RS -4n
@@ -2652,7 +2639,7 @@ getParams
 Gets the dictionary that contains parameter name as keys and parameter values as the values\&.
 .TP
 setParamValue
-Sets (or changes) value of particular parameter\&.
+Sets (or change) value of particular parameters\&.
 .RE
 .PP
 \fBProperties\fR
@@ -2763,19 +2750,16 @@ parameters dictionary
 \fBsetParamValue\fR (::SpiceGenTcl::ParamStatement)
 .RE
 .PP
-Sets (or changes) value of particular parameter\&.
-.RS 4n\fBOBJECT setParamValue\fP \fIparamName value\fP
+Sets (or change) value of particular parameters\&.
+.RS 4n\fBOBJECT setParamValue\fP \fI?args?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
-paramName
-Name of parameter\&.
-.TP
-value
-New value of parameter\&.
+args
+List with even number of elements with parameter name and value, {paramName0 paramValue0 #    paramName1 paramValue1 \&.\&.\&.}
 .RE
 .PP
 .RS -4n
@@ -3291,7 +3275,7 @@ getPins
 Gets the dictionary that contains pin name as keys and connected node name as the values\&.
 .TP
 setParamValue
-Sets (or change) value of particular parameter\&.
+Sets (or change) value of particular parameters\&.
 .RE
 .PP
 \fBProperties\fR
@@ -3431,19 +3415,16 @@ parameters dictionary
 \fBsetParamValue\fR (::SpiceGenTcl::Subcircuit)
 .RE
 .PP
-Sets (or change) value of particular parameter\&.
-.RS 4n\fBOBJECT setParamValue\fP \fIparamName value\fP
+Sets (or change) value of particular parameters\&.
+.RS 4n\fBOBJECT setParamValue\fP \fI?args?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
-paramName
-Name of parameter\&.
-.TP
-value
-New value of parameter\&.
+args
+List with even number of elements with parameter name and value, {paramName0 paramValue0 #    paramName1 paramValue1 \&.\&.\&.}
 .RE
 .PP
 .RS -4n

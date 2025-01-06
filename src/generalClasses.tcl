@@ -512,19 +512,24 @@ namespace eval ::SpiceGenTcl {
             $pin configure -NodeName $nodeName
             return
         }
-        method setParamValue {paramName value} {
-            # Sets (or change) value of particular parameter.
-            #  paramName - name of parameter
-            #  value - new value of parameter
-            set paramName [string tolower $paramName]
-            set error [catch {dget $Params $paramName}]
-            if {$error>0} {
-                return -code error "Parameter with name '$paramName' was not found in device's '[my configure -Name]'\
-                        list of parameters '[dict keys [my getParams]]'"
-            } else {
-                set param [dget $Params $paramName]
+        method setParamValue {args} {
+            # Sets (or change) value of particular parameters.
+            #  args - list with even number of elements with parameter name and value, {paramName0 paramValue0\
+            #    paramName1 paramValue1 ...}
+            if {[llength $args]%2!=0} {
+                return -code error "Number of arguments to method '[dict get [info frame 0] method]' must be even"
             }
-            $param configure -Value $value
+            for {set i 0} {$i<[llength $args]} {incr i 2} {
+                set paramName [string tolower [@ $args [= {$i}]]]
+                set paramValue [@ $args [= {$i+1}]]
+                if {[catch {dget $Params $paramName}]} {
+                    return -code error "Parameter with name '$paramName' was not found in element's\
+                            '[my configure -Name]' list of parameters '[dict keys [my getParams]]'"
+                } else {
+                    set param [dget $Params $paramName]
+                }
+                $param configure -Value $paramValue
+            }
             return
         }
         method AddPin {pinName nodeName} {
@@ -699,16 +704,8 @@ namespace eval ::SpiceGenTcl {
         method deleteParam [@ $def 0] [@ $def 1]
         set def [info class definition ::SpiceGenTcl::Device setParamValue]
         method setParamValue [@ $def 0] [@ $def 1]            
-        method getParams {} {
-            # Gets the dictionary that contains parameter name as keys and
-            #  parameter values as the values.
-            # Returns: parameters dictionary
-            set tempDict [dcreate]
-            dict for {paramName param} $Params {
-                dict append tempDict $paramName [$param configure -Value]
-            }
-            return $tempDict
-        }
+        set def [info class definition ::SpiceGenTcl::Device getParams]
+        method getParams [@ $def 0] [@ $def 1]  
         method genSPICEString {} {
             # Creates model string for SPICE netlist.
             # Returns: string '.model $Name $Type $Params'
@@ -921,22 +918,8 @@ namespace eval ::SpiceGenTcl {
         }
         set def [info class definition ::SpiceGenTcl::Device deleteParam]
         method deleteParam [@ $def 0] [@ $def 1]
-        method setParamValue {paramName value} {
-            # Sets (or changes) value of particular parameter
-            #  it throws a error if try to set a value of switch parameter.
-            #  paramName - name of parameter
-            #  value - new value of parameter
-            set paramName [string tolower $paramName]
-            set error [catch {dget $Params $paramName}]
-            if {$error>0} {
-                return -code error "Parameter with name '$paramName' was not found in options's '[my configure -Name]'\
-                        list of parameters '[dict keys [my getParams]]'"
-            } else {
-                set param [dget $Params $paramName]
-            }
-            $param configure -Value $value
-            return
-        }
+        set def [info class definition ::SpiceGenTcl::Device setParamValue]
+        method setParamValue [@ $def 0] [@ $def 1]  
         method genSPICEString {} {
             # Creates options string for SPICE netlist.
             # Returns: '.options $Params'
@@ -980,16 +963,8 @@ namespace eval ::SpiceGenTcl {
                 }   
             }
         }
-        method getParams {} {
-            # Gets the dictionary that contains parameter name as keys and
-            #  parameter values as the values.
-            # Returns: parameters dictionary
-            set tempDict [dcreate]
-            dict for {paramName param} $Params {
-                dict append tempDict $paramName [$param configure -Value]
-            }
-            return $tempDict
-        }
+        set def [info class definition ::SpiceGenTcl::Device getParams]
+        method getParams [@ $def 0] [@ $def 1]  
         method addParam {paramName value args} {
             # Adds new Parameter object to the list Params.
             #  paramName - name of parameter
@@ -1015,21 +990,8 @@ namespace eval ::SpiceGenTcl {
         }
         set def [info class definition ::SpiceGenTcl::Device deleteParam]
         method deleteParam [@ $def 0] [@ $def 1]
-        method setParamValue {paramName value} {
-            # Sets (or changes) value of particular parameter.
-            #  paramName - name of parameter
-            #  value - new value of parameter
-            set paramName [string tolower $paramName]
-            set error [catch {dget $Params $paramName}]
-            if {$error>0} {
-                return -code error "Parameter with name '$paramName' was not found in parameter statement's\
-                        '[my configure -Name]' list of parameters '[dict keys [my getParams]]'"
-            } else {
-                set param [dget $Params $paramName]
-            }
-            $param configure -Value $value
-            return
-        }
+        set def [info class definition ::SpiceGenTcl::Device setParamValue]
+        method setParamValue [@ $def 0] [@ $def 1]  
         method genSPICEString {} {
             # Creates parameter statement string for SPICE netlist.
             # Returns: '.param $Params'
@@ -1453,16 +1415,8 @@ namespace eval ::SpiceGenTcl {
                 } 
             }
         }
-        method getParams {} {
-            # Gets the dictionary that contains parameter name as keys and
-            #  parameter values as the values
-            # Returns: parameters dictionary
-            set tempDict [dcreate]
-            dict for {paramName param} $Params {
-                dict append tempDict $paramName [$param configure -Value]
-            }
-            return $tempDict
-        }
+        set def [info class definition ::SpiceGenTcl::Device getParams]
+        method getParams [@ $def 0] [@ $def 1]  
         method addParam {paramName value args} {
             # Adds new Parameter object to the list `Params`.
             #  paramName - name of parameter
@@ -1502,21 +1456,8 @@ namespace eval ::SpiceGenTcl {
         }
         set def [info class definition ::SpiceGenTcl::Device deleteParam]
         method deleteParam [@ $def 0] [@ $def 1]
-        method setParamValue {paramName value} {
-            # Sets (or changes) value of particular parameter.
-            #  paramName - name of parameter
-            #  value - the new value of parameter
-            set paramName [string tolower $paramName]
-            set error [catch {dget $Params $paramName}]
-            if {$error>0} {
-                return -code error "Parameter with name '$paramName' was not found in parameter analysis's\
-                        '[my configure -Name]' list of parameters '[dict keys [my getParams]]'"
-            } else {
-                set param [dget $Params $paramName]
-            }
-            $param configure -Value $value
-            return
-        }
+        set def [info class definition ::SpiceGenTcl::Device setParamValue]
+        method setParamValue [@ $def 0] [@ $def 1]  
         method genSPICEString {} {
             # Creates analysis for SPICE netlist.
             # Returns: string '.$Type $Params'

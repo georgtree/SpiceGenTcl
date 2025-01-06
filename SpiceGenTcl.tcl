@@ -26,6 +26,7 @@ interp alias {} @ {} lindex
 interp alias {} = {} expr
 interp alias {} dexist {} dict exists
 interp alias {} dcreate {} dict create
+interp alias {} dset {} dict set
 
 set dir [file dirname [file normalize [info script]]]
 set libDir "${dir}/lib"

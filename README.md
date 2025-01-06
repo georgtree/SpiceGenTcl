@@ -126,6 +126,7 @@ interp alias {} @ {} lindex
 interp alias {} = {} expr
 interp alias {} dexist {} dict exists
 interp alias {} dcreate {} dict create
+interp alias {} dset {} dict set
 ```
 
 ### Packages imports
