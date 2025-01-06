@@ -10,7 +10,7 @@ set circuit [Circuit new {diode IV}]
 # add elements to circuit
 $circuit add [D new 1 anode 0 -model diomod -area 1 -lm 1e-6]
 $circuit add [Vdc new a anode 0 -dc 0]
-$circuit add [DiodeModel new diomod -is 1e-12 -n 1.2 -rs 0.01 -cj0 1e-9 -trs1 0.001 -xti 5]
+$circuit add [DiodeModel new diomod -is 1e-12 -n 1.2 -rs 0.01 -cj0 1e-9 -trs1 0.001 -xti 5 -ikf 100]
 $circuit add [Dc new -src va -start 0 -stop 2 -incr 0.01]
 set tempSt [Temp new 25]
 $circuit add $tempSt
@@ -34,7 +34,6 @@ foreach temp $temps {
     lappend dataList $xydata
     unset xydata
 }
-
 
 # plot results with ticklecharts
 set chart [ticklecharts::chart new]
