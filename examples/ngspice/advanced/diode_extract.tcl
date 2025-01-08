@@ -24,7 +24,7 @@ proc diodeIVcalc {xall pdata args} {
     $vSrc setParamValue start $vMin stop $vMax incr $vStep
     $circuit runAndRead
     set data [$circuit getDataDict]
-    foreach iVal $i iSim [dget $data i(va)] {
+    foreach iVal $i iSim [lmap i [dget $data i(va)] {= {-$i}}] {
         lappend fvec [= {(log(abs($iVal))-log(abs($iSim)))}]
         lappend fval $iSim
     }
@@ -52,16 +52,17 @@ set iRaw [lmap elem $ivTemp25 {@ $elem 1}]
 
 ### define first fitting region
 set vMin [min {*}$vRaw]
-set vMax 0.65
+set vMax 0.85
 set vStep 0.02
 # interpolate current with irregular voltage grid to evenly spaced one with fixed step
 set vInterp [lseq $vMin to $vMax by $vStep]
 set iInterp [lin1d -x $vRaw -y $iRaw -xi $vInterp]
-set iniPars [list 1e-12 1.0 30 1e-4]
+set iniPars [list 1e-14 1.0 30 1e-4]
 # set data dictionary passed into function
-set pdata [dcreate v $vInterp i $iInterp circuit $circuit model $diodeModel vMin $vMin vMax $vMax vStep $vStep vSrc $vSrc]
+set pdata [dcreate v $vInterp i $iInterp circuit $circuit model $diodeModel vMin $vMin vMax $vMax vStep $vStep\
+                   vSrc $vSrc]
 # set fitting parameters
-set par0 [parCreate -parname is -lowlim 1e-15 -uplim 1e-8]
+set par0 [parCreate -parname is -lowlim 1e-17 -uplim 1e-12]
 set par1 [parCreate -parname n -lowlim 0.5 -uplim 2]
 set par2 [parCreate -fixed -parname rs -lowlim 1 -uplim 100]
 set par3 [parCreate -fixed -parname ikf -lowlim 1e-12 -uplim 0.1]
@@ -72,7 +73,7 @@ set resPars [dget $result x]
 puts [format "is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e" {*}[dget $result x]]
 
 ### define second fitting region
-set vMin 0.65
+set vMin 0.85
 set vMax [max {*}$vRaw]
 set vInterp [lseq $vMin to $vMax by $vStep]
 set iInterp [lin1d -x $vRaw -y $iRaw -xi $vInterp]
@@ -80,7 +81,7 @@ dset pdata v $vInterp
 dset pdata i $iInterp
 dset pdata vMin $vMin
 dset pdata vMax $vMax
-set par0 [parCreate -fixed -parname is -lowlim 1e-15 -uplim 1e-10]
+set par0 [parCreate -fixed -parname is -lowlim 1e-17 -uplim 1e-12]
 set par1 [parCreate -fixed -parname n -lowlim 0.8 -uplim 2]
 set par2 [parCreate -parname rs -lowlim 1 -uplim 100]
 set par3 [parCreate -parname ikf -lowlim 1e-12 -uplim 0.1]
@@ -110,15 +111,15 @@ puts [format "is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e" {*}[dget $result x]]
 
 ### calculate initial curve and fitted curve
 set initIdiode [dget [diodeIVcalc $iniPars $pdata] fval]
-set fittedVIdiode [lmap vVal $vInterp iVal $fittedIdiode {list $vVal [= {-$iVal}]}]
-set initVIdiode [lmap vVal $vInterp iVal $initIdiode {list $vVal [= {-$iVal}]}]
-set viRaw [lmap vVal $vRaw iVal $iRaw {list $vVal [= {-$iVal}]}]
-
+set fittedVIdiode [lmap vVal $vInterp iVal $fittedIdiode {list $vVal $iVal]}]
+set initVIdiode [lmap vVal $vInterp iVal $initIdiode {list $vVal $iVal]}]
+set viRaw [lmap vVal $vRaw iVal $iRaw {list $vVal $iVal]}]
 
 # plot results with ticklecharts
 set chart [ticklecharts::chart new]
 $chart Xaxis -name "v(anode), V" -minorTick {show "True"}  -type "value" -splitLine {show "True"}
-$chart Yaxis -name "Idiode, A" -minorTick {show "True"}  -type "log" -splitLine {show "True"} -min "dataMin" -max "dataMax"
+$chart Yaxis -name "Idiode, A" -minorTick {show "True"}  -type "log" -splitLine {show "True"} -min "dataMin"\
+        -max "dataMax"
 $chart SetOptions -title {} -tooltip {} -animation "False" -legend {} -toolbox {feature {dataZoom {yAxisIndex "none"}}}\
         -grid {left "10%" right "15%"} -backgroundColor "#212121"
 $chart Add "lineSeries" -data $fittedVIdiode -showAllSymbol "nothing" -name "fitted" -symbolSize "4"
