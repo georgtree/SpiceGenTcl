@@ -17,10 +17,7 @@ package require tcltest
 namespace import ::tcltest::*
 package require SpiceGenTcl
 namespace import ::SpiceGenTcl::*
-set ngspiceNameSpc [namespace children ::SpiceGenTcl::Ngspice]
-foreach nameSpc $ngspiceNameSpc {
-    namespace import ${nameSpc}::*
-}
+importNgspice
 
 
 ###  Basic devices tests 
@@ -1579,8 +1576,6 @@ test testSubcircuitInstanceAutoClass-4 {test creation of SubcircuitInstanceAuto 
     unset subcircuit subInst1 result
 }
 
-foreach nameSpc $ngspiceNameSpc {
-    namespace forget ${nameSpc}::*
-}
+forgetNgspice
 
 cleanupTests

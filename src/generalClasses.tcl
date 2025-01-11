@@ -20,7 +20,7 @@ namespace eval ::SpiceGenTcl {
             ParameterDefault ParameterEquation ParameterPositionalEquation Device Model RawString Comment Include\
             Options ParamStatement Temp Netlist Circuit Library Subcircuit Analysis Simulator Dataset Axis Trace\
             EmptyTrace RawFile
-    namespace export importNgspice importXyce importCommon
+    namespace export importNgspice importXyce importCommon forgetNgspice forgetXyce forgetCommon
     
     proc importCommon {} {
         # Imports all ::SpiceGenTcl::Common commands to caller namespace
@@ -28,18 +28,34 @@ namespace eval ::SpiceGenTcl {
             namespace import ${nameSpc}::*
         }}
     }
-    
+    proc forgetCommon {} {
+        # Forgets all ::SpiceGenTcl::Common commands from caller namespace
+        uplevel 1 {foreach nameSpc [namespace children ::SpiceGenTcl::Common] {
+            namespace forget ${nameSpc}::*
+        }}
+    }   
     proc importNgspice {} {
         # Imports all ::SpiceGenTcl::Ngspice commands to caller namespace
         uplevel 1 {foreach nameSpc [namespace children ::SpiceGenTcl::Ngspice] {
             namespace import ${nameSpc}::*
         }}
     }
-
+    proc forgetNgspice {} {
+        # Forgets all ::SpiceGenTcl::Ngspice commands from caller namespace
+        uplevel 1 {foreach nameSpc [namespace children ::SpiceGenTcl::Ngspice] {
+            namespace forget ${nameSpc}::*
+        }}
+    }
     proc importXyce {} {
         # Imports all ::SpiceGenTcl::Xyce commands to caller namespace
         uplevel 1 {foreach nameSpc [namespace children ::SpiceGenTcl::Xyce] {
             namespace import ${nameSpc}::*
+        }}
+    }
+    proc forgetXyce {} {
+        # Forgets all ::SpiceGenTcl::Xyce commands from caller namespace
+        uplevel 1 {foreach nameSpc [namespace children ::SpiceGenTcl::Xyce] {
+            namespace forget ${nameSpc}::*
         }}
     }
     

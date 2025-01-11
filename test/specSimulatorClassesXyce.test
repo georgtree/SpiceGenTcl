@@ -24,10 +24,7 @@ variable pi
 set epsilon 1e-8
 
 namespace import ::SpiceGenTcl::*
-set xyceNameSpc [namespace children ::SpiceGenTcl::Xyce]
-foreach nameSpc $xyceNameSpc {
-    namespace import ${nameSpc}::*
-}
+importXyce
 
 proc matchList {expected actual} {
     variable epsilon
@@ -157,8 +154,6 @@ test testSimulations-3 {test diode CV simulation} -setup {
     unset circuit simulator data voltSweep vdc x xf y yf xydata
 }
 
-foreach nameSpc $xyceNameSpc {
-    namespace forget ${nameSpc}::*
-}
+forgetXyce
 
 cleanupTests

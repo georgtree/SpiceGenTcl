@@ -17,10 +17,7 @@ package require tcltest
 namespace import ::tcltest::*
 package require SpiceGenTcl
 namespace import ::SpiceGenTcl::*
-set ngspiceNameSpc [namespace children ::SpiceGenTcl::Ngspice]
-foreach nameSpc $ngspiceNameSpc {
-    namespace import ${nameSpc}::*
-}
+importNgspice
     
 ### ________________________ RModel class tests _________________________ ###
     
@@ -121,8 +118,6 @@ test testMesfet1ModelClass-1 {test Mesfet1Model class} -setup {
     unset mod result
 }
 
-foreach nameSpc $ngspiceNameSpc {
-    namespace forget ${nameSpc}::*
-}
+forgetNgspice
 
 cleanupTests

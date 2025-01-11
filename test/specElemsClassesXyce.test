@@ -17,10 +17,7 @@ package require tcltest
 namespace import ::tcltest::*
 package require SpiceGenTcl
 namespace import ::SpiceGenTcl::*
-set xyceNameSpc [namespace children ::SpiceGenTcl::Xyce]
-foreach nameSpc $xyceNameSpc {
-    namespace import ${nameSpc}::*
-}
+importXyce
 
 
 ###  Basic devices tests 
@@ -1436,8 +1433,6 @@ test testSubcircuitInstanceAutoClass-4 {test creation of SubcircuitInstanceAuto 
     unset subcircuit subInst1 result
 }
 
-foreach nameSpc $xyceNameSpc {
-    namespace forget ${nameSpc}::*
-}
+forgetXyce
 
 cleanupTests
