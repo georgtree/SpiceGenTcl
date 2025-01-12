@@ -7,7 +7,6 @@ package require gnuplotutil
 
 namespace import ::tcl::mathfunc::*
 namespace import ::tclinterp::interpolation::*
-namespace import ::tclopt::*
 namespace import ::gnuplotutil::*
 set ::ticklecharts::theme "dark"
 
@@ -25,7 +24,7 @@ proc diodeIVcalc {xall pdata args} {
     $circuit runAndRead
     set data [$circuit getDataDict]
     foreach iVal $i iSim [lmap i [dget $data i(va)] {= {-$i}}] {
-        lappend fvec [= {(log(abs($iVal))-log(abs($iSim)))}]
+        lappend fvec [= {log(abs($iVal))-log(abs($iSim))}]
         lappend fval $iSim
     }
     return [dcreate fvec $fvec fval $fval]
@@ -62,13 +61,14 @@ set iniPars [list 1e-14 1.0 30 1e-4]
 set pdata [dcreate v $vInterp i $iInterp circuit $circuit model $diodeModel vMin $vMin vMax $vMax vStep $vStep\
                    vSrc $vSrc]
 # set fitting parameters
-set par0 [parCreate -parname is -lowlim 1e-17 -uplim 1e-12]
-set par1 [parCreate -parname n -lowlim 0.5 -uplim 2]
-set par2 [parCreate -fixed -parname rs -lowlim 1 -uplim 100]
-set par3 [parCreate -fixed -parname ikf -lowlim 1e-12 -uplim 0.1]
-set pars [list $par0 $par1 $par2 $par3]
+set par0 [::tclopt::ParameterMpfit new is [@ $iniPars 0] -lowlim 1e-17 -uplim 1e-12]
+set par1 [::tclopt::ParameterMpfit new n [@ $iniPars 1] -lowlim 0.5 -uplim 2]
+set par2 [::tclopt::ParameterMpfit new rs [@ $iniPars 2] -fixed -lowlim 1e-10 -uplim 100]
+set par3 [::tclopt::ParameterMpfit new ikf [@ $iniPars 3] -fixed -lowlim 1e-12 -uplim 0.1]
 # fit in first region
-set result [mpfit -funct diodeIVcalc -m [llength $vInterp] -xall $iniPars -pars $pars -pdata $pdata]
+set optimizer [::tclopt::Mpfit new -funct diodeIVcalc -m [llength $vInterp] -pdata $pdata]
+$optimizer addPars $par0 $par1 $par2 $par3
+set result [$optimizer run]
 set resPars [dget $result x]
 puts [format "is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e" {*}[dget $result x]]
 
@@ -81,12 +81,13 @@ dset pdata v $vInterp
 dset pdata i $iInterp
 dset pdata vMin $vMin
 dset pdata vMax $vMax
-set par0 [parCreate -fixed -parname is -lowlim 1e-17 -uplim 1e-12]
-set par1 [parCreate -fixed -parname n -lowlim 0.8 -uplim 2]
-set par2 [parCreate -parname rs -lowlim 1 -uplim 100]
-set par3 [parCreate -parname ikf -lowlim 1e-12 -uplim 0.1]
-set pars [list $par0 $par1 $par2 $par3]
-set result [mpfit -funct diodeIVcalc -m [llength $vInterp] -xall $resPars -pars $pars -pdata $pdata]
+$par0 configure -fixed 1 -initval [@ $resPars 0]
+$par1 configure -fixed 1 -initval [@ $resPars 1]
+$par2 configure -fixed 0
+$par3 configure -fixed 0
+$optimizer configure -m [llength $vInterp]
+$optimizer configure -pdata $pdata
+set result [$optimizer run]
 set fittedIdiode [dget [diodeIVcalc [dget $result x] $pdata] fval]
 set resPars [dget $result x]
 puts [format "is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e" {*}[dget $result x]]
@@ -100,20 +101,21 @@ dset pdata v $vInterp
 dset pdata i $iInterp
 dset pdata vMin $vMin
 dset pdata vMax $vMax
-set par0 [parCreate -parname is -lowlim [= {[@ $resPars 0]*0.9}] -uplim [= {[@ $resPars 0]*1.1}]]
-set par1 [parCreate -parname n -lowlim [= {[@ $resPars 1]*0.9}] -uplim [= {[@ $resPars 1]*1.1}]]
-set par2 [parCreate -parname rs -lowlim [= {[@ $resPars 2]*0.9}] -uplim [= {[@ $resPars 2]*1.1}]]
-set par3 [parCreate -parname ikf -lowlim [= {[@ $resPars 3]*0.9}] -uplim [= {[@ $resPars 3]*1.1}]]
-set pars [list $par0 $par1 $par2 $par3]
-set result [mpfit -funct diodeIVcalc -m [llength $vInterp] -xall $resPars -pars $pars -pdata $pdata]
+$par0 configure -fixed 0 -initval [@ $resPars 0] -lowlim [= {[@ $resPars 0]*0.9}] -uplim [= {[@ $resPars 0]*1.1}]
+$par1 configure -fixed 0 -initval [@ $resPars 1] -lowlim [= {[@ $resPars 1]*0.9}] -uplim [= {[@ $resPars 1]*1.1}]
+$par2 configure -initval [@ $resPars 2] -lowlim [= {[@ $resPars 2]*0.9}] -uplim [= {[@ $resPars 2]*1.1}]
+$par3 configure -initval [@ $resPars 3] -lowlim [= {[@ $resPars 3]*0.9}] -uplim [= {[@ $resPars 3]*1.1}]
+$optimizer configure -m [llength $vInterp]
+$optimizer configure -pdata $pdata
+set result [$optimizer run]
 set fittedIdiode [dget [diodeIVcalc [dget $result x] $pdata] fval]
 puts [format "is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e" {*}[dget $result x]]
 
 ### calculate initial curve and fitted curve
 set initIdiode [dget [diodeIVcalc $iniPars $pdata] fval]
-set fittedVIdiode [lmap vVal $vInterp iVal $fittedIdiode {list $vVal $iVal]}]
-set initVIdiode [lmap vVal $vInterp iVal $initIdiode {list $vVal $iVal]}]
-set viRaw [lmap vVal $vRaw iVal $iRaw {list $vVal $iVal]}]
+set fittedVIdiode [lmap vVal $vInterp iVal $fittedIdiode {list $vVal $iVal}]
+set initVIdiode [lmap vVal $vInterp iVal $initIdiode {list $vVal $iVal}]
+set viRaw [lmap vVal $vRaw iVal $iRaw {list $vVal $iVal}]
 
 # plot results with ticklecharts
 set chart [ticklecharts::chart new]
