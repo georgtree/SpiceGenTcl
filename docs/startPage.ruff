@@ -7,6 +7,7 @@ variable startPage {
     SPICE-like simulators written in Python.
 
     ## General concept
+
     The general concept of the package is to build a netlist using Tcl scripts. It is based on the TclOO
     object-oriented system, where everything is represented by objects, including elements, models, analyses,
     waveforms, and netlists. After defining the netlist, you can run the simulation, read the resulting data, and then
@@ -17,6 +18,7 @@ variable startPage {
     flexible approach that can be extended to work with different simulators that use netlists with similar syntax.
     
     ## Usage examples
+
     SpiceGenTcl can be used if you need:
     - automate some repetitive simulation tasks, and you don't like
       [Nutmeg](https://ngspice.sourceforge.io/ngspice-control-language-tutorial.html) syntax (SPICE standard scripting
@@ -27,9 +29,11 @@ variable startPage {
     - run circuit optimization with parameters variations as well as variations in circuit topology
     
     ## Installing
+
     You have two ways: install from git repo (convinient for Linux users) or from archive package release.
 
     ### From git repo
+
     Run following commands:
     - `git clone https://github.com/georgtree/SpiceGenTcl.git`
     - `./configure`
@@ -42,6 +46,7 @@ variable startPage {
     For package uninstall run `sudo make uninstall`.
 
     ### From archive
+
     To install the package you should extract archive with source code and add path of the package folder to `auto_path`
     variable:
     ```tcl
@@ -49,6 +54,7 @@ variable startPage {
     ```
 
     ## Dependencies
+
     Package is written in pure Tcl with relying on Tcllib and ticklecharts, tcl version is 9.0. The only necessary
     external dependency is the simulator itself.
 
@@ -119,9 +125,10 @@ variable startPage {
     interp alias {} dset {} dict set
     ```
     - <font color="red"> **Important note 4**</font>: source code follows the pattern, if method or variable name
-    of the class starts from capital letter, it is intended to be private and accessible from outside the object. Even
-    if variable defined as a `property` (you can access it with `configure` method) and start from capital letter, it is
-    better to not have a direct access to it.
+    of the class starts from capital letter, it is intended to be private and not directly accessible from outside the 
+    object. Even if variable defined as a `property` (you can access it with `configure` method) and start from capital 
+    letter, it is better to not try to access it directly.
+
     ### Packages imports
     
     The first step is import of package:

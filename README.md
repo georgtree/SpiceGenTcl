@@ -129,9 +129,9 @@ interp alias {} dcreate {} dict create
 interp alias {} dset {} dict set
 ```
 - <font color="red"> **Important note 4**</font>: source code follows the pattern, if method or variable name
-of the class starts from capital letter, it is intended to be private and accessible from outside the object. Even
-if variable defined as a `property` (you can access it with `configure` method) and start from capital letter, it is
-better to not have a direct access to it.
+of the class starts from capital letter, it is intended to be private and not directly accessible from outside the 
+object. Even if variable defined as a `property` (you can access it with `configure` method) and start from capital 
+letter, it is better to not try to access it directly.
 ### Packages imports
 
 The first step is import of package:
