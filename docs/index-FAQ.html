@@ -6,7 +6,7 @@
 <body>
 <div class='ruff-layout'>
 <header class='ruff-layout-header ruff-hd'>
-<a style='text-decoration:none;' href='index.html'>Tcl SpiceGenTcl package (v0.54)</a>
+<a style='text-decoration:none;' href='index.html'>Tcl SpiceGenTcl package (v0.60)</a>
 
 
             <div id="ruffButtonBar">
@@ -147,20 +147,20 @@
 
 </figure><h2 class='ruff'><a name='::FAQ-How to get the names of all vectors in raw file?'></a>How to get the names of all vectors in raw file?<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
-<p class='ruff'>For this task, you should first retrieve the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile" title="::SpiceGenTcl::RawFile" class='ruff_cmd'>::SpiceGenTcl::RawFile</a> object reference from the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> object using the <code>configure <font color=#b9b96e>-Data</font></code> method. Then, call the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile::getVariablesNames" title="::SpiceGenTcl::RawFile::getVariablesNames" class='ruff_cmd'>::SpiceGenTcl::RawFile::getVariablesNames</a> method, which returns a list of all variable names.</p>
+<p class='ruff'>For this task, you should first retrieve the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile" title="::SpiceGenTcl::RawFile" class='ruff_cmd'>::SpiceGenTcl::RawFile</a> object reference from the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> object using the <code>configure <font color=#b9b96e>-data</font></code> method. Then, call the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile::getVariablesNames" title="::SpiceGenTcl::RawFile::getVariablesNames" class='ruff_cmd'>::SpiceGenTcl::RawFile::getVariablesNames</a> method, which returns a list of all variable names.</p>
 <p class='ruff'>Example:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>set</font></b> rawFileObj [<font color=#f1b479>$circuit</font> configure <font color=#b9b96e>-Data</font>]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>set</font></b> rawFileObj [<font color=#f1b479>$circuit</font> configure <font color=#b9b96e>-data</font>]
 <b><font color=#ffa500>puts</font></b> [<font color=#f1b479>$rawFileObj</font> getVariablesNames]
 </pre>
 
 </figure><p class='ruff'>There are also methods for retrieve all voltages and currents names separated from each other: <a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile::getVoltagesNames" title="::SpiceGenTcl::RawFile::getVoltagesNames" class='ruff_cmd'>::SpiceGenTcl::RawFile::getVoltagesNames</a> and <a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile::getCurrentsNames" title="::SpiceGenTcl::RawFile::getCurrentsNames" class='ruff_cmd'>::SpiceGenTcl::RawFile::getCurrentsNames</a>.</p>
 <h2 class='ruff'><a name='::FAQ-How to get log file after simulation?'></a>How to get log file after simulation?<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
-<p class='ruff'>There is a property method for it in object of <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> class - <code>configure <font color=#b9b96e>-Log</font></code>, it returns string containing log file.</p>
+<p class='ruff'>There is a property method for it in object of <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> class - <code>configure <font color=#b9b96e>-log</font></code>, it returns string containing log file.</p>
 <p class='ruff'>Example:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>puts</font></b> [<font color=#f1b479>$circuit</font> configure <font color=#b9b96e>-Log</font>]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>puts</font></b> [<font color=#f1b479>$circuit</font> configure <font color=#b9b96e>-log</font>]
 </pre>
 
 </figure><h2 class='ruff'><a name='::FAQ-How to save result traces in comma-separated file format (csv)?'></a>How to save result traces in comma-separated file format (csv)?<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
@@ -174,7 +174,7 @@
 <font color=#f1b479>$circuit</font> add [<b><font color=#ffa500>R</font></b> new 2 out 0 <font color=#b9b96e>-r</font> 2e3]
 <font color=#f1b479>$circuit</font> add [<b><font color=#ffa500>Dc</font></b> new <font color=#b9b96e>-src</font> v1 <font color=#b9b96e>-start</font> 0 <font color=#b9b96e>-stop</font> 5 <font color=#b9b96e>-incr</font> 1]
 <b><font color=#ffa500>set</font></b> simulator [<b><font color=#ffa500>Batch</font></b> new {batch1}]
-<font color=#f1b479>$circuit</font> configure <font color=#b9b96e>-Simulator</font> <font color=#f1b479>$simulator</font>
+<font color=#f1b479>$circuit</font> configure <font color=#b9b96e>-simulator</font> <font color=#f1b479>$simulator</font>
 <font color=#f1b479>$circuit</font> runAndRead
 <b><font color=#ffa500>set</font></b> data [<font color=#f1b479>$circuit</font> getDataCsv <font color=#b9b96e>-traces</font> v(in) v(out)]
 <b><font color=#ffa500>puts</font></b> <font color=#f1b479>$data</font>

@@ -21,7 +21,7 @@ set voltSweep [lseq 0 20.0 0.1]
 #set simulator with default 
 set simulator [Batch new {batch1}]
 # attach simulator object to circuit
-$circuit configure -Simulator $simulator
+$circuit configure -simulator $simulator
 # loop in which we run simulation, change reverse bias and read the results
 foreach volt $voltSweep {
     #set reverse voltage bias

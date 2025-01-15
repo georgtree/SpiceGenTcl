@@ -20,3 +20,5 @@ tclsh ./switch_oscillator.tcl
 tclsh ./fourbitadder.tcl
 cd ../advanced
 tclsh ./monte_carlo.tcl
+cd ../advanced
+tclsh ./diode_extract.tcl

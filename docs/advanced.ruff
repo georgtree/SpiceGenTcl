@@ -6,7 +6,7 @@ namespace eval Advanced {
         List of availible examples:
         - [Monte-Carlo simulation] - "examples/ngspice/advanced/monte_carlo.tcl" and
           "examples/xyce/advanced/monte_carlo.tcl" file
-                
+        - [Parameters extraction of diode model parameters] - "examples/ngspice/advanced/diode_extract.tcl" file        
                 
         ## Monte-Carlo simulation
         
@@ -38,7 +38,7 @@ namespace eval Advanced {
         #set simulator with default 
         set simulator [Batch new {batch1}]
         # attach simulator object to circuit
-        $circuit configure -Simulator $simulator
+        $circuit configure -simulator $simulator
         
         ```
         
@@ -294,6 +294,26 @@ namespace eval Advanced {
 
         !ticklechart_mark_monte_carlo_dists_comb_ngspice!
         
+        ## Parameters extraction of diode model parameters
+
+        In this advanced example we will do curve fitting procedure to extract parameters of diode model. We use
+        measured (emulated with more advanced diode model generated data, with added small distorsion and make non-equal
+        voltage steps) forward current characteristic of diode.
+
+        This example demands two additional Tcl packages to make fast interpolation and Levenberg-Marquardt optimization
+        algorithm:
+        - [Optimization package](https://github.com/georgtree/tclopt)
+        - [Interpolation package](https://github.com/georgtree/tclinterp)
+        
+        The main steps of this procedure are:
+        - Create cost function that calculates difference between simulated and measured data, and which should be 
+        minimized
+        - Select the region of optimization
+        - Set list of parameters that will be extracted, define lower and upper limits for them.
+        - Run optimization
+        - Use resulted values as initial values for next optimization in different region
+        - ...
+        - Repeat until the quality of fitting reaches required level.
     }
 
 }

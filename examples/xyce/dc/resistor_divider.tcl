@@ -14,7 +14,7 @@ $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 0.1]
 #set simulator with default 
 set simulator [Batch new {batch1}]
 # attach simulator object to circuit
-$circuit configure -Simulator $simulator
+$circuit configure -simulator $simulator
 # run circuit, read log and data
 $circuit runAndRead
 # get data object

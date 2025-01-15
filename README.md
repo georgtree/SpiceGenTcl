@@ -5,7 +5,7 @@ This package provides Tcl interface to different SPICE and SPICE-like simulator,
 It was inspired by [PySpice](https://github.com/PySpice-org/PySpice) project, object-oriented interface to
 SPICE-like simulators written in Python.
 
-![Static Badge](https://img.shields.io/badge/version-0.54-blue)
+![Static Badge](https://img.shields.io/badge/version-0.60-blue)
 
 ![Static Badge](https://img.shields.io/badge/license-MIT-blue)
 
@@ -128,7 +128,10 @@ interp alias {} dexist {} dict exists
 interp alias {} dcreate {} dict create
 interp alias {} dset {} dict set
 ```
-
+- <font color="red"> **Important note 4**</font>: source code follows the pattern, if method or variable name
+of the class starts from capital letter, it is intended to be private and accessible from outside the object. Even
+if variable defined as a `property` (you can access it with `configure` method) and start from capital letter, it is
+better to not have a direct access to it.
 ### Packages imports
 
 The first step is import of package:

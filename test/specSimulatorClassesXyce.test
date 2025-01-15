@@ -48,9 +48,9 @@ test testSimulations-1 {test creation of circuit, run it with XyceBatch and read
     $circuit add [R new 2 out 0 -r 2e3]
     $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1]
     set simulator [Batch new batch1 .]
-    $circuit configure -Simulator $simulator
+    $circuit configure -simulator $simulator
     $circuit runAndRead
-    set data [[$circuit configure -Data] getTracesData]
+    set data [[$circuit configure -data] getTracesData]
 } -body {
     lappend result [lmap voutVal [dget $data out] {format "%.3e" $voutVal}]
     return $result
@@ -75,10 +75,10 @@ test testSimulations-2 {test diode IV simulation} -setup {
     #set simulator with default 
     set simulator [Batch new {batch1}]
     # attach simulator object to circuit
-    $circuit configure -Simulator $simulator
+    $circuit configure -simulator $simulator
     # run circuit, change temperature, read log and data
     foreach temp $temps {
-        $tempSt configure -Value $temp
+        $tempSt configure -value $temp
         $circuit runAndRead
         set data [$circuit getDataDict]
         foreach x [dget $data anode] y [dget $data va#branch] {
@@ -125,7 +125,7 @@ test testSimulations-3 {test diode CV simulation} -setup {
     #set simulator with default 
     set simulator [Batch new {batch1}]
     # attach simulator object to circuit
-    $circuit configure -Simulator $simulator
+    $circuit configure -simulator $simulator
     # loop in which we run simulation, change reverse bias and read the results
     foreach volt $voltSweep {
         #set reverse voltage bias

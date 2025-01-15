@@ -40,7 +40,7 @@ $circuit add $diodeModel
 $circuit add $vSrc
 set tempSt [Temp new 25]
 $circuit add $tempSt
-$circuit configure -Simulator [Batch new {batch1}]
+$circuit configure -simulator [Batch new {batch1}]
 
 ### load measurement data
 set file [open [file join $fileDataPath iv25.csv]]
@@ -85,8 +85,7 @@ $par0 configure -fixed 1 -initval [@ $resPars 0]
 $par1 configure -fixed 1 -initval [@ $resPars 1]
 $par2 configure -fixed 0
 $par3 configure -fixed 0
-$optimizer configure -m [llength $vInterp]
-$optimizer configure -pdata $pdata
+$optimizer configure -m [llength $vInterp] -pdata $pdata
 set result [$optimizer run]
 set fittedIdiode [dget [diodeIVcalc [dget $result x] $pdata] fval]
 set resPars [dget $result x]
@@ -105,8 +104,7 @@ $par0 configure -fixed 0 -initval [@ $resPars 0] -lowlim [= {[@ $resPars 0]*0.9}
 $par1 configure -fixed 0 -initval [@ $resPars 1] -lowlim [= {[@ $resPars 1]*0.9}] -uplim [= {[@ $resPars 1]*1.1}]
 $par2 configure -initval [@ $resPars 2] -lowlim [= {[@ $resPars 2]*0.9}] -uplim [= {[@ $resPars 2]*1.1}]
 $par3 configure -initval [@ $resPars 3] -lowlim [= {[@ $resPars 3]*0.9}] -uplim [= {[@ $resPars 3]*1.1}]
-$optimizer configure -m [llength $vInterp]
-$optimizer configure -pdata $pdata
+$optimizer configure -m [llength $vInterp] -pdata $pdata
 set result [$optimizer run]
 set fittedIdiode [dget [diodeIVcalc [dget $result x] $pdata] fval]
 puts [format "is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e" {*}[dget $result x]]

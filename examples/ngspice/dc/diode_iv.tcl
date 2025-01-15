@@ -19,12 +19,12 @@ set temps [list -55 25 85 125 175]
 #set simulator with default 
 set simulator [Batch new {batch1}]
 # attach simulator object to circuit
-$circuit configure -Simulator $simulator
+$circuit configure -simulator $simulator
 # run circuit, change temperature, read log and data
 foreach temp $temps {
-    $tempSt configure -Value $temp
+    $tempSt configure -value $temp
     $circuit runAndRead
-    puts [$circuit configure -Log]
+    puts [$circuit configure -log]
     set data [$circuit getDataDict]
     foreach x [dget $data v(anode)] y [dget $data i(va)] {
         set xf [format "%.3f" $x]

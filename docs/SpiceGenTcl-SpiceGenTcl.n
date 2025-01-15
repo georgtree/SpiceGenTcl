@@ -1,7 +1,7 @@
 '\"
 '\" '\" Copyright (c) George Yashin
 '\"
-.TH "SpiceGenTcl" 3tcl 0\&.54 "SpiceGenTcl" "Tcl SpiceGenTcl package"
+.TH "SpiceGenTcl" 3tcl 0\&.60 "SpiceGenTcl" "Tcl SpiceGenTcl package"
 .SH NAME
 SpiceGenTcl - Commands in namespace SpiceGenTcl
 .SH SYNOPSIS
@@ -395,9 +395,9 @@ Sets (or change) value of particular parameters\&.
 .PP
 \fBProperties\fR
 .PP
-Readable: -Name, -Type
+Readable: -name, -type
 .PP
-Writable: -Name, -Type
+Writable: -name, -type
 .PP
 \fBSuperclasses\fR
 .PP
@@ -429,7 +429,7 @@ type
 Type of analysis, for example, tran, ac, dc, etc\&.
 .TP
 params
-List of instance parameters in form {{Name Value} {Name -sw} {Name Value -eq} {Name Value -posnocheck} \&.\&.\&.}
+List of instance parameters in form {{name value} {name -sw} {name Value -eq} {name Value -posnocheck} \&.\&.\&.}
 .TP
 args
 Optional argument \fI-name\fP
@@ -488,7 +488,7 @@ Creates analysis for SPICE netlist\&.
 .PP
 \fBReturn value\fR
 .PP
-string '\&.\fI$Type\fP \fI$Params\fP'
+string '\&.\fI$type\fP \fI$Params\fP'
 .PP
 .RS -4n
 \fBgetParams\fR (::SpiceGenTcl::Analysis)
@@ -548,9 +548,9 @@ See \fIDataset\&.setDataPoints\fP
 .PP
 \fBProperties\fR
 .PP
-Readable: -Len, -Name, -NumType, -Type
+Readable: -Len, -NumType, -Type, -name
 .PP
-Writable: -Len, -Name, -NumType, -Type
+Writable: -Len, -NumType, -Type, -name
 .PP
 \fBSuperclasses\fR
 .PP
@@ -765,14 +765,14 @@ getElement
 Gets particular element object reference by its name\&.
 .TP
 runAndRead
-Invokes 'runAndRead', 'configure -Log' and 'configure -Data' methods from attached simulator\&.
+Invokes 'runAndRead', 'configure -log' and 'configure -data' methods from attached simulator\&.
 .RE
 .PP
 \fBProperties\fR
 .PP
-Readable: -Data, -Log, -Name, -Simulator
+Readable: -data, -log, -name, -simulator
 .PP
-Writable: -Data, -Log, -Name, -Simulator
+Writable: -data, -log, -name, -simulator
 .PP
 \fBSuperclasses\fR
 .PP
@@ -798,9 +798,9 @@ Name of the tol-level circuit\&.
 .PP
 \fBDescription\fR
 .PP
-Class implements a top level netlist which is run in SPICE\&. We should add Simulator
-object reference to make it able to run simulation\&. Results of last simulation attached as RawData
-class object and can be retrieved by getData method\&.
+Class implements a top level netlist which is run in SPICE\&. We should add \fI::SpiceGenTcl::Simulator\fP
+object reference to make it able to run simulation\&. Results of last simulation attached as
+\fI::SpiceGenTcl::RawData\fP class object and can be retrieved by \fI::SpiceGenTcl::Circuit::getData\fP method\&.
 .PP
 .RS -4n
 \fBadd\fR (::SpiceGenTcl::Circuit)
@@ -915,7 +915,7 @@ Name of element\&.
 \fBrunAndRead\fR (::SpiceGenTcl::Circuit)
 .RE
 .PP
-Invokes 'runAndRead', 'configure -Log' and 'configure -Data' methods from attached simulator\&.
+Invokes 'runAndRead', 'configure -log' and 'configure -data' methods from attached simulator\&.
 .RS 4n\fBOBJECT runAndRead\fP \fI?args?\fP
 .br
 .RE
@@ -946,9 +946,9 @@ Creates comment string for SPICE netlist\&.
 .PP
 \fBProperties\fR
 .PP
-Readable: -Name, -Value
+Readable: -name, -value
 .PP
-Writable: -Name, -Value
+Writable: -name, -value
 .PP
 \fBSuperclasses\fR
 .PP
@@ -990,7 +990,7 @@ Creates comment string for SPICE netlist\&.
 .PP
 \fBReturn value\fR
 .PP
-string '*\fI$Value\fP'
+string '\fI$value\fP'
 .PP
 .RS -4n
 \fBDataset\fR (::SpiceGenTcl)
@@ -1020,9 +1020,9 @@ Method to set the data points\&.
 .PP
 \fBProperties\fR
 .PP
-Readable: -Len, -Name, -NumType, -Type
+Readable: -Len, -NumType, -Type, -name
 .PP
-Writable: -Len, -Name, -NumType, -Type
+Writable: -Len, -NumType, -Type, -name
 .PP
 \fBSubclasses\fR
 .PP
@@ -1144,9 +1144,9 @@ Sets node name of particular pin, so, in other words, connect particular pin to 
 .PP
 \fBProperties\fR
 .PP
-Readable: -Name
+Readable: -name
 .PP
-Writable: -Name
+Writable: -name
 .PP
 \fBSuperclasses\fR
 .PP
@@ -1210,10 +1210,10 @@ optional flags:
 pos - parameter has strict position and only '\fI$Value\fP' is displayed in netlist
 .TP
 \(bu
-eq - parameter may contain equation in terms of functions and other parsmeters, printed as '\fI$Name\fP={\fI$Equation\fP}'
+eq - parameter may contain equation in terms of functions and other parsmeters, printed as '\fI$name\fP={\fI$equation\fP}'
 .TP
 \(bu
-poseq - combination of both flags, print only '{\fI$Equation\fP}'
+poseq - combination of both flags, print only '{\fI$equation\fP}'
 .PP
 .RS -4n
 \fBaddParam\fR (::SpiceGenTcl::Device)
@@ -1409,9 +1409,9 @@ See \fIDataset\&.setDataPoints\fP
 .PP
 \fBProperties\fR
 .PP
-Readable: -Len, -Name, -NumType, -Type
+Readable: -Len, -NumType, -Type, -name
 .PP
-Writable: -Len, -Name, -NumType, -Type
+Writable: -Len, -NumType, -Type, -name
 .PP
 \fBSuperclasses\fR
 .PP
@@ -1473,9 +1473,9 @@ Creates include string for SPICE netlist\&.
 .PP
 \fBProperties\fR
 .PP
-Readable: -Name, -Value
+Readable: -name, -value
 .PP
-Writable: -Name, -Value
+Writable: -name, -value
 .PP
 \fBSuperclasses\fR
 .PP
@@ -1517,7 +1517,7 @@ Creates include string for SPICE netlist\&.
 .PP
 \fBReturn value\fR
 .PP
-\'\&.include \fI$Value\fP'
+\'\&.include \fI$value\fP'
 .PP
 .RS -4n
 \fBKeyArgsBuilder\fR (::SpiceGenTcl)
@@ -1599,9 +1599,9 @@ Creates library string for SPICE netlist\&.
 .PP
 \fBProperties\fR
 .PP
-Readable: -LibValue, -Name, -Value
+Readable: -libvalue, -name, -value
 .PP
-Writable: -LibValue, -Name, -Value
+Writable: -libvalue, -name, -value
 .PP
 \fBSuperclasses\fR
 .PP
@@ -1646,7 +1646,7 @@ Creates library string for SPICE netlist\&.
 .PP
 \fBReturn value\fR
 .PP
-\'\&.lib \fI$Value\fP \fI$LibValue\fP'
+\'\&.lib \fI$value\fP \fI$libvalue\fP'
 .PP
 .RS -4n
 \fBModel\fR (::SpiceGenTcl)
@@ -1682,9 +1682,9 @@ Sets (or change) value of particular parameters\&.
 .PP
 \fBProperties\fR
 .PP
-Readable: -Name, -Type
+Readable: -name, -type
 .PP
-Writable: -Name, -Type
+Writable: -name, -type
 .PP
 \fBSuperclasses\fR
 .PP
@@ -1722,7 +1722,7 @@ params
 Not documented\&.
 .TP
 instParams
-List of instance parameters in form {{Name Value ?-pos|eq|poseq?} {Name Value ?-pos|eq|poseq?} {Name Value ?-pos|eq|poseq?} \&.\&.\&.}
+List of instance parameters in form {{name value ?-pos|eq|poseq?} {name value ?-pos|eq|poseq?} {name value ?-pos|eq|poseq?} \&.\&.\&.}
 .RE
 .PP
 \fBDescription\fR
@@ -1778,7 +1778,7 @@ Creates model string for SPICE netlist\&.
 .PP
 \fBReturn value\fR
 .PP
-string '\&.model \fI$Name\fP \fI$Type\fP \fI$Params\fP'
+string '\&.model \fI$name\fP \fI$type\fP \fI$Params\fP'
 .PP
 .RS -4n
 \fBgetParams\fR (::SpiceGenTcl::Model)
@@ -1844,9 +1844,9 @@ Gets particular element object reference by its name\&.
 .PP
 \fBProperties\fR
 .PP
-Readable: -Name
+Readable: -name
 .PP
-Writable: -Name
+Writable: -name
 .PP
 \fBSuperclasses\fR
 .PP
@@ -1991,9 +1991,9 @@ Sets (or change) value of particular parameters\&.
 .PP
 \fBProperties\fR
 .PP
-Readable: -Name
+Readable: -name
 .PP
-Writable: -Name
+Writable: -name
 .PP
 \fBSuperclasses\fR
 .PP
@@ -2018,7 +2018,7 @@ Creates object of class Options\&.
 .RS 4n
 .TP
 params
-List of instance parameters in form {{Name Value ?-sw?} {Name Value ?-sw?} {Name Value ?-sw?} \&.\&.\&.}
+List of instance parameters in form {{name value ?-sw?} {name value ?-sw?} {name value ?-sw?} \&.\&.\&.}
 .TP
 args
 Optional argument -name - represent name of library statement\&.
@@ -2128,9 +2128,9 @@ Creates string for SPICE netlist\&.
 .PP
 \fBProperties\fR
 .PP
-Readable: -Name, -Value
+Readable: -name, -value
 .PP
-Writable: -Name, -Value
+Writable: -name, -value
 .PP
 \fBSuperclasses\fR
 .PP
@@ -2165,7 +2165,7 @@ Value of the parameter\&.
 .PP
 Class models parameter that has a name and a value - the most
 common type of parameters in SPICE netlist\&. Its representation in netlist is
-\'Name=Value', and can be called "keyword parameter"\&.
+\'name=value', and can be called "keyword parameter"\&.
 .PP
 .RS -4n
 \fBgenSPICEString\fR (::SpiceGenTcl::Parameter)
@@ -2178,7 +2178,7 @@ Creates string for SPICE netlist\&.
 .PP
 \fBReturn value\fR
 .PP
-\'\fI$Name\fP=\fI$Value\fP'
+\'\fI$name\fP=\fI$value\fP'
 .PP
 .RS -4n
 \fBParameterDefault\fR (::SpiceGenTcl)
@@ -2202,9 +2202,9 @@ Resets value of the parameter to it's default value\&.
 .PP
 \fBProperties\fR
 .PP
-Readable: -DefValue, -Name, -Value
+Readable: -defvalue, -name, -value
 .PP
-Writable: -DefValue, -Name, -Value
+Writable: -defvalue, -name, -value
 .PP
 \fBSuperclasses\fR
 .PP
@@ -2268,9 +2268,9 @@ Creates string for SPICE netlist\&.
 .PP
 \fBProperties\fR
 .PP
-Readable: -Name, -Value
+Readable: -name, -value
 .PP
-Writable: -Name, -Value
+Writable: -name, -value
 .PP
 \fBSuperclasses\fR
 .PP
@@ -2317,7 +2317,7 @@ Creates string for SPICE netlist\&.
 .PP
 \fBReturn value\fR
 .PP
-\'\fI$Name\fP={\fI$Value\fP}'
+\'\fI$name\fP={\fI$value\fP}'
 .PP
 .RS -4n
 \fBParameterNoCheck\fR (::SpiceGenTcl)
@@ -2338,9 +2338,9 @@ See \fIParameter\&.genSPICEString\fP
 .PP
 \fBProperties\fR
 .PP
-Readable: -Name, -Value
+Readable: -name, -value
 .PP
-Writable: -Name, -Value
+Writable: -name, -value
 .PP
 \fBSuperclasses\fR
 .PP
@@ -2390,9 +2390,9 @@ Creates string for SPICE netlist\&.
 .PP
 \fBProperties\fR
 .PP
-Readable: -Name, -Value
+Readable: -name, -value
 .PP
-Writable: -Name, -Value
+Writable: -name, -value
 .PP
 \fBSuperclasses\fR
 .PP
@@ -2464,9 +2464,9 @@ Creates string for SPICE netlist\&.
 .PP
 \fBProperties\fR
 .PP
-Readable: -Name, -Value
+Readable: -name, -value
 .PP
-Writable: -Name, -Value
+Writable: -name, -value
 .PP
 \fBSuperclasses\fR
 .PP
@@ -2526,14 +2526,14 @@ configure
 Configure properties\&.
 .TP
 genSPICEString
-Creates string for SPICE netlist\&. Results: '\fI$Value\fP'
+Creates string for SPICE netlist\&. Results: '\fI$value\fP'
 .RE
 .PP
 \fBProperties\fR
 .PP
-Readable: -Name, -Value
+Readable: -name, -value
 .PP
-Writable: -Name, -Value
+Writable: -name, -value
 .PP
 \fBSuperclasses\fR
 .PP
@@ -2569,7 +2569,7 @@ Class models parameter the same as described by ParameterPositional but without 
 .RE
 .PP
 Creates string for SPICE netlist\&.
-Results: '\fI$Value\fP'
+Results: '\fI$value\fP'
 .RS 4n\fBOBJECT genSPICEString\fP
 .br
 .RE
@@ -2593,9 +2593,9 @@ Creates string for SPICE netlist\&.
 .PP
 \fBProperties\fR
 .PP
-Readable: -Name
+Readable: -name
 .PP
-Writable: -Name
+Writable: -name
 .PP
 \fBSuperclasses\fR
 .PP
@@ -2641,7 +2641,7 @@ Creates string for SPICE netlist\&.
 .PP
 \fBReturn value\fR
 .PP
-string '\fI$Name\fP'
+string '\fI$name\fP'
 .PP
 .RS -4n
 \fBParamStatement\fR (::SpiceGenTcl)
@@ -2677,9 +2677,9 @@ Sets (or change) value of particular parameters\&.
 .PP
 \fBProperties\fR
 .PP
-Readable: -Name
+Readable: -name
 .PP
-Writable: -Name
+Writable: -name
 .PP
 \fBSuperclasses\fR
 .PP
@@ -2704,7 +2704,7 @@ Creates object of class ParamStatement\&.
 .RS 4n
 .TP
 params
-List of instance parameters in form {{Name Value} {Name Value} {Name Equation -eq} \&.\&.\&.}
+List of instance parameters in form {{name value} {name value} {name equation -eq} \&.\&.\&.}
 .TP
 args
 Optional argument -name - represent name of library statement\&.
@@ -2815,14 +2815,14 @@ genSPICEString
 Creates string for SPICE netlist\&.
 .TP
 unsetNodeName
-Makes pin floating by setting NodeName with empty string\&.
+Makes pin floating by setting nodename with empty string\&.
 .RE
 .PP
 \fBProperties\fR
 .PP
-Readable: -Name, -NodeName
+Readable: -name, -nodename
 .PP
-Writable: -Name, -NodeName
+Writable: -name, -nodename
 .PP
 \fBSuperclasses\fR
 .PP
@@ -2885,13 +2885,13 @@ Creates string for SPICE netlist\&.
 .PP
 \fBReturn value\fR
 .PP
-string '\fI\fI$NodeName\fP\fP'
+string '\fI\fI$nodename\fP\fP'
 .PP
 .RS -4n
 \fBunsetNodeName\fR (::SpiceGenTcl::Pin)
 .RE
 .PP
-Makes pin floating by setting NodeName with empty string\&.
+Makes pin floating by setting nodename with empty string\&.
 .RS 4n\fBOBJECT unsetNodeName\fP
 .br
 .RE
@@ -3113,9 +3113,9 @@ Creates raw string for SPICE netlist\&.
 .PP
 \fBProperties\fR
 .PP
-Readable: -Name, -Value
+Readable: -name, -value
 .PP
-Writable: -Name, -Value
+Writable: -name, -value
 .PP
 \fBSuperclasses\fR
 .PP
@@ -3160,7 +3160,7 @@ Creates raw string for SPICE netlist\&.
 .PP
 \fBReturn value\fR
 .PP
-string '\fI$Value\fP'
+string '\fI$value\fP'
 .PP
 .RS -4n
 \fBSimulator\fR (::SpiceGenTcl)
@@ -3187,9 +3187,9 @@ Runs simulation\&.
 .PP
 \fBProperties\fR
 .PP
-Readable: -Command, -Data, -Log, -Name
+Readable: -Command, -data, -log, -name
 .PP
-Writable: -Command, -Data, -Log, -Name
+Writable: -Command, -data, -log, -name
 .PP
 \fBSubclasses\fR
 .PP
@@ -3275,7 +3275,7 @@ constructor
 Constructor for the class\&.
 .TP
 add
-Add element object reference to Netlist, it extends add method to add check of element class because subcircuit can't contain particular elements inside, like Include, Library, Options and Analysis\&.
+Add element object reference to Netlist, it extends add method to add check of element class because subcircuit can't contain particular elements inside, like \fI::SpiceGenTcl::Include\fP, \fI::SpiceGenTcl::Library\fP, \fI::SpiceGenTcl::Options\fP and \fI::SpiceGenTcl::Analysis\fP\&.
 .TP
 addParam
 Adds new parameter to subcircuit, and throws error on dublicated names\&.
@@ -3313,9 +3313,9 @@ Sets (or change) value of particular parameters\&.
 .PP
 \fBProperties\fR
 .PP
-Readable: -Name
+Readable: -name
 .PP
-Writable: -Name
+Writable: -name
 .PP
 \fBSuperclasses\fR
 .PP
@@ -3342,7 +3342,7 @@ pins
 List of pins in the order they appear in SPICE subcircuits definition together in form: {pinName0 pinName1 pinName2 \&.\&.\&.}
 .TP
 params
-List of input parameters in form {{Name Value} {Name Value} {Name Value} \&.\&.\&.}
+List of input parameters in form {{name value} {name value} {name value} \&.\&.\&.}
 .RE
 .PP
 \fBDescription\fR
@@ -3355,7 +3355,8 @@ inside subcircuit, together with header and connection of elements inside\&.
 .RE
 .PP
 Add element object reference to Netlist, it extends add method to add check of element class because
-subcircuit can't contain particular elements inside, like Include, Library, Options and Analysis\&.
+subcircuit can't contain particular elements inside, like \fI::SpiceGenTcl::Include\fP,
+\fI::SpiceGenTcl::Library\fP, \fI::SpiceGenTcl::Options\fP and \fI::SpiceGenTcl::Analysis\fP\&.
 .RS 4n\fBOBJECT add\fP \fIelement\fP
 .br
 .RE
@@ -3479,9 +3480,9 @@ Creates \&.temp statement string for SPICE netlist\&.
 .PP
 \fBProperties\fR
 .PP
-Readable: -Name, -Value
+Readable: -name, -value
 .PP
-Writable: -Name, -Value
+Writable: -name, -value
 .PP
 \fBSuperclasses\fR
 .PP
@@ -3523,7 +3524,7 @@ Creates \&.temp statement string for SPICE netlist\&.
 .PP
 \fBReturn value\fR
 .PP
-\'\&.temp \fI$Value\fP'
+\'\&.temp \fI$value\fP'
 .PP
 .RS -4n
 \fBTrace\fR (::SpiceGenTcl)
@@ -3553,9 +3554,9 @@ See \fIDataset\&.setDataPoints\fP
 .PP
 \fBProperties\fR
 .PP
-Readable: -Axis, -Len, -Name, -NumType, -Type
+Readable: -Axis, -Len, -NumType, -Type, -name
 .PP
-Writable: -Axis, -Len, -Name, -NumType, -Type
+Writable: -Axis, -Len, -NumType, -Type, -name
 .PP
 \fBSuperclasses\fR
 .PP

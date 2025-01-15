@@ -75,7 +75,7 @@ $circuit add [Ac new -variation oct -n 100 -fstart 250e3 -fstop 10e6]
 #set simulator with default 
 set simulator [Batch new {batch1}]
 # attach simulator object to circuit
-$circuit configure -Simulator $simulator
+$circuit configure -simulator $simulator
 
 # simulate typical values bandwidth
 

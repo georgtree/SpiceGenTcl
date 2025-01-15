@@ -385,7 +385,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
                         '::SpiceGenTcl::Subcircuit'"
             }
             # get name of subcircuit
-            set subName [$subcktObj configure -Name] 
+            set subName [$subcktObj configure -name] 
             # get pins names of subcircuit
             set pinsNames [dict keys [$subcktObj getPins]]
             # check if number of pins in subcircuit definition matchs the number of supplied nodes

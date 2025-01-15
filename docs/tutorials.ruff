@@ -272,7 +272,7 @@ namespace eval Tutorials {
         # set simulator with default 
         set simulator [Batch new {batch1}]
         # attach simulator object to circuit
-        $circuit configure -Simulator $simulator
+        $circuit configure -simulator $simulator
         ```
         
         The only thing left is to set the temperature value in the [::SpiceGenTcl::Temp] class object, run the circuit,
@@ -280,7 +280,7 @@ namespace eval Tutorials {
         ```tcl
         # run circuit, change temperature, read log and data
         foreach temp $temps {
-            $tempSt configure -Value $temp
+            $tempSt configure -value $temp
             $circuit runAndRead
             puts [$circuit getLog]
             set data [$circuit getDataDict]
@@ -382,7 +382,7 @@ namespace eval Tutorials {
         #set simulator with default 
         set simulator [BatchLiveLog new {batch1}]
         # attach simulator object to circuit
-        $circuit configure -Simulator $simulator
+        $circuit configure -simulator $simulator
         # loop in which we run simulation, change reverse bias and read the results
         foreach volt $voltSweep {
             #set reverse voltage bias
@@ -477,7 +477,7 @@ namespace eval Tutorials {
         #set simulator with default 
         set simulator [Batch new {batch1}]
         # attach simulator object to circuit
-        $circuit configure -Simulator $simulator
+        $circuit configure -simulator $simulator
         # run circuit, read log and data
         $circuit runAndRead
         # get data object
@@ -562,7 +562,7 @@ namespace eval Tutorials {
         #set simulator with default temporary directory
         set simulator [BatchLiveLog new {batch1}]
         # attach simulator object to circuit
-        $circuit configure -Simulator $simulator
+        $circuit configure -simulator $simulator
         # run circuit, read log and data
         $circuit runAndRead
         # get data object
@@ -764,7 +764,7 @@ namespace eval Tutorials {
         #set simulator with default temporary directory
         set simulator [BatchLiveLog new {batch1}]
         # attach simulator object to circuit
-        $circuit configure -Simulator $simulator
+        $circuit configure -simulator $simulator
         # run circuit, read log and data
         $circuit runAndRead
         ```
@@ -860,7 +860,7 @@ namespace eval Tutorials {
         ```tcl
         set simulator [BatchLiveLog new {batch1}]
         # attach simulator object to circuit
-        $circuit configure -Simulator $simulator
+        $circuit configure -simulator $simulator
         $circuit runAndRead
         # get data object
         set data [$circuit getDataDict]

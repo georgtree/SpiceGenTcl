@@ -37,7 +37,7 @@ $circuit add [Sp new -variation lin -n 500 -fstart 10meg -fstop 200meg]
 #set simulator with default 
 set simulator [BatchLiveLog new {batch1}]
 # attach simulator object to circuit
-$circuit configure -Simulator $simulator
+$circuit configure -simulator $simulator
 $circuit runAndRead
 # get data object
 set data [$circuit getDataDict]

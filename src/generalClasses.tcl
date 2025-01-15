@@ -65,7 +65,7 @@ namespace eval ::SpiceGenTcl {
         self mixin -append oo::abstract
         # Abstract class of all elements of SPICE netlist
         #  and it forces implementation of genSPICEString method for all subclasses.
-        variable Name
+        variable name
         method genSPICEString {} {
             # Declaration of method common for all SPICE elements that generates 
             #  representation of element in SPICE netlist. Not implemented in
@@ -138,23 +138,23 @@ namespace eval ::SpiceGenTcl {
     oo::configurable create Pin {
         superclass SPICEElement
         # name of the node connected to pin
-        property NodeName -set {
+        property nodename -set {
             if {[regexp {[^A-Za-z0-9_]+} $value]} {
                 return -code error "Node name '${value}' is not a valid name"
             }
-            set NodeName [string tolower $value]
+            set nodename [string tolower $value]
         }
-        property Name -set {
+        property name -set {
             if {$value==""} {
                 return -code error "Pin must have a name, empty string was provided"
             } elseif {[regexp {[^A-Za-z0-9_]+} $value]} {
                 return -code error "Pin name '$value' is not a valid name"
             }
-            set Name [string tolower $value]
+            set name [string tolower $value]
         } -get {
-            return $Name
+            return $name
         }
-        variable Name NodeName
+        variable name nodename
         constructor {name nodeName} {
             # Creates object of class `Pin` with name and connected node
             #  name - name of the pin
@@ -168,17 +168,16 @@ namespace eval ::SpiceGenTcl {
             # if is contains empty string it is floating.
             # Floating pin can't be netlisted, so it throws error when try to
             # do so. Set pin name empty by special method `unsetNodeName`.
-            my configure -Name $name
-            my configure -NodeName $nodeName
+            my configure -name $name -nodename $nodeName
         }
         method unsetNodeName {} {
-            # Makes pin floating by setting `NodeName` with empty string.
-            my configure -NodeName {}
+            # Makes pin floating by setting `nodename` with empty string.
+            my configure -nodename {}
         }
         method checkFloating {} {
             # Determines if pin is connected to the node.
             # Returns: `true` if connected and `false` if not
-            if {[my configure -NodeName]=={}} {
+            if {[my configure -nodename]=={}} {
                 set floating true
             } else {
                 set floating false
@@ -187,11 +186,11 @@ namespace eval ::SpiceGenTcl {
         }
         method genSPICEString {} {
             # Creates string for SPICE netlist.
-            # Returns: string '*$NodeName*'
+            # Returns: string '*$nodename*'
             if {[my checkFloating]=="true"} {
-                return -code error "Pin '[my configure -Name]' is not connected to the node so can't be netlisted"
+                return -code error "Pin '[my configure -name]' is not connected to the node so can't be netlisted"
             }
-            return "[my configure -NodeName]"
+            return "[my configure -nodename]"
         }
     }
     
@@ -199,18 +198,18 @@ namespace eval ::SpiceGenTcl {
 
     oo::configurable create ParameterSwitch {
         superclass SPICEElement
-        property Name -set {
+        property name -set {
             if {$value==""} {
                 return -code error "Parameter must have a name, empty string was provided"
             } elseif {[regexp {[^A-Za-z0-9_]+} $value]} {
                 return -code error "Parameter name '$value' is not a valid name"
             } elseif {[regexp {^[A-Za-z][A-Za-z0-9_]*} $value]} {
-                set Name [string tolower $value]
+                set name [string tolower $value]
             } else {
                 return -code error "Parameter name '$value' is not a valid name"
             }
         }
-        variable Name
+        variable name
         constructor {name} {
             # Creates object of class `ParameterSwitch` with parameter name.
             #  name - name of the parameter
@@ -218,12 +217,12 @@ namespace eval ::SpiceGenTcl {
             # its presence gives us information that something it controls is on.
             # This parameter doesn't have a value, and it is the most basic class
             # in Parameter class family.
-            my configure -Name $name
+            my configure -name $name
         }
         method genSPICEString {} {
             # Creates string for SPICE netlist.
-            # Returns: string '$Name'
-            return "[my configure -Name]"
+            # Returns: string '$name'
+            return "[my configure -name]"
         }
     }
     
@@ -231,45 +230,47 @@ namespace eval ::SpiceGenTcl {
 
     oo::configurable create Parameter {
         superclass ParameterSwitch 
-        property Value -set {
-            if {[string is double -strict $value]} {
-                set Value $value
-            } else {
-                if {[string tolower [string range $value end-2 end]]=={meg}} {
-                    if {[string is double -strict [string range $value 0 end-3]]} {
-                        set Value [string tolower $value]
-                    } else {
-                        return -code error "Value '$value' is not a valid value"
-                    } 
-                } else {
-                    set suffix [string tolower [string index $value end]]
-                    if {$suffix in {f p n u m k g t}} {
-                        if {[string is double -strict [string range $value 0 end-1]]} {
-                            set Value [string tolower $value]
-                        } else {
-                            return -code error "Value '$value' is not a valid value"
-                        } 
-                    } else {
-                        return -code error "Value '$value' is not a valid value"
-                    }
-                }
-            }
-        }
-        variable Value
+        property value
         constructor {name value} {
             # Creates object of class `Parameter` with parameter name and value.
             #  name - name of the parameter
             #  value - value of the parameter
             # Class models parameter that has a name and a value - the most
             # common type of parameters in SPICE netlist. Its representation in netlist is
-            # 'Name=Value', and can be called "keyword parameter".
-            my configure -Name $name
-            my configure -Value $value
+            # 'name=value', and can be called "keyword parameter".
+            my configure -name $name -value $value
         }
         method genSPICEString {} {
             # Creates string for SPICE netlist.
-            # Returns: '$Name=$Value'
-            return "[my configure -Name]=[my configure -Value]"
+            # Returns: '$name=$value'
+            return "[my configure -name]=[my configure -value]"
+        }
+    }
+    oo::define Parameter {
+        variable value
+        method <WriteProp-value> val {
+            if {[string is double -strict $val]} {
+                set value $val
+            } else {
+                if {[string tolower [string range $val end-2 end]]=={meg}} {
+                    if {[string is double -strict [string range $val 0 end-3]]} {
+                        set value [string tolower $val]
+                    } else {
+                        return -code error "Value '$val' is not a valid value"
+                    } 
+                } else {
+                    set suffix [string tolower [string index $val end]]
+                    if {$suffix in {f p n u m k g t}} {
+                        if {[string is double -strict [string range $val 0 end-1]]} {
+                            set value [string tolower $val]
+                        } else {
+                            return -code error "Value '$val' is not a valid value"
+                        } 
+                    } else {
+                        return -code error "Value '$val' is not a valid value"
+                    }
+                }
+            }
         }
     }
 
@@ -277,13 +278,7 @@ namespace eval ::SpiceGenTcl {
 
     oo::configurable create ParameterNoCheck {
         superclass Parameter
-        property Value -set {
-            if {$value==""} {
-                return -code error "Value '$value' is not a valid value"
-            } 
-            set Value $value
-        }
-        variable Value
+        property value
         constructor {name value} {
             # Creates object of class `ParameterNoCheck` with parameter name and value.
             #  name - name of the parameter
@@ -291,7 +286,16 @@ namespace eval ::SpiceGenTcl {
             # Class models parameter the same as described by `Parameter` but without check for value form.
             next $name $value
         }
-    }    
+    }
+    oo::define ParameterNoCheck {
+        variable value
+        method <WriteProp-value> val {
+            if {$val==""} {
+                return -code error "Value '$val' is not a valid value"
+            } 
+            set value $val
+        }
+    }
     
 ###  ParameterPositional class definition 
 
@@ -312,7 +316,7 @@ namespace eval ::SpiceGenTcl {
         method genSPICEString {} {
             # Creates string for SPICE netlist.
             # Returns: '$Value'
-            return "[my configure -Value]"
+            return "[my configure -value]"
         }
     }
     
@@ -320,13 +324,7 @@ namespace eval ::SpiceGenTcl {
 
     oo::configurable create ParameterPositionalNoCheck {
         superclass ParameterPositional
-        property Value -set {
-            if {$value==""} {
-                return -code error "Value '$value' is not a valid value"
-            } 
-            set Value $value
-        }
-        variable Value
+        property value
         constructor {name value} {
             # Creates object of class `ParameterPositionalNoCheck`.
             #  name - name of parameter
@@ -336,8 +334,17 @@ namespace eval ::SpiceGenTcl {
         }
         method genSPICEString {} {
             # Creates string for SPICE netlist.
-            # Results: '$Value'
-            return "[my configure -Value]"
+            # Results: '$value'
+            return "[my configure -value]"
+        }
+    }
+    oo::define ParameterPositionalNoCheck {
+        variable value
+        method <WriteProp-value> val {
+            if {$val==""} {
+                return -code error "Value '$val' is not a valid value"
+            } 
+            set value $val
         }
     }
     
@@ -345,13 +352,13 @@ namespace eval ::SpiceGenTcl {
 
     oo::configurable create ParameterDefault {
         superclass Parameter
-        property DefValue -set {
+        property defvalue -set {
             if {[string is double -strict $value]} {
-                set DefValue $value
+                set defvalue $value
             } else {
                 if {[string tolower [string range $value end-2 end]]=={meg}} {
                     if {[string is double -strict [string range $value 0 end-3]]} {
-                        set DefValue [string tolower $value]
+                        set defvalue [string tolower $value]
                     } else {
                         return -code error "Default value '$value' is not a valid value"
                     } 
@@ -359,7 +366,7 @@ namespace eval ::SpiceGenTcl {
                     set suffix [string tolower [string index $value end]]
                     if {$suffix in {f p n u m k g t}} {
                         if {[string is double -strict [string range $value 0 end-1]]} {
-                            set DefValue [string tolower $value]
+                            set defvalue [string tolower $value]
                         } else {
                             return -code error "Default value '$value' is not a valid value"
                         } 
@@ -369,7 +376,7 @@ namespace eval ::SpiceGenTcl {
                 }
             }
         }
-        variable DefValue Value
+        variable defvalue
         constructor {name value defValue} {
             # Creates object of class `ParameterDefault` with parameter name, value and default value.
             #  name - name of the parameter
@@ -378,13 +385,13 @@ namespace eval ::SpiceGenTcl {
             # Class models parameter that has a name and a value, but it differs from
             # parent class in sense of having default value, so it has special ability to reset its value to default
             # value by special method `resetValue`.
-            my configure -DefValue $defValue
+            my configure -defvalue $defValue
             next $name $value
         }
         
         method resetValue {} {
             # Resets value of the parameter to it's default value.
-            my configure -Value [my configure -DefValue]
+            my configure -value [my configure -defvalue]
             return
         }
     }
@@ -393,14 +400,7 @@ namespace eval ::SpiceGenTcl {
 
     oo::configurable create ParameterEquation {
         superclass Parameter
-        property Value -set {
-            if {$value!=""} {
-                set Value $value
-            } else {
-                return -code error "Parameter '[my configure -Name]' equation can't be empty"
-            }
-        }
-        variable Value
+        property value
         constructor {name value} {
             # Creates object of class `ParameterEquation` with parameter name and value as an equation.
             #  name - name of the parameter
@@ -411,10 +411,20 @@ namespace eval ::SpiceGenTcl {
         }
         method genSPICEString {} {
             # Creates string for SPICE netlist.
-            # Returns: '$Name={$Value}'
-            return "[my configure -Name]=\{[my configure -Value]\}"
+            # Returns: '$name={$value}'
+            return "[my configure -name]=\{[my configure -value]\}"
         }
-    }  
+    }
+    oo::define ParameterEquation {
+        variable value
+        method <WriteProp-value> val {
+            if {$val!=""} {
+                set value $val
+            } else {
+                return -code error "Parameter '[my configure -name]' equation can't be empty"
+            }
+        }
+    }
 
 ###  ParameterPositionalEquation class definition 
 
@@ -432,7 +442,7 @@ namespace eval ::SpiceGenTcl {
         method genSPICEString {} {
             # Creates string for SPICE netlist.
             # Returns: '{$paramValue}'
-            return "\{[my configure -Value]\}"
+            return "\{[my configure -value]\}"
         }
     }
     
@@ -441,16 +451,16 @@ namespace eval ::SpiceGenTcl {
     oo::configurable create Device {
         superclass SPICEElement
         mixin DuplChecker
-        property Name -set {
+        property name -set {
             if {[regexp {[^A-Za-z0-9_]+} $value]} {
                 return -code error "Reference name '$value' is not a valid name"
             } elseif {[regexp {^[A-Za-z][A-Za-z0-9]+} $value]} {
-                set Name [string tolower $value]
+                set name [string tolower $value]
             } else {
                 return -code error "Reference name '$value' is not a valid name"
             }
         }
-        variable Name
+        variable name
         # list of Pin objects references
         variable Pins
         # list of Parameter objects references
@@ -477,7 +487,7 @@ namespace eval ::SpiceGenTcl {
             # This class accept definition that contains elements listed above, and generates classes: Pin, Parameter, 
             # PositionalParameter with compositional relationship (has a).
             
-            my configure -Name $name
+            my configure -name $name
             # create Pins objects
             foreach pin $pins {
                 my AddPin [@ $pin 0] [@ $pin 1]
@@ -487,8 +497,8 @@ namespace eval ::SpiceGenTcl {
             #  optional flags:
             #  - pos - parameter has strict position and only '$Value' is displayed in netlist
             #  - eq - parameter may contain equation in terms of functions and other parsmeters,
-            #    printed as '$Name={$Equation}'
-            #  - poseq - combination of both flags, print only '{$Equation}'
+            #    printed as '$name={$equation}'
+            #  - poseq - combination of both flags, print only '{$equation}'
             if {$params!=""} {
                 foreach param $params {
                     if {[@ $param 2]=={}} {
@@ -509,7 +519,7 @@ namespace eval ::SpiceGenTcl {
             # Returns: parameters dictionary
             set tempDict [dcreate]
             dict for {pinName pin} $Pins {
-                dict append tempDict $pinName [$pin configure -NodeName]
+                dict append tempDict $pinName [$pin configure -nodename]
             }
             return $tempDict
         }
@@ -520,12 +530,12 @@ namespace eval ::SpiceGenTcl {
             #  nodeName - name of the node that we want connect to pin
             set error [catch {dget $Pins $pinName}]
             if {$error>0} {
-                return -code error "Pin with name '$pinName' was not found in device's '[my configure -Name]'\
+                return -code error "Pin with name '$pinName' was not found in device's '[my configure -name]'\
                         list of pins '[dict keys [my getPins]]'"
             } else {
                 set pin [dget $Pins $pinName]
             }
-            $pin configure -NodeName $nodeName
+            $pin configure -nodename $nodeName
             return
         }
         method setParamValue {args} {
@@ -540,11 +550,11 @@ namespace eval ::SpiceGenTcl {
                 set paramValue [@ $args [= {$i+1}]]
                 if {[catch {dget $Params $paramName}]} {
                     return -code error "Parameter with name '$paramName' was not found in element's\
-                            '[my configure -Name]' list of parameters '[dict keys [my getParams]]'"
+                            '[my configure -name]' list of parameters '[dict keys [my getParams]]'"
                 } else {
                     set param [dget $Params $paramName]
                 }
-                $param configure -Value $paramValue
+                $param configure -value $paramValue
             }
             return
         }
@@ -610,7 +620,7 @@ namespace eval ::SpiceGenTcl {
             set paramName [string tolower $paramName]
             set error [catch {dget $Params $paramName}]
             if {$error>0} {
-                return -code error "Parameter with name '$paramName' was not found in device's '[my configure -Name]'\
+                return -code error "Parameter with name '$paramName' was not found in device's '[my configure -name]'\
                         list of parameters '[dict keys [my getParams]]'"
             } else {
                 set Params [dict remove $Params $paramName]
@@ -623,7 +633,7 @@ namespace eval ::SpiceGenTcl {
             set floatingPins {}
             dict for {pinName pin} $Pins {
                 if {[$pin checkFloating]=="true"} {
-                    lappend floatingPins [$pin configure -Name]
+                    lappend floatingPins [$pin configure -name]
                 }
             }
             return $floatingPins
@@ -634,7 +644,7 @@ namespace eval ::SpiceGenTcl {
             # Returns: parameters dictionary
             set tempDict [dcreate]
             dict for {paramName param} $Params {
-                dict append tempDict $paramName [$param configure -Value]
+                dict append tempDict $paramName [$param configure -value]
             }
             return $tempDict
         }
@@ -646,18 +656,18 @@ namespace eval ::SpiceGenTcl {
                 if {$error!=1} {
                     lappend nodes [$pin genSPICEString]
                 } else {
-                    return -code error "Device '[my configure -Name]' can't be netlisted because '$pinName' pin is\
+                    return -code error "Device '[my configure -name]' can't be netlisted because '$pinName' pin is\
                             floating"
                 }
             }
             if {($Params=="") || ([info exists Params]==0)} {
                 lappend params ""
-                return "[my configure -Name] [join $nodes]"
+                return "[my configure -name] [join $nodes]"
             } else {
                 dict for {paramName param} $Params {
                     lappend params [$param genSPICEString]
                 }
-                return "[my configure -Name] [join $nodes] [join $params]"
+                return "[my configure -name] [join $nodes] [join $params]"
             }
         }
     }
@@ -667,38 +677,37 @@ namespace eval ::SpiceGenTcl {
     oo::configurable create Model {
         superclass SPICEElement
         mixin DuplChecker
-        property Name -set {
+        property name -set {
             if {$value==""} {
                 return -code error "Model must have a name, empty string was provided"
             } elseif {[regexp {[^A-Za-z0-9_]+} $value]} {
                 return -code error "Model name '$value' is not a valid name"
             } else {
-                set Name [string tolower $value]
+                set name [string tolower $value]
             }
         }
-        property Type -set {
+        property type -set {
             if {$value==""} {
                 return -code error "Model must have a type, empty string was provided"
             } elseif {[regexp {[^A-Za-z0-9]+} $value]} {
                 return -code error "Model type '$value' is not a valid type"
             } else {
-                set Type [string tolower $value]
+                set type [string tolower $value]
             }
         }
-        variable Name
+        variable name
         # type of the model
-        variable Type
+        variable type
         # list of model parameters objects
         variable Params
         constructor {name type params} {
             # Creates object of class `Model`.
             #  name - name of the model
             #  type - type of model, for example, diode, npn, etc
-            #  instParams - list of instance parameters in form `{{Name Value ?-pos|eq|poseq?}
-            #   {Name Value ?-pos|eq|poseq?} {Name Value ?-pos|eq|poseq?} ...}`
+            #  instParams - list of instance parameters in form `{{name value ?-pos|eq|poseq?}
+            #   {name value ?-pos|eq|poseq?} {name value ?-pos|eq|poseq?} ...}`
             # Class represents model card in SPICE netlist.
-            my configure -Name $name
-            my configure -Type $type
+            my configure -name $name -type $type
             # create Params objects
             if {$params!=""} {
                 foreach param $params {
@@ -724,15 +733,15 @@ namespace eval ::SpiceGenTcl {
         method getParams [@ $def 0] [@ $def 1]  
         method genSPICEString {} {
             # Creates model string for SPICE netlist.
-            # Returns: string '.model $Name $Type $Params'
+            # Returns: string '.model $name $type $Params'
             if {($Params=="") || ([info exists Params]==0)} {
                 lappend params ""
-                return ".model [my configure -Name] [my configure -Type]"
+                return ".model [my configure -name] [my configure -type]"
             } else {
                 dict for {paramName param} $Params {
                     lappend params [$param genSPICEString]
                 }
-                return ".model [my configure -Name] [my configure -Type]([join $params])"
+                return ".model [my configure -name] [my configure -type]([join $params])"
             }
         }
     }
@@ -741,15 +750,13 @@ namespace eval ::SpiceGenTcl {
 
     oo::configurable create RawString {
         superclass SPICEElement
-        property Name -set {
-            set Name [string tolower $value]
+        property name -set {
+            set name [string tolower $value]
         }
-        property Value -set {
-            set Value $value
-        }
-        variable Name
+        property value
+        variable name
         # value of the raw string
-        variable Value
+        variable value
         constructor {value args} {
             # Creates object of class `RawString`.
             #  value - value of the raw string
@@ -760,16 +767,16 @@ namespace eval ::SpiceGenTcl {
                 -name=
             }]
             if {[info exists name]} {
-                my configure -Name $name
+                my configure -name $name
             } else {
-                my configure -Name [self object]
+                my configure -name [self object]
             }
-            my configure -Value $value
+            my configure -value $value
         }
         method genSPICEString {} {
             # Creates raw string for SPICE netlist.
-            # Returns: string '$Value'
-            return [my configure -Value]
+            # Returns: string '$value'
+            return [my configure -value]
         }
     }
 
@@ -786,16 +793,16 @@ namespace eval ::SpiceGenTcl {
                 -name=
             }]
             if {[info exists name]} {
-                my configure -Name $name
+                my configure -name $name
             } else {
-                my configure -Name [self object]
+                my configure -name [self object]
             }
-            my configure -Value $value
+            my configure -value $value
         }
         method genSPICEString {} {
             # Creates comment string for SPICE netlist.
-            # Returns: string '*$Value'
-            set splitted [split [my configure -Value] "\n"]
+            # Returns: string '$value'
+            set splitted [split [my configure -value] "\n"]
             set prepared [join [lmap line $splitted {set result "*$line"}] \n]
             return $prepared
         }
@@ -814,16 +821,16 @@ namespace eval ::SpiceGenTcl {
                 -name=
             }]
             if {[info exists name]} {
-                my configure -Name $name
+                my configure -name $name
             } else {
-                my configure -Name [self object]
+                my configure -name [self object]
             }
-            my configure -Value $value
+            my configure -value $value
         }
         method genSPICEString {} {
             # Creates include string for SPICE netlist.
-            # Returns: '.include $Value'
-            return ".include [my configure -Value]"
+            # Returns: '.include $value'
+            return ".include [my configure -value]"
         }
     }   
     
@@ -832,10 +839,10 @@ namespace eval ::SpiceGenTcl {
     oo::configurable create Library {
         superclass RawString
         # this variable contains selected library name inside sourced file
-        property LibValue -set {
-            set LibValue [string tolower $value]
+        property libvalue -set {
+            set libvalue [string tolower $value]
         }
-        variable LibValue
+        variable libvalue
         constructor {value libValue args} {
             # Creates object of class `Library`.
             #  value - value of the include file
@@ -846,17 +853,16 @@ namespace eval ::SpiceGenTcl {
                 -name=
             }]
             if {[info exists name]} {
-                my configure -Name $name
+                my configure -name $name
             } else {
-                my configure -Name [self object]
+                my configure -name [self object]
             }
-            my configure -Value $value
-            my configure -LibValue $libValue
+            my configure -value $value -libvalue $libValue
         }
         method genSPICEString {} {
             # Creates library string for SPICE netlist.
-            # Returns: '.lib $Value $LibValue'
-            return ".lib [my configure -Value] [my configure -LibValue]"
+            # Returns: '.lib $value $libvalue'
+            return ".lib [my configure -value] [my configure -libvalue]"
         }
     }   
     
@@ -865,26 +871,26 @@ namespace eval ::SpiceGenTcl {
     oo::configurable create Options {
         superclass SPICEElement
         mixin DuplChecker
-        property Name -set {
-            set Name [string tolower $value]
+        property name -set {
+            set name [string tolower $value]
         }
-        variable Name
+        variable name
         # list of Parameter objects
         variable Params
         constructor {params args} {
             # Creates object of class `Options`.
             #  name - name of the parameter
-            #  params - list of instance parameters in form `{{Name Value ?-sw?} {Name Value ?-sw?}
-            #   {Name Value ?-sw?} ...}`
+            #  params - list of instance parameters in form `{{name value ?-sw?} {name value ?-sw?}
+            #   {name value ?-sw?} ...}`
             #  args - optional argument -name - represent name of library statement
             # This class represent .options statement.
             set arguments [argparse {
                 -name=
             }]
             if {[info exists name]} {
-                my configure -Name $name
+                my configure -name $name
             } else {
-                my configure -Name [self object]
+                my configure -name [self object]
             }
             foreach param $params {
                 if {[@ $param 2]=={}} {
@@ -905,10 +911,10 @@ namespace eval ::SpiceGenTcl {
             set tempDict [dcreate]
             dict for {paramName param} $Params {
                 # check if parameter doesn't have value, it means that we return {} for switch parameter
-                if {[catch {$param configure -Value}]} {
+                if {[catch {$param configure -value}]} {
                     dict append tempDict $paramName ""
                 } else {
-                    dict append tempDict $paramName [$param configure -Value]
+                    dict append tempDict $paramName [$param configure -value]
                 }
             }
             return $tempDict
@@ -951,23 +957,23 @@ namespace eval ::SpiceGenTcl {
     oo::configurable create ParamStatement {
         superclass SPICEElement
         mixin DuplChecker
-        property Name -set {
-            set Name [string tolower $value]
+        property name -set {
+            set name [string tolower $value]
         }
-        variable Name
+        variable name
         variable Params
         constructor {params args} {
             # Creates object of class `ParamStatement`.
-            #  params - list of instance parameters in form `{{Name Value} {Name Value} {Name Equation -eq} ...}`
+            #  params - list of instance parameters in form `{{name value} {name value} {name equation -eq} ...}`
             #  args - optional argument -name - represent name of library statement
             # Class represent .param statement.
             set arguments [argparse {
                 -name=
             }]
             if {[info exists name]} {
-                my configure -Name $name
+                my configure -name $name
             } else {
-                my configure -Name [self object]
+                my configure -name [self object]
             }
             foreach param $params {
                 if {[@ $param 2]=={}} {
@@ -1022,23 +1028,13 @@ namespace eval ::SpiceGenTcl {
     
     oo::configurable create Temp {
         superclass SPICEElement
-        property Name -set {
-            set Name [string tolower $value]
+        property name -set {
+            set name [string tolower $value]
         }
-        property Value -set {
-            lassign $value value eq
-            if {$eq=="-eq"} {
-                my AddParam temp $value -eq
-            } elseif {$eq==""} {
-                my AddParam temp $value
-            } else {
-                return -code error "Wrong value '$eq' of qualifier"
-            }
-        } -get {
-            return [$Value configure -Value]
+        property value -get {
+            return [$value configure -value]
         }
-        variable Name
-        variable Value
+        variable name value
         constructor {value args} {
             # Creates object of class `Temp`.
             #  value - value of the temperature
@@ -1047,13 +1043,14 @@ namespace eval ::SpiceGenTcl {
             set arguments [argparse {
                 {-eq -boolean}
             }]
-            my configure -Name temp
+            #set [my varname value] $value
+            my configure -name temp
             if {$eq} {
                 my AddParam temp $value -eq
             } else {
                 my AddParam temp $value
-            }             
-        }       
+            }
+        }
         method AddParam {paramName value args} {
             # Adds temperature parameter.
             #  paramName - name of temperature parameter
@@ -1063,17 +1060,29 @@ namespace eval ::SpiceGenTcl {
                 {-eq -boolean} 
             }]
             if {$eq} {
-                set Value [::SpiceGenTcl::ParameterPositionalEquation new $paramName $value]
+                set [my varname value] [::SpiceGenTcl::ParameterPositionalEquation new $paramName $value]
             } else {
-                set Value [::SpiceGenTcl::ParameterPositional new $paramName $value]
+                set [my varname value] [::SpiceGenTcl::ParameterPositional new $paramName $value]
             }
             return
         }
         method genSPICEString {} {
             # Creates .temp statement string for SPICE netlist.
-            # Returns: '.temp $Value'
-            return ".temp [$Value genSPICEString]"
+            # Returns: '.temp $value'
+            return ".temp [$value genSPICEString]"
         }
+    }
+    oo::define Temp {
+        method <WriteProp-value> val {
+            lassign $val value eq
+            if {$eq=="-eq"} {
+                my AddParam temp $value -eq
+            } elseif {$eq==""} {
+                my AddParam temp $value
+            } else {
+                return -code error "Wrong value '$eq' of qualifier"
+            }
+        }    
     }
         
 ###  Netlist class definition 
@@ -1081,17 +1090,17 @@ namespace eval ::SpiceGenTcl {
     oo::configurable create Netlist {
         superclass SPICEElement
         mixin DuplChecker
-        property Name -set {
-            set Name [string tolower $value]
+        property name -set {
+            set name [string tolower $value]
         }
-        variable Name
+        variable name
         variable Elements
         constructor {name} {
             # Creates object of class `Netlist`.
             #  name - name of the netlist
             # Class implements netlist as a collection of SPICE elements. Any element that has SPICEElement
             # as a parent class can be added to Netlist, except Options and Analysis.
-            my configure -Name $name
+            my configure -name $name
         }
         method add {element} {
             # Adds elements object to Elements dictionary.
@@ -1102,15 +1111,15 @@ namespace eval ::SpiceGenTcl {
             } elseif {$elementClass=={::SpiceGenTcl::Analysis}} {
                 return -code error "Analysis element can't be included in general netlist, only top-level Circuit"
             }
-            set elemName [string tolower [$element configure -Name]]
+            set elemName [string tolower [$element configure -name]]
             if {[info exists Elements]} {
                 set elemList [my getAllElemNames]
             }
             lappend elemList $elemName
             if {[my duplListCheck $elemList]} {
-                return -code error "Netlist '[my configure -Name]' already contains element with name $elemName"
+                return -code error "Netlist '[my configure -name]' already contains element with name $elemName"
             }
-            dict append Elements [$element configure -Name] $element 
+            dict append Elements [$element configure -name] $element 
             return
         }
         method del {elemName} {
@@ -1119,7 +1128,7 @@ namespace eval ::SpiceGenTcl {
             set elemName [string tolower $elemName]
             set error [catch {dget $Elements $elemName}]
             if {$error>0} {
-                return -code error "Element with name '$elemName' was not found in netlist's '[my configure -Name]'\
+                return -code error "Element with name '$elemName' was not found in netlist's '[my configure -name]'\
                         list of elements"
             } else {
                 set Elements [dict remove $Elements $elemName]
@@ -1132,7 +1141,7 @@ namespace eval ::SpiceGenTcl {
             set elemName [string tolower $elemName]
             set error [catch {dget $Elements $elemName}]
             if {$error>0} {
-                return -code error "Element with name '$elemName' was not found in netlist's '[my configure -Name]'\
+                return -code error "Element with name '$elemName' was not found in netlist's '[my configure -name]'\
                         list of elements"
             } else {
                 set foundElem [dget $Elements $elemName]
@@ -1163,31 +1172,31 @@ namespace eval ::SpiceGenTcl {
     oo::configurable create Circuit {
         superclass Netlist
         # simulator object that run simulation
-        property Simulator
-        variable Simulator
+        property simulator
+        variable simulator
         # standard output of simulation
-        property Log
-        variable Log
+        property log
+        variable log
         # results of simulation in form of RawData object
-        property Data
-        variable Data
+        property data
+        variable data
         # flag that tells about Analysis element presence in Circuit
         variable ContainAnalysis
         constructor {name} {
             # Creates object of class `CircuitNetlist`.
             #  name - name of the tol-level circuit
-            # Class implements a top level netlist which is run in SPICE. We should add `Simulator`
-            # object reference to make it able to run simulation. Results of last simulation attached as `RawData`
-            # class object and can be retrieved by `getData` method.
+            # Class implements a top level netlist which is run in SPICE. We should add [::SpiceGenTcl::Simulator]
+            # object reference to make it able to run simulation. Results of last simulation attached as 
+            # [::SpiceGenTcl::RawData] class object and can be retrieved by [::SpiceGenTcl::Circuit::getData] method.
             next $name
         }
         method add {element} {
             # Adds elements object to Elements dictionary.
             #  element - element object reference
             my variable Elements
-            set elemName [string tolower [$element configure -Name]]
+            set elemName [string tolower [$element configure -name]]
             if {([info object class $element {::SpiceGenTcl::Analysis}]) && ([info exists ContainAnalysis])} {
-                return -code error "Netlist '[my configure -Name]' already contains Analysis element"
+                return -code error "Netlist '[my configure -name]' already contains Analysis element"
             } elseif {[info object class $element {::SpiceGenTcl::Analysis}]} {
                 set ContainAnalysis ""
             }
@@ -1196,9 +1205,9 @@ namespace eval ::SpiceGenTcl {
             }
             lappend elemList $elemName
             if {[my duplListCheck $elemList]} {
-                return -code error "Netlist '[my configure -Name]' already contains element with name $elemName"
+                return -code error "Netlist '[my configure -name]' already contains element with name $elemName"
             }
-            dict append Elements [$element configure -Name] $element 
+            dict append Elements [$element configure -name] $element 
             return
         }
         method del {elemName} {
@@ -1208,7 +1217,7 @@ namespace eval ::SpiceGenTcl {
             set elemName [string tolower $elemName]
             set error [catch {dget $Elements $elemName}]
             if {$error>0} {
-                return -code error "Element with name '$elemName' was not found in device's '[my configure -Name]'\
+                return -code error "Element with name '$elemName' was not found in device's '[my configure -name]'\
                         list of elements"
             } else {
                 set Elements [dict remove $Elements $elemName]
@@ -1225,7 +1234,7 @@ namespace eval ::SpiceGenTcl {
             set elemName [string tolower $elemName]
             set error [catch {dget $Elements $elemName}]
             if {$error>0} {
-                return -code error "Element with name '$elemName' was not found in netlist's '[my configure -Name]'\
+                return -code error "Element with name '$elemName' was not found in netlist's '[my configure -name]'\
                         list of elements"
             } else {
                 set foundElem [dget $Elements $elemName]
@@ -1234,47 +1243,46 @@ namespace eval ::SpiceGenTcl {
         }
         method detachSimulator {} {
             # Removes `Simulator` object reference from `Circuit`.
-            unset Simulator
+            unset simulator
             return
         }
         method getDataDict {} {
             # Method to get dictionary with raw data vectors.
             # Returns: dict with vectors data, keys - names of vectors
-            return [[my configure -Data] getTracesData]
+            return [[my configure -data] getTracesData]
         }
         method getDataCsv {args} {
             # Returns string with csv formatting containing all data
             #  -all - select all traces
             #  -traces - select names of traces to return
             #  -sep - separator of columns, default is comma
-            return [[my configure -Data] getTracesCsv {*}$args]
+            return [[my configure -data] getTracesCsv {*}$args]
         }
         method genSPICEString {} {
             # Creates circuit string for SPICE netlist.
             # Returns: 'circuit string'
             my variable Elements
-            lappend totalStr [my configure -Name]
+            lappend totalStr [my configure -name]
             dict for {elemName element} $Elements {
                 lappend totalStr [$element genSPICEString]
             }
             return [join $totalStr \n]
         }
         method runAndRead {args} {
-            # Invokes 'runAndRead', 'configure -Log' and 'configure -Data' methods from attached simulator.
+            # Invokes 'runAndRead', 'configure -log' and 'configure -data' methods from attached simulator.
             #  -nodelete - flag to forbid simulation file deletion
             set arguments [argparse {
                 -nodelete
             }]
-            if {[info exists Simulator]==0} {
-                return -code error "Simulator is not attached to '[my configure -Name]' circuit"
+            if {[info exists simulator]==0} {
+                return -code error "Simulator is not attached to '[my configure -name]' circuit"
             }
             if {[info exists nodelete]} {
-                $Simulator runAndRead [my genSPICEString] -nodelete
+                $simulator runAndRead [my genSPICEString] -nodelete
             } else {
-                $Simulator runAndRead [my genSPICEString]
+                $simulator runAndRead [my genSPICEString]
             }
-            my configure -Log [$Simulator configure -Log]
-            my configure -Data [$Simulator configure -Data]
+            my configure -log [$simulator configure -log] -data [$simulator configure -data]
         }
     }
     
@@ -1291,7 +1299,7 @@ namespace eval ::SpiceGenTcl {
             #  name - name of the subcircuit
             #  pins - list of pins in the order they appear in SPICE subcircuits definition together
             #   in form: `{pinName0 pinName1 pinName2 ...}`
-            #  params - list of input parameters in form `{{Name Value} {Name Value} {Name Value} ...}`
+            #  params - list of input parameters in form `{{name value} {name value} {name value} ...}`
             # This class implements subcircuit, it is subclass of netlist because it holds list of elements
             # inside subcircuit, together with header and connection of elements inside.
             
@@ -1311,7 +1319,6 @@ namespace eval ::SpiceGenTcl {
             } else {
                 set Params ""
             }
-            # pass name of subcircuit to Netlist constructor
             next $name
         }
         # copy methods of Device to manipulate header .subckt definition elements
@@ -1344,7 +1351,8 @@ namespace eval ::SpiceGenTcl {
         
         method add {element} {
             # Add element object reference to `Netlist`, it extends add method to add check of element class because
-            # subcircuit can't contain particular elements inside, like `Include`, `Library`, `Options` and `Analysis`.
+            # subcircuit can't contain particular elements inside, like [::SpiceGenTcl::Include], 
+            # [::SpiceGenTcl::Library], [::SpiceGenTcl::Options] and [::SpiceGenTcl::Analysis].
             #  element - element object reference
             set elementClass [info object class $element]
             set elementClassSuperclass [info class superclasses $elementClass]
@@ -1362,9 +1370,9 @@ namespace eval ::SpiceGenTcl {
         method genSPICEString {} {
             # Creates subcircuit string for SPICE subcircuit.
             # Returns: '.subckt $Pins $Params'
-            set name [my configure -Name]
+            set name [my configure -name]
             dict for {pinName pin} $Pins {
-                lappend nodes [$pin configure -Name]
+                lappend nodes [$pin configure -name]
             }
             if {$Params==""} {
                 lappend params ""
@@ -1387,39 +1395,39 @@ namespace eval ::SpiceGenTcl {
     oo::configurable create Analysis {
         superclass SPICEElement
         mixin DuplChecker
-        property Name -set {
-            set Name [string tolower $value]
+        property name -set {
+            set name [string tolower $value]
         }
-        variable Name
+        variable name
         # type of analysis, i.e. dc, ac, tran, etc
-        property Type -set {
+        property type -set {
             set type [string tolower $value]
             set suppAnalysis [list ac dc tran op disto noise pz sens sp tf]
             if {$value ni $suppAnalysis} {
                 return -code error "Type '$value' is not in supported list of analysis, should be one of '$suppAnalysis'"
             }
-            set Type $value
+            set type $value
         }
-        variable Type
+        variable type
         # list of Parameter objects
         variable Params
         constructor {type params args} {
             # Creates object of class `Analysis`.
             #  type - type of analysis, for example, tran, ac, dc, etc
             #  params - list of instance parameters in form 
-            #   `{{Name Value} {Name -sw} {Name Value -eq} {Name Value -posnocheck} ...}`
+            #   `{{name value} {name -sw} {name Value -eq} {name Value -posnocheck} ...}`
             #  args - optional argument *-name*
             # Class models analysis statement.
-            my variable Name
+            my variable name
             set arguments [argparse {
                 -name=
             }]
             if {[info exists name]} {
-                my configure -Name $name
+                my configure -name $name
             } else {
-                my configure -Name [self object]
+                my configure -name [self object]
             }
-            my configure -Type $type
+            my configure -type $type
             # create Analysis objects
             foreach param $params {
                 if {[@ $param 2]=={}} {
@@ -1476,14 +1484,14 @@ namespace eval ::SpiceGenTcl {
         method setParamValue [@ $def 0] [@ $def 1]  
         method genSPICEString {} {
             # Creates analysis for SPICE netlist.
-            # Returns: string '.$Type $Params'
+            # Returns: string '.$type $Params'
             if {[info exists Params]} {
                 dict for {paramName param} $Params {
                     lappend params [$param genSPICEString]
                 }
-                return ".[my configure -Type] [join $params]"
+                return ".[my configure -type] [join $params]"
             } else {
-                return ".[my configure -Type]"
+                return ".[my configure -type]"
             }
         }
     }
@@ -1492,14 +1500,14 @@ namespace eval ::SpiceGenTcl {
     
     oo::configurable create Simulator {
         self mixin -append oo::abstract
-        property Name
-        variable Name
+        property name
+        variable name
         property Command
         variable Command
-        property Log
-        variable Log
-        property Data
-        variable Data
+        property log
+        variable log
+        property data
+        variable data
         method run {} {
             # Runs simulation.
             error "Not implemented"
@@ -1570,10 +1578,10 @@ namespace eval ::SpiceGenTcl {
     
     oo::configurable create Dataset {
         # This class models general raw dataset
-        property Name -set {
-            set Name [string tolower $value]
+        property name -set {
+            set name [string tolower $value]
         }
-        variable Name
+        variable name
         # Type of dataset, could be voltage, vurrent, time or frequency
         property Type -set {
             set Type [string tolower $value]
@@ -1599,10 +1607,7 @@ namespace eval ::SpiceGenTcl {
             #  type - type of dataset
             #  len - total number of points
             #  numType - numerical type of dataset
-            my configure -Name $name
-            my configure -Type $type
-            my configure -Len $len
-            my configure -NumType $numType
+            my configure -name $name -Type $type -Len $len -NumType $numType
         }
         method setDataPoints {dataPoints} {
             # method to set the data points
@@ -1618,12 +1623,12 @@ namespace eval ::SpiceGenTcl {
             if {[info exists DataPoints]} {
                 return $DataPoints
             } else {
-                return -code error "Dataset with name '[my configure -Name]' doesn't contain non-zero points"
+                return -code error "Dataset with name '[my configure -name]' doesn't contain non-zero points"
             }
             return 
         }
         method getStr {} {
-            return "Name: '[my configure -Name]', Type: '[my configure -Type]',\
+            return "Name: '[my configure -name]', Type: '[my configure -Type]',\
                     Length: '[my configure -Len]', Numerical type: '[my configure -NumType]'"
         }
     }
@@ -1771,8 +1776,8 @@ namespace eval ::SpiceGenTcl {
                 }
                 dict append RawParams [@ $lineList 0] [string trim [@ $lineList 1]]
             }
-            my configure -NPoints [dget [my configure -RawParams] "No. Points"]
-            my configure -NVariables [dget [my configure -RawParams] "No. Variables"]
+            my configure -NPoints [dget [my configure -RawParams] "No. Points"] -NVariables\
+                    [dget [my configure -RawParams] "No. Variables"]
             if {[dget [my configure -RawParams] "Plotname"] in {"Operating Point" "Transfet Function"}} {
                 set hasAxis 0
             } else {
@@ -1807,7 +1812,7 @@ namespace eval ::SpiceGenTcl {
                 } elseif {($traces2read=="*") || ($name in $traces2read)} {
                     if {$hasAxis} {
                         set trace [::SpiceGenTcl::Trace new $name $varType $NPoints\
-                                           [[my configure -Axis] configure -Name] $numType]
+                                           [[my configure -Axis] configure -name] $numType]
                     } else {
                         set trace [::SpiceGenTcl::Trace new $name $varType $NPoints {} $numType]
                     }
@@ -1851,7 +1856,7 @@ namespace eval ::SpiceGenTcl {
                             set fun readFloat32 
                         }
                     } else {
-                        error "Invalid data type '[$trace configure -NumType]' for trace '[$trace configure -Name]'"
+                        error "Invalid data type '[$trace configure -NumType]' for trace '[$trace configure -name]'"
                     }
                     lappend scanFunctions $fun
                 }
@@ -1877,11 +1882,9 @@ namespace eval ::SpiceGenTcl {
                             continue
                         }
                         set lineList [textutil::split::splitx $line]
-                        #puts $lineList
                         if {$firstVar=="true"} {
                             set firstVar false
                             set sPoint [@ $lineList 0]
-                            #puts "$sPoint $i"
                             if {$i!=int($sPoint)} {
                                 error "Error reading file"
                             }
@@ -1908,7 +1911,7 @@ namespace eval ::SpiceGenTcl {
             # Returns trace object reference by it's name
             set traceFoundFlag false
             foreach trace [my configure -Traces] {
-                if {[$trace configure -Name]==$traceName} {
+                if {[$trace configure -name]==$traceName} {
                     set traceFound $trace
                     set traceFoundFlag true
                     break
@@ -1923,7 +1926,7 @@ namespace eval ::SpiceGenTcl {
         method getVariablesNames {} {
             # Returns list that contains names of all variables
             foreach trace [my configure -Traces] {
-                lappend tracesNames [$trace configure -Name]
+                lappend tracesNames [$trace configure -name]
             }
             return $tracesNames
         }
@@ -1931,7 +1934,7 @@ namespace eval ::SpiceGenTcl {
             # Returns list that contains names of all voltage variables
             foreach trace [my configure -Traces] {
                 if {[$trace configure -Type]=="voltage"} {
-                    lappend voltNames [$trace configure -Name]
+                    lappend voltNames [$trace configure -name]
                 }
             }
             return $voltNames
@@ -1940,7 +1943,7 @@ namespace eval ::SpiceGenTcl {
             # Returns list that contains names of all current variables
             foreach trace [my configure -Traces] {
                 if {[$trace configure -Type]=="current"} {
-                    lappend currNames [$trace configure -Name]
+                    lappend currNames [$trace configure -name]
                 }
             }
             return $currNames
@@ -1948,7 +1951,7 @@ namespace eval ::SpiceGenTcl {
         method getTracesStr {} {
             # Returns information about all Traces in raw file in form of string
             foreach trace [my configure -Traces] {
-                lappend tracesList "[$trace configure -Name] [$trace configure -Type] [$trace configure -NumType]"
+                lappend tracesList "[$trace configure -name] [$trace configure -Type] [$trace configure -NumType]"
             }
             return $tracesList
         }
@@ -1956,7 +1959,7 @@ namespace eval ::SpiceGenTcl {
             # Returns dictionary that contains all data in value and name as a key
             set dict [dcreate]
             foreach trace [my configure -Traces] {
-                dict append dict [$trace configure -Name] [$trace getDataPoints]
+                dict append dict [$trace configure -name] [$trace getDataPoints]
             }
             return $dict
         }
@@ -1983,7 +1986,7 @@ namespace eval ::SpiceGenTcl {
             } elseif {[dget $arguments traces]!=""} {
                 foreach traceName [dget $arguments traces] {
                     set traceObj [my getTrace $traceName]
-                    dict append tracesDict [$traceObj configure -Name] [$traceObj getDataPoints]
+                    dict append tracesDict [$traceObj configure -name] [$traceObj getDataPoints]
                 }
                 set tracesList [list [dict keys $tracesDict]]
                 for {set i 0} {$i<[my configure -NPoints]} {incr i} {

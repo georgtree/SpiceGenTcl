@@ -169,12 +169,12 @@ namespace eval FAQ {
         ## How to get the names of all vectors in raw file?
         
         For this task, you should first retrieve the [::SpiceGenTcl::RawFile] object reference from the
-        [::SpiceGenTcl::Circuit] object using the `configure -Data` method. Then, call the
+        [::SpiceGenTcl::Circuit] object using the `configure -data` method. Then, call the
         [::SpiceGenTcl::RawFile::getVariablesNames] method, which returns a list of all variable names.
         
         Example:
         ```tcl
-        set rawFileObj [$circuit configure -Data]
+        set rawFileObj [$circuit configure -data]
         puts [$rawFileObj getVariablesNames]
         ```
         
@@ -183,12 +183,12 @@ namespace eval FAQ {
         
         ## How to get log file after simulation?
         
-        There is a property method for it in object of [::SpiceGenTcl::Circuit] class - `configure -Log`, it returns
+        There is a property method for it in object of [::SpiceGenTcl::Circuit] class - `configure -log`, it returns
         string containing log file.
         
         Example:
         ```tcl
-        puts [$circuit configure -Log]
+        puts [$circuit configure -log]
         ```
 
         ## How to save result traces in comma-separated file format (csv)?
@@ -205,7 +205,7 @@ namespace eval FAQ {
         $circuit add [R new 2 out 0 -r 2e3]
         $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1]
         set simulator [Batch new {batch1}]
-        $circuit configure -Simulator $simulator
+        $circuit configure -simulator $simulator
         $circuit runAndRead
         set data [$circuit getDataCsv -traces v(in) v(out)]
         puts $data
