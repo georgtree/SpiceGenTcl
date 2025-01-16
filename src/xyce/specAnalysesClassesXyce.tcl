@@ -41,6 +41,7 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
             # ```
             # ::SpiceGenTcl::Xyce::Analyses::Dc new -src v1 -start {time1 -eq} -stop 5 -incr 0.1 -name dc1
             # ```
+            # Synopsis: -src value -start value -stop value -incr value ?-name value?
             set arguments [argparse -inline {
                 -name=
                 {-src= -required}
@@ -88,6 +89,7 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
             # ```
             # ::SpiceGenTcl::Xyce::Analyses::Ac new -variation dec -n 10 -fstart 1 -fstop 1e6 -name dc1
             # ```
+            # Synopsis: -variation value -n value -fstart value -fstop value ?-name value?
             set arguments [argparse -inline {
                 -name=
                 {-variation= -required}
@@ -122,7 +124,7 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
         superclass ::SpiceGenTcl::Analysis
         constructor {args} {
             # Creates object of class `Sens` that describes SENS ac analysis. 
-            #  -objfunc - output =ession
+            #  -objfunc - output expression
             #  -param - circuit parameter(s)
             #  -name - name argument, optional 
             # ```
@@ -132,6 +134,7 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
             # ```
             # ::SpiceGenTcl::Analyses::Xyce::Sens new -objfunc "0.5*(V(B)-3.0)**2.0" -param "R1:R,R2:R" -name dc1
             # ```
+            # Synopsis: -objfunc value -param value ?-name value?
             set arguments [argparse -inline {
                 -name=
                 {-objfunc= -required}
@@ -157,7 +160,7 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
             #  -tstep - initial step value
             #  -tstop - final time value
             #  -tstart - start time of saving data, optional
-            #  -tstart - size of maximum time step in actual simulation, optional, require -tstart
+            #  -tmax - size of maximum time step in actual simulation, optional, require -tstart
             #  -uic - skip initial operating point solution, optional
             #  -name - name argument, optional
             # ```
@@ -168,6 +171,7 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
             # ```
             # ::SpiceGenTcl::Xyce::Analyses::Tran new -tstep 1e-9 -tstop 10e-6 -name dc1
             # ```
+            # Synopsis: -tstep value -tstop value ?-tstart value ?-tmax value?? ?-uic? ?-name value?
             set arguments [argparse -inline {
                 -name=
                 {-tstep= -required}
@@ -215,6 +219,7 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
             # ```
             # ::SpiceGenTcl::Xyce::Analyses::Op new -name op1
             # ```
+            # Synopsis: ?-name value?
             set arguments [argparse -inline {
                 -name=
             }]

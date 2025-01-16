@@ -5,25 +5,19 @@
 .SH NAME
 SpiceGenTcl::Ngspice::SemiconductorDevices - Commands in namespace SpiceGenTcl::Ngspice::SemiconductorDevices
 .SH SYNOPSIS
-\fBBjt create OBJNAME\fP \fIname ncNode nbNode neNode ?args?\fP
-.br
-\fBBjt new\fP \fIname ncNode nbNode neNode ?args?\fP
+\fBOBJECT constructor\fP \fIname ncNode nbNode neNode -model value ?-ns value ?-tj value?? ?-area value? ?-areac value? ?-areab value? ?-m value? ?-ic {value value}? ?-temp value|-dtemp value?\fP
 .br
 \fBBjtGPModel create OBJNAME\fP \fIname type ?args?\fP
 .br
 \fBBjtGPModel new\fP \fIname type ?args?\fP
 .br
-\fBDiode create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBDiode new\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -model value ?-area value? ?-pj value? ?-ic value? ?-m value? ?-temp value|-dtemp value? ?-lm value? ?-wm value? ?-lp value? ?-wp value?\fP
 .br
 \fBDiodeModel create OBJNAME\fP \fIname ?args?\fP
 .br
 \fBDiodeModel new\fP \fIname ?args?\fP
 .br
-\fBJfet create OBJNAME\fP \fIname ndNode ngNode nsNode ?args?\fP
-.br
-\fBJfet new\fP \fIname ndNode ngNode nsNode ?args?\fP
+\fBOBJECT constructor\fP \fIname ndNode ngNode nsNode -model value ?-area value? ?-off? ?-ic {value value}? ?-temp value?\fP
 .br
 \fBJfet1Model create OBJNAME\fP \fIname type ?args?\fP
 .br
@@ -33,17 +27,13 @@ SpiceGenTcl::Ngspice::SemiconductorDevices - Commands in namespace SpiceGenTcl::
 .br
 \fBJfet2Model new\fP \fIname type ?args?\fP
 .br
-\fBMesfet create OBJNAME\fP \fIname ndNode ngNode nsNode ?args?\fP
-.br
-\fBMesfet new\fP \fIname ndNode ngNode nsNode ?args?\fP
+\fBOBJECT constructor\fP \fIname ndNode ngNode nsNode -model value ?-area value? ?-off? ?-ic {value value} ?\fP
 .br
 \fBMesfet1Model create OBJNAME\fP \fIname type ?args?\fP
 .br
 \fBMesfet1Model new\fP \fIname type ?args?\fP
 .br
-\fBMosfet create OBJNAME\fP \fIname ndNode ngNode nsNode ?args?\fP
-.br
-\fBMosfet new\fP \fIname ndNode ngNode nsNode ?args?\fP
+\fBOBJECT constructor\fP \fIname ndNode ngNode nsNode -model value ?-n4 value ?-n5 value ?-n6 value ?-n7 value???? ?-m value? ?-l value? ?-w value? ?-ad value|-nrd value? ?-as value|-nrs value? ?-temp value? ?-off? ?-pd value? ?-ps value? ?-ic {value value value}? ?-custparams param1 {param1Val ?-eq|-poseq|-posnocheck|-pos|-nocheck?} \&.\&.\&.?\fP
 .br
 .SH ::SPICEGENTCL::NGSPICE::SEMICONDUCTORDEVICES
 .SH CLASSES
@@ -108,9 +98,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Bjt that describes semiconductor bipolar junction transistor device\&.
-.RS 4n\fBBjt create OBJNAME\fP \fIname ncNode nbNode neNode ?args?\fP
-.br
-\fBBjt new\fP \fIname ncNode nbNode neNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname ncNode nbNode neNode -model value ?-ns value ?-tj value?? ?-area value? ?-areac value? ?-areab value? ?-m value? ?-ic {value value}? ?-temp value|-dtemp value?\fP
 .br
 .RE
 .PP
@@ -372,9 +360,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Diode that describes semiconductor diode device\&.
-.RS 4n\fBDiode create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBDiode new\fP \fIname npNode nmNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -model value ?-area value? ?-pj value? ?-ic value? ?-m value? ?-temp value|-dtemp value? ?-lm value? ?-wm value? ?-lp value? ?-wp value?\fP
 .br
 .RE
 .PP
@@ -633,9 +619,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Jfet that describes semiconductor junction FET device\&.
-.RS 4n\fBJfet create OBJNAME\fP \fIname ndNode ngNode nsNode ?args?\fP
-.br
-\fBJfet new\fP \fIname ndNode ngNode nsNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname ndNode ngNode nsNode -model value ?-area value? ?-off? ?-ic {value value}? ?-temp value?\fP
 .br
 .RE
 .PP
@@ -966,9 +950,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Mesfet that describes semiconductor MESFET device\&.
-.RS 4n\fBMesfet create OBJNAME\fP \fIname ndNode ngNode nsNode ?args?\fP
-.br
-\fBMesfet new\fP \fIname ndNode ngNode nsNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname ndNode ngNode nsNode -model value ?-area value? ?-off? ?-ic {value value} ?\fP
 .br
 .RE
 .PP
@@ -1004,7 +986,7 @@ Initial state, optional\&.
 .PP
 .RS 4n
 .nf
-ZXXXXXXX ND NG NS MNAME <AREA> <OFF> <IC=VDS,VGS >
+ZXXXXXXX ND NG NS MNAME <AREA> <OFF> <IC=VDS,VGS>
 .fi
 .RE
 .PP
@@ -1162,9 +1144,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Mosfet that describes semiconductor MOSFET device\&.
-.RS 4n\fBMosfet create OBJNAME\fP \fIname ndNode ngNode nsNode ?args?\fP
-.br
-\fBMosfet new\fP \fIname ndNode ngNode nsNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname ndNode ngNode nsNode -model value ?-n4 value ?-n5 value ?-n6 value ?-n7 value???? ?-m value? ?-l value? ?-w value? ?-ad value|-nrd value? ?-as value|-nrs value? ?-temp value? ?-off? ?-pd value? ?-ps value? ?-ic {value value value}? ?-custparams param1 {param1Val ?-eq|-poseq|-posnocheck|-pos|-nocheck?} \&.\&.\&.?\fP
 .br
 .RE
 .PP
@@ -1210,6 +1190,9 @@ Name of 4th node;
 -n5
 Name of 5th node, require -n4, optional\&.
 .TP
+-n6
+Name of 6th node, require -n5, optional\&.
+.TP
 -n7
 Name of 7th node, require -n6, optional\&.
 .TP
@@ -1233,9 +1216,6 @@ Device temperature\&.
 .TP
 -w
 Width of channel, optional\&.
-.TP
-n6
-Name of 6th node, require -n5, optional\&.
 .RE
 .PP
 \fBDescription\fR

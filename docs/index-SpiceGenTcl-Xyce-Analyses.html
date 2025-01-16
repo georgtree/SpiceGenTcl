@@ -35,7 +35,7 @@
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Xyce::Analyses::Ac::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Ac" title="::SpiceGenTcl::Xyce::Analyses::Ac" class='ruff_cmd'>::SpiceGenTcl::Xyce::Analyses::Ac</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Ac'>Ac</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Ac</font></b></code> that describes AC analysis.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>Ac create OBJNAME</span> <span class='ruff_arg'>?args?</span><br><span class='ruff_cmd'>Ac new</span> <span class='ruff_arg'>?args?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>-variation value -n value -fstart value -fstop value ?-name value?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-fstart</font></code></td><td>Start frequency.</td></tr>
 <tr><td><code><font color=#b9b96e>-fstop</font></code></td><td>Start frequency.</td></tr>
@@ -70,6 +70,7 @@
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Xyce::Analyses::Ac new -variation dec -n 10 -fstart 1 -fstop 1e6 -name dc1</font></i>
     <i><font color=#76a396># ```</font></i>
+    <i><font color=#76a396># Synopsis: -variation value -n value -fstart value -fstop value ?-name value?</font></i>
     <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> {
         <font color=#b9b96e>-name</font>=
         {<font color=#b9b96e>-variation</font>= <font color=#b9b96e>-required</font>}
@@ -114,7 +115,7 @@
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Xyce::Analyses::Dc::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Dc" title="::SpiceGenTcl::Xyce::Analyses::Dc" class='ruff_cmd'>::SpiceGenTcl::Xyce::Analyses::Dc</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Dc'>Dc</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Dc</font></b></code> that describes DC analysis.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>Dc create OBJNAME</span> <span class='ruff_arg'>?args?</span><br><span class='ruff_cmd'>Dc new</span> <span class='ruff_arg'>?args?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>-src value -start value -stop value -incr value ?-name value?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-incr</font></code></td><td>Incrementing value.</td></tr>
 <tr><td><code><font color=#b9b96e>-name</font></code></td><td>Name argument, optional.</td></tr>
@@ -147,6 +148,7 @@
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Xyce::Analyses::Dc new -src v1 -start {time1 -eq} -stop 5 -incr 0.1 -name dc1</font></i>
     <i><font color=#76a396># ```</font></i>
+    <i><font color=#76a396># Synopsis: -src value -start value -stop value -incr value ?-name value?</font></i>
     <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> {
         <font color=#b9b96e>-name</font>=
         {<font color=#b9b96e>-src</font>= <font color=#b9b96e>-required</font>}
@@ -191,7 +193,7 @@
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Xyce::Analyses::Op::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Op" title="::SpiceGenTcl::Xyce::Analyses::Op" class='ruff_cmd'>::SpiceGenTcl::Xyce::Analyses::Op</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Op'>Op</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Op</font></b></code> that describes OP analysis.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>Op create OBJNAME</span> <span class='ruff_arg'>?args?</span><br><span class='ruff_cmd'>Op new</span> <span class='ruff_arg'>?args?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>?-name value?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-name</font></code></td><td>Name argument, optional.</td></tr>
 </table>
@@ -216,6 +218,7 @@
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Xyce::Analyses::Op new -name op1</font></i>
     <i><font color=#76a396># ```</font></i>
+    <i><font color=#76a396># Synopsis: ?-name value?</font></i>
     <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> {
         <font color=#b9b96e>-name</font>=
     }]
@@ -244,10 +247,10 @@
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Xyce::Analyses::Sens::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Sens" title="::SpiceGenTcl::Xyce::Analyses::Sens" class='ruff_cmd'>::SpiceGenTcl::Xyce::Analyses::Sens</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Sens'>Sens</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code>Sens</code> that describes SENS ac analysis.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>Sens create OBJNAME</span> <span class='ruff_arg'>?args?</span><br><span class='ruff_cmd'>Sens new</span> <span class='ruff_arg'>?args?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>-objfunc value -param value ?-name value?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-name</font></code></td><td>Name argument, optional.</td></tr>
-<tr><td><code><font color=#b9b96e>-objfunc</font></code></td><td>Output =ession.</td></tr>
+<tr><td><code><font color=#b9b96e>-objfunc</font></code></td><td>Output expression.</td></tr>
 <tr><td><code><font color=#b9b96e>-param</font></code></td><td>Circuit parameter(s)</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
@@ -263,7 +266,7 @@
 <div id='SpiceGenTcl_Xyce_Analyses_Sens_constructor' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> constructor {args} {
 
     <i><font color=#76a396># Creates object of class `Sens` that describes SENS ac analysis.</font></i>
-    <i><font color=#76a396>#  -objfunc - output =ession</font></i>
+    <i><font color=#76a396>#  -objfunc - output expression</font></i>
     <i><font color=#76a396>#  -param - circuit parameter(s)</font></i>
     <i><font color=#76a396>#  -name - name argument, optional</font></i>
     <i><font color=#76a396># ```</font></i>
@@ -273,6 +276,7 @@
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Analyses::Xyce::Sens new -objfunc &quot;0.5*(V(B)-3.0)**2.0&quot; -param &quot;R1:R,R2:R&quot; -name dc1</font></i>
     <i><font color=#76a396># ```</font></i>
+    <i><font color=#76a396># Synopsis: -objfunc value -param value ?-name value?</font></i>
     <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> {
         <font color=#b9b96e>-name</font>=
         {<font color=#b9b96e>-objfunc</font>= <font color=#b9b96e>-required</font>}
@@ -305,10 +309,11 @@
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Xyce::Analyses::Tran::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Tran" title="::SpiceGenTcl::Xyce::Analyses::Tran" class='ruff_cmd'>::SpiceGenTcl::Xyce::Analyses::Tran</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Tran'>Tran</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Tran</font></b></code> that describes TRAN analysis.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>Tran create OBJNAME</span> <span class='ruff_arg'>?args?</span><br><span class='ruff_cmd'>Tran new</span> <span class='ruff_arg'>?args?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>-tstep value -tstop value ?-tstart value ?-tmax value?? ?-uic? ?-name value?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-name</font></code></td><td>Name argument, optional.</td></tr>
-<tr><td><code><font color=#b9b96e>-tstart</font></code></td><td>Size of maximum time step in actual simulation, optional, require -tstart.</td></tr>
+<tr><td><code><font color=#b9b96e>-tmax</font></code></td><td>Size of maximum time step in actual simulation, optional, require -tstart.</td></tr>
+<tr><td><code><font color=#b9b96e>-tstart</font></code></td><td>Start time of saving data, optional.</td></tr>
 <tr><td><code><font color=#b9b96e>-tstep</font></code></td><td>Initial step value.</td></tr>
 <tr><td><code><font color=#b9b96e>-tstop</font></code></td><td>Final time value.</td></tr>
 <tr><td><code><font color=#b9b96e>-uic</font></code></td><td>Skip initial operating point solution, optional.</td></tr>
@@ -330,7 +335,7 @@
     <i><font color=#76a396>#  -tstep - initial step value</font></i>
     <i><font color=#76a396>#  -tstop - final time value</font></i>
     <i><font color=#76a396>#  -tstart - start time of saving data, optional</font></i>
-    <i><font color=#76a396>#  -tstart - size of maximum time step in actual simulation, optional, require -tstart</font></i>
+    <i><font color=#76a396>#  -tmax - size of maximum time step in actual simulation, optional, require -tstart</font></i>
     <i><font color=#76a396>#  -uic - skip initial operating point solution, optional</font></i>
     <i><font color=#76a396>#  -name - name argument, optional</font></i>
     <i><font color=#76a396># ```</font></i>
@@ -341,6 +346,7 @@
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Xyce::Analyses::Tran new -tstep 1e-9 -tstop 10e-6 -name dc1</font></i>
     <i><font color=#76a396># ```</font></i>
+    <i><font color=#76a396># Synopsis: -tstep value -tstop value ?-tstart value ?-tmax value?? ?-uic? ?-name value?</font></i>
     <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> {
         <font color=#b9b96e>-name</font>=
         {<font color=#b9b96e>-tstep</font>= <font color=#b9b96e>-required</font>}
@@ -393,15 +399,10 @@
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html'>SpiceGenTcl::Xyce::SemiconductorDevices</a></li>
 <li class='ruff-toc1'><a class='ruff-highlight' href='index-SpiceGenTcl-Xyce-Analyses.html'>SpiceGenTcl::Xyce::Analyses</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-Simulators.html'>SpiceGenTcl::Xyce::Simulators</a></li>
-<hr><li class='ruff-toc2'><a href='#::SpiceGenTcl::Xyce::Analyses-Classes'>Classes</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Ac'>Ac</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Ac::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Ac</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Ac</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Ac</font></b></code> that describes AC analysis.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Dc'>Dc</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Dc::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Dc</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Dc</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Dc</font></b></code> that describes DC analysis.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Op'>Op</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Op::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Op</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Op</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Op</font></b></code> that describes OP analysis.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Sens'>Sens</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Sens::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;Sens create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;Sens new&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Creates object of class <code>Sens</code> that describes SENS ac analysis.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Tran'>Tran</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Tran::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Tran</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Tran</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Tran</font></b></code> that describes TRAN analysis.
+<hr><li class='ruff-toc2'><a href='#::SpiceGenTcl::Xyce::Analyses-Classes'>Classes</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Ac'>Ac</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Ac::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;<font color=#b9b96e>-variation</font> value <font color=#b9b96e>-n</font> value <font color=#b9b96e>-fstart</font> value <font color=#b9b96e>-fstop</font> value ?-name value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Ac</font></b></code> that describes AC analysis.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Dc'>Dc</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Dc::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;<font color=#b9b96e>-src</font> value <font color=#b9b96e>-start</font> value <font color=#b9b96e>-stop</font> value <font color=#b9b96e>-incr</font> value ?-name value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Dc</font></b></code> that describes DC analysis.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Op'>Op</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Op::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;?-name value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Op</font></b></code> that describes OP analysis.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Sens'>Sens</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Sens::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;<font color=#b9b96e>-objfunc</font> value <font color=#b9b96e>-param</font> value ?-name value?&lt;/span&gt;</pre>Creates object of class <code>Sens</code> that describes SENS ac analysis.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Tran'>Tran</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Tran::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;<font color=#b9b96e>-tstep</font> value <font color=#b9b96e>-tstop</font> value ?-tstart value ?-tmax value?? ?-uic? ?-name value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Tran</font></b></code> that describes TRAN analysis.
 </span></li></ul></nav><footer class='ruff-layout-footer ruff-ft'><div style='float: right;'>Document generated by <a href='https://ruff.magicsplat.com'>Ruff!</a></div><div>&copy; George Yashin</div></footer>
 </div></body></html>

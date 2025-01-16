@@ -61,7 +61,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # Behavioral resistor:
             # ```
-            # RXXXXXXX n+ n- R ={=ession} <tc1=value> <tc2=value> <noisy=0>
+            # RXXXXXXX n+ n- R={expression} <tc1=value> <tc2=value> <noisy=0>
             # ```
             # Example of class initialization:
             # ```
@@ -77,6 +77,11 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # ::SpiceGenTcl::Ngspice::BasicDevices::Resistor new 1 netp netm -model resm -l 1e-6 -w 10e-6
             # ```
+            # Synopsis: name npNode nmNode -r value ?-tc1 value? ?-tc2 value? ?-ac value? ?-m value? ?-noisy 0|1? 
+            #   ?-temp value|-dtemp value? ?-scale value?
+            # Synopsis: name npNode nmNode -beh -r value ?-tc1 value? ?-tc2 value?
+            # Synopsis: name npNode nmNode -model value ?-r value? ?-l value? ?-w value? ?-temp value|-dtemp value?
+            #   ?-m value? ?-noisy 0|1? ?-ac value? ?scale value?
             set arguments [argparse -inline {
                 -r=
                 {-beh -forbid {model} -require {r}}
@@ -146,15 +151,15 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # Behavioral capacitor with C =ession:
             # ```
-            # CXXXXXXX n+ n- C={=ession} <tc1=value> <tc2=value>
+            # CXXXXXXX n+ n- C={expression} <tc1=value> <tc2=value>
             # ```
             # Example of class initialization:
             # ```
             # ::SpiceGenTcl::Ngspice::BasicDevices::Capacitor new 1 netp netm -c "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1
             # ```
-            # Behavioral capacitor with Q =ession:
+            # Behavioral capacitor with Q expression:
             # ```
-            # CXXXXXXX n+ n- Q={=ession} <tc1=value> <tc2=value>
+            # CXXXXXXX n+ n- Q={expression} <tc1=value> <tc2=value>
             # ```
             # Example of class initialization:
             # ```
@@ -169,6 +174,12 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # ::SpiceGenTcl::Ngspice::BasicDevices::Capacitor new 1 netp netm -model capm -l 1e-6 -w 10e-6
             # ```
+            # Synopsis: name npNode nmNode -c value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value|-dtemp value? 
+            #   ?-scale value? ?-ic value?
+            # Synopsis: name npNode nmNode -beh -c value ?-tc1 value? ?-tc2 value?
+            # Synopsis: name npNode nmNode -beh -q value ?-tc1 value? ?-tc2 value?
+            # Synopsis: name npNode nmNode -model value ?-c value? ?-l value? ?-w value? ?-temp value|-dtemp value?
+            #   ?-m value? ?scale value? ?-ic value?
             set arguments [argparse -inline {
                 {-c= -forbid {q}}
                 {-q= -require {beh} -forbid {c model}}
@@ -243,7 +254,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # Behavioral inductor:
             # ```
-            # LYYYYYYY n+ n- L={=ession} <tc1=val> <tc2=val>
+            # LYYYYYYY n+ n- L={expression} <tc1=val> <tc2=val>
             # ```
             # Example of class initialization:
             # ```
@@ -259,6 +270,11 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # ::SpiceGenTcl::Ngspice::BasicDevices::Inductor new 1 netp netm -l 1e-6 -model indm
             # ```
+            # Synopsis: name npNode nmNode -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value|-dtemp value? 
+            #   ?-scale value? ?-ic value?
+            # Synopsis: name npNode nmNode -beh -l value ?-tc1 value? ?-tc2 value?
+            # Synopsis: name npNode nmNode -model value ?-l value? ?-temp value|-dtemp value? ?-m value? ?scale value? 
+            #   ?-ic value? ?-nt value? ?-tc1 value? ?-tc2 value?
             set arguments [argparse -inline {
                 -l=
                 {-beh -forbid {model} -require {l}}
@@ -270,6 +286,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
                 -tc1=
                 -tc2=
                 {-nt= -require {model}}
+                {-ic= -forbid {beh}}
             }]
             set params ""
             if {[dexist $arguments l]} {
@@ -377,7 +394,8 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # ::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstanceAuto new $subcktObj 1 {net1 net2} -r 1 -c {cpar -eq}
             # ```
-            
+            # Synopsis: subcktObj name nodes ?-paramName {paramValue ?-eq?} ...?
+
             # check that inputs object class is Subcircuit
             if {[info object class $subcktObj "::SpiceGenTcl::Subcircuit"]!=1} {
                 set objClass [info object class $subcktObj]
@@ -562,6 +580,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             # ```
             # ::SpiceGenTcl::Ngspice::Sources::Vport new 1 netp netm -dc 1 -ac 1 -portnum 1 -z0 100
             # ```
+            # Synopsis: name npNode nmNode -dc value -ac value -portnum value ?-z0 value?
             set arguments [argparse -inline {
                 {-dc= -required}
                 {-ac= -required}
@@ -604,6 +623,8 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             # ```
             # ::SpiceGenTcl::Ngspice::Sources::Vpulse new 1 net1 net2 -low 0 -high 1 -td {td -eq} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6 -np {np -eq}
             # ```
+            # Synopsis: name npNode nmNode -low value -high value -td value -tr value -tf value -pw value -per value
+            #   ?-np value?
             next $name v $npNode $nmNode {*}$args
         }
     }  
@@ -650,6 +671,8 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             # ```
             # ::SpiceGenTcl::Ngspice::Sources::Vsin new 1 net1 net2 -v0 0 -va 1 -fc {freq -eq} -mdi 0 -fs 1e3 -phasec {phase -eq}
             # ```
+            # Synopsis: name npNode nmNode -v0 value -va value -fc value -mdi value -fs value ?-phasec value 
+            #   ?-phases value??
             next $name v $npNode $nmNode {*}$args
         }
     }
@@ -676,6 +699,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             # ```
             # ::SpiceGenTcl::Ngspice::Sources::Vam new 1 net1 net2 -v0 0 -va 2 -mf 1e3 -fc {freq -eq} -td 1e-6 -phases {phase -eq}
             # ```
+            # Synopsis: name npNode nmNode -v0 value -va value -mf value -fc value ?-td value ?-phases value??
             next $name v $npNode $nmNode {*}$args
         }
     }    
@@ -717,6 +741,8 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             # ```
             # ::SpiceGenTcl::Ngspice::Sources::Ipulse new 1 net1 net2 -low 0 -high 1 -td {td -eq} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6 -np {np -eq}
             # ```
+            # Synopsis: name npNode nmNode -low value -high value -td value -tr value -tf value -pw value -per value
+            #   ?-np value?
             next $name i $npNode $nmNode {*}$args
         }
     }
@@ -762,6 +788,8 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             # ```
             # ::SpiceGenTcl::Ngspice::Sources::Isin new 1 net1 net2 -v0 0 -va 1 -fc {freq -eq} -mdi 0 -fs 1e3 -phasec {phase -eq}
             # ```
+            # Synopsis: name npNode nmNode -v0 value -va value -fc value -mdi value -fs value ?-phasec value 
+            #   ?-phases value??
             next $name i $npNode $nmNode {*}$args
         }
     }
@@ -788,6 +816,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             # ```
             # ::SpiceGenTcl::Ngspice::Sources::Iam new 1 net1 net2 -v0 0 -va 2 -mf 1e3 -fc {freq -eq} -td 1e-6 -phases {phase -eq}
             # ```
+            # Synopsis: name npNode nmNode -v0 value -va value -mf value -fc value ?-td value ?-phases value??
             next $name i $npNode $nmNode {*}$args
         }
     }
@@ -854,21 +883,23 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             #  name - name of the device without first-letter designator R
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  -i - current =ession
-            #  -v - voltage =ession
+            #  -i - current expression
+            #  -v - voltage expression
             # ```
-            # BXXXXXXX n+ n- <i==> <v==> <tc1=value> <tc2=value> <dtemp=value> <temp=value>
+            # BXXXXXXX n+ n- <i=expr> <v=expr> <tc1=value> <tc2=value> <dtemp=value> <temp=value>
             # ```
             # Example of class initialization:
             # ```
             # ::SpiceGenTcl::Ngspice::Sources::BehaviouralSource new 1 netp netm -v "V(a)+V(b)+pow(V(c),2)" -tc1 1
             # ```
+            # Synopsis: name npNode nmNode -i value ?-tc1 value? ?-tc2 value? ?-noisy 0|1? ?-temp value|-dtemp value?
+            # Synopsis: name npNode nmNode -v value ?-tc1 value? ?-tc2 value? ?-noisy 0|1? ?-temp value|-dtemp value?
             set arguments [argparse -inline {
                 {-i= -forbid {v}}
                 {-v= -forbid {i}}
                 -tc1=
                 -tc2=
-                -noisy=
+                {-noisy= -enum {0 1}}
                 {-temp= -forbid {dtemp}}
                 {-dtemp= -forbid {temp}}
             }]
@@ -928,6 +959,8 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             # ```
             # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Diode new 1 netp netm -model diomod -l 1e-6 -w 10e-6
             # ```
+            # Synopsis: name npNode nmNode -model value ?-area value? ?-pj value? ?-ic value? ?-m value?
+            #   ?-temp value|-dtemp value? ?-lm value? ?-wm value? ?-lp value? ?-wp value?
             set arguments [argparse -inline {
                 {-model= -required}
                 -area=
@@ -987,6 +1020,8 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             # ```
             # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Bjt new 1 netc netb nete -model bjtmod -ns nets -area 1e-3
             # ```
+            # Synopsis: name ncNode nbNode neNode -model value ?-ns value ?-tj value?? ?-area value? ?-areac value? 
+            #   ?-areab value? ?-m value? ?-ic \{value value\}? ?-temp value|-dtemp value?
             set arguments [argparse -inline {
                 {-model= -required}
                 -area=
@@ -1048,6 +1083,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             # ```
             # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet new 1 netd netg nets -model jfetmod -area {area*2 -eq} -temp 25
             # ```
+            # Synopsis: name ndNode ngNode nsNode -model value ?-area value? ?-off? ?-ic \{value value\}? ?-temp value?
             set arguments [argparse -inline {
                 {-model= -required}
                 -area=
@@ -1101,12 +1137,13 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             #  -ic - initial conditions for vds and vgs, in form of two element list, optional
             #  -off - initial state, optional
             # ```
-            # ZXXXXXXX ND NG NS MNAME <AREA> <OFF> <IC=VDS,VGS >
+            # ZXXXXXXX ND NG NS MNAME <AREA> <OFF> <IC=VDS,VGS>
             # ```
             # Example of class initialization:
             # ```
             # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet new 1 netd netg nets -model mesfetmod -area {area*2 -eq}
             # ```
+            # Synopsis: name ndNode ngNode nsNode -model value ?-area value? ?-off? ?-ic \{value value\} ?
             set arguments [argparse -inline {
                 {-model= -required}
                 -area=
@@ -1165,7 +1202,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             #  -off - initial state, optional
             #  -n4 - name of 4th node;
             #  -n5 - name of 5th node, require -n4, optional
-            #  n6 - name of 6th node, require -n5, optional
+            #  -n6 - name of 6th node, require -n5, optional
             #  -n7 - name of 7th node, require -n6, optional
             #  -custparams - key that collects all arguments at the end of device definition, to provide an ability
             #  to add custom parameters in form `-custparams param1 param1Val param2 {param2eq -eq} param3 param3Val ...`
@@ -1179,6 +1216,10 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             # ```
             # ::SpiceGenTcl::Ngspice::Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5
             # ```
+            # Synopsis: name ndNode ngNode nsNode -model value ?-n4 value ?-n5 value ?-n6 value ?-n7 value???? ?-m value?
+            #   ?-l value? ?-w value? ?-ad value|-nrd value? ?-as value|-nrs value? ?-temp value? ?-off? ?-pd value?
+            #   ?-ps value? ?-ic \{value value value\}? 
+            #   ?-custparams param1 \{param1Val ?-eq|-poseq|-posnocheck|-pos|-nocheck?\} ...?
             set arguments [argparse -inline {
                 {-model= -required}
                 -m=

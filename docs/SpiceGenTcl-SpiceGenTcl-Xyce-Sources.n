@@ -5,9 +5,9 @@
 .SH NAME
 SpiceGenTcl::Xyce::Sources - Commands in namespace SpiceGenTcl::Xyce::Sources
 .SH SYNOPSIS
-\fBBehaviouralSource create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -i value\fP
 .br
-\fBBehaviouralSource new\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -v value ?-smoothbsrc? ?-rcconst value?\fP
 .br
 .SH ::SPICEGENTCL::XYCE::SOURCES
 .SH CLASSES
@@ -136,9 +136,9 @@ Writable: -name
 .RE
 .PP
 Creates object of class BehaviouralSource that describes behavioural source\&.
-.RS 4n\fBBehaviouralSource create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -i value\fP
 .br
-\fBBehaviouralSource new\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -v value ?-smoothbsrc? ?-rcconst value?\fP
 .br
 .RE
 .PP
@@ -155,7 +155,7 @@ nmNode
 Name of node connected to negative pin\&.
 .TP
 -i
-Current =ession\&.
+Current expression\&.
 .TP
 -rcconst
 Rc constant of the RC network, optional, require -v\&.
@@ -164,15 +164,15 @@ Rc constant of the RC network, optional, require -v\&.
 Enables the smooth transitions, optional, require -v\&.
 .TP
 -v
-Voltage =ession\&.
+Voltage expression\&.
 .RE
 .PP
 \fBDescription\fR
 .PP
 .RS 4n
 .nf
-B<name> <(+) node> <(-) node> V={=ession} [device parameters]
-B<name> <(+) node> <(-) node> I={=ession}
+B<name> <(+) node> <(-) node> V={expression} [device parameters]
+B<name> <(+) node> <(-) node> I={expression}
 .fi
 .RE
 .PP

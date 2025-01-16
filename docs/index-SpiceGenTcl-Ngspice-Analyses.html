@@ -35,7 +35,7 @@
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::Analyses::Ac::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Ac" title="::SpiceGenTcl::Ngspice::Analyses::Ac" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::Ac</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Ac'>Ac</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Ac</font></b></code> that describes AC analysis.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>Ac create OBJNAME</span> <span class='ruff_arg'>?args?</span><br><span class='ruff_cmd'>Ac new</span> <span class='ruff_arg'>?args?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>-variation value -n value -fstart value -fstop value ?-name value?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-fstart</font></code></td><td>Start frequency.</td></tr>
 <tr><td><code><font color=#b9b96e>-fstop</font></code></td><td>Start frequency.</td></tr>
@@ -68,9 +68,10 @@
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Ngspice::Analyses::Ac new -variation dec -n 10 -fstart 1 -fstop 1e6 -name dc1</font></i>
     <i><font color=#76a396># ```</font></i>
+    <i><font color=#76a396># Synopsis: -variation value -n value -fstart value -fstop value ?-name value?</font></i>
     <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> {
         <font color=#b9b96e>-name</font>=
-        {<font color=#b9b96e>-variation</font>= <font color=#b9b96e>-required</font>}
+        {<font color=#b9b96e>-variation</font>= <font color=#b9b96e>-required</font> <font color=#b9b96e>-enum</font> {dec oct lin}}
         {<font color=#b9b96e>-n</font>= <font color=#b9b96e>-required</font>}
         {<font color=#b9b96e>-fstart</font>= <font color=#b9b96e>-required</font>}
         {<font color=#b9b96e>-fstop</font>= <font color=#b9b96e>-required</font>}
@@ -112,7 +113,7 @@
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::Analyses::Dc::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Dc" title="::SpiceGenTcl::Ngspice::Analyses::Dc" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::Dc</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Dc'>Dc</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Dc</font></b></code> that describes DC analysis.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>Dc create OBJNAME</span> <span class='ruff_arg'>?args?</span><br><span class='ruff_cmd'>Dc new</span> <span class='ruff_arg'>?args?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>-src value -start value -stop value -incr value ?-name value?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-incr</font></code></td><td>Incrementing value.</td></tr>
 <tr><td><code><font color=#b9b96e>-name</font></code></td><td>Name argument, optional.</td></tr>
@@ -145,6 +146,7 @@
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Ngspice::Analyses::Dc new -src v1 -start {time1 -eq} -stop 5 -incr 0.1 -name dc1</font></i>
     <i><font color=#76a396># ```</font></i>
+    <i><font color=#76a396># Synopsis: -src value -start value -stop value -incr value ?-name value?</font></i>
     <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> {
         <font color=#b9b96e>-name</font>=
         {<font color=#b9b96e>-src</font>= <font color=#b9b96e>-required</font>}
@@ -189,7 +191,7 @@
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::Analyses::Op::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Op" title="::SpiceGenTcl::Ngspice::Analyses::Op" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::Op</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Op'>Op</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Op</font></b></code> that describes OP analysis.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>Op create OBJNAME</span> <span class='ruff_arg'>?args?</span><br><span class='ruff_cmd'>Op new</span> <span class='ruff_arg'>?args?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>?-name value?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-name</font></code></td><td>Name argument, optional.</td></tr>
 </table>
@@ -214,6 +216,7 @@
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Ngspice::Analyses::Op new -name op1</font></i>
     <i><font color=#76a396># ```</font></i>
+    <i><font color=#76a396># Synopsis: ?-name value?</font></i>
     <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> {
         <font color=#b9b96e>-name</font>=
     }]
@@ -242,7 +245,7 @@
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::Analyses::SensAc::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::SensAc" title="::SpiceGenTcl::Ngspice::Analyses::SensAc" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::SensAc</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::SensAc'>SensAc</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>SensAc</font></b></code> that describes SENS ac analysis.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>SensAc create OBJNAME</span> <span class='ruff_arg'>?args?</span><br><span class='ruff_cmd'>SensAc new</span> <span class='ruff_arg'>?args?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>-outvar value -variation value -n value -fstart value -fstop value ?-name value?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-fstart</font></code></td><td>Start frequency.</td></tr>
 <tr><td><code><font color=#b9b96e>-fstop</font></code></td><td>Start frequency.</td></tr>
@@ -277,6 +280,7 @@
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Ngspice::Analyses::SensAc new -outvar v(1,out) -variation dec -n 10 -fstart 1 -fstop 1e6 -name dc1</font></i>
     <i><font color=#76a396># ```</font></i>
+    <i><font color=#76a396># Synopsis: -outvar value -variation value -n value -fstart value -fstop value ?-name value?</font></i>
     <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> {
         <font color=#b9b96e>-name</font>=
         {<font color=#b9b96e>-outvar</font>= <font color=#b9b96e>-required</font>}
@@ -324,13 +328,13 @@
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::Analyses::SensDc::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::SensDc" title="::SpiceGenTcl::Ngspice::Analyses::SensDc" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::SensDc</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::SensDc'>SensDc</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>SensDc</font></b></code> that describes SENS dc analysis.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>SensDc create OBJNAME</span> <span class='ruff_arg'>?args?</span><br><span class='ruff_cmd'>SensDc new</span> <span class='ruff_arg'>?args?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>-outvar value ?-name value?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-name</font></code></td><td>Name argument, optional.</td></tr>
 <tr><td><code><font color=#b9b96e>-outvar</font></code></td><td>Output variable.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>.senc variation n fstart fstop
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>.senc outvar
 </pre>
 
 </figure><p class='ruff'>Example of class initialization:</p>
@@ -345,12 +349,13 @@
     <i><font color=#76a396>#  -outvar - output variable</font></i>
     <i><font color=#76a396>#  -name - name argument, optional</font></i>
     <i><font color=#76a396># ```</font></i>
-    <i><font color=#76a396># .senc variation n fstart fstop</font></i>
+    <i><font color=#76a396># .senc outvar</font></i>
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># Example of class initialization:</font></i>
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Ngspice::Analyses::SensDc new -outvar v(1,out) -name sensdc1</font></i>
     <i><font color=#76a396># ```</font></i>
+    <i><font color=#76a396># Synopsis: -outvar value ?-name value?</font></i>
     <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> {
         <font color=#b9b96e>-name</font>=
         {<font color=#b9b96e>-outvar</font>= <font color=#b9b96e>-required</font>}
@@ -381,7 +386,7 @@
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::Analyses::Sp::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Sp" title="::SpiceGenTcl::Ngspice::Analyses::Sp" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::Sp</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Sp'>Sp</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Sp</font></b></code> that describes s-parameter analysis.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>Sp create OBJNAME</span> <span class='ruff_arg'>?args?</span><br><span class='ruff_cmd'>Sp new</span> <span class='ruff_arg'>?args?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>-variation value -n value -fstart value -fstop value ?-name value? ?-donoise?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-donoise</font></code></td><td>Activate s-parameter noise.</td></tr>
 <tr><td><code><font color=#b9b96e>-fstart</font></code></td><td>Start frequency.</td></tr>
@@ -416,9 +421,10 @@
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Ngspice::Analyses::Sp new -variation dec -n 10 -fstart 1 -fstop 1e6 -name sp1 -donoise</font></i>
     <i><font color=#76a396># ```</font></i>
+    <i><font color=#76a396># Synopsis: -variation value -n value -fstart value -fstop value ?-name value? ?-donoise?</font></i>
     <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> {
         <font color=#b9b96e>-name</font>=
-        {<font color=#b9b96e>-variation</font>= <font color=#b9b96e>-required</font>}
+        {<font color=#b9b96e>-variation</font>= <font color=#b9b96e>-required</font> <font color=#b9b96e>-enum</font> {dec oct lin}}
         {<font color=#b9b96e>-n</font>= <font color=#b9b96e>-required</font>}
         {<font color=#b9b96e>-fstart</font>= <font color=#b9b96e>-required</font>}
         {<font color=#b9b96e>-fstop</font>= <font color=#b9b96e>-required</font>}
@@ -464,7 +470,7 @@
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::Analyses::Tran::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Tran" title="::SpiceGenTcl::Ngspice::Analyses::Tran" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::Tran</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Tran'>Tran</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Tran</font></b></code> that describes TRAN analysis.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>Tran create OBJNAME</span> <span class='ruff_arg'>?args?</span><br><span class='ruff_cmd'>Tran new</span> <span class='ruff_arg'>?args?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>-tstep value -tstop value ?-tstart value ?-tmax value?? ?-uic? ?-name value?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-name</font></code></td><td>Name argument, optional.</td></tr>
 <tr><td><code><font color=#b9b96e>-tmax</font></code></td><td>Size of maximum time step in actual simulation, optional, require -tstart.</td></tr>
@@ -499,6 +505,7 @@
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Ngspice::Analyses::Tran new -tstep 1e-9 -tstop 10e-6 -name dc1</font></i>
     <i><font color=#76a396># ```</font></i>
+    <i><font color=#76a396># Synopsis: -tstep value -tstop value ?-tstart value ?-tmax value?? ?-uic? ?-name value?</font></i>
     <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> {
         <font color=#b9b96e>-name</font>=
         {<font color=#b9b96e>-tstep</font>= <font color=#b9b96e>-required</font>}
@@ -551,19 +558,12 @@
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html'>SpiceGenTcl::Xyce::SemiconductorDevices</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-Analyses.html'>SpiceGenTcl::Xyce::Analyses</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-Simulators.html'>SpiceGenTcl::Xyce::Simulators</a></li>
-<hr><li class='ruff-toc2'><a href='#::SpiceGenTcl::Ngspice::Analyses-Classes'>Classes</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Ac'>Ac</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Ac::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Ac</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Ac</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Ac</font></b></code> that describes AC analysis.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Dc'>Dc</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Dc::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Dc</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Dc</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Dc</font></b></code> that describes DC analysis.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Op'>Op</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Op::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Op</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Op</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Op</font></b></code> that describes OP analysis.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::SensAc'>SensAc</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::SensAc::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>SensAc</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>SensAc</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>SensAc</font></b></code> that describes SENS ac analysis.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::SensDc'>SensDc</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::SensDc::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>SensDc</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>SensDc</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>SensDc</font></b></code> that describes SENS dc analysis.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Sp'>Sp</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Sp::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Sp</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Sp</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Sp</font></b></code> that describes s-parameter analysis.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Tran'>Tran</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Tran::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Tran</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Tran</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Tran</font></b></code> that describes TRAN analysis.
+<hr><li class='ruff-toc2'><a href='#::SpiceGenTcl::Ngspice::Analyses-Classes'>Classes</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Ac'>Ac</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Ac::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;<font color=#b9b96e>-variation</font> value <font color=#b9b96e>-n</font> value <font color=#b9b96e>-fstart</font> value <font color=#b9b96e>-fstop</font> value ?-name value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Ac</font></b></code> that describes AC analysis.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Dc'>Dc</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Dc::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;<font color=#b9b96e>-src</font> value <font color=#b9b96e>-start</font> value <font color=#b9b96e>-stop</font> value <font color=#b9b96e>-incr</font> value ?-name value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Dc</font></b></code> that describes DC analysis.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Op'>Op</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Op::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;?-name value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Op</font></b></code> that describes OP analysis.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::SensAc'>SensAc</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::SensAc::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;<font color=#b9b96e>-outvar</font> value <font color=#b9b96e>-variation</font> value <font color=#b9b96e>-n</font> value <font color=#b9b96e>-fstart</font> value <font color=#b9b96e>-fstop</font> value ?-name value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>SensAc</font></b></code> that describes SENS ac analysis.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::SensDc'>SensDc</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::SensDc::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;<font color=#b9b96e>-outvar</font> value ?-name value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>SensDc</font></b></code> that describes SENS dc analysis.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Sp'>Sp</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Sp::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;<font color=#b9b96e>-variation</font> value <font color=#b9b96e>-n</font> value <font color=#b9b96e>-fstart</font> value <font color=#b9b96e>-fstop</font> value ?-name value? ?-donoise?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Sp</font></b></code> that describes s-parameter analysis.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Tran'>Tran</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Tran::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;<font color=#b9b96e>-tstep</font> value <font color=#b9b96e>-tstop</font> value ?-tstart value ?-tmax value?? ?-uic? ?-name value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Tran</font></b></code> that describes TRAN analysis.
 </span></li></ul></nav><footer class='ruff-layout-footer ruff-ft'><div style='float: right;'>Document generated by <a href='https://ruff.magicsplat.com'>Ruff!</a></div><div>&copy; George Yashin</div></footer>
 </div></body></html>

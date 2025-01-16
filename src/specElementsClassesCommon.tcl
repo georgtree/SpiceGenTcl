@@ -54,6 +54,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             # ```
             # ::SpiceGenTcl::Common::BasicDevices::Resistor new 1 netp netm -r 1e3 -tc1 1 -temp {temp_amb -eq}
             # ```
+            # Synopsis: name npNode nmNode -r value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value?
             set arguments [argparse -inline {
                 {-r= -required}
                 -m=
@@ -103,7 +104,8 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             # Example of class initialization:
             # ```
             # ::SpiceGenTcl::Common::BasicDevices::Capacitor new 1 netp netm -c 1e3 -tc1 1 -temp {temp_amb -eq}
-            # ```            
+            # ```
+            # Synopsis: name npNode nmNode -c value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value? ?-ic value?
             set arguments [argparse -inline {
                 {-c= -required}
                 -m=
@@ -157,6 +159,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             # ```
             # ::SpiceGenTcl::Common::BasicDevices::Inductor new 1 netp netm -l 1e3 -tc1 1 -temp {temp_amb -eq}
             # ```
+            # Synopsis: name npNode nmNode -l value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value?
             set arguments [argparse -inline {
                 {-l= -required}
                 -m= 
@@ -235,6 +238,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             # ```
             # ::SpiceGenTcl::Ngspice::BasicDevices::VSwitch new 1 net1 0 netc 0 -model sw1 -on
             # ```
+            # Synopsis: name npNode nmNode ncpNode ncmNode -model value ?-on|-off?
             set arguments [argparse -inline {
                 {-model= -required}
                 {-on -forbid {off}}
@@ -277,6 +281,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             # ```
             # ::SpiceGenTcl::Ngspice::BasicDevices::CSwitch new 1 net1 0 -icntrl v1 -model sw1 -on
             # ```
+            # Synopsis: name npNode nmNode -icntrl value -model value ?-on|-off?
             set arguments [argparse -inline {
                 {-icntrl= -required}
                 {-model= -required}
@@ -319,6 +324,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             # ```
             # ::SpiceGenTcl::Common::BasicDevices::SubcircuitInstanceAuto new $subcktObj 1 {net1 net2} -r 1 -c {cpar -eq}
             # ```
+            # Synopsis: subcktObj name nodes ?-paramName {paramValue ?-eq?} ...?
             
             # check that inputs object class is Subcircuit
             if {[info object class $subcktObj "::SpiceGenTcl::Subcircuit"]!=1} {
@@ -594,6 +600,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Vdc new 1 netp netm -dc 10
             # ```
+            # Synopsis: name npNode nmNode -dc value
             next $name v $npNode $nmNode {*}$args
         }
     }
@@ -616,6 +623,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Vac new 1 netp netm -ac 10 -acphase 45
             # ```
+            # Synopsis: name npNode nmNode -ac value ?-acphase value?
             next $name v $npNode $nmNode {*}$args
 
         }
@@ -644,6 +652,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Vpulse new 1 net1 net2 -low 0 -high 1 -td {td -eq} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6
             # ```
+            # Synopsis: name npNode nmNode -low value -high value -td value -tr value -tf value -pw value -per value
             next $name v $npNode $nmNode {*}$args
         }
     }  
@@ -671,6 +680,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Vsin new 1 net1 net2 -v0 0 -va 2 -freq {freq -eq} -td 1e-6 -theta {theta -eq}
             # ```
+            # Synopsis: name npNode nmNode -v0 value -va value -freq value ?-td value ?-theta value ?-phase value???
             next $name v $npNode $nmNode {*}$args
         }
     }
@@ -697,6 +707,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Vexp new 1 net1 net2 -v1 0 -v2 1 -td1 1e-9 -tau1 1e-9 -td2 {td2 -eq} -tau2 10e-6
             # ```
+            # Synopsis: name npNode nmNode -v1 value -v2 value -td1 value -tau1 value -td2 value -tau2 value
             next $name v $npNode $nmNode {*}$args
         }
     }
@@ -718,6 +729,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Vpwl new 1 npNode nmNode -seq {0 0 {t1 -eq} 1 2 2 3 3 4 4}
             # ```
+            # Synopsis: name npNode nmNode -seq list
             next $name v $npNode $nmNode {*}$args
         }
     }    
@@ -743,6 +755,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Vsin new 1 net1 net2 -v0 0 -va 1 -fc {freq -eq} -mdi 0 -fs 1e3
             # ```
+            # Synopsis: name npNode nmNode -v0 value -va value -fc value -mdi value -fs value
             next $name v $npNode $nmNode {*}$args
         }
     }
@@ -765,6 +778,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Idc new 1 netp netm -dc 10
             # ```
+            # Synopsis: name npNode nmNode -dc value
             next $name i $npNode $nmNode {*}$args
         }
     }
@@ -786,6 +800,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # Example of class initialization:
             # ```
             # ::SpiceGenTcl::Common::Sources::Iac new 1 netp netm -ac 10 -acphase 45
+            # Synopsis: name npNode nmNode -ac value ?-acphase value?
             next $name i $npNode $nmNode {*}$args
         }
     }
@@ -814,6 +829,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Ipulse new 1 net1 net2 -low 0 -high 1 -td {td -eq} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6
             # ```
+            # Synopsis: name npNode nmNode -low value -high value -td value -tr value -tf value -pw value -per value
             next $name i $npNode $nmNode {*}$args
         }
     }
@@ -840,6 +856,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Isin new 1 net1 net2 -v0 0 -va 2 -freq {freq -eq} -td 1e-6 -theta {theta -eq}
             # ```
+            # Synopsis: name npNode nmNode -v0 value -va value -freq value ?-td value ?-theta value ?-phase value???
             next $name i $npNode $nmNode {*}$args
         }
     }
@@ -866,6 +883,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Iexp new 1 net1 net2 -v1 0 -v2 1 -td1 1e-9 -tau1 1e-9 -td2 {td2 -eq} -tau2 10e-6
             # ```
+            # Synopsis: name npNode nmNode -v1 value -v2 value -td1 value -tau1 value -td2 value -tau2 value
             next $name i $npNode $nmNode {*}$args
         }
     }
@@ -887,6 +905,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Ipwl new 1 npNode nmNode -seq {0 0 {t1 -eq} 1 2 2 3 3 4 4}
             # ```
+            # Synopsis: name npNode nmNode -seq list
             next $name i $npNode $nmNode {*}$args
         }
     }   
@@ -912,6 +931,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Isin new 1 net1 net2 -v0 0 -va 1 -fc {freq -eq} -mdi 0 -fs 1e3
             # ```
+            # Synopsis: name npNode nmNode -v0 value -va value -fc value -mdi value -fs value
             next $name i $npNode $nmNode {*}$args
         }
     }
@@ -936,6 +956,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Vccs new 1 net1 0 netc 0 -trcond 10 -m 1
             # ```
+            # Synopsis: name npNode nmNode ncpNode ncmNode -trcond value ?-m value?
             set arguments [argparse -inline {
                 {-trcond -required}
                 -m=
@@ -984,6 +1005,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Vcvs new 1 net1 0 netc 0 -gain 10
             # ```
+            # Synopsis: name npNode nmNode ncpNode ncmNode -gain value
             set arguments [argparse -inline {
                 {-gain -required}
             }]
@@ -1023,6 +1045,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Cccs new 1 net1 0 netc 0 -consrc vc -gain 10 -m 1
             # ```
+            # Synopsis: name npNode nmNode -consrc value -gain value ?-m value?
             set arguments [argparse -inline {
                 {-consrc -required}
                 {-gain -required}
@@ -1073,6 +1096,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Ccvs new 1 net1 0 -consrc vc -transr {tres -eq}
             # ```
+            # Synopsis: name npNode nmNode -consrc value -transr value
             set arguments [argparse -inline {
                 {-consrc -required}
                 {-transr -required}

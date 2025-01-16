@@ -9,13 +9,9 @@ SpiceGenTcl::Common::Sources - Commands in namespace SpiceGenTcl::Common::Source
 .br
 \fBac new\fP \fIname type npNode nmNode ?args?\fP
 .br
-\fBCccs create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -consrc value -gain value ?-m value?\fP
 .br
-\fBCccs new\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBCcvs create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBCcvs new\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -consrc value -transr value\fP
 .br
 \fBdc create OBJNAME\fP \fIname type npNode nmNode ?args?\fP
 .br
@@ -29,29 +25,17 @@ SpiceGenTcl::Common::Sources - Commands in namespace SpiceGenTcl::Common::Source
 .br
 \fBIac new\fP \fIname npNode nmNode ?args?\fP
 .br
-\fBIdc create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -dc value\fP
 .br
-\fBIdc new\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -v1 value -v2 value -td1 value -tau1 value -td2 value -tau2 value\fP
 .br
-\fBIexp create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -low value -high value -td value -tr value -tf value -pw value -per value\fP
 .br
-\fBIexp new\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -seq list\fP
 .br
-\fBIpulse create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -fc value -mdi value -fs value\fP
 .br
-\fBIpulse new\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBIpwl create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBIpwl new\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBIsffm create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBIsffm new\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBIsin create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBIsin new\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -freq value ?-td value ?-theta value ?-phase value???\fP
 .br
 \fBpulse create OBJNAME\fP \fIname type npNode nmNode ?args?\fP
 .br
@@ -69,41 +53,23 @@ SpiceGenTcl::Common::Sources - Commands in namespace SpiceGenTcl::Common::Source
 .br
 \fBsin new\fP \fIname type npNode nmNode ?args?\fP
 .br
-\fBVac create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -ac value ?-acphase value?\fP
 .br
-\fBVac new\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode ncpNode ncmNode -trcond value ?-m value?\fP
 .br
-\fBVccs create OBJNAME\fP \fIname npNode nmNode ncpNode ncmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode ncpNode ncmNode -gain value\fP
 .br
-\fBVccs new\fP \fIname npNode nmNode ncpNode ncmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -dc value\fP
 .br
-\fBVcvs create OBJNAME\fP \fIname npNode nmNode ncpNode ncmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -v1 value -v2 value -td1 value -tau1 value -td2 value -tau2 value\fP
 .br
-\fBVcvs new\fP \fIname npNode nmNode ncpNode ncmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -low value -high value -td value -tr value -tf value -pw value -per value\fP
 .br
-\fBVdc create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -seq list\fP
 .br
-\fBVdc new\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -fc value -mdi value -fs value\fP
 .br
-\fBVexp create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBVexp new\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBVpulse create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBVpulse new\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBVpwl create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBVpwl new\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBVsffm create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBVsffm new\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBVsin create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBVsin new\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -freq value ?-td value ?-theta value ?-phase value???\fP
 .br
 .SH ::SPICEGENTCL::COMMON::SOURCES
 .SH CLASSES
@@ -248,9 +214,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Cccs that describes linear current-controlled current source\&.
-.RS 4n\fBCccs create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBCccs new\fP \fIname npNode nmNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -consrc value -gain value ?-m value?\fP
 .br
 .RE
 .PP
@@ -352,9 +316,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Ccvs that describes linear current-controlled current source\&.
-.RS 4n\fBCcvs create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBCcvs new\fP \fIname npNode nmNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -consrc value -transr value\fP
 .br
 .RE
 .PP
@@ -843,6 +805,7 @@ Example of class initialization:
 .RS 4n
 .nf
 ::SpiceGenTcl::Common::Sources::Iac new 1 netp netm -ac 10 -acphase 45
+Synopsis: name npNode nmNode -ac value ?-acphase value?
 .fi
 .RE
 .PP
@@ -906,9 +869,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Idc that describes simple constant voltage source\&.
-.RS 4n\fBIdc create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBIdc new\fP \fIname npNode nmNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -dc value\fP
 .br
 .RE
 .PP
@@ -1004,9 +965,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Iexp that describes exponential current source\&.
-.RS 4n\fBIexp create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBIexp new\fP \fIname npNode nmNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -v1 value -v2 value -td1 value -tau1 value -td2 value -tau2 value\fP
 .br
 .RE
 .PP
@@ -1117,9 +1076,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Ipulse that describes pulse current source\&.
-.RS 4n\fBIpulse create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBIpulse new\fP \fIname npNode nmNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -low value -high value -td value -tr value -tf value -pw value -per value\fP
 .br
 .RE
 .PP
@@ -1233,9 +1190,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Ipwl that describes piece-wise current source\&.
-.RS 4n\fBIpwl create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBIpwl new\fP \fIname npNode nmNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -seq list\fP
 .br
 .RE
 .PP
@@ -1331,9 +1286,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Isffm that describes single-frequency FM current source\&.
-.RS 4n\fBIsffm create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBIsffm new\fP \fIname npNode nmNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -fc value -mdi value -fs value\fP
 .br
 .RE
 .PP
@@ -1441,9 +1394,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Isin that describes sinusoidal current source\&.
-.RS 4n\fBIsin create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBIsin new\fP \fIname npNode nmNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -freq value ?-td value ?-theta value ?-phase value???\fP
 .br
 .RE
 .PP
@@ -1874,9 +1825,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Vac that describes ac voltage source\&.
-.RS 4n\fBVac create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBVac new\fP \fIname npNode nmNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -ac value ?-acphase value?\fP
 .br
 .RE
 .PP
@@ -1975,9 +1924,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Vccs that describes linear voltage-controlled current source\&.
-.RS 4n\fBVccs create OBJNAME\fP \fIname npNode nmNode ncpNode ncmNode ?args?\fP
-.br
-\fBVccs new\fP \fIname npNode nmNode ncpNode ncmNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode ncpNode ncmNode -trcond value ?-m value?\fP
 .br
 .RE
 .PP
@@ -2082,9 +2029,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Vcvs that describes linear voltage-controlled current source\&.
-.RS 4n\fBVcvs create OBJNAME\fP \fIname npNode nmNode ncpNode ncmNode ?args?\fP
-.br
-\fBVcvs new\fP \fIname npNode nmNode ncpNode ncmNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode ncpNode ncmNode -gain value\fP
 .br
 .RE
 .PP
@@ -2186,9 +2131,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Vdc that describes simple constant voltage source\&.
-.RS 4n\fBVdc create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBVdc new\fP \fIname npNode nmNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -dc value\fP
 .br
 .RE
 .PP
@@ -2284,9 +2227,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Vexp that describes exponential voltage source\&.
-.RS 4n\fBVexp create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBVexp new\fP \fIname npNode nmNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -v1 value -v2 value -td1 value -tau1 value -td2 value -tau2 value\fP
 .br
 .RE
 .PP
@@ -2397,9 +2338,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Vpulse that describes pulse voltage source\&.
-.RS 4n\fBVpulse create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBVpulse new\fP \fIname npNode nmNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -low value -high value -td value -tr value -tf value -pw value -per value\fP
 .br
 .RE
 .PP
@@ -2513,9 +2452,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Vpwl that describes piece-wise voltage source\&.
-.RS 4n\fBVpwl create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBVpwl new\fP \fIname npNode nmNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -seq list\fP
 .br
 .RE
 .PP
@@ -2611,9 +2548,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Vsffm that describes single-frequency FM voltage source\&.
-.RS 4n\fBVsffm create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBVsffm new\fP \fIname npNode nmNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -fc value -mdi value -fs value\fP
 .br
 .RE
 .PP
@@ -2731,9 +2666,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Vsin that describes sinusoidal voltage source\&.
-.RS 4n\fBVsin create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBVsin new\fP \fIname npNode nmNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -freq value ?-td value ?-theta value ?-phase value???\fP
 .br
 .RE
 .PP

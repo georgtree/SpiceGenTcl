@@ -59,7 +59,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ```
             # Behavioral resistor:
             # ```
-            # R<name> <(+) node> <(-) node> R ={=ession} [device parameters]
+            # R<name> <(+) node> <(-) node> R ={expression} [device parameters]
             # ```
             # Example of class initialization:
             # ```
@@ -73,6 +73,10 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ```
             # ::SpiceGenTcl::Xyce::BasicDevices::Resistor new 1 netp netm -model resm -l 1e-6 -w 10e-6
             # ```
+            # Synopsis: name npNode nmNode -r value ?-tc1 value? ?-tc2 value? ?-tce value? ?-m value? ?-temp value? 
+            # Synopsis: name npNode nmNode -r value -beh ?-tc1 value? ?-tc2 value? ?-tce value? ?-m value? ?-temp value?
+            # Synopsis: name npNode nmNode -r value -model ?-tc1 value? ?-tc2 value? ?-tce value? ?-m value? ?-temp value?
+            #   ?-l value? ?-w value?
             set arguments [argparse -inline {
                 -r=
                 {-beh -forbid {model} -require {r}}
@@ -138,17 +142,17 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ```
             # ::SpiceGenTcl::Xyce::BasicDevices::Capacitor new 1 netp netm 1e-6 -tc1 1 -temp {temp -eq}
             # ```
-            # Behavioral capacitor with C =ession:
+            # Behavioral capacitor with C expression:
             # ```
-            # C<device name> <(+) node> <(-) node> C={=ession} [device parameters]
+            # C<device name> <(+) node> <(-) node> C={expression} [device parameters]
             # ```
             # Example of class initialization:
             # ```
             # ::SpiceGenTcl::Xyce::BasicDevices::Capacitor new 1 netp netm -c "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1
             # ```
-            # Behavioral capacitor with Q =ession:
+            # Behavioral capacitor with Q expression:
             # ```
-            # C<device name> <(+) node> <(-) node> Q={=ession} [device parameters]
+            # C<device name> <(+) node> <(-) node> Q={expression} [device parameters]
             # ```
             # Example of class initialization:
             # ```
@@ -162,6 +166,14 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ```
             # ::SpiceGenTcl::Xyce::BasicDevices::Capacitor new 1 netp netm -model capm -l 1e-6 -w 10e-6
             # ```
+            # Synopsis: name npNode nmNode -c value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value?
+            #   ?-age value? ?-d value?
+            # Synopsis: name npNode nmNode -beh -c value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value?
+            #   ?-age value? ?-d value?
+            # Synopsis: name npNode nmNode -beh -q value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value?
+            #   ?-age value? ?-d value?
+            # Synopsis: name npNode nmNode -model value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value?
+            #   ?-age value? ?-d value? ?-l value? ?-w value?
             set arguments [argparse -inline {
                 {-c= -forbid {q}}
                 {-q= -require {beh} -forbid {c model}}
@@ -233,14 +245,6 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ```
             # ::SpiceGenTcl::Xyce::BasicDevices::Inductor new 1 netp netm -l 1e-6 -tc1 1 -temp {temp -eq}
             # ```
-            # Behavioral inductor:
-            # ```
-            # L<name> <(+) node> <(-) node> [model] <value> [device parameters]
-            # ```
-            # Example of class initialization:
-            # ```
-            # ::SpiceGenTcl::Xyce::BasicDevices::Inductor new 1 netp netm -l "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1
-            # ```
             # Inductor with model card:
             # ```
             # L<name> <(+) node> <(-) node> [model] <value> [device parameters]
@@ -249,6 +253,9 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ```
             # ::SpiceGenTcl::Xyce::BasicDevices::Inductor new 1 netp netm -l 1e-6 -model indm
             # ```
+            # Synopsis: name npNode nmNode -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value? 
+            # Synopsis: name npNode nmNode -model value -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value?   
+            #   ?-ic value?
             set arguments [argparse -inline {
                 {-l= -required}
                 -model=
@@ -328,6 +335,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ```
             # ::SpiceGenTcl::Xyce::BasicDevices::GenSwitch new 1 net1 0 -model sw1 -control {I(VMON)}
             # ```
+            # Synopsis: name npNode nmNode -model value -control value ?-on|off?
             set arguments [argparse -inline {
                 {-model= -required}
                 {-control= -required}
@@ -400,6 +408,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ```
             # ::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstanceAuto new $subcktObj 1 {net1 net2} -r 1 -c {cpar -eq}
             # ```
+            # Synopsis: subcktObj name nodes ?-paramName {paramValue ?-eq?} ...?
             
             # check that inputs object class is Subcircuit
             if {[info object class $subcktObj "::SpiceGenTcl::Subcircuit"]!=1} {
@@ -604,18 +613,20 @@ namespace eval ::SpiceGenTcl::Xyce::Sources {
             #  name - name of the device without first-letter designator R
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  -i - current =ession
-            #  -v - voltage =ession
+            #  -i - current expression
+            #  -v - voltage expression
             #  -smoothbsrc - enables the smooth transitions, optional, require -v
-            #  -rcconst -  rc constant of the RC network, optional, require -v
+            #  -rcconst - rc constant of the RC network, optional, require -v
             # ```
-            # B<name> <(+) node> <(-) node> V={=ession} [device parameters]
-            # B<name> <(+) node> <(-) node> I={=ession}
+            # B<name> <(+) node> <(-) node> V={expression} [device parameters]
+            # B<name> <(+) node> <(-) node> I={expression}
             # ```
             # Example of class initialization:
             # ```
             # ::SpiceGenTcl::Xyce::Sources::BehaviouralSource new 1 netp netm -v "V(a)+V(b)+pow(V(c),2)"
             # ```
+            # Synopsis: name npNode nmNode -i value
+            # Synopsis: name npNode nmNode -v value ?-smoothbsrc? ?-rcconst value?
             set arguments [argparse -inline {
                 {-i= -forbid {v}}
                 {-v= -forbid {i}}
@@ -675,6 +686,8 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             # ```
             # ::SpiceGenTcl::Xyce::SemiconductorDevices::Diode new 1 netp netm -model diomod -area 1e-6
             # ```
+            # Synopsis: name npNode nmNode -model value ?-area value? ?-pj value? ?-ic value? ?-m value? ?-temp value?
+            #   ?-custparams param1 \{param1Val ?-eq|-poseq|-posnocheck|-pos|-nocheck?\} ...?
             set arguments [argparse -inline {
                 {-model= -required}
                 -area=
@@ -753,6 +766,8 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             # ```
             # ::SpiceGenTcl::Xyce::SemiconductorDevices::Bjt new 1 netc netb nete -model bjtmod -ns nets -area 1e-3
             # ```
+            # Synopsis: name ncNode nbNode neNode -model value ?-ns value ?-tj value?? ?-area value? ?-m value? 
+            #   ?-temp value? ?-off? ?-ic1 value? ?-ic2 value?
             set arguments [argparse -inline {
                 {-model= -required}
                 -area=
@@ -826,6 +841,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             # ```
             # ::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet new 1 netd netg nets -model jfetmod -area {area*2 -eq} -temp 25
             # ```
+            # Synopsis: name ndNode ngNode nsNode -model value ?-area value? ?-temp value?
             set arguments [argparse -inline {
                 {-model= -required}
                 -area=
@@ -876,6 +892,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             # ```
             # ::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet new 1 netd netg nets -model mesfetmod -area {area*2 -eq}
             # ```
+            # Synopsis: name ndNode ngNode nsNode -model value ?-area value? ?-temp value?
             set arguments [argparse -inline {
                 {-model= -required}
                 -area=
@@ -922,7 +939,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             #  -w - width of channel, optional
             #  -ad - diffusion area of drain, optional, forbid -nrd
             #  -as - diffusion area of source, optional,forbid -nrs
-             #  -pd - perimeter area of drain, optional
+            #  -pd - perimeter area of drain, optional
             #  -ps - perimeter area of source, optional
             #  -nrd - equivalent number of squares of the drain diffusions
             #  -nrs - equivalent number of squares of the source diffusions
@@ -931,7 +948,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             #  -off - initial state, optional
             #  -n4 - name of 4th node;
             #  -n5 - name of 5th node, require -n4, optional
-            #  n6 - name of 6th node, require -n5, optional
+            #  -n6 - name of 6th node, require -n5, optional
             #  -n7 - name of 7th node, require -n6, optional
             #  -custparams - key that collects all arguments at the end of device definition, to provide an ability
             #  to add custom parameters in form `-custparams param1 param1Val param2 {param2eq -eq} param3 param3Val ...`
@@ -949,6 +966,10 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             # ```
             # ::SpiceGenTcl::Xyce::Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5
             # ```
+            # Synopsis: name ndNode ngNode nsNode -model value ?-n4 value ?-n5 value ?-n6 value ?-n7 value???? ?-m value?
+            #   ?-l value? ?-w value? ?-ad value|-nrd value? ?-as value|-nrs value? ?-temp value? ?-off? ?-pd value?
+            #   ?-ps value? ?-ic \{value value value\}? 
+            #   ?-custparams param1 \{param1Val ?-eq|-poseq|-posnocheck|-pos|-nocheck?\} ...?
             set arguments [argparse -inline {
                 {-model= -required}
                 -m=

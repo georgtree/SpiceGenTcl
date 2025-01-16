@@ -5,9 +5,13 @@
 .SH NAME
 SpiceGenTcl::Xyce::BasicDevices - Commands in namespace SpiceGenTcl::Xyce::BasicDevices
 .SH SYNOPSIS
-\fBCapacitor create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -c value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value? ?-age value? ?-d value?\fP
 .br
-\fBCapacitor new\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -beh -c value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value? ?-age value? ?-d value?\fP
+.br
+\fBOBJECT constructor\fP \fIname npNode nmNode -beh -q value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value? ?-age value? ?-d value?\fP
+.br
+\fBOBJECT constructor\fP \fIname npNode nmNode -model value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value? ?-age value? ?-d value? ?-l value? ?-w value?\fP
 .br
 \fBCModel create OBJNAME\fP \fIname ?args?\fP
 .br
@@ -17,21 +21,21 @@ SpiceGenTcl::Xyce::BasicDevices - Commands in namespace SpiceGenTcl::Xyce::Basic
 .br
 \fBCSwitchModel new\fP \fIname ?args?\fP
 .br
-\fBGenSwitch create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -model value -control value ?-on|off?\fP
 .br
-\fBGenSwitch new\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value?\fP
 .br
-\fBInductor create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBInductor new\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -model value -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value?\fP
 .br
 \fBLModel create OBJNAME\fP \fIname ?args?\fP
 .br
 \fBLModel new\fP \fIname ?args?\fP
 .br
-\fBResistor create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -r value ?-tc1 value? ?-tc2 value? ?-tce value? ?-m value? ?-temp value?\fP
 .br
-\fBResistor new\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -r value -beh ?-tc1 value? ?-tc2 value? ?-tce value? ?-m value? ?-temp value?\fP
+.br
+\fBOBJECT constructor\fP \fIname npNode nmNode -r value -model ?-tc1 value? ?-tc2 value? ?-tce value? ?-m value? ?-temp value? ?-l value? ?-w value?\fP
 .br
 \fBRModel create OBJNAME\fP \fIname ?args?\fP
 .br
@@ -41,9 +45,7 @@ SpiceGenTcl::Xyce::BasicDevices - Commands in namespace SpiceGenTcl::Xyce::Basic
 .br
 \fBSubcircuitInstance new\fP \fIname pins subName params\fP
 .br
-\fBSubcircuitInstanceAuto create OBJNAME\fP \fIsubcktObj name nodes ?args?\fP
-.br
-\fBSubcircuitInstanceAuto new\fP \fIsubcktObj name nodes ?args?\fP
+\fBOBJECT constructor\fP \fIsubcktObj name nodes ?-paramName paramValue ?-eq? \&.\&.\&.?\fP
 .br
 \fBVSwitchModel create OBJNAME\fP \fIname ?args?\fP
 .br
@@ -176,9 +178,13 @@ Writable: -name
 .RE
 .PP
 Creates object of class Capacitor that describes capacitor\&.
-.RS 4n\fBCapacitor create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -c value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value? ?-age value? ?-d value?\fP
 .br
-\fBCapacitor new\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -beh -c value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value? ?-age value? ?-d value?\fP
+.br
+\fBOBJECT constructor\fP \fIname npNode nmNode -beh -q value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value? ?-age value? ?-d value?\fP
+.br
+\fBOBJECT constructor\fP \fIname npNode nmNode -model value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value? ?-age value? ?-d value? ?-l value? ?-w value?\fP
 .br
 .RE
 .PP
@@ -219,11 +225,11 @@ Example of class initialization as a simple capacitor:
 .fi
 .RE
 .PP
-Behavioral capacitor with C =ession:
+Behavioral capacitor with C expression:
 .PP
 .RS 4n
 .nf
-C<device name> <(+) node> <(-) node> C={=ession} [device parameters]
+C<device name> <(+) node> <(-) node> C={expression} [device parameters]
 .fi
 .RE
 .PP
@@ -235,11 +241,11 @@ Example of class initialization:
 .fi
 .RE
 .PP
-Behavioral capacitor with Q =ession:
+Behavioral capacitor with Q expression:
 .PP
 .RS 4n
 .nf
-C<device name> <(+) node> <(-) node> Q={=ession} [device parameters]
+C<device name> <(+) node> <(-) node> Q={expression} [device parameters]
 .fi
 .RE
 .PP
@@ -593,9 +599,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class GenSwitch that describes generic switch device\&.
-.RS 4n\fBGenSwitch create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBGenSwitch new\fP \fIname npNode nmNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -model value -control value ?-on|off?\fP
 .br
 .RE
 .PP
@@ -707,9 +711,9 @@ Writable: -name
 .RE
 .PP
 Creates object of class Inductor that describes inductor\&.
-.RS 4n\fBInductor create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value?\fP
 .br
-\fBInductor new\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -model value -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value?\fP
 .br
 .RE
 .PP
@@ -746,22 +750,6 @@ Example of class initialization as a simple inductor:
 .RS 4n
 .nf
 ::SpiceGenTcl::Xyce::BasicDevices::Inductor new 1 netp netm -l 1e-6 -tc1 1 -temp {temp -eq}
-.fi
-.RE
-.PP
-Behavioral inductor:
-.PP
-.RS 4n
-.nf
-L<name> <(+) node> <(-) node> [model] <value> [device parameters]
-.fi
-.RE
-.PP
-Example of class initialization:
-.PP
-.RS 4n
-.nf
-::SpiceGenTcl::Xyce::BasicDevices::Inductor new 1 netp netm -l "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1
 .fi
 .RE
 .PP
@@ -1042,9 +1030,11 @@ Writable: -name
 .RE
 .PP
 Creates object of class Resistor that describes resistor\&.
-.RS 4n\fBResistor create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -r value ?-tc1 value? ?-tc2 value? ?-tce value? ?-m value? ?-temp value?\fP
 .br
-\fBResistor new\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -r value -beh ?-tc1 value? ?-tc2 value? ?-tce value? ?-m value? ?-temp value?\fP
+.br
+\fBOBJECT constructor\fP \fIname npNode nmNode -r value -model ?-tc1 value? ?-tc2 value? ?-tce value? ?-m value? ?-temp value? ?-l value? ?-w value?\fP
 .br
 .RE
 .PP
@@ -1089,7 +1079,7 @@ Behavioral resistor:
 .PP
 .RS 4n
 .nf
-R<name> <(+) node> <(-) node> R ={=ession} [device parameters]
+R<name> <(+) node> <(-) node> R ={expression} [device parameters]
 .fi
 .RE
 .PP
@@ -1359,9 +1349,7 @@ Writable: -name
 .PP
 Creates object of class SubcircuitInstanceAuto that describes subcircuit instance with already created
 subcircuit definition object\&.
-.RS 4n\fBSubcircuitInstanceAuto create OBJNAME\fP \fIsubcktObj name nodes ?args?\fP
-.br
-\fBSubcircuitInstanceAuto new\fP \fIsubcktObj name nodes ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIsubcktObj name nodes ?-paramName paramValue ?-eq? \&.\&.\&.?\fP
 .br
 .RE
 .PP

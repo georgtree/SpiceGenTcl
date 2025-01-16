@@ -41,6 +41,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             # ```
             # ::SpiceGenTcl::Ngspice::Analyses::Dc new -src v1 -start {time1 -eq} -stop 5 -incr 0.1 -name dc1
             # ```
+            # Synopsis: -src value -start value -stop value -incr value ?-name value?
             set arguments [argparse -inline {
                 -name=
                 {-src= -required}
@@ -87,9 +88,10 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             # ```
             # ::SpiceGenTcl::Ngspice::Analyses::Ac new -variation dec -n 10 -fstart 1 -fstop 1e6 -name dc1
             # ```
+            # Synopsis: -variation value -n value -fstart value -fstop value ?-name value?
             set arguments [argparse -inline {
                 -name=
-                {-variation= -required}
+                {-variation= -required -enum {dec oct lin}}
                 {-n= -required}
                 {-fstart= -required}
                 {-fstop= -required}
@@ -134,9 +136,10 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             # ```
             # ::SpiceGenTcl::Ngspice::Analyses::Sp new -variation dec -n 10 -fstart 1 -fstop 1e6 -name sp1 -donoise
             # ```
+            # Synopsis: -variation value -n value -fstart value -fstop value ?-name value? ?-donoise?
             set arguments [argparse -inline {
                 -name=
-                {-variation= -required}
+                {-variation= -required -enum {dec oct lin}}
                 {-n= -required}
                 {-fstart= -required}
                 {-fstop= -required}
@@ -185,6 +188,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             # ```
             # ::SpiceGenTcl::Ngspice::Analyses::SensAc new -outvar v(1,out) -variation dec -n 10 -fstart 1 -fstop 1e6 -name dc1
             # ```
+            # Synopsis: -outvar value -variation value -n value -fstart value -fstop value ?-name value?
             set arguments [argparse -inline {
                 -name=
                 {-outvar= -required}
@@ -225,12 +229,13 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             #  -outvar - output variable
             #  -name - name argument, optional
             # ```
-            # .senc variation n fstart fstop
+            # .senc outvar 
             # ```
             # Example of class initialization:
             # ```
             # ::SpiceGenTcl::Ngspice::Analyses::SensDc new -outvar v(1,out) -name sensdc1
             # ```
+            # Synopsis: -outvar value ?-name value?
             set arguments [argparse -inline {
                 -name=
                 {-outvar= -required}
@@ -264,6 +269,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             # ```
             # ::SpiceGenTcl::Ngspice::Analyses::Tran new -tstep 1e-9 -tstop 10e-6 -name dc1
             # ```
+            # Synopsis: -tstep value -tstop value ?-tstart value ?-tmax value?? ?-uic? ?-name value?
             set arguments [argparse -inline {
                 -name=
                 {-tstep= -required}
@@ -311,6 +317,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             # ```
             # ::SpiceGenTcl::Ngspice::Analyses::Op new -name op1
             # ```
+            # Synopsis: ?-name value?
             set arguments [argparse -inline {
                 -name=
             }]

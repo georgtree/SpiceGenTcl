@@ -55,6 +55,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
             # Runs netlist circuit file.
             #  circuitStr - top-level netlist string
             #  -nodelete - flag to forbid simulation file deletion
+            # Synopsis: circuitStr ?-nodelete?
             set arguments [argparse {
                 -nodelete
             }]
@@ -107,6 +108,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
             # Runs netlist circuit file.
             #  circuitStr - top-level netlist string
             #  -nodelete - flag to forbid simulation file deletion
+            # Synopsis: circuitStr ?-nodelete?
             set arguments [argparse {
                 -nodelete
             }]

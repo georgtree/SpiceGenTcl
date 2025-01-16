@@ -9,21 +9,15 @@ SpiceGenTcl::Ngspice::Sources - Commands in namespace SpiceGenTcl::Ngspice::Sour
 .br
 \fBam new\fP \fIname type npNode nmNode ?args?\fP
 .br
-\fBBehaviouralSource create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -i value ?-tc1 value? ?-tc2 value? ?-noisy 0|1? ?-temp value|-dtemp value?\fP
 .br
-\fBBehaviouralSource new\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -v value ?-tc1 value? ?-tc2 value? ?-noisy 0|1? ?-temp value|-dtemp value?\fP
 .br
-\fBIam create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -mf value -fc value ?-td value ?-phases value??\fP
 .br
-\fBIam new\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -low value -high value -td value -tr value -tf value -pw value -per value ?-np value?\fP
 .br
-\fBIpulse create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBIpulse new\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBIsffm create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBIsffm new\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -fc value -mdi value -fs value ?-phasec value ?-phases value??\fP
 .br
 \fBpulse create OBJNAME\fP \fIname type npNode nmNode ?args?\fP
 .br
@@ -33,21 +27,13 @@ SpiceGenTcl::Ngspice::Sources - Commands in namespace SpiceGenTcl::Ngspice::Sour
 .br
 \fBsffm new\fP \fIname type npNode nmNode ?args?\fP
 .br
-\fBVam create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -mf value -fc value ?-td value ?-phases value??\fP
 .br
-\fBVam new\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -dc value -ac value -portnum value ?-z0 value?\fP
 .br
-\fBVport create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -low value -high value -td value -tr value -tf value -pw value -per value ?-np value?\fP
 .br
-\fBVport new\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBVpulse create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBVpulse new\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBVsffm create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBVsffm new\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -fc value -mdi value -fs value ?-phasec value ?-phases value??\fP
 .br
 .SH ::SPICEGENTCL::NGSPICE::SOURCES
 .SH CLASSES
@@ -256,9 +242,9 @@ Writable: -name
 .RE
 .PP
 Creates object of class BehaviouralSource that describes behavioural source\&.
-.RS 4n\fBBehaviouralSource create OBJNAME\fP \fIname npNode nmNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -i value ?-tc1 value? ?-tc2 value? ?-noisy 0|1? ?-temp value|-dtemp value?\fP
 .br
-\fBBehaviouralSource new\fP \fIname npNode nmNode ?args?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -v value ?-tc1 value? ?-tc2 value? ?-noisy 0|1? ?-temp value|-dtemp value?\fP
 .br
 .RE
 .PP
@@ -275,17 +261,17 @@ nmNode
 Name of node connected to negative pin\&.
 .TP
 -i
-Current =ession\&.
+Current expression\&.
 .TP
 -v
-Voltage =ession\&.
+Voltage expression\&.
 .RE
 .PP
 \fBDescription\fR
 .PP
 .RS 4n
 .nf
-BXXXXXXX n+ n- <i==> <v==> <tc1=value> <tc2=value> <dtemp=value> <temp=value>
+BXXXXXXX n+ n- <i=expr> <v=expr> <tc1=value> <tc2=value> <dtemp=value> <temp=value>
 .fi
 .RE
 .PP
@@ -697,9 +683,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Iam that describes single-frequency FM current source\&.
-.RS 4n\fBIam create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBIam new\fP \fIname npNode nmNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -mf value -fc value ?-td value ?-phases value??\fP
 .br
 .RE
 .PP
@@ -902,9 +886,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Ipulse that describes pulse current source\&.
-.RS 4n\fBIpulse create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBIpulse new\fP \fIname npNode nmNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -low value -high value -td value -tr value -tf value -pw value -per value ?-np value?\fP
 .br
 .RE
 .PP
@@ -1071,9 +1053,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Isffm that describes single-frequency FM current source\&.
-.RS 4n\fBIsffm create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBIsffm new\fP \fIname npNode nmNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -fc value -mdi value -fs value ?-phasec value ?-phases value??\fP
 .br
 .RE
 .PP
@@ -1449,9 +1429,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Vam that describes single-frequency FM voltage source\&.
-.RS 4n\fBVam create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBVam new\fP \fIname npNode nmNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -mf value -fc value ?-td value ?-phases value??\fP
 .br
 .RE
 .PP
@@ -1758,9 +1736,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Vport that describes simple constant voltage source\&.
-.RS 4n\fBVport create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBVport new\fP \fIname npNode nmNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -dc value -ac value -portnum value ?-z0 value?\fP
 .br
 .RE
 .PP
@@ -1861,9 +1837,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Vpulse that describes pulse voltage source\&.
-.RS 4n\fBVpulse create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBVpulse new\fP \fIname npNode nmNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -low value -high value -td value -tr value -tf value -pw value -per value ?-np value?\fP
 .br
 .RE
 .PP
@@ -2034,9 +2008,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Vsffm that describes single-frequency FM voltage source\&.
-.RS 4n\fBVsffm create OBJNAME\fP \fIname npNode nmNode ?args?\fP
-.br
-\fBVsffm new\fP \fIname npNode nmNode ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -fc value -mdi value -fs value ?-phasec value ?-phases value??\fP
 .br
 .RE
 .PP

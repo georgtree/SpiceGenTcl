@@ -585,7 +585,7 @@ namespace eval ::SpiceGenTcl {
             #    switches
             #  -pos - parameter is of class [::SpiceGenTcl::ParameterPositional], optional, forbids other switches
             #  -nocheck - parameter is of class [::SpiceGenTcl::ParameterNoCheck], optional, forbids other switches
-            # Synopsis: paramName value ?-name value? ?-eq || -poseq || -posnocheck || -pos || -nocheck?
+            # Synopsis: paramName value ?-name value? ?-eq|-poseq|-posnocheck|-pos|-nocheck?
             argparse {
                 {-pos -forbid {eq poseq posnocheck nocheck}}
                 {-eq -forbid {pos poseq posnocheck nocheck}}
@@ -1475,7 +1475,7 @@ namespace eval ::SpiceGenTcl {
             #    switches
             #  -pos - parameter is of class [::SpiceGenTcl::ParameterPositional], optional, forbids other switches
             #  -nocheck - parameter is of class [::SpiceGenTcl::ParameterNoCheck], optional, forbids other switches
-            # Synopsis: paramName value ?-name value? ?-eq || -poseq || -posnocheck || -pos || -nocheck?
+            # Synopsis: paramName value ?-name value? ?-eq|-poseq|-posnocheck|-pos|-nocheck?
             set arguments [argparse {
                 {-eq -forbid {poseq posnocheck pos nocheck}}
                 {-poseq -forbid {eq posnocheck pos nocheck}}
