@@ -17,11 +17,9 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBimportXyce\fP
 .br
-\fBAnalysis create OBJNAME\fP \fItype params ?args?\fP
+\fBOBJECT constructor\fP \fItype params ?-name value?\fP
 .br
-\fBAnalysis new\fP \fItype params ?args?\fP
-.br
-\fBOBJECT addParam\fP \fIparamName value ?args?\fP
+\fBOBJECT addParam\fP \fIparamName value ?-name value? ?-eq || -poseq || -posnocheck || -pos || -nocheck?\fP
 .br
 \fBOBJECT deleteParam\fP \fIparamName\fP
 .br
@@ -59,17 +57,15 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT genSPICEString\fP
 .br
-\fBOBJECT getDataCsv\fP \fI?args?\fP
+\fBOBJECT getDataCsv\fP \fI?-all? ?-traces list? ?-sep value?\fP
 .br
 \fBOBJECT getDataDict\fP
 .br
 \fBOBJECT getElement\fP \fIelemName\fP
 .br
-\fBOBJECT runAndRead\fP \fI?args?\fP
+\fBOBJECT runAndRead\fP \fI?-nodelete?\fP
 .br
-\fBComment create OBJNAME\fP \fIvalue ?args?\fP
-.br
-\fBComment new\fP \fIvalue ?args?\fP
+\fBOBJECT constructor\fP \fIvalue ?-name value?\fP
 .br
 \fBOBJECT genSPICEString\fP
 .br
@@ -89,7 +85,7 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBDevice new\fP \fIname pins params\fP
 .br
-\fBOBJECT addParam\fP \fIparamName value ?args?\fP
+\fBOBJECT addParam\fP \fIparamName value ?-name value? ?-eq || -poseq || -posnocheck || -pos || -nocheck?\fP
 .br
 \fBOBJECT checkFloatingPins\fP
 .br
@@ -113,9 +109,7 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT getDataPoints\fP
 .br
-\fBInclude create OBJNAME\fP \fIvalue ?args?\fP
-.br
-\fBInclude new\fP \fIvalue ?args?\fP
+\fBOBJECT constructor\fP \fIvalue ?-name value?\fP
 .br
 \fBOBJECT genSPICEString\fP
 .br
@@ -123,9 +117,7 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT buildArgStr\fP \fIparamsNames\fP
 .br
-\fBLibrary create OBJNAME\fP \fIvalue libValue ?args?\fP
-.br
-\fBLibrary new\fP \fIvalue libValue ?args?\fP
+\fBOBJECT constructor\fP \fIvalue libValue ?-name value?\fP
 .br
 \fBOBJECT genSPICEString\fP
 .br
@@ -133,7 +125,7 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBModel new\fP \fIname type params\fP
 .br
-\fBOBJECT addParam\fP \fIparamName value ?args?\fP
+\fBOBJECT addParam\fP \fIparamName value ?-name value? ?-eq || -poseq || -posnocheck || -pos || -nocheck?\fP
 .br
 \fBOBJECT deleteParam\fP \fIparamName\fP
 .br
@@ -157,9 +149,7 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT getElement\fP \fIelemName\fP
 .br
-\fBOptions create OBJNAME\fP \fIparams ?args?\fP
-.br
-\fBOptions new\fP \fIparams ?args?\fP
+\fBOBJECT constructor\fP \fIparams ?-name value?\fP
 .br
 \fBOBJECT addParam\fP \fIparamName value\fP
 .br
@@ -217,11 +207,9 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT genSPICEString\fP
 .br
-\fBParamStatement create OBJNAME\fP \fIparams ?args?\fP
+\fBOBJECT constructor\fP \fIparams ?-name value?\fP
 .br
-\fBParamStatement new\fP \fIparams ?args?\fP
-.br
-\fBOBJECT addParam\fP \fIparamName value ?args?\fP
+\fBOBJECT addParam\fP \fIparamName value ?-eq?\fP
 .br
 \fBOBJECT deleteParam\fP \fIparamName\fP
 .br
@@ -249,7 +237,7 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT getTrace\fP \fItraceName\fP
 .br
-\fBOBJECT getTracesCsv\fP \fI?args?\fP
+\fBOBJECT getTracesCsv\fP \fI?-all? ?-traces list? ?-sep value?\fP
 .br
 \fBOBJECT getTracesData\fP
 .br
@@ -259,9 +247,7 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT getVoltagesNames\fP
 .br
-\fBRawString create OBJNAME\fP \fIvalue ?args?\fP
-.br
-\fBRawString new\fP \fIvalue ?args?\fP
+\fBOBJECT constructor\fP \fIvalue ?-name value?\fP
 .br
 \fBOBJECT genSPICEString\fP
 .br
@@ -293,9 +279,7 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT setParamValue\fP \fI?args?\fP
 .br
-\fBTemp create OBJNAME\fP \fIvalue ?args?\fP
-.br
-\fBTemp new\fP \fIvalue ?args?\fP
+\fBOBJECT constructor\fP \fIvalue ?-eq?\fP
 .br
 \fBOBJECT genSPICEString\fP
 .br
@@ -416,9 +400,7 @@ Writable: -name, -type
 .RE
 .PP
 Creates object of class Analysis\&.
-.RS 4n\fBAnalysis create OBJNAME\fP \fItype params ?args?\fP
-.br
-\fBAnalysis new\fP \fItype params ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fItype params ?-name value?\fP
 .br
 .RE
 .PP
@@ -431,8 +413,8 @@ Type of analysis, for example, tran, ac, dc, etc\&.
 params
 List of instance parameters in form {{name value} {name -sw} {name Value -eq} {name Value -posnocheck} \&.\&.\&.}
 .TP
-args
-Optional argument \fI-name\fP
+-name
+Name of the string that could be used to retrieve element from \fI::SpiceGenTcl::Netlist\fP object and its descendants, optional\&.
 .RE
 .PP
 \fBDescription\fR
@@ -444,7 +426,7 @@ Class models analysis statement\&.
 .RE
 .PP
 Adds new Parameter object to the list Params\&.
-.RS 4n\fBOBJECT addParam\fP \fIparamName value ?args?\fP
+.RS 4n\fBOBJECT addParam\fP \fIparamName value ?-name value? ?-eq || -poseq || -posnocheck || -pos || -nocheck?\fP
 .br
 .RE
 .PP
@@ -457,8 +439,20 @@ Name of parameter\&.
 value
 Value of parameter\&.
 .TP
-args
-Optional arguments \fI-eq\fP or \fI-posnocheck\fP as parameter qualificators\&.
+-eq
+Parameter is of class \fI::SpiceGenTcl::ParameterEquation\fP, optional, forbids other switches\&.
+.TP
+-nocheck
+Parameter is of class \fI::SpiceGenTcl::ParameterNoCheck\fP, optional, forbids other switches\&.
+.TP
+-pos
+Parameter is of class \fI::SpiceGenTcl::ParameterPositional\fP, optional, forbids other switches\&.
+.TP
+-poseq
+Parameter is of class \fI::SpiceGenTcl::ParameterPositionalEquation\fP, optional, forbids other switches\&.
+.TP
+-posnocheck
+Parameter is of class \fI::SpiceGenTcl::ParameterPositionalNoCheck\fP, optional, forbids other switches\&.
 .RE
 .PP
 .RS -4n
@@ -799,8 +793,7 @@ Name of the tol-level circuit\&.
 \fBDescription\fR
 .PP
 Class implements a top level netlist which is run in SPICE\&. We should add \fI::SpiceGenTcl::Simulator\fP
-object reference to make it able to run simulation\&. Results of last simulation attached as
-\fI::SpiceGenTcl::RawData\fP class object and can be retrieved by \fI::SpiceGenTcl::Circuit::getData\fP method\&.
+object reference to make it able to run simulation\&.
 .PP
 .RS -4n
 \fBadd\fR (::SpiceGenTcl::Circuit)
@@ -861,7 +854,7 @@ Creates circuit string for SPICE netlist\&.
 .RE
 .PP
 Returns string with csv formatting containing all data
-.RS 4n\fBOBJECT getDataCsv\fP \fI?args?\fP
+.RS 4n\fBOBJECT getDataCsv\fP \fI?-all? ?-traces list? ?-sep value?\fP
 .br
 .RE
 .PP
@@ -916,7 +909,7 @@ Name of element\&.
 .RE
 .PP
 Invokes 'runAndRead', 'configure -log' and 'configure -data' methods from attached simulator\&.
-.RS 4n\fBOBJECT runAndRead\fP \fI?args?\fP
+.RS 4n\fBOBJECT runAndRead\fP \fI?-nodelete?\fP
 .br
 .RE
 .PP
@@ -959,9 +952,7 @@ Writable: -name, -value
 .RE
 .PP
 Creates object of class Comment\&.
-.RS 4n\fBComment create OBJNAME\fP \fIvalue ?args?\fP
-.br
-\fBComment new\fP \fIvalue ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIvalue ?-name value?\fP
 .br
 .RE
 .PP
@@ -971,8 +962,8 @@ Creates object of class Comment\&.
 value
 Value of the comment\&.
 .TP
-args
-Optional argument -name - represent name of comment string\&.
+-name
+Name of the string that could be used to retrieve element from \fI::SpiceGenTcl::Netlist\fP object and its descendants, optional\&.
 .RE
 .PP
 \fBDescription\fR
@@ -1220,7 +1211,7 @@ poseq - combination of both flags, print only '{\fI$equation\fP}'
 .RE
 .PP
 Adds new parameter to device, and throws error on dublicated names\&.
-.RS 4n\fBOBJECT addParam\fP \fIparamName value ?args?\fP
+.RS 4n\fBOBJECT addParam\fP \fIparamName value ?-name value? ?-eq || -poseq || -posnocheck || -pos || -nocheck?\fP
 .br
 .RE
 .PP
@@ -1233,8 +1224,20 @@ Name of parameter\&.
 value
 Value of parameter\&.
 .TP
-args
-Optional arguments that adds qualificator to parameter: -pos - positional parameter, -eq - equational parameter, -poseq - positional equation parameter\&.
+-eq
+Parameter is of class \fI::SpiceGenTcl::ParameterEquation\fP, optional, forbids other switches\&.
+.TP
+-nocheck
+Parameter is of class \fI::SpiceGenTcl::ParameterNoCheck\fP, optional, forbids other switches\&.
+.TP
+-pos
+Parameter is of class \fI::SpiceGenTcl::ParameterPositional\fP, optional, forbids other switches\&.
+.TP
+-poseq
+Parameter is of class \fI::SpiceGenTcl::ParameterPositionalEquation\fP, optional, forbids other switches\&.
+.TP
+-posnocheck
+Parameter is of class \fI::SpiceGenTcl::ParameterPositionalNoCheck\fP, optional, forbids other switches\&.
 .RE
 .PP
 .RS -4n
@@ -1486,9 +1489,7 @@ Writable: -name, -value
 .RE
 .PP
 Creates object of class Include\&.
-.RS 4n\fBInclude create OBJNAME\fP \fIvalue ?args?\fP
-.br
-\fBInclude new\fP \fIvalue ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIvalue ?-name value?\fP
 .br
 .RE
 .PP
@@ -1498,8 +1499,8 @@ Creates object of class Include\&.
 value
 Value of the include path\&.
 .TP
-args
-Optional argument -name - represent name of include statement\&.
+-name
+Name of the string that could be used to retrieve element from \fI::SpiceGenTcl::Netlist\fP object and its descendants, optional\&.
 .RE
 .PP
 \fBDescription\fR
@@ -1612,9 +1613,7 @@ Writable: -libvalue, -name, -value
 .RE
 .PP
 Creates object of class Library\&.
-.RS 4n\fBLibrary create OBJNAME\fP \fIvalue libValue ?args?\fP
-.br
-\fBLibrary new\fP \fIvalue libValue ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIvalue libValue ?-name value?\fP
 .br
 .RE
 .PP
@@ -1627,8 +1626,8 @@ Value of the include file\&.
 libValue
 Value of selected library\&.
 .TP
-args
-Optional argument -name - represent name of library statement\&.
+-name
+Name of the string that could be used to retrieve element from \fI::SpiceGenTcl::Netlist\fP object and its descendants, optional\&.
 .RE
 .PP
 \fBDescription\fR
@@ -1734,7 +1733,7 @@ Class represents model card in SPICE netlist\&.
 .RE
 .PP
 Adds new parameter to device, and throws error on dublicated names\&.
-.RS 4n\fBOBJECT addParam\fP \fIparamName value ?args?\fP
+.RS 4n\fBOBJECT addParam\fP \fIparamName value ?-name value? ?-eq || -poseq || -posnocheck || -pos || -nocheck?\fP
 .br
 .RE
 .PP
@@ -1747,8 +1746,20 @@ Name of parameter\&.
 value
 Value of parameter\&.
 .TP
-args
-Optional arguments that adds qualificator to parameter: -pos - positional parameter, -eq - equational parameter, -poseq - positional equation parameter\&.
+-eq
+Parameter is of class \fI::SpiceGenTcl::ParameterEquation\fP, optional, forbids other switches\&.
+.TP
+-nocheck
+Parameter is of class \fI::SpiceGenTcl::ParameterNoCheck\fP, optional, forbids other switches\&.
+.TP
+-pos
+Parameter is of class \fI::SpiceGenTcl::ParameterPositional\fP, optional, forbids other switches\&.
+.TP
+-poseq
+Parameter is of class \fI::SpiceGenTcl::ParameterPositionalEquation\fP, optional, forbids other switches\&.
+.TP
+-posnocheck
+Parameter is of class \fI::SpiceGenTcl::ParameterPositionalNoCheck\fP, optional, forbids other switches\&.
 .RE
 .PP
 .RS -4n
@@ -2008,9 +2019,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Options\&.
-.RS 4n\fBOptions create OBJNAME\fP \fIparams ?args?\fP
-.br
-\fBOptions new\fP \fIparams ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIparams ?-name value?\fP
 .br
 .RE
 .PP
@@ -2020,11 +2029,8 @@ Creates object of class Options\&.
 params
 List of instance parameters in form {{name value ?-sw?} {name value ?-sw?} {name value ?-sw?} \&.\&.\&.}
 .TP
-args
-Optional argument -name - represent name of library statement\&.
-.TP
-name
-Name of the parameter\&.
+-name
+Name of the string that could be used to retrieve element from \fI::SpiceGenTcl::Netlist\fP object and its descendants, optional\&.
 .RE
 .PP
 \fBDescription\fR
@@ -2694,9 +2700,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class ParamStatement\&.
-.RS 4n\fBParamStatement create OBJNAME\fP \fIparams ?args?\fP
-.br
-\fBParamStatement new\fP \fIparams ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIparams ?-name value?\fP
 .br
 .RE
 .PP
@@ -2706,8 +2710,8 @@ Creates object of class ParamStatement\&.
 params
 List of instance parameters in form {{name value} {name value} {name equation -eq} \&.\&.\&.}
 .TP
-args
-Optional argument -name - represent name of library statement\&.
+-name
+Name of the library that could be used to retrieve element from \fI::SpiceGenTcl::Netlist\fP object and its descendants, optional\&.
 .RE
 .PP
 \fBDescription\fR
@@ -2719,7 +2723,7 @@ Class represent \&.param statement\&.
 .RE
 .PP
 Adds new Parameter object to the list Params\&.
-.RS 4n\fBOBJECT addParam\fP \fIparamName value ?args?\fP
+.RS 4n\fBOBJECT addParam\fP \fIparamName value ?-eq?\fP
 .br
 .RE
 .PP
@@ -2732,8 +2736,8 @@ Name of parameter\&.
 value
 Value of parameter\&.
 .TP
-args
-Optional parameter qualificator -eq\&.
+-eq
+Optional parameter qualificator\&.
 .RE
 .PP
 .RS -4n
@@ -3021,7 +3025,7 @@ Returns trace object reference by it's name
 .RE
 .PP
 Returns string with csv formatting containing all data
-.RS 4n\fBOBJECT getTracesCsv\fP \fI?args?\fP
+.RS 4n\fBOBJECT getTracesCsv\fP \fI?-all? ?-traces list? ?-sep value?\fP
 .br
 .RE
 .PP
@@ -3029,13 +3033,13 @@ Returns string with csv formatting containing all data
 .RS 4n
 .TP
 -all
-Select all traces\&.
+Select all traces, optional\&.
 .TP
 -sep
-Separator of columns, default is comma\&.
+Separator of columns, default is comma, optional\&.
 .TP
 -traces
-Select names of traces to return\&.
+Select names of traces to return, optional\&.
 .RE
 .PP
 \fBReturn value\fR
@@ -3130,9 +3134,7 @@ Writable: -name, -value
 .RE
 .PP
 Creates object of class RawString\&.
-.RS 4n\fBRawString create OBJNAME\fP \fIvalue ?args?\fP
-.br
-\fBRawString new\fP \fIvalue ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIvalue ?-name value?\fP
 .br
 .RE
 .PP
@@ -3141,6 +3143,9 @@ Creates object of class RawString\&.
 .TP
 value
 Value of the raw string\&.
+.TP
+-name
+Name of the string that could be used to retrieve element from \fI::SpiceGenTcl::Netlist\fP object and its descendants, optional\&.
 .RE
 .PP
 \fBDescription\fR
@@ -3493,9 +3498,7 @@ Writable: -name, -value
 .RE
 .PP
 Creates object of class Temp\&.
-.RS 4n\fBTemp create OBJNAME\fP \fIvalue ?args?\fP
-.br
-\fBTemp new\fP \fIvalue ?args?\fP
+.RS 4n\fBOBJECT constructor\fP \fIvalue ?-eq?\fP
 .br
 .RE
 .PP
@@ -3505,8 +3508,8 @@ Creates object of class Temp\&.
 value
 Value of the temperature\&.
 .TP
-args
-Optional parameter qualificator -eq\&.
+-eq
+Optional parameter qualificator\&.
 .RE
 .PP
 \fBDescription\fR

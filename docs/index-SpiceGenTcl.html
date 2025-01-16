@@ -111,11 +111,11 @@
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Analysis::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis" title="::SpiceGenTcl::Analysis" class='ruff_cmd'>::SpiceGenTcl::Analysis</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Analysis'>Analysis</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Analysis</font></b></code>.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>Analysis create OBJNAME</span> <span class='ruff_arg'>type params ?args?</span><br><span class='ruff_cmd'>Analysis new</span> <span class='ruff_arg'>type params ?args?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>type params ?-name value?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code>type</code></td><td>Type of analysis, for example, tran, ac, dc, etc.</td></tr>
 <tr><td><code>params</code></td><td>List of instance parameters in form <code>{{name value} {name <font color=#b9b96e>-sw</font>} {name Value <font color=#b9b96e>-eq</font>} {name Value <font color=#b9b96e>-posnocheck</font>} ...}</code></td></tr>
-<tr><td><code>args</code></td><td>Optional argument <em>-name</em></td></tr>
+<tr><td><code><font color=#b9b96e>-name</font></code></td><td>Name of the string that could be used to retrieve element from <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Netlist" title="::SpiceGenTcl::Netlist" class='ruff_cmd'>::SpiceGenTcl::Netlist</a> object and its descendants, optional.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5><p class='ruff'>Class models analysis statement.</p>
 <div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Analysis_constructor' href="javascript:toggleSource('SpiceGenTcl_Analysis_constructor')">Show source</a></p>
@@ -125,8 +125,10 @@
     <i><font color=#76a396>#  type - type of analysis, for example, tran, ac, dc, etc</font></i>
     <i><font color=#76a396>#  params - list of instance parameters in form</font></i>
     <i><font color=#76a396>#   `{{name value} {name -sw} {name Value -eq} {name Value -posnocheck} ...}`</font></i>
-    <i><font color=#76a396>#  args - optional argument *-name*</font></i>
+    <i><font color=#76a396>#  -name - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist] object</font></i>
+    <i><font color=#76a396>#    and its descendants, optional</font></i>
     <i><font color=#76a396># Class models analysis statement.</font></i>
+    <i><font color=#76a396># Synopsis: type params ?-name value?</font></i>
     <b><font color=#fe6efe>my</font></b> variable name
     <b><font color=#ffa500>set</font></b> arguments [argparse {
         <font color=#b9b96e>-name</font>=
@@ -151,11 +153,15 @@
 </div><h4 class='ruffmethod'><a name='::SpiceGenTcl::Analysis::addParam'>addParam</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis" title="::SpiceGenTcl::Analysis" class='ruff_cmd'>::SpiceGenTcl::Analysis</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Analysis'>Analysis</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Adds new Parameter object to the list <code>Params</code>.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT addParam</span> <span class='ruff_arg'>paramName value ?args?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT addParam</span> <span class='ruff_arg'>paramName value ?-name value? ?-eq || -poseq || -posnocheck || -pos || -nocheck?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code>paramName</code></td><td>Name of parameter.</td></tr>
 <tr><td><code>value</code></td><td>Value of parameter.</td></tr>
-<tr><td><code>args</code></td><td>Optional arguments <em>-eq</em> or <em>-posnocheck</em> as parameter qualificators.</td></tr>
+<tr><td><code><font color=#b9b96e>-eq</font></code></td><td>Parameter is of class <a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParameterEquation" title="::SpiceGenTcl::ParameterEquation" class='ruff_cmd'>::SpiceGenTcl::ParameterEquation</a>, optional, forbids other switches.</td></tr>
+<tr><td><code><font color=#b9b96e>-nocheck</font></code></td><td>Parameter is of class <a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParameterNoCheck" title="::SpiceGenTcl::ParameterNoCheck" class='ruff_cmd'>::SpiceGenTcl::ParameterNoCheck</a>, optional, forbids other switches.</td></tr>
+<tr><td><code><font color=#b9b96e>-pos</font></code></td><td>Parameter is of class <a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParameterPositional" title="::SpiceGenTcl::ParameterPositional" class='ruff_cmd'>::SpiceGenTcl::ParameterPositional</a>, optional, forbids other switches.</td></tr>
+<tr><td><code><font color=#b9b96e>-poseq</font></code></td><td>Parameter is of class <a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParameterPositionalEquation" title="::SpiceGenTcl::ParameterPositionalEquation" class='ruff_cmd'>::SpiceGenTcl::ParameterPositionalEquation</a>, optional, forbids other switches.</td></tr>
+<tr><td><code><font color=#b9b96e>-posnocheck</font></code></td><td>Parameter is of class <a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParameterPositionalNoCheck" title="::SpiceGenTcl::ParameterPositionalNoCheck" class='ruff_cmd'>::SpiceGenTcl::ParameterPositionalNoCheck</a>, optional, forbids other switches.</td></tr>
 </table>
 <div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Analysis_addParam' href="javascript:toggleSource('SpiceGenTcl_Analysis_addParam')">Show source</a></p>
 <div id='SpiceGenTcl_Analysis_addParam' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> addParam {paramName value args} {
@@ -163,13 +169,20 @@
     <i><font color=#76a396># Adds new Parameter object to the list `Params`.</font></i>
     <i><font color=#76a396>#  paramName - name of parameter</font></i>
     <i><font color=#76a396>#  value - value of parameter</font></i>
-    <i><font color=#76a396>#  args - optional arguments *-eq* or *-posnocheck* as parameter qualificators</font></i>
+    <i><font color=#76a396>#  -eq - parameter is of class [::SpiceGenTcl::ParameterEquation], optional, forbids other switches</font></i>
+    <i><font color=#76a396>#  -poseq - parameter is of class [::SpiceGenTcl::ParameterPositionalEquation], optional, forbids other</font></i>
+    <i><font color=#76a396>#    switches</font></i>
+    <i><font color=#76a396>#  -posnocheck - parameter is of class [::SpiceGenTcl::ParameterPositionalNoCheck], optional, forbids other</font></i>
+    <i><font color=#76a396>#    switches</font></i>
+    <i><font color=#76a396>#  -pos - parameter is of class [::SpiceGenTcl::ParameterPositional], optional, forbids other switches</font></i>
+    <i><font color=#76a396>#  -nocheck - parameter is of class [::SpiceGenTcl::ParameterNoCheck], optional, forbids other switches</font></i>
+    <i><font color=#76a396># Synopsis: paramName value ?-name value? ?-eq || -poseq || -posnocheck || -pos || -nocheck?</font></i>
     <b><font color=#ffa500>set</font></b> arguments [argparse {
-        {<font color=#b9b96e>-eq</font> <font color=#b9b96e>-forbid</font> {posnocheck}}
-        {<font color=#b9b96e>-poseq</font> <font color=#b9b96e>-forbid</font> {posnocheck}}
-        {<font color=#b9b96e>-posnocheck</font> <font color=#b9b96e>-forbid</font> {eq}}
-        {<font color=#b9b96e>-pos</font> <font color=#b9b96e>-forbid</font> {eq}}
-        {<font color=#b9b96e>-nocheck</font> <font color=#b9b96e>-forbid</font> {eq}}
+        {<font color=#b9b96e>-eq</font> <font color=#b9b96e>-forbid</font> {poseq posnocheck pos nocheck}}
+        {<font color=#b9b96e>-poseq</font> <font color=#b9b96e>-forbid</font> {eq posnocheck pos nocheck}}
+        {<font color=#b9b96e>-posnocheck</font> <font color=#b9b96e>-forbid</font> {eq poseq pos nocheck}}
+        {<font color=#b9b96e>-pos</font> <font color=#b9b96e>-forbid</font> {eq poseq posnocheck nocheck}}
+        {<font color=#b9b96e>-nocheck</font> <font color=#b9b96e>-forbid</font> {eq poseq posnocheck pos}}
     }]
     <b><font color=#ffa500>set</font></b> paramName [<b><font color=#ffa500>string</font></b> tolower <font color=#f1b479>$paramName</font>]
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> exists Params]} {
@@ -450,15 +463,14 @@
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code>name</code></td><td>Name of the tol-level circuit.</td></tr>
 </table>
-<h5 class='ruff'>Description</h5><p class='ruff'>Class implements a top level netlist which is run in SPICE. We should add <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Simulator" title="::SpiceGenTcl::Simulator" class='ruff_cmd'>::SpiceGenTcl::Simulator</a> object reference to make it able to run simulation. Results of last simulation attached as [::SpiceGenTcl::RawData] class object and can be retrieved by [::SpiceGenTcl::Circuit::getData] method.</p>
+<h5 class='ruff'>Description</h5><p class='ruff'>Class implements a top level netlist which is run in SPICE. We should add <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Simulator" title="::SpiceGenTcl::Simulator" class='ruff_cmd'>::SpiceGenTcl::Simulator</a> object reference to make it able to run simulation.</p>
 <div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Circuit_constructor' href="javascript:toggleSource('SpiceGenTcl_Circuit_constructor')">Show source</a></p>
 <div id='SpiceGenTcl_Circuit_constructor' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> constructor {name} {
 
     <i><font color=#76a396># Creates object of class `CircuitNetlist`.</font></i>
     <i><font color=#76a396>#  name - name of the tol-level circuit</font></i>
     <i><font color=#76a396># Class implements a top level netlist which is run in SPICE. We should add [::SpiceGenTcl::Simulator]</font></i>
-    <i><font color=#76a396># object reference to make it able to run simulation. Results of last simulation attached as</font></i>
-    <i><font color=#76a396># [::SpiceGenTcl::RawData] class object and can be retrieved by [::SpiceGenTcl::Circuit::getData] method.</font></i>
+    <i><font color=#76a396># object reference to make it able to run simulation.</font></i>
     <b><font color=#ffa500>next</font></b> <font color=#f1b479>$name</font>
 }</pre></div>
 </div><h4 class='ruffmethod'><a name='::SpiceGenTcl::Circuit::add'>add</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Circuit'>Circuit</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
@@ -546,7 +558,7 @@
 </div><h4 class='ruffmethod'><a name='::SpiceGenTcl::Circuit::getDataCsv'>getDataCsv</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Circuit'>Circuit</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Returns string with csv formatting containing all data</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT getDataCsv</span> <span class='ruff_arg'>?args?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT getDataCsv</span> <span class='ruff_arg'>?-all? ?-traces list? ?-sep value?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-all</font></code></td><td>Select all traces.</td></tr>
 <tr><td><code><font color=#b9b96e>-sep</font></code></td><td>Separator of columns, default is comma.</td></tr>
@@ -560,6 +572,7 @@
     <i><font color=#76a396>#  -all - select all traces</font></i>
     <i><font color=#76a396>#  -traces - select names of traces to return</font></i>
     <i><font color=#76a396>#  -sep - separator of columns, default is comma</font></i>
+    <i><font color=#76a396># Synopsis: ?-all? ?-traces list? ?-sep value?</font></i>
     <b><font color=#fe6efe>return</font></b> [[<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-data</font>] getTracesCsv {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$args</font>]
 }</pre></div>
 </div><h4 class='ruffmethod'><a name='::SpiceGenTcl::Circuit::getDataDict'>getDataDict</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Circuit'>Circuit</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
@@ -599,7 +612,7 @@
 </div><h4 class='ruffmethod'><a name='::SpiceGenTcl::Circuit::runAndRead'>runAndRead</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Circuit'>Circuit</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Invokes 'runAndRead', 'configure -log' and 'configure -data' methods from attached simulator.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT runAndRead</span> <span class='ruff_arg'>?args?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT runAndRead</span> <span class='ruff_arg'>?-nodelete?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-nodelete</font></code></td><td>Flag to forbid simulation file deletion.</td></tr>
 </table>
@@ -608,6 +621,7 @@
 
     <i><font color=#76a396># Invokes 'runAndRead', 'configure -log' and 'configure -data' methods from attached simulator.</font></i>
     <i><font color=#76a396>#  -nodelete - flag to forbid simulation file deletion</font></i>
+    <i><font color=#76a396># Synopsis: ?-nodelete?</font></i>
     <b><font color=#ffa500>set</font></b> arguments [argparse {
         <font color=#b9b96e>-nodelete</font>
     }]
@@ -634,10 +648,10 @@
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Comment::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Comment" title="::SpiceGenTcl::Comment" class='ruff_cmd'>::SpiceGenTcl::Comment</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Comment'>Comment</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Comment</font></b></code>.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>Comment create OBJNAME</span> <span class='ruff_arg'>value ?args?</span><br><span class='ruff_cmd'>Comment new</span> <span class='ruff_arg'>value ?args?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>value ?-name value?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code>value</code></td><td>Value of the comment.</td></tr>
-<tr><td><code>args</code></td><td>Optional argument -name - represent name of comment string.</td></tr>
+<tr><td><code><font color=#b9b96e>-name</font></code></td><td>Name of the string that could be used to retrieve element from <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Netlist" title="::SpiceGenTcl::Netlist" class='ruff_cmd'>::SpiceGenTcl::Netlist</a> object and its descendants, optional.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5><p class='ruff'>Class represent comment string, it can be a multiline comment.</p>
 <div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Comment_constructor' href="javascript:toggleSource('SpiceGenTcl_Comment_constructor')">Show source</a></p>
@@ -645,11 +659,13 @@
 
     <i><font color=#76a396># Creates object of class `Comment`.</font></i>
     <i><font color=#76a396>#  value - value of the comment</font></i>
-    <i><font color=#76a396>#  args - optional argument -name - represent name of comment string</font></i>
+    <i><font color=#76a396>#  -name - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist] object</font></i>
+    <i><font color=#76a396>#    and its descendants, optional</font></i>
     <i><font color=#76a396># Class represent comment string, it can be a multiline comment.</font></i>
-    <b><font color=#ffa500>set</font></b> arguments [argparse {
+    <i><font color=#76a396># Synopsis: value ?-name value?</font></i>
+    argparse {
         <font color=#b9b96e>-name</font>=
-    }]
+    }
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> exists name]} {
         <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-name</font> <font color=#f1b479>$name</font>
     } <b><font color=#ffa500>else</font></b> {
@@ -848,11 +864,15 @@
 </div><h4 class='ruffmethod'><a name='::SpiceGenTcl::Device::addParam'>addParam</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device" title="::SpiceGenTcl::Device" class='ruff_cmd'>::SpiceGenTcl::Device</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Device'>Device</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Adds new parameter to device, and throws error on dublicated names.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT addParam</span> <span class='ruff_arg'>paramName value ?args?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT addParam</span> <span class='ruff_arg'>paramName value ?-name value? ?-eq || -poseq || -posnocheck || -pos || -nocheck?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code>paramName</code></td><td>Name of parameter.</td></tr>
 <tr><td><code>value</code></td><td>Value of parameter.</td></tr>
-<tr><td><code>args</code></td><td>Optional arguments that adds qualificator to parameter: -pos - positional parameter, -eq - equational parameter, -poseq - positional equation parameter.</td></tr>
+<tr><td><code><font color=#b9b96e>-eq</font></code></td><td>Parameter is of class <a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParameterEquation" title="::SpiceGenTcl::ParameterEquation" class='ruff_cmd'>::SpiceGenTcl::ParameterEquation</a>, optional, forbids other switches.</td></tr>
+<tr><td><code><font color=#b9b96e>-nocheck</font></code></td><td>Parameter is of class <a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParameterNoCheck" title="::SpiceGenTcl::ParameterNoCheck" class='ruff_cmd'>::SpiceGenTcl::ParameterNoCheck</a>, optional, forbids other switches.</td></tr>
+<tr><td><code><font color=#b9b96e>-pos</font></code></td><td>Parameter is of class <a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParameterPositional" title="::SpiceGenTcl::ParameterPositional" class='ruff_cmd'>::SpiceGenTcl::ParameterPositional</a>, optional, forbids other switches.</td></tr>
+<tr><td><code><font color=#b9b96e>-poseq</font></code></td><td>Parameter is of class <a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParameterPositionalEquation" title="::SpiceGenTcl::ParameterPositionalEquation" class='ruff_cmd'>::SpiceGenTcl::ParameterPositionalEquation</a>, optional, forbids other switches.</td></tr>
+<tr><td><code><font color=#b9b96e>-posnocheck</font></code></td><td>Parameter is of class <a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParameterPositionalNoCheck" title="::SpiceGenTcl::ParameterPositionalNoCheck" class='ruff_cmd'>::SpiceGenTcl::ParameterPositionalNoCheck</a>, optional, forbids other switches.</td></tr>
 </table>
 <div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Device_addParam' href="javascript:toggleSource('SpiceGenTcl_Device_addParam')">Show source</a></p>
 <div id='SpiceGenTcl_Device_addParam' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> addParam {paramName value args} {
@@ -860,15 +880,21 @@
     <i><font color=#76a396># Adds new parameter to device, and throws error on dublicated names.</font></i>
     <i><font color=#76a396>#  paramName - name of parameter</font></i>
     <i><font color=#76a396>#  value - value of parameter</font></i>
-    <i><font color=#76a396>#  args - optional arguments that adds qualificator to parameter: -pos - positional parameter, -eq -</font></i>
-    <i><font color=#76a396>#  equational parameter, -poseq - positional equation parameter</font></i>
-    <b><font color=#ffa500>set</font></b> arguments [argparse {
-        {<font color=#b9b96e>-pos</font> <font color=#b9b96e>-forbid</font> {poseq}}
-        {<font color=#b9b96e>-eq</font> <font color=#b9b96e>-forbid</font> {poseq}}
-        {<font color=#b9b96e>-poseq</font> <font color=#b9b96e>-forbid</font> {pos eq}}
-        {<font color=#b9b96e>-posnocheck</font> <font color=#b9b96e>-forbid</font> {poseq eq pos}}
-        {<font color=#b9b96e>-nocheck</font> <font color=#b9b96e>-forbid</font> {pos eq poseq}}
-    }]
+    <i><font color=#76a396>#  -eq - parameter is of class [::SpiceGenTcl::ParameterEquation], optional, forbids other switches</font></i>
+    <i><font color=#76a396>#  -poseq - parameter is of class [::SpiceGenTcl::ParameterPositionalEquation], optional, forbids other</font></i>
+    <i><font color=#76a396>#    switches</font></i>
+    <i><font color=#76a396>#  -posnocheck - parameter is of class [::SpiceGenTcl::ParameterPositionalNoCheck], optional, forbids other</font></i>
+    <i><font color=#76a396>#    switches</font></i>
+    <i><font color=#76a396>#  -pos - parameter is of class [::SpiceGenTcl::ParameterPositional], optional, forbids other switches</font></i>
+    <i><font color=#76a396>#  -nocheck - parameter is of class [::SpiceGenTcl::ParameterNoCheck], optional, forbids other switches</font></i>
+    <i><font color=#76a396># Synopsis: paramName value ?-name value? ?-eq || -poseq || -posnocheck || -pos || -nocheck?</font></i>
+    argparse {
+        {<font color=#b9b96e>-pos</font> <font color=#b9b96e>-forbid</font> {eq poseq posnocheck nocheck}}
+        {<font color=#b9b96e>-eq</font> <font color=#b9b96e>-forbid</font> {pos poseq posnocheck nocheck}}
+        {<font color=#b9b96e>-poseq</font> <font color=#b9b96e>-forbid</font> {pos eq posnocheck nocheck}}
+        {<font color=#b9b96e>-posnocheck</font> <font color=#b9b96e>-forbid</font> {pos eq poseq nocheck}}
+        {<font color=#b9b96e>-nocheck</font> <font color=#b9b96e>-forbid</font> {pos eq poseq posnocheck}}
+    }
     <i><font color=#76a396># method adds new Parameter object to the list Params</font></i>
     <b><font color=#ffa500>set</font></b> paramName [<b><font color=#ffa500>string</font></b> tolower <font color=#f1b479>$paramName</font>]
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> exists Params]} {
@@ -1140,10 +1166,10 @@
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Include::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Include" title="::SpiceGenTcl::Include" class='ruff_cmd'>::SpiceGenTcl::Include</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Include'>Include</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Include</font></b></code>.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>Include create OBJNAME</span> <span class='ruff_arg'>value ?args?</span><br><span class='ruff_cmd'>Include new</span> <span class='ruff_arg'>value ?args?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>value ?-name value?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code>value</code></td><td>Value of the include path.</td></tr>
-<tr><td><code>args</code></td><td>Optional argument -name - represent name of include statement.</td></tr>
+<tr><td><code><font color=#b9b96e>-name</font></code></td><td>Name of the string that could be used to retrieve element from <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Netlist" title="::SpiceGenTcl::Netlist" class='ruff_cmd'>::SpiceGenTcl::Netlist</a> object and its descendants, optional.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5><p class='ruff'>This class represent .include statement.</p>
 <div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Include_constructor' href="javascript:toggleSource('SpiceGenTcl_Include_constructor')">Show source</a></p>
@@ -1151,11 +1177,13 @@
 
     <i><font color=#76a396># Creates object of class `Include`.</font></i>
     <i><font color=#76a396>#  value - value of the include path</font></i>
-    <i><font color=#76a396>#  args - optional argument -name - represent name of include statement</font></i>
+    <i><font color=#76a396>#  -name - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist] object</font></i>
+    <i><font color=#76a396>#    and its descendants, optional</font></i>
     <i><font color=#76a396># This class represent .include statement.</font></i>
-    <b><font color=#ffa500>set</font></b> arguments [argparse {
+    <i><font color=#76a396># Synopsis: value ?-name value?</font></i>
+    argparse {
         <font color=#b9b96e>-name</font>=
-    }]
+    }
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> exists name]} {
         <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-name</font> <font color=#f1b479>$name</font>
     } <b><font color=#ffa500>else</font></b> {
@@ -1247,11 +1275,11 @@
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Library::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Library" title="::SpiceGenTcl::Library" class='ruff_cmd'>::SpiceGenTcl::Library</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Library'>Library</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Library</font></b></code>.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>Library create OBJNAME</span> <span class='ruff_arg'>value libValue ?args?</span><br><span class='ruff_cmd'>Library new</span> <span class='ruff_arg'>value libValue ?args?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>value libValue ?-name value?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code>value</code></td><td>Value of the include file.</td></tr>
 <tr><td><code>libValue</code></td><td>Value of selected library.</td></tr>
-<tr><td><code>args</code></td><td>Optional argument -name - represent name of library statement.</td></tr>
+<tr><td><code><font color=#b9b96e>-name</font></code></td><td>Name of the string that could be used to retrieve element from <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Netlist" title="::SpiceGenTcl::Netlist" class='ruff_cmd'>::SpiceGenTcl::Netlist</a> object and its descendants, optional.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5><p class='ruff'>Class represent .lib statement.</p>
 <div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Library_constructor' href="javascript:toggleSource('SpiceGenTcl_Library_constructor')">Show source</a></p>
@@ -1260,11 +1288,13 @@
     <i><font color=#76a396># Creates object of class `Library`.</font></i>
     <i><font color=#76a396>#  value - value of the include file</font></i>
     <i><font color=#76a396>#  libValue - value of selected library</font></i>
-    <i><font color=#76a396>#  args - optional argument -name - represent name of library statement</font></i>
+    <i><font color=#76a396>#  -name - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist] object</font></i>
+    <i><font color=#76a396>#    and its descendants, optional</font></i>
     <i><font color=#76a396># Class represent .lib statement.</font></i>
-    <b><font color=#ffa500>set</font></b> arguments [argparse {
+    <i><font color=#76a396># Synopsis: value libValue ?-name value?</font></i>
+    argparse {
         <font color=#b9b96e>-name</font>=
-    }]
+    }
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> exists name]} {
         <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-name</font> <font color=#f1b479>$name</font>
     } <b><font color=#ffa500>else</font></b> {
@@ -1340,11 +1370,15 @@
 </div><h4 class='ruffmethod'><a name='::SpiceGenTcl::Model::addParam'>addParam</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model" title="::SpiceGenTcl::Model" class='ruff_cmd'>::SpiceGenTcl::Model</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Model'>Model</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Adds new parameter to device, and throws error on dublicated names.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT addParam</span> <span class='ruff_arg'>paramName value ?args?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT addParam</span> <span class='ruff_arg'>paramName value ?-name value? ?-eq || -poseq || -posnocheck || -pos || -nocheck?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code>paramName</code></td><td>Name of parameter.</td></tr>
 <tr><td><code>value</code></td><td>Value of parameter.</td></tr>
-<tr><td><code>args</code></td><td>Optional arguments that adds qualificator to parameter: -pos - positional parameter, -eq - equational parameter, -poseq - positional equation parameter.</td></tr>
+<tr><td><code><font color=#b9b96e>-eq</font></code></td><td>Parameter is of class <a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParameterEquation" title="::SpiceGenTcl::ParameterEquation" class='ruff_cmd'>::SpiceGenTcl::ParameterEquation</a>, optional, forbids other switches.</td></tr>
+<tr><td><code><font color=#b9b96e>-nocheck</font></code></td><td>Parameter is of class <a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParameterNoCheck" title="::SpiceGenTcl::ParameterNoCheck" class='ruff_cmd'>::SpiceGenTcl::ParameterNoCheck</a>, optional, forbids other switches.</td></tr>
+<tr><td><code><font color=#b9b96e>-pos</font></code></td><td>Parameter is of class <a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParameterPositional" title="::SpiceGenTcl::ParameterPositional" class='ruff_cmd'>::SpiceGenTcl::ParameterPositional</a>, optional, forbids other switches.</td></tr>
+<tr><td><code><font color=#b9b96e>-poseq</font></code></td><td>Parameter is of class <a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParameterPositionalEquation" title="::SpiceGenTcl::ParameterPositionalEquation" class='ruff_cmd'>::SpiceGenTcl::ParameterPositionalEquation</a>, optional, forbids other switches.</td></tr>
+<tr><td><code><font color=#b9b96e>-posnocheck</font></code></td><td>Parameter is of class <a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParameterPositionalNoCheck" title="::SpiceGenTcl::ParameterPositionalNoCheck" class='ruff_cmd'>::SpiceGenTcl::ParameterPositionalNoCheck</a>, optional, forbids other switches.</td></tr>
 </table>
 <div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Model_addParam' href="javascript:toggleSource('SpiceGenTcl_Model_addParam')">Show source</a></p>
 <div id='SpiceGenTcl_Model_addParam' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> addParam {paramName value args} {
@@ -1352,15 +1386,21 @@
     <i><font color=#76a396># Adds new parameter to device, and throws error on dublicated names.</font></i>
     <i><font color=#76a396>#  paramName - name of parameter</font></i>
     <i><font color=#76a396>#  value - value of parameter</font></i>
-    <i><font color=#76a396>#  args - optional arguments that adds qualificator to parameter: -pos - positional parameter, -eq -</font></i>
-    <i><font color=#76a396>#  equational parameter, -poseq - positional equation parameter</font></i>
-    <b><font color=#ffa500>set</font></b> arguments [argparse {
-        {<font color=#b9b96e>-pos</font> <font color=#b9b96e>-forbid</font> {poseq}}
-        {<font color=#b9b96e>-eq</font> <font color=#b9b96e>-forbid</font> {poseq}}
-        {<font color=#b9b96e>-poseq</font> <font color=#b9b96e>-forbid</font> {pos eq}}
-        {<font color=#b9b96e>-posnocheck</font> <font color=#b9b96e>-forbid</font> {poseq eq pos}}
-        {<font color=#b9b96e>-nocheck</font> <font color=#b9b96e>-forbid</font> {pos eq poseq}}
-    }]
+    <i><font color=#76a396>#  -eq - parameter is of class [::SpiceGenTcl::ParameterEquation], optional, forbids other switches</font></i>
+    <i><font color=#76a396>#  -poseq - parameter is of class [::SpiceGenTcl::ParameterPositionalEquation], optional, forbids other</font></i>
+    <i><font color=#76a396>#    switches</font></i>
+    <i><font color=#76a396>#  -posnocheck - parameter is of class [::SpiceGenTcl::ParameterPositionalNoCheck], optional, forbids other</font></i>
+    <i><font color=#76a396>#    switches</font></i>
+    <i><font color=#76a396>#  -pos - parameter is of class [::SpiceGenTcl::ParameterPositional], optional, forbids other switches</font></i>
+    <i><font color=#76a396>#  -nocheck - parameter is of class [::SpiceGenTcl::ParameterNoCheck], optional, forbids other switches</font></i>
+    <i><font color=#76a396># Synopsis: paramName value ?-name value? ?-eq || -poseq || -posnocheck || -pos || -nocheck?</font></i>
+    argparse {
+        {<font color=#b9b96e>-pos</font> <font color=#b9b96e>-forbid</font> {eq poseq posnocheck nocheck}}
+        {<font color=#b9b96e>-eq</font> <font color=#b9b96e>-forbid</font> {pos poseq posnocheck nocheck}}
+        {<font color=#b9b96e>-poseq</font> <font color=#b9b96e>-forbid</font> {pos eq posnocheck nocheck}}
+        {<font color=#b9b96e>-posnocheck</font> <font color=#b9b96e>-forbid</font> {pos eq poseq nocheck}}
+        {<font color=#b9b96e>-nocheck</font> <font color=#b9b96e>-forbid</font> {pos eq poseq posnocheck}}
+    }
     <i><font color=#76a396># method adds new Parameter object to the list Params</font></i>
     <b><font color=#ffa500>set</font></b> paramName [<b><font color=#ffa500>string</font></b> tolower <font color=#f1b479>$paramName</font>]
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> exists Params]} {
@@ -1627,25 +1667,25 @@
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Options::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Options" title="::SpiceGenTcl::Options" class='ruff_cmd'>::SpiceGenTcl::Options</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Options'>Options</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Options</font></b></code>.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>Options create OBJNAME</span> <span class='ruff_arg'>params ?args?</span><br><span class='ruff_cmd'>Options new</span> <span class='ruff_arg'>params ?args?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>params ?-name value?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code>params</code></td><td>List of instance parameters in form <code>{{name value ?-sw?} {name value ?-sw?} {name value ?-sw?} ...}</code></td></tr>
-<tr><td><code>args</code></td><td>Optional argument -name - represent name of library statement.</td></tr>
-<tr><td><code>name</code></td><td>Name of the parameter.</td></tr>
+<tr><td><code><font color=#b9b96e>-name</font></code></td><td>Name of the string that could be used to retrieve element from <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Netlist" title="::SpiceGenTcl::Netlist" class='ruff_cmd'>::SpiceGenTcl::Netlist</a> object and its descendants, optional.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5><p class='ruff'>This class represent .options statement.</p>
 <div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Options_constructor' href="javascript:toggleSource('SpiceGenTcl_Options_constructor')">Show source</a></p>
 <div id='SpiceGenTcl_Options_constructor' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> constructor {params args} {
 
     <i><font color=#76a396># Creates object of class `Options`.</font></i>
-    <i><font color=#76a396>#  name - name of the parameter</font></i>
     <i><font color=#76a396>#  params - list of instance parameters in form `{{name value ?-sw?} {name value ?-sw?}</font></i>
     <i><font color=#76a396>#   {name value ?-sw?} ...}`</font></i>
-    <i><font color=#76a396>#  args - optional argument -name - represent name of library statement</font></i>
+    <i><font color=#76a396>#  -name - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist] object</font></i>
+    <i><font color=#76a396>#    and its descendants, optional</font></i>
     <i><font color=#76a396># This class represent .options statement.</font></i>
-    <b><font color=#ffa500>set</font></b> arguments [argparse {
+    <i><font color=#76a396># Synopsis: params ?-name value?</font></i>
+    argparse {
         <font color=#b9b96e>-name</font>=
-    }]
+    }
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> exists name]} {
         <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-name</font> <font color=#f1b479>$name</font>
     } <b><font color=#ffa500>else</font></b> {
@@ -2123,10 +2163,10 @@
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::ParamStatement::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement" title="::SpiceGenTcl::ParamStatement" class='ruff_cmd'>::SpiceGenTcl::ParamStatement</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement'>ParamStatement</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>ParamStatement</font></b></code>.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>ParamStatement create OBJNAME</span> <span class='ruff_arg'>params ?args?</span><br><span class='ruff_cmd'>ParamStatement new</span> <span class='ruff_arg'>params ?args?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>params ?-name value?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code>params</code></td><td>List of instance parameters in form <code>{{name value} {name value} {name equation <font color=#b9b96e>-eq</font>} ...}</code></td></tr>
-<tr><td><code>args</code></td><td>Optional argument -name - represent name of library statement.</td></tr>
+<tr><td><code><font color=#b9b96e>-name</font></code></td><td>Name of the library that could be used to retrieve element from <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Netlist" title="::SpiceGenTcl::Netlist" class='ruff_cmd'>::SpiceGenTcl::Netlist</a> object and its descendants, optional.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5><p class='ruff'>Class represent .param statement.</p>
 <div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_ParamStatement_constructor' href="javascript:toggleSource('SpiceGenTcl_ParamStatement_constructor')">Show source</a></p>
@@ -2134,11 +2174,13 @@
 
     <i><font color=#76a396># Creates object of class `ParamStatement`.</font></i>
     <i><font color=#76a396>#  params - list of instance parameters in form `{{name value} {name value} {name equation -eq} ...}`</font></i>
-    <i><font color=#76a396>#  args - optional argument -name - represent name of library statement</font></i>
+    <i><font color=#76a396>#  -name - name of the library that could be used to retrieve element from [::SpiceGenTcl::Netlist] object</font></i>
+    <i><font color=#76a396>#    and its descendants, optional</font></i>
     <i><font color=#76a396># Class represent .param statement.</font></i>
-    <b><font color=#ffa500>set</font></b> arguments [argparse {
+    <i><font color=#76a396># Synopsis: params ?-name value?</font></i>
+    argparse {
         <font color=#b9b96e>-name</font>=
-    }]
+    }
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> exists name]} {
         <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-name</font> <font color=#f1b479>$name</font>
     } <b><font color=#ffa500>else</font></b> {
@@ -2157,11 +2199,11 @@
 </div><h4 class='ruffmethod'><a name='::SpiceGenTcl::ParamStatement::addParam'>addParam</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement" title="::SpiceGenTcl::ParamStatement" class='ruff_cmd'>::SpiceGenTcl::ParamStatement</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement'>ParamStatement</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Adds new Parameter object to the list Params.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT addParam</span> <span class='ruff_arg'>paramName value ?args?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT addParam</span> <span class='ruff_arg'>paramName value ?-eq?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code>paramName</code></td><td>Name of parameter.</td></tr>
 <tr><td><code>value</code></td><td>Value of parameter.</td></tr>
-<tr><td><code>args</code></td><td>Optional parameter qualificator -eq.</td></tr>
+<tr><td><code><font color=#b9b96e>-eq</font></code></td><td>Optional parameter qualificator.</td></tr>
 </table>
 <div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_ParamStatement_addParam' href="javascript:toggleSource('SpiceGenTcl_ParamStatement_addParam')">Show source</a></p>
 <div id='SpiceGenTcl_ParamStatement_addParam' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> addParam {paramName value args} {
@@ -2169,10 +2211,11 @@
     <i><font color=#76a396># Adds new Parameter object to the list Params.</font></i>
     <i><font color=#76a396>#  paramName - name of parameter</font></i>
     <i><font color=#76a396>#  value - value of parameter</font></i>
-    <i><font color=#76a396>#  args - optional parameter qualificator -eq</font></i>
-    <b><font color=#ffa500>set</font></b> arguments [argparse {
+    <i><font color=#76a396>#  -eq - optional parameter qualificator</font></i>
+    <i><font color=#76a396># Synopsis: paramName value ?-eq?</font></i>
+    argparse {
         <font color=#b9b96e>-eq</font>
-    }]
+    }
     <b><font color=#ffa500>set</font></b> paramName [<b><font color=#ffa500>string</font></b> tolower <font color=#f1b479>$paramName</font>]
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> exists Params]} {
         <b><font color=#ffa500>set</font></b> paramList [<b><font color=#ffa500>dict</font></b> keys <font color=#f1b479>$Params</font>]
@@ -2608,20 +2651,21 @@
 </div><h4 class='ruffmethod'><a name='::SpiceGenTcl::RawFile::getTracesCsv'>getTracesCsv</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile" title="::SpiceGenTcl::RawFile" class='ruff_cmd'>::SpiceGenTcl::RawFile</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawFile'>RawFile</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Returns string with csv formatting containing all data</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT getTracesCsv</span> <span class='ruff_arg'>?args?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT getTracesCsv</span> <span class='ruff_arg'>?-all? ?-traces list? ?-sep value?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
-<tr><td><code><font color=#b9b96e>-all</font></code></td><td>Select all traces.</td></tr>
-<tr><td><code><font color=#b9b96e>-sep</font></code></td><td>Separator of columns, default is comma.</td></tr>
-<tr><td><code><font color=#b9b96e>-traces</font></code></td><td>Select names of traces to return.</td></tr>
+<tr><td><code><font color=#b9b96e>-all</font></code></td><td>Select all traces, optional.</td></tr>
+<tr><td><code><font color=#b9b96e>-sep</font></code></td><td>Separator of columns, default is comma, optional.</td></tr>
+<tr><td><code><font color=#b9b96e>-traces</font></code></td><td>Select names of traces to return, optional.</td></tr>
 </table>
 <h5 class='ruff'>Return value</h5><p class='ruff'>Returns string with csv formatting containing all data</p>
 <div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_RawFile_getTracesCsv' href="javascript:toggleSource('SpiceGenTcl_RawFile_getTracesCsv')">Show source</a></p>
 <div id='SpiceGenTcl_RawFile_getTracesCsv' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> getTracesCsv {args} {
 
     <i><font color=#76a396># Returns string with csv formatting containing all data</font></i>
-    <i><font color=#76a396>#  -all - select all traces</font></i>
-    <i><font color=#76a396>#  -traces - select names of traces to return</font></i>
-    <i><font color=#76a396>#  -sep - separator of columns, default is comma</font></i>
+    <i><font color=#76a396>#  -all - select all traces, optional</font></i>
+    <i><font color=#76a396>#  -traces - select names of traces to return, optional</font></i>
+    <i><font color=#76a396>#  -sep - separator of columns, default is comma, optional</font></i>
+    <i><font color=#76a396># Synopsis: ?-all? ?-traces list? ?-sep value?</font></i>
     <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> {
         {<font color=#b9b96e>-all</font> <font color=#b9b96e>-forbid</font> {traces}}
         {<font color=#b9b96e>-traces</font> <font color=#b9b96e>-catchall</font> <font color=#b9b96e>-forbid</font> {all}}
@@ -2728,9 +2772,10 @@
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::RawString::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawString" title="::SpiceGenTcl::RawString" class='ruff_cmd'>::SpiceGenTcl::RawString</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawString'>RawString</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>RawString</font></b></code>.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>RawString create OBJNAME</span> <span class='ruff_arg'>value ?args?</span><br><span class='ruff_cmd'>RawString new</span> <span class='ruff_arg'>value ?args?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>value ?-name value?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code>value</code></td><td>Value of the raw string.</td></tr>
+<tr><td><code><font color=#b9b96e>-name</font></code></td><td>Name of the string that could be used to retrieve element from <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Netlist" title="::SpiceGenTcl::Netlist" class='ruff_cmd'>::SpiceGenTcl::Netlist</a> object and its descendants, optional.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5><p class='ruff'>Class represent arbitary string. It can be used to pass any string directly into netlist, for example, it can add elements that doesn't have dedicated class.</p>
 <div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_RawString_constructor' href="javascript:toggleSource('SpiceGenTcl_RawString_constructor')">Show source</a></p>
@@ -2738,12 +2783,15 @@
 
     <i><font color=#76a396># Creates object of class `RawString`.</font></i>
     <i><font color=#76a396>#  value - value of the raw string</font></i>
+    <i><font color=#76a396>#  -name - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist] object</font></i>
+    <i><font color=#76a396>#    and its descendants, optional</font></i>
     <i><font color=#76a396># Class represent arbitary string.</font></i>
     <i><font color=#76a396>#  It can be used to pass any string directly into netlist,</font></i>
     <i><font color=#76a396>#  for example, it can add elements that doesn't have dedicated class.</font></i>
-    <b><font color=#ffa500>set</font></b> arguments [argparse {
+    <i><font color=#76a396># Synopsis: value ?-name value?</font></i>
+    argparse {
         <font color=#b9b96e>-name</font>=
-    }]
+    }
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> exists name]} {
         <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-name</font> <font color=#f1b479>$name</font>
     } <b><font color=#ffa500>else</font></b> {
@@ -3070,10 +3118,10 @@
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Temp::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Temp" title="::SpiceGenTcl::Temp" class='ruff_cmd'>::SpiceGenTcl::Temp</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Temp'>Temp</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Temp</font></b></code>.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>Temp create OBJNAME</span> <span class='ruff_arg'>value ?args?</span><br><span class='ruff_cmd'>Temp new</span> <span class='ruff_arg'>value ?args?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>value ?-eq?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code>value</code></td><td>Value of the temperature.</td></tr>
-<tr><td><code>args</code></td><td>Optional parameter qualificator -eq.</td></tr>
+<tr><td><code><font color=#b9b96e>-eq</font></code></td><td>Optional parameter qualificator.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5><p class='ruff'>This class represent .temp statement with temperature value.</p>
 <div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Temp_constructor' href="javascript:toggleSource('SpiceGenTcl_Temp_constructor')">Show source</a></p>
@@ -3081,11 +3129,12 @@
 
     <i><font color=#76a396># Creates object of class `Temp`.</font></i>
     <i><font color=#76a396>#  value - value of the temperature</font></i>
-    <i><font color=#76a396>#  args - optional parameter qualificator -eq</font></i>
+    <i><font color=#76a396>#  -eq - optional parameter qualificator</font></i>
     <i><font color=#76a396># This class represent .temp statement with temperature value.</font></i>
-    <b><font color=#ffa500>set</font></b> arguments [argparse {
+    <i><font color=#76a396># Synopsis: value ?-eq?</font></i>
+    argparse {
         {<font color=#b9b96e>-eq</font> <font color=#b9b96e>-boolean</font>}
-    }]
+    }
     <i><font color=#76a396>#set [my varname value] $value</font></i>
     <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-name</font> temp
     <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$eq</font>} {
@@ -3169,9 +3218,8 @@
 </span></li><li class='ruff-toc3 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::importCommon'>importCommon</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;importCommon&lt;/span&gt; </pre>Imports all ::SpiceGenTcl::Common commands to caller namespace
 </span></li><li class='ruff-toc3 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::importNgspice'>importNgspice</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;importNgspice&lt;/span&gt; </pre>Imports all ::SpiceGenTcl::Ngspice commands to caller namespace
 </span></li><li class='ruff-toc3 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::importXyce'>importXyce</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;importXyce&lt;/span&gt; </pre>Imports all ::SpiceGenTcl::Xyce commands to caller namespace
-</span></li><li class='ruff-toc2'><a href='#::SpiceGenTcl-Classes'>Classes</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Analysis'>Analysis</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Analysis::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Analysis</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;type params ?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Analysis</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;type params ?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Analysis</font></b></code>.
-</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Analysis::addParam'>addParam</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT addParam&lt;/span&gt; &lt;span class='ruff_arg'&gt;paramName value ?args?&lt;/span&gt;</pre>Adds new Parameter object to the list <code>Params</code>.
+</span></li><li class='ruff-toc2'><a href='#::SpiceGenTcl-Classes'>Classes</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Analysis'>Analysis</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Analysis::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;type params ?-name value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Analysis</font></b></code>.
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Analysis::addParam'>addParam</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT addParam&lt;/span&gt; &lt;span class='ruff_arg'&gt;paramName value ?-name value? ?-eq || <font color=#b9b96e>-poseq</font> || <font color=#b9b96e>-posnocheck</font> || <font color=#b9b96e>-pos</font> || <font color=#b9b96e>-nocheck</font>?&lt;/span&gt;</pre>Adds new Parameter object to the list <code>Params</code>.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Analysis::deleteParam'>deleteParam</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT deleteParam&lt;/span&gt; &lt;span class='ruff_arg'&gt;paramName&lt;/span&gt;</pre>Deletes existing <code><b><font color=#ffa500>Parameter</font></b></code> object from list <code>Params</code>.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Analysis::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre>Creates analysis for SPICE netlist.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Analysis::getParams'>getParams</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getParams&lt;/span&gt; </pre>Gets the dictionary that contains parameter name as keys and parameter values as the values.
@@ -3190,12 +3238,11 @@
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::del'>del</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT del&lt;/span&gt; &lt;span class='ruff_arg'&gt;elemName&lt;/span&gt;</pre>Deletes element from the circuit by its name.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::detachSimulator'>detachSimulator</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT detachSimulator&lt;/span&gt; </pre>Removes <code><b><font color=#ffa500>Simulator</font></b></code> object reference from <code><b><font color=#ffa500>Circuit</font></b></code>.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre>Creates circuit string for SPICE netlist.
-</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::getDataCsv'>getDataCsv</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getDataCsv&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Returns string with csv formatting containing all data
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::getDataCsv'>getDataCsv</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getDataCsv&lt;/span&gt; &lt;span class='ruff_arg'&gt;?-all? ?-traces list? ?-sep value?&lt;/span&gt;</pre>Returns string with csv formatting containing all data
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::getDataDict'>getDataDict</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getDataDict&lt;/span&gt; </pre>Method to get dictionary with raw data vectors.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::getElement'>getElement</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getElement&lt;/span&gt; &lt;span class='ruff_arg'&gt;elemName&lt;/span&gt;</pre>Gets particular element object reference by its name.
-</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::runAndRead'>runAndRead</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT runAndRead&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Invokes 'runAndRead', 'configure -log' and 'configure -data' methods from attached simulator.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Comment'>Comment</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Comment::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Comment</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;value ?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Comment</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;value ?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Comment</font></b></code>.
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::runAndRead'>runAndRead</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT runAndRead&lt;/span&gt; &lt;span class='ruff_arg'&gt;?-nodelete?&lt;/span&gt;</pre>Invokes 'runAndRead', 'configure -log' and 'configure -data' methods from attached simulator.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Comment'>Comment</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Comment::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;value ?-name value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Comment</font></b></code>.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Comment::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre>Creates comment string for SPICE netlist.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Dataset'>Dataset</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Dataset::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Dataset</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name type len ?numType?&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Dataset</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name type len ?numType?&lt;/span&gt;</pre>initialize dataset
@@ -3203,7 +3250,7 @@
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Dataset::getDataPoints'>getDataPoints</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getDataPoints&lt;/span&gt; </pre></span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Dataset::getStr'>getStr</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getStr&lt;/span&gt; </pre></span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Dataset::setDataPoints'>setDataPoints</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT setDataPoints&lt;/span&gt; &lt;span class='ruff_arg'&gt;dataPoints&lt;/span&gt;</pre>method to set the data points
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Device'>Device</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Device::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Device</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name pins params&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Device</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name pins params&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Device</font></b></code>.
-</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam'>addParam</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT addParam&lt;/span&gt; &lt;span class='ruff_arg'&gt;paramName value ?args?&lt;/span&gt;</pre>Adds new parameter to device, and throws error on dublicated names.
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam'>addParam</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT addParam&lt;/span&gt; &lt;span class='ruff_arg'&gt;paramName value ?-name value? ?-eq || <font color=#b9b96e>-poseq</font> || <font color=#b9b96e>-posnocheck</font> || <font color=#b9b96e>-pos</font> || <font color=#b9b96e>-nocheck</font>?&lt;/span&gt;</pre>Adds new parameter to device, and throws error on dublicated names.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins'>checkFloatingPins</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT checkFloatingPins&lt;/span&gt; </pre>Check if some pin device doesn't have connected nodes and return list of them.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam'>deleteParam</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT deleteParam&lt;/span&gt; &lt;span class='ruff_arg'&gt;paramName&lt;/span&gt;</pre>Deletes existing <code><b><font color=#ffa500>Parameter</font></b></code> object from list <code>Params</code>.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre>Creates device string for SPICE netlist.
@@ -3214,17 +3261,15 @@
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker'>DuplChecker</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck'>duplListCheck</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT duplListCheck&lt;/span&gt; &lt;span class='ruff_arg'&gt;<b><font color=#ffa500>list</font></b>&lt;/span&gt;</pre>Checks if list contains duplicates.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::EmptyTrace'>EmptyTrace</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::EmptyTrace::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>EmptyTrace</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name type len ?numType?&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>EmptyTrace</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name type len ?numType?&lt;/span&gt;</pre>initialize dummy trace
-</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::EmptyTrace::getDataPoints'>getDataPoints</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getDataPoints&lt;/span&gt; </pre></span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Include'>Include</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Include::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Include</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;value ?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Include</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;value ?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Include</font></b></code>.
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::EmptyTrace::getDataPoints'>getDataPoints</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getDataPoints&lt;/span&gt; </pre></span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Include'>Include</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Include::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;value ?-name value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Include</font></b></code>.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Include::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre>Creates include string for SPICE netlist.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder'>KeyArgsBuilder</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess'>argsPreprocess</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT argsPreprocess&lt;/span&gt; &lt;span class='ruff_arg'&gt;paramsNames ?args?&lt;/span&gt;</pre>Calls argparse and constructs list for passing to Device constructor.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr'>buildArgStr</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT buildArgStr&lt;/span&gt; &lt;span class='ruff_arg'&gt;paramsNames&lt;/span&gt;</pre>Builds argument list for argparse.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Library'>Library</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Library::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Library</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;value libValue ?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Library</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;value libValue ?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Library</font></b></code>.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Library'>Library</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Library::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;value libValue ?-name value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Library</font></b></code>.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Library::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre>Creates library string for SPICE netlist.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Model'>Model</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Model::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Model</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name type params&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Model</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name type params&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Model</font></b></code>.
-</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Model::addParam'>addParam</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT addParam&lt;/span&gt; &lt;span class='ruff_arg'&gt;paramName value ?args?&lt;/span&gt;</pre>Adds new parameter to device, and throws error on dublicated names.
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Model::addParam'>addParam</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT addParam&lt;/span&gt; &lt;span class='ruff_arg'&gt;paramName value ?-name value? ?-eq || <font color=#b9b96e>-poseq</font> || <font color=#b9b96e>-posnocheck</font> || <font color=#b9b96e>-pos</font> || <font color=#b9b96e>-nocheck</font>?&lt;/span&gt;</pre>Adds new parameter to device, and throws error on dublicated names.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Model::deleteParam'>deleteParam</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT deleteParam&lt;/span&gt; &lt;span class='ruff_arg'&gt;paramName&lt;/span&gt;</pre>Deletes existing <code><b><font color=#ffa500>Parameter</font></b></code> object from list <code>Params</code>.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Model::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre>Creates model string for SPICE netlist.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Model::getParams'>getParams</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getParams&lt;/span&gt; </pre>Gets the dictionary that contains parameter name as keys and parameter values as the values.
@@ -3236,8 +3281,7 @@
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Netlist::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre>Creates netlist string for SPICE netlist.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Netlist::getAllElemNames'>getAllElemNames</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getAllElemNames&lt;/span&gt; </pre>Gets names of all elements in netlist.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Netlist::getElement'>getElement</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getElement&lt;/span&gt; &lt;span class='ruff_arg'&gt;elemName&lt;/span&gt;</pre>Gets particular element object reference by its name.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Options'>Options</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Options::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Options</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;params ?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Options</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;params ?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Options</font></b></code>.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Options'>Options</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Options::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;params ?-name value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Options</font></b></code>.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Options::addParam'>addParam</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT addParam&lt;/span&gt; &lt;span class='ruff_arg'&gt;paramName value&lt;/span&gt;</pre>Creates new parameter object and add it to the list <code>Params</code>.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Options::deleteParam'>deleteParam</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT deleteParam&lt;/span&gt; &lt;span class='ruff_arg'&gt;paramName&lt;/span&gt;</pre>Deletes existing <code><b><font color=#ffa500>Parameter</font></b></code> object from list <code>Params</code>.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Options::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre>Creates options string for SPICE netlist.
@@ -3266,9 +3310,8 @@
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParameterSwitch'>ParameterSwitch</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParameterSwitch::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>ParameterSwitch</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>ParameterSwitch</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>ParameterSwitch</font></b></code> with parameter name.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParameterSwitch::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre>Creates string for SPICE netlist.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement'>ParamStatement</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>ParamStatement</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;params ?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>ParamStatement</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;params ?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>ParamStatement</font></b></code>.
-</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement::addParam'>addParam</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT addParam&lt;/span&gt; &lt;span class='ruff_arg'&gt;paramName value ?args?&lt;/span&gt;</pre>Adds new Parameter object to the list Params.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement'>ParamStatement</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;params ?-name value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>ParamStatement</font></b></code>.
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement::addParam'>addParam</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT addParam&lt;/span&gt; &lt;span class='ruff_arg'&gt;paramName value ?-eq?&lt;/span&gt;</pre>Adds new Parameter object to the list Params.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement::deleteParam'>deleteParam</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT deleteParam&lt;/span&gt; &lt;span class='ruff_arg'&gt;paramName&lt;/span&gt;</pre>Deletes existing <code><b><font color=#ffa500>Parameter</font></b></code> object from list <code>Params</code>.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre>Creates parameter statement string for SPICE netlist.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement::getParams'>getParams</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getParams&lt;/span&gt; </pre>Gets the dictionary that contains parameter name as keys and parameter values as the values.
@@ -3282,13 +3325,12 @@
 &lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>RawFile</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;path ?traces2read? ?simulator?&lt;/span&gt;</pre>Creates RawFile object.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawFile::getCurrentsNames'>getCurrentsNames</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getCurrentsNames&lt;/span&gt; </pre>Returns list that contains names of all current variables
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawFile::getTrace'>getTrace</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getTrace&lt;/span&gt; &lt;span class='ruff_arg'&gt;traceName&lt;/span&gt;</pre>Returns trace object reference by it's name
-</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawFile::getTracesCsv'>getTracesCsv</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getTracesCsv&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Returns string with csv formatting containing all data
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawFile::getTracesCsv'>getTracesCsv</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getTracesCsv&lt;/span&gt; &lt;span class='ruff_arg'&gt;?-all? ?-traces list? ?-sep value?&lt;/span&gt;</pre>Returns string with csv formatting containing all data
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawFile::getTracesData'>getTracesData</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getTracesData&lt;/span&gt; </pre>Returns dictionary that contains all data in value and name as a key
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawFile::getTracesStr'>getTracesStr</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getTracesStr&lt;/span&gt; </pre>Returns information about all Traces in raw file in form of string
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawFile::getVariablesNames'>getVariablesNames</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getVariablesNames&lt;/span&gt; </pre>Returns list that contains names of all variables
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawFile::getVoltagesNames'>getVoltagesNames</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getVoltagesNames&lt;/span&gt; </pre>Returns list that contains names of all voltage variables
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawString'>RawString</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawString::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>RawString</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;value ?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>RawString</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;value ?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>RawString</font></b></code>.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawString'>RawString</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawString::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;value ?-name value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>RawString</font></b></code>.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawString::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre>Creates raw string for SPICE netlist.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Simulator'>Simulator</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Simulator::getLog'>getLog</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getLog&lt;/span&gt; </pre>Returns log file of completed simulations.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Simulator::readData'>readData</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT readData&lt;/span&gt; </pre>Reads raw data file of last simulation.
@@ -3304,8 +3346,7 @@
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Subcircuit::getParams'>getParams</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getParams&lt;/span&gt; </pre>Gets the dictionary that contains parameter name as keys and parameter values as the values.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Subcircuit::getPins'>getPins</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getPins&lt;/span&gt; </pre>Gets the dictionary that contains pin name as keys and connected node name as the values.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Subcircuit::setParamValue'>setParamValue</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT setParamValue&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Sets (or change) value of particular parameters.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Temp'>Temp</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Temp::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Temp</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;value ?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Temp</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;value ?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Temp</font></b></code>.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Temp'>Temp</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Temp::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;value ?-eq?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Temp</font></b></code>.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Temp::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre>Creates .temp statement string for SPICE netlist.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Trace'>Trace</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Trace::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Trace</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name type len axis ?numType?&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Trace</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name type len axis ?numType?&lt;/span&gt;</pre>initialize trace

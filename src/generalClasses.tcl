@@ -578,15 +578,21 @@ namespace eval ::SpiceGenTcl {
             # Adds new parameter to device, and throws error on dublicated names.
             #  paramName - name of parameter
             #  value - value of parameter
-            #  args - optional arguments that adds qualificator to parameter: -pos - positional parameter, -eq - 
-            #  equational parameter, -poseq - positional equation parameter
-            set arguments [argparse {
-                {-pos -forbid {poseq}}
-                {-eq -forbid {poseq}}
-                {-poseq -forbid {pos eq}}
-                {-posnocheck -forbid {poseq eq pos}}
-                {-nocheck -forbid {pos eq poseq}}
-            }]
+            #  -eq - parameter is of class [::SpiceGenTcl::ParameterEquation], optional, forbids other switches
+            #  -poseq - parameter is of class [::SpiceGenTcl::ParameterPositionalEquation], optional, forbids other 
+            #    switches
+            #  -posnocheck - parameter is of class [::SpiceGenTcl::ParameterPositionalNoCheck], optional, forbids other 
+            #    switches
+            #  -pos - parameter is of class [::SpiceGenTcl::ParameterPositional], optional, forbids other switches
+            #  -nocheck - parameter is of class [::SpiceGenTcl::ParameterNoCheck], optional, forbids other switches
+            # Synopsis: paramName value ?-name value? ?-eq || -poseq || -posnocheck || -pos || -nocheck?
+            argparse {
+                {-pos -forbid {eq poseq posnocheck nocheck}}
+                {-eq -forbid {pos poseq posnocheck nocheck}}
+                {-poseq -forbid {pos eq posnocheck nocheck}}
+                {-posnocheck -forbid {pos eq poseq nocheck}}
+                {-nocheck -forbid {pos eq poseq posnocheck}}
+            }
             # method adds new Parameter object to the list Params
             set paramName [string tolower $paramName]
             if {[info exists Params]} {
@@ -760,12 +766,15 @@ namespace eval ::SpiceGenTcl {
         constructor {value args} {
             # Creates object of class `RawString`.
             #  value - value of the raw string
+            #  -name - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist] object
+            #    and its descendants, optional
             # Class represent arbitary string.
             #  It can be used to pass any string directly into netlist, 
             #  for example, it can add elements that doesn't have dedicated class.
-            set arguments [argparse {
+            # Synopsis: value ?-name value?
+            argparse {
                 -name=
-            }]
+            }
             if {[info exists name]} {
                 my configure -name $name
             } else {
@@ -787,11 +796,13 @@ namespace eval ::SpiceGenTcl {
         constructor {value args} {
             # Creates object of class `Comment`.
             #  value - value of the comment
-            #  args - optional argument -name - represent name of comment string
+            #  -name - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist] object
+            #    and its descendants, optional
             # Class represent comment string, it can be a multiline comment.
-            set arguments [argparse {
+            # Synopsis: value ?-name value?
+            argparse {
                 -name=
-            }]
+            }
             if {[info exists name]} {
                 my configure -name $name
             } else {
@@ -815,11 +826,13 @@ namespace eval ::SpiceGenTcl {
         constructor {value args} {
             # Creates object of class `Include`.
             #  value - value of the include path
-            #  args - optional argument -name - represent name of include statement
+            #  -name - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist] object
+            #    and its descendants, optional
             # This class represent .include statement.
-            set arguments [argparse {
+            # Synopsis: value ?-name value?
+            argparse {
                 -name=
-            }]
+            }
             if {[info exists name]} {
                 my configure -name $name
             } else {
@@ -834,7 +847,7 @@ namespace eval ::SpiceGenTcl {
         }
     }   
     
-###  Library class definition     
+###  Library class definition
     
     oo::configurable create Library {
         superclass RawString
@@ -847,11 +860,13 @@ namespace eval ::SpiceGenTcl {
             # Creates object of class `Library`.
             #  value - value of the include file
             #  libValue - value of selected library
-            #  args - optional argument -name - represent name of library statement
+            #  -name - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist] object
+            #    and its descendants, optional
             # Class represent .lib statement.
-            set arguments [argparse {
+            # Synopsis: value libValue ?-name value?
+            argparse {
                 -name=
-            }]
+            }
             if {[info exists name]} {
                 my configure -name $name
             } else {
@@ -875,18 +890,18 @@ namespace eval ::SpiceGenTcl {
             set name [string tolower $value]
         }
         variable name
-        # list of Parameter objects
         variable Params
         constructor {params args} {
             # Creates object of class `Options`.
-            #  name - name of the parameter
             #  params - list of instance parameters in form `{{name value ?-sw?} {name value ?-sw?}
             #   {name value ?-sw?} ...}`
-            #  args - optional argument -name - represent name of library statement
+            #  -name - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist] object
+            #    and its descendants, optional
             # This class represent .options statement.
-            set arguments [argparse {
+            # Synopsis: params ?-name value?
+            argparse {
                 -name=
-            }]
+            }
             if {[info exists name]} {
                 my configure -name $name
             } else {
@@ -965,11 +980,13 @@ namespace eval ::SpiceGenTcl {
         constructor {params args} {
             # Creates object of class `ParamStatement`.
             #  params - list of instance parameters in form `{{name value} {name value} {name equation -eq} ...}`
-            #  args - optional argument -name - represent name of library statement
+            #  -name - name of the library that could be used to retrieve element from [::SpiceGenTcl::Netlist] object
+            #    and its descendants, optional
             # Class represent .param statement.
-            set arguments [argparse {
+            # Synopsis: params ?-name value?
+            argparse {
                 -name=
-            }]
+            }
             if {[info exists name]} {
                 my configure -name $name
             } else {
@@ -991,10 +1008,11 @@ namespace eval ::SpiceGenTcl {
             # Adds new Parameter object to the list Params.
             #  paramName - name of parameter
             #  value - value of parameter
-            #  args - optional parameter qualificator -eq
-            set arguments [argparse {
+            #  -eq - optional parameter qualificator
+            # Synopsis: paramName value ?-eq?
+            argparse {
                 -eq
-            }]
+            }
             set paramName [string tolower $paramName]
             if {[info exists Params]} {
                 set paramList [dict keys $Params]
@@ -1038,11 +1056,12 @@ namespace eval ::SpiceGenTcl {
         constructor {value args} {
             # Creates object of class `Temp`.
             #  value - value of the temperature
-            #  args - optional parameter qualificator -eq
+            #  -eq - optional parameter qualificator
             # This class represent .temp statement with temperature value.
-            set arguments [argparse {
+            # Synopsis: value ?-eq?
+            argparse {
                 {-eq -boolean}
-            }]
+            }
             #set [my varname value] $value
             my configure -name temp
             if {$eq} {
@@ -1055,7 +1074,8 @@ namespace eval ::SpiceGenTcl {
             # Adds temperature parameter.
             #  paramName - name of temperature parameter
             #  value - value of temperature
-            #  args - optional parameter qualificator -eq
+            #  -eq - optional parameter qualificator
+            # Synopsis: paramName value ?-eq?
             set arguments [argparse {
                 {-eq -boolean} 
             }]
@@ -1186,8 +1206,7 @@ namespace eval ::SpiceGenTcl {
             # Creates object of class `CircuitNetlist`.
             #  name - name of the tol-level circuit
             # Class implements a top level netlist which is run in SPICE. We should add [::SpiceGenTcl::Simulator]
-            # object reference to make it able to run simulation. Results of last simulation attached as 
-            # [::SpiceGenTcl::RawData] class object and can be retrieved by [::SpiceGenTcl::Circuit::getData] method.
+            # object reference to make it able to run simulation.
             next $name
         }
         method add {element} {
@@ -1256,6 +1275,7 @@ namespace eval ::SpiceGenTcl {
             #  -all - select all traces
             #  -traces - select names of traces to return
             #  -sep - separator of columns, default is comma
+            # Synopsis: ?-all? ?-traces list? ?-sep value?
             return [[my configure -data] getTracesCsv {*}$args]
         }
         method genSPICEString {} {
@@ -1271,6 +1291,7 @@ namespace eval ::SpiceGenTcl {
         method runAndRead {args} {
             # Invokes 'runAndRead', 'configure -log' and 'configure -data' methods from attached simulator.
             #  -nodelete - flag to forbid simulation file deletion
+            # Synopsis: ?-nodelete?
             set arguments [argparse {
                 -nodelete
             }]
@@ -1416,8 +1437,10 @@ namespace eval ::SpiceGenTcl {
             #  type - type of analysis, for example, tran, ac, dc, etc
             #  params - list of instance parameters in form 
             #   `{{name value} {name -sw} {name Value -eq} {name Value -posnocheck} ...}`
-            #  args - optional argument *-name*
+            #  -name - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist] object
+            #    and its descendants, optional
             # Class models analysis statement.
+            # Synopsis: type params ?-name value?
             my variable name
             set arguments [argparse {
                 -name=
@@ -1445,13 +1468,20 @@ namespace eval ::SpiceGenTcl {
             # Adds new Parameter object to the list `Params`.
             #  paramName - name of parameter
             #  value - value of parameter
-            #  args - optional arguments *-eq* or *-posnocheck* as parameter qualificators
+            #  -eq - parameter is of class [::SpiceGenTcl::ParameterEquation], optional, forbids other switches
+            #  -poseq - parameter is of class [::SpiceGenTcl::ParameterPositionalEquation], optional, forbids other 
+            #    switches
+            #  -posnocheck - parameter is of class [::SpiceGenTcl::ParameterPositionalNoCheck], optional, forbids other 
+            #    switches
+            #  -pos - parameter is of class [::SpiceGenTcl::ParameterPositional], optional, forbids other switches
+            #  -nocheck - parameter is of class [::SpiceGenTcl::ParameterNoCheck], optional, forbids other switches
+            # Synopsis: paramName value ?-name value? ?-eq || -poseq || -posnocheck || -pos || -nocheck?
             set arguments [argparse {
-                {-eq -forbid {posnocheck}}
-                {-poseq -forbid {posnocheck}}
-                {-posnocheck -forbid {eq}}
-                {-pos -forbid {eq}}
-                {-nocheck -forbid {eq}}
+                {-eq -forbid {poseq posnocheck pos nocheck}}
+                {-poseq -forbid {eq posnocheck pos nocheck}}
+                {-posnocheck -forbid {eq poseq pos nocheck}}
+                {-pos -forbid {eq poseq posnocheck nocheck}}
+                {-nocheck -forbid {eq poseq posnocheck pos}}
             }]
             set paramName [string tolower $paramName]
             if {[info exists Params]} {
@@ -1965,9 +1995,10 @@ namespace eval ::SpiceGenTcl {
         }
         method getTracesCsv {args} {
             # Returns string with csv formatting containing all data
-            #  -all - select all traces
-            #  -traces - select names of traces to return
-            #  -sep - separator of columns, default is comma
+            #  -all - select all traces, optional
+            #  -traces - select names of traces to return, optional
+            #  -sep - separator of columns, default is comma, optional
+            # Synopsis: ?-all? ?-traces list? ?-sep value?
             set arguments [argparse -inline {
                 {-all -forbid {traces}}
                 {-traces -catchall -forbid {all}}
