@@ -32,6 +32,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # ::SpiceGenTcl::Ngspice::BasicDevices::RModel new resmod -tc1 1 -tc2 2
             # ```
+            # Synopsis: name ?-option value ...?
             set paramsNames [list tc1 tc2 rsh defw narrow short tnom kf af wf lf ef {r res}]
             next $name r [my argsPreprocess $paramsNames {*}$args]
         }
@@ -50,6 +51,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # ::SpiceGenTcl::Ngspice::BasicDevices::CModel new capmod -tc1 1 -tc2 2
             # ```
+            # Synopsis: name ?-option value ...?
             set paramsNames [list cap cj cjsw defw narrow short tc1 tc2 tnom di thick]
             next $name c [my argsPreprocess $paramsNames {*}$args]
         }
@@ -68,6 +70,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # ::SpiceGenTcl::Ngspice::BasicDevices::LModel new indmod -tc1 1 -tc2 2
             # ```
+            # Synopsis: name ?-option value ...?
             set paramsNames [list ind csect dia length tc1 tc2 tnom nt mu]
             next $name l [my argsPreprocess $paramsNames {*}$args]
         }
@@ -85,6 +88,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # ::SpiceGenTcl::Ngspice::BasicDevices::VSwitchModel new swmod -vt 1 -vh 0.5 -ron 1 -roff 1e6
             # ```
+            # Synopsis: name ?-option value ...?
             set paramsNames [list vt vh ron roff]
             next $name sw [my argsPreprocess $paramsNames {*}$args]
         }
@@ -103,6 +107,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # ::SpiceGenTcl::Ngspice::BasicDevices::CSwitchModel new cswmod -it 1 -ih 0.5 -ron 1 -roff 1e6
             # ```
+            # Synopsis: name ?-option value ...?
             set paramsNames [list it ih ron roff]
             next $name csw [my argsPreprocess $paramsNames {*}$args]
         }
@@ -126,6 +131,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             # ```
             # ::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel new diodemod -is 1e-14 -n 1.2 -rs 0.01 -cj0 1e-9
             # ```
+            # Synopsis: name ?-option value ...?
             set paramsNames [list level jws n rs bv ibv nbv ikr jtun jtunsw ntun xtitun keg isr nr \
                     fc fcs mjsw php tt lm lp wm wp xom xoi xm xp eg trs2 tm1 tm2 ttt1 ttt2 \
                     xti tlev tlevc ctp tcv {is js} {ikf ik} {cjo cj0} {cjp cjsw} {m mj} {vj pb} \
@@ -148,6 +154,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             # ```
             # ::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel new bjtmod npn -is 1e-15 -bf 200 -vaf 100 -cje 1e-10
             # ```
+            # Synopsis: name type ?-option value ...?
             set paramsNames [list subs is ibe ibc iss bf nf {vaf va} ikf {nkf nk} ise ne br \
                     nr {var vb} ikr isc nc rb irb rbm re rc cje {vje pe} {mje me} tf xtf \
                     vtf itf ptf cjc {vjc pc} mjc xcjc tr cjs {vjs ps} {mjs ms} xtb eg \
@@ -175,6 +182,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             # ```
             # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet1Model new jfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4 -cgd 1e-12
             # ```
+            # Synopsis: name type ?-option value ...?
             set paramsNames [list vto beta lambda rd rs cgs cgd pb is b kf af nlev gdsnoi fc tnom \
                     tcv vtotc bex betatce xti eg]
             set params [my argsPreprocess $paramsNames {*}$args]
@@ -196,6 +204,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             # ```
             # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4 -vbi 1.2
             # ```
+            # Synopsis: name type ?-option value ...?
             set paramsNames [list acgam beta cgd cgs delta fc hfeta hfe1 hfe2 hfgam \
                     hfg1 hfg2 ibd is lfgam lfg1 lfg2 mvst n p q rs rd  taud taug vbd \
                     vbi vst vto xc xi z rg lg ls ld cdss afac nfing tnom temp]
@@ -218,6 +227,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             # ```
             # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4 -vbi 1.2
             # ```
+            # Synopsis: name type ?-option value ...?
             set paramsNames [list vto beta b alpha lambda rd rs cgs cgd pb kf af fc]
             set params [my argsPreprocess $paramsNames {*}$args]
             next $name $type [linsert $params 0 [list level 1]]
