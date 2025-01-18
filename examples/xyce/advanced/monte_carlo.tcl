@@ -1,6 +1,7 @@
 
 package require SpiceGenTcl
 package require ticklecharts
+set ::ticklecharts::theme "dark"
 package require math::statistics
 namespace import tcl::mathop::*
 package require math::constants

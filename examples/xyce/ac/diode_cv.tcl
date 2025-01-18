@@ -1,6 +1,7 @@
 
 package require SpiceGenTcl
 package require ticklecharts
+set ::ticklecharts::theme "dark"
 package require math::constants
 ::math::constants::constants radtodeg degtorad pi
 namespace import ::SpiceGenTcl::*

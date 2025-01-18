@@ -1411,7 +1411,7 @@ namespace eval ::SpiceGenTcl {
                     return -code error "Analysis element can't be included in subcircuit"
                 }
             }
-            next $args
+            next {*}$args
         }
         method genSPICEString {} {
             # Creates subcircuit string for SPICE subcircuit.

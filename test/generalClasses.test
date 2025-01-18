@@ -1061,8 +1061,7 @@ test testSubcircuitClass-1 {test creation of Subcircuit class instance with genS
             # define input parameters of subcircuit
             set params {{r 100} {c 1e-6}}
             # add elements to subcircuit definition
-            my add [R new 1 net1 net2 -r {r -eq}]
-            my add [C new 1 net2 net3 -c {c -eq}]
+            my add [R new 1 net1 net2 -r {r -eq}] [C new 1 net2 net3 -c {c -eq}]
             # pass name, list of pins and list of parameters to Subcircuit constructor
             next rcnet $pins $params
         }

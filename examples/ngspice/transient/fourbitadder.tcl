@@ -17,18 +17,10 @@ oo::class create NAND {
         # define input parameters of subcircuit
         set params {}
         # add elements to subcircuit definition
-        my add [Q new 1 9 5 1 -model qmod]
-        my add [D new 1clamp 0 1 -model dmod]
-        my add [Q new 2 9 5 2 -model qmod]
-        my add [D new 2clamp 0 2 -model dmod]
-        my add [R new b 4 5 -r 4e3]
-        my add [R new 1 4 6 -r 1.6e3]
-        my add [Q new 3 6 9 8 -model qmod]
-        my add [R new 2 8 0 -r 1e3]
-        my add [R new c 4 7 -r 130]
-        my add [Q new 4 7 6 10 -model qmod]
-        my add [D new vbedrop 10 3 -model dmod]
-        my add [Q new 5 3 8 0 -model qmod]
+        my add [Q new 1 9 5 1 -model qmod] [D new 1clamp 0 1 -model dmod] [Q new 2 9 5 2 -model qmod]\
+                [D new 2clamp 0 2 -model dmod] [R new b 4 5 -r 4e3] [R new 1 4 6 -r 1.6e3] [Q new 3 6 9 8 -model qmod]\
+                [R new 2 8 0 -r 1e3] [R new c 4 7 -r 130] [Q new 4 7 6 10 -model qmod] [D new vbedrop 10 3 -model dmod]\
+                [Q new 5 3 8 0 -model qmod]
         # pass name, list of pins and list of parameters to Subcircuit constructor
         next nand $pins $params
     }
@@ -46,15 +38,9 @@ oo::class create ONEBIT {
         set params {}
         # add elements to subcircuit definition
         global variable nand
-        my add [XAuto new $nand x1 "1 2 7 6"]
-        my add [XAuto new $nand x2 "1 7 8 6"]
-        my add [XAuto new $nand x3 "2 7 9 6"]
-        my add [XAuto new $nand x4 "8 9 10 6"]
-        my add [XAuto new $nand x5 "3 10 11 6"]
-        my add [XAuto new $nand x6 "3 11 12 6"]
-        my add [XAuto new $nand x7 "10 11 13 6"]
-        my add [XAuto new $nand x8 "12 13 4 6"]
-        my add [XAuto new $nand x9 "11 7 5 6"]
+        my add [XAuto new $nand x1 "1 2 7 6"] [XAuto new $nand x2 "1 7 8 6"] [XAuto new $nand x3 "2 7 9 6"]\
+                [XAuto new $nand x4 "8 9 10 6"] [XAuto new $nand x5 "3 10 11 6"] [XAuto new $nand x6 "3 11 12 6"]\
+                [XAuto new $nand x7 "10 11 13 6"] [XAuto new $nand x8 "12 13 4 6"] [XAuto new $nand x9 "11 7 5 6"]
         # pass name, list of pins and list of parameters to Subcircuit constructor
         next onebit $pins $params
     }
@@ -72,8 +58,7 @@ oo::class create TWOBIT {
         set params {}
         # add elements to subcircuit definition
         global variable onebit
-        my add [XAuto new $onebit x1 "1 2 7 5 10 9"]
-        my add [XAuto new $onebit x2 "3 4 10 6 8 9"]
+        my add [XAuto new $onebit x1 "1 2 7 5 10 9"] [XAuto new $onebit x2 "3 4 10 6 8 9"]
         # pass name, list of pins and list of parameters to Subcircuit constructor
         next twobit $pins $params
     }
@@ -91,8 +76,7 @@ oo::class create FOURBIT {
         set params {}
         # add elements to subcircuit definition
         global variable twobit
-        my add [XAuto new $twobit x1 "1 2 3 4 9 10 13 16 15"]
-        my add [XAuto new $twobit x2 "5 6 7 8 11 12 16 14 15"]
+        my add [XAuto new $twobit x1 "1 2 3 4 9 10 13 16 15"] [XAuto new $twobit x2 "5 6 7 8 11 12 16 14 15"] 
         # pass name, list of pins and list of parameters to Subcircuit constructor
         next fourbit $pins $params
     }
@@ -105,10 +89,7 @@ set circuit [Circuit new {Four-bit adder}]
 # add elements to circuit
 $circuit add [Tran new -tstep 1e-9 -tstop 10e-6]
 $circuit add [Options new {{noacct -sw}}]
-$circuit add $nand
-$circuit add $onebit
-$circuit add $twobit
-$circuit add $fourbit
+$circuit add $nand $onebit $twobit $fourbit
 $circuit add [XAuto new $fourbit x18 {1 2 3 4 5 6 7 8 9 10 11 12 0 13 99}]
 
 set trtf 10e-9
@@ -122,15 +103,9 @@ foreach name [list in1a in1b in2a in2b in3a in3b in4a in4b] {
     incr i
 }
 
-$circuit add [R new bit0 9 0 -r 1e3]
-$circuit add [R new bit1 10 0 -r 1e3]
-$circuit add [R new bit2 11 0 -r 1e3]
-$circuit add [R new bit3 12 0 -r 1e3]
-$circuit add [R new cout 13 0 -r 1e3]
-
-$circuit add [DiodeModel new dmod]
-$circuit add [BjtGPModel new qmod npn -bf 75 -rb 100 -cje 1e-12 -cjc 3e-12]
-
+$circuit add [R new bit0 9 0 -r 1e3] [R new bit1 10 0 -r 1e3] [R new bit2 11 0 -r 1e3] [R new bit3 12 0 -r 1e3]\
+        [R new cout 13 0 -r 1e3]
+$circuit add [DiodeModel new dmod] [BjtGPModel new qmod npn -bf 75 -rb 100 -cje 1e-12 -cjc 3e-12]
 
 #set simulator with default temporary directory
 set simulator [BatchLiveLog new {batch1}]
