@@ -320,7 +320,7 @@ test testParameterDefaultClass-4 {test creation of ParameterDefault class instan
     unset parInst result
 }
     
-###  ParameterSwitch class tests 
+###  ParameterSwitch class tests  
 
 test testParameterSwitchClass-1 {test creation of ParameterSwitch class instance and getName interface} -setup {
     set parInst [ParameterSwitch new U0]
@@ -879,9 +879,8 @@ v1 net1 net3 5} -cleanup {
 
 test testNetlistClass-2 {test creation of Netlist class instance with del interface and genSPICEString interface} -setup {
     set netlistInst [Netlist new newNetlist]
-    $netlistInst add [R new 1 net1 net2 -r 10]
-    $netlistInst add [R new 2 net1 net2 -r {{r1+5/10} -eq}]
-    $netlistInst add [R new 5 net1 net2 -model res_sem -l 10e-6 -w 100e-6]
+    $netlistInst add [R new 1 net1 net2 -r 10] [R new 2 net1 net2 -r {{r1+5/10} -eq}]\
+            [R new 5 net1 net2 -model res_sem -l 10e-6 -w 100e-6]
     $netlistInst add [RModel new rsem1mod -tc1 0.1 -tc2 0.4]
     $netlistInst add [C new 1 net2 net3 -c 1e-6]
     $netlistInst add [ParamStatement new {{r1 1} {r2 2}} -name ps1]
@@ -987,6 +986,69 @@ v1 net1 net3 5} -cleanup {
     unset netlistInst resistor
 }
 
+test testNetlistClass-7 {test creation of Netlist class instance with add element with same name as ones already added to netslit} -setup {
+    set netlistInst [Netlist new new_netlist]
+} -body {
+    catch {$netlistInst add [R new 1 net1 net2 -r 10] [R new 1 net1 net2 -r 15]} errorStr
+    return $errorStr
+} -result {Netlist 'new_netlist' already contains element with name r1} -cleanup {
+    unset netlistInst errorStr
+}
+
+test testNetlistClass-8 {test creation of Netlist class instance with del interface and genSPICEString interface} -setup {
+    set netlistInst [Netlist new newNetlist]
+    $netlistInst add [R new 1 net1 net2 -r 10] [R new 2 net1 net2 -r {{r1+5/10} -eq}]\
+            [R new 5 net1 net2 -model res_sem -l 10e-6 -w 100e-6]
+    $netlistInst add [RModel new rsem1mod -tc1 0.1 -tc2 0.4]
+    $netlistInst add [C new 1 net2 net3 -c 1e-6]
+    $netlistInst add [ParamStatement new {{r1 1} {r2 2}} -name ps1]
+    $netlistInst add [Comment new {some random comment} -name com1]
+    $netlistInst add [Include new {/fold1/fold2/file.lib} -name inc1]
+    $netlistInst add [Library new {/fold1/fold2/file.lib} fast -name lib1]
+    $netlistInst add [RawString new {*comment in form of raw string} -name raw1]
+    $netlistInst add [Vdc new 1 net1 net3 -dc 5]
+} -body {
+    $netlistInst del V1 com1
+    set result [$netlistInst genSPICEString]
+} -result {r1 net1 net2 10
+r2 net1 net2 {r1+5/10}
+r5 net1 net2 res_sem l=10e-6 w=100e-6
+.model rsem1mod r(tc1=0.1 tc2=0.4)
+c1 net2 net3 1e-6
+.param r1=1 r2=2
+.include /fold1/fold2/file.lib
+.lib /fold1/fold2/file.lib fast
+*comment in form of raw string} -cleanup {
+    unset netlistInst result
+}
+
+test testNetlistClass-9 {test creation of Netlist class instance with del interface and genSPICEString interface} -setup {
+    set netlistInst [Netlist new newNetlist]
+    $netlistInst add [R new 1 net1 net2 -r 10] [R new 2 net1 net2 -r {{r1+5/10} -eq}]\
+            [R new 5 net1 net2 -model res_sem -l 10e-6 -w 100e-6]
+    $netlistInst add [RModel new rsem1mod -tc1 0.1 -tc2 0.4]
+    $netlistInst add [C new 1 net2 net3 -c 1e-6]
+    $netlistInst add [ParamStatement new {{r1 1} {r2 2}} -name ps1]
+    $netlistInst add [Comment new {some random comment} -name com1]
+    $netlistInst add [Include new {/fold1/fold2/file.lib} -name inc1]
+    $netlistInst add [Library new {/fold1/fold2/file.lib} fast -name lib1]
+    $netlistInst add [RawString new {*comment in form of raw string} -name raw1]
+    $netlistInst add [Vdc new 1 net1 net3 -dc 5]
+} -body {
+    catch {$netlistInst del V1 com1 V1} errorStr
+    return $errorStr
+} -result {Element with name 'v1' was not found in netlist's 'newnetlist' list of elements} -cleanup {
+    unset netlistInst errorStr
+}
+
+test testNetlistClass-10 {test creation of Netlist class instance with del interface} -setup {
+    set netlistInst [Netlist new newNetlist]
+} -body {
+    catch {$netlistInst del V1} errorStr
+    return $errorStr
+} -result {Netlist 'newnetlist' doesn't have attached elements} -cleanup {
+    unset netlistInst errorStr
+}
     
 ###  Subcircuit class tests 
 
@@ -1083,7 +1145,7 @@ test testSubcircuitClass-4 {test creation of Subcircuit class instance with forb
 } -body {
     catch {RCnet new} errorStr
     set result $errorStr
-} -result {Include element can't be included in subcircuit} -cleanup {
+} -result {::SpiceGenTcl::Include element can't be included in subcircuit} -cleanup {
     rename RCnet ""
     unset result errorStr
 }
@@ -1307,8 +1369,7 @@ test testRawFileClass-5 {test creation of RawFile class instance and getTracesCs
 test testCircuitClass-1 {test creation of Circuit class instance and getDataCsv interface} -setup {
     set circuit [Circuit new {voltage divider netlist}]
     $circuit add [Vdc new 1 in 0 -dc 1]
-    $circuit add [R new 1 in out -r 1e3]
-    $circuit add [R new 2 out 0 -r 2e3]
+    $circuit add [R new 1 in out -r 1e3] [R new 2 out 0 -r 2e3] 
     $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1]
     set simulator [Batch new {batch1}]
     $circuit configure -simulator $simulator
@@ -1325,6 +1386,74 @@ test testCircuitClass-1 {test creation of Circuit class instance and getDataCsv 
 5.0,3.333333333333333
 " -cleanup {
     unset circuit data simulator
+}
+
+test testCircuitClass-2 {test creation of Circuit class instance} -setup {
+    set circuit [Circuit new {voltage divider netlist}]
+    $circuit add [Vdc new 1 in 0 -dc 1]
+    $circuit add [R new 1 in out -r 1e3]
+    $circuit add [R new 2 out 0 -r 2e3]
+    $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1]
+} -body {
+    catch {$circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1]} errorStr
+    return $errorStr
+} -result "Netlist 'voltage divider netlist' already contains Analysis element" -cleanup {
+    unset circuit errorStr
+}
+
+test testCircuitClass-3 {test creation of Circuit class instance} -setup {
+    set circuit [Circuit new {voltage divider netlist}]
+    $circuit add [Vdc new 1 in 0 -dc 1]
+    $circuit add [R new 1 in out -r 1e3]
+} -body {
+    catch {$circuit add [R new 1 out 0 -r 2e3]} errorStr
+    return $errorStr
+} -result "Netlist 'voltage divider netlist' already contains element with name r1" -cleanup {
+    unset circuit errorStr
+}
+
+test testCircuitClass-4 {test creation of Circuit class instance} -setup {
+    set circuit [Circuit new {voltage divider netlist}]
+    $circuit add [Vdc new 1 in 0 -dc 1]
+    $circuit add [R new 1 in out -r 1e3]
+    $circuit add [R new 2 out 0 -r 2e3]
+} -body {
+    catch {$circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1] [Dc new -src v1 -start 0 -stop 5 -incr 1]} errorStr
+    return $errorStr
+} -result "Netlist 'voltage divider netlist' already contains Analysis element" -cleanup {
+    unset circuit errorStr
+}
+
+test testCircuitClass-5 {test creation of Circuit class instance} -setup {
+    set circuit [Circuit new {voltage divider netlist}]
+    $circuit add [Vdc new 1 in 0 -dc 1]
+    $circuit add [R new 1 in out -r 1e3] [R new 2 out 0 -r 2e3]
+    $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1]
+} -body {
+    $circuit del R2 r1
+    return [$circuit genSPICEString]
+} -result "voltage divider netlist
+v1 in 0 1
+.dc v1 0 5 1" -cleanup {
+    unset circuit
+}
+
+test testCircuitClass-4 {test creation of Circuit class instance, add Anslysis, remove it and then add again} -setup {
+    set circuit [Circuit new {voltage divider netlist}]
+    $circuit add [Vdc new 1 in 0 -dc 1]
+    $circuit add [R new 1 in out -r 1e3]
+    $circuit add [R new 2 out 0 -r 2e3]
+    $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1 -name dc1]
+    $circuit del dc1
+} -body {
+    $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1 -name dc1]
+    return [$circuit genSPICEString]
+} -result "voltage divider netlist
+v1 in 0 1
+r1 in out 1e3
+r2 out 0 2e3
+.dc v1 0 5 1" -cleanup {
+    unset circuit
 }
 
 forgetNgspice

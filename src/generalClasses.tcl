@@ -94,6 +94,22 @@ namespace eval ::SpiceGenTcl {
             }
             return $flag
         }
+        method duplListCheckRet {list} {
+            # Checks if list contains duplicates and return value of first duplicate.
+            #  list - list to check
+            # Returns: empty list if no duplicate or value of first duplicate.
+            set itemDup ""
+            set new {}
+            foreach item $list {
+                if {[lsearch $new $item] < 0} {
+                    lappend new $item
+                } else {
+                    set itemDup $item
+                    break
+                }
+            }
+            return $itemDup
+        }
     }
 
 ###  KeyArgsBuilder class definition 
@@ -1122,36 +1138,43 @@ namespace eval ::SpiceGenTcl {
             # as a parent class can be added to Netlist, except Options and Analysis.
             my configure -name $name
         }
-        method add {element} {
-            # Adds elements object to Elements dictionary.
-            #  element - element object reference
-            set elementClass [info object class $element]
-            if {$elementClass=={::SpiceGenTcl::Options}} {
-                return -code error "Options element can't be included in general netlist, only top-level Circuit"
-            } elseif {$elementClass=={::SpiceGenTcl::Analysis}} {
-                return -code error "Analysis element can't be included in general netlist, only top-level Circuit"
+        method add {args} {
+            # Adds elements objects to Elements dictionary.
+            #  args - elements objects references
+            foreach arg $args {
+                set argClass [info object class $arg]
+                if {$argClass in {::SpiceGenTcl::Options ::SpiceGenTcl::Analysis}} {
+                    return -code error "$argClass element can't be included in general netlist"
+                }
+                lappend elementsNamesList [string tolower [$arg configure -name]]
             }
-            set elemName [string tolower [$element configure -name]]
             if {[info exists Elements]} {
-                set elemList [my getAllElemNames]
+                lappend elementsNamesList {*}[my getAllElemNames]
             }
-            lappend elemList $elemName
-            if {[my duplListCheck $elemList]} {
-                return -code error "Netlist '[my configure -name]' already contains element with name $elemName"
+            set dup [my duplListCheckRet $elementsNamesList]
+            if {$dup!=""} {
+                return -code error "Netlist '[my configure -name]' already contains element with name $dup"
             }
-            dict append Elements [$element configure -name] $element 
+            foreach arg $args {
+                set elemName [$arg configure -name]
+                dict append Elements $elemName $arg
+            }
             return
         }
-        method del {elemName} {
-            # Deletes element from the netlist by its name.
-            #  elemName - name of element to delete
-            set elemName [string tolower $elemName]
-            set error [catch {dget $Elements $elemName}]
-            if {$error>0} {
-                return -code error "Element with name '$elemName' was not found in netlist's '[my configure -name]'\
+        method del {args} {
+            # Deletes elements from the netlist by its name.
+            #  args - names of elements to delete
+            if {![info exists Elements]} {
+                return -code error "Netlist '[my configure -name]' doesn't have attached elements"
+            }
+            foreach arg $args {
+                set elemName [string tolower $arg]
+                if {[catch {dget $Elements $elemName}]} {
+                    return -code error "Element with name '$elemName' was not found in netlist's '[my configure -name]'\
                         list of elements"
-            } else {
-                set Elements [dict remove $Elements $elemName]
+                } else {
+                    set Elements [dict remove $Elements $elemName]
+                }
             }
             return
         }
@@ -1201,7 +1224,7 @@ namespace eval ::SpiceGenTcl {
         property data
         variable data
         # flag that tells about Analysis element presence in Circuit
-        variable ContainAnalysis
+        variable ContainAnalysis Elements
         constructor {name} {
             # Creates object of class `CircuitNetlist`.
             #  name - name of the tol-level circuit
@@ -1209,39 +1232,46 @@ namespace eval ::SpiceGenTcl {
             # object reference to make it able to run simulation.
             next $name
         }
-        method add {element} {
-            # Adds elements object to Elements dictionary.
-            #  element - element object reference
-            my variable Elements
-            set elemName [string tolower [$element configure -name]]
-            if {([info object class $element {::SpiceGenTcl::Analysis}]) && ([info exists ContainAnalysis])} {
-                return -code error "Netlist '[my configure -name]' already contains Analysis element"
-            } elseif {[info object class $element {::SpiceGenTcl::Analysis}]} {
-                set ContainAnalysis ""
+        method add {args} {
+            # Adds elements object to Circuit `Elements` dictionary.
+            #  args - elements objects references
+            foreach arg $args {
+                if {([info object class $arg {::SpiceGenTcl::Analysis}]) && ([info exists ContainAnalysis])} {
+                    return -code error "Netlist '[my configure -name]' already contains Analysis element"
+                } elseif {[info object class $arg {::SpiceGenTcl::Analysis}]} {
+                    set ContainAnalysis ""
+                }
+                lappend elementsNamesList [string tolower [$arg configure -name]]
             }
             if {[info exists Elements]} {
-                set elemList [my getAllElemNames]
+                lappend elementsNamesList {*}[my getAllElemNames]
             }
-            lappend elemList $elemName
-            if {[my duplListCheck $elemList]} {
-                return -code error "Netlist '[my configure -name]' already contains element with name $elemName"
+            set dup [my duplListCheckRet $elementsNamesList]
+            if {$dup!=""} {
+                return -code error "Netlist '[my configure -name]' already contains element with name $dup"
             }
-            dict append Elements [$element configure -name] $element 
+            foreach arg $args {
+                set elemName [$arg configure -name]
+                dict append Elements $elemName $arg
+            }
             return
         }
-        method del {elemName} {
-            # Deletes element from the circuit by its name.
-            #  elemName - name of element to delete
-            my variable Elements
-            set elemName [string tolower $elemName]
-            set error [catch {dget $Elements $elemName}]
-            if {$error>0} {
-                return -code error "Element with name '$elemName' was not found in device's '[my configure -name]'\
+        method del {args} {
+            # Deletes elements from the circuit by its name.
+            #  args - name of element to delete
+            if {![info exists Elements]} {
+                return -code error "Netlist '[my configure -name]' doesn't have attached elements"
+            }
+            foreach arg $args {
+                set elemName [string tolower $arg]
+                if {[catch {dget $Elements $elemName}]} {
+                    return -code error "Element with name '$elemName' was not found in circuit's '[my configure -name]'\
                         list of elements"
-            } else {
-                set Elements [dict remove $Elements $elemName]
-                if {[info object class [dget $Elements $elemName] {::SpiceGenTcl::Analysis}]} {
-                    unset ContainAnalysis
+                } else {
+                    if {[info object class [dget $Elements $elemName] {::SpiceGenTcl::Analysis}]} {
+                        unset ContainAnalysis
+                    }
+                    set Elements [dict remove $Elements $elemName]
                 }
             }
             return
@@ -1249,7 +1279,6 @@ namespace eval ::SpiceGenTcl {
         method getElement {elemName} {
             # Gets particular element object reference by its name.
             #  elemName - name of element
-            my variable Elements
             set elemName [string tolower $elemName]
             set error [catch {dget $Elements $elemName}]
             if {$error>0} {
@@ -1281,7 +1310,6 @@ namespace eval ::SpiceGenTcl {
         method genSPICEString {} {
             # Creates circuit string for SPICE netlist.
             # Returns: 'circuit string'
-            my variable Elements
             lappend totalStr [my configure -name]
             dict for {elemName element} $Elements {
                 lappend totalStr [$element genSPICEString]
@@ -1370,23 +1398,20 @@ namespace eval ::SpiceGenTcl {
             return
         }
         
-        method add {element} {
+        method add {args} {
             # Add element object reference to `Netlist`, it extends add method to add check of element class because
             # subcircuit can't contain particular elements inside, like [::SpiceGenTcl::Include], 
             # [::SpiceGenTcl::Library], [::SpiceGenTcl::Options] and [::SpiceGenTcl::Analysis].
-            #  element - element object reference
-            set elementClass [info object class $element]
-            set elementClassSuperclass [info class superclasses $elementClass]
-            if {$elementClass=={::SpiceGenTcl::Include}} {
-                return -code error "Include element can't be included in subcircuit"
-            } elseif {$elementClass=={::SpiceGenTcl::Library}} {
-                return -code error "Library element can't be included in subcircuit"
-            } elseif {$elementClass=={::SpiceGenTcl::Options}} {
-                return -code error "Options element can't be included in subcircuit"
-            } elseif {$elementClassSuperclass=={::SpiceGenTcl::Analysis}} {
-                return -code error "Analysis element can't be included in subcircuit"
+            #  args - elements objects references
+            foreach arg $args {
+                set argClass [info object class $arg]
+                if {$argClass in {::SpiceGenTcl::Include ::SpiceGenTcl::Library ::SpiceGenTcl::Options}} {
+                    return -code error "$argClass element can't be included in subcircuit"
+                } elseif {[info class superclasses $argClass]=={::SpiceGenTcl::Analysis}} {
+                    return -code error "Analysis element can't be included in subcircuit"
+                }
             }
-            next $element
+            next $args
         }
         method genSPICEString {} {
             # Creates subcircuit string for SPICE subcircuit.

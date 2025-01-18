@@ -49,9 +49,9 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBCircuit new\fP \fIname\fP
 .br
-\fBOBJECT add\fP \fIelement\fP
+\fBOBJECT add\fP \fI?args?\fP
 .br
-\fBOBJECT del\fP \fIelemName\fP
+\fBOBJECT del\fP \fI?args?\fP
 .br
 \fBOBJECT detachSimulator\fP
 .br
@@ -103,6 +103,8 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT duplListCheck\fP \fIlist\fP
 .br
+\fBOBJECT duplListCheckRet\fP \fIlist\fP
+.br
 \fBEmptyTrace create OBJNAME\fP \fIname type len ?numType?\fP
 .br
 \fBEmptyTrace new\fP \fIname type len ?numType?\fP
@@ -139,9 +141,9 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBNetlist new\fP \fIname\fP
 .br
-\fBOBJECT add\fP \fIelement\fP
+\fBOBJECT add\fP \fI?args?\fP
 .br
-\fBOBJECT del\fP \fIelemName\fP
+\fBOBJECT del\fP \fI?args?\fP
 .br
 \fBOBJECT genSPICEString\fP
 .br
@@ -265,7 +267,7 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBSubcircuit new\fP \fIname pins params\fP
 .br
-\fBOBJECT add\fP \fIelement\fP
+\fBOBJECT add\fP \fI?args?\fP
 .br
 \fBOBJECT addParam\fP \fIparamName value\fP
 .br
@@ -366,6 +368,9 @@ Deletes existing Parameter object from list Params\&.
 .TP
 duplListCheck
 See \fIDuplChecker\&.duplListCheck\fP
+.TP
+duplListCheckRet
+See \fIDuplChecker\&.duplListCheckRet\fP
 .TP
 genSPICEString
 Creates analysis for SPICE netlist\&.
@@ -729,19 +734,22 @@ constructor
 Constructor for the class\&.
 .TP
 add
-Adds elements object to Elements dictionary\&.
+Adds elements object to Circuit Elements dictionary\&.
 .TP
 configure
 Configure properties\&.
 .TP
 del
-Deletes element from the circuit by its name\&.
+Deletes elements from the circuit by its name\&.
 .TP
 detachSimulator
 Removes Simulator object reference from Circuit\&.
 .TP
 duplListCheck
 See \fIDuplChecker\&.duplListCheck\fP
+.TP
+duplListCheckRet
+See \fIDuplChecker\&.duplListCheckRet\fP
 .TP
 genSPICEString
 Creates circuit string for SPICE netlist\&.
@@ -799,31 +807,31 @@ object reference to make it able to run simulation\&.
 \fBadd\fR (::SpiceGenTcl::Circuit)
 .RE
 .PP
-Adds elements object to Elements dictionary\&.
-.RS 4n\fBOBJECT add\fP \fIelement\fP
+Adds elements object to Circuit Elements dictionary\&.
+.RS 4n\fBOBJECT add\fP \fI?args?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
-element
-Element object reference\&.
+args
+Elements objects references\&.
 .RE
 .PP
 .RS -4n
 \fBdel\fR (::SpiceGenTcl::Circuit)
 .RE
 .PP
-Deletes element from the circuit by its name\&.
-.RS 4n\fBOBJECT del\fP \fIelemName\fP
+Deletes elements from the circuit by its name\&.
+.RS 4n\fBOBJECT del\fP \fI?args?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
-elemName
+args
 Name of element to delete\&.
 .RE
 .PP
@@ -1117,6 +1125,9 @@ Deletes existing Parameter object from list Params\&.
 duplListCheck
 See \fIDuplChecker\&.duplListCheck\fP
 .TP
+duplListCheckRet
+See \fIDuplChecker\&.duplListCheckRet\fP
+.TP
 genSPICEString
 Creates device string for SPICE netlist\&.
 .TP
@@ -1358,6 +1369,9 @@ Configure properties\&.
 .TP
 duplListCheck
 Checks if list contains duplicates\&.
+.TP
+duplListCheckRet
+Checks if list contains duplicates and return value of first duplicate\&.
 .RE
 .PP
 \fBSubclasses\fR
@@ -1383,6 +1397,26 @@ List to check\&.
 \fBReturn value\fR
 .PP
 0 if there are no duplicates and 1 if there are\&.
+.PP
+.RS -4n
+\fBduplListCheckRet\fR (::SpiceGenTcl::DuplChecker)
+.RE
+.PP
+Checks if list contains duplicates and return value of first duplicate\&.
+.RS 4n\fBOBJECT duplListCheckRet\fP \fIlist\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+list
+List to check\&.
+.RE
+.PP
+\fBReturn value\fR
+.PP
+empty list if no duplicate or value of first duplicate\&.
 .PP
 .RS -4n
 \fBEmptyTrace\fR (::SpiceGenTcl)
@@ -1669,6 +1703,9 @@ Deletes existing Parameter object from list Params\&.
 duplListCheck
 See \fIDuplChecker\&.duplListCheck\fP
 .TP
+duplListCheckRet
+See \fIDuplChecker\&.duplListCheckRet\fP
+.TP
 genSPICEString
 Creates model string for SPICE netlist\&.
 .TP
@@ -1832,16 +1869,19 @@ constructor
 Constructor for the class\&.
 .TP
 add
-Adds elements object to Elements dictionary\&.
+Adds elements objects to Elements dictionary\&.
 .TP
 configure
 Configure properties\&.
 .TP
 del
-Deletes element from the netlist by its name\&.
+Deletes elements from the netlist by its name\&.
 .TP
 duplListCheck
 See \fIDuplChecker\&.duplListCheck\fP
+.TP
+duplListCheckRet
+See \fIDuplChecker\&.duplListCheckRet\fP
 .TP
 genSPICEString
 Creates netlist string for SPICE netlist\&.
@@ -1898,32 +1938,32 @@ as a parent class can be added to Netlist, except Options and Analysis\&.
 \fBadd\fR (::SpiceGenTcl::Netlist)
 .RE
 .PP
-Adds elements object to Elements dictionary\&.
-.RS 4n\fBOBJECT add\fP \fIelement\fP
+Adds elements objects to Elements dictionary\&.
+.RS 4n\fBOBJECT add\fP \fI?args?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
-element
-Element object reference\&.
+args
+Elements objects references\&.
 .RE
 .PP
 .RS -4n
 \fBdel\fR (::SpiceGenTcl::Netlist)
 .RE
 .PP
-Deletes element from the netlist by its name\&.
-.RS 4n\fBOBJECT del\fP \fIelemName\fP
+Deletes elements from the netlist by its name\&.
+.RS 4n\fBOBJECT del\fP \fI?args?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
-elemName
-Name of element to delete\&.
+args
+Names of elements to delete\&.
 .RE
 .PP
 .RS -4n
@@ -1989,6 +2029,9 @@ Deletes existing Parameter object from list Params\&.
 .TP
 duplListCheck
 See \fIDuplChecker\&.duplListCheck\fP
+.TP
+duplListCheckRet
+See \fIDuplChecker\&.duplListCheckRet\fP
 .TP
 genSPICEString
 Creates options string for SPICE netlist\&.
@@ -2671,6 +2714,9 @@ Deletes existing Parameter object from list Params\&.
 duplListCheck
 See \fIDuplChecker\&.duplListCheck\fP
 .TP
+duplListCheckRet
+See \fIDuplChecker\&.duplListCheckRet\fP
+.TP
 genSPICEString
 Creates parameter statement string for SPICE netlist\&.
 .TP
@@ -3297,6 +3343,9 @@ Deletes existing Parameter object from list Params\&.
 duplListCheck
 See \fIDuplChecker\&.duplListCheck\fP
 .TP
+duplListCheckRet
+See \fIDuplChecker\&.duplListCheckRet\fP
+.TP
 genSPICEString
 Creates subcircuit string for SPICE subcircuit\&.
 .TP
@@ -3362,15 +3411,15 @@ inside subcircuit, together with header and connection of elements inside\&.
 Add element object reference to Netlist, it extends add method to add check of element class because
 subcircuit can't contain particular elements inside, like \fI::SpiceGenTcl::Include\fP,
 \fI::SpiceGenTcl::Library\fP, \fI::SpiceGenTcl::Options\fP and \fI::SpiceGenTcl::Analysis\fP\&.
-.RS 4n\fBOBJECT add\fP \fIelement\fP
+.RS 4n\fBOBJECT add\fP \fI?args?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
-element
-Element object reference\&.
+args
+Elements objects references\&.
 .RE
 .PP
 .RS -4n
