@@ -165,7 +165,7 @@ r2 out 0 2e3
 ```
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/img/resistor_divider_cir_black_github.png">
-  <img alt="" src="docs/assets/img/resistor_divider_cir_white.png">
+  <img alt="" src="docs/assets/img/resistor_divider_cir_white.png" width=50% height=50%>
 </picture>
 
 
