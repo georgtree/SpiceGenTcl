@@ -234,5 +234,7 @@ $chart Render -outfile [file normalize [file join .. html_charts $fbasename.html
 ```
 To view result, we should open rendered resistor_divider.html chart in browser.
 
-![resistor_divider](docs/assets/img/resistor_divider.png)
-
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/img/resistor_divider_graph_black_github.png">
+  <img alt="" src="docs/assets/img/resistor_divider_graph_white.png" width=100% height=100%>
+</picture>

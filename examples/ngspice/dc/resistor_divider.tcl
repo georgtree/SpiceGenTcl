@@ -1,7 +1,7 @@
 
 package require SpiceGenTcl
 package require ticklecharts
-#set ::ticklecharts::theme "dark"
+set ::ticklecharts::theme "dark"
 namespace import ::SpiceGenTcl::*
 importNgspice
 
@@ -33,7 +33,7 @@ foreach x $axis y $trace {
 set chart [ticklecharts::chart new]
 $chart Xaxis -name "v(in), V" -minorTick {show "True"} -min 0 -max 5 -type "value" -splitLine {show "True"}
 $chart Yaxis -name "v(out), V" -minorTick {show "True"} -min 0 -max 3.5 -type "value" -splitLine {show "True"}
-$chart SetOptions -title {} -tooltip {trigger "axis"} -animation "False"
+$chart SetOptions -title {} -tooltip {trigger "axis"} -animation "False" -backgroundColor "#212121"
 $chart Add "lineSeries" -data $xydata -showAllSymbol "nothing"
 set fbasename [file rootname [file tail [info script]]]
 
