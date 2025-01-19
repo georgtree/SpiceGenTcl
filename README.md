@@ -163,7 +163,10 @@ r1 in out 1e3
 r2 out 0 2e3
 .dc v1 0 5 0.1
 ```
-<img src="docs/assets/img/resistor_divider_cir.png" alt="drawing" width="300"/>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/img/resistor_divider_cir_black_github.png">
+  <img alt="" src="docs/assets/img/resistor_divider_cir_white.png">
+</picture>
 
 
 First step is creating circuit object:
