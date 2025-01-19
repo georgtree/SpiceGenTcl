@@ -1113,6 +1113,12 @@ Constructor for the class\&.
 addParam
 Adds new parameter to device, and throws error on dublicated names\&.
 .TP
+argsPreprocess
+See \fIKeyArgsBuilder\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fIKeyArgsBuilder\&.buildArgStr\fP
+.TP
 checkFloatingPins
 Check if some pin device doesn't have connected nodes and return list of them\&.
 .TP
@@ -1156,7 +1162,7 @@ Writable: -name
 .PP
 \fBMixins\fR
 .PP
-\fIDuplChecker\fP
+\fIDuplChecker\fP, \fIKeyArgsBuilder\fP
 .PP
 \fBSubclasses\fR
 .PP
@@ -1570,7 +1576,7 @@ Builds argument list for argparse\&.
 .PP
 \fBSubclasses\fR
 .PP
-\fI::SpiceGenTcl::Common::BasicDevices::Inductor\fP, \fI::SpiceGenTcl::Common::Sources::Vsin\fP, \fI::SpiceGenTcl::Ngspice::Sources::sffm\fP, \fI::SpiceGenTcl::Ngspice::Sources::Vsffm\fP, \fI::SpiceGenTcl::Ngspice::Sources::BehaviouralSource\fP, \fI::SpiceGenTcl::Ngspice::BasicDevices::RModel\fP, \fI::SpiceGenTcl::Ngspice::BasicDevices::CModel\fP, \fI::SpiceGenTcl::Ngspice::BasicDevices::LModel\fP, \fI::SpiceGenTcl::Ngspice::BasicDevices::VSwitchModel\fP, \fI::SpiceGenTcl::Ngspice::BasicDevices::CSwitchModel\fP, \fI::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel\fP, \fI::SpiceGenTcl::Ngspice::SemiconductorDevices::BjtGPModel\fP, \fI::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet1Model\fP, \fI::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet2Model\fP, \fI::SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet1Model\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::Resistor\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::Capacitor\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::Inductor\fP, \fI::SpiceGenTcl::Xyce::Sources::BehaviouralSource\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::RModel\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::CModel\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::LModel\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::VSwitchModel\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::CSwitchModel\fP, \fI::SpiceGenTcl::Xyce::SemiconductorDevices::DiodeModel\fP, \fI::SpiceGenTcl::Xyce::SemiconductorDevices::BjtGPModel\fP, \fI::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet1Model\fP, \fI::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet2Model\fP, \fI::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet1Model\fP
+\fIDevice\fP, \fIModel\fP
 .PP
 .RS -4n
 \fBargsPreprocess\fR (::SpiceGenTcl::KeyArgsBuilder)
@@ -1593,7 +1599,7 @@ Argument list with key names and it's values\&.
 .PP
 \fBReturn value\fR
 .PP
-string in form *-paramName= \\n {-paramName= -alias aliasName} \\n \&.\&.\&.*
+list of parameters formatted for Device/Model constructor
 .PP
 .RS -4n
 \fBbuildArgStr\fR (::SpiceGenTcl::KeyArgsBuilder)
@@ -1694,6 +1700,12 @@ Constructor for the class\&.
 addParam
 Adds new parameter to device, and throws error on dublicated names\&.
 .TP
+argsPreprocess
+See \fIKeyArgsBuilder\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fIKeyArgsBuilder\&.buildArgStr\fP
+.TP
 configure
 Configure properties\&.
 .TP
@@ -1728,7 +1740,7 @@ Writable: -name, -type
 .PP
 \fBMixins\fR
 .PP
-\fIDuplChecker\fP
+\fIDuplChecker\fP, \fIKeyArgsBuilder\fP
 .PP
 \fBSubclasses\fR
 .PP
