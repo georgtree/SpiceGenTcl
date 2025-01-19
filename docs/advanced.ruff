@@ -79,15 +79,15 @@ namespace eval Advanced {
         foreach x $freqs y $trace {
             lappend xydata [list [@ $x 0] $y]
         }
+        puts [findBW [lmap freq $freqs {@ $freq 0}] $trace -10]
         set chartTransMag [ticklecharts::chart new]
-        $chartTransMag Xaxis -name "Frequency, Hz" -minorTick {show "True"} -type "log"
-        $chartTransMag Yaxis -name "Magnitude, dB" -minorTick {show "True"} -type "value"
-        $chartTransMag SetOptions -title {} -tooltip {} -animation "False"\
-                -toolbox {feature {dataZoom {yAxisIndex "none"}}} -grid {left "10%" right "15%"}
+        $chartTransMag Xaxis -name "Frequency, Hz" -minorTick {show "True"} -type "log" -splitLine {show "True"}
+        $chartTransMag Yaxis -name "Magnitude, dB" -minorTick {show "True"} -type "value" -splitLine {show "True"}
+        $chartTransMag SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
+                -toolbox {feature {dataZoom {yAxisIndex "none"}}} -grid {left "10%" right "15%"} -backgroundColor "#212121"
         $chartTransMag Add "lineSeries" -data $xydata -showAllSymbol "nothing" -symbolSize "1"
         set fbasename [file rootname [file tail [info script]]]
-
-        $chartTransMag Render -outfile [file normalize [file join html_charts ${fbasename}_typ.html]] -width 1000px
+        $chartTransMag Render -outfile [file normalize [file join .. html_charts ${fbasename}_typ.html]] -width 1000px
         ```
         
         !ticklechart_mark_monte_carlo_typ_mag_ngspice!
@@ -252,14 +252,16 @@ namespace eval Advanced {
         $chartUni Xaxis -name "Frequency intervals, Hz" -data [list [dget $uniIntervals intervalsStr]]\
                 -axisTick {show "True" alignWithLabel "True"} -axisLabel {interval "0" rotate "45" fontSize "8"}
         $chartUni Yaxis -name "Bandwidths per interval" -minorTick {show "True"} -type "value"
-        $chartUni SetOptions -title {} -tooltip {} -animation "False" -toolbox {feature {dataZoom {yAxisIndex "none"}}}
+        $chartUni SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
+                -toolbox {feature {dataZoom {yAxisIndex "none"}}} -backgroundColor "#212121"
         $chartUni Add "barSeries" -data [list $uniDist]
         # chart for normally distributed parameters
         set chartNorm [ticklecharts::chart new]
         $chartNorm Xaxis -name "Frequency intervals, Hz" -data [list [dget $normIntervals intervalsStr]]\
                 -axisTick {show "True" alignWithLabel "True"} -axisLabel {interval "0" rotate "45" fontSize "8"}
         $chartNorm Yaxis -name "Bandwidths per interval" -minorTick {show "True"} -type "value"
-        $chartNorm SetOptions -title {} -tooltip {} -animation "False" -toolbox {feature {dataZoom {yAxisIndex "none"}}}
+        $chartNorm SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
+                -toolbox {feature {dataZoom {yAxisIndex "none"}}} -backgroundColor "#212121"
         $chartNorm Add "barSeries" -data [list $normDist]
         # create multiplot
         set layout [ticklecharts::Gridlayout new]
@@ -267,7 +269,7 @@ namespace eval Advanced {
         $layout Add $chartUni -bottom "60%" -height "35%" -width "75%"
 
         set fbasename [file rootname [file tail [info script]]]
-        $layout Render -outfile [file normalize [file join html_charts $fbasename.html]] -height 800px -width 1200px
+        $layout Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -height 800px -width 1200px
         ```
         
         !ticklechart_mark_monte_carlo_dists_ngspice!
@@ -284,11 +286,11 @@ namespace eval Advanced {
         $chartCombined Xaxis -name "Frequency intervals, Hz" -data [list [dget $uniIntervals intervalsStr]]\
                 -axisTick {show "True" alignWithLabel "True"} -axisLabel {interval "0" rotate "45" fontSize "8"}
         $chartCombined Yaxis -name "Bandwidths per interval" -minorTick {show "True"} -type "value"
-        $chartCombined SetOptions -title {} -legend  {} -tooltip {} -animation "False"\
-                -toolbox {feature {dataZoom {yAxisIndex "none"}}} -grid {left "10%" right "15%"}       
+        $chartCombined SetOptions -title {} -legend {} -tooltip {trigger "axis"} -animation "False"\
+                -toolbox {feature {dataZoom {yAxisIndex "none"}}} -grid {left "10%" right "15%"} -backgroundColor "#212121"
         $chartCombined Add "barSeries" -data [list $uniDist] -name "Uniform"
         $chartCombined Add "barSeries" -data [list $normDistWithUniIntervals] -name "Normal"
-        $chartCombined Render -outfile [file normalize [file join html_charts ${fbasename}_combined.html]]\
+        $chartCombined Render -outfile [file normalize [file join .. html_charts ${fbasename}_combined.html]]\
                 -height 800px -width 1200px
         ```
 
@@ -592,25 +594,30 @@ namespace eval Advanced {
         set initIdiode [dget [diodeIVcalc $iniPars $pdata] fval]
         set fittedVIdiode [lmap vVal $vInterp iVal $fittedIdiode {list $vVal $iVal}]
         set initVIdiode [lmap vVal $vInterp iVal $initIdiode {list $vVal $iVal}]
+        set viRaw [lmap vVal $vRaw iVal $iRaw {list $vVal $iVal}]
         ```
 
         Plot it with `ticklecharts` package in linear and logarithmic scales:
         ```tcl
         set chart [ticklecharts::chart new]
-        $chart Xaxis -name "v(anode), V" -minorTick {show "True"}  -type "value" -splitLine {show "True"} -min "0.4" -max "1.6"
+        $chart Xaxis -name "v(anode), V" -minorTick {show "True"}  -type "value" -splitLine {show "True"} -min "0.4"\
+                -max "1.6"
         $chart Yaxis -name "Idiode, A" -minorTick {show "True"}  -type "value" -splitLine {show "True"} -min "0.0"\
                 -max "dataMax"
-        $chart SetOptions -title {} -tooltip {} -animation "False" -legend {} -toolbox {feature {dataZoom {yAxisIndex "none"}}}\
-                -grid {left "10%" right "15%"} -backgroundColor "#212121"
-        $chart Add "lineSeries" -data $fittedVIdiode -showAllSymbol "nothing" -name "fitted" -symbolSize "4"
+        $chart SetOptions -title {} -tooltip {trigger "axis"} -animation "False" -legend {}\
+                -toolbox {feature {dataZoom {yAxisIndex "none"}}} -grid {left "10%" right "15%"}\
+                -backgroundColor "#212121" 
+        $chart Add "lineSeries" -data $fittedVIdiode -showAllSymbol "nothing" -name "fitted" -symbolSize "4" 
         $chart Add "lineSeries" -data $initVIdiode -showAllSymbol "nothing" -name "unfitted" -symbolSize "4"
         $chart Add "lineSeries" -data $viRaw -showAllSymbol "nothing" -name "measured" -symbolSize "4"
         set chartLog [ticklecharts::chart new]
-        $chartLog Xaxis -name "v(anode), V" -minorTick {show "True"}  -type "value" -splitLine {show "True"} -min "0.4" -max "1.6"
+        $chartLog Xaxis -name "v(anode), V" -minorTick {show "True"}  -type "value" -splitLine {show "True"} -min "0.4"\
+                -max "1.6"
         $chartLog Yaxis -name "Idiode, A" -minorTick {show "True"}  -type "log" -splitLine {show "True"} -min "dataMin"\
                 -max "0.1"
-        $chartLog SetOptions -title {} -tooltip {} -animation "False" -legend {} -toolbox {feature {dataZoom {yAxisIndex "none"}}}\
-                -grid {left "10%" right "15%"} -backgroundColor "#212121"
+        $chartLog SetOptions -title {} -tooltip {trigger "axis"} -animation "False" -legend {}\
+                -toolbox {feature {dataZoom {yAxisIndex "none"}}} -grid {left "10%" right "15%"}\
+                -backgroundColor "#212121"
         $chartLog Add "lineSeries" -data $fittedVIdiode -showAllSymbol "nothing" -name "fitted" -symbolSize "4"
         $chartLog Add "lineSeries" -data $initVIdiode -showAllSymbol "nothing" -name "unfitted" -symbolSize "4"
         $chartLog Add "lineSeries" -data $viRaw -showAllSymbol "nothing" -name "measured" -symbolSize "4"

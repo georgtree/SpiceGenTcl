@@ -33,7 +33,7 @@ foreach x $axis y $trace {
 set chart [ticklecharts::chart new]
 $chart Xaxis -name "v(in), V" -minorTick {show "True"} -min 0 -max 5 -type "value"
 $chart Yaxis -name "v(out), V" -minorTick {show "True"} -min 0 -max 3.5 -type "value"
-$chart SetOptions -title {} -tooltip {} -animation "False"
+$chart SetOptions -title {} -tooltip {trigger "axis"} -animation "False"
 $chart Add "lineSeries" -data $xydata -showAllSymbol "nothing"
 set fbasename [file rootname [file tail [info script]]]
 

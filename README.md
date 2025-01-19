@@ -224,10 +224,10 @@ foreach x $axis y $trace {
 set chart [ticklecharts::chart new]
 $chart Xaxis -name "v(in), V" -minorTick {show "True"} -min 0 -max 5 -type "value" -splitLine {show "True"}
 $chart Yaxis -name "v(out), V" -minorTick {show "True"} -min 0 -max 3.5 -type "value" -splitLine {show "True"}
-$chart SetOptions -title {} -tooltip {} -animation "False"
+$chart SetOptions -title {} -tooltip {trigger "axis"} -animation "False" -backgroundColor "#212121"
 $chart Add "lineSeries" -data $xydata -showAllSymbol "nothing"
 set fbasename [file rootname [file tail [info script]]]
-$chart Render -outfile [file normalize [file join html_charts $fbasename.html]]
+$chart Render -outfile [file normalize [file join .. html_charts $fbasename.html]]
 ```
 To view result, we should open rendered resistor_divider.html chart in browser.
 

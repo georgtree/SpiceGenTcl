@@ -181,10 +181,11 @@ r2 out 0 2e3
 <b><font color=#ffa500>set</font></b> chart [ticklecharts::chart new]
 <font color=#f1b479>$chart</font> Xaxis <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;v(in), V&quot;</font> <font color=#b9b96e>-minorTick</font> {show <font color=#90ee90>&quot;True&quot;</font>} <font color=#b9b96e>-min</font> 0 <font color=#b9b96e>-max</font> 5 <font color=#b9b96e>-type</font> <font color=#90ee90>&quot;value&quot;</font> <font color=#b9b96e>-splitLine</font> {show <font color=#90ee90>&quot;True&quot;</font>}
 <font color=#f1b479>$chart</font> Yaxis <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;v(out), V&quot;</font> <font color=#b9b96e>-minorTick</font> {show <font color=#90ee90>&quot;True&quot;</font>} <font color=#b9b96e>-min</font> 0 <font color=#b9b96e>-max</font> 3.5 <font color=#b9b96e>-type</font> <font color=#90ee90>&quot;value&quot;</font> <font color=#b9b96e>-splitLine</font> {show <font color=#90ee90>&quot;True&quot;</font>}
-<font color=#f1b479>$chart</font> SetOptions <font color=#b9b96e>-title</font> {} <font color=#b9b96e>-tooltip</font> {} <font color=#b9b96e>-animation</font> <font color=#90ee90>&quot;False&quot;</font> 
+<font color=#f1b479>$chart</font> SetOptions <font color=#b9b96e>-title</font> {} <font color=#b9b96e>-tooltip</font> {trigger <font color=#90ee90>&quot;axis&quot;</font>} <font color=#b9b96e>-animation</font> <font color=#90ee90>&quot;False&quot;</font> <font color=#b9b96e>-backgroundColor</font> <font color=#90ee90>&quot;#212121&quot;</font>
 <font color=#f1b479>$chart</font> Add <font color=#90ee90>&quot;lineSeries&quot;</font> <font color=#b9b96e>-data</font> <font color=#f1b479>$xydata</font> <font color=#b9b96e>-showAllSymbol</font> <font color=#90ee90>&quot;nothing&quot;</font>
 <b><font color=#ffa500>set</font></b> fbasename [<b><font color=#ffa500>file</font></b> rootname [<b><font color=#ffa500>file</font></b> tail [<b><font color=#ffa500>info</font></b> script]]]
-<font color=#f1b479>$chart</font> Render <font color=#b9b96e>-outfile</font> [<b><font color=#ffa500>file</font></b> normalize [<b><font color=#ffa500>file</font></b> join html_charts <font color=#f1b479>$fbasename</font>.html]]
+
+<font color=#f1b479>$chart</font> Render <font color=#b9b96e>-outfile</font> [<b><font color=#ffa500>file</font></b> normalize [<b><font color=#ffa500>file</font></b> join .. html_charts <font color=#f1b479>$fbasename</font>.html]]
 </pre>
 
 </figure><p class='ruff'>To view result, we should open rendered resistor_divider.html chart in browser.</p>
@@ -196,10 +197,10 @@ r2 out 0 2e3
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
   </head>
   <body>
-    <div id="id_27b3094c42d64ace8d1a0374b0e39747" class="chart-container" style="width:900px; height:500px;"></div>
+    <div id="id_72635f7c1f2143e7a67dcbe2dfb1452a" class="chart-container" style="width:900px; height:500px;"></div>
     <script>
-      var chart_27b3094c42d64ace8d1a0374b0e39747 = echarts.init(document.getElementById("id_27b3094c42d64ace8d1a0374b0e39747"), null, {renderer: "canvas"});
-      var option_27b3094c42d64ace8d1a0374b0e39747 = {
+      var chart_72635f7c1f2143e7a67dcbe2dfb1452a = echarts.init(document.getElementById("id_72635f7c1f2143e7a67dcbe2dfb1452a"), null, {renderer: "canvas"});
+      var option_72635f7c1f2143e7a67dcbe2dfb1452a = {
   "xAxis": [{
       "show": true,
       "type": "value",
@@ -328,7 +329,7 @@ r2 out 0 2e3
     }],
   "tooltip": [{
       "show": true,
-      "trigger": "item",
+      "trigger": "axis",
       "showContent": true,
       "alwaysShowContent": false,
       "triggerOn": "mousemove|click",
@@ -564,7 +565,7 @@ r2 out 0 2e3
       "silent": false
     }]
 };
-      chart_27b3094c42d64ace8d1a0374b0e39747.setOption(option_27b3094c42d64ace8d1a0374b0e39747);
+      chart_72635f7c1f2143e7a67dcbe2dfb1452a.setOption(option_72635f7c1f2143e7a67dcbe2dfb1452a);
     </script>
   </body>
 </html>

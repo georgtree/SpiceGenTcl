@@ -120,17 +120,18 @@ set chart [ticklecharts::chart new]
 $chart Xaxis -name "v(anode), V" -minorTick {show "True"}  -type "value" -splitLine {show "True"} -min "0.4" -max "1.6"
 $chart Yaxis -name "Idiode, A" -minorTick {show "True"}  -type "value" -splitLine {show "True"} -min "0.0"\
         -max "dataMax"
-$chart SetOptions -title {} -tooltip {} -animation "False" -legend {} -toolbox {feature {dataZoom {yAxisIndex "none"}}}\
-        -grid {left "10%" right "15%"} -backgroundColor "#212121"
-$chart Add "lineSeries" -data $fittedVIdiode -showAllSymbol "nothing" -name "fitted" -symbolSize "4"
+$chart SetOptions -title {} -tooltip {trigger "axis"} -animation "False" -legend {}\
+        -toolbox {feature {dataZoom {yAxisIndex "none"}}} -grid {left "10%" right "15%"} -backgroundColor "#212121" 
+$chart Add "lineSeries" -data $fittedVIdiode -showAllSymbol "nothing" -name "fitted" -symbolSize "4" 
 $chart Add "lineSeries" -data $initVIdiode -showAllSymbol "nothing" -name "unfitted" -symbolSize "4"
 $chart Add "lineSeries" -data $viRaw -showAllSymbol "nothing" -name "measured" -symbolSize "4"
 set chartLog [ticklecharts::chart new]
-$chartLog Xaxis -name "v(anode), V" -minorTick {show "True"}  -type "value" -splitLine {show "True"} -min "0.4" -max "1.6"
+$chartLog Xaxis -name "v(anode), V" -minorTick {show "True"}  -type "value" -splitLine {show "True"} -min "0.4"\
+        -max "1.6"
 $chartLog Yaxis -name "Idiode, A" -minorTick {show "True"}  -type "log" -splitLine {show "True"} -min "dataMin"\
         -max "0.1"
-$chartLog SetOptions -title {} -tooltip {} -animation "False" -legend {} -toolbox {feature {dataZoom {yAxisIndex "none"}}}\
-        -grid {left "10%" right "15%"} -backgroundColor "#212121"
+$chartLog SetOptions -title {} -tooltip {trigger "axis"} -animation "False" -legend {}\
+        -toolbox {feature {dataZoom {yAxisIndex "none"}}} -grid {left "10%" right "15%"} -backgroundColor "#212121"
 $chartLog Add "lineSeries" -data $fittedVIdiode -showAllSymbol "nothing" -name "fitted" -symbolSize "4"
 $chartLog Add "lineSeries" -data $initVIdiode -showAllSymbol "nothing" -name "unfitted" -symbolSize "4"
 $chartLog Add "lineSeries" -data $viRaw -showAllSymbol "nothing" -name "measured" -symbolSize "4"

@@ -18,7 +18,7 @@ puts $packageVersion
 set title "Tcl SpiceGenTcl package"
 
 set common [list -title $title -sortnamespaces false -preamble $startPage -pagesplit namespace -recurse false\
-                    -includesource true -pagesplit namespace -autopunctuate true -compact false -includeprivate false\
+                    -includesource true -pagesplit namespace -autopunctuate true -compact true -includeprivate false\
                     -product SpiceGenTcl -diagrammer "ditaa --border-width 1" -version $packageVersion\
                     -copyright "George Yashin" {*}$::argv]
 set commonNroff [list -title $title -sortnamespaces false -preamble $startPage -pagesplit namespace -recurse false\

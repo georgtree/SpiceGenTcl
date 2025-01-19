@@ -92,8 +92,8 @@ puts [findBW [lmap freq $freqs {@ $freq 0}] $trace -10]
 set chartTransMag [ticklecharts::chart new]
 $chartTransMag Xaxis -name "Frequency, Hz" -minorTick {show "True"} -type "log"
 $chartTransMag Yaxis -name "Magnitude, dB" -minorTick {show "True"} -type "value"
-$chartTransMag SetOptions -title {} -tooltip {} -animation "False" -toolbox {feature {dataZoom {yAxisIndex "none"}}}\
-        -grid {left "10%" right "15%"}
+$chartTransMag SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
+        -toolbox {feature {dataZoom {yAxisIndex "none"}}} -grid {left "10%" right "15%"} -backgroundColor "#212121"
 $chartTransMag Add "lineSeries" -data $xydata -showAllSymbol "nothing" -symbolSize "1"
 set fbasename [file rootname [file tail [info script]]]
 
@@ -178,14 +178,16 @@ set chartUni [ticklecharts::chart new]
 $chartUni Xaxis -name "Frequency intervals, Hz" -data [list [dget $uniIntervals intervalsStr]]\
         -axisTick {show "True" alignWithLabel "True"} -axisLabel {interval "0" rotate "45" fontSize "8"}
 $chartUni Yaxis -name "Bandwidths per interval" -minorTick {show "True"} -type "value"
-$chartUni SetOptions -title {} -tooltip {} -animation "False" -toolbox {feature {dataZoom {yAxisIndex "none"}}}
+$chartUni SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
+        -toolbox {feature {dataZoom {yAxisIndex "none"}}} -backgroundColor "#212121"
 $chartUni Add "barSeries" -data [list $uniDist]
 # chart for normally distributed parameters
 set chartNorm [ticklecharts::chart new]
 $chartNorm Xaxis -name "Frequency intervals, Hz" -data [list [dget $normIntervals intervalsStr]]\
         -axisTick {show "True" alignWithLabel "True"} -axisLabel {interval "0" rotate "45" fontSize "8"}
 $chartNorm Yaxis -name "Bandwidths per interval" -minorTick {show "True"} -type "value"
-$chartNorm SetOptions -title {} -tooltip {} -animation "False" -toolbox {feature {dataZoom {yAxisIndex "none"}}}
+$chartNorm SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
+        -toolbox {feature {dataZoom {yAxisIndex "none"}}} -backgroundColor "#212121"
 $chartNorm Add "barSeries" -data [list $normDist]
 # create multiplot
 set layout [ticklecharts::Gridlayout new]
@@ -202,8 +204,8 @@ set chartCombined [ticklecharts::chart new]
 $chartCombined Xaxis -name "Frequency intervals, Hz" -data [list [dget $uniIntervals intervalsStr]]\
         -axisTick {show "True" alignWithLabel "True"} -axisLabel {interval "0" rotate "45" fontSize "8"}
 $chartCombined Yaxis -name "Bandwidths per interval" -minorTick {show "True"} -type "value"
-$chartCombined SetOptions -title {} -legend  {} -tooltip {} -animation "False"\
-        -toolbox {feature {dataZoom {yAxisIndex "none"}}} -grid {left "10%" right "15%"}       
+$chartCombined SetOptions -title {} -legend  {} -tooltip {trigger "axis"} -animation "False"\
+        -toolbox {feature {dataZoom {yAxisIndex "none"}}} -grid {left "10%" right "15%"} -backgroundColor "#212121"     
 $chartCombined Add "barSeries" -data [list $uniDist] -name "Uniform"
 $chartCombined Add "barSeries" -data [list $normDistWithUniIntervals] -name "Normal"
 $chartCombined Render -outfile [file normalize [file join .. html_charts ${fbasename}_combined.html]] -height 800px -width 1200px

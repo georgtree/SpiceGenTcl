@@ -85,14 +85,14 @@
 <b><font color=#ffa500>foreach</font></b> x <font color=#f1b479>$freqs</font> y <font color=#f1b479>$trace</font> {
     <b><font color=#ffa500>lappend</font></b> xydata [<b><font color=#ffa500>list</font></b> [@ <font color=#f1b479>$x</font> 0] <font color=#f1b479>$y</font>]
 }
+<b><font color=#ffa500>puts</font></b> [findBW [<b><font color=#ffa500>lmap</font></b> freq <font color=#f1b479>$freqs</font> {@ <font color=#f1b479>$freq</font> 0}] <font color=#f1b479>$trace</font> -10]
 <b><font color=#ffa500>set</font></b> chartTransMag [ticklecharts::chart new]
-<font color=#f1b479>$chartTransMag</font> Xaxis <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;Frequency, Hz&quot;</font> <font color=#b9b96e>-minorTick</font> {show <font color=#90ee90>&quot;True&quot;</font>} <font color=#b9b96e>-type</font> <font color=#90ee90>&quot;log&quot;</font>
-<font color=#f1b479>$chartTransMag</font> Yaxis <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;Magnitude, dB&quot;</font> <font color=#b9b96e>-minorTick</font> {show <font color=#90ee90>&quot;True&quot;</font>} <font color=#b9b96e>-type</font> <font color=#90ee90>&quot;value&quot;</font>
-<font color=#f1b479>$chartTransMag</font> SetOptions <font color=#b9b96e>-title</font> {} <font color=#b9b96e>-tooltip</font> {} <font color=#b9b96e>-animation</font> <font color=#90ee90>&quot;False&quot;</font> <font color=#b9b96e>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#90ee90>&quot;none&quot;</font>}}} <font color=#b9b96e>-grid</font> {left <font color=#90ee90>&quot;10%&quot;</font> right <font color=#90ee90>&quot;15%&quot;</font>}
+<font color=#f1b479>$chartTransMag</font> Xaxis <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;Frequency, Hz&quot;</font> <font color=#b9b96e>-minorTick</font> {show <font color=#90ee90>&quot;True&quot;</font>} <font color=#b9b96e>-type</font> <font color=#90ee90>&quot;log&quot;</font> <font color=#b9b96e>-splitLine</font> {show <font color=#90ee90>&quot;True&quot;</font>}
+<font color=#f1b479>$chartTransMag</font> Yaxis <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;Magnitude, dB&quot;</font> <font color=#b9b96e>-minorTick</font> {show <font color=#90ee90>&quot;True&quot;</font>} <font color=#b9b96e>-type</font> <font color=#90ee90>&quot;value&quot;</font> <font color=#b9b96e>-splitLine</font> {show <font color=#90ee90>&quot;True&quot;</font>}
+<font color=#f1b479>$chartTransMag</font> SetOptions <font color=#b9b96e>-title</font> {} <font color=#b9b96e>-tooltip</font> {trigger <font color=#90ee90>&quot;axis&quot;</font>} <font color=#b9b96e>-animation</font> <font color=#90ee90>&quot;False&quot;</font> <font color=#b9b96e>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#90ee90>&quot;none&quot;</font>}}} <font color=#b9b96e>-grid</font> {left <font color=#90ee90>&quot;10%&quot;</font> right <font color=#90ee90>&quot;15%&quot;</font>} <font color=#b9b96e>-backgroundColor</font> <font color=#90ee90>&quot;#212121&quot;</font>
 <font color=#f1b479>$chartTransMag</font> Add <font color=#90ee90>&quot;lineSeries&quot;</font> <font color=#b9b96e>-data</font> <font color=#f1b479>$xydata</font> <font color=#b9b96e>-showAllSymbol</font> <font color=#90ee90>&quot;nothing&quot;</font> <font color=#b9b96e>-symbolSize</font> <font color=#90ee90>&quot;1&quot;</font>
 <b><font color=#ffa500>set</font></b> fbasename [<b><font color=#ffa500>file</font></b> rootname [<b><font color=#ffa500>file</font></b> tail [<b><font color=#ffa500>info</font></b> script]]]
-
-<font color=#f1b479>$chartTransMag</font> Render <font color=#b9b96e>-outfile</font> [<b><font color=#ffa500>file</font></b> normalize [<b><font color=#ffa500>file</font></b> join html_charts <font color=#f1b479>${fbasename}</font>_typ.html]] <font color=#b9b96e>-width</font> 1000px
+<font color=#f1b479>$chartTransMag</font> Render <font color=#b9b96e>-outfile</font> [<b><font color=#ffa500>file</font></b> normalize [<b><font color=#ffa500>file</font></b> join .. html_charts <font color=#f1b479>${fbasename}</font>_typ.html]] <font color=#b9b96e>-width</font> 1000px
 </pre>
 
 </figure><p class='ruff'><!DOCTYPE html>
@@ -103,10 +103,10 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
   </head>
   <body>
-    <div id="id_558cec927d934da4a3ac77560a3ad76e" class="chart-container" style="width:1000px; height:500px;"></div>
+    <div id="id_9e81a62d166c4234a670fa97fe071d2b" class="chart-container" style="width:1000px; height:500px;"></div>
     <script>
-      var chart_558cec927d934da4a3ac77560a3ad76e = echarts.init(document.getElementById("id_558cec927d934da4a3ac77560a3ad76e"), null, {renderer: "canvas"});
-      var option_558cec927d934da4a3ac77560a3ad76e = {
+      var chart_9e81a62d166c4234a670fa97fe071d2b = echarts.init(document.getElementById("id_9e81a62d166c4234a670fa97fe071d2b"), null, {renderer: "canvas"});
+      var option_9e81a62d166c4234a670fa97fe071d2b = {
   "xAxis": [{
       "show": true,
       "type": "log",
@@ -231,7 +231,7 @@
     }],
   "tooltip": [{
       "show": true,
-      "trigger": "item",
+      "trigger": "axis",
       "showContent": true,
       "alwaysShowContent": false,
       "triggerOn": "mousemove|click",
@@ -2417,7 +2417,7 @@
       "silent": false
     }]
 };
-      chart_558cec927d934da4a3ac77560a3ad76e.setOption(option_558cec927d934da4a3ac77560a3ad76e);
+      chart_9e81a62d166c4234a670fa97fe071d2b.setOption(option_9e81a62d166c4234a670fa97fe071d2b);
     </script>
   </body>
 </html>
@@ -2554,13 +2554,13 @@
 <b><font color=#ffa500>set</font></b> chartUni [ticklecharts::chart new]
 <font color=#f1b479>$chartUni</font> Xaxis <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;Frequency intervals, Hz&quot;</font> <font color=#b9b96e>-data</font> [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$uniIntervals</font> intervalsStr]] <font color=#b9b96e>-axisTick</font> {show <font color=#90ee90>&quot;True&quot;</font> alignWithLabel <font color=#90ee90>&quot;True&quot;</font>} <font color=#b9b96e>-axisLabel</font> {interval <font color=#90ee90>&quot;0&quot;</font> rotate <font color=#90ee90>&quot;45&quot;</font> fontSize <font color=#90ee90>&quot;8&quot;</font>}
 <font color=#f1b479>$chartUni</font> Yaxis <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;Bandwidths per interval&quot;</font> <font color=#b9b96e>-minorTick</font> {show <font color=#90ee90>&quot;True&quot;</font>} <font color=#b9b96e>-type</font> <font color=#90ee90>&quot;value&quot;</font>
-<font color=#f1b479>$chartUni</font> SetOptions <font color=#b9b96e>-title</font> {} <font color=#b9b96e>-tooltip</font> {} <font color=#b9b96e>-animation</font> <font color=#90ee90>&quot;False&quot;</font> <font color=#b9b96e>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#90ee90>&quot;none&quot;</font>}}}
+<font color=#f1b479>$chartUni</font> SetOptions <font color=#b9b96e>-title</font> {} <font color=#b9b96e>-tooltip</font> {trigger <font color=#90ee90>&quot;axis&quot;</font>} <font color=#b9b96e>-animation</font> <font color=#90ee90>&quot;False&quot;</font> <font color=#b9b96e>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#90ee90>&quot;none&quot;</font>}}} <font color=#b9b96e>-backgroundColor</font> <font color=#90ee90>&quot;#212121&quot;</font>
 <font color=#f1b479>$chartUni</font> Add <font color=#90ee90>&quot;barSeries&quot;</font> <font color=#b9b96e>-data</font> [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$uniDist</font>]
 <i><font color=#76a396># chart for normally distributed parameters</font></i>
 <b><font color=#ffa500>set</font></b> chartNorm [ticklecharts::chart new]
 <font color=#f1b479>$chartNorm</font> Xaxis <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;Frequency intervals, Hz&quot;</font> <font color=#b9b96e>-data</font> [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$normIntervals</font> intervalsStr]] <font color=#b9b96e>-axisTick</font> {show <font color=#90ee90>&quot;True&quot;</font> alignWithLabel <font color=#90ee90>&quot;True&quot;</font>} <font color=#b9b96e>-axisLabel</font> {interval <font color=#90ee90>&quot;0&quot;</font> rotate <font color=#90ee90>&quot;45&quot;</font> fontSize <font color=#90ee90>&quot;8&quot;</font>}
 <font color=#f1b479>$chartNorm</font> Yaxis <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;Bandwidths per interval&quot;</font> <font color=#b9b96e>-minorTick</font> {show <font color=#90ee90>&quot;True&quot;</font>} <font color=#b9b96e>-type</font> <font color=#90ee90>&quot;value&quot;</font>
-<font color=#f1b479>$chartNorm</font> SetOptions <font color=#b9b96e>-title</font> {} <font color=#b9b96e>-tooltip</font> {} <font color=#b9b96e>-animation</font> <font color=#90ee90>&quot;False&quot;</font> <font color=#b9b96e>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#90ee90>&quot;none&quot;</font>}}}
+<font color=#f1b479>$chartNorm</font> SetOptions <font color=#b9b96e>-title</font> {} <font color=#b9b96e>-tooltip</font> {trigger <font color=#90ee90>&quot;axis&quot;</font>} <font color=#b9b96e>-animation</font> <font color=#90ee90>&quot;False&quot;</font> <font color=#b9b96e>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#90ee90>&quot;none&quot;</font>}}} <font color=#b9b96e>-backgroundColor</font> <font color=#90ee90>&quot;#212121&quot;</font>
 <font color=#f1b479>$chartNorm</font> Add <font color=#90ee90>&quot;barSeries&quot;</font> <font color=#b9b96e>-data</font> [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$normDist</font>]
 <i><font color=#76a396># create multiplot</font></i>
 <b><font color=#ffa500>set</font></b> layout [ticklecharts::Gridlayout new]
@@ -2568,7 +2568,7 @@
 <font color=#f1b479>$layout</font> Add <font color=#f1b479>$chartUni</font> <font color=#b9b96e>-bottom</font> <font color=#90ee90>&quot;60%&quot;</font> <font color=#b9b96e>-height</font> <font color=#90ee90>&quot;35%&quot;</font> <font color=#b9b96e>-width</font> <font color=#90ee90>&quot;75%&quot;</font>
 
 <b><font color=#ffa500>set</font></b> fbasename [<b><font color=#ffa500>file</font></b> rootname [<b><font color=#ffa500>file</font></b> tail [<b><font color=#ffa500>info</font></b> script]]]
-<font color=#f1b479>$layout</font> Render <font color=#b9b96e>-outfile</font> [<b><font color=#ffa500>file</font></b> normalize [<b><font color=#ffa500>file</font></b> join html_charts <font color=#f1b479>$fbasename</font>.html]] <font color=#b9b96e>-height</font> 800px <font color=#b9b96e>-width</font> 1200px
+<font color=#f1b479>$layout</font> Render <font color=#b9b96e>-outfile</font> [<b><font color=#ffa500>file</font></b> normalize [<b><font color=#ffa500>file</font></b> join .. html_charts <font color=#f1b479>$fbasename</font>.html]] <font color=#b9b96e>-height</font> 800px <font color=#b9b96e>-width</font> 1200px
 </pre>
 
 </figure><p class='ruff'><!DOCTYPE html>
@@ -2579,10 +2579,10 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
   </head>
   <body>
-    <div id="id_965aa25346f24f7dba72ba7156da8ca2" class="chart-container" style="width:1200px; height:800px;"></div>
+    <div id="id_f02006af22e542d8aede697e98ce4f76" class="chart-container" style="width:1200px; height:800px;"></div>
     <script>
-      var chart_965aa25346f24f7dba72ba7156da8ca2 = echarts.init(document.getElementById("id_965aa25346f24f7dba72ba7156da8ca2"), null, {renderer: "canvas"});
-      var option_965aa25346f24f7dba72ba7156da8ca2 = {
+      var chart_f02006af22e542d8aede697e98ce4f76 = echarts.init(document.getElementById("id_f02006af22e542d8aede697e98ce4f76"), null, {renderer: "canvas"});
+      var option_f02006af22e542d8aede697e98ce4f76 = {
   "darkMode": true,
   "backgroundColor": "#212121",
   "color": [
@@ -2611,18 +2611,18 @@
         "<=1.01e+06",
         "1.01e+06-1.02e+06",
         "1.02e+06-1.03e+06",
-        "1.03e+06-1.04e+06",
-        "1.04e+06-1.06e+06",
+        "1.03e+06-1.05e+06",
+        "1.05e+06-1.06e+06",
         "1.06e+06-1.07e+06",
         "1.07e+06-1.08e+06",
-        "1.08e+06-1.09e+06",
-        "1.09e+06-1.10e+06",
+        "1.08e+06-1.10e+06",
         "1.10e+06-1.11e+06",
         "1.11e+06-1.12e+06",
         "1.12e+06-1.13e+06",
         "1.13e+06-1.14e+06",
-        "1.14e+06-1.15e+06",
-        "1.15e+06-1.16e+06"
+        "1.14e+06-1.16e+06",
+        "1.16e+06-1.17e+06",
+        "1.17e+06-1.18e+06"
       ],
       "gridIndex": 0,
       "position": "bottom",
@@ -2698,17 +2698,17 @@
       "show": true,
       "type": "category",
       "data": [
-        "<=9.98e+05",
-        "9.98e+05-1.01e+06",
-        "1.01e+06-1.03e+06",
-        "1.03e+06-1.04e+06",
-        "1.04e+06-1.05e+06",
-        "1.05e+06-1.07e+06",
-        "1.07e+06-1.08e+06",
-        "1.08e+06-1.10e+06",
-        "1.10e+06-1.11e+06",
-        "1.11e+06-1.13e+06",
-        "1.13e+06-1.14e+06",
+        "<=9.89e+05",
+        "9.89e+05-1.00e+06",
+        "1.00e+06-1.02e+06",
+        "1.02e+06-1.03e+06",
+        "1.03e+06-1.05e+06",
+        "1.05e+06-1.06e+06",
+        "1.06e+06-1.08e+06",
+        "1.08e+06-1.09e+06",
+        "1.09e+06-1.11e+06",
+        "1.11e+06-1.12e+06",
+        "1.12e+06-1.14e+06",
         "1.14e+06-1.15e+06",
         "1.15e+06-1.17e+06",
         "1.17e+06-1.18e+06",
@@ -2912,7 +2912,7 @@
   "tooltip": [
     {
       "show": true,
-      "trigger": "item",
+      "trigger": "axis",
       "showContent": true,
       "alwaysShowContent": false,
       "triggerOn": "mousemove|click",
@@ -2922,7 +2922,7 @@
     },
     {
       "show": true,
-      "trigger": "item",
+      "trigger": "axis",
       "showContent": true,
       "alwaysShowContent": false,
       "triggerOn": "mousemove|click",
@@ -2986,20 +2986,20 @@
       "largeThreshold": 400,
       "data": [
         1,
-        0,
+        1,
+        12,
+        29,
+        109,
+        91,
+        187,
+        214,
+        102,
+        149,
+        45,
+        37,
+        11,
         8,
-        33,
-        69,
-        90,
-        94,
-        249,
-        103,
-        166,
-        71,
-        50,
-        50,
-        9,
-        7
+        4
       ],
       "zlevel": 0,
       "z": 2,
@@ -3025,20 +3025,20 @@
       "largeThreshold": 400,
       "data": [
         1,
-        21,
-        52,
-        97,
-        100,
-        104,
-        97,
+        6,
+        41,
+        75,
+        115,
+        95,
+        105,
         98,
-        103,
-        112,
-        60,
-        61,
-        53,
-        33,
-        8
+        94,
+        88,
+        95,
+        87,
+        59,
+        36,
+        5
       ],
       "zlevel": 0,
       "z": 2,
@@ -3060,7 +3060,7 @@
     }
   ]
 };
-      chart_965aa25346f24f7dba72ba7156da8ca2.setOption(option_965aa25346f24f7dba72ba7156da8ca2);
+      chart_f02006af22e542d8aede697e98ce4f76.setOption(option_f02006af22e542d8aede697e98ce4f76);
     </script>
   </body>
 </html>
@@ -3073,10 +3073,10 @@
 <b><font color=#ffa500>set</font></b> chartCombined [ticklecharts::chart new]
 <font color=#f1b479>$chartCombined</font> Xaxis <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;Frequency intervals, Hz&quot;</font> <font color=#b9b96e>-data</font> [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$uniIntervals</font> intervalsStr]] <font color=#b9b96e>-axisTick</font> {show <font color=#90ee90>&quot;True&quot;</font> alignWithLabel <font color=#90ee90>&quot;True&quot;</font>} <font color=#b9b96e>-axisLabel</font> {interval <font color=#90ee90>&quot;0&quot;</font> rotate <font color=#90ee90>&quot;45&quot;</font> fontSize <font color=#90ee90>&quot;8&quot;</font>}
 <font color=#f1b479>$chartCombined</font> Yaxis <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;Bandwidths per interval&quot;</font> <font color=#b9b96e>-minorTick</font> {show <font color=#90ee90>&quot;True&quot;</font>} <font color=#b9b96e>-type</font> <font color=#90ee90>&quot;value&quot;</font>
-<font color=#f1b479>$chartCombined</font> SetOptions <font color=#b9b96e>-title</font> {} <font color=#b9b96e>-legend</font>  {} <font color=#b9b96e>-tooltip</font> {} <font color=#b9b96e>-animation</font> <font color=#90ee90>&quot;False&quot;</font> <font color=#b9b96e>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#90ee90>&quot;none&quot;</font>}}} <font color=#b9b96e>-grid</font> {left <font color=#90ee90>&quot;10%&quot;</font> right <font color=#90ee90>&quot;15%&quot;</font>}       
+<font color=#f1b479>$chartCombined</font> SetOptions <font color=#b9b96e>-title</font> {} <font color=#b9b96e>-legend</font> {} <font color=#b9b96e>-tooltip</font> {trigger <font color=#90ee90>&quot;axis&quot;</font>} <font color=#b9b96e>-animation</font> <font color=#90ee90>&quot;False&quot;</font> <font color=#b9b96e>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#90ee90>&quot;none&quot;</font>}}} <font color=#b9b96e>-grid</font> {left <font color=#90ee90>&quot;10%&quot;</font> right <font color=#90ee90>&quot;15%&quot;</font>} <font color=#b9b96e>-backgroundColor</font> <font color=#90ee90>&quot;#212121&quot;</font>
 <font color=#f1b479>$chartCombined</font> Add <font color=#90ee90>&quot;barSeries&quot;</font> <font color=#b9b96e>-data</font> [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$uniDist</font>] <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;Uniform&quot;</font>
 <font color=#f1b479>$chartCombined</font> Add <font color=#90ee90>&quot;barSeries&quot;</font> <font color=#b9b96e>-data</font> [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$normDistWithUniIntervals</font>] <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;Normal&quot;</font>
-<font color=#f1b479>$chartCombined</font> Render <font color=#b9b96e>-outfile</font> [<b><font color=#ffa500>file</font></b> normalize [<b><font color=#ffa500>file</font></b> join html_charts <font color=#f1b479>${fbasename}</font>_combined.html]] <font color=#b9b96e>-height</font> 800px <font color=#b9b96e>-width</font> 1200px
+<font color=#f1b479>$chartCombined</font> Render <font color=#b9b96e>-outfile</font> [<b><font color=#ffa500>file</font></b> normalize [<b><font color=#ffa500>file</font></b> join .. html_charts <font color=#f1b479>${fbasename}</font>_combined.html]] <font color=#b9b96e>-height</font> 800px <font color=#b9b96e>-width</font> 1200px
 </pre>
 
 </figure><p class='ruff'><!DOCTYPE html>
@@ -3087,25 +3087,25 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
   </head>
   <body>
-    <div id="id_901941b409c042598472152b75fa2ecb" class="chart-container" style="width:1200px; height:800px;"></div>
+    <div id="id_6d78c44ac7f64a4ea4a17c04c96ebd4c" class="chart-container" style="width:1200px; height:800px;"></div>
     <script>
-      var chart_901941b409c042598472152b75fa2ecb = echarts.init(document.getElementById("id_901941b409c042598472152b75fa2ecb"), null, {renderer: "canvas"});
-      var option_901941b409c042598472152b75fa2ecb = {
+      var chart_6d78c44ac7f64a4ea4a17c04c96ebd4c = echarts.init(document.getElementById("id_6d78c44ac7f64a4ea4a17c04c96ebd4c"), null, {renderer: "canvas"});
+      var option_6d78c44ac7f64a4ea4a17c04c96ebd4c = {
   "xAxis": [{
       "show": true,
       "type": "category",
       "data": [
-        "<=9.98e+05",
-        "9.98e+05-1.01e+06",
-        "1.01e+06-1.03e+06",
-        "1.03e+06-1.04e+06",
-        "1.04e+06-1.05e+06",
-        "1.05e+06-1.07e+06",
-        "1.07e+06-1.08e+06",
-        "1.08e+06-1.10e+06",
-        "1.10e+06-1.11e+06",
-        "1.11e+06-1.13e+06",
-        "1.13e+06-1.14e+06",
+        "<=9.89e+05",
+        "9.89e+05-1.00e+06",
+        "1.00e+06-1.02e+06",
+        "1.02e+06-1.03e+06",
+        "1.03e+06-1.05e+06",
+        "1.05e+06-1.06e+06",
+        "1.06e+06-1.08e+06",
+        "1.08e+06-1.09e+06",
+        "1.09e+06-1.11e+06",
+        "1.11e+06-1.12e+06",
+        "1.12e+06-1.14e+06",
         "1.14e+06-1.15e+06",
         "1.15e+06-1.17e+06",
         "1.17e+06-1.18e+06",
@@ -3293,7 +3293,7 @@
     }],
   "tooltip": [{
       "show": true,
-      "trigger": "item",
+      "trigger": "axis",
       "showContent": true,
       "alwaysShowContent": false,
       "triggerOn": "mousemove|click",
@@ -3341,20 +3341,20 @@
       "largeThreshold": 400,
       "data": [
         1,
-        21,
-        52,
-        97,
-        100,
-        104,
-        97,
+        6,
+        41,
+        75,
+        115,
+        95,
+        105,
         98,
-        103,
-        112,
-        60,
-        61,
-        53,
-        33,
-        8
+        94,
+        88,
+        95,
+        87,
+        59,
+        36,
+        5
       ],
       "zlevel": 0,
       "z": 2,
@@ -3379,17 +3379,17 @@
         0,
         0,
         2,
-        16,
+        10,
         59,
-        124,
-        217,
-        229,
-        166,
-        120,
-        35,
-        25,
-        7,
-        0,
+        110,
+        155,
+        215,
+        195,
+        149,
+        71,
+        21,
+        9,
+        4,
         0
       ],
       "zlevel": 0,
@@ -3398,7 +3398,7 @@
     }
   ]
 };
-      chart_901941b409c042598472152b75fa2ecb.setOption(option_901941b409c042598472152b75fa2ecb);
+      chart_6d78c44ac7f64a4ea4a17c04c96ebd4c.setOption(option_6d78c44ac7f64a4ea4a17c04c96ebd4c);
     </script>
   </body>
 </html>
@@ -3671,6 +3671,7 @@ dset pdata vMax <font color=#f1b479>$vMax</font>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>set</font></b> initIdiode [<b><font color=#ffa500>dget</font></b> [diodeIVcalc <font color=#f1b479>$iniPars</font> <font color=#f1b479>$pdata</font>] fval]
 <b><font color=#ffa500>set</font></b> fittedVIdiode [<b><font color=#ffa500>lmap</font></b> vVal <font color=#f1b479>$vInterp</font> iVal <font color=#f1b479>$fittedIdiode</font> {<b><font color=#ffa500>list</font></b> <font color=#f1b479>$vVal</font> <font color=#f1b479>$iVal</font>}]
 <b><font color=#ffa500>set</font></b> initVIdiode [<b><font color=#ffa500>lmap</font></b> vVal <font color=#f1b479>$vInterp</font> iVal <font color=#f1b479>$initIdiode</font> {<b><font color=#ffa500>list</font></b> <font color=#f1b479>$vVal</font> <font color=#f1b479>$iVal</font>}]
+<b><font color=#ffa500>set</font></b> viRaw [<b><font color=#ffa500>lmap</font></b> vVal <font color=#f1b479>$vRaw</font> iVal <font color=#f1b479>$iRaw</font> {<b><font color=#ffa500>list</font></b> <font color=#f1b479>$vVal</font> <font color=#f1b479>$iVal</font>}]
 </pre>
 
 </figure><p class='ruff'>Plot it with <code>ticklecharts</code> package in linear and logarithmic scales:</p>
@@ -3678,14 +3679,14 @@ dset pdata vMax <font color=#f1b479>$vMax</font>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>set</font></b> chart [ticklecharts::chart new]
 <font color=#f1b479>$chart</font> Xaxis <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;v(anode), V&quot;</font> <font color=#b9b96e>-minorTick</font> {show <font color=#90ee90>&quot;True&quot;</font>}  <font color=#b9b96e>-type</font> <font color=#90ee90>&quot;value&quot;</font> <font color=#b9b96e>-splitLine</font> {show <font color=#90ee90>&quot;True&quot;</font>} <font color=#b9b96e>-min</font> <font color=#90ee90>&quot;0.4&quot;</font> <font color=#b9b96e>-max</font> <font color=#90ee90>&quot;1.6&quot;</font>
 <font color=#f1b479>$chart</font> Yaxis <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;Idiode, A&quot;</font> <font color=#b9b96e>-minorTick</font> {show <font color=#90ee90>&quot;True&quot;</font>}  <font color=#b9b96e>-type</font> <font color=#90ee90>&quot;value&quot;</font> <font color=#b9b96e>-splitLine</font> {show <font color=#90ee90>&quot;True&quot;</font>} <font color=#b9b96e>-min</font> <font color=#90ee90>&quot;0.0&quot;</font> <font color=#b9b96e>-max</font> <font color=#90ee90>&quot;dataMax&quot;</font>
-<font color=#f1b479>$chart</font> SetOptions <font color=#b9b96e>-title</font> {} <font color=#b9b96e>-tooltip</font> {} <font color=#b9b96e>-animation</font> <font color=#90ee90>&quot;False&quot;</font> <font color=#b9b96e>-legend</font> {} <font color=#b9b96e>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#90ee90>&quot;none&quot;</font>}}} <font color=#b9b96e>-grid</font> {left <font color=#90ee90>&quot;10%&quot;</font> right <font color=#90ee90>&quot;15%&quot;</font>} <font color=#b9b96e>-backgroundColor</font> <font color=#90ee90>&quot;#212121&quot;</font>
-<font color=#f1b479>$chart</font> Add <font color=#90ee90>&quot;lineSeries&quot;</font> <font color=#b9b96e>-data</font> <font color=#f1b479>$fittedVIdiode</font> <font color=#b9b96e>-showAllSymbol</font> <font color=#90ee90>&quot;nothing&quot;</font> <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;fitted&quot;</font> <font color=#b9b96e>-symbolSize</font> <font color=#90ee90>&quot;4&quot;</font>
+<font color=#f1b479>$chart</font> SetOptions <font color=#b9b96e>-title</font> {} <font color=#b9b96e>-tooltip</font> {trigger <font color=#90ee90>&quot;axis&quot;</font>} <font color=#b9b96e>-animation</font> <font color=#90ee90>&quot;False&quot;</font> <font color=#b9b96e>-legend</font> {} <font color=#b9b96e>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#90ee90>&quot;none&quot;</font>}}} <font color=#b9b96e>-grid</font> {left <font color=#90ee90>&quot;10%&quot;</font> right <font color=#90ee90>&quot;15%&quot;</font>} <font color=#b9b96e>-backgroundColor</font> <font color=#90ee90>&quot;#212121&quot;</font> 
+<font color=#f1b479>$chart</font> Add <font color=#90ee90>&quot;lineSeries&quot;</font> <font color=#b9b96e>-data</font> <font color=#f1b479>$fittedVIdiode</font> <font color=#b9b96e>-showAllSymbol</font> <font color=#90ee90>&quot;nothing&quot;</font> <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;fitted&quot;</font> <font color=#b9b96e>-symbolSize</font> <font color=#90ee90>&quot;4&quot;</font> 
 <font color=#f1b479>$chart</font> Add <font color=#90ee90>&quot;lineSeries&quot;</font> <font color=#b9b96e>-data</font> <font color=#f1b479>$initVIdiode</font> <font color=#b9b96e>-showAllSymbol</font> <font color=#90ee90>&quot;nothing&quot;</font> <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;unfitted&quot;</font> <font color=#b9b96e>-symbolSize</font> <font color=#90ee90>&quot;4&quot;</font>
 <font color=#f1b479>$chart</font> Add <font color=#90ee90>&quot;lineSeries&quot;</font> <font color=#b9b96e>-data</font> <font color=#f1b479>$viRaw</font> <font color=#b9b96e>-showAllSymbol</font> <font color=#90ee90>&quot;nothing&quot;</font> <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;measured&quot;</font> <font color=#b9b96e>-symbolSize</font> <font color=#90ee90>&quot;4&quot;</font>
 <b><font color=#ffa500>set</font></b> chartLog [ticklecharts::chart new]
 <font color=#f1b479>$chartLog</font> Xaxis <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;v(anode), V&quot;</font> <font color=#b9b96e>-minorTick</font> {show <font color=#90ee90>&quot;True&quot;</font>}  <font color=#b9b96e>-type</font> <font color=#90ee90>&quot;value&quot;</font> <font color=#b9b96e>-splitLine</font> {show <font color=#90ee90>&quot;True&quot;</font>} <font color=#b9b96e>-min</font> <font color=#90ee90>&quot;0.4&quot;</font> <font color=#b9b96e>-max</font> <font color=#90ee90>&quot;1.6&quot;</font>
 <font color=#f1b479>$chartLog</font> Yaxis <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;Idiode, A&quot;</font> <font color=#b9b96e>-minorTick</font> {show <font color=#90ee90>&quot;True&quot;</font>}  <font color=#b9b96e>-type</font> <font color=#90ee90>&quot;log&quot;</font> <font color=#b9b96e>-splitLine</font> {show <font color=#90ee90>&quot;True&quot;</font>} <font color=#b9b96e>-min</font> <font color=#90ee90>&quot;dataMin&quot;</font> <font color=#b9b96e>-max</font> <font color=#90ee90>&quot;0.1&quot;</font>
-<font color=#f1b479>$chartLog</font> SetOptions <font color=#b9b96e>-title</font> {} <font color=#b9b96e>-tooltip</font> {} <font color=#b9b96e>-animation</font> <font color=#90ee90>&quot;False&quot;</font> <font color=#b9b96e>-legend</font> {} <font color=#b9b96e>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#90ee90>&quot;none&quot;</font>}}} <font color=#b9b96e>-grid</font> {left <font color=#90ee90>&quot;10%&quot;</font> right <font color=#90ee90>&quot;15%&quot;</font>} <font color=#b9b96e>-backgroundColor</font> <font color=#90ee90>&quot;#212121&quot;</font>
+<font color=#f1b479>$chartLog</font> SetOptions <font color=#b9b96e>-title</font> {} <font color=#b9b96e>-tooltip</font> {trigger <font color=#90ee90>&quot;axis&quot;</font>} <font color=#b9b96e>-animation</font> <font color=#90ee90>&quot;False&quot;</font> <font color=#b9b96e>-legend</font> {} <font color=#b9b96e>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#90ee90>&quot;none&quot;</font>}}} <font color=#b9b96e>-grid</font> {left <font color=#90ee90>&quot;10%&quot;</font> right <font color=#90ee90>&quot;15%&quot;</font>} <font color=#b9b96e>-backgroundColor</font> <font color=#90ee90>&quot;#212121&quot;</font>
 <font color=#f1b479>$chartLog</font> Add <font color=#90ee90>&quot;lineSeries&quot;</font> <font color=#b9b96e>-data</font> <font color=#f1b479>$fittedVIdiode</font> <font color=#b9b96e>-showAllSymbol</font> <font color=#90ee90>&quot;nothing&quot;</font> <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;fitted&quot;</font> <font color=#b9b96e>-symbolSize</font> <font color=#90ee90>&quot;4&quot;</font>
 <font color=#f1b479>$chartLog</font> Add <font color=#90ee90>&quot;lineSeries&quot;</font> <font color=#b9b96e>-data</font> <font color=#f1b479>$initVIdiode</font> <font color=#b9b96e>-showAllSymbol</font> <font color=#90ee90>&quot;nothing&quot;</font> <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;unfitted&quot;</font> <font color=#b9b96e>-symbolSize</font> <font color=#90ee90>&quot;4&quot;</font>
 <font color=#f1b479>$chartLog</font> Add <font color=#90ee90>&quot;lineSeries&quot;</font> <font color=#b9b96e>-data</font> <font color=#f1b479>$viRaw</font> <font color=#b9b96e>-showAllSymbol</font> <font color=#90ee90>&quot;nothing&quot;</font> <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;measured&quot;</font> <font color=#b9b96e>-symbolSize</font> <font color=#90ee90>&quot;4&quot;</font>
@@ -3706,10 +3707,10 @@ dset pdata vMax <font color=#f1b479>$vMax</font>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
   </head>
   <body>
-    <div id="id_d9c95e342c764fefa65c8fab8811cbb4" class="chart-container" style="width:700px; height:900px;"></div>
+    <div id="id_3019618d5fbe45889778017e59cab9e3" class="chart-container" style="width:700px; height:900px;"></div>
     <script>
-      var chart_d9c95e342c764fefa65c8fab8811cbb4 = echarts.init(document.getElementById("id_d9c95e342c764fefa65c8fab8811cbb4"), null, {renderer: "canvas"});
-      var option_d9c95e342c764fefa65c8fab8811cbb4 = {
+      var chart_3019618d5fbe45889778017e59cab9e3 = echarts.init(document.getElementById("id_3019618d5fbe45889778017e59cab9e3"), null, {renderer: "canvas"});
+      var option_3019618d5fbe45889778017e59cab9e3 = {
   "darkMode": true,
   "backgroundColor": "#212121",
   "color": [
@@ -4023,7 +4024,7 @@ dset pdata vMax <font color=#f1b479>$vMax</font>
   "tooltip": [
     {
       "show": true,
-      "trigger": "item",
+      "trigger": "axis",
       "showContent": true,
       "alwaysShowContent": false,
       "triggerOn": "mousemove|click",
@@ -4033,7 +4034,7 @@ dset pdata vMax <font color=#f1b479>$vMax</font>
     },
     {
       "show": true,
-      "trigger": "item",
+      "trigger": "axis",
       "showContent": true,
       "alwaysShowContent": false,
       "triggerOn": "mousemove|click",
@@ -5357,7 +5358,7 @@ dset pdata vMax <font color=#f1b479>$vMax</font>
     }
   ]
 };
-      chart_d9c95e342c764fefa65c8fab8811cbb4.setOption(option_d9c95e342c764fefa65c8fab8811cbb4);
+      chart_3019618d5fbe45889778017e59cab9e3.setOption(option_3019618d5fbe45889778017e59cab9e3);
     </script>
   </body>
 </html>

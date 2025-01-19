@@ -43,8 +43,8 @@ foreach volt $voltSweep {
 set chart [ticklecharts::chart new]
 $chart Xaxis -name "v(0,c), V" -minorTick {show "True"} -type "value" -splitLine {show "True"}
 $chart Yaxis -name "Diode capacitance, nF" -minorTick {show "True"} -type "value" -splitLine {show "True"}
-$chart SetOptions -title {} -tooltip {} -animation "False" -toolbox {feature {dataZoom {yAxisIndex "none"}}}\
-        -backgroundColor "#212121"
+$chart SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
+        -toolbox {feature {dataZoom {yAxisIndex "none"}}} -backgroundColor "#212121"
 $chart Add "lineSeries" -data $xydata -showAllSymbol "nothing" 
 set fbasename [file rootname [file tail [info script]]]
 

@@ -65,13 +65,15 @@ foreach time [dget $data time] vout [dget $data osc_out] imeas [dget $data vmeas
 set chartVout [ticklecharts::chart new]
 $chartVout Xaxis -name "time, s" -minorTick {show "True"} -type "value"
 $chartVout Yaxis -name "Output voltage, V" -minorTick {show "True"} -type "value"
-$chartVout SetOptions -title {} -tooltip {} -animation "False" -toolbox {feature {dataZoom {yAxisIndex "none"}}}
+$chartVout SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
+        -toolbox {feature {dataZoom {yAxisIndex "none"}}} -backgroundColor "#212121"
 $chartVout Add "lineSeries" -data $timeVout -showAllSymbol "nothing" -symbolSize "0"
 # chart for measured current
 set chartImeas [ticklecharts::chart new]
 $chartImeas Xaxis -name "time, s" -minorTick {show "True"} -type "value"
 $chartImeas Yaxis -name "Current, I" -minorTick {show "True"} -type "value"
-$chartImeas SetOptions -title {} -tooltip {} -animation "False" -toolbox {feature {dataZoom {yAxisIndex "none"}}}
+$chartImeas SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
+        -toolbox {feature {dataZoom {yAxisIndex "none"}}} -backgroundColor "#212121"
 $chartImeas Add "lineSeries" -data $timeImeas -showAllSymbol "nothing" -symbolSize "0"
 # create multiplot
 set layout [ticklecharts::Gridlayout new]
