@@ -488,7 +488,6 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
     
     oo::abstract create sffm {
         superclass ::SpiceGenTcl::Device
-        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
                 {-v0= -required}
@@ -651,7 +650,6 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
 
     oo::class create Vsffm {
         superclass ::SpiceGenTcl::Ngspice::Sources::sffm
-        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name npNode nmNode args} {
             # Creates object of class `Vsffm` that describes single-frequency FM voltage source.
             #  name - name of the device without first-letter designator V
@@ -877,7 +875,6 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
     
     oo::class create BehaviouralSource {
         superclass ::SpiceGenTcl::Device
-        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name npNode nmNode args} {
             # Creates object of class `BehaviouralSource` that describes behavioural source.
             #  name - name of the device without first-letter designator R

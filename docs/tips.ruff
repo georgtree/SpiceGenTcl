@@ -8,15 +8,29 @@ namespace eval Tips {
         One simple example is custom Verilog-A device, that could have arbitary number of pins and parameters.
         Let's try to define new element for next Verilog-A device:
         ```verilog-a
-        module core(p,n);
+        // Jiles/Atherton Magnetic Core Model
+        // Enhanced as described in "Simulation and MOdeling of Nonlinear Magnetics"
+        // by Williams, Vogelsong, and Kundert, as found on www.designers-guide.org.
+        `include "discipline.h"
+        `include "constants.h"
+
+
+
+        //
+        // Core Model
+        //
+        module coreja(p,n);
+
         magnetic p, n;
-        parameter real len=0.1 from (0:1000);	// effective magnetic length of core
-        parameter real area=1 from (0:inf);	// magnetic cross-sectional area of core
+        inout p, n;
+        (* type = "instance" *) parameter real len=0.1 from (0:1000);	// effective magnetic length of core
+        (* type = "instance" *) parameter real area=1 from (0:inf);	// magnetic cross-sectional area of core
         parameter real ms=1.6M from (0:inf);	// saturation magnetization
         parameter real a=1100 from (0:inf);	// 
         parameter real k=2000 from (0:inf);	// bulk coupliing coefficient
         parameter real alpha=1.6m from (0:inf); // interdomain coupling coef.
         parameter real c=0.2 from [0:1];	// coef. for reversable magnetization
+
         magnetic Hdot;  	// internal Hdot node
         real H;			// field intensity
         real B;			// flux density
@@ -27,39 +41,43 @@ namespace eval Tips {
         real Heff;		// effective field intensity
         integer delta;		// direction of the input MMF
         integer migrating;	// flag indicating that the pinning sites are moving
+
         // sign function
             analog function integer sign;
-       	input arg;
-       	real arg;
-       	sign = (arg >= 0.0 ? 1 : -1);
+            input arg;
+            real arg;
+            sign = (arg >= 0.0 ? 1 : -1);
             endfunction
+
         // hyperbolic cotangent function
             analog function real coth;
-       	input arg;
-       	real arg;
-       	real x;
-       	begin
-       	    x = exp(min(80,max(-80,arg)));
-       	    coth = (x+1/x)/(x-1/x);
-       	end
+            input arg;
+            real arg;
+            real x;
+            begin
+                x = exp(min(80,max(-80,arg)));
+                coth = (x+1/x)/(x-1/x);
+            end
             endfunction
+
         // core model
             analog begin
-       	H = MMF(p,n) / len;
-       	MMF(Hdot) <+ ddt(H);
-       	delta = sign(MMF(Hdot));
-       	B = Phi(p,n)/area;
-       	M = B/`P_U0 - H;
-       	Heff = H + alpha * M;
-       	if (abs(Heff) > 0.001 * a) 
-       	    Manh = ms * (coth(Heff/a) - a/Heff);
-       	else
-       	    Manh = ms * Heff/(3.0*a);	// Taylor series expansion of coth()
-       	dMirr = (Manh - M)/(delta*k - alpha*(Manh - M)) * MMF(Hdot);
-       	migrating = (delta > 0) ^ (M > Manh);
-       	Mirr = idt( migrating * dMirr, Manh );
-       	M = (1-c)*Mirr + c*Manh;
-       	Phi(p,n) <+ area*`P_U0*(H+M);
+            H = MMF(p,n) / len;
+            MMF(Hdot) <+ ddt(H);
+            delta = sign(MMF(Hdot));
+            B = Phi(p,n)/area;
+            M = B/`P_U0 - H;
+            Heff = H + alpha * M;
+            if (abs(Heff) > 0.001 * a) 
+                Manh = ms * (coth(Heff/a) - a/Heff);
+            else
+                Manh = ms * Heff/(3.0*a);	// Taylor series expansion of coth()
+            dMirr = (Manh - M)/(delta*k - alpha*(Manh - M)) * MMF(Hdot);
+            migrating = (delta > 0) ^ (M > Manh);
+            Mirr = idt( migrating * dMirr, Manh );
+
+            M = (1-c)*Mirr + c*Manh;
+            Phi(p,n) <+ area*`P_U0*(H+M);
             end
         endmodule
         ```
@@ -69,22 +87,20 @@ namespace eval Tips {
         
         ```tcl
         oo::class create Core {
-            superclass ::SpiceGenTcl::Device
-            mixin ::SpiceGenTcl::KeyArgsBuilder
+            superclass Device
             constructor {name pNode nNode args} {
-                set paramsNames [list len area ms a k alpha c]
-                set paramDefList [my buildArgStr $paramsNames]
-                set arguments [argparse -inline "
+                set arguments [argparse -inline {
                     {-model= -required}
-                    $paramDefList
-                "]
-                lappend params "model [dget $arguments model] -posnocheck"
+                    {-len= -default 0.1}
+                    {-area= -default 1}
+                }]
+                lappend paramList "model [dget $arguments model] -posnocheck"
                 dict for {paramName value} $arguments {
-                    if {$paramName!="model"} {
-                        lappend params "$paramName $value"
+                    if {$paramName ni {model}} {
+                        lappend paramList "$paramName $value"
                     }
                 }
-                next n$name [list "p $pNode" "n $nNode"] $params
+                next n$name [list "p $pNode" "n $nNode"] $paramList
             }
         }
         ```
@@ -102,40 +118,35 @@ namespace eval Tips {
         superclass SpiceGenTcl::Device
         ```
         
-        We use mixin class [::SpiceGenTcl::KeyArgsBuilder] to add it's method
-        [::SpiceGenTcl::KeyArgsBuilder::buildArgStr], that helps to build arguments list for
-        [argparse](https://wiki.tcl-lang.org/page/argparse) package.
-        
         In next line we define arguments for constructor:
         ```tcl
         constructor {name pNode nNode args}
         ```
         First argument is name of instance, then positive node and negative node names, `args` accepts model value
-        after `-model` key and all optional parameters of device.
+        after `-model` key and all instance parameters of device.
         
-        In these few lines we process `args` variable with `argparse` package:
+        In these few lines we process `args` variable with [argparse](https://wiki.tcl-lang.org/page/argparse) package:
         ```tcl
-        set paramsNames [list len area ms a k alpha c]
-        set paramDefList [my buildArgStr $paramsNames]
         set arguments [argparse -inline "
             {-model= -required}
-            $paramDefList
+            {-len= -default 0.1}
+            {-area= -default 1}
         "]
         ```
         
-        List `[list len area ms a k alpha c]` contains all parameters we have in core verilog-a model.
-        Due to these line we can pass parameters to element in forms `-paramName $paramValue $paramQual`, for example:
-        `-area 1e-4` or `-area l*m -eq`.
+        Here we define required `-model` argument, and optional instance arguments `-len` and `-area` with default 
+        values. Due to these lines we can pass parameters to element in forms `-paramName $paramValue $paramQual`, for
+        example: `-area 1e-4` or `-area l*m -eq`.
         
-        Possible qualificator is -eq - it means that parameter should be inserted into SPICE netlist as
-        `paramName={=ession}`
+        Possible qualificator is `-eq` - it means that parameter should be inserted into SPICE netlist as
+        `paramName={expression}`
         
         In the next few lines we build parameter list that will be passed to [::SpiceGenTcl::Device] constructor:      
         ```tcl
-        lappend params "model [dget $arguments model] -posnocheck"
+        lappend paramList "model [dget $arguments model] -posnocheck"
         dict for {paramName value} $arguments {
-            if {$paramName!="model"} {
-                lappend params "$paramName $value"
+            if {$paramName ni {model}} {
+                lappend paramList "$paramName $value"
             }
         }
         ```
@@ -146,7 +157,7 @@ namespace eval Tips {
         ```
         
         This superclass accept arguments in form `constructor {name pins modelName instParams}`.
-        So, we pass string `n$name` as device name, `n` is reference designator for verilog-a devices in ngspice.
+        So, we pass string `n$name` as device name, `n` is reference designator for Verilog-a devices in Ngspice.
         Secondly we pass list of nodes `[list "p $pNode" "n $nNode"]` in form of `{{Name0 NodeName} {Name1 NodeName}
         {Name2 NodeName} ...}`.
         And the last is list of parameters in form `{{model Value -posnocheck} {Name Value ?-eq?} {Name Value ?-eq?}
@@ -159,8 +170,65 @@ namespace eval Tips {
         ```
         Resulted SPICE string is:
         ```
-        n1 p n coreModel area=1e-4 len={l*5}
+        n1 p n coremodel area=1e-4 len={l*5}
         ```
+        
+        Verilog-A devices in Ngspice demand corresponding model being instantiated in the netlist. For that purpose we
+        create `CoreModel` class:
+        ```tcl
+        oo::class create CoreModel {
+            superclass Model
+            constructor {name args} {
+                set paramsNames [list ms a k alpha c]
+                next $name coreja [my argsPreprocess $paramsNames {*}$args]
+            }
+        }
+        ```
+        
+        Here we use as superclass [::SpiceGenTcl::Model] for new element. Next we define constructor for model,
+        first argument is name of model and `args` that accepts model value all instance parameters of device.
+        To process optional arguments, we use special method [::SpiceGenTcl::KeyArgsBuilder::argsPreprocess], that 
+        process optional `args` arguments and produces string for [::SpiceGenTcl::Model] constructor.
+        ```tcl
+        set paramsNames [list ms a k alpha c]
+        next $name coreja [my argsPreprocess $paramsNames {*}$args]
+        ```
+        We set model parameters in list `paramsNames`, and after that we pass arguments to superclass's constructor.
+        The name `coreja` corresponds to name of Verilog-A module.
+
+        We use [::SpiceGenTcl::KeyArgsBuilder::argsPreprocess] procedure here, but we can go the same way we do with
+        `Core` class, and add, for example, default values, or use some complex logic of elements initialization:
+        ```tcl
+        oo::class create CoreModel {
+            superclass Model
+            constructor {name args} {
+                set arguments [argparse -inline {
+                    -ms=
+                    {-a= -default 1000}
+                    -k=
+                    -alpha=
+                    -c=
+                }]
+                dict for {paramName value} $arguments {
+                    lappend paramList "$paramName $value"
+                }
+                next $name coreja $paramList
+            }
+        }
+        ```
+        Finally, we initialize model instance and print SPICE string:
+        ```tcl
+        set coreModel [CoreModel new coremodel -ms 1.7meg -a 1100 -k 2000 -alpha 1.6m -c 0.2]
+        puts [$coreModel genSPICEString]
+        ```
+
+        The result is:
+        ```
+        .model coremodel coreja(ms=1.7meg a=1100 k=2000 alpha=1.6m c=0.2)
+        ```
+
+        If you want to see the simulation example with that model, please look at 
+        /examples/ngspice/advanced/verilog_a_magnetic.va.
     }
 
 }

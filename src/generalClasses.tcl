@@ -136,7 +136,7 @@ namespace eval ::SpiceGenTcl {
             #  paramsNames - list of parameter names, define alias for parameter name by
             #  using two element list {paramName aliasName}
             #  args - argument list with key names and it's values
-            # Returns: string in form *-paramName= \n {-paramName= -alias aliasName} \n ...*
+            # Returns: list of parameters formatted for Device/Model constructor
             set paramDefList [my buildArgStr $paramsNames]
             set arguments [argparse -inline "
                 $paramDefList
@@ -466,7 +466,7 @@ namespace eval ::SpiceGenTcl {
 
     oo::configurable create Device {
         superclass SPICEElement
-        mixin DuplChecker
+        mixin DuplChecker KeyArgsBuilder
         property name -set {
             if {[regexp {[^A-Za-z0-9_]+} $value]} {
                 return -code error "Reference name '$value' is not a valid name"
@@ -698,7 +698,7 @@ namespace eval ::SpiceGenTcl {
 
     oo::configurable create Model {
         superclass SPICEElement
-        mixin DuplChecker
+        mixin DuplChecker KeyArgsBuilder
         property name -set {
             if {$value==""} {
                 return -code error "Model must have a name, empty string was provided"

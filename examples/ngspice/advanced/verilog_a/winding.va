@@ -1,0 +1,20 @@
+
+//
+// Winding Model
+//
+`include "discipline.h"
+`include "constants.h"
+
+module winding(e1,e2,m1,m2);
+
+electrical e1, e2;
+magnetic m1, m2;
+inout e1, e2, m1, m2;
+(* type = "instance" *) parameter real turns=1;
+parameter real r=0;  // winding resistance per turn
+
+    analog begin
+        MMF(m1,m2) <+ turns * I(e1,e2);
+        V(e1,e2) <+ turns * (r * I(e1,e2) - ddt(Phi(m1,m2)));
+    end
+endmodule

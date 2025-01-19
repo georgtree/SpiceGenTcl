@@ -39,7 +39,6 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
 
     oo::class create Resistor {
         superclass ::SpiceGenTcl::Device
-        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name npNode nmNode args} {
             # Creates object of class `Resistor` that describes resistor. 
             #  name - name of the device without first-letter designator R
@@ -124,7 +123,6 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
 
     oo::class create Capacitor {
         superclass ::SpiceGenTcl::Device
-        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name npNode nmNode args} {
             # Creates object of class `Capacitor` that describes capacitor. 
             #  name - name of the device without first-letter designator C
@@ -228,7 +226,6 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
 
     oo::class create Inductor {
         superclass ::SpiceGenTcl::Device
-        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name npNode nmNode args} {
             # Creates object of class `Inductor` that describes inductor. 
             #  name - name of the device without first-letter designator L
@@ -607,7 +604,6 @@ namespace eval ::SpiceGenTcl::Xyce::Sources {
     
     oo::class create BehaviouralSource {
         superclass ::SpiceGenTcl::Device
-        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name npNode nmNode args} {
             # Creates object of class `BehaviouralSource` that describes behavioural source.
             #  name - name of the device without first-letter designator R

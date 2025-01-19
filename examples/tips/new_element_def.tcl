@@ -8,22 +8,52 @@ importNgspice
         
         
 oo::class create Core {
-    superclass ::SpiceGenTcl::DeviceModel
-    mixin ::SpiceGenTcl::KeyArgsBuilder
-    constructor {name pNode nNode modelName args} {
-        set paramsNames [list len area ms a k alpha c]
-        set paramDefList [my buildArgStr $paramsNames]
-        set arguments [argparse -inline "
-            $paramDefList
-        "]
-        set paramList ""
+    superclass Device
+    constructor {name pNode nNode args} {
+        set arguments [argparse -inline {
+            {-model= -required}
+            {-len= -default 0.1}
+            {-area= -default 1}
+        }]
+        lappend paramList "model [dget $arguments model] -posnocheck"
         dict for {paramName value} $arguments {
-            lappend paramList "$paramName $value"
+            if {$paramName ni {model}} {
+                lappend paramList "$paramName $value"
+            }
         }
-        next n$name [list "p $pNode" "n $nNode"] $modelName $paramList
+        next n$name [list "p $pNode" "n $nNode"] $paramList
     }
 }
 
-set coreInst [Core new 1 p n coreModel -area 1e-4 -len {l*5 -eq}]
+oo::class create CoreModel {
+    superclass Model
+    constructor {name args} {
+        set paramsNames [list ms a k alpha c]
+        next $name coreja [my argsPreprocess $paramsNames {*}$args]
+    }
+}
+
+oo::class create CoreModel1 {
+    superclass Model
+    constructor {name args} {
+        set arguments [argparse -inline {
+            -ms=
+            {-a= -default 1000}
+            -k=
+            -alpha=
+            -c=
+        }]
+        dict for {paramName value} $arguments {
+            lappend paramList "$paramName $value"
+        }
+        next $name coreja $paramList
+    }
+}
+
+set coreInst [Core new 1 p n -model coremodel -area 1e-4 -len {l*5 -eq}]
+set coreModel [CoreModel new coremodel -ms 1.7meg -a 1100 -k 2000 -alpha 1.6m -c 0.2]
+set coreModel1 [CoreModel1 new coremodel -ms 1.7meg -a 1100 -k 2000 -alpha 1.6m -c 0.2]
 
 puts [$coreInst genSPICEString]
+puts [$coreModel genSPICEString]
+puts [$coreModel1 genSPICEString]

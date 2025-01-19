@@ -23,7 +23,6 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
     
     oo::class create RModel {
         superclass ::SpiceGenTcl::Model
-        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name args} {
             # Creates object of class `RModel` that describes semiconductor resistor model.
             #  name - name of the model 
@@ -42,7 +41,6 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
     
     oo::class create CModel {
         superclass ::SpiceGenTcl::Model
-        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name args} {
             # Creates object of class `CModel` that describes semiconductor capacitor model.
             #  name - name of the model 
@@ -61,7 +59,6 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
     
     oo::class create LModel {
         superclass ::SpiceGenTcl::Model
-        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name args} {
             # Creates object of class `LModel` that describes inductor model.
             #  name - name of the model 
@@ -80,7 +77,6 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
     
     oo::class create VSwitchModel {
         superclass ::SpiceGenTcl::Model
-        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name args} {
             # Creates object of class `VSwitchModel` that describes voltage switch model.
             #  name - name of the model 
@@ -99,7 +95,6 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
     
     oo::class create CSwitchModel {
         superclass ::SpiceGenTcl::Model
-        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name args} {
             # Creates object of class `CSwitchModel` that describes current switch model.
             #  name - name of the model 
@@ -123,7 +118,6 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
     
     oo::class create DiodeModel {
         superclass ::SpiceGenTcl::Model
-        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name args} {
             # Creates object of class `DiodeModel` that describes semiconductor diode model.
             #  name - name of the model 
@@ -144,7 +138,6 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
     
     oo::class create BjtGPModel {
         superclass ::SpiceGenTcl::Model
-        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name type args} {
             # Creates object of class `BjtGPModel` that describes Gummel-Poon model of semiconductor bipolar transistor.
             #  name - name of the model 
@@ -168,7 +161,6 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
     
     oo::class create Jfet1Model {
         superclass ::SpiceGenTcl::Model
-        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name type args} {
             # Creates object of class `Jfet1Model` that describes JFET level 1 model with Parker Skellern modification.
             #  name - name of the model 
@@ -189,7 +181,6 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
     
     oo::class create Jfet2Model {
         superclass ::SpiceGenTcl::Model
-        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name type args} {
             # Creates object of class `Jfet2Model` that describes JFET level 2 model with Parker Skellern modification.
             #  name - name of the model 
@@ -210,7 +201,6 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
     
     oo::class create Mesfet1Model {
         superclass ::SpiceGenTcl::Model
-        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name type args} {
             # Creates object of class `Mesfet1Model` that describes MESFET model by Statz e.a..
             #  name - name of the model 

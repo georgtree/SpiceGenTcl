@@ -1,0 +1,17 @@
+//
+// Gap Model
+//
+`include "discipline.h"
+`include "constants.h"
+
+module gap(p,n);
+
+magnetic p, n;
+inout p, n;
+(* type = "instance" *) parameter real len=0.1 from [0:inf);     // effective length
+(* type = "instance" *) parameter real area=1 from (0:inf);     // area
+
+    analog begin
+        MMF(p,n) <+ len * Phi(p,n) / (`P_U0 * area);
+    end
+endmodule

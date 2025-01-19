@@ -140,7 +140,6 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
 
     oo::class create Inductor {
         superclass ::SpiceGenTcl::Device
-        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name npNode nmNode args} {
             # Creates object of class `Inductor` that describes inductor.
             #  name - name of the device without first-letter designator L
@@ -661,7 +660,6 @@ namespace eval ::SpiceGenTcl::Common::Sources {
 
     oo::class create Vsin {
         superclass ::SpiceGenTcl::Common::Sources::sin
-        mixin ::SpiceGenTcl::KeyArgsBuilder
         constructor {name npNode nmNode args} {
             # Creates object of class `Vsin` that describes sinusoidal voltage source.
             #  name - name of the device without first-letter designator V

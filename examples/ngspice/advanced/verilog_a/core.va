@@ -1,0 +1,72 @@
+// Jiles/Atherton Magnetic Core Model
+// Enhanced as described in "Simulation and MOdeling of Nonlinear Magnetics"
+// by Williams, Vogelsong, and Kundert, as found on www.designers-guide.org.
+`include "discipline.h"
+`include "constants.h"
+
+
+
+//
+// Core Model
+//
+module coreja(p,n);
+
+magnetic p, n;
+inout p, n;
+(* type = "instance" *) parameter real len=0.1 from (0:1000);	// effective magnetic length of core
+(* type = "instance" *) parameter real area=1 from (0:inf);	// magnetic cross-sectional area of core
+parameter real ms=1.6M from (0:inf);	// saturation magnetization
+parameter real a=1100 from (0:inf);	// 
+parameter real k=2000 from (0:inf);	// bulk coupliing coefficient
+parameter real alpha=1.6m from (0:inf); // interdomain coupling coef.
+parameter real c=0.2 from [0:1];	// coef. for reversable magnetization
+
+magnetic Hdot;  	// internal Hdot node
+real H;			// field intensity
+real B;			// flux density
+real Manh;		// anhysteric magnetization
+real Mirr;		// irreversible magnetization
+real dMirr;		// dMirr/dH
+real M;			// total magnetization
+real Heff;		// effective field intensity
+integer delta;		// direction of the input MMF
+integer migrating;	// flag indicating that the pinning sites are moving
+   
+// sign function
+    analog function integer sign;
+	input arg;
+	real arg;
+	sign = (arg >= 0.0 ? 1 : -1);
+    endfunction
+
+// hyperbolic cotangent function
+    analog function real coth;
+	input arg;
+	real arg;
+	real x;
+	begin
+	    x = exp(min(80,max(-80,arg)));
+	    coth = (x+1/x)/(x-1/x);
+	end
+    endfunction
+
+// core model
+    analog begin
+	H = MMF(p,n) / len;
+	MMF(Hdot) <+ ddt(H);
+	delta = sign(MMF(Hdot));
+	B = Phi(p,n)/area;
+	M = B/`P_U0 - H;
+	Heff = H + alpha * M;
+	if (abs(Heff) > 0.001 * a) 
+	    Manh = ms * (coth(Heff/a) - a/Heff);
+	else
+	    Manh = ms * Heff/(3.0*a);	// Taylor series expansion of coth()
+	dMirr = (Manh - M)/(delta*k - alpha*(Manh - M)) * MMF(Hdot);
+	migrating = (delta > 0) ^ (M > Manh);
+	Mirr = idt( migrating * dMirr, Manh );
+
+	M = (1-c)*Mirr + c*Manh;
+	Phi(p,n) <+ area*`P_U0*(H+M);
+    end
+endmodule
