@@ -202,7 +202,7 @@ namespace eval ::SpiceGenTcl {
         }
         method genSPICEString {} {
             # Creates string for SPICE netlist.
-            # Returns: string '*$nodename*'
+            # Returns: SPICE netlist's string
             if {[my checkFloating]=="true"} {
                 return -code error "Pin '[my configure -name]' is not connected to the node so can't be netlisted"
             }
@@ -258,7 +258,7 @@ namespace eval ::SpiceGenTcl {
         }
         method genSPICEString {} {
             # Creates string for SPICE netlist.
-            # Returns: '$name=$value'
+            # Returns: SPICE netlist's string
             return "[my configure -name]=[my configure -value]"
         }
     }
@@ -331,7 +331,7 @@ namespace eval ::SpiceGenTcl {
         }
         method genSPICEString {} {
             # Creates string for SPICE netlist.
-            # Returns: '$Value'
+            # Returns: SPICE netlist's string
             return "[my configure -value]"
         }
     }
@@ -350,7 +350,7 @@ namespace eval ::SpiceGenTcl {
         }
         method genSPICEString {} {
             # Creates string for SPICE netlist.
-            # Results: '$value'
+            # Results: SPICE netlist's string
             return "[my configure -value]"
         }
     }
@@ -427,7 +427,7 @@ namespace eval ::SpiceGenTcl {
         }
         method genSPICEString {} {
             # Creates string for SPICE netlist.
-            # Returns: '$name={$value}'
+            # Returns: SPICE netlist's string
             return "[my configure -name]=\{[my configure -value]\}"
         }
     }
@@ -457,7 +457,7 @@ namespace eval ::SpiceGenTcl {
         }
         method genSPICEString {} {
             # Creates string for SPICE netlist.
-            # Returns: '{$paramValue}'
+            # Returns: SPICE netlist's string
             return "\{[my configure -value]\}"
         }
     }
@@ -556,8 +556,9 @@ namespace eval ::SpiceGenTcl {
         }
         method setParamValue {args} {
             # Sets (or change) value of particular parameters.
-            #  args - list with even number of elements with parameter name and value, {paramName0 paramValue0\
-            #    paramName1 paramValue1 ...}
+            #  name - name of the parameter
+            #  value - value of the parameter
+            # Synopsis: name value ?name value ...?
             if {[llength $args]%2!=0} {
                 return -code error "Number of arguments to method '[dict get [info frame 0] method]' must be even"
             }
@@ -672,7 +673,7 @@ namespace eval ::SpiceGenTcl {
         }
         method genSPICEString {} {
             # Creates device string for SPICE netlist.
-            # Returns: string '$Name $Nodes $Params'
+            # Returns: SPICE netlist's string
             dict for {pinName pin} $Pins {
                 set error [catch {$pin genSPICEString} errStr] 
                 if {$error!=1} {
@@ -745,17 +746,13 @@ namespace eval ::SpiceGenTcl {
                 set Params ""
             }
         }
-        set def [info class definition ::SpiceGenTcl::Device addParam]
-        method addParam [@ $def 0] [@ $def 1]
-        set def [info class definition ::SpiceGenTcl::Device deleteParam]
-        method deleteParam [@ $def 0] [@ $def 1]
-        set def [info class definition ::SpiceGenTcl::Device setParamValue]
-        method setParamValue [@ $def 0] [@ $def 1]            
-        set def [info class definition ::SpiceGenTcl::Device getParams]
-        method getParams [@ $def 0] [@ $def 1]  
+        method addParam {*}[info class definition ::SpiceGenTcl::Device addParam]
+        method deleteParam {*}[info class definition ::SpiceGenTcl::Device deleteParam]
+        method setParamValue {*}[info class definition ::SpiceGenTcl::Device setParamValue]
+        method getParams {*}[info class definition ::SpiceGenTcl::Device getParams]
         method genSPICEString {} {
             # Creates model string for SPICE netlist.
-            # Returns: string '.model $name $type $Params'
+            # Returns: SPICE netlist's string
             if {($Params=="") || ([info exists Params]==0)} {
                 lappend params ""
                 return ".model [my configure -name] [my configure -type]"
@@ -800,7 +797,7 @@ namespace eval ::SpiceGenTcl {
         }
         method genSPICEString {} {
             # Creates raw string for SPICE netlist.
-            # Returns: string '$value'
+            # Returns: SPICE netlists string
             return [my configure -value]
         }
     }
@@ -828,7 +825,7 @@ namespace eval ::SpiceGenTcl {
         }
         method genSPICEString {} {
             # Creates comment string for SPICE netlist.
-            # Returns: string '$value'
+            # Returns: SPICE netlist's string
             set splitted [split [my configure -value] "\n"]
             set prepared [join [lmap line $splitted {set result "*$line"}] \n]
             return $prepared
@@ -858,7 +855,7 @@ namespace eval ::SpiceGenTcl {
         }
         method genSPICEString {} {
             # Creates include string for SPICE netlist.
-            # Returns: '.include $value'
+            # Returns: SPICE netlist's string
             return ".include [my configure -value]"
         }
     }   
@@ -892,7 +889,7 @@ namespace eval ::SpiceGenTcl {
         }
         method genSPICEString {} {
             # Creates library string for SPICE netlist.
-            # Returns: '.lib $value $libvalue'
+            # Returns: SPICE netlist's string
             return ".lib [my configure -value] [my configure -libvalue]"
         }
     }   
@@ -969,13 +966,11 @@ namespace eval ::SpiceGenTcl {
             }
             return
         }
-        set def [info class definition ::SpiceGenTcl::Device deleteParam]
-        method deleteParam [@ $def 0] [@ $def 1]
-        set def [info class definition ::SpiceGenTcl::Device setParamValue]
-        method setParamValue [@ $def 0] [@ $def 1]  
+        method deleteParam {*}[info class definition ::SpiceGenTcl::Device deleteParam]
+        method setParamValue {*}[info class definition ::SpiceGenTcl::Device setParamValue]
         method genSPICEString {} {
             # Creates options string for SPICE netlist.
-            # Returns: '.options $Params'
+            # Returns: SPICE netlist's string
             dict for {paramName param} $Params {
                 lappend params [$param genSPICEString]
             }
@@ -1018,8 +1013,7 @@ namespace eval ::SpiceGenTcl {
                 }   
             }
         }
-        set def [info class definition ::SpiceGenTcl::Device getParams]
-        method getParams [@ $def 0] [@ $def 1]  
+        method getParams {*}[info class definition ::SpiceGenTcl::Device getParams]
         method addParam {paramName value args} {
             # Adds new Parameter object to the list Params.
             #  paramName - name of parameter
@@ -1044,13 +1038,11 @@ namespace eval ::SpiceGenTcl {
             }
             return
         }
-        set def [info class definition ::SpiceGenTcl::Device deleteParam]
-        method deleteParam [@ $def 0] [@ $def 1]
-        set def [info class definition ::SpiceGenTcl::Device setParamValue]
-        method setParamValue [@ $def 0] [@ $def 1]  
+        method deleteParam {*}[info class definition ::SpiceGenTcl::Device deleteParam]
+        method setParamValue {*}[info class definition ::SpiceGenTcl::Device setParamValue]
         method genSPICEString {} {
             # Creates parameter statement string for SPICE netlist.
-            # Returns: '.param $Params'
+            # Returns: SPICE netlist's string
             dict for {paramName param} $Params {
                 lappend params [$param genSPICEString]
             }
@@ -1104,7 +1096,7 @@ namespace eval ::SpiceGenTcl {
         }
         method genSPICEString {} {
             # Creates .temp statement string for SPICE netlist.
-            # Returns: '.temp $value'
+            # Returns: SPICE netlist's string
             return ".temp [$value genSPICEString]"
         }
     }
@@ -1201,7 +1193,7 @@ namespace eval ::SpiceGenTcl {
         }
         method genSPICEString {} {
             # Creates netlist string for SPICE netlist.
-            # Returns: 'netlist string'
+            # Returns: SPICE netlist's string
             dict for {elemName element} $Elements {
                 lappend totalStr [$element genSPICEString]
             }
@@ -1309,7 +1301,7 @@ namespace eval ::SpiceGenTcl {
         }
         method genSPICEString {} {
             # Creates circuit string for SPICE netlist.
-            # Returns: 'circuit string'
+            # Returns: SPICE netlist's string
             lappend totalStr [my configure -name]
             dict for {elemName element} $Elements {
                 lappend totalStr [$element genSPICEString]
@@ -1371,16 +1363,11 @@ namespace eval ::SpiceGenTcl {
             next $name
         }
         # copy methods of Device to manipulate header .subckt definition elements
-        set def [info class definition ::SpiceGenTcl::Device AddPin]
-        method AddPin [@ $def 0] [@ $def 1]       
-        set def [info class definition ::SpiceGenTcl::Device getPins]
-        method getPins [@ $def 0] [@ $def 1] 
-        set def [info class definition ::SpiceGenTcl::Device deleteParam]
-        method deleteParam [@ $def 0] [@ $def 1] 
-        set def [info class definition ::SpiceGenTcl::Device setParamValue]
-        method setParamValue [@ $def 0] [@ $def 1]     
-        set def [info class definition ::SpiceGenTcl::Device getParams]
-        method getParams [@ $def 0] [@ $def 1]  
+        method AddPin {*}[info class definition ::SpiceGenTcl::Device AddPin]
+        method getPins {*}[info class definition ::SpiceGenTcl::Device getPins]
+        method deleteParam {*}[info class definition ::SpiceGenTcl::Device deleteParam]
+        method setParamValue {*}[info class definition ::SpiceGenTcl::Device setParamValue]
+        method getParams {*}[info class definition ::SpiceGenTcl::Device getParams]
         method addParam {paramName value} {
             # Adds new parameter to subcircuit, and throws error
             #  on dublicated names.
@@ -1415,7 +1402,7 @@ namespace eval ::SpiceGenTcl {
         }
         method genSPICEString {} {
             # Creates subcircuit string for SPICE subcircuit.
-            # Returns: '.subckt $Pins $Params'
+            # Returns: SPICE netlist's string
             set name [my configure -name]
             dict for {pinName pin} $Pins {
                 lappend nodes [$pin configure -name]
@@ -1487,8 +1474,7 @@ namespace eval ::SpiceGenTcl {
                 } 
             }
         }
-        set def [info class definition ::SpiceGenTcl::Device getParams]
-        method getParams [@ $def 0] [@ $def 1]  
+        method getParams {*}[info class definition ::SpiceGenTcl::Device getParams]
         method addParam {paramName value args} {
             # Adds new Parameter object to the list `Params`.
             #  paramName - name of parameter
@@ -1533,13 +1519,11 @@ namespace eval ::SpiceGenTcl {
             }
             return
         }
-        set def [info class definition ::SpiceGenTcl::Device deleteParam]
-        method deleteParam [@ $def 0] [@ $def 1]
-        set def [info class definition ::SpiceGenTcl::Device setParamValue]
-        method setParamValue [@ $def 0] [@ $def 1]  
+        method deleteParam {*}[info class definition ::SpiceGenTcl::Device deleteParam]
+        method setParamValue {*}[info class definition ::SpiceGenTcl::Device setParamValue] 
         method genSPICEString {} {
             # Creates analysis for SPICE netlist.
-            # Returns: string '.$type $Params'
+            # Returns: string SPICE netlist's string
             if {[info exists Params]} {
                 dict for {paramName param} $Params {
                     lappend params [$param genSPICEString]

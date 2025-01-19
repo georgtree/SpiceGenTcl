@@ -27,7 +27,7 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT getParams\fP
 .br
-\fBOBJECT setParamValue\fP \fI?args?\fP
+\fBOBJECT setParamValue\fP \fIname value ?name value \&.\&.\&.?\fP
 .br
 \fBAxis create OBJNAME\fP \fIname type len ?numType?\fP
 .br
@@ -97,7 +97,7 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT getPins\fP
 .br
-\fBOBJECT setParamValue\fP \fI?args?\fP
+\fBOBJECT setParamValue\fP \fIname value ?name value \&.\&.\&.?\fP
 .br
 \fBOBJECT setPinNodeName\fP \fIpinName nodeName\fP
 .br
@@ -135,7 +135,7 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT getParams\fP
 .br
-\fBOBJECT setParamValue\fP \fI?args?\fP
+\fBOBJECT setParamValue\fP \fIname value ?name value \&.\&.\&.?\fP
 .br
 \fBNetlist create OBJNAME\fP \fIname\fP
 .br
@@ -161,7 +161,7 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT getParams\fP
 .br
-\fBOBJECT setParamValue\fP \fI?args?\fP
+\fBOBJECT setParamValue\fP \fIname value ?name value \&.\&.\&.?\fP
 .br
 \fBParameter create OBJNAME\fP \fIname value\fP
 .br
@@ -219,7 +219,7 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT getParams\fP
 .br
-\fBOBJECT setParamValue\fP \fI?args?\fP
+\fBOBJECT setParamValue\fP \fIname value ?name value \&.\&.\&.?\fP
 .br
 \fBPin create OBJNAME\fP \fIname nodeName\fP
 .br
@@ -279,7 +279,7 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT getPins\fP
 .br
-\fBOBJECT setParamValue\fP \fI?args?\fP
+\fBOBJECT setParamValue\fP \fIname value ?name value \&.\&.\&.?\fP
 .br
 \fBOBJECT constructor\fP \fIvalue ?-eq?\fP
 .br
@@ -487,7 +487,7 @@ Creates analysis for SPICE netlist\&.
 .PP
 \fBReturn value\fR
 .PP
-string '\&.\fI$type\fP \fI$Params\fP'
+string SPICE netlist's string
 .PP
 .RS -4n
 \fBgetParams\fR (::SpiceGenTcl::Analysis)
@@ -508,15 +508,18 @@ parameters dictionary
 .RE
 .PP
 Sets (or change) value of particular parameters\&.
-.RS 4n\fBOBJECT setParamValue\fP \fI?args?\fP
+.RS 4n\fBOBJECT setParamValue\fP \fIname value ?name value \&.\&.\&.?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
-args
-List with even number of elements with parameter name and value, {paramName0 paramValue0 #    paramName1 paramValue1 \&.\&.\&.}
+name
+Name of the parameter\&.
+.TP
+value
+Value of the parameter\&.
 .RE
 .PP
 .RS -4n
@@ -855,7 +858,7 @@ Creates circuit string for SPICE netlist\&.
 .PP
 \fBReturn value\fR
 .PP
-\'circuit string'
+SPICE netlist's string
 .PP
 .RS -4n
 \fBgetDataCsv\fR (::SpiceGenTcl::Circuit)
@@ -989,7 +992,7 @@ Creates comment string for SPICE netlist\&.
 .PP
 \fBReturn value\fR
 .PP
-string '\fI$value\fP'
+SPICE netlist's string
 .PP
 .RS -4n
 \fBDataset\fR (::SpiceGenTcl)
@@ -1297,7 +1300,7 @@ Creates device string for SPICE netlist\&.
 .PP
 \fBReturn value\fR
 .PP
-string '\fI$Name\fP \fI$Nodes\fP \fI$Params\fP'
+SPICE netlist's string
 .PP
 .RS -4n
 \fBgetParams\fR (::SpiceGenTcl::Device)
@@ -1332,15 +1335,18 @@ parameters dictionary
 .RE
 .PP
 Sets (or change) value of particular parameters\&.
-.RS 4n\fBOBJECT setParamValue\fP \fI?args?\fP
+.RS 4n\fBOBJECT setParamValue\fP \fIname value ?name value \&.\&.\&.?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
-args
-List with even number of elements with parameter name and value, {paramName0 paramValue0 #    paramName1 paramValue1 \&.\&.\&.}
+name
+Name of the parameter\&.
+.TP
+value
+Value of the parameter\&.
 .RE
 .PP
 .RS -4n
@@ -1558,7 +1564,7 @@ Creates include string for SPICE netlist\&.
 .PP
 \fBReturn value\fR
 .PP
-\'\&.include \fI$value\fP'
+SPICE netlist's string
 .PP
 .RS -4n
 \fBKeyArgsBuilder\fR (::SpiceGenTcl)
@@ -1685,7 +1691,7 @@ Creates library string for SPICE netlist\&.
 .PP
 \fBReturn value\fR
 .PP
-\'\&.lib \fI$value\fP \fI$libvalue\fP'
+SPICE netlist's string
 .PP
 .RS -4n
 \fBModel\fR (::SpiceGenTcl)
@@ -1838,7 +1844,7 @@ Creates model string for SPICE netlist\&.
 .PP
 \fBReturn value\fR
 .PP
-string '\&.model \fI$name\fP \fI$type\fP \fI$Params\fP'
+SPICE netlist's string
 .PP
 .RS -4n
 \fBgetParams\fR (::SpiceGenTcl::Model)
@@ -1859,15 +1865,18 @@ parameters dictionary
 .RE
 .PP
 Sets (or change) value of particular parameters\&.
-.RS 4n\fBOBJECT setParamValue\fP \fI?args?\fP
+.RS 4n\fBOBJECT setParamValue\fP \fIname value ?name value \&.\&.\&.?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
-args
-List with even number of elements with parameter name and value, {paramName0 paramValue0 #    paramName1 paramValue1 \&.\&.\&.}
+name
+Name of the parameter\&.
+.TP
+value
+Value of the parameter\&.
 .RE
 .PP
 .RS -4n
@@ -1989,7 +1998,7 @@ Creates netlist string for SPICE netlist\&.
 .PP
 \fBReturn value\fR
 .PP
-\'netlist string'
+SPICE netlist's string
 .PP
 .RS -4n
 \fBgetAllElemNames\fR (::SpiceGenTcl::Netlist)
@@ -2138,7 +2147,7 @@ Creates options string for SPICE netlist\&.
 .PP
 \fBReturn value\fR
 .PP
-\'\&.options \fI$Params\fP'
+SPICE netlist's string
 .PP
 .RS -4n
 \fBgetParams\fR (::SpiceGenTcl::Options)
@@ -2159,15 +2168,18 @@ parameters dictionary
 .RE
 .PP
 Sets (or change) value of particular parameters\&.
-.RS 4n\fBOBJECT setParamValue\fP \fI?args?\fP
+.RS 4n\fBOBJECT setParamValue\fP \fIname value ?name value \&.\&.\&.?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
-args
-List with even number of elements with parameter name and value, {paramName0 paramValue0 #    paramName1 paramValue1 \&.\&.\&.}
+name
+Name of the parameter\&.
+.TP
+value
+Value of the parameter\&.
 .RE
 .PP
 .RS -4n
@@ -2239,7 +2251,7 @@ Creates string for SPICE netlist\&.
 .PP
 \fBReturn value\fR
 .PP
-\'\fI$name\fP=\fI$value\fP'
+SPICE netlist's string
 .PP
 .RS -4n
 \fBParameterDefault\fR (::SpiceGenTcl)
@@ -2378,7 +2390,7 @@ Creates string for SPICE netlist\&.
 .PP
 \fBReturn value\fR
 .PP
-\'\fI$name\fP={\fI$value\fP}'
+SPICE netlist's string
 .PP
 .RS -4n
 \fBParameterNoCheck\fR (::SpiceGenTcl)
@@ -2504,7 +2516,7 @@ Creates string for SPICE netlist\&.
 .PP
 \fBReturn value\fR
 .PP
-\'\fI$Value\fP'
+SPICE netlist's string
 .PP
 .RS -4n
 \fBParameterPositionalEquation\fR (::SpiceGenTcl)
@@ -2571,7 +2583,7 @@ Creates string for SPICE netlist\&.
 .PP
 \fBReturn value\fR
 .PP
-\'{\fI$paramValue\fP}'
+SPICE netlist's string
 .PP
 .RS -4n
 \fBParameterPositionalNoCheck\fR (::SpiceGenTcl)
@@ -2587,7 +2599,7 @@ configure
 Configure properties\&.
 .TP
 genSPICEString
-Creates string for SPICE netlist\&. Results: '\fI$value\fP'
+Creates string for SPICE netlist\&. Results: SPICE netlist's string\&.
 .RE
 .PP
 \fBProperties\fR
@@ -2630,7 +2642,7 @@ Class models parameter the same as described by ParameterPositional but without 
 .RE
 .PP
 Creates string for SPICE netlist\&.
-Results: '\fI$value\fP'
+Results: SPICE netlist's string
 .RS 4n\fBOBJECT genSPICEString\fP
 .br
 .RE
@@ -2825,7 +2837,7 @@ Creates parameter statement string for SPICE netlist\&.
 .PP
 \fBReturn value\fR
 .PP
-\'\&.param \fI$Params\fP'
+SPICE netlist's string
 .PP
 .RS -4n
 \fBgetParams\fR (::SpiceGenTcl::ParamStatement)
@@ -2846,15 +2858,18 @@ parameters dictionary
 .RE
 .PP
 Sets (or change) value of particular parameters\&.
-.RS 4n\fBOBJECT setParamValue\fP \fI?args?\fP
+.RS 4n\fBOBJECT setParamValue\fP \fIname value ?name value \&.\&.\&.?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
-args
-List with even number of elements with parameter name and value, {paramName0 paramValue0 #    paramName1 paramValue1 \&.\&.\&.}
+name
+Name of the parameter\&.
+.TP
+value
+Value of the parameter\&.
 .RE
 .PP
 .RS -4n
@@ -2947,7 +2962,7 @@ Creates string for SPICE netlist\&.
 .PP
 \fBReturn value\fR
 .PP
-string '\fI\fI$nodename\fP\fP'
+SPICE netlist's string
 .PP
 .RS -4n
 \fBunsetNodeName\fR (::SpiceGenTcl::Pin)
@@ -3223,7 +3238,7 @@ Creates raw string for SPICE netlist\&.
 .PP
 \fBReturn value\fR
 .PP
-string '\fI$value\fP'
+SPICE netlists string
 .PP
 .RS -4n
 \fBSimulator\fR (::SpiceGenTcl)
@@ -3481,7 +3496,7 @@ Creates subcircuit string for SPICE subcircuit\&.
 .PP
 \fBReturn value\fR
 .PP
-\'\&.subckt \fI$Pins\fP \fI$Params\fP'
+SPICE netlist's string
 .PP
 .RS -4n
 \fBgetParams\fR (::SpiceGenTcl::Subcircuit)
@@ -3516,15 +3531,18 @@ parameters dictionary
 .RE
 .PP
 Sets (or change) value of particular parameters\&.
-.RS 4n\fBOBJECT setParamValue\fP \fI?args?\fP
+.RS 4n\fBOBJECT setParamValue\fP \fIname value ?name value \&.\&.\&.?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
-args
-List with even number of elements with parameter name and value, {paramName0 paramValue0 #    paramName1 paramValue1 \&.\&.\&.}
+name
+Name of the parameter\&.
+.TP
+value
+Value of the parameter\&.
 .RE
 .PP
 .RS -4n
@@ -3588,7 +3606,7 @@ Creates \&.temp statement string for SPICE netlist\&.
 .PP
 \fBReturn value\fR
 .PP
-\'\&.temp \fI$value\fP'
+SPICE netlist's string
 .PP
 .RS -4n
 \fBTrace\fR (::SpiceGenTcl)

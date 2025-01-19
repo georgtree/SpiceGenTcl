@@ -801,6 +801,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
         method genSPICEString {} {
             # Modify substrate pin string in order to complain square brackets enclosure,
             # see BJT info in reference manual of Xyce
+            # Returns: SPICE netlist's string
             set SPICEStr [next]
             if {[dexist [my getPins] ns]} {
                 set SPICEList [split $SPICEStr]
