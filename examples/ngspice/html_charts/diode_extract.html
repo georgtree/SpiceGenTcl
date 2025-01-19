@@ -6,11 +6,32 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
   </head>
   <body>
-    <div id="id_52b1a3d13a434984865630ccb48bfd35" class="chart-container" style="width:900px; height:500px;"></div>
+    <div id="id_d9c95e342c764fefa65c8fab8811cbb4" class="chart-container" style="width:700px; height:900px;"></div>
     <script>
-      var chart_52b1a3d13a434984865630ccb48bfd35 = echarts.init(document.getElementById("id_52b1a3d13a434984865630ccb48bfd35"), null, {renderer: "canvas"});
-      var option_52b1a3d13a434984865630ccb48bfd35 = {
-  "xAxis": [{
+      var chart_d9c95e342c764fefa65c8fab8811cbb4 = echarts.init(document.getElementById("id_d9c95e342c764fefa65c8fab8811cbb4"), null, {renderer: "canvas"});
+      var option_d9c95e342c764fefa65c8fab8811cbb4 = {
+  "darkMode": true,
+  "backgroundColor": "#212121",
+  "color": [
+    "#4992ff",
+    "#7cffb2",
+    "#fddd60",
+    "#ff6e76",
+    "#58d9f9",
+    "#05c091",
+    "#ff8a45",
+    "#8d48e3",
+    "#dd79ff"
+  ],
+  "animation": false,
+  "animationDuration": 1000,
+  "animationDurationUpdate": 500,
+  "animationEasing": "cubicInOut",
+  "animationEasingUpdate": "cubicInOut",
+  "animationThreshold": 2000,
+  "progressiveThreshold": 3000,
+  "xAxis": [
+    {
       "show": true,
       "type": "value",
       "gridIndex": 0,
@@ -21,6 +42,8 @@
       "nameRotate": 0,
       "inverse": false,
       "boundaryGap": true,
+      "min": 0.4,
+      "max": 1.6,
       "scale": false,
       "silent": false,
       "triggerEvent": false,
@@ -49,8 +72,52 @@
       },
       "zlevel": 0,
       "z": 0
-    }],
-  "yAxis": [{
+    },
+    {
+      "show": true,
+      "type": "value",
+      "gridIndex": 1,
+      "position": "bottom",
+      "name": "v(anode), V",
+      "nameLocation": "end",
+      "nameGap": 15,
+      "nameRotate": 0,
+      "inverse": false,
+      "boundaryGap": true,
+      "min": 0.4,
+      "max": 1.6,
+      "scale": false,
+      "silent": false,
+      "triggerEvent": false,
+      "axisLine": {
+        "show": true,
+        "lineStyle": {
+          "color": "#B9B8CE",
+          "width": 1
+        }
+      },
+      "axisTick": {"show": true},
+      "minorTick": {
+        "show": true,
+        "splitNumber": 5,
+        "length": 3
+      },
+      "axisLabel": {"color": "#B9B8CE"},
+      "splitLine": {
+        "show": true,
+        "onZero": true,
+        "symbol": null,
+        "lineStyle": {
+          "color": "#484753",
+          "width": 1
+        }
+      },
+      "zlevel": 0,
+      "z": 0
+    }
+  ],
+  "yAxis": [
+    {
       "show": true,
       "gridIndex": 0,
       "position": "left",
@@ -64,6 +131,50 @@
       "inverse": false,
       "boundaryGap": false,
       "min": "dataMin",
+      "max": 0.1,
+      "scale": false,
+      "silent": false,
+      "triggerEvent": false,
+      "axisLine": {
+        "show": true,
+        "lineStyle": {
+          "color": "#B9B8CE",
+          "width": 1
+        }
+      },
+      "axisTick": {"show": true},
+      "minorTick": {
+        "show": true,
+        "splitNumber": 5,
+        "length": 3
+      },
+      "axisLabel": {"color": "#B9B8CE"},
+      "splitLine": {
+        "show": true,
+        "onZero": true,
+        "symbol": null,
+        "lineStyle": {
+          "color": "#484753",
+          "width": 1
+        }
+      },
+      "zlevel": 0,
+      "z": 0
+    },
+    {
+      "show": true,
+      "gridIndex": 1,
+      "position": "left",
+      "realtimeSort": true,
+      "sortSeriesIndex": 0,
+      "type": "value",
+      "name": "Idiode, A",
+      "nameLocation": "end",
+      "nameGap": 15,
+      "nameRotate": 0,
+      "inverse": false,
+      "boundaryGap": false,
+      "min": 0.0,
       "max": "dataMax",
       "scale": false,
       "silent": false,
@@ -93,28 +204,10 @@
       },
       "zlevel": 0,
       "z": 0
-    }],
-  "darkMode": true,
-  "backgroundColor": "#212121",
-  "color": [
-    "#4992ff",
-    "#7cffb2",
-    "#fddd60",
-    "#ff6e76",
-    "#58d9f9",
-    "#05c091",
-    "#ff8a45",
-    "#8d48e3",
-    "#dd79ff"
+    }
   ],
-  "animation": false,
-  "animationDuration": 1000,
-  "animationDurationUpdate": 500,
-  "animationEasing": "cubicInOut",
-  "animationEasingUpdate": "cubicInOut",
-  "animationThreshold": 2000,
-  "progressiveThreshold": 3000,
-  "title": [{
+  "title": [
+    {
       "show": true,
       "target": "blank",
       "textStyle": {"color": "#EEF1FA"},
@@ -133,8 +226,30 @@
       "borderColor": "transparent",
       "borderWidth": 1,
       "borderRadius": 0
-    }],
-  "legend": [{
+    },
+    {
+      "show": true,
+      "target": "blank",
+      "textStyle": {"color": "#EEF1FA"},
+      "subtarget": "blank",
+      "subtextStyle": {"color": "#B9B8CE"},
+      "textAlign": null,
+      "textVerticalAlign": "auto",
+      "padding": 5,
+      "itemGap": 10,
+      "z": 2,
+      "left": "auto",
+      "top": "auto",
+      "right": "auto",
+      "bottom": "auto",
+      "backgroundColor": "transparent",
+      "borderColor": "transparent",
+      "borderWidth": 1,
+      "borderRadius": 0
+    }
+  ],
+  "legend": [
+    {
       "type": "plain",
       "show": true,
       "z": 2,
@@ -162,9 +277,51 @@
       "pageButtonItemGap": 5,
       "pageIconColor": "rgb(47, 69, 84)",
       "pageIconInactiveColor": "rgb(170, 170, 170)",
-      "pageIconSize": 15
-    }],
-  "tooltip": [{
+      "pageIconSize": 15,
+      "data": [
+        "fitted",
+        "unfitted",
+        "measured"
+      ]
+    },
+    {
+      "type": "plain",
+      "show": true,
+      "z": 2,
+      "left": "center",
+      "top": "auto",
+      "right": "auto",
+      "bottom": "auto",
+      "width": "auto",
+      "height": "auto",
+      "orient": "horizontal",
+      "align": "auto",
+      "padding": 5,
+      "itemGap": 10,
+      "itemWidth": 25,
+      "itemHeight": 14,
+      "symbolRotate": "inherit",
+      "selectedMode": true,
+      "inactiveColor": "rgb(204, 204, 204)",
+      "inactiveBorderColor": "rgb(204, 204, 204)",
+      "inactiveBorderWidth": "auto",
+      "textStyle": {"color": "#B9B8CE"},
+      "backgroundColor": "transparent",
+      "borderWidth": 0,
+      "borderRadius": 0,
+      "pageButtonItemGap": 5,
+      "pageIconColor": "rgb(47, 69, 84)",
+      "pageIconInactiveColor": "rgb(170, 170, 170)",
+      "pageIconSize": 15,
+      "data": [
+        "fitted",
+        "unfitted",
+        "measured"
+      ]
+    }
+  ],
+  "tooltip": [
+    {
       "show": true,
       "trigger": "item",
       "showContent": true,
@@ -173,11 +330,34 @@
       "transitionDuration": 0.4,
       "padding": 5,
       "order": "seriesAsc"
-    }],
-  "grid": [{
+    },
+    {
+      "show": true,
+      "trigger": "item",
+      "showContent": true,
+      "alwaysShowContent": false,
+      "triggerOn": "mousemove|click",
+      "transitionDuration": 0.4,
+      "padding": 5,
+      "order": "seriesAsc"
+    }
+  ],
+  "grid": [
+    {
       "left": "10%",
-      "right": "15%"
-    }],
+      "right": "15%",
+      "bottom": "5%",
+      "width": "80%",
+      "height": "40%"
+    },
+    {
+      "left": "10%",
+      "right": "15%",
+      "bottom": "55%",
+      "width": "80%",
+      "height": "40%"
+    }
+  ],
   "toolbox": {
     "show": true,
     "orient": "horizontal",
@@ -194,7 +374,25 @@
     "top": "auto",
     "right": "auto",
     "width": "auto",
-    "height": "auto"
+    "height": "auto",
+    "24": {
+      "show": true,
+      "orient": "horizontal",
+      "itemSize": 15,
+      "itemGap": 10,
+      "showTitle": true,
+      "feature": {"dataZoom": {
+          "show": true,
+          "filterMode": "filter",
+          "yAxisIndex": "none"
+        }},
+      "iconStyle": {"borderColor": "#B9B8CE"},
+      "z": 2,
+      "top": "auto",
+      "right": "auto",
+      "width": "auto",
+      "height": "auto"
+    }
   },
   "series": [
     {
@@ -207,6 +405,7 @@
       "symbolKeepAspect": true,
       "showSymbol": true,
       "legendHoverLink": true,
+      "stack": null,
       "cursor": "pointer",
       "connectNulls": false,
       "clip": true,
@@ -414,7 +613,9 @@
       ],
       "zlevel": 0,
       "z": 2,
-      "silent": false
+      "silent": false,
+      "xAxisIndex": 0,
+      "yAxisIndex": 0
     },
     {
       "type": "line",
@@ -426,6 +627,7 @@
       "symbolKeepAspect": true,
       "showSymbol": true,
       "legendHoverLink": true,
+      "stack": null,
       "cursor": "pointer",
       "connectNulls": false,
       "clip": true,
@@ -633,7 +835,9 @@
       ],
       "zlevel": 0,
       "z": 2,
-      "silent": false
+      "silent": false,
+      "xAxisIndex": 0,
+      "yAxisIndex": 0
     },
     {
       "type": "line",
@@ -645,6 +849,7 @@
       "symbolKeepAspect": true,
       "showSymbol": true,
       "legendHoverLink": true,
+      "stack": null,
       "cursor": "pointer",
       "connectNulls": false,
       "clip": true,
@@ -816,11 +1021,643 @@
       ],
       "zlevel": 0,
       "z": 2,
-      "silent": false
+      "silent": false,
+      "xAxisIndex": 0,
+      "yAxisIndex": 0
+    },
+    {
+      "type": "line",
+      "name": "fitted",
+      "colorBy": "series",
+      "coordinateSystem": "cartesian2d",
+      "symbol": "circle",
+      "symbolSize": 4,
+      "symbolKeepAspect": true,
+      "showSymbol": true,
+      "legendHoverLink": true,
+      "stack": null,
+      "cursor": "pointer",
+      "connectNulls": false,
+      "clip": true,
+      "triggerLineEvent": false,
+      "step": false,
+      "label": {"color": "#B9B8CE"},
+      "smooth": false,
+      "data": [
+        [
+          0.5237,
+          1.0297989377905381e-8
+        ],
+        [
+          0.5437,
+          2.139629148856237e-8
+        ],
+        [
+          0.5637,
+          4.440832156171748e-8
+        ],
+        [
+          0.5837,
+          9.20290759987008e-8
+        ],
+        [
+          0.6037,
+          1.9029699975525727e-7
+        ],
+        [
+          0.6237,
+          3.922643695697392e-7
+        ],
+        [
+          0.6437,
+          8.05005564208372e-7
+        ],
+        [
+          0.6637,
+          1.6417655051559343e-6
+        ],
+        [
+          0.6837,
+          3.319413020924644e-6
+        ],
+        [
+          0.7037,
+          6.632331059686081e-6
+        ],
+        [
+          0.7237,
+          1.3043189300815383e-5
+        ],
+        [
+          0.7437,
+          2.5127148337106275e-5
+        ],
+        [
+          0.7637,
+          4.717100054554835e-5
+        ],
+        [
+          0.7837,
+          8.585481353137747e-5
+        ],
+        [
+          0.8037,
+          0.00015086629016794473
+        ],
+        [
+          0.8237,
+          0.0002552985785009565
+        ],
+        [
+          0.8437,
+          0.0004157921995861791
+        ],
+        [
+          0.8637,
+          0.0006524726565957373
+        ],
+        [
+          0.8837,
+          0.0009886332964382794
+        ],
+        [
+          0.9037,
+          0.0014498786980342848
+        ],
+        [
+          0.9237,
+          0.0020623818302786534
+        ],
+        [
+          0.9437,
+          0.0028502338715472586
+        ],
+        [
+          0.9637,
+          0.003832441054280683
+        ],
+        [
+          0.9837,
+          0.00502052178541626
+        ],
+        [
+          1.0037,
+          0.006417518032146352
+        ],
+        [
+          1.0237,
+          0.008018620355910111
+        ],
+        [
+          1.0437,
+          0.00981295917244987
+        ],
+        [
+          1.0637,
+          0.011785829658085306
+        ],
+        [
+          1.0837,
+          0.013920734458346323
+        ],
+        [
+          1.1037,
+          0.0162009286338497
+        ],
+        [
+          1.1237,
+          0.018610416817295278
+        ],
+        [
+          1.1437,
+          0.02113449679339202
+        ],
+        [
+          1.1637,
+          0.023759984230881936
+        ],
+        [
+          1.1837,
+          0.026475238825504566
+        ],
+        [
+          1.2037,
+          0.029270080261968923
+        ],
+        [
+          1.2237,
+          0.032135651908883844
+        ],
+        [
+          1.2437,
+          0.0350642670655712
+        ],
+        [
+          1.2637,
+          0.038049257050353835
+        ],
+        [
+          1.2837,
+          0.04108483074677946
+        ],
+        [
+          1.3037,
+          0.04416594955067166
+        ],
+        [
+          1.3237,
+          0.047288218525820436
+        ],
+        [
+          1.3437,
+          0.050447792971737127
+        ],
+        [
+          1.3637,
+          0.053641298886583005
+        ],
+        [
+          1.3837,
+          0.056865765576258
+        ],
+        [
+          1.4037,
+          0.06011856868276377
+        ],
+        [
+          1.4237,
+          0.0633973820474047
+        ],
+        [
+          1.4437,
+          0.06670013701309724
+        ],
+        [
+          1.4637,
+          0.07002498796594678
+        ],
+        [
+          1.4837,
+          0.07337028310012725
+        ]
+      ],
+      "zlevel": 0,
+      "z": 2,
+      "silent": false,
+      "xAxisIndex": 1,
+      "yAxisIndex": 1
+    },
+    {
+      "type": "line",
+      "name": "unfitted",
+      "colorBy": "series",
+      "coordinateSystem": "cartesian2d",
+      "symbol": "circle",
+      "symbolSize": 4,
+      "symbolKeepAspect": true,
+      "showSymbol": true,
+      "legendHoverLink": true,
+      "stack": null,
+      "cursor": "pointer",
+      "connectNulls": false,
+      "clip": true,
+      "triggerLineEvent": false,
+      "step": false,
+      "label": {"color": "#B9B8CE"},
+      "smooth": false,
+      "data": [
+        [
+          0.5237,
+          4.1877896781068735e-6
+        ],
+        [
+          0.5437,
+          8.348648078630727e-6
+        ],
+        [
+          0.5637,
+          1.612673960936853e-5
+        ],
+        [
+          0.5837,
+          2.998549717995666e-5
+        ],
+        [
+          0.6037,
+          5.3384807480419405e-5
+        ],
+        [
+          0.6237,
+          9.073335923007186e-5
+        ],
+        [
+          0.6437,
+          0.00014715433186027194
+        ],
+        [
+          0.6637,
+          0.00022810518770444502
+        ],
+        [
+          0.6837,
+          0.00033887814859967155
+        ],
+        [
+          0.7037,
+          0.00048400854393001666
+        ],
+        [
+          0.7237,
+          0.0006666996840118504
+        ],
+        [
+          0.7437,
+          0.0008884489037545087
+        ],
+        [
+          0.7637,
+          0.0011490111635874788
+        ],
+        [
+          0.7837,
+          0.0014466849098310613
+        ],
+        [
+          0.8037,
+          0.0017787768276211584
+        ],
+        [
+          0.8237,
+          0.0021420788866127645
+        ],
+        [
+          0.8437,
+          0.0025332499122555814
+        ],
+        [
+          0.8637,
+          0.002949068557224252
+        ],
+        [
+          0.8837,
+          0.003386572887266563
+        ],
+        [
+          0.9037,
+          0.003843118991687832
+        ],
+        [
+          0.9237,
+          0.004316389560474258
+        ],
+        [
+          0.9437,
+          0.0048043753447069674
+        ],
+        [
+          0.9637,
+          0.0053053442678656845
+        ],
+        [
+          0.9837,
+          0.005817806806053004
+        ],
+        [
+          1.0037,
+          0.0063404822168207225
+        ],
+        [
+          1.0237,
+          0.006872267763705163
+        ],
+        [
+          1.0437,
+          0.007412211714294507
+        ],
+        [
+          1.0637,
+          0.007959490170777898
+        ],
+        [
+          1.0837,
+          0.008513387449365625
+        ],
+        [
+          1.1037,
+          0.0090732795898051
+        ],
+        [
+          1.1237,
+          0.00963862054929399
+        ],
+        [
+          1.1437,
+          0.010208930660379895
+        ],
+        [
+          1.1637,
+          0.010783786979417204
+        ],
+        [
+          1.1837,
+          0.011362815204926442
+        ],
+        [
+          1.2037,
+          0.01194568289601752
+        ],
+        [
+          1.2237,
+          0.012532093766559442
+        ],
+        [
+          1.2437,
+          0.013121782869964713
+        ],
+        [
+          1.2637,
+          0.013714512522405343
+        ],
+        [
+          1.2837,
+          0.014310068839582146
+        ],
+        [
+          1.3037,
+          0.014908258784600836
+        ],
+        [
+          1.3237,
+          0.015508907642839711
+        ],
+        [
+          1.3437,
+          0.016111856854636144
+        ],
+        [
+          1.3637,
+          0.01671696214878522
+        ],
+        [
+          1.3837,
+          0.017324091929752282
+        ],
+        [
+          1.4037,
+          0.017933125879580514
+        ],
+        [
+          1.4237,
+          0.018543953742071694
+        ],
+        [
+          1.4437,
+          0.0191564742622184
+        ],
+        [
+          1.4637,
+          0.019770594258296303
+        ],
+        [
+          1.4837,
+          0.02038622780766929
+        ]
+      ],
+      "zlevel": 0,
+      "z": 2,
+      "silent": false,
+      "xAxisIndex": 1,
+      "yAxisIndex": 1
+    },
+    {
+      "type": "line",
+      "name": "measured",
+      "colorBy": "series",
+      "coordinateSystem": "cartesian2d",
+      "symbol": "circle",
+      "symbolSize": 4,
+      "symbolKeepAspect": true,
+      "showSymbol": true,
+      "legendHoverLink": true,
+      "stack": null,
+      "cursor": "pointer",
+      "connectNulls": false,
+      "clip": true,
+      "triggerLineEvent": false,
+      "step": false,
+      "label": {"color": "#B9B8CE"},
+      "smooth": false,
+      "data": [
+        [
+          0.5237,
+          0.0000000125
+        ],
+        [
+          0.5481,
+          0.0000000305
+        ],
+        [
+          0.5755,
+          0.000000071
+        ],
+        [
+          0.5998,
+          0.000000165
+        ],
+        [
+          0.6242,
+          0.000000394
+        ],
+        [
+          0.6495,
+          0.000000929
+        ],
+        [
+          0.6731,
+          0.00000221
+        ],
+        [
+          0.6982,
+          0.00000492
+        ],
+        [
+          0.7242,
+          0.0000111
+        ],
+        [
+          0.7492,
+          0.0000238
+        ],
+        [
+          0.7744,
+          0.0000517
+        ],
+        [
+          0.7995,
+          0.000107
+        ],
+        [
+          0.8239,
+          0.000217
+        ],
+        [
+          0.8498,
+          0.000431
+        ],
+        [
+          0.875,
+          0.000814
+        ],
+        [
+          0.9001,
+          0.00144
+        ],
+        [
+          0.9252,
+          0.00234
+        ],
+        [
+          0.9496,
+          0.0035
+        ],
+        [
+          0.9755,
+          0.00508
+        ],
+        [
+          1.0006,
+          0.00702
+        ],
+        [
+          1.0246,
+          0.0087
+        ],
+        [
+          1.0492,
+          0.0109
+        ],
+        [
+          1.0738,
+          0.0132
+        ],
+        [
+          1.0984,
+          0.0158
+        ],
+        [
+          1.1238,
+          0.0187
+        ],
+        [
+          1.1502,
+          0.0216
+        ],
+        [
+          1.1748,
+          0.0247
+        ],
+        [
+          1.2002,
+          0.028
+        ],
+        [
+          1.224,
+          0.0313
+        ],
+        [
+          1.2494,
+          0.0349
+        ],
+        [
+          1.2749,
+          0.0386
+        ],
+        [
+          1.2995,
+          0.0424
+        ],
+        [
+          1.3241,
+          0.0463
+        ],
+        [
+          1.3504,
+          0.0502
+        ],
+        [
+          1.375,
+          0.0544
+        ],
+        [
+          1.4014,
+          0.0585
+        ],
+        [
+          1.4242,
+          0.0629
+        ],
+        [
+          1.4487,
+          0.0673
+        ],
+        [
+          1.4761,
+          0.0716
+        ],
+        [
+          1.4998,
+          0.076
+        ]
+      ],
+      "zlevel": 0,
+      "z": 2,
+      "silent": false,
+      "xAxisIndex": 1,
+      "yAxisIndex": 1
     }
   ]
 };
-      chart_52b1a3d13a434984865630ccb48bfd35.setOption(option_52b1a3d13a434984865630ccb48bfd35);
+      chart_d9c95e342c764fefa65c8fab8811cbb4.setOption(option_d9c95e342c764fefa65c8fab8811cbb4);
     </script>
   </body>
 </html>

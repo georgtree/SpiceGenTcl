@@ -84,5 +84,6 @@ set chartsMap [dcreate !ticklechart_mark_resistor_divider_ngspice! resistor_divi
 fileutil::updateInPlace [file join $docDir index.html] processContentsTutorial
 set chartsMap [dcreate !ticklechart_mark_monte_carlo_typ_mag_ngspice! monte_carlo_typ.html\
                        !ticklechart_mark_monte_carlo_dists_ngspice! monte_carlo.html\
-                       !ticklechart_mark_monte_carlo_dists_comb_ngspice! monte_carlo_combined.html]
+                       !ticklechart_mark_monte_carlo_dists_comb_ngspice! monte_carlo_combined.html\
+                       !ticklechart_mark_diode_extract_ngspice! diode_extract.html]
 fileutil::updateInPlace [file join $docDir index-Advanced.html] processContentsTutorial

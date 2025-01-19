@@ -56,11 +56,11 @@ set vStep 0.02
 # interpolate current with irregular voltage grid to evenly spaced one with fixed step
 set vInterp [lseq $vMin to $vMax by $vStep]
 set iInterp [lin1d -x $vRaw -y $iRaw -xi $vInterp]
-set iniPars [list 1e-14 1.0 30 1e-4]
 # set data dictionary passed into function
 set pdata [dcreate v $vInterp i $iInterp circuit $circuit model $diodeModel vMin $vMin vMax $vMax vStep $vStep\
                    vSrc $vSrc]
 # set fitting parameters
+set iniPars [list 1e-14 1.0 30 1e-4]
 set par0 [::tclopt::ParameterMpfit new is [@ $iniPars 0] -lowlim 1e-17 -uplim 1e-12]
 set par1 [::tclopt::ParameterMpfit new n [@ $iniPars 1] -lowlim 0.5 -uplim 2]
 set par2 [::tclopt::ParameterMpfit new rs [@ $iniPars 2] -fixed -lowlim 1e-10 -uplim 100]
@@ -117,13 +117,27 @@ set viRaw [lmap vVal $vRaw iVal $iRaw {list $vVal $iVal}]
 
 # plot results with ticklecharts
 set chart [ticklecharts::chart new]
-$chart Xaxis -name "v(anode), V" -minorTick {show "True"}  -type "value" -splitLine {show "True"}
-$chart Yaxis -name "Idiode, A" -minorTick {show "True"}  -type "log" -splitLine {show "True"} -min "dataMin"\
+$chart Xaxis -name "v(anode), V" -minorTick {show "True"}  -type "value" -splitLine {show "True"} -min "0.4" -max "1.6"
+$chart Yaxis -name "Idiode, A" -minorTick {show "True"}  -type "value" -splitLine {show "True"} -min "0.0"\
         -max "dataMax"
 $chart SetOptions -title {} -tooltip {} -animation "False" -legend {} -toolbox {feature {dataZoom {yAxisIndex "none"}}}\
         -grid {left "10%" right "15%"} -backgroundColor "#212121"
 $chart Add "lineSeries" -data $fittedVIdiode -showAllSymbol "nothing" -name "fitted" -symbolSize "4"
 $chart Add "lineSeries" -data $initVIdiode -showAllSymbol "nothing" -name "unfitted" -symbolSize "4"
 $chart Add "lineSeries" -data $viRaw -showAllSymbol "nothing" -name "measured" -symbolSize "4"
+set chartLog [ticklecharts::chart new]
+$chartLog Xaxis -name "v(anode), V" -minorTick {show "True"}  -type "value" -splitLine {show "True"} -min "0.4" -max "1.6"
+$chartLog Yaxis -name "Idiode, A" -minorTick {show "True"}  -type "log" -splitLine {show "True"} -min "dataMin"\
+        -max "0.1"
+$chartLog SetOptions -title {} -tooltip {} -animation "False" -legend {} -toolbox {feature {dataZoom {yAxisIndex "none"}}}\
+        -grid {left "10%" right "15%"} -backgroundColor "#212121"
+$chartLog Add "lineSeries" -data $fittedVIdiode -showAllSymbol "nothing" -name "fitted" -symbolSize "4"
+$chartLog Add "lineSeries" -data $initVIdiode -showAllSymbol "nothing" -name "unfitted" -symbolSize "4"
+$chartLog Add "lineSeries" -data $viRaw -showAllSymbol "nothing" -name "measured" -symbolSize "4"
+
+set layout [ticklecharts::Gridlayout new]
+$layout Add $chartLog -bottom "5%" -height "40%" -width "80%"
+$layout Add $chart -bottom "55%" -height "40%" -width "80%"
+
 set fbasename [file rootname [file tail [info script]]]
-$chart Render -outfile [file normalize [file join .. html_charts $fbasename.html]]
+$layout Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -height 900px -width 700px

@@ -305,6 +305,8 @@ namespace eval Advanced {
         - [Optimization package](https://github.com/georgtree/tclopt)
         - [Interpolation package](https://github.com/georgtree/tclinterp)
         
+        Also, the [tclcsv](https://tclcsv.magicsplat.com/) package is used for data reading.
+
         The main steps of this procedure are:
         - Create cost function that calculates difference between simulated and measured data, and which should be 
         minimized
@@ -314,6 +316,316 @@ namespace eval Advanced {
         - Use resulted values as initial values for next optimization in different region
         - ...
         - Repeat until the quality of fitting reaches required level.
+
+        First step is to define the cost function that will be used by the optimizer:
+        ```tcl
+        proc diodeIVcalc {xall pdata args} {
+            dict with pdata {}
+            $model setParamValue is [@ $xall 0] n [@ $xall 1] rs [@ $xall 2] ikf [@ $xall 3]
+            $vSrc setParamValue start $vMin stop $vMax incr $vStep
+            $circuit runAndRead
+            set data [$circuit getDataDict]
+            foreach iVal $i iSim [lmap i [dget $data i(va)] {= {-$i}}] {
+                lappend fvec [= {log(abs($iVal))-log(abs($iSim))}]
+                lappend fval $iSim
+            }
+            return [dcreate fvec $fvec fval $fval]
+        }
+        ```
+
+        The input arguments are:
+        - `xall` - list with fitting parameters, in our case, the parameters of the diode model.
+        - `pdata` - the dictionary containing information that allows to calculate cost function, in our case it 
+          contains multiple fields that will be explained below.
+        - `args` - any additional arguments, usually is used for passing information for calculating analytic 
+          derivatives.
+
+        Let me expand the values in `pdata` dictionary:
+        - `v` - list of applied voltages values
+        - `i` - list of measured current values
+        - `circuit` - top circuit object simulating forward diode current
+        - `model` - diode model object
+        - `vMin` - start of the voltage region
+        - `vMax` - end of the voltage region
+        - `vStep` - size of voltage step
+        - `vSrc` - voltage source object
+
+        First line creates variables with the same name as keys of `pdata` dictionary:
+        ```tcl
+        dict with pdata {}
+        ```
+
+        Then we set parameters values of the diode model object using [::SpiceGenTcl::Model::setParamValue] method:
+        ```tcl
+        $model setParamValue is [@ $xall 0] n [@ $xall 1] rs [@ $xall 2] ikf [@ $xall 3]
+        ```
+
+        The same we do with voltage source element:
+        ```tcl
+        $vSrc setParamValue start $vMin stop $vMax incr $vStep
+        ```
+
+        Then we run circuit with new parameters and read data back to calculate residuals:
+        ```tcl
+        $circuit runAndRead
+        set data [$circuit getDataDict]
+        ```
+
+        Calculating residuals and save simulated data in the loop:
+        ```tcl
+        foreach iVal $i iSim [lmap i [dget $data i(va)] {= {-$i}}] {
+            lappend fvec [= {log(abs($iVal))-log(abs($iSim))}]
+            lappend fval $iSim
+        }
+        ```
+
+        The residuals is calculated with the next formula:
+        ```
+        f = log ⎛|i    |⎞ - log ⎛|i   |⎞
+                ⎝| meas|⎠       ⎝| sim|⎠
+        ```
+
+        We use logarithm of values because the current values span across multiple orders, from 1e-8 to 1e-2, that
+        creates issue for fitting algorithm.
+
+        Procedure returns dictionary that contains lists with residuals and diode current under the keys `fvec` and
+        `fval`, and `fvec` key is mandatory because list under this key is used by optimization procedure.
+
+        To run simulation we need to build circuit and define necessary objects:
+        ```tcl
+        set diodeModel [DiodeModel new diomod -is 1e-12 -n 1.0 -rs 30 -cj0 1e-9 -trs1 0.001 -xti 5 -ikf 1e-4]
+        set vSrc [Dc new -src va -start 0 -stop 2 -incr 0.02]
+        set circuit [Circuit new {diode IV}]
+        $circuit add [D new 1 anode 0 -model diomod -area 1]
+        $circuit add [Vdc new a anode 0 -dc 0]
+        $circuit add $diodeModel
+        $circuit add $vSrc
+        set tempSt [Temp new 25]
+        $circuit add $tempSt
+        $circuit configure -simulator [Batch new {batch1}]
+        ```
+
+        We save object references for diode model and voltage source into dedicated variable to use it in cost 
+        function \- it will be saved into `pdata` dictionary.
+
+        Next, we read measured data from .csv file with `tclcsv` package:
+        ```tcl
+        set file [open [file join $fileDataPath iv25.csv]]
+        set ivTemp25 [csv_read -startline 1 $file]
+        close $file
+        set vRaw [lmap elem $ivTemp25 {@ $elem 0}]
+        set iRaw [lmap elem $ivTemp25 {@ $elem 1}]
+        ```
+
+        The loaded data is (with selected regions of fitting):
+
+        <img src="assets/img/iv_diode_extraction_plots.png" alt="drawing" width="900"/>
+
+        ### Fitting in first region
+
+        First region we want to fit is the region of ideal diode, it spans from minimum voltage to approximately 0.85V.
+        We set these limits in variables `vMin`, `vMax` and define the equal step of voltage `vStep`.
+        ```tcl
+        set vMin [min {*}$vRaw]
+        set vMax 0.85
+        set vStep 0.02
+        ```
+        We use fixed voltage step instead of data points defined in measured data with non-equal steps to ease the 
+        defining the sweep of voltage in simulator \- we can use DC sweep of voltage source with fixed step. So,
+        we use linear interpolation to get values of current at even grid with defined minimum and maximum values. Then,
+        we create `pdata` dictionary with corresponding values:
+        ```tcl
+        set vInterp [lseq $vMin to $vMax by $vStep]
+        set iInterp [lin1d -x $vRaw -y $iRaw -xi $vInterp]
+        set pdata [dcreate v $vInterp i $iInterp circuit $circuit model $diodeModel vMin $vMin vMax $vMax vStep $vStep\
+                   vSrc $vSrc]
+        ```
+        
+        Command `lin1d` is imported from `tclinterp` package.
+
+        Parameters that we need to find (extract) are: 
+        `is` - saturation current
+        `n` - ideality factor
+        `rs` - series resistance
+        `ikf` - forward knee current
+        
+        In first region the parameters of interest are `n` and `is0` \- it affects current curve the most in this 
+        region. 
+
+        Parameter are represented as special objects `::tclopt::ParameterMpfit` from `tclopt` package, where we can 
+        define initial values and lower/upper limits:
+        ```tcl
+        set iniPars [list 1e-14 1.0 30 1e-4]
+        set par0 [::tclopt::ParameterMpfit new is [@ $iniPars 0] -lowlim 1e-17 -uplim 1e-12]
+        set par1 [::tclopt::ParameterMpfit new n [@ $iniPars 1] -lowlim 0.5 -uplim 2]
+        set par2 [::tclopt::ParameterMpfit new rs [@ $iniPars 2] -fixed -lowlim 1e-10 -uplim 100]
+        set par3 [::tclopt::ParameterMpfit new ikf [@ $iniPars 3] -fixed -lowlim 1e-12 -uplim 0.1]
+        ```
+
+        For `rs` and `ikf` parameters we specify option `-fixed` to make them constant during the first region fitting.
+        
+        Optimization is done with Levenberg-Marquardt algorithm based optimizator from `tclopt` package. First step is 
+        to create `::tclopt::Mpfit` object that defines the optimization parameters:
+        ```tcl
+        set optimizer [::tclopt::Mpfit new -funct diodeIVcalc -m [llength $vInterp] -pdata $pdata]
+        ```
+        
+        The arguments we pass here are:
+        `-funct` - name of the procedure calculating the residuals
+        `-m` - number of fitting points
+        `-pdata` - dictionary that is passed to cost function procedure
+
+        Then we add parameters to $optimizer object, and the order of adding them should match the order of the elements
+        list `xall` we pass values to cost function:
+        ```tcl
+        $optimizer addPars $par0 $par1 $par2 $par3
+        ```
+        
+        Then we can run the simulation, read the resulted list of parameters `x` and print formatted values:
+        ```tcl
+        set result [$optimizer run]
+        set resPars [dget $result x]
+        puts [format "is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e" {*}[dget $result x]]
+        ```
+
+        The result is:
+        ```
+        is=5.771e-17, n=1.050e+00, rs=3.000e+01, ikf=1.000e-04
+        ```
+        
+        You can notice that `is` and `n` now have different values, and `rs` and `ikf` remains the same because of
+        `-fixed` option.
+
+        ### Fitting in second region
+        
+        Now we are ready to fit curve in the second ohmic/high-injection region. It started at the upper end of first
+        region and continue until the end of the data. We interpolate this range with the same voltage step:
+        ```tcl
+        set vMin 0.85
+        set vMax [max {*}$vRaw]
+        set vInterp [lseq $vMin to $vMax by $vStep]
+        set iInterp [lin1d -x $vRaw -y $iRaw -xi $vInterp]
+        ```
+
+        We will use the same `pdata` variable containing dictionary, but change the current and voltage data and limits:
+        ```tcl
+        dset pdata v $vInterp
+        dset pdata i $iInterp
+        dset pdata vMin $vMin
+        dset pdata vMax $vMax
+        ```
+
+        We make `is` and `n` parameters fixed this time, and free the `rs` and `ikf`:
+        ```tcl
+        $par0 configure -fixed 1 -initval [@ $resPars 0]
+        $par1 configure -fixed 1 -initval [@ $resPars 1]
+        $par2 configure -fixed 0
+        $par3 configure -fixed 0
+        ```
+        You can notice that we supply the resulted values of `is` and `n` as the initial values to the second fitting,
+        so we have two parameters already fitted before start the next optimization.
+
+        Replace $optimizer object fields with the new values:
+        ```tcl
+        $optimizer configure -m [llength $vInterp] -pdata $pdata
+        ```
+
+        Run, read result and print new parameters values:
+        ```tcl
+        set result [$optimizer run]
+        set fittedIdiode [dget [diodeIVcalc [dget $result x] $pdata] fval]
+        set resPars [dget $result x]
+        puts [format "is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e" {*}[dget $result x]]
+        ```
+
+        The result is:
+        ```
+        is=5.771e-17, n=1.050e+00, rs=5.430e+00, ikf=3.069e-04
+        ```
+        Now we can see that `rs` and `ikf` were changed during fitting, just as planned.
+
+        ### Fitting the whole curve
+
+        The last step is the fitting to the whole curve, with initial values of parameters replaced with resulted values.
+
+        Again, set voltage limits to minimum and maximum of the data, interpolate it and replace data in $pdata 
+        dictionary:
+        ```tcl
+        set vMin [min {*}$vRaw]
+        set vMax [max {*}$vRaw]
+        set vInterp [lseq $vMin to $vMax by $vStep]
+        set iInterp [lin1d -x $vRaw -y $iRaw -xi $vInterp]
+        dset pdata v $vInterp
+        dset pdata i $iInterp
+        dset pdata vMin $vMin
+        dset pdata vMax $vMax
+        ```
+
+        We unfix `rs` and `ikf` parameters, and set new limits within ±10% of previous values to forbid parameters
+        becoming too different:
+        ```tcl
+        $par0 configure -fixed 0 -initval [@ $resPars 0] -lowlim [= {[@ $resPars 0]*0.9}] -uplim [= {[@ $resPars 0]*1.1}]
+        $par1 configure -fixed 0 -initval [@ $resPars 1] -lowlim [= {[@ $resPars 1]*0.9}] -uplim [= {[@ $resPars 1]*1.1}]
+        $par2 configure -initval [@ $resPars 2] -lowlim [= {[@ $resPars 2]*0.9}] -uplim [= {[@ $resPars 2]*1.1}]
+        $par3 configure -initval [@ $resPars 3] -lowlim [= {[@ $resPars 3]*0.9}] -uplim [= {[@ $resPars 3]*1.1}]
+        ```
+
+        The set new data in optimizer object, run and print results:
+        ```tcl
+        $optimizer configure -m [llength $vInterp] -pdata $pdata
+        set result [$optimizer run]
+        puts [format "is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e" {*}[dget $result x]]
+        ```
+        
+        The result is:
+        ```
+        is=6.348e-17, n=1.061e+00, rs=5.232e+00, ikf=3.376e-04
+        ```
+
+        All parameters were changed to produce best fit for the whole curve.
+
+        ### Plotting resulted data
+
+        Now we are ready to see the result of the fitting, we need to calculate curves with initial values and final
+        values of parameters:
+        ```tcl
+        set initIdiode [dget [diodeIVcalc $iniPars $pdata] fval]
+        set fittedVIdiode [lmap vVal $vInterp iVal $fittedIdiode {list $vVal $iVal}]
+        set initVIdiode [lmap vVal $vInterp iVal $initIdiode {list $vVal $iVal}]
+        ```
+
+        Plot it with `ticklecharts` package in linear and logarithmic scales:
+        ```tcl
+        set chart [ticklecharts::chart new]
+        $chart Xaxis -name "v(anode), V" -minorTick {show "True"}  -type "value" -splitLine {show "True"} -min "0.4" -max "1.6"
+        $chart Yaxis -name "Idiode, A" -minorTick {show "True"}  -type "value" -splitLine {show "True"} -min "0.0"\
+                -max "dataMax"
+        $chart SetOptions -title {} -tooltip {} -animation "False" -legend {} -toolbox {feature {dataZoom {yAxisIndex "none"}}}\
+                -grid {left "10%" right "15%"} -backgroundColor "#212121"
+        $chart Add "lineSeries" -data $fittedVIdiode -showAllSymbol "nothing" -name "fitted" -symbolSize "4"
+        $chart Add "lineSeries" -data $initVIdiode -showAllSymbol "nothing" -name "unfitted" -symbolSize "4"
+        $chart Add "lineSeries" -data $viRaw -showAllSymbol "nothing" -name "measured" -symbolSize "4"
+        set chartLog [ticklecharts::chart new]
+        $chartLog Xaxis -name "v(anode), V" -minorTick {show "True"}  -type "value" -splitLine {show "True"} -min "0.4" -max "1.6"
+        $chartLog Yaxis -name "Idiode, A" -minorTick {show "True"}  -type "log" -splitLine {show "True"} -min "dataMin"\
+                -max "0.1"
+        $chartLog SetOptions -title {} -tooltip {} -animation "False" -legend {} -toolbox {feature {dataZoom {yAxisIndex "none"}}}\
+                -grid {left "10%" right "15%"} -backgroundColor "#212121"
+        $chartLog Add "lineSeries" -data $fittedVIdiode -showAllSymbol "nothing" -name "fitted" -symbolSize "4"
+        $chartLog Add "lineSeries" -data $initVIdiode -showAllSymbol "nothing" -name "unfitted" -symbolSize "4"
+        $chartLog Add "lineSeries" -data $viRaw -showAllSymbol "nothing" -name "measured" -symbolSize "4"
+
+        set layout [ticklecharts::Gridlayout new]
+        $layout Add $chartLog -bottom "5%" -height "40%" -width "80%"
+        $layout Add $chart -bottom "55%" -height "40%" -width "80%"
+
+        set fbasename [file rootname [file tail [info script]]]
+        $layout Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -height 900px -width 700px
+        ```
+        
+        !ticklechart_mark_diode_extract_ngspice!
+        
+        On the plot we can see the initial simulated curve, the measured data and the final fitting result.
     }
 
 }

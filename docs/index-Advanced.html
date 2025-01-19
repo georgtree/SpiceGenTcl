@@ -3411,6 +3411,7 @@
 <li><a href="https://github.com/georgtree/tclopt" >Optimization package</a></li>
 <li><a href="https://github.com/georgtree/tclinterp" >Interpolation package</a></li>
 </ul>
+<p class='ruff'>Also, the <a href="https://tclcsv.magicsplat.com/" >tclcsv</a> package is used for data reading.</p>
 <p class='ruff'>The main steps of this procedure are:</p>
 <ul class='ruff'>
 <li>Create cost function that calculates difference between simulated and measured data, and which should be minimized</li>
@@ -3421,6 +3422,1947 @@
 <li>...</li>
 <li>Repeat until the quality of fitting reaches required level.</li>
 </ul>
+<p class='ruff'>First step is to define the cost function that will be used by the optimizer:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#fe6efe>proc</font></b> diodeIVcalc {xall pdata args} {
+    <b><font color=#ffa500>dict</font></b> with pdata {}
+    <font color=#f1b479>$model</font> setParamValue is [@ <font color=#f1b479>$xall</font> 0] n [@ <font color=#f1b479>$xall</font> 1] rs [@ <font color=#f1b479>$xall</font> 2] ikf [@ <font color=#f1b479>$xall</font> 3]
+    <font color=#f1b479>$vSrc</font> setParamValue start <font color=#f1b479>$vMin</font> stop <font color=#f1b479>$vMax</font> incr <font color=#f1b479>$vStep</font>
+    <font color=#f1b479>$circuit</font> runAndRead
+    <b><font color=#ffa500>set</font></b> data [<font color=#f1b479>$circuit</font> getDataDict]
+    <b><font color=#ffa500>foreach</font></b> iVal <font color=#f1b479>$i</font> iSim [<b><font color=#ffa500>lmap</font></b> i [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$data</font> i(va)] {= {-<font color=#f1b479>$i</font>}}] {
+        <b><font color=#ffa500>lappend</font></b> fvec [= {log(abs(<font color=#f1b479>$iVal</font>))-log(abs(<font color=#f1b479>$iSim</font>))}]
+        <b><font color=#ffa500>lappend</font></b> fval <font color=#f1b479>$iSim</font>
+    }
+    <b><font color=#fe6efe>return</font></b> [<b><font color=#ffa500>dcreate</font></b> fvec <font color=#f1b479>$fvec</font> fval <font color=#f1b479>$fval</font>]
+}
+</pre>
+
+</figure><p class='ruff'>The input arguments are:</p>
+<ul class='ruff'>
+<li><code>xall</code> - list with fitting parameters, in our case, the parameters of the diode model.</li>
+<li><code>pdata</code> - the dictionary containing information that allows to calculate cost function, in our case it contains multiple fields that will be explained below.</li>
+<li><code>args</code> - any additional arguments, usually is used for passing information for calculating analytic derivatives.</li>
+</ul>
+<p class='ruff'>Let me expand the values in <code>pdata</code> dictionary:</p>
+<ul class='ruff'>
+<li><code>v</code> - list of applied voltages values</li>
+<li><code>i</code> - list of measured current values</li>
+<li><code>circuit</code> - top circuit object simulating forward diode current</li>
+<li><code>model</code> - diode model object</li>
+<li><code>vMin</code> - start of the voltage region</li>
+<li><code>vMax</code> - end of the voltage region</li>
+<li><code>vStep</code> - size of voltage step</li>
+<li><code>vSrc</code> - voltage source object</li>
+</ul>
+<p class='ruff'>First line creates variables with the same name as keys of <code>pdata</code> dictionary:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>dict</font></b> with pdata {}
+</pre>
+
+</figure><p class='ruff'>Then we set parameters values of the diode model object using <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::setParamValue" title="::SpiceGenTcl::Model::setParamValue" class='ruff_cmd'>::SpiceGenTcl::Model::setParamValue</a> method:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#f1b479>$model</font> setParamValue is [@ <font color=#f1b479>$xall</font> 0] n [@ <font color=#f1b479>$xall</font> 1] rs [@ <font color=#f1b479>$xall</font> 2] ikf [@ <font color=#f1b479>$xall</font> 3]
+</pre>
+
+</figure><p class='ruff'>The same we do with voltage source element:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#f1b479>$vSrc</font> setParamValue start <font color=#f1b479>$vMin</font> stop <font color=#f1b479>$vMax</font> incr <font color=#f1b479>$vStep</font>
+</pre>
+
+</figure><p class='ruff'>Then we run circuit with new parameters and read data back to calculate residuals:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#f1b479>$circuit</font> runAndRead
+<b><font color=#ffa500>set</font></b> data [<font color=#f1b479>$circuit</font> getDataDict]
+</pre>
+
+</figure><p class='ruff'>Calculating residuals and save simulated data in the loop:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>foreach</font></b> iVal <font color=#f1b479>$i</font> iSim [<b><font color=#ffa500>lmap</font></b> i [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$data</font> i(va)] {= {-<font color=#f1b479>$i</font>}}] {
+    <b><font color=#ffa500>lappend</font></b> fvec [= {log(abs(<font color=#f1b479>$iVal</font>))-log(abs(<font color=#f1b479>$iSim</font>))}]
+    <b><font color=#ffa500>lappend</font></b> fval <font color=#f1b479>$iSim</font>
+}
+</pre>
+
+</figure><p class='ruff'>The residuals is calculated with the next formula:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>f = log ⎛|i    |⎞ - log ⎛|i   |⎞
+        ⎝| meas|⎠       ⎝| sim|⎠
+</pre>
+
+</figure><p class='ruff'>We use logarithm of values because the current values span across multiple orders, from 1e-8 to 1e-2, that creates issue for fitting algorithm.</p>
+<p class='ruff'>Procedure returns dictionary that contains lists with residuals and diode current under the keys <code>fvec</code> and <code>fval</code>, and <code>fvec</code> key is mandatory because list under this key is used by optimization procedure.</p>
+<p class='ruff'>To run simulation we need to build circuit and define necessary objects:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>set</font></b> diodeModel [DiodeModel new diomod <font color=#b9b96e>-is</font> 1e-12 <font color=#b9b96e>-n</font> 1.0 <font color=#b9b96e>-rs</font> 30 <font color=#b9b96e>-cj0</font> 1e-9 <font color=#b9b96e>-trs1</font> 0.001 <font color=#b9b96e>-xti</font> 5 <font color=#b9b96e>-ikf</font> 1e-4]
+<b><font color=#ffa500>set</font></b> vSrc [<b><font color=#ffa500>Dc</font></b> new <font color=#b9b96e>-src</font> va <font color=#b9b96e>-start</font> 0 <font color=#b9b96e>-stop</font> 2 <font color=#b9b96e>-incr</font> 0.02]
+<b><font color=#ffa500>set</font></b> circuit [<b><font color=#ffa500>Circuit</font></b> new {diode IV}]
+<font color=#f1b479>$circuit</font> add [<b><font color=#ffa500>D</font></b> new 1 anode 0 <font color=#b9b96e>-model</font> diomod <font color=#b9b96e>-area</font> 1]
+<font color=#f1b479>$circuit</font> add [<b><font color=#ffa500>Vdc</font></b> new a anode 0 <font color=#b9b96e>-dc</font> 0]
+<font color=#f1b479>$circuit</font> add <font color=#f1b479>$diodeModel</font>
+<font color=#f1b479>$circuit</font> add <font color=#f1b479>$vSrc</font>
+<b><font color=#ffa500>set</font></b> tempSt [<b><font color=#ffa500>Temp</font></b> new 25]
+<font color=#f1b479>$circuit</font> add <font color=#f1b479>$tempSt</font>
+<font color=#f1b479>$circuit</font> configure <font color=#b9b96e>-simulator</font> [<b><font color=#ffa500>Batch</font></b> new {batch1}]
+</pre>
+
+</figure><p class='ruff'>We save object references for diode model and voltage source into dedicated variable to use it in cost function - it will be saved into <code>pdata</code> dictionary.</p>
+<p class='ruff'>Next, we read measured data from .csv file with <code>tclcsv</code> package:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>set</font></b> file [<b><font color=#ffa500>open</font></b> [<b><font color=#ffa500>file</font></b> join <font color=#f1b479>$fileDataPath</font> iv25.csv]]
+<b><font color=#ffa500>set</font></b> ivTemp25 [csv_read <font color=#b9b96e>-startline</font> 1 <font color=#f1b479>$file</font>]
+<b><font color=#ffa500>close</font></b> <font color=#f1b479>$file</font>
+<b><font color=#ffa500>set</font></b> vRaw [<b><font color=#ffa500>lmap</font></b> elem <font color=#f1b479>$ivTemp25</font> {@ <font color=#f1b479>$elem</font> 0}]
+<b><font color=#ffa500>set</font></b> iRaw [<b><font color=#ffa500>lmap</font></b> elem <font color=#f1b479>$ivTemp25</font> {@ <font color=#f1b479>$elem</font> 1}]
+</pre>
+
+</figure><p class='ruff'>The loaded data is (with selected regions of fitting):</p>
+<p class='ruff'><img src="assets/img/iv_diode_extraction_plots.png" alt="drawing" width="900"/></p>
+<h3 class='ruff'><a name='::Advanced-Fitting in first region'></a>Fitting in first region<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
+<div style='clear:both;'></div>
+<p class='ruff'>First region we want to fit is the region of ideal diode, it spans from minimum voltage to approximately 0.85V. We set these limits in variables <code>vMin</code>, <code>vMax</code> and define the equal step of voltage <code>vStep</code>.</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>set</font></b> vMin [min {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$vRaw</font>]
+<b><font color=#ffa500>set</font></b> vMax 0.85
+<b><font color=#ffa500>set</font></b> vStep 0.02
+</pre>
+
+</figure><p class='ruff'>We use fixed voltage step instead of data points defined in measured data with non-equal steps to ease the defining the sweep of voltage in simulator - we can use DC sweep of voltage source with fixed step. So, we use linear interpolation to get values of current at even grid with defined minimum and maximum values. Then, we create <code>pdata</code> dictionary with corresponding values:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>set</font></b> vInterp [lseq <font color=#f1b479>$vMin</font> to <font color=#f1b479>$vMax</font> by <font color=#f1b479>$vStep</font>]
+<b><font color=#ffa500>set</font></b> iInterp [lin1d <font color=#b9b96e>-x</font> <font color=#f1b479>$vRaw</font> <font color=#b9b96e>-y</font> <font color=#f1b479>$iRaw</font> <font color=#b9b96e>-xi</font> <font color=#f1b479>$vInterp</font>]
+<b><font color=#ffa500>set</font></b> pdata [<b><font color=#ffa500>dcreate</font></b> v <font color=#f1b479>$vInterp</font> i <font color=#f1b479>$iInterp</font> circuit <font color=#f1b479>$circuit</font> model <font color=#f1b479>$diodeModel</font> vMin <font color=#f1b479>$vMin</font> vMax <font color=#f1b479>$vMax</font> vStep <font color=#f1b479>$vStep</font> vSrc <font color=#f1b479>$vSrc</font>]
+</pre>
+
+</figure><p class='ruff'>Command <code>lin1d</code> is imported from <code>tclinterp</code> package.</p>
+<p class='ruff'>Parameters that we need to find (extract) are:</p>
+<table class='ruff_deflist'>
+<tr><td><code>is</code></td><td>Saturation current.</td></tr>
+<tr><td><code>n</code></td><td>Ideality factor.</td></tr>
+<tr><td><code>rs</code></td><td>Series resistance.</td></tr>
+<tr><td><code>ikf</code></td><td>Forward knee current.</td></tr>
+</table>
+<p class='ruff'>In first region the parameters of interest are <code>n</code> and <code>is0</code> - it affects current curve the most in this region.</p>
+<p class='ruff'>Parameter are represented as special objects <code>::tclopt::ParameterMpfit</code> from <code>tclopt</code> package, where we can define initial values and lower/upper limits:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>set</font></b> iniPars [<b><font color=#ffa500>list</font></b> 1e-14 1.0 30 1e-4]
+<b><font color=#ffa500>set</font></b> par0 [::tclopt::ParameterMpfit new is [@ <font color=#f1b479>$iniPars</font> 0] <font color=#b9b96e>-lowlim</font> 1e-17 <font color=#b9b96e>-uplim</font> 1e-12]
+<b><font color=#ffa500>set</font></b> par1 [::tclopt::ParameterMpfit new n [@ <font color=#f1b479>$iniPars</font> 1] <font color=#b9b96e>-lowlim</font> 0.5 <font color=#b9b96e>-uplim</font> 2]
+<b><font color=#ffa500>set</font></b> par2 [::tclopt::ParameterMpfit new rs [@ <font color=#f1b479>$iniPars</font> 2] <font color=#b9b96e>-fixed</font> <font color=#b9b96e>-lowlim</font> 1e-10 <font color=#b9b96e>-uplim</font> 100]
+<b><font color=#ffa500>set</font></b> par3 [::tclopt::ParameterMpfit new ikf [@ <font color=#f1b479>$iniPars</font> 3] <font color=#b9b96e>-fixed</font> <font color=#b9b96e>-lowlim</font> 1e-12 <font color=#b9b96e>-uplim</font> 0.1]
+</pre>
+
+</figure><p class='ruff'>For <code>rs</code> and <code>ikf</code> parameters we specify option <code><font color=#b9b96e>-fixed</font></code> to make them constant during the first region fitting.</p>
+<p class='ruff'>Optimization is done with Levenberg-Marquardt algorithm based optimizator from <code>tclopt</code> package. First step is to create <code>::tclopt::Mpfit</code> object that defines the optimization parameters:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>set</font></b> optimizer [::tclopt::Mpfit new <font color=#b9b96e>-funct</font> diodeIVcalc <font color=#b9b96e>-m</font> [<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$vInterp</font>] <font color=#b9b96e>-pdata</font> <font color=#f1b479>$pdata</font>]
+</pre>
+
+</figure><p class='ruff'>The arguments we pass here are:</p>
+<table class='ruff_deflist'>
+<tr><td><code><font color=#b9b96e>-funct</font></code></td><td>Name of the procedure calculating the residuals.</td></tr>
+<tr><td><code><font color=#b9b96e>-m</font></code></td><td>Number of fitting points.</td></tr>
+<tr><td><code><font color=#b9b96e>-pdata</font></code></td><td>Dictionary that is passed to cost function procedure.</td></tr>
+</table>
+<p class='ruff'>Then we add parameters to <code><font color=#f1b479>$optimizer</font></code> object, and the order of adding them should match the order of the elements list <code>xall</code> we pass values to cost function:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#f1b479>$optimizer</font> addPars <font color=#f1b479>$par0</font> <font color=#f1b479>$par1</font> <font color=#f1b479>$par2</font> <font color=#f1b479>$par3</font>
+</pre>
+
+</figure><p class='ruff'>Then we can run the simulation, read the resulted list of parameters <code>x</code> and print formatted values:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>set</font></b> result [<font color=#f1b479>$optimizer</font> run]
+<b><font color=#ffa500>set</font></b> resPars [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$result</font> x]
+<b><font color=#ffa500>puts</font></b> [<b><font color=#ffa500>format</font></b> <font color=#90ee90>&quot;is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e&quot;</font> {<b><font color=#ffa500>*</font></b>}[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$result</font> x]]
+</pre>
+
+</figure><p class='ruff'>The result is:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>is=5.771e-17, n=1.050e+00, rs=3.000e+01, ikf=1.000e-04
+</pre>
+
+</figure><p class='ruff'>You can notice that <code>is</code> and <code>n</code> now have different values, and <code>rs</code> and <code>ikf</code> remains the same because of <code><font color=#b9b96e>-fixed</font></code> option.</p>
+<h3 class='ruff'><a name='::Advanced-Fitting in second region'></a>Fitting in second region<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
+<div style='clear:both;'></div>
+<p class='ruff'>Now we are ready to fit curve in the second ohmic/high-injection region. It started at the upper end of first region and continue until the end of the data. We interpolate this range with the same voltage step:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>set</font></b> vMin 0.85
+<b><font color=#ffa500>set</font></b> vMax [max {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$vRaw</font>]
+<b><font color=#ffa500>set</font></b> vInterp [lseq <font color=#f1b479>$vMin</font> to <font color=#f1b479>$vMax</font> by <font color=#f1b479>$vStep</font>]
+<b><font color=#ffa500>set</font></b> iInterp [lin1d <font color=#b9b96e>-x</font> <font color=#f1b479>$vRaw</font> <font color=#b9b96e>-y</font> <font color=#f1b479>$iRaw</font> <font color=#b9b96e>-xi</font> <font color=#f1b479>$vInterp</font>]
+</pre>
+
+</figure><p class='ruff'>We will use the same <code>pdata</code> variable containing dictionary, but change the current and voltage data and limits:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>dset pdata v <font color=#f1b479>$vInterp</font>
+dset pdata i <font color=#f1b479>$iInterp</font>
+dset pdata vMin <font color=#f1b479>$vMin</font>
+dset pdata vMax <font color=#f1b479>$vMax</font>
+</pre>
+
+</figure><p class='ruff'>We make <code>is</code> and <code>n</code> parameters fixed this time, and free the <code>rs</code> and <code>ikf</code>:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#f1b479>$par0</font> configure <font color=#b9b96e>-fixed</font> 1 <font color=#b9b96e>-initval</font> [@ <font color=#f1b479>$resPars</font> 0]
+<font color=#f1b479>$par1</font> configure <font color=#b9b96e>-fixed</font> 1 <font color=#b9b96e>-initval</font> [@ <font color=#f1b479>$resPars</font> 1]
+<font color=#f1b479>$par2</font> configure <font color=#b9b96e>-fixed</font> 0
+<font color=#f1b479>$par3</font> configure <font color=#b9b96e>-fixed</font> 0
+</pre>
+
+</figure><p class='ruff'>You can notice that we supply the resulted values of <code>is</code> and <code>n</code> as the initial values to the second fitting, so we have two parameters already fitted before start the next optimization.</p>
+<p class='ruff'>Replace <code><font color=#f1b479>$optimizer</font></code> object fields with the new values:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#f1b479>$optimizer</font> configure <font color=#b9b96e>-m</font> [<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$vInterp</font>] <font color=#b9b96e>-pdata</font> <font color=#f1b479>$pdata</font>
+</pre>
+
+</figure><p class='ruff'>Run, read result and print new parameters values:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>set</font></b> result [<font color=#f1b479>$optimizer</font> run]
+<b><font color=#ffa500>set</font></b> fittedIdiode [<b><font color=#ffa500>dget</font></b> [diodeIVcalc [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$result</font> x] <font color=#f1b479>$pdata</font>] fval]
+<b><font color=#ffa500>set</font></b> resPars [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$result</font> x]
+<b><font color=#ffa500>puts</font></b> [<b><font color=#ffa500>format</font></b> <font color=#90ee90>&quot;is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e&quot;</font> {<b><font color=#ffa500>*</font></b>}[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$result</font> x]]
+</pre>
+
+</figure><p class='ruff'>The result is:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>is=5.771e-17, n=1.050e+00, rs=5.430e+00, ikf=3.069e-04
+</pre>
+
+</figure><p class='ruff'>Now we can see that <code>rs</code> and <code>ikf</code> were changed during fitting, just as planned.</p>
+<h3 class='ruff'><a name='::Advanced-Fitting the whole curve'></a>Fitting the whole curve<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
+<div style='clear:both;'></div>
+<p class='ruff'>The last step is the fitting to the whole curve, with initial values of parameters replaced with resulted values.</p>
+<p class='ruff'>Again, set voltage limits to minimum and maximum of the data, interpolate it and replace data in <code><font color=#f1b479>$pdata</font></code> dictionary:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>set</font></b> vMin [min {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$vRaw</font>]
+<b><font color=#ffa500>set</font></b> vMax [max {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$vRaw</font>]
+<b><font color=#ffa500>set</font></b> vInterp [lseq <font color=#f1b479>$vMin</font> to <font color=#f1b479>$vMax</font> by <font color=#f1b479>$vStep</font>]
+<b><font color=#ffa500>set</font></b> iInterp [lin1d <font color=#b9b96e>-x</font> <font color=#f1b479>$vRaw</font> <font color=#b9b96e>-y</font> <font color=#f1b479>$iRaw</font> <font color=#b9b96e>-xi</font> <font color=#f1b479>$vInterp</font>]
+dset pdata v <font color=#f1b479>$vInterp</font>
+dset pdata i <font color=#f1b479>$iInterp</font>
+dset pdata vMin <font color=#f1b479>$vMin</font>
+dset pdata vMax <font color=#f1b479>$vMax</font>
+</pre>
+
+</figure><p class='ruff'>We unfix <code>rs</code> and <code>ikf</code> parameters, and set new limits within ±10% of previous values to forbid parameters becoming too different:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#f1b479>$par0</font> configure <font color=#b9b96e>-fixed</font> 0 <font color=#b9b96e>-initval</font> [@ <font color=#f1b479>$resPars</font> 0] <font color=#b9b96e>-lowlim</font> [= {[@ <font color=#f1b479>$resPars</font> 0]*0.9}] <font color=#b9b96e>-uplim</font> [= {[@ <font color=#f1b479>$resPars</font> 0]*1.1}]
+<font color=#f1b479>$par1</font> configure <font color=#b9b96e>-fixed</font> 0 <font color=#b9b96e>-initval</font> [@ <font color=#f1b479>$resPars</font> 1] <font color=#b9b96e>-lowlim</font> [= {[@ <font color=#f1b479>$resPars</font> 1]*0.9}] <font color=#b9b96e>-uplim</font> [= {[@ <font color=#f1b479>$resPars</font> 1]*1.1}]
+<font color=#f1b479>$par2</font> configure <font color=#b9b96e>-initval</font> [@ <font color=#f1b479>$resPars</font> 2] <font color=#b9b96e>-lowlim</font> [= {[@ <font color=#f1b479>$resPars</font> 2]*0.9}] <font color=#b9b96e>-uplim</font> [= {[@ <font color=#f1b479>$resPars</font> 2]*1.1}]
+<font color=#f1b479>$par3</font> configure <font color=#b9b96e>-initval</font> [@ <font color=#f1b479>$resPars</font> 3] <font color=#b9b96e>-lowlim</font> [= {[@ <font color=#f1b479>$resPars</font> 3]*0.9}] <font color=#b9b96e>-uplim</font> [= {[@ <font color=#f1b479>$resPars</font> 3]*1.1}]
+</pre>
+
+</figure><p class='ruff'>The set new data in optimizer object, run and print results:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#f1b479>$optimizer</font> configure <font color=#b9b96e>-m</font> [<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$vInterp</font>] <font color=#b9b96e>-pdata</font> <font color=#f1b479>$pdata</font>
+<b><font color=#ffa500>set</font></b> result [<font color=#f1b479>$optimizer</font> run]
+<b><font color=#ffa500>puts</font></b> [<b><font color=#ffa500>format</font></b> <font color=#90ee90>&quot;is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e&quot;</font> {<b><font color=#ffa500>*</font></b>}[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$result</font> x]]
+</pre>
+
+</figure><p class='ruff'>The result is:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>is=6.348e-17, n=1.061e+00, rs=5.232e+00, ikf=3.376e-04
+</pre>
+
+</figure><p class='ruff'>All parameters were changed to produce best fit for the whole curve.</p>
+<h3 class='ruff'><a name='::Advanced-Plotting resulted data'></a>Plotting resulted data<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
+<div style='clear:both;'></div>
+<p class='ruff'>Now we are ready to see the result of the fitting, we need to calculate curves with initial values and final values of parameters:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>set</font></b> initIdiode [<b><font color=#ffa500>dget</font></b> [diodeIVcalc <font color=#f1b479>$iniPars</font> <font color=#f1b479>$pdata</font>] fval]
+<b><font color=#ffa500>set</font></b> fittedVIdiode [<b><font color=#ffa500>lmap</font></b> vVal <font color=#f1b479>$vInterp</font> iVal <font color=#f1b479>$fittedIdiode</font> {<b><font color=#ffa500>list</font></b> <font color=#f1b479>$vVal</font> <font color=#f1b479>$iVal</font>}]
+<b><font color=#ffa500>set</font></b> initVIdiode [<b><font color=#ffa500>lmap</font></b> vVal <font color=#f1b479>$vInterp</font> iVal <font color=#f1b479>$initIdiode</font> {<b><font color=#ffa500>list</font></b> <font color=#f1b479>$vVal</font> <font color=#f1b479>$iVal</font>}]
+</pre>
+
+</figure><p class='ruff'>Plot it with <code>ticklecharts</code> package in linear and logarithmic scales:</p>
+
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>set</font></b> chart [ticklecharts::chart new]
+<font color=#f1b479>$chart</font> Xaxis <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;v(anode), V&quot;</font> <font color=#b9b96e>-minorTick</font> {show <font color=#90ee90>&quot;True&quot;</font>}  <font color=#b9b96e>-type</font> <font color=#90ee90>&quot;value&quot;</font> <font color=#b9b96e>-splitLine</font> {show <font color=#90ee90>&quot;True&quot;</font>} <font color=#b9b96e>-min</font> <font color=#90ee90>&quot;0.4&quot;</font> <font color=#b9b96e>-max</font> <font color=#90ee90>&quot;1.6&quot;</font>
+<font color=#f1b479>$chart</font> Yaxis <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;Idiode, A&quot;</font> <font color=#b9b96e>-minorTick</font> {show <font color=#90ee90>&quot;True&quot;</font>}  <font color=#b9b96e>-type</font> <font color=#90ee90>&quot;value&quot;</font> <font color=#b9b96e>-splitLine</font> {show <font color=#90ee90>&quot;True&quot;</font>} <font color=#b9b96e>-min</font> <font color=#90ee90>&quot;0.0&quot;</font> <font color=#b9b96e>-max</font> <font color=#90ee90>&quot;dataMax&quot;</font>
+<font color=#f1b479>$chart</font> SetOptions <font color=#b9b96e>-title</font> {} <font color=#b9b96e>-tooltip</font> {} <font color=#b9b96e>-animation</font> <font color=#90ee90>&quot;False&quot;</font> <font color=#b9b96e>-legend</font> {} <font color=#b9b96e>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#90ee90>&quot;none&quot;</font>}}} <font color=#b9b96e>-grid</font> {left <font color=#90ee90>&quot;10%&quot;</font> right <font color=#90ee90>&quot;15%&quot;</font>} <font color=#b9b96e>-backgroundColor</font> <font color=#90ee90>&quot;#212121&quot;</font>
+<font color=#f1b479>$chart</font> Add <font color=#90ee90>&quot;lineSeries&quot;</font> <font color=#b9b96e>-data</font> <font color=#f1b479>$fittedVIdiode</font> <font color=#b9b96e>-showAllSymbol</font> <font color=#90ee90>&quot;nothing&quot;</font> <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;fitted&quot;</font> <font color=#b9b96e>-symbolSize</font> <font color=#90ee90>&quot;4&quot;</font>
+<font color=#f1b479>$chart</font> Add <font color=#90ee90>&quot;lineSeries&quot;</font> <font color=#b9b96e>-data</font> <font color=#f1b479>$initVIdiode</font> <font color=#b9b96e>-showAllSymbol</font> <font color=#90ee90>&quot;nothing&quot;</font> <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;unfitted&quot;</font> <font color=#b9b96e>-symbolSize</font> <font color=#90ee90>&quot;4&quot;</font>
+<font color=#f1b479>$chart</font> Add <font color=#90ee90>&quot;lineSeries&quot;</font> <font color=#b9b96e>-data</font> <font color=#f1b479>$viRaw</font> <font color=#b9b96e>-showAllSymbol</font> <font color=#90ee90>&quot;nothing&quot;</font> <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;measured&quot;</font> <font color=#b9b96e>-symbolSize</font> <font color=#90ee90>&quot;4&quot;</font>
+<b><font color=#ffa500>set</font></b> chartLog [ticklecharts::chart new]
+<font color=#f1b479>$chartLog</font> Xaxis <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;v(anode), V&quot;</font> <font color=#b9b96e>-minorTick</font> {show <font color=#90ee90>&quot;True&quot;</font>}  <font color=#b9b96e>-type</font> <font color=#90ee90>&quot;value&quot;</font> <font color=#b9b96e>-splitLine</font> {show <font color=#90ee90>&quot;True&quot;</font>} <font color=#b9b96e>-min</font> <font color=#90ee90>&quot;0.4&quot;</font> <font color=#b9b96e>-max</font> <font color=#90ee90>&quot;1.6&quot;</font>
+<font color=#f1b479>$chartLog</font> Yaxis <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;Idiode, A&quot;</font> <font color=#b9b96e>-minorTick</font> {show <font color=#90ee90>&quot;True&quot;</font>}  <font color=#b9b96e>-type</font> <font color=#90ee90>&quot;log&quot;</font> <font color=#b9b96e>-splitLine</font> {show <font color=#90ee90>&quot;True&quot;</font>} <font color=#b9b96e>-min</font> <font color=#90ee90>&quot;dataMin&quot;</font> <font color=#b9b96e>-max</font> <font color=#90ee90>&quot;0.1&quot;</font>
+<font color=#f1b479>$chartLog</font> SetOptions <font color=#b9b96e>-title</font> {} <font color=#b9b96e>-tooltip</font> {} <font color=#b9b96e>-animation</font> <font color=#90ee90>&quot;False&quot;</font> <font color=#b9b96e>-legend</font> {} <font color=#b9b96e>-toolbox</font> {feature {dataZoom {yAxisIndex <font color=#90ee90>&quot;none&quot;</font>}}} <font color=#b9b96e>-grid</font> {left <font color=#90ee90>&quot;10%&quot;</font> right <font color=#90ee90>&quot;15%&quot;</font>} <font color=#b9b96e>-backgroundColor</font> <font color=#90ee90>&quot;#212121&quot;</font>
+<font color=#f1b479>$chartLog</font> Add <font color=#90ee90>&quot;lineSeries&quot;</font> <font color=#b9b96e>-data</font> <font color=#f1b479>$fittedVIdiode</font> <font color=#b9b96e>-showAllSymbol</font> <font color=#90ee90>&quot;nothing&quot;</font> <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;fitted&quot;</font> <font color=#b9b96e>-symbolSize</font> <font color=#90ee90>&quot;4&quot;</font>
+<font color=#f1b479>$chartLog</font> Add <font color=#90ee90>&quot;lineSeries&quot;</font> <font color=#b9b96e>-data</font> <font color=#f1b479>$initVIdiode</font> <font color=#b9b96e>-showAllSymbol</font> <font color=#90ee90>&quot;nothing&quot;</font> <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;unfitted&quot;</font> <font color=#b9b96e>-symbolSize</font> <font color=#90ee90>&quot;4&quot;</font>
+<font color=#f1b479>$chartLog</font> Add <font color=#90ee90>&quot;lineSeries&quot;</font> <font color=#b9b96e>-data</font> <font color=#f1b479>$viRaw</font> <font color=#b9b96e>-showAllSymbol</font> <font color=#90ee90>&quot;nothing&quot;</font> <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;measured&quot;</font> <font color=#b9b96e>-symbolSize</font> <font color=#90ee90>&quot;4&quot;</font>
+
+<b><font color=#ffa500>set</font></b> layout [ticklecharts::Gridlayout new]
+<font color=#f1b479>$layout</font> Add <font color=#f1b479>$chartLog</font> <font color=#b9b96e>-bottom</font> <font color=#90ee90>&quot;5%&quot;</font> <font color=#b9b96e>-height</font> <font color=#90ee90>&quot;40%&quot;</font> <font color=#b9b96e>-width</font> <font color=#90ee90>&quot;80%&quot;</font>
+<font color=#f1b479>$layout</font> Add <font color=#f1b479>$chart</font> <font color=#b9b96e>-bottom</font> <font color=#90ee90>&quot;55%&quot;</font> <font color=#b9b96e>-height</font> <font color=#90ee90>&quot;40%&quot;</font> <font color=#b9b96e>-width</font> <font color=#90ee90>&quot;80%&quot;</font>
+
+<b><font color=#ffa500>set</font></b> fbasename [<b><font color=#ffa500>file</font></b> rootname [<b><font color=#ffa500>file</font></b> tail [<b><font color=#ffa500>info</font></b> script]]]
+<font color=#f1b479>$layout</font> Render <font color=#b9b96e>-outfile</font> [<b><font color=#ffa500>file</font></b> normalize [<b><font color=#ffa500>file</font></b> join .. html_charts <font color=#f1b479>$fbasename</font>.html]] <font color=#b9b96e>-height</font> 900px <font color=#b9b96e>-width</font> 700px
+</pre>
+
+</figure><p class='ruff'><!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>ticklEcharts !!!</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+  </head>
+  <body>
+    <div id="id_d9c95e342c764fefa65c8fab8811cbb4" class="chart-container" style="width:700px; height:900px;"></div>
+    <script>
+      var chart_d9c95e342c764fefa65c8fab8811cbb4 = echarts.init(document.getElementById("id_d9c95e342c764fefa65c8fab8811cbb4"), null, {renderer: "canvas"});
+      var option_d9c95e342c764fefa65c8fab8811cbb4 = {
+  "darkMode": true,
+  "backgroundColor": "#212121",
+  "color": [
+    "#4992ff",
+    "#7cffb2",
+    "#fddd60",
+    "#ff6e76",
+    "#58d9f9",
+    "#05c091",
+    "#ff8a45",
+    "#8d48e3",
+    "#dd79ff"
+  ],
+  "animation": false,
+  "animationDuration": 1000,
+  "animationDurationUpdate": 500,
+  "animationEasing": "cubicInOut",
+  "animationEasingUpdate": "cubicInOut",
+  "animationThreshold": 2000,
+  "progressiveThreshold": 3000,
+  "xAxis": [
+    {
+      "show": true,
+      "type": "value",
+      "gridIndex": 0,
+      "position": "bottom",
+      "name": "v(anode), V",
+      "nameLocation": "end",
+      "nameGap": 15,
+      "nameRotate": 0,
+      "inverse": false,
+      "boundaryGap": true,
+      "min": 0.4,
+      "max": 1.6,
+      "scale": false,
+      "silent": false,
+      "triggerEvent": false,
+      "axisLine": {
+        "show": true,
+        "lineStyle": {
+          "color": "#B9B8CE",
+          "width": 1
+        }
+      },
+      "axisTick": {"show": true},
+      "minorTick": {
+        "show": true,
+        "splitNumber": 5,
+        "length": 3
+      },
+      "axisLabel": {"color": "#B9B8CE"},
+      "splitLine": {
+        "show": true,
+        "onZero": true,
+        "symbol": null,
+        "lineStyle": {
+          "color": "#484753",
+          "width": 1
+        }
+      },
+      "zlevel": 0,
+      "z": 0
+    },
+    {
+      "show": true,
+      "type": "value",
+      "gridIndex": 1,
+      "position": "bottom",
+      "name": "v(anode), V",
+      "nameLocation": "end",
+      "nameGap": 15,
+      "nameRotate": 0,
+      "inverse": false,
+      "boundaryGap": true,
+      "min": 0.4,
+      "max": 1.6,
+      "scale": false,
+      "silent": false,
+      "triggerEvent": false,
+      "axisLine": {
+        "show": true,
+        "lineStyle": {
+          "color": "#B9B8CE",
+          "width": 1
+        }
+      },
+      "axisTick": {"show": true},
+      "minorTick": {
+        "show": true,
+        "splitNumber": 5,
+        "length": 3
+      },
+      "axisLabel": {"color": "#B9B8CE"},
+      "splitLine": {
+        "show": true,
+        "onZero": true,
+        "symbol": null,
+        "lineStyle": {
+          "color": "#484753",
+          "width": 1
+        }
+      },
+      "zlevel": 0,
+      "z": 0
+    }
+  ],
+  "yAxis": [
+    {
+      "show": true,
+      "gridIndex": 0,
+      "position": "left",
+      "realtimeSort": true,
+      "sortSeriesIndex": 0,
+      "type": "log",
+      "name": "Idiode, A",
+      "nameLocation": "end",
+      "nameGap": 15,
+      "nameRotate": 0,
+      "inverse": false,
+      "boundaryGap": false,
+      "min": "dataMin",
+      "max": 0.1,
+      "scale": false,
+      "silent": false,
+      "triggerEvent": false,
+      "axisLine": {
+        "show": true,
+        "lineStyle": {
+          "color": "#B9B8CE",
+          "width": 1
+        }
+      },
+      "axisTick": {"show": true},
+      "minorTick": {
+        "show": true,
+        "splitNumber": 5,
+        "length": 3
+      },
+      "axisLabel": {"color": "#B9B8CE"},
+      "splitLine": {
+        "show": true,
+        "onZero": true,
+        "symbol": null,
+        "lineStyle": {
+          "color": "#484753",
+          "width": 1
+        }
+      },
+      "zlevel": 0,
+      "z": 0
+    },
+    {
+      "show": true,
+      "gridIndex": 1,
+      "position": "left",
+      "realtimeSort": true,
+      "sortSeriesIndex": 0,
+      "type": "value",
+      "name": "Idiode, A",
+      "nameLocation": "end",
+      "nameGap": 15,
+      "nameRotate": 0,
+      "inverse": false,
+      "boundaryGap": false,
+      "min": 0.0,
+      "max": "dataMax",
+      "scale": false,
+      "silent": false,
+      "triggerEvent": false,
+      "axisLine": {
+        "show": true,
+        "lineStyle": {
+          "color": "#B9B8CE",
+          "width": 1
+        }
+      },
+      "axisTick": {"show": true},
+      "minorTick": {
+        "show": true,
+        "splitNumber": 5,
+        "length": 3
+      },
+      "axisLabel": {"color": "#B9B8CE"},
+      "splitLine": {
+        "show": true,
+        "onZero": true,
+        "symbol": null,
+        "lineStyle": {
+          "color": "#484753",
+          "width": 1
+        }
+      },
+      "zlevel": 0,
+      "z": 0
+    }
+  ],
+  "title": [
+    {
+      "show": true,
+      "target": "blank",
+      "textStyle": {"color": "#EEF1FA"},
+      "subtarget": "blank",
+      "subtextStyle": {"color": "#B9B8CE"},
+      "textAlign": null,
+      "textVerticalAlign": "auto",
+      "padding": 5,
+      "itemGap": 10,
+      "z": 2,
+      "left": "auto",
+      "top": "auto",
+      "right": "auto",
+      "bottom": "auto",
+      "backgroundColor": "transparent",
+      "borderColor": "transparent",
+      "borderWidth": 1,
+      "borderRadius": 0
+    },
+    {
+      "show": true,
+      "target": "blank",
+      "textStyle": {"color": "#EEF1FA"},
+      "subtarget": "blank",
+      "subtextStyle": {"color": "#B9B8CE"},
+      "textAlign": null,
+      "textVerticalAlign": "auto",
+      "padding": 5,
+      "itemGap": 10,
+      "z": 2,
+      "left": "auto",
+      "top": "auto",
+      "right": "auto",
+      "bottom": "auto",
+      "backgroundColor": "transparent",
+      "borderColor": "transparent",
+      "borderWidth": 1,
+      "borderRadius": 0
+    }
+  ],
+  "legend": [
+    {
+      "type": "plain",
+      "show": true,
+      "z": 2,
+      "left": "center",
+      "top": "auto",
+      "right": "auto",
+      "bottom": "auto",
+      "width": "auto",
+      "height": "auto",
+      "orient": "horizontal",
+      "align": "auto",
+      "padding": 5,
+      "itemGap": 10,
+      "itemWidth": 25,
+      "itemHeight": 14,
+      "symbolRotate": "inherit",
+      "selectedMode": true,
+      "inactiveColor": "rgb(204, 204, 204)",
+      "inactiveBorderColor": "rgb(204, 204, 204)",
+      "inactiveBorderWidth": "auto",
+      "textStyle": {"color": "#B9B8CE"},
+      "backgroundColor": "transparent",
+      "borderWidth": 0,
+      "borderRadius": 0,
+      "pageButtonItemGap": 5,
+      "pageIconColor": "rgb(47, 69, 84)",
+      "pageIconInactiveColor": "rgb(170, 170, 170)",
+      "pageIconSize": 15,
+      "data": [
+        "fitted",
+        "unfitted",
+        "measured"
+      ]
+    },
+    {
+      "type": "plain",
+      "show": true,
+      "z": 2,
+      "left": "center",
+      "top": "auto",
+      "right": "auto",
+      "bottom": "auto",
+      "width": "auto",
+      "height": "auto",
+      "orient": "horizontal",
+      "align": "auto",
+      "padding": 5,
+      "itemGap": 10,
+      "itemWidth": 25,
+      "itemHeight": 14,
+      "symbolRotate": "inherit",
+      "selectedMode": true,
+      "inactiveColor": "rgb(204, 204, 204)",
+      "inactiveBorderColor": "rgb(204, 204, 204)",
+      "inactiveBorderWidth": "auto",
+      "textStyle": {"color": "#B9B8CE"},
+      "backgroundColor": "transparent",
+      "borderWidth": 0,
+      "borderRadius": 0,
+      "pageButtonItemGap": 5,
+      "pageIconColor": "rgb(47, 69, 84)",
+      "pageIconInactiveColor": "rgb(170, 170, 170)",
+      "pageIconSize": 15,
+      "data": [
+        "fitted",
+        "unfitted",
+        "measured"
+      ]
+    }
+  ],
+  "tooltip": [
+    {
+      "show": true,
+      "trigger": "item",
+      "showContent": true,
+      "alwaysShowContent": false,
+      "triggerOn": "mousemove|click",
+      "transitionDuration": 0.4,
+      "padding": 5,
+      "order": "seriesAsc"
+    },
+    {
+      "show": true,
+      "trigger": "item",
+      "showContent": true,
+      "alwaysShowContent": false,
+      "triggerOn": "mousemove|click",
+      "transitionDuration": 0.4,
+      "padding": 5,
+      "order": "seriesAsc"
+    }
+  ],
+  "grid": [
+    {
+      "left": "10%",
+      "right": "15%",
+      "bottom": "5%",
+      "width": "80%",
+      "height": "40%"
+    },
+    {
+      "left": "10%",
+      "right": "15%",
+      "bottom": "55%",
+      "width": "80%",
+      "height": "40%"
+    }
+  ],
+  "toolbox": {
+    "show": true,
+    "orient": "horizontal",
+    "itemSize": 15,
+    "itemGap": 10,
+    "showTitle": true,
+    "feature": {"dataZoom": {
+        "show": true,
+        "filterMode": "filter",
+        "yAxisIndex": "none"
+      }},
+    "iconStyle": {"borderColor": "#B9B8CE"},
+    "z": 2,
+    "top": "auto",
+    "right": "auto",
+    "width": "auto",
+    "height": "auto",
+    "24": {
+      "show": true,
+      "orient": "horizontal",
+      "itemSize": 15,
+      "itemGap": 10,
+      "showTitle": true,
+      "feature": {"dataZoom": {
+          "show": true,
+          "filterMode": "filter",
+          "yAxisIndex": "none"
+        }},
+      "iconStyle": {"borderColor": "#B9B8CE"},
+      "z": 2,
+      "top": "auto",
+      "right": "auto",
+      "width": "auto",
+      "height": "auto"
+    }
+  },
+  "series": [
+    {
+      "type": "line",
+      "name": "fitted",
+      "colorBy": "series",
+      "coordinateSystem": "cartesian2d",
+      "symbol": "circle",
+      "symbolSize": 4,
+      "symbolKeepAspect": true,
+      "showSymbol": true,
+      "legendHoverLink": true,
+      "stack": null,
+      "cursor": "pointer",
+      "connectNulls": false,
+      "clip": true,
+      "triggerLineEvent": false,
+      "step": false,
+      "label": {"color": "#B9B8CE"},
+      "smooth": false,
+      "data": [
+        [
+          0.5237,
+          1.0297989377905381e-8
+        ],
+        [
+          0.5437,
+          2.139629148856237e-8
+        ],
+        [
+          0.5637,
+          4.440832156171748e-8
+        ],
+        [
+          0.5837,
+          9.20290759987008e-8
+        ],
+        [
+          0.6037,
+          1.9029699975525727e-7
+        ],
+        [
+          0.6237,
+          3.922643695697392e-7
+        ],
+        [
+          0.6437,
+          8.05005564208372e-7
+        ],
+        [
+          0.6637,
+          1.6417655051559343e-6
+        ],
+        [
+          0.6837,
+          3.319413020924644e-6
+        ],
+        [
+          0.7037,
+          6.632331059686081e-6
+        ],
+        [
+          0.7237,
+          1.3043189300815383e-5
+        ],
+        [
+          0.7437,
+          2.5127148337106275e-5
+        ],
+        [
+          0.7637,
+          4.717100054554835e-5
+        ],
+        [
+          0.7837,
+          8.585481353137747e-5
+        ],
+        [
+          0.8037,
+          0.00015086629016794473
+        ],
+        [
+          0.8237,
+          0.0002552985785009565
+        ],
+        [
+          0.8437,
+          0.0004157921995861791
+        ],
+        [
+          0.8637,
+          0.0006524726565957373
+        ],
+        [
+          0.8837,
+          0.0009886332964382794
+        ],
+        [
+          0.9037,
+          0.0014498786980342848
+        ],
+        [
+          0.9237,
+          0.0020623818302786534
+        ],
+        [
+          0.9437,
+          0.0028502338715472586
+        ],
+        [
+          0.9637,
+          0.003832441054280683
+        ],
+        [
+          0.9837,
+          0.00502052178541626
+        ],
+        [
+          1.0037,
+          0.006417518032146352
+        ],
+        [
+          1.0237,
+          0.008018620355910111
+        ],
+        [
+          1.0437,
+          0.00981295917244987
+        ],
+        [
+          1.0637,
+          0.011785829658085306
+        ],
+        [
+          1.0837,
+          0.013920734458346323
+        ],
+        [
+          1.1037,
+          0.0162009286338497
+        ],
+        [
+          1.1237,
+          0.018610416817295278
+        ],
+        [
+          1.1437,
+          0.02113449679339202
+        ],
+        [
+          1.1637,
+          0.023759984230881936
+        ],
+        [
+          1.1837,
+          0.026475238825504566
+        ],
+        [
+          1.2037,
+          0.029270080261968923
+        ],
+        [
+          1.2237,
+          0.032135651908883844
+        ],
+        [
+          1.2437,
+          0.0350642670655712
+        ],
+        [
+          1.2637,
+          0.038049257050353835
+        ],
+        [
+          1.2837,
+          0.04108483074677946
+        ],
+        [
+          1.3037,
+          0.04416594955067166
+        ],
+        [
+          1.3237,
+          0.047288218525820436
+        ],
+        [
+          1.3437,
+          0.050447792971737127
+        ],
+        [
+          1.3637,
+          0.053641298886583005
+        ],
+        [
+          1.3837,
+          0.056865765576258
+        ],
+        [
+          1.4037,
+          0.06011856868276377
+        ],
+        [
+          1.4237,
+          0.0633973820474047
+        ],
+        [
+          1.4437,
+          0.06670013701309724
+        ],
+        [
+          1.4637,
+          0.07002498796594678
+        ],
+        [
+          1.4837,
+          0.07337028310012725
+        ]
+      ],
+      "zlevel": 0,
+      "z": 2,
+      "silent": false,
+      "xAxisIndex": 0,
+      "yAxisIndex": 0
+    },
+    {
+      "type": "line",
+      "name": "unfitted",
+      "colorBy": "series",
+      "coordinateSystem": "cartesian2d",
+      "symbol": "circle",
+      "symbolSize": 4,
+      "symbolKeepAspect": true,
+      "showSymbol": true,
+      "legendHoverLink": true,
+      "stack": null,
+      "cursor": "pointer",
+      "connectNulls": false,
+      "clip": true,
+      "triggerLineEvent": false,
+      "step": false,
+      "label": {"color": "#B9B8CE"},
+      "smooth": false,
+      "data": [
+        [
+          0.5237,
+          4.1877896781068735e-6
+        ],
+        [
+          0.5437,
+          8.348648078630727e-6
+        ],
+        [
+          0.5637,
+          1.612673960936853e-5
+        ],
+        [
+          0.5837,
+          2.998549717995666e-5
+        ],
+        [
+          0.6037,
+          5.3384807480419405e-5
+        ],
+        [
+          0.6237,
+          9.073335923007186e-5
+        ],
+        [
+          0.6437,
+          0.00014715433186027194
+        ],
+        [
+          0.6637,
+          0.00022810518770444502
+        ],
+        [
+          0.6837,
+          0.00033887814859967155
+        ],
+        [
+          0.7037,
+          0.00048400854393001666
+        ],
+        [
+          0.7237,
+          0.0006666996840118504
+        ],
+        [
+          0.7437,
+          0.0008884489037545087
+        ],
+        [
+          0.7637,
+          0.0011490111635874788
+        ],
+        [
+          0.7837,
+          0.0014466849098310613
+        ],
+        [
+          0.8037,
+          0.0017787768276211584
+        ],
+        [
+          0.8237,
+          0.0021420788866127645
+        ],
+        [
+          0.8437,
+          0.0025332499122555814
+        ],
+        [
+          0.8637,
+          0.002949068557224252
+        ],
+        [
+          0.8837,
+          0.003386572887266563
+        ],
+        [
+          0.9037,
+          0.003843118991687832
+        ],
+        [
+          0.9237,
+          0.004316389560474258
+        ],
+        [
+          0.9437,
+          0.0048043753447069674
+        ],
+        [
+          0.9637,
+          0.0053053442678656845
+        ],
+        [
+          0.9837,
+          0.005817806806053004
+        ],
+        [
+          1.0037,
+          0.0063404822168207225
+        ],
+        [
+          1.0237,
+          0.006872267763705163
+        ],
+        [
+          1.0437,
+          0.007412211714294507
+        ],
+        [
+          1.0637,
+          0.007959490170777898
+        ],
+        [
+          1.0837,
+          0.008513387449365625
+        ],
+        [
+          1.1037,
+          0.0090732795898051
+        ],
+        [
+          1.1237,
+          0.00963862054929399
+        ],
+        [
+          1.1437,
+          0.010208930660379895
+        ],
+        [
+          1.1637,
+          0.010783786979417204
+        ],
+        [
+          1.1837,
+          0.011362815204926442
+        ],
+        [
+          1.2037,
+          0.01194568289601752
+        ],
+        [
+          1.2237,
+          0.012532093766559442
+        ],
+        [
+          1.2437,
+          0.013121782869964713
+        ],
+        [
+          1.2637,
+          0.013714512522405343
+        ],
+        [
+          1.2837,
+          0.014310068839582146
+        ],
+        [
+          1.3037,
+          0.014908258784600836
+        ],
+        [
+          1.3237,
+          0.015508907642839711
+        ],
+        [
+          1.3437,
+          0.016111856854636144
+        ],
+        [
+          1.3637,
+          0.01671696214878522
+        ],
+        [
+          1.3837,
+          0.017324091929752282
+        ],
+        [
+          1.4037,
+          0.017933125879580514
+        ],
+        [
+          1.4237,
+          0.018543953742071694
+        ],
+        [
+          1.4437,
+          0.0191564742622184
+        ],
+        [
+          1.4637,
+          0.019770594258296303
+        ],
+        [
+          1.4837,
+          0.02038622780766929
+        ]
+      ],
+      "zlevel": 0,
+      "z": 2,
+      "silent": false,
+      "xAxisIndex": 0,
+      "yAxisIndex": 0
+    },
+    {
+      "type": "line",
+      "name": "measured",
+      "colorBy": "series",
+      "coordinateSystem": "cartesian2d",
+      "symbol": "circle",
+      "symbolSize": 4,
+      "symbolKeepAspect": true,
+      "showSymbol": true,
+      "legendHoverLink": true,
+      "stack": null,
+      "cursor": "pointer",
+      "connectNulls": false,
+      "clip": true,
+      "triggerLineEvent": false,
+      "step": false,
+      "label": {"color": "#B9B8CE"},
+      "smooth": false,
+      "data": [
+        [
+          0.5237,
+          0.0000000125
+        ],
+        [
+          0.5481,
+          0.0000000305
+        ],
+        [
+          0.5755,
+          0.000000071
+        ],
+        [
+          0.5998,
+          0.000000165
+        ],
+        [
+          0.6242,
+          0.000000394
+        ],
+        [
+          0.6495,
+          0.000000929
+        ],
+        [
+          0.6731,
+          0.00000221
+        ],
+        [
+          0.6982,
+          0.00000492
+        ],
+        [
+          0.7242,
+          0.0000111
+        ],
+        [
+          0.7492,
+          0.0000238
+        ],
+        [
+          0.7744,
+          0.0000517
+        ],
+        [
+          0.7995,
+          0.000107
+        ],
+        [
+          0.8239,
+          0.000217
+        ],
+        [
+          0.8498,
+          0.000431
+        ],
+        [
+          0.875,
+          0.000814
+        ],
+        [
+          0.9001,
+          0.00144
+        ],
+        [
+          0.9252,
+          0.00234
+        ],
+        [
+          0.9496,
+          0.0035
+        ],
+        [
+          0.9755,
+          0.00508
+        ],
+        [
+          1.0006,
+          0.00702
+        ],
+        [
+          1.0246,
+          0.0087
+        ],
+        [
+          1.0492,
+          0.0109
+        ],
+        [
+          1.0738,
+          0.0132
+        ],
+        [
+          1.0984,
+          0.0158
+        ],
+        [
+          1.1238,
+          0.0187
+        ],
+        [
+          1.1502,
+          0.0216
+        ],
+        [
+          1.1748,
+          0.0247
+        ],
+        [
+          1.2002,
+          0.028
+        ],
+        [
+          1.224,
+          0.0313
+        ],
+        [
+          1.2494,
+          0.0349
+        ],
+        [
+          1.2749,
+          0.0386
+        ],
+        [
+          1.2995,
+          0.0424
+        ],
+        [
+          1.3241,
+          0.0463
+        ],
+        [
+          1.3504,
+          0.0502
+        ],
+        [
+          1.375,
+          0.0544
+        ],
+        [
+          1.4014,
+          0.0585
+        ],
+        [
+          1.4242,
+          0.0629
+        ],
+        [
+          1.4487,
+          0.0673
+        ],
+        [
+          1.4761,
+          0.0716
+        ],
+        [
+          1.4998,
+          0.076
+        ]
+      ],
+      "zlevel": 0,
+      "z": 2,
+      "silent": false,
+      "xAxisIndex": 0,
+      "yAxisIndex": 0
+    },
+    {
+      "type": "line",
+      "name": "fitted",
+      "colorBy": "series",
+      "coordinateSystem": "cartesian2d",
+      "symbol": "circle",
+      "symbolSize": 4,
+      "symbolKeepAspect": true,
+      "showSymbol": true,
+      "legendHoverLink": true,
+      "stack": null,
+      "cursor": "pointer",
+      "connectNulls": false,
+      "clip": true,
+      "triggerLineEvent": false,
+      "step": false,
+      "label": {"color": "#B9B8CE"},
+      "smooth": false,
+      "data": [
+        [
+          0.5237,
+          1.0297989377905381e-8
+        ],
+        [
+          0.5437,
+          2.139629148856237e-8
+        ],
+        [
+          0.5637,
+          4.440832156171748e-8
+        ],
+        [
+          0.5837,
+          9.20290759987008e-8
+        ],
+        [
+          0.6037,
+          1.9029699975525727e-7
+        ],
+        [
+          0.6237,
+          3.922643695697392e-7
+        ],
+        [
+          0.6437,
+          8.05005564208372e-7
+        ],
+        [
+          0.6637,
+          1.6417655051559343e-6
+        ],
+        [
+          0.6837,
+          3.319413020924644e-6
+        ],
+        [
+          0.7037,
+          6.632331059686081e-6
+        ],
+        [
+          0.7237,
+          1.3043189300815383e-5
+        ],
+        [
+          0.7437,
+          2.5127148337106275e-5
+        ],
+        [
+          0.7637,
+          4.717100054554835e-5
+        ],
+        [
+          0.7837,
+          8.585481353137747e-5
+        ],
+        [
+          0.8037,
+          0.00015086629016794473
+        ],
+        [
+          0.8237,
+          0.0002552985785009565
+        ],
+        [
+          0.8437,
+          0.0004157921995861791
+        ],
+        [
+          0.8637,
+          0.0006524726565957373
+        ],
+        [
+          0.8837,
+          0.0009886332964382794
+        ],
+        [
+          0.9037,
+          0.0014498786980342848
+        ],
+        [
+          0.9237,
+          0.0020623818302786534
+        ],
+        [
+          0.9437,
+          0.0028502338715472586
+        ],
+        [
+          0.9637,
+          0.003832441054280683
+        ],
+        [
+          0.9837,
+          0.00502052178541626
+        ],
+        [
+          1.0037,
+          0.006417518032146352
+        ],
+        [
+          1.0237,
+          0.008018620355910111
+        ],
+        [
+          1.0437,
+          0.00981295917244987
+        ],
+        [
+          1.0637,
+          0.011785829658085306
+        ],
+        [
+          1.0837,
+          0.013920734458346323
+        ],
+        [
+          1.1037,
+          0.0162009286338497
+        ],
+        [
+          1.1237,
+          0.018610416817295278
+        ],
+        [
+          1.1437,
+          0.02113449679339202
+        ],
+        [
+          1.1637,
+          0.023759984230881936
+        ],
+        [
+          1.1837,
+          0.026475238825504566
+        ],
+        [
+          1.2037,
+          0.029270080261968923
+        ],
+        [
+          1.2237,
+          0.032135651908883844
+        ],
+        [
+          1.2437,
+          0.0350642670655712
+        ],
+        [
+          1.2637,
+          0.038049257050353835
+        ],
+        [
+          1.2837,
+          0.04108483074677946
+        ],
+        [
+          1.3037,
+          0.04416594955067166
+        ],
+        [
+          1.3237,
+          0.047288218525820436
+        ],
+        [
+          1.3437,
+          0.050447792971737127
+        ],
+        [
+          1.3637,
+          0.053641298886583005
+        ],
+        [
+          1.3837,
+          0.056865765576258
+        ],
+        [
+          1.4037,
+          0.06011856868276377
+        ],
+        [
+          1.4237,
+          0.0633973820474047
+        ],
+        [
+          1.4437,
+          0.06670013701309724
+        ],
+        [
+          1.4637,
+          0.07002498796594678
+        ],
+        [
+          1.4837,
+          0.07337028310012725
+        ]
+      ],
+      "zlevel": 0,
+      "z": 2,
+      "silent": false,
+      "xAxisIndex": 1,
+      "yAxisIndex": 1
+    },
+    {
+      "type": "line",
+      "name": "unfitted",
+      "colorBy": "series",
+      "coordinateSystem": "cartesian2d",
+      "symbol": "circle",
+      "symbolSize": 4,
+      "symbolKeepAspect": true,
+      "showSymbol": true,
+      "legendHoverLink": true,
+      "stack": null,
+      "cursor": "pointer",
+      "connectNulls": false,
+      "clip": true,
+      "triggerLineEvent": false,
+      "step": false,
+      "label": {"color": "#B9B8CE"},
+      "smooth": false,
+      "data": [
+        [
+          0.5237,
+          4.1877896781068735e-6
+        ],
+        [
+          0.5437,
+          8.348648078630727e-6
+        ],
+        [
+          0.5637,
+          1.612673960936853e-5
+        ],
+        [
+          0.5837,
+          2.998549717995666e-5
+        ],
+        [
+          0.6037,
+          5.3384807480419405e-5
+        ],
+        [
+          0.6237,
+          9.073335923007186e-5
+        ],
+        [
+          0.6437,
+          0.00014715433186027194
+        ],
+        [
+          0.6637,
+          0.00022810518770444502
+        ],
+        [
+          0.6837,
+          0.00033887814859967155
+        ],
+        [
+          0.7037,
+          0.00048400854393001666
+        ],
+        [
+          0.7237,
+          0.0006666996840118504
+        ],
+        [
+          0.7437,
+          0.0008884489037545087
+        ],
+        [
+          0.7637,
+          0.0011490111635874788
+        ],
+        [
+          0.7837,
+          0.0014466849098310613
+        ],
+        [
+          0.8037,
+          0.0017787768276211584
+        ],
+        [
+          0.8237,
+          0.0021420788866127645
+        ],
+        [
+          0.8437,
+          0.0025332499122555814
+        ],
+        [
+          0.8637,
+          0.002949068557224252
+        ],
+        [
+          0.8837,
+          0.003386572887266563
+        ],
+        [
+          0.9037,
+          0.003843118991687832
+        ],
+        [
+          0.9237,
+          0.004316389560474258
+        ],
+        [
+          0.9437,
+          0.0048043753447069674
+        ],
+        [
+          0.9637,
+          0.0053053442678656845
+        ],
+        [
+          0.9837,
+          0.005817806806053004
+        ],
+        [
+          1.0037,
+          0.0063404822168207225
+        ],
+        [
+          1.0237,
+          0.006872267763705163
+        ],
+        [
+          1.0437,
+          0.007412211714294507
+        ],
+        [
+          1.0637,
+          0.007959490170777898
+        ],
+        [
+          1.0837,
+          0.008513387449365625
+        ],
+        [
+          1.1037,
+          0.0090732795898051
+        ],
+        [
+          1.1237,
+          0.00963862054929399
+        ],
+        [
+          1.1437,
+          0.010208930660379895
+        ],
+        [
+          1.1637,
+          0.010783786979417204
+        ],
+        [
+          1.1837,
+          0.011362815204926442
+        ],
+        [
+          1.2037,
+          0.01194568289601752
+        ],
+        [
+          1.2237,
+          0.012532093766559442
+        ],
+        [
+          1.2437,
+          0.013121782869964713
+        ],
+        [
+          1.2637,
+          0.013714512522405343
+        ],
+        [
+          1.2837,
+          0.014310068839582146
+        ],
+        [
+          1.3037,
+          0.014908258784600836
+        ],
+        [
+          1.3237,
+          0.015508907642839711
+        ],
+        [
+          1.3437,
+          0.016111856854636144
+        ],
+        [
+          1.3637,
+          0.01671696214878522
+        ],
+        [
+          1.3837,
+          0.017324091929752282
+        ],
+        [
+          1.4037,
+          0.017933125879580514
+        ],
+        [
+          1.4237,
+          0.018543953742071694
+        ],
+        [
+          1.4437,
+          0.0191564742622184
+        ],
+        [
+          1.4637,
+          0.019770594258296303
+        ],
+        [
+          1.4837,
+          0.02038622780766929
+        ]
+      ],
+      "zlevel": 0,
+      "z": 2,
+      "silent": false,
+      "xAxisIndex": 1,
+      "yAxisIndex": 1
+    },
+    {
+      "type": "line",
+      "name": "measured",
+      "colorBy": "series",
+      "coordinateSystem": "cartesian2d",
+      "symbol": "circle",
+      "symbolSize": 4,
+      "symbolKeepAspect": true,
+      "showSymbol": true,
+      "legendHoverLink": true,
+      "stack": null,
+      "cursor": "pointer",
+      "connectNulls": false,
+      "clip": true,
+      "triggerLineEvent": false,
+      "step": false,
+      "label": {"color": "#B9B8CE"},
+      "smooth": false,
+      "data": [
+        [
+          0.5237,
+          0.0000000125
+        ],
+        [
+          0.5481,
+          0.0000000305
+        ],
+        [
+          0.5755,
+          0.000000071
+        ],
+        [
+          0.5998,
+          0.000000165
+        ],
+        [
+          0.6242,
+          0.000000394
+        ],
+        [
+          0.6495,
+          0.000000929
+        ],
+        [
+          0.6731,
+          0.00000221
+        ],
+        [
+          0.6982,
+          0.00000492
+        ],
+        [
+          0.7242,
+          0.0000111
+        ],
+        [
+          0.7492,
+          0.0000238
+        ],
+        [
+          0.7744,
+          0.0000517
+        ],
+        [
+          0.7995,
+          0.000107
+        ],
+        [
+          0.8239,
+          0.000217
+        ],
+        [
+          0.8498,
+          0.000431
+        ],
+        [
+          0.875,
+          0.000814
+        ],
+        [
+          0.9001,
+          0.00144
+        ],
+        [
+          0.9252,
+          0.00234
+        ],
+        [
+          0.9496,
+          0.0035
+        ],
+        [
+          0.9755,
+          0.00508
+        ],
+        [
+          1.0006,
+          0.00702
+        ],
+        [
+          1.0246,
+          0.0087
+        ],
+        [
+          1.0492,
+          0.0109
+        ],
+        [
+          1.0738,
+          0.0132
+        ],
+        [
+          1.0984,
+          0.0158
+        ],
+        [
+          1.1238,
+          0.0187
+        ],
+        [
+          1.1502,
+          0.0216
+        ],
+        [
+          1.1748,
+          0.0247
+        ],
+        [
+          1.2002,
+          0.028
+        ],
+        [
+          1.224,
+          0.0313
+        ],
+        [
+          1.2494,
+          0.0349
+        ],
+        [
+          1.2749,
+          0.0386
+        ],
+        [
+          1.2995,
+          0.0424
+        ],
+        [
+          1.3241,
+          0.0463
+        ],
+        [
+          1.3504,
+          0.0502
+        ],
+        [
+          1.375,
+          0.0544
+        ],
+        [
+          1.4014,
+          0.0585
+        ],
+        [
+          1.4242,
+          0.0629
+        ],
+        [
+          1.4487,
+          0.0673
+        ],
+        [
+          1.4761,
+          0.0716
+        ],
+        [
+          1.4998,
+          0.076
+        ]
+      ],
+      "zlevel": 0,
+      "z": 2,
+      "silent": false,
+      "xAxisIndex": 1,
+      "yAxisIndex": 1
+    }
+  ]
+};
+      chart_d9c95e342c764fefa65c8fab8811cbb4.setOption(option_d9c95e342c764fefa65c8fab8811cbb4);
+    </script>
+  </body>
+</html>
+</p>
+<p class='ruff'>On the plot we can see the initial simulated curve, the measured data and the final fitting result.</p>
 </main><nav class='ruff-nav'><ul ><li class='ruff-toc1'><a style='padding-top:2px;' href='index.html'>Start page</a></li>
 <li class='ruff-toc1'><a href='index-docindex.html' accesskey='i'>Index</a></li>
 <hr>
@@ -3442,5 +5384,5 @@
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html'>SpiceGenTcl::Xyce::SemiconductorDevices</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-Analyses.html'>SpiceGenTcl::Xyce::Analyses</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-Simulators.html'>SpiceGenTcl::Xyce::Simulators</a></li>
-<hr><li class='ruff-toc2'><a href='#::Advanced-Monte-Carlo simulation'>Monte-Carlo simulation</a></li><li class='ruff-toc2'><a href='#::Advanced-Parameters extraction of diode model parameters'>Parameters extraction of diode model parameters</a></li></ul></nav><footer class='ruff-layout-footer ruff-ft'><div style='float: right;'>Document generated by <a href='https://ruff.magicsplat.com'>Ruff!</a></div><div>&copy; George Yashin</div></footer>
+<hr><li class='ruff-toc2'><a href='#::Advanced-Monte-Carlo simulation'>Monte-Carlo simulation</a></li><li class='ruff-toc2'><a href='#::Advanced-Parameters extraction of diode model parameters'>Parameters extraction of diode model parameters</a></li><li class='ruff-toc3'><a href='#::Advanced-Fitting in first region'>Fitting in first region</a></li><li class='ruff-toc3'><a href='#::Advanced-Fitting in second region'>Fitting in second region</a></li><li class='ruff-toc3'><a href='#::Advanced-Fitting the whole curve'>Fitting the whole curve</a></li><li class='ruff-toc3'><a href='#::Advanced-Plotting resulted data'>Plotting resulted data</a></li></ul></nav><footer class='ruff-layout-footer ruff-ft'><div style='float: right;'>Document generated by <a href='https://ruff.magicsplat.com'>Ruff!</a></div><div>&copy; George Yashin</div></footer>
 </div></body></html>
