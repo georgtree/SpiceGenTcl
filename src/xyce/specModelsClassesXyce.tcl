@@ -32,8 +32,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ::SpiceGenTcl::Xyce::BasicDevices::RModel new resmod -tc1 1 -tc2 2
             # ```
             # Synopsis: name ?-option value ...?
-            set paramsNames [list defw narrow r rsh tc1 tc2 tce tnom]
-            next $name r [my argsPreprocess $paramsNames {*}$args]
+            next $name r [my argsPreprocess [list defw narrow r rsh tc1 tc2 tce tnom] {*}$args]
         }
     }
 
@@ -50,8 +49,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ::SpiceGenTcl::Xyce::BasicDevices::CModel new capmod -tc1 1 -tc2 2
             # ```
             # Synopsis: name ?-option value ...?
-            set paramsNames [list c cj cjsw defw narrow tc1 tc2 tnom]
-            next $name c [my argsPreprocess $paramsNames {*}$args]
+            next $name c [my argsPreprocess [list c cj cjsw defw narrow tc1 tc2 tnom] {*}$args]
         }
     }
 
@@ -68,8 +66,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ::SpiceGenTcl::Xyce::BasicDevices::LModel new indmod -tc1 1 -tc2 2
             # ```
             # Synopsis: name ?-option value ...?
-            set paramsNames [list ic l tc1 tc2 tnom]
-            next $name l [my argsPreprocess $paramsNames {*}$args]
+            next $name l [my argsPreprocess [list ic l tc1 tc2 tnom] {*}$args]
         }
     }    
     
@@ -86,8 +83,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ::SpiceGenTcl::Ngspice::BasicDevices::VSwitchModel new swmod -von 1 -voff 0.5 -ron 1 -roff 1e6
             # ```
             # Synopsis: name ?-option value ...?
-            set paramsNames [list off on roff ron voff von]
-            next $name vswitch [my argsPreprocess $paramsNames {*}$args]
+            next $name vswitch [my argsPreprocess [list off on roff ron voff von] {*}$args]
         }
     }
 
@@ -104,8 +100,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ::SpiceGenTcl::Ngspice::BasicDevices::CSwitchModel new cswmod -ion 1 -ioff 0.5 -ron 1 -roff 1e6
             # ```
             # Synopsis: name ?-option value ...?
-            set paramsNames [list ioff ion off on roff ron]
-            next $name iswitch [my argsPreprocess $paramsNames {*}$args]
+            next $name iswitch [my argsPreprocess [list ioff ion off on roff ron] {*}$args]
         }
     }
 }
@@ -172,8 +167,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             # ```
             # Synopsis: name type ?-option value ...?
             set paramsNames [list af b beta cgd cgs delta fc is kf lambda pb rd rs tempmodel theta tnom vto]
-            set params [my argsPreprocess $paramsNames {*}$args]
-            next $name $type [linsert $params 0 [list level 1]]
+            next $name $type [linsert [my argsPreprocess $paramsNames {*}$args] 0 [list level 1]]
         }
     }
     
@@ -192,8 +186,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             # ```
             # Synopsis: name type ?-option value ...?
             set paramsNames [list af b beta cgd cgs delta fc is kf lambda pb rd rs tempmodel theta tnom vto]
-            set params [my argsPreprocess $paramsNames {*}$args]
-            next $name $type [linsert $params 0 [list level 2]]
+            next $name $type [linsert [my argsPreprocess $paramsNames {*}$args] 0 [list level 2]]
         }
     } 
     
@@ -212,8 +205,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             # ```
             # Synopsis: name type ?-option value ...?
             set paramsNames [list af alpha b beta cgd cgs fc is kf lambda pb rd rs tempmodel tnom vto]
-            set params [my argsPreprocess $paramsNames {*}$args]
-            next $name $type [linsert $params 0 [list level 1]]
+            next $name $type [linsert [my argsPreprocess $paramsNames {*}$args] 0 [list level 1]]
         }
     } 
 }
