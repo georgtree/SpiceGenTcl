@@ -1475,50 +1475,7 @@ namespace eval ::SpiceGenTcl {
             }
         }
         method getParams {*}[info class definition ::SpiceGenTcl::Device getParams]
-        method addParam {paramName value args} {
-            # Adds new Parameter object to the list `Params`.
-            #  paramName - name of parameter
-            #  value - value of parameter
-            #  -eq - parameter is of class [::SpiceGenTcl::ParameterEquation], optional, forbids other switches
-            #  -poseq - parameter is of class [::SpiceGenTcl::ParameterPositionalEquation], optional, forbids other 
-            #    switches
-            #  -posnocheck - parameter is of class [::SpiceGenTcl::ParameterPositionalNoCheck], optional, forbids other 
-            #    switches
-            #  -pos - parameter is of class [::SpiceGenTcl::ParameterPositional], optional, forbids other switches
-            #  -nocheck - parameter is of class [::SpiceGenTcl::ParameterNoCheck], optional, forbids other switches
-            # Synopsis: paramName value ?-name value? ?-eq|-poseq|-posnocheck|-pos|-nocheck?
-            set arguments [argparse {
-                {-eq -forbid {poseq posnocheck pos nocheck}}
-                {-poseq -forbid {eq posnocheck pos nocheck}}
-                {-posnocheck -forbid {eq poseq pos nocheck}}
-                {-pos -forbid {eq poseq posnocheck nocheck}}
-                {-nocheck -forbid {eq poseq posnocheck pos}}
-            }]
-            set paramName [string tolower $paramName]
-            if {[info exists Params]} {
-                set paramList [dict keys $Params]
-            }
-            lappend paramList $paramName
-            if {[my duplListCheck $paramList]} {
-                return -code error "Parameters list '$paramList' has already contains parameter with name '$paramName'"
-            }
-            if {$value=="-sw"} {
-                dict append Params $paramName [::SpiceGenTcl::ParameterSwitch new $paramName]
-            } elseif {[info exists eq]} {
-                dict append Params $paramName [::SpiceGenTcl::ParameterEquation new $paramName $value]
-            } elseif {[info exists poseq]} {
-                dict append Params $paramName [::SpiceGenTcl::ParameterPositionalEquation new $paramName $value]
-            } elseif {[info exists posnocheck]} {
-                dict append Params $paramName [::SpiceGenTcl::ParameterPositionalNoCheck new $paramName $value]
-            } elseif {[info exists pos]} {
-                dict append Params $paramName [::SpiceGenTcl::ParameterPositional new $paramName $value]
-            } elseif {[info exists nocheck]} {
-                dict append Params $paramName [::SpiceGenTcl::ParameterNoCheck new $paramName $value]
-            } else {
-                dict append Params $paramName [::SpiceGenTcl::Parameter new $paramName $value]
-            }
-            return
-        }
+        method addParam {*}[info class definition ::SpiceGenTcl::Device addParam]
         method deleteParam {*}[info class definition ::SpiceGenTcl::Device deleteParam]
         method setParamValue {*}[info class definition ::SpiceGenTcl::Device setParamValue] 
         method genSPICEString {} {
