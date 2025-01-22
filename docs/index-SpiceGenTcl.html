@@ -242,8 +242,7 @@
     <i><font color=#76a396># Deletes existing `Parameter` object from list `Params`.</font></i>
     <i><font color=#76a396>#  paramName - name of parameter that will be deleted</font></i>
     <b><font color=#ffa500>set</font></b> paramName [<b><font color=#ffa500>string</font></b> tolower <font color=#f1b479>$paramName</font>]
-    <b><font color=#ffa500>set</font></b> error [<b><font color=#ffa500>catch</font></b> {<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>}]
-    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$error</font>&gt;0} {
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>catch</font></b> {<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>}]} {
         <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Parameter with name '<font color=#f1b479>$</font>paramName' was not found in device's '<font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font>' list of parameters '<font color=#f1b479>[</font>dict keys <font color=#f1b479>[</font>my getParams<font color=#f1b479>]]</font>'&quot;</font>
     } <b><font color=#ffa500>else</font></b> {
         <b><font color=#ffa500>set</font></b> Params [<b><font color=#ffa500>dict</font></b> remove <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>]
@@ -263,10 +262,7 @@
     <i><font color=#76a396># Creates analysis for SPICE netlist.</font></i>
     <i><font color=#76a396># Returns: string SPICE netlist's string</font></i>
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> exists Params]} {
-        <b><font color=#ffa500>dict</font></b> for {paramName param} <font color=#f1b479>$Params</font> {
-            <b><font color=#ffa500>lappend</font></b> params [<font color=#f1b479>$param</font> genSPICEString]
-        }
-        <b><font color=#fe6efe>return</font></b> <font color=#90ee90>&quot;.<font color=#f1b479>[</font>my configure -type<font color=#f1b479>]</font> <font color=#f1b479>[</font>join <font color=#f1b479>$</font>params<font color=#f1b479>]</font>&quot;</font>
+        <b><font color=#fe6efe>return</font></b> <font color=#90ee90>&quot;.<font color=#f1b479>[</font>my configure -type<font color=#f1b479>]</font> <font color=#f1b479>[</font>join <font color=#f1b479>[</font>lmap param <font color=#f1b479>[</font>dict values <font color=#f1b479>$</font>Params<font color=#f1b479>]</font> <font color=#f1b479>{$</font>param genSPICEString<font color=#f1b479>}]]</font>&quot;</font>
     } <b><font color=#ffa500>else</font></b> {
         <b><font color=#fe6efe>return</font></b> <font color=#90ee90>&quot;.<font color=#f1b479>[</font>my configure -type<font color=#f1b479>]</font>&quot;</font>
     }
@@ -284,11 +280,7 @@
     <i><font color=#76a396># Gets the dictionary that contains parameter name as keys and</font></i>
     <i><font color=#76a396>#  parameter values as the values.</font></i>
     <i><font color=#76a396># Returns: parameters dictionary</font></i>
-    <b><font color=#ffa500>set</font></b> tempDict [<b><font color=#ffa500>dcreate</font></b>]
-    <b><font color=#ffa500>dict</font></b> for {paramName param} <font color=#f1b479>$Params</font> {
-        <b><font color=#ffa500>dict</font></b> append tempDict <font color=#f1b479>$paramName</font> [<font color=#f1b479>$param</font> configure <font color=#b9b96e>-value</font>]
-    }
-    <b><font color=#fe6efe>return</font></b> <font color=#f1b479>$tempDict</font>
+    <b><font color=#fe6efe>return</font></b> [<b><font color=#ffa500>dict</font></b> map {paramName param} <font color=#f1b479>$Params</font> {<font color=#f1b479>$param</font> configure <font color=#b9b96e>-value</font>}]
 }</pre></div>
 </div></details>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Analysis::setParamValue'>setParamValue</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis" title="::SpiceGenTcl::Analysis" class='ruff_cmd'>::SpiceGenTcl::Analysis</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Analysis'>Analysis</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
@@ -609,10 +601,7 @@
 
     <i><font color=#76a396># Creates circuit string for SPICE netlist.</font></i>
     <i><font color=#76a396># Returns: SPICE netlist's string</font></i>
-    <b><font color=#ffa500>lappend</font></b> totalStr [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-name</font>]
-    <b><font color=#ffa500>dict</font></b> for {elemName element} <font color=#f1b479>$Elements</font> {
-        <b><font color=#ffa500>lappend</font></b> totalStr [<font color=#f1b479>$element</font> genSPICEString]
-    }
+    <b><font color=#ffa500>lappend</font></b> totalStr [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-name</font>] {<b><font color=#ffa500>*</font></b>}[<b><font color=#ffa500>lmap</font></b> element [<b><font color=#ffa500>dict</font></b> values <font color=#f1b479>$Elements</font>] {<font color=#f1b479>$element</font> genSPICEString}]
     <b><font color=#fe6efe>return</font></b> [<b><font color=#ffa500>join</font></b> <font color=#f1b479>$totalStr</font> \n]
 }</pre></div>
 </div></details>
@@ -1045,8 +1034,7 @@
     <i><font color=#76a396># Deletes existing `Parameter` object from list `Params`.</font></i>
     <i><font color=#76a396>#  paramName - name of parameter that will be deleted</font></i>
     <b><font color=#ffa500>set</font></b> paramName [<b><font color=#ffa500>string</font></b> tolower <font color=#f1b479>$paramName</font>]
-    <b><font color=#ffa500>set</font></b> error [<b><font color=#ffa500>catch</font></b> {<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>}]
-    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$error</font>&gt;0} {
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>catch</font></b> {<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>}]} {
         <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Parameter with name '<font color=#f1b479>$</font>paramName' was not found in device's '<font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font>' list of parameters '<font color=#f1b479>[</font>dict keys <font color=#f1b479>[</font>my getParams<font color=#f1b479>]]</font>'&quot;</font>
     } <b><font color=#ffa500>else</font></b> {
         <b><font color=#ffa500>set</font></b> Params [<b><font color=#ffa500>dict</font></b> remove <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>]
@@ -1077,9 +1065,7 @@
         <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;&quot;</font>
         <b><font color=#fe6efe>return</font></b> <font color=#90ee90>&quot;<font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font> <font color=#f1b479>[</font>join <font color=#f1b479>$</font>nodes<font color=#f1b479>]</font>&quot;</font>
     } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>dict</font></b> for {paramName param} <font color=#f1b479>$Params</font> {
-            <b><font color=#ffa500>lappend</font></b> params [<font color=#f1b479>$param</font> genSPICEString]
-        }
+        <b><font color=#ffa500>set</font></b> params [<b><font color=#ffa500>lmap</font></b> param [<b><font color=#ffa500>dict</font></b> values <font color=#f1b479>$Params</font>] {<font color=#f1b479>$param</font> genSPICEString}]
         <b><font color=#fe6efe>return</font></b> <font color=#90ee90>&quot;<font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font> <font color=#f1b479>[</font>join <font color=#f1b479>$</font>nodes<font color=#f1b479>]</font> <font color=#f1b479>[</font>join <font color=#f1b479>$</font>params<font color=#f1b479>]</font>&quot;</font>
     }
 }</pre></div>
@@ -1096,11 +1082,7 @@
     <i><font color=#76a396># Gets the dictionary that contains parameter name as keys and</font></i>
     <i><font color=#76a396>#  parameter values as the values.</font></i>
     <i><font color=#76a396># Returns: parameters dictionary</font></i>
-    <b><font color=#ffa500>set</font></b> tempDict [<b><font color=#ffa500>dcreate</font></b>]
-    <b><font color=#ffa500>dict</font></b> for {paramName param} <font color=#f1b479>$Params</font> {
-        <b><font color=#ffa500>dict</font></b> append tempDict <font color=#f1b479>$paramName</font> [<font color=#f1b479>$param</font> configure <font color=#b9b96e>-value</font>]
-    }
-    <b><font color=#fe6efe>return</font></b> <font color=#f1b479>$tempDict</font>
+    <b><font color=#fe6efe>return</font></b> [<b><font color=#ffa500>dict</font></b> map {paramName param} <font color=#f1b479>$Params</font> {<font color=#f1b479>$param</font> configure <font color=#b9b96e>-value</font>}]
 }</pre></div>
 </div></details>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Device::getPins'>getPins</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device" title="::SpiceGenTcl::Device" class='ruff_cmd'>::SpiceGenTcl::Device</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Device'>Device</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
@@ -1115,11 +1097,7 @@
     <i><font color=#76a396># Gets the dictionary that contains pin name as keys and</font></i>
     <i><font color=#76a396>#  connected node name as the values.</font></i>
     <i><font color=#76a396># Returns: parameters dictionary</font></i>
-    <b><font color=#ffa500>set</font></b> tempDict [<b><font color=#ffa500>dcreate</font></b>]
-    <b><font color=#ffa500>dict</font></b> for {pinName pin} <font color=#f1b479>$Pins</font> {
-        <b><font color=#ffa500>dict</font></b> append tempDict <font color=#f1b479>$pinName</font> [<font color=#f1b479>$pin</font> configure <font color=#b9b96e>-nodename</font>]
-    }
-    <b><font color=#fe6efe>return</font></b> <font color=#f1b479>$tempDict</font>
+    <b><font color=#fe6efe>return</font></b> [<b><font color=#ffa500>dict</font></b> map {pinName pin} <font color=#f1b479>$Pins</font> {<font color=#f1b479>$pin</font> configure <font color=#b9b96e>-nodename</font>}]
 }</pre></div>
 </div></details>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Device::setParamValue'>setParamValue</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device" title="::SpiceGenTcl::Device" class='ruff_cmd'>::SpiceGenTcl::Device</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Device'>Device</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
@@ -1602,8 +1580,7 @@
     <i><font color=#76a396># Deletes existing `Parameter` object from list `Params`.</font></i>
     <i><font color=#76a396>#  paramName - name of parameter that will be deleted</font></i>
     <b><font color=#ffa500>set</font></b> paramName [<b><font color=#ffa500>string</font></b> tolower <font color=#f1b479>$paramName</font>]
-    <b><font color=#ffa500>set</font></b> error [<b><font color=#ffa500>catch</font></b> {<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>}]
-    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$error</font>&gt;0} {
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>catch</font></b> {<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>}]} {
         <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Parameter with name '<font color=#f1b479>$</font>paramName' was not found in device's '<font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font>' list of parameters '<font color=#f1b479>[</font>dict keys <font color=#f1b479>[</font>my getParams<font color=#f1b479>]]</font>'&quot;</font>
     } <b><font color=#ffa500>else</font></b> {
         <b><font color=#ffa500>set</font></b> Params [<b><font color=#ffa500>dict</font></b> remove <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>]
@@ -1626,9 +1603,7 @@
         <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;&quot;</font>
         <b><font color=#fe6efe>return</font></b> <font color=#90ee90>&quot;.model <font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font> <font color=#f1b479>[</font>my configure -type<font color=#f1b479>]</font>&quot;</font>
     } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>dict</font></b> for {paramName param} <font color=#f1b479>$Params</font> {
-            <b><font color=#ffa500>lappend</font></b> params [<font color=#f1b479>$param</font> genSPICEString]
-        }
+        <b><font color=#ffa500>set</font></b> params [<b><font color=#ffa500>lmap</font></b> param [<b><font color=#ffa500>dict</font></b> values <font color=#f1b479>$Params</font>] {<font color=#f1b479>$param</font> genSPICEString}]
         <b><font color=#fe6efe>return</font></b> <font color=#90ee90>&quot;.model <font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font> <font color=#f1b479>[</font>my configure -type<font color=#f1b479>]</font>(<font color=#f1b479>[</font>join <font color=#f1b479>$</font>params<font color=#f1b479>]</font>)&quot;</font>
     }
 }</pre></div>
@@ -1645,11 +1620,7 @@
     <i><font color=#76a396># Gets the dictionary that contains parameter name as keys and</font></i>
     <i><font color=#76a396>#  parameter values as the values.</font></i>
     <i><font color=#76a396># Returns: parameters dictionary</font></i>
-    <b><font color=#ffa500>set</font></b> tempDict [<b><font color=#ffa500>dcreate</font></b>]
-    <b><font color=#ffa500>dict</font></b> for {paramName param} <font color=#f1b479>$Params</font> {
-        <b><font color=#ffa500>dict</font></b> append tempDict <font color=#f1b479>$paramName</font> [<font color=#f1b479>$param</font> configure <font color=#b9b96e>-value</font>]
-    }
-    <b><font color=#fe6efe>return</font></b> <font color=#f1b479>$tempDict</font>
+    <b><font color=#fe6efe>return</font></b> [<b><font color=#ffa500>dict</font></b> map {paramName param} <font color=#f1b479>$Params</font> {<font color=#f1b479>$param</font> configure <font color=#b9b96e>-value</font>}]
 }</pre></div>
 </div></details>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Model::setParamValue'>setParamValue</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model" title="::SpiceGenTcl::Model" class='ruff_cmd'>::SpiceGenTcl::Model</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Model'>Model</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
@@ -1793,10 +1764,7 @@
 
     <i><font color=#76a396># Creates netlist string for SPICE netlist.</font></i>
     <i><font color=#76a396># Returns: SPICE netlist's string</font></i>
-    <b><font color=#ffa500>dict</font></b> for {elemName element} <font color=#f1b479>$Elements</font> {
-        <b><font color=#ffa500>lappend</font></b> totalStr [<font color=#f1b479>$element</font> genSPICEString]
-    }
-    <b><font color=#fe6efe>return</font></b> [<b><font color=#ffa500>join</font></b> <font color=#f1b479>$totalStr</font> \n]
+    <b><font color=#fe6efe>return</font></b> [<b><font color=#ffa500>join</font></b> [<b><font color=#ffa500>lmap</font></b> element [<b><font color=#ffa500>dict</font></b> values <font color=#f1b479>$Elements</font>] {<font color=#f1b479>$element</font> genSPICEString}] \n]
 }</pre></div>
 </div></details>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Netlist::getAllElemNames'>getAllElemNames</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Netlist" title="::SpiceGenTcl::Netlist" class='ruff_cmd'>::SpiceGenTcl::Netlist</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Netlist'>Netlist</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
@@ -1810,10 +1778,7 @@
 
     <i><font color=#76a396># Gets names of all elements in netlist.</font></i>
     <i><font color=#76a396># Returns: list of elements names</font></i>
-    <b><font color=#ffa500>dict</font></b> for {elemName elem} <font color=#f1b479>$Elements</font> {
-        <b><font color=#ffa500>lappend</font></b> names <font color=#f1b479>$elemName</font>
-    }
-    <b><font color=#fe6efe>return</font></b> <font color=#f1b479>$names</font>
+    <b><font color=#fe6efe>return</font></b> [<b><font color=#ffa500>dict</font></b> keys <font color=#f1b479>$Elements</font>]
 }</pre></div>
 </div></details>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Netlist::getElement'>getElement</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Netlist" title="::SpiceGenTcl::Netlist" class='ruff_cmd'>::SpiceGenTcl::Netlist</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Netlist'>Netlist</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
@@ -1942,8 +1907,7 @@
     <i><font color=#76a396># Deletes existing `Parameter` object from list `Params`.</font></i>
     <i><font color=#76a396>#  paramName - name of parameter that will be deleted</font></i>
     <b><font color=#ffa500>set</font></b> paramName [<b><font color=#ffa500>string</font></b> tolower <font color=#f1b479>$paramName</font>]
-    <b><font color=#ffa500>set</font></b> error [<b><font color=#ffa500>catch</font></b> {<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>}]
-    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$error</font>&gt;0} {
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>catch</font></b> {<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>}]} {
         <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Parameter with name '<font color=#f1b479>$</font>paramName' was not found in device's '<font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font>' list of parameters '<font color=#f1b479>[</font>dict keys <font color=#f1b479>[</font>my getParams<font color=#f1b479>]]</font>'&quot;</font>
     } <b><font color=#ffa500>else</font></b> {
         <b><font color=#ffa500>set</font></b> Params [<b><font color=#ffa500>dict</font></b> remove <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>]
@@ -1962,10 +1926,7 @@
 
     <i><font color=#76a396># Creates options string for SPICE netlist.</font></i>
     <i><font color=#76a396># Returns: SPICE netlist's string</font></i>
-    <b><font color=#ffa500>dict</font></b> for {paramName param} <font color=#f1b479>$Params</font> {
-        <b><font color=#ffa500>lappend</font></b> params [<font color=#f1b479>$param</font> genSPICEString]
-    }
-    <b><font color=#fe6efe>return</font></b> <font color=#90ee90>&quot;.options <font color=#f1b479>[</font>join <font color=#f1b479>$</font>params<font color=#f1b479>]</font>&quot;</font>
+    <b><font color=#fe6efe>return</font></b> <font color=#90ee90>&quot;.options <font color=#f1b479>[</font>join <font color=#f1b479>[</font>lmap param <font color=#f1b479>[</font>dict values <font color=#f1b479>$</font>Params<font color=#f1b479>]</font> <font color=#f1b479>{$</font>param genSPICEString<font color=#f1b479>}]]</font>&quot;</font>
 }</pre></div>
 </div></details>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Options::getParams'>getParams</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Options" title="::SpiceGenTcl::Options" class='ruff_cmd'>::SpiceGenTcl::Options</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Options'>Options</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
@@ -1980,16 +1941,7 @@
     <i><font color=#76a396># Gets the dictionary that contains parameter name as keys and</font></i>
     <i><font color=#76a396>#  parameter values as the values.</font></i>
     <i><font color=#76a396># Returns: parameters dictionary</font></i>
-    <b><font color=#ffa500>set</font></b> tempDict [<b><font color=#ffa500>dcreate</font></b>]
-    <b><font color=#ffa500>dict</font></b> for {paramName param} <font color=#f1b479>$Params</font> {
-        <i><font color=#76a396># check if parameter doesn't have value, it means that we return {} for switch parameter</font></i>
-        <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>catch</font></b> {<font color=#f1b479>$param</font> configure <font color=#b9b96e>-value</font>}]} {
-            <b><font color=#ffa500>dict</font></b> append tempDict <font color=#f1b479>$paramName</font> <font color=#90ee90>&quot;&quot;</font>
-        } <b><font color=#ffa500>else</font></b> {
-            <b><font color=#ffa500>dict</font></b> append tempDict <font color=#f1b479>$paramName</font> [<font color=#f1b479>$param</font> configure <font color=#b9b96e>-value</font>]
-        }
-    }
-    <b><font color=#fe6efe>return</font></b> <font color=#f1b479>$tempDict</font>
+    <b><font color=#fe6efe>return</font></b> [<b><font color=#ffa500>dict</font></b> map {paramName param} <font color=#f1b479>$Params</font> {<b><font color=#ffa500>expr</font></b> {[<b><font color=#ffa500>catch</font></b> {<font color=#f1b479>$param</font> configure <font color=#b9b96e>-value</font>}] ? <font color=#90ee90>&quot;&quot;</font> : [<font color=#f1b479>$param</font> configure <font color=#b9b96e>-value</font>]}}]
 }</pre></div>
 </div></details>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Options::setParamValue'>setParamValue</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Options" title="::SpiceGenTcl::Options" class='ruff_cmd'>::SpiceGenTcl::Options</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Options'>Options</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
@@ -2487,8 +2439,7 @@
     <i><font color=#76a396># Deletes existing `Parameter` object from list `Params`.</font></i>
     <i><font color=#76a396>#  paramName - name of parameter that will be deleted</font></i>
     <b><font color=#ffa500>set</font></b> paramName [<b><font color=#ffa500>string</font></b> tolower <font color=#f1b479>$paramName</font>]
-    <b><font color=#ffa500>set</font></b> error [<b><font color=#ffa500>catch</font></b> {<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>}]
-    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$error</font>&gt;0} {
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>catch</font></b> {<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>}]} {
         <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Parameter with name '<font color=#f1b479>$</font>paramName' was not found in device's '<font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font>' list of parameters '<font color=#f1b479>[</font>dict keys <font color=#f1b479>[</font>my getParams<font color=#f1b479>]]</font>'&quot;</font>
     } <b><font color=#ffa500>else</font></b> {
         <b><font color=#ffa500>set</font></b> Params [<b><font color=#ffa500>dict</font></b> remove <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>]
@@ -2507,10 +2458,7 @@
 
     <i><font color=#76a396># Creates parameter statement string for SPICE netlist.</font></i>
     <i><font color=#76a396># Returns: SPICE netlist's string</font></i>
-    <b><font color=#ffa500>dict</font></b> for {paramName param} <font color=#f1b479>$Params</font> {
-        <b><font color=#ffa500>lappend</font></b> params [<font color=#f1b479>$param</font> genSPICEString]
-    }
-    <b><font color=#fe6efe>return</font></b> <font color=#90ee90>&quot;.param <font color=#f1b479>[</font>join <font color=#f1b479>$</font>params<font color=#f1b479>]</font>&quot;</font>
+    <b><font color=#fe6efe>return</font></b> <font color=#90ee90>&quot;.param <font color=#f1b479>[</font>join <font color=#f1b479>[</font>join <font color=#f1b479>[</font>lmap param <font color=#f1b479>[</font>dict values <font color=#f1b479>$</font>Params<font color=#f1b479>]</font> <font color=#f1b479>{$</font>param genSPICEString<font color=#f1b479>}]]]</font>&quot;</font>
 }</pre></div>
 </div></details>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::ParamStatement::getParams'>getParams</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement" title="::SpiceGenTcl::ParamStatement" class='ruff_cmd'>::SpiceGenTcl::ParamStatement</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement'>ParamStatement</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
@@ -2525,11 +2473,7 @@
     <i><font color=#76a396># Gets the dictionary that contains parameter name as keys and</font></i>
     <i><font color=#76a396>#  parameter values as the values.</font></i>
     <i><font color=#76a396># Returns: parameters dictionary</font></i>
-    <b><font color=#ffa500>set</font></b> tempDict [<b><font color=#ffa500>dcreate</font></b>]
-    <b><font color=#ffa500>dict</font></b> for {paramName param} <font color=#f1b479>$Params</font> {
-        <b><font color=#ffa500>dict</font></b> append tempDict <font color=#f1b479>$paramName</font> [<font color=#f1b479>$param</font> configure <font color=#b9b96e>-value</font>]
-    }
-    <b><font color=#fe6efe>return</font></b> <font color=#f1b479>$tempDict</font>
+    <b><font color=#fe6efe>return</font></b> [<b><font color=#ffa500>dict</font></b> map {paramName param} <font color=#f1b479>$Params</font> {<font color=#f1b479>$param</font> configure <font color=#b9b96e>-value</font>}]
 }</pre></div>
 </div></details>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::ParamStatement::setParamValue'>setParamValue</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement" title="::SpiceGenTcl::ParamStatement" class='ruff_cmd'>::SpiceGenTcl::ParamStatement</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement'>ParamStatement</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
@@ -2880,12 +2824,7 @@
 <div id='SpiceGenTcl_RawFile_getCurrentsNames' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> getCurrentsNames {} {
 
     <i><font color=#76a396># Returns list that contains names of all current variables</font></i>
-    <b><font color=#ffa500>foreach</font></b> trace [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-Traces</font>] {
-        <b><font color=#ffa500>if</font></b> {[<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-Type</font>]==<font color=#90ee90>&quot;current&quot;</font>} {
-            <b><font color=#ffa500>lappend</font></b> currNames [<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-name</font>]
-        }
-    }
-    <b><font color=#fe6efe>return</font></b> <font color=#f1b479>$currNames</font>
+    <b><font color=#fe6efe>return</font></b> [<b><font color=#ffa500>lmap</font></b> trace [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-Traces</font>] {<b><font color=#ffa500>expr</font></b> {[<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-Type</font>]==<font color=#90ee90>&quot;current&quot;</font> ? [<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-name</font>] : [<b><font color=#fe6efe>continue</font></b>]}}]
 }</pre></div>
 </div></details>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::RawFile::getTrace'>getTrace</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile" title="::SpiceGenTcl::RawFile" class='ruff_cmd'>::SpiceGenTcl::RawFile</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawFile'>RawFile</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
@@ -2943,11 +2882,7 @@
         <b><font color=#ffa500>set</font></b> tracesDict [<b><font color=#fe6efe>my</font></b> getTracesData]
         <b><font color=#ffa500>set</font></b> tracesList [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>dict</font></b> keys <font color=#f1b479>$tracesDict</font>]]
         <b><font color=#ffa500>for</font></b> {<b><font color=#ffa500>set</font></b> i 0} {<font color=#f1b479>$i</font>&lt;[<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-NPoints</font>]} {<b><font color=#ffa500>incr</font></b> i} {
-            <b><font color=#ffa500>dict</font></b> for {traceName traceValues} <font color=#f1b479>$tracesDict</font> {
-                <b><font color=#ffa500>lappend</font></b> row [@ <font color=#f1b479>$traceValues</font> <font color=#f1b479>$i</font>]
-            }
-            <b><font color=#ffa500>lappend</font></b> tracesList <font color=#f1b479>$row</font>
-            <b><font color=#ffa500>unset</font></b> row
+            <b><font color=#ffa500>lappend</font></b> tracesList [<b><font color=#ffa500>lmap</font></b> traceValues [<b><font color=#ffa500>dict</font></b> values <font color=#f1b479>$tracesDict</font>] {@ <font color=#f1b479>$traceValues</font> <font color=#f1b479>$i</font>}]
         }
     } <b><font color=#ffa500>elseif</font></b> {[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> traces]!=<font color=#90ee90>&quot;&quot;</font>} {
         <b><font color=#ffa500>foreach</font></b> traceName [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> traces] {
@@ -2956,11 +2891,7 @@
         }
         <b><font color=#ffa500>set</font></b> tracesList [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>dict</font></b> keys <font color=#f1b479>$tracesDict</font>]]
         <b><font color=#ffa500>for</font></b> {<b><font color=#ffa500>set</font></b> i 0} {<font color=#f1b479>$i</font>&lt;[<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-NPoints</font>]} {<b><font color=#ffa500>incr</font></b> i} {
-            <b><font color=#ffa500>dict</font></b> for {traceName traceValues} <font color=#f1b479>$tracesDict</font> {
-                <b><font color=#ffa500>lappend</font></b> row [@ <font color=#f1b479>$traceValues</font> <font color=#f1b479>$i</font>]
-            }
-            <b><font color=#ffa500>lappend</font></b> tracesList <font color=#f1b479>$row</font>
-            <b><font color=#ffa500>unset</font></b> row
+            <b><font color=#ffa500>lappend</font></b> tracesList [<b><font color=#ffa500>lmap</font></b> traceValues [<b><font color=#ffa500>dict</font></b> values <font color=#f1b479>$tracesDict</font>] {@ <font color=#f1b479>$traceValues</font> <font color=#f1b479>$i</font>}]
         }
     } <b><font color=#ffa500>else</font></b> {
         <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Arguments '-all' or '-traces traceName1 traceName2 ...' must be provided to 'getTracesCsv' method&quot;</font>
@@ -2995,10 +2926,7 @@
 <div id='SpiceGenTcl_RawFile_getTracesStr' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> getTracesStr {} {
 
     <i><font color=#76a396># Returns information about all Traces in raw file in form of string</font></i>
-    <b><font color=#ffa500>foreach</font></b> trace [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-Traces</font>] {
-        <b><font color=#ffa500>lappend</font></b> tracesList <font color=#90ee90>&quot;<font color=#f1b479>[$</font>trace configure -name<font color=#f1b479>]</font> <font color=#f1b479>[$</font>trace configure -Type<font color=#f1b479>]</font> <font color=#f1b479>[$</font>trace configure -NumType<font color=#f1b479>]</font>&quot;</font>
-    }
-    <b><font color=#fe6efe>return</font></b> <font color=#f1b479>$tracesList</font>
+    <b><font color=#fe6efe>return</font></b> [<b><font color=#ffa500>lmap</font></b> trace [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-Traces</font>] {<b><font color=#ffa500>join</font></b> [<b><font color=#ffa500>list</font></b> [<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-name</font>] [<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-Type</font>] [<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-NumType</font>]]}]
 }</pre></div>
 </div></details>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::RawFile::getVariablesNames'>getVariablesNames</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile" title="::SpiceGenTcl::RawFile" class='ruff_cmd'>::SpiceGenTcl::RawFile</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawFile'>RawFile</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
@@ -3011,10 +2939,7 @@
 <div id='SpiceGenTcl_RawFile_getVariablesNames' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> getVariablesNames {} {
 
     <i><font color=#76a396># Returns list that contains names of all variables</font></i>
-    <b><font color=#ffa500>foreach</font></b> trace [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-Traces</font>] {
-        <b><font color=#ffa500>lappend</font></b> tracesNames [<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-name</font>]
-    }
-    <b><font color=#fe6efe>return</font></b> <font color=#f1b479>$tracesNames</font>
+    <b><font color=#fe6efe>return</font></b> [<b><font color=#ffa500>lmap</font></b> trace [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-Traces</font>] {<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-name</font>}]
 }</pre></div>
 </div></details>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::RawFile::getVoltagesNames'>getVoltagesNames</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile" title="::SpiceGenTcl::RawFile" class='ruff_cmd'>::SpiceGenTcl::RawFile</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawFile'>RawFile</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
@@ -3027,12 +2952,7 @@
 <div id='SpiceGenTcl_RawFile_getVoltagesNames' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> getVoltagesNames {} {
 
     <i><font color=#76a396># Returns list that contains names of all voltage variables</font></i>
-    <b><font color=#ffa500>foreach</font></b> trace [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-Traces</font>] {
-        <b><font color=#ffa500>if</font></b> {[<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-Type</font>]==<font color=#90ee90>&quot;voltage&quot;</font>} {
-            <b><font color=#ffa500>lappend</font></b> voltNames [<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-name</font>]
-        }
-    }
-    <b><font color=#fe6efe>return</font></b> <font color=#f1b479>$voltNames</font>
+    <b><font color=#fe6efe>return</font></b> [<b><font color=#ffa500>lmap</font></b> trace [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-Traces</font>] {<b><font color=#ffa500>expr</font></b> {[<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-Type</font>]==<font color=#90ee90>&quot;voltage&quot;</font> ? [<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-name</font>] : [<b><font color=#fe6efe>continue</font></b>]}}]
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::RawString'>RawString</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl" title="::SpiceGenTcl" class='ruff_cmd'>::SpiceGenTcl</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -3304,8 +3224,7 @@
     <i><font color=#76a396># Deletes existing `Parameter` object from list `Params`.</font></i>
     <i><font color=#76a396>#  paramName - name of parameter that will be deleted</font></i>
     <b><font color=#ffa500>set</font></b> paramName [<b><font color=#ffa500>string</font></b> tolower <font color=#f1b479>$paramName</font>]
-    <b><font color=#ffa500>set</font></b> error [<b><font color=#ffa500>catch</font></b> {<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>}]
-    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$error</font>&gt;0} {
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>catch</font></b> {<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>}]} {
         <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Parameter with name '<font color=#f1b479>$</font>paramName' was not found in device's '<font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font>' list of parameters '<font color=#f1b479>[</font>dict keys <font color=#f1b479>[</font>my getParams<font color=#f1b479>]]</font>'&quot;</font>
     } <b><font color=#ffa500>else</font></b> {
         <b><font color=#ffa500>set</font></b> Params [<b><font color=#ffa500>dict</font></b> remove <font color=#f1b479>$Params</font> <font color=#f1b479>$paramName</font>]
@@ -3325,22 +3244,16 @@
     <i><font color=#76a396># Creates subcircuit string for SPICE subcircuit.</font></i>
     <i><font color=#76a396># Returns: SPICE netlist's string</font></i>
     <b><font color=#ffa500>set</font></b> name [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-name</font>]
-    <b><font color=#ffa500>dict</font></b> for {pinName pin} <font color=#f1b479>$Pins</font> {
-        <b><font color=#ffa500>lappend</font></b> nodes [<font color=#f1b479>$pin</font> configure <font color=#b9b96e>-name</font>]
-    }
+    <b><font color=#ffa500>set</font></b> nodes [<b><font color=#ffa500>lmap</font></b> pin [<b><font color=#ffa500>dict</font></b> values <font color=#f1b479>$Pins</font>] {<font color=#f1b479>$pin</font> configure <font color=#b9b96e>-name</font>}]
     <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$Params</font>==&quot;&quot;} {
-        <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;&quot;</font>
         <b><font color=#ffa500>set</font></b> header <font color=#90ee90>&quot;.subckt <font color=#f1b479>$</font>name <font color=#f1b479>[</font>join <font color=#f1b479>$</font>nodes<font color=#f1b479>]</font>&quot;</font>
     } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>dict</font></b> for {paramName param} <font color=#f1b479>$Params</font> {
-            <b><font color=#ffa500>lappend</font></b> params [<font color=#f1b479>$param</font> genSPICEString]
-        }
+        <b><font color=#ffa500>set</font></b> params [<b><font color=#ffa500>lmap</font></b> param [<b><font color=#ffa500>dict</font></b> values <font color=#f1b479>$Params</font>] {<font color=#f1b479>$param</font> genSPICEString}]
         <b><font color=#ffa500>set</font></b> header <font color=#90ee90>&quot;.subckt <font color=#f1b479>$</font>name <font color=#f1b479>[</font>join <font color=#f1b479>$</font>nodes<font color=#f1b479>]</font> <font color=#f1b479>[</font>join <font color=#f1b479>$</font>params<font color=#f1b479>]</font>&quot;</font>
     }
     <i><font color=#76a396># get netlist elements from netlist genSPICEString method</font></i>
     <b><font color=#ffa500>set</font></b> resStr [<b><font color=#ffa500>next</font></b>]
-    <b><font color=#ffa500>set</font></b> end <font color=#90ee90>&quot;.ends&quot;</font>
-    <b><font color=#fe6efe>return</font></b> [<b><font color=#ffa500>join</font></b> [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$header</font> <font color=#f1b479>$resStr</font> <font color=#f1b479>$end</font>] \n]
+    <b><font color=#fe6efe>return</font></b> [<b><font color=#ffa500>join</font></b> [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$header</font> <font color=#f1b479>$resStr</font> .ends] \n]
 }</pre></div>
 </div></details>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Subcircuit::getParams'>getParams</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Subcircuit" title="::SpiceGenTcl::Subcircuit" class='ruff_cmd'>::SpiceGenTcl::Subcircuit</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Subcircuit'>Subcircuit</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
@@ -3355,11 +3268,7 @@
     <i><font color=#76a396># Gets the dictionary that contains parameter name as keys and</font></i>
     <i><font color=#76a396>#  parameter values as the values.</font></i>
     <i><font color=#76a396># Returns: parameters dictionary</font></i>
-    <b><font color=#ffa500>set</font></b> tempDict [<b><font color=#ffa500>dcreate</font></b>]
-    <b><font color=#ffa500>dict</font></b> for {paramName param} <font color=#f1b479>$Params</font> {
-        <b><font color=#ffa500>dict</font></b> append tempDict <font color=#f1b479>$paramName</font> [<font color=#f1b479>$param</font> configure <font color=#b9b96e>-value</font>]
-    }
-    <b><font color=#fe6efe>return</font></b> <font color=#f1b479>$tempDict</font>
+    <b><font color=#fe6efe>return</font></b> [<b><font color=#ffa500>dict</font></b> map {paramName param} <font color=#f1b479>$Params</font> {<font color=#f1b479>$param</font> configure <font color=#b9b96e>-value</font>}]
 }</pre></div>
 </div></details>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Subcircuit::getPins'>getPins</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Subcircuit" title="::SpiceGenTcl::Subcircuit" class='ruff_cmd'>::SpiceGenTcl::Subcircuit</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Subcircuit'>Subcircuit</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
@@ -3374,11 +3283,7 @@
     <i><font color=#76a396># Gets the dictionary that contains pin name as keys and</font></i>
     <i><font color=#76a396>#  connected node name as the values.</font></i>
     <i><font color=#76a396># Returns: parameters dictionary</font></i>
-    <b><font color=#ffa500>set</font></b> tempDict [<b><font color=#ffa500>dcreate</font></b>]
-    <b><font color=#ffa500>dict</font></b> for {pinName pin} <font color=#f1b479>$Pins</font> {
-        <b><font color=#ffa500>dict</font></b> append tempDict <font color=#f1b479>$pinName</font> [<font color=#f1b479>$pin</font> configure <font color=#b9b96e>-nodename</font>]
-    }
-    <b><font color=#fe6efe>return</font></b> <font color=#f1b479>$tempDict</font>
+    <b><font color=#fe6efe>return</font></b> [<b><font color=#ffa500>dict</font></b> map {pinName pin} <font color=#f1b479>$Pins</font> {<font color=#f1b479>$pin</font> configure <font color=#b9b96e>-nodename</font>}]
 }</pre></div>
 </div></details>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Subcircuit::setParamValue'>setParamValue</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Subcircuit" title="::SpiceGenTcl::Subcircuit" class='ruff_cmd'>::SpiceGenTcl::Subcircuit</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Subcircuit'>Subcircuit</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
@@ -3505,6 +3410,11 @@
     <b><font color=#ffa500>next</font></b> <font color=#f1b479>$name</font> <font color=#f1b479>$type</font> <font color=#f1b479>$len</font> <font color=#f1b479>$numType</font>
 }</pre></div>
 </div></details>
+<h3 class='ruffclass'><a name='::SpiceGenTcl::Utility'>Utility</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl" title="::SpiceGenTcl" class='ruff_cmd'>::SpiceGenTcl</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
+<div style='clear:both;'></div>
+<h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
+</table>
+<h5 class='ruff'>Subclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::pulse" title="::SpiceGenTcl::Common::Sources::pulse" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::pulse</a>, <a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::sin" title="::SpiceGenTcl::Common::Sources::sin" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::sin</a>, <a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::exp" title="::SpiceGenTcl::Common::Sources::exp" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::exp</a>, <a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::sffm" title="::SpiceGenTcl::Common::Sources::sffm" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::sffm</a>, <a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::pulse" title="::SpiceGenTcl::Ngspice::Sources::pulse" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources::pulse</a>, <a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::sffm" title="::SpiceGenTcl::Ngspice::Sources::sffm" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources::sffm</a>, <a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::am" title="::SpiceGenTcl::Ngspice::Sources::am" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources::am</a>, <a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Dc" title="::SpiceGenTcl::Ngspice::Analyses::Dc" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::Dc</a>, <a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Ac" title="::SpiceGenTcl::Ngspice::Analyses::Ac" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::Ac</a>, <a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Sp" title="::SpiceGenTcl::Ngspice::Analyses::Sp" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::Sp</a>, <a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::SensAc" title="::SpiceGenTcl::Ngspice::Analyses::SensAc" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::SensAc</a>, <a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Tran" title="::SpiceGenTcl::Ngspice::Analyses::Tran" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::Tran</a>, <a href="index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Dc" title="::SpiceGenTcl::Xyce::Analyses::Dc" class='ruff_cmd'>::SpiceGenTcl::Xyce::Analyses::Dc</a>, <a href="index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Ac" title="::SpiceGenTcl::Xyce::Analyses::Ac" class='ruff_cmd'>::SpiceGenTcl::Xyce::Analyses::Ac</a>, <a href="index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Tran" title="::SpiceGenTcl::Xyce::Analyses::Tran" class='ruff_cmd'>::SpiceGenTcl::Xyce::Analyses::Tran</a></p>
 </main><nav class='ruff-nav'><ul ><li class='ruff-toc1'><a style='padding-top:2px;' href='index.html'>Start page</a></li>
 <li class='ruff-toc1'><a href='index-docindex.html' accesskey='i'>Index</a></li>
 <hr>
@@ -3665,5 +3575,5 @@
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Temp::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre>Creates .temp statement string for SPICE netlist.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Trace'>Trace</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Trace::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Trace</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name type len axis ?numType?&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Trace</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name type len axis ?numType?&lt;/span&gt;</pre>initialize trace
-</span></li></ul></nav><footer class='ruff-layout-footer ruff-ft'><div style='float: right;'>Document generated by <a href='https://ruff.magicsplat.com'>Ruff!</a></div><div>&copy; George Yashin</div></footer>
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Utility'>Utility</a></li></ul></nav><footer class='ruff-layout-footer ruff-ft'><div style='float: right;'>Document generated by <a href='https://ruff.magicsplat.com'>Ruff!</a></div><div>&copy; George Yashin</div></footer>
 </div></body></html>

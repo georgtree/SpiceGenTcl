@@ -33,6 +33,7 @@
 <h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#b9b96e>-name</font></code>, <code><font color=#b9b96e>-type</font></code></p>
 <p class='ruff'>Writable: <code><font color=#b9b96e>-name</font></code>, <code><font color=#b9b96e>-type</font></code></p>
 <h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis" title="::SpiceGenTcl::Analysis" class='ruff_cmd'>::SpiceGenTcl::Analysis</a></p>
+<h5 class='ruff'>Mixins</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility" title="::SpiceGenTcl::Utility" class='ruff_cmd'>::SpiceGenTcl::Utility</a></p>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::Analyses::Ac::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Ac" title="::SpiceGenTcl::Ngspice::Analyses::Ac" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::Ac</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Ac'>Ac</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Ac</font></b></code> that describes AC analysis.</p>
@@ -78,23 +79,10 @@
         {<font color=#b9b96e>-fstart</font>= <font color=#b9b96e>-required</font>}
         {<font color=#b9b96e>-fstop</font>= <font color=#b9b96e>-required</font>}
     }]
-    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> name]} {
-        <b><font color=#ffa500>set</font></b> name [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name]
-    } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>set</font></b> name [<b><font color=#fe6efe>self</font></b> object]
-    }
+    <b><font color=#fe6efe>my</font></b> NameProcess <font color=#f1b479>$arguments</font> [<b><font color=#fe6efe>self</font></b> object]
     <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;variation <font color=#f1b479>[</font>dget <font color=#f1b479>$</font>arguments variation<font color=#f1b479>]</font> -posnocheck&quot;</font>
     <b><font color=#ffa500>set</font></b> paramsOrder [<b><font color=#ffa500>list</font></b> n fstart fstop]
-    <b><font color=#ffa500>foreach</font></b> param <font color=#f1b479>$paramsOrder</font> {
-        <b><font color=#ffa500>dict</font></b> append argsOrdered <font color=#f1b479>$param</font> [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> <font color=#f1b479>$param</font>]
-    }
-    <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$argsOrdered</font> {
-        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$value</font>]&gt;1) && ([@ <font color=#f1b479>$value</font> 1]==<font color=#90ee90>&quot;-eq&quot;</font>)} {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;<font color=#f1b479>$</font>paramName <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>value 0<font color=#f1b479>]</font> -poseq&quot;</font>
-        } <b><font color=#ffa500>else</font></b> {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;<font color=#f1b479>$</font>paramName <font color=#f1b479>$</font>value -pos&quot;</font>
-        }
-    }
+    <b><font color=#fe6efe>my</font></b> ParamsProcess <font color=#f1b479>$paramsOrder</font> <font color=#f1b479>$arguments</font> params
     <b><font color=#ffa500>next</font></b> ac <font color=#f1b479>$params</font> <font color=#b9b96e>-name</font> <font color=#f1b479>$name</font>
 }</pre></div>
 </div></details>
@@ -114,6 +102,7 @@
 <h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#b9b96e>-name</font></code>, <code><font color=#b9b96e>-type</font></code></p>
 <p class='ruff'>Writable: <code><font color=#b9b96e>-name</font></code>, <code><font color=#b9b96e>-type</font></code></p>
 <h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis" title="::SpiceGenTcl::Analysis" class='ruff_cmd'>::SpiceGenTcl::Analysis</a></p>
+<h5 class='ruff'>Mixins</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility" title="::SpiceGenTcl::Utility" class='ruff_cmd'>::SpiceGenTcl::Utility</a></p>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::Analyses::Dc::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Dc" title="::SpiceGenTcl::Ngspice::Analyses::Dc" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::Dc</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Dc'>Dc</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Dc</font></b></code> that describes DC analysis.</p>
@@ -159,23 +148,10 @@
         {<font color=#b9b96e>-stop</font>= <font color=#b9b96e>-required</font>}
         {<font color=#b9b96e>-incr</font>= <font color=#b9b96e>-required</font>}
     }]
-    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> name]} {
-        <b><font color=#ffa500>set</font></b> name [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name]
-    } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>set</font></b> name [<b><font color=#fe6efe>self</font></b> object]
-    }
+    <b><font color=#fe6efe>my</font></b> NameProcess <font color=#f1b479>$arguments</font> [<b><font color=#fe6efe>self</font></b> object]
     <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;src <font color=#f1b479>[</font>dget <font color=#f1b479>$</font>arguments src<font color=#f1b479>]</font> -posnocheck&quot;</font>
     <b><font color=#ffa500>set</font></b> paramsOrder [<b><font color=#ffa500>list</font></b> start stop incr]
-    <b><font color=#ffa500>foreach</font></b> param <font color=#f1b479>$paramsOrder</font> {
-        <b><font color=#ffa500>dict</font></b> append argsOrdered <font color=#f1b479>$param</font> [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> <font color=#f1b479>$param</font>]
-    }
-    <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$argsOrdered</font> {
-        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$value</font>]&gt;1) && ([@ <font color=#f1b479>$value</font> 1]==<font color=#90ee90>&quot;-eq&quot;</font>)} {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;<font color=#f1b479>$</font>paramName <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>value 0<font color=#f1b479>]</font> -poseq&quot;</font>
-        } <b><font color=#ffa500>else</font></b> {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;<font color=#f1b479>$</font>paramName <font color=#f1b479>$</font>value -pos&quot;</font>
-        }
-    }
+    <b><font color=#fe6efe>my</font></b> ParamsProcess <font color=#f1b479>$paramsOrder</font> <font color=#f1b479>$arguments</font> params
     <b><font color=#ffa500>next</font></b> dc <font color=#f1b479>$params</font> <font color=#b9b96e>-name</font> <font color=#f1b479>$name</font>
 }</pre></div>
 </div></details>
@@ -228,11 +204,7 @@
     <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> {
         <font color=#b9b96e>-name</font>=
     }]
-    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> name]} {
-        <b><font color=#ffa500>set</font></b> name [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name]
-    } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>set</font></b> name [<b><font color=#fe6efe>self</font></b> object]
-    }
+    <b><font color=#fe6efe>my</font></b> NameProcess <font color=#f1b479>$arguments</font> [<b><font color=#fe6efe>self</font></b> object]
     <b><font color=#ffa500>next</font></b> op <font color=#90ee90>&quot;&quot;</font> <font color=#b9b96e>-name</font> <font color=#f1b479>$name</font>
 }</pre></div>
 </div></details>
@@ -252,6 +224,7 @@
 <h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#b9b96e>-name</font></code>, <code><font color=#b9b96e>-type</font></code></p>
 <p class='ruff'>Writable: <code><font color=#b9b96e>-name</font></code>, <code><font color=#b9b96e>-type</font></code></p>
 <h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis" title="::SpiceGenTcl::Analysis" class='ruff_cmd'>::SpiceGenTcl::Analysis</a></p>
+<h5 class='ruff'>Mixins</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility" title="::SpiceGenTcl::Utility" class='ruff_cmd'>::SpiceGenTcl::Utility</a></p>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::Analyses::SensAc::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::SensAc" title="::SpiceGenTcl::Ngspice::Analyses::SensAc" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::SensAc</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::SensAc'>SensAc</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>SensAc</font></b></code> that describes SENS ac analysis.</p>
@@ -300,25 +273,12 @@
         {<font color=#b9b96e>-fstart</font>= <font color=#b9b96e>-required</font>}
         {<font color=#b9b96e>-fstop</font>= <font color=#b9b96e>-required</font>}
     }]
-    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> name]} {
-        <b><font color=#ffa500>set</font></b> name [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name]
-    } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>set</font></b> name [<b><font color=#fe6efe>self</font></b> object]
-    }
+    <b><font color=#fe6efe>my</font></b> NameProcess <font color=#f1b479>$arguments</font> [<b><font color=#fe6efe>self</font></b> object]
     <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;outvar <font color=#f1b479>[</font>dget <font color=#f1b479>$</font>arguments outvar<font color=#f1b479>]</font> -posnocheck&quot;</font>
     <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;ac -sw&quot;</font>
     <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;variation <font color=#f1b479>[</font>dget <font color=#f1b479>$</font>arguments variation<font color=#f1b479>]</font> -posnocheck&quot;</font>
     <b><font color=#ffa500>set</font></b> paramsOrder [<b><font color=#ffa500>list</font></b> n fstart fstop]
-    <b><font color=#ffa500>foreach</font></b> param <font color=#f1b479>$paramsOrder</font> {
-        <b><font color=#ffa500>dict</font></b> append argsOrdered <font color=#f1b479>$param</font> [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> <font color=#f1b479>$param</font>]
-    }
-    <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$argsOrdered</font> {
-        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$value</font>]&gt;1) && ([@ <font color=#f1b479>$value</font> 1]==<font color=#90ee90>&quot;-eq&quot;</font>)} {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;<font color=#f1b479>$</font>paramName <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>value 0<font color=#f1b479>]</font> -poseq&quot;</font>
-        } <b><font color=#ffa500>else</font></b> {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;<font color=#f1b479>$</font>paramName <font color=#f1b479>$</font>value -pos&quot;</font>
-        }
-    }
+    <b><font color=#fe6efe>my</font></b> ParamsProcess <font color=#f1b479>$paramsOrder</font> <font color=#f1b479>$arguments</font> params
     <b><font color=#ffa500>next</font></b> sens <font color=#f1b479>$params</font> <font color=#b9b96e>-name</font> <font color=#f1b479>$name</font>
 }</pre></div>
 </div></details>
@@ -374,11 +334,7 @@
         <font color=#b9b96e>-name</font>=
         {<font color=#b9b96e>-outvar</font>= <font color=#b9b96e>-required</font>}
     }]
-    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> name]} {
-        <b><font color=#ffa500>set</font></b> name [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name]
-    } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>set</font></b> name [<b><font color=#fe6efe>self</font></b> object]
-    }
+    <b><font color=#fe6efe>my</font></b> NameProcess <font color=#f1b479>$arguments</font> [<b><font color=#fe6efe>self</font></b> object]
     <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;outvar <font color=#f1b479>[</font>dget <font color=#f1b479>$</font>arguments outvar<font color=#f1b479>]</font> -posnocheck&quot;</font>
     <b><font color=#ffa500>next</font></b> sens <font color=#f1b479>$params</font> <font color=#b9b96e>-name</font> <font color=#f1b479>$name</font>
 }</pre></div>
@@ -399,6 +355,7 @@
 <h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#b9b96e>-name</font></code>, <code><font color=#b9b96e>-type</font></code></p>
 <p class='ruff'>Writable: <code><font color=#b9b96e>-name</font></code>, <code><font color=#b9b96e>-type</font></code></p>
 <h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis" title="::SpiceGenTcl::Analysis" class='ruff_cmd'>::SpiceGenTcl::Analysis</a></p>
+<h5 class='ruff'>Mixins</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility" title="::SpiceGenTcl::Utility" class='ruff_cmd'>::SpiceGenTcl::Utility</a></p>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::Analyses::Sp::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Sp" title="::SpiceGenTcl::Ngspice::Analyses::Sp" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::Sp</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Sp'>Sp</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Sp</font></b></code> that describes s-parameter analysis.</p>
@@ -447,23 +404,10 @@
         {<font color=#b9b96e>-fstop</font>= <font color=#b9b96e>-required</font>}
         {<font color=#b9b96e>-donoise</font>}
     }]
-    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> name]} {
-        <b><font color=#ffa500>set</font></b> name [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name]
-    } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>set</font></b> name [<b><font color=#fe6efe>self</font></b> object]
-    }
+    <b><font color=#fe6efe>my</font></b> NameProcess <font color=#f1b479>$arguments</font> [<b><font color=#fe6efe>self</font></b> object]
     <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;variation <font color=#f1b479>[</font>dget <font color=#f1b479>$</font>arguments variation<font color=#f1b479>]</font> -posnocheck&quot;</font>
     <b><font color=#ffa500>set</font></b> paramsOrder [<b><font color=#ffa500>list</font></b> n fstart fstop]
-    <b><font color=#ffa500>foreach</font></b> param <font color=#f1b479>$paramsOrder</font> {
-        <b><font color=#ffa500>dict</font></b> append argsOrdered <font color=#f1b479>$param</font> [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> <font color=#f1b479>$param</font>]
-    }
-    <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$argsOrdered</font> {
-        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$value</font>]&gt;1) && ([@ <font color=#f1b479>$value</font> 1]==<font color=#90ee90>&quot;-eq&quot;</font>)} {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;<font color=#f1b479>$</font>paramName <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>value 0<font color=#f1b479>]</font> -poseq&quot;</font>
-        } <b><font color=#ffa500>else</font></b> {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;<font color=#f1b479>$</font>paramName <font color=#f1b479>$</font>value -pos&quot;</font>
-        }
-    }
+    <b><font color=#fe6efe>my</font></b> ParamsProcess <font color=#f1b479>$paramsOrder</font> <font color=#f1b479>$arguments</font> params
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> donoise]} {
         <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;donoise 1 -pos&quot;</font>
     }
@@ -486,6 +430,7 @@
 <h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#b9b96e>-name</font></code>, <code><font color=#b9b96e>-type</font></code></p>
 <p class='ruff'>Writable: <code><font color=#b9b96e>-name</font></code>, <code><font color=#b9b96e>-type</font></code></p>
 <h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis" title="::SpiceGenTcl::Analysis" class='ruff_cmd'>::SpiceGenTcl::Analysis</a></p>
+<h5 class='ruff'>Mixins</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility" title="::SpiceGenTcl::Utility" class='ruff_cmd'>::SpiceGenTcl::Utility</a></p>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::Analyses::Tran::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Tran" title="::SpiceGenTcl::Ngspice::Analyses::Tran" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::Tran</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Tran'>Tran</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Tran</font></b></code> that describes TRAN analysis.</p>
@@ -534,24 +479,9 @@
         {<font color=#b9b96e>-tmax</font>= <font color=#b9b96e>-require</font> {tstart}}
         {<font color=#b9b96e>-uic</font> <font color=#b9b96e>-boolean</font>}
     }]
-    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> name]} {
-        <b><font color=#ffa500>set</font></b> name [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name]
-    } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>set</font></b> name [<b><font color=#fe6efe>self</font></b> object]
-    }
+    <b><font color=#fe6efe>my</font></b> NameProcess <font color=#f1b479>$arguments</font> [<b><font color=#fe6efe>self</font></b> object]
     <b><font color=#ffa500>set</font></b> paramsOrder [<b><font color=#ffa500>list</font></b> tstep tstop tstart tmax]
-    <b><font color=#ffa500>foreach</font></b> param <font color=#f1b479>$paramsOrder</font> {
-        <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> <font color=#f1b479>$param</font>]} {
-            <b><font color=#ffa500>dict</font></b> append argsOrdered <font color=#f1b479>$param</font> [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> <font color=#f1b479>$param</font>]
-        }
-    }
-    <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$argsOrdered</font> {
-        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$value</font>]&gt;1) && ([@ <font color=#f1b479>$value</font> 1]==<font color=#90ee90>&quot;-eq&quot;</font>)} {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;<font color=#f1b479>$</font>paramName <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>value 0<font color=#f1b479>]</font> -poseq&quot;</font>
-        } <b><font color=#ffa500>else</font></b> {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;<font color=#f1b479>$</font>paramName <font color=#f1b479>$</font>value -pos&quot;</font>
-        }
-    }
+    <b><font color=#fe6efe>my</font></b> ParamsProcess <font color=#f1b479>$paramsOrder</font> <font color=#f1b479>$arguments</font> params
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> uic]==1} {
         <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;uic -sw&quot;</font>
     }

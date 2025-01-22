@@ -38,6 +38,7 @@
 <h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#b9b96e>-name</font></code></p>
 <p class='ruff'>Writable: <code><font color=#b9b96e>-name</font></code></p>
 <h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device" title="::SpiceGenTcl::Device" class='ruff_cmd'>::SpiceGenTcl::Device</a></p>
+<h5 class='ruff'>Mixins</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility" title="::SpiceGenTcl::Utility" class='ruff_cmd'>::SpiceGenTcl::Utility</a></p>
 <h5 class='ruff'>Subclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::Vam" title="Vam" class='ruff_cmd'>Vam</a>, <a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::Iam" title="Iam" class='ruff_cmd'>Iam</a></p>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::Sources::am::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::am" title="::SpiceGenTcl::Ngspice::Sources::am" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources::am</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::am'>am</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
@@ -61,19 +62,8 @@
         <font color=#b9b96e>-phases</font>=
     }]
     <b><font color=#ffa500>set</font></b> paramsOrder [<b><font color=#ffa500>list</font></b> v0 va mf fc td phases]
-    <b><font color=#ffa500>foreach</font></b> param <font color=#f1b479>$paramsOrder</font> {
-        <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> <font color=#f1b479>$param</font>]} {
-            <b><font color=#ffa500>dict</font></b> append argsOrdered <font color=#f1b479>$param</font> [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> <font color=#f1b479>$param</font>]
-        }
-    }
     <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;model am -posnocheck&quot;</font>
-    <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$argsOrdered</font> {
-        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$value</font>]&gt;1) && ([@ <font color=#f1b479>$value</font> 1]==<font color=#90ee90>&quot;-eq&quot;</font>)} {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;<font color=#f1b479>$</font>paramName <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>value 0<font color=#f1b479>]</font> -poseq&quot;</font>
-        } <b><font color=#ffa500>else</font></b> {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;<font color=#f1b479>$</font>paramName <font color=#f1b479>$</font>value -pos&quot;</font>
-        }
-    }
+    <b><font color=#fe6efe>my</font></b> ParamsProcess <font color=#f1b479>$paramsOrder</font> <font color=#f1b479>$arguments</font> params
     <b><font color=#ffa500>next</font></b> <font color=#f1b479>$type$name</font> [<b><font color=#ffa500>list</font></b> <font color=#90ee90>&quot;np <font color=#f1b479>$</font>npNode&quot;</font> <font color=#90ee90>&quot;nm <font color=#f1b479>$</font>nmNode&quot;</font>] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
@@ -643,6 +633,7 @@
 <h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#b9b96e>-name</font></code></p>
 <p class='ruff'>Writable: <code><font color=#b9b96e>-name</font></code></p>
 <h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device" title="::SpiceGenTcl::Device" class='ruff_cmd'>::SpiceGenTcl::Device</a></p>
+<h5 class='ruff'>Mixins</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility" title="::SpiceGenTcl::Utility" class='ruff_cmd'>::SpiceGenTcl::Utility</a></p>
 <h5 class='ruff'>Subclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::Vpulse" title="Vpulse" class='ruff_cmd'>Vpulse</a>, <a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::Ipulse" title="Ipulse" class='ruff_cmd'>Ipulse</a></p>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::Sources::pulse::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::pulse" title="::SpiceGenTcl::Ngspice::Sources::pulse" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources::pulse</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::pulse'>pulse</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
@@ -668,19 +659,8 @@
         <font color=#b9b96e>-np</font>=
     }]
     <b><font color=#ffa500>set</font></b> paramsOrder [<b><font color=#ffa500>list</font></b> low high td tr tf pw per np]
-    <b><font color=#ffa500>foreach</font></b> param <font color=#f1b479>$paramsOrder</font> {
-        <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> <font color=#f1b479>$param</font>]} {
-            <b><font color=#ffa500>dict</font></b> append argsOrdered <font color=#f1b479>$param</font> [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> <font color=#f1b479>$param</font>]
-        }
-    }
     <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;model pulse -posnocheck&quot;</font>
-    <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$argsOrdered</font> {
-        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$value</font>]&gt;1) && ([@ <font color=#f1b479>$value</font> 1]==<font color=#90ee90>&quot;-eq&quot;</font>)} {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;<font color=#f1b479>$</font>paramName <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>value 0<font color=#f1b479>]</font> -poseq&quot;</font>
-        } <b><font color=#ffa500>else</font></b> {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;<font color=#f1b479>$</font>paramName <font color=#f1b479>$</font>value -pos&quot;</font>
-        }
-    }
+    <b><font color=#fe6efe>my</font></b> ParamsProcess <font color=#f1b479>$paramsOrder</font> <font color=#f1b479>$arguments</font> params
     <b><font color=#ffa500>next</font></b> <font color=#f1b479>$type$name</font> [<b><font color=#ffa500>list</font></b> <font color=#90ee90>&quot;np <font color=#f1b479>$</font>npNode&quot;</font> <font color=#90ee90>&quot;nm <font color=#f1b479>$</font>nmNode&quot;</font>] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
@@ -705,6 +685,7 @@
 <h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#b9b96e>-name</font></code></p>
 <p class='ruff'>Writable: <code><font color=#b9b96e>-name</font></code></p>
 <h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device" title="::SpiceGenTcl::Device" class='ruff_cmd'>::SpiceGenTcl::Device</a></p>
+<h5 class='ruff'>Mixins</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility" title="::SpiceGenTcl::Utility" class='ruff_cmd'>::SpiceGenTcl::Utility</a></p>
 <h5 class='ruff'>Subclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::Vsffm" title="Vsffm" class='ruff_cmd'>Vsffm</a>, <a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::Isffm" title="Isffm" class='ruff_cmd'>Isffm</a></p>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::Sources::sffm::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::sffm" title="::SpiceGenTcl::Ngspice::Sources::sffm" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources::sffm</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::sffm'>sffm</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
@@ -729,19 +710,8 @@
         {<font color=#b9b96e>-phases</font>= <font color=#b9b96e>-require</font> {phasec}}
     }]
     <b><font color=#ffa500>set</font></b> paramsOrder [<b><font color=#ffa500>list</font></b> v0 va fc mdi fs phasec phases]
-    <b><font color=#ffa500>foreach</font></b> param <font color=#f1b479>$paramsOrder</font> {
-        <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> <font color=#f1b479>$param</font>]} {
-            <b><font color=#ffa500>dict</font></b> append argsOrdered <font color=#f1b479>$param</font> [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> <font color=#f1b479>$param</font>]
-        }
-    }
     <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;model sffm -posnocheck&quot;</font>
-    <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$argsOrdered</font> {
-        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$value</font>]&gt;1) && ([@ <font color=#f1b479>$value</font> 1]==<font color=#90ee90>&quot;-eq&quot;</font>)} {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;<font color=#f1b479>$</font>paramName <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>value 0<font color=#f1b479>]</font> -poseq&quot;</font>
-        } <b><font color=#ffa500>else</font></b> {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;<font color=#f1b479>$</font>paramName <font color=#f1b479>$</font>value -pos&quot;</font>
-        }
-    }
+    <b><font color=#fe6efe>my</font></b> ParamsProcess <font color=#f1b479>$paramsOrder</font> <font color=#f1b479>$arguments</font> params
     <b><font color=#ffa500>next</font></b> <font color=#f1b479>$type$name</font> [<b><font color=#ffa500>list</font></b> <font color=#90ee90>&quot;np <font color=#f1b479>$</font>npNode&quot;</font> <font color=#90ee90>&quot;nm <font color=#f1b479>$</font>nmNode&quot;</font>] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
@@ -986,7 +956,13 @@
         {<font color=#b9b96e>-portnum</font>= <font color=#b9b96e>-required</font>}
         {<font color=#b9b96e>-z0</font>=}
     }]
-    <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$arguments</font> {
+    <b><font color=#ffa500>set</font></b> paramsOrder [<b><font color=#ffa500>list</font></b> dc ac portnum z0]
+    <b><font color=#ffa500>foreach</font></b> param <font color=#f1b479>$paramsOrder</font> {
+        <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> <font color=#f1b479>$param</font>]} {
+            <b><font color=#ffa500>dict</font></b> append argsOrdered <font color=#f1b479>$param</font> [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> <font color=#f1b479>$param</font>]
+        }
+    }
+    <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$argsOrdered</font> {
         <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;<font color=#f1b479>$</font>paramName -sw&quot;</font>
         <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$value</font>]&gt;1) && ([@ <font color=#f1b479>$value</font> 1]==<font color=#90ee90>&quot;-eq&quot;</font>)} {
             <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;<font color=#f1b479>${</font>paramName<font color=#f1b479>}</font>val <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>value 0<font color=#f1b479>]</font> -poseq&quot;</font>
