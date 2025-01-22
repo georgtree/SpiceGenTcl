@@ -454,6 +454,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
     
     oo::abstract create pulse {
         superclass ::SpiceGenTcl::Device
+        mixin ::SpiceGenTcl::Utility
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
                 {-low= -required}
@@ -466,19 +467,8 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
                 -np=
             }]
             set paramsOrder [list low high td tr tf pw per np]
-            foreach param $paramsOrder {
-                if {[dexist $arguments $param]} {
-                    dict append argsOrdered $param [dget $arguments $param]
-                }
-            }
             lappend params "model pulse -posnocheck"
-            dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
-                    lappend params "$paramName [@ $value 0] -poseq"
-                } else {
-                    lappend params "$paramName $value -pos"
-                }
-            }
+            my ParamsProcess $paramsOrder $arguments params
             next $type$name [list "np $npNode" "nm $nmNode"] $params
         }
     } 
@@ -488,6 +478,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
     
     oo::abstract create sffm {
         superclass ::SpiceGenTcl::Device
+        mixin ::SpiceGenTcl::Utility
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
                 {-v0= -required}
@@ -499,19 +490,8 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
                 {-phases= -require {phasec}}
             }]
             set paramsOrder [list v0 va fc mdi fs phasec phases]
-            foreach param $paramsOrder {
-                if {[dexist $arguments $param]} {
-                    dict append argsOrdered $param [dget $arguments $param]
-                }
-            }
             lappend params "model sffm -posnocheck"
-            dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
-                    lappend params "$paramName [@ $value 0] -poseq"
-                } else {
-                    lappend params "$paramName $value -pos"
-                }
-            }
+            my ParamsProcess $paramsOrder $arguments params
             next $type$name [list "np $npNode" "nm $nmNode"] $params
         }
     }      
@@ -520,6 +500,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
     
     oo::abstract create am {
         superclass ::SpiceGenTcl::Device
+        mixin ::SpiceGenTcl::Utility
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
                 {-v0= -required}
@@ -530,19 +511,8 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
                 -phases=
             }]
             set paramsOrder [list v0 va mf fc td phases]
-            foreach param $paramsOrder {
-                if {[dexist $arguments $param]} {
-                    dict append argsOrdered $param [dget $arguments $param]
-                }
-            }
             lappend params "model am -posnocheck"
-            dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
-                    lappend params "$paramName [@ $value 0] -poseq"
-                } else {
-                    lappend params "$paramName $value -pos"
-                }
-            }
+            my ParamsProcess $paramsOrder $arguments params
             next $type$name [list "np $npNode" "nm $nmNode"] $params
         }
     }   
@@ -586,7 +556,13 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
                 {-portnum= -required}
                 {-z0=}
             }]
-            dict for {paramName value} $arguments {
+            set paramsOrder [list dc ac portnum z0]
+            foreach param $paramsOrder {
+                if {[dexist $arguments $param]} {
+                    dict append argsOrdered $param [dget $arguments $param]
+                }
+            }
+            dict for {paramName value} $argsOrdered {
                 lappend params "$paramName -sw"
                 if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
                     lappend params "${paramName}val [@ $value 0] -poseq"

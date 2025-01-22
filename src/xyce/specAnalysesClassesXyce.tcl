@@ -21,12 +21,13 @@ namespace eval ::SpiceGenTcl {
 }
 
 namespace eval ::SpiceGenTcl::Xyce::Analyses {
-    
+
     
 ###  Dc class 
 
     oo::class create Dc {
         superclass ::SpiceGenTcl::Analysis
+        mixin ::SpiceGenTcl::Utility
         constructor {args} {
             # Creates object of class `Dc` that describes DC analysis. 
             #  -src - name of independent voltage or current source, a resistor, or the circuit temperature
@@ -49,23 +50,10 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
                 {-stop= -required}
                 {-incr= -required}
             }]
-            if {[dexist $arguments name]} {
-                set name [dget $arguments name]
-            } else {
-                set name [self object]
-            }
+            my NameProcess $arguments [self object]
             lappend params "src [dget $arguments src] -posnocheck"
             set paramsOrder [list start stop incr]
-            foreach param $paramsOrder {
-                dict append argsOrdered $param [dget $arguments $param]
-            }
-            dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
-                    lappend params "$paramName [@ $value 0] -poseq"
-                } else {
-                    lappend params "$paramName $value -pos"
-                }
-            }
+            my ParamsProcess $paramsOrder $arguments params
             next dc $params -name $name
         }
     }
@@ -74,6 +62,7 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
 
     oo::class create Ac {
         superclass ::SpiceGenTcl::Analysis
+        mixin ::SpiceGenTcl::Utility
         constructor {args} {
             # Creates object of class `Ac` that describes AC analysis. 
             #  -variation - parameter that defines frequency scale, could be dec, oct or lin
@@ -97,23 +86,10 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
                 {-fstart= -required}
                 {-fstop= -required}
             }]
-            if {[dexist $arguments name]} {
-                set name [dget $arguments name]
-            } else {
-                set name [self object]
-            }
+            my NameProcess $arguments [self object]
             lappend params "variation [dget $arguments variation] -posnocheck"
             set paramsOrder [list n fstart fstop]
-            foreach param $paramsOrder {
-                dict append argsOrdered $param [dget $arguments $param]
-            }
-            dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
-                    lappend params "$paramName [@ $value 0] -poseq"
-                } else {
-                    lappend params "$paramName $value -pos"
-                }
-            }
+            my ParamsProcess $paramsOrder $arguments params
             next ac $params -name $name
         }
     }
@@ -140,11 +116,7 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
                 {-objfunc= -required}
                 {-param= -required}
             }]
-            if {[dexist $arguments name]} {
-                set name [dget $arguments name]
-            } else {
-                set name [self object]
-            }
+            my NameProcess $arguments [self object]
             lappend params "objfunc [dget $arguments objfunc] -eq"
             lappend params "param [dget $arguments param] -nocheck"
             next sens $params -name $name
@@ -155,6 +127,7 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
 
     oo::class create Tran {
         superclass ::SpiceGenTcl::Analysis
+        mixin ::SpiceGenTcl::Utility
         constructor {args} {
             # Creates object of class `Tran` that describes TRAN analysis. 
             #  -tstep - initial step value
@@ -180,24 +153,9 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
                 {-tmax= -require {tstart}}
                 {-uic -boolean}
             }]
-            if {[dexist $arguments name]} {
-                set name [dget $arguments name]
-            } else {
-                set name [self object]
-            }
+            my NameProcess $arguments [self object]
             set paramsOrder [list tstep tstop tstart tmax]
-            foreach param $paramsOrder {
-                if {[dexist $arguments $param]} {
-                    dict append argsOrdered $param [dget $arguments $param]
-                }
-            }
-            dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
-                    lappend params "$paramName [@ $value 0] -poseq"
-                } else {
-                    lappend params "$paramName $value -pos"
-                }
-            }
+            my ParamsProcess $paramsOrder $arguments params
             if {[dget $arguments uic]==1} {
                 lappend params "uic -sw"
             }
@@ -223,11 +181,7 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
             set arguments [argparse -inline {
                 -name=
             }]
-            if {[dexist $arguments name]} {
-                set name [dget $arguments name]
-            } else {
-                set name [self object]
-            }
+            my NameProcess $arguments [self object]
             next op "" -name $name
         }
     }

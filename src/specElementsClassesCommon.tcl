@@ -120,7 +120,6 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             } else {
                 lappend params "c $cVal -pos"
             }
-            
             dict for {paramName value} $arguments {
                 if {$paramName ni {c}} {
                     lappend params "$paramName $value"
@@ -330,25 +329,16 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 set objClass [info object class $subcktObj]
                 error "Wrong object class '$objClass' is passed as subcktObj, should be '::SpiceGenTcl::Subcircuit'"
             }
-            # get name of subcircuit
             set subName [$subcktObj configure -name] 
-            # get pins names of subcircuit
             set pinsNames [dict keys [$subcktObj getPins]]
             # check if number of pins in subcircuit definition matchs the number of supplied nodes
             if {[llength $pinsNames]!=[llength $nodes]} {
                 return -code error "Wrong number of nodes '[llength $nodes]' in definition, should be\
                         '[llength $pinsNames]'"
             }
-            # create list of pins and connected nodes
-            foreach pinName $pinsNames node $nodes {
-                lappend pinsList "$pinName $node"
-            }
-            # get parameters names of subcircuit
-            set paramsNames [dict keys [$subcktObj getParams]]
-            foreach paramName $paramsNames {
-                lappend paramDefList "-${paramName}="
-            }
-            if {[info exists paramDefList]} {
+            set pinsList [lmap pinName $pinsNames node $nodes {join [list $pinName $node]}]
+            set paramDefList [lmap paramName [dict keys [$subcktObj getParams]] {subst "-${paramName}="}]
+            if {$paramDefList!=""} {
                 # create definition for argparse module for passing parameters as optional arguments
                 set arguments [argparse -inline "
                     [join $paramDefList \n]
@@ -428,6 +418,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
     
     oo::abstract create pulse {
         superclass ::SpiceGenTcl::Device
+        mixin ::SpiceGenTcl::Utility
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
                 {-low= -required}
@@ -439,19 +430,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {-per= -required}
             }]
             set paramsOrder [list low high td tr tf pw per]
-            foreach param $paramsOrder {
-                if {[dexist $arguments $param]} {
-                    dict append argsOrdered $param [dget $arguments $param]
-                }
-            }
             lappend params "model pulse -posnocheck"
-            dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
-                    lappend params "$paramName [@ $value 0] -poseq"
-                } else {
-                    lappend params "$paramName $value -pos"
-                }
-            }
+            my ParamsProcess $paramsOrder $arguments params
             next $type$name [list "np $npNode" "nm $nmNode"] $params
         }
     } 
@@ -460,6 +440,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
     
     oo::abstract create sin {
         superclass ::SpiceGenTcl::Device
+        mixin ::SpiceGenTcl::Utility
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
                 {-v0= -required}
@@ -470,19 +451,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {-phase= -require {td theta}}
             }]
             set paramsOrder [list v0 va freq td theta phase]
-            foreach param $paramsOrder {
-                if {[dexist $arguments $param]} {
-                    dict append argsOrdered $param [dget $arguments $param]
-                }
-            }
             lappend params "model sin -posnocheck"
-            dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
-                    lappend params "$paramName [@ $value 0] -poseq"
-                } else {
-                    lappend params "$paramName $value -pos"
-                }
-            }
+            my ParamsProcess $paramsOrder $arguments params
             next $type$name [list "np $npNode" "nm $nmNode"] $params
         }
     }  
@@ -491,6 +461,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
     
     oo::abstract create exp {
         superclass ::SpiceGenTcl::Device
+        mixin ::SpiceGenTcl::Utility
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
                 {-v1= -required}
@@ -501,19 +472,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {-tau2= -required}
             }]
             set paramsOrder [list v1 v2 td1 tau1 td2 tau2]
-            foreach param $paramsOrder {
-                if {[dexist $arguments $param]} {
-                    dict append argsOrdered $param [dget $arguments $param]
-                }
-            }
             lappend params "model exp -posnocheck"
-            dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
-                    lappend params "$paramName [@ $value 0] -poseq"
-                } else {
-                    lappend params "$paramName $value -pos"
-                }
-            }
+            my ParamsProcess $paramsOrder $arguments params
             next $type$name [list "np $npNode" "nm $nmNode"] $params
         }
     }    
@@ -556,6 +516,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
     
     oo::abstract create sffm {
         superclass ::SpiceGenTcl::Device
+        mixin ::SpiceGenTcl::Utility
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
                 {-v0= -required}
@@ -565,19 +526,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {-fs= -required}
             }]
             set paramsOrder [list v0 va fc mdi fs]
-            foreach param $paramsOrder {
-                if {[dexist $arguments $param]} {
-                    dict append argsOrdered $param [dget $arguments $param]
-                }
-            }
             lappend params "model sffm -posnocheck"
-            dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
-                    lappend params "$paramName [@ $value 0] -poseq"
-                } else {
-                    lappend params "$paramName $value -pos"
-                }
-            }
+            my ParamsProcess $paramsOrder $arguments params
             next $type$name [list "np $npNode" "nm $nmNode"] $params
         }
     }      

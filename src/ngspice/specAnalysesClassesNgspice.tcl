@@ -22,11 +22,13 @@ namespace eval ::SpiceGenTcl {
 
 namespace eval ::SpiceGenTcl::Ngspice::Analyses {
     
-    
+
+
 ###  Dc class 
 
     oo::class create Dc {
         superclass ::SpiceGenTcl::Analysis
+        mixin ::SpiceGenTcl::Utility
         constructor {args} {
             # Creates object of class `Dc` that describes DC analysis. 
             #  -src - name of independent voltage or current source, a resistor, or the circuit temperature
@@ -49,23 +51,10 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
                 {-stop= -required}
                 {-incr= -required}
             }]
-            if {[dexist $arguments name]} {
-                set name [dget $arguments name]
-            } else {
-                set name [self object]
-            }
+            my NameProcess $arguments [self object]
             lappend params "src [dget $arguments src] -posnocheck"
             set paramsOrder [list start stop incr]
-            foreach param $paramsOrder {
-                dict append argsOrdered $param [dget $arguments $param]
-            }
-            dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
-                    lappend params "$paramName [@ $value 0] -poseq"
-                } else {
-                    lappend params "$paramName $value -pos"
-                }
-            }
+            my ParamsProcess $paramsOrder $arguments params
             next dc $params -name $name
         }
     }
@@ -74,6 +63,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
 
     oo::class create Ac {
         superclass ::SpiceGenTcl::Analysis
+        mixin ::SpiceGenTcl::Utility
         constructor {args} {
             # Creates object of class `Ac` that describes AC analysis. 
             #  -variation - parameter that defines frequency scale, could be dec, oct or lin
@@ -96,23 +86,10 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
                 {-fstart= -required}
                 {-fstop= -required}
             }]
-            if {[dexist $arguments name]} {
-                set name [dget $arguments name]
-            } else {
-                set name [self object]
-            }
+            my NameProcess $arguments [self object]
             lappend params "variation [dget $arguments variation] -posnocheck"
             set paramsOrder [list n fstart fstop]
-            foreach param $paramsOrder {
-                dict append argsOrdered $param [dget $arguments $param]
-            }
-            dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
-                    lappend params "$paramName [@ $value 0] -poseq"
-                } else {
-                    lappend params "$paramName $value -pos"
-                }
-            }
+            my ParamsProcess $paramsOrder $arguments params
             next ac $params -name $name
         }
     }
@@ -121,6 +98,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
 
     oo::class create Sp {
         superclass ::SpiceGenTcl::Analysis
+        mixin ::SpiceGenTcl::Utility
         constructor {args} {
             # Creates object of class `Sp` that describes s-parameter analysis. 
             #  -variation - parameter that defines frequency scale, could be dec, oct or lin
@@ -145,23 +123,10 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
                 {-fstop= -required}
                 {-donoise}
             }]
-            if {[dexist $arguments name]} {
-                set name [dget $arguments name]
-            } else {
-                set name [self object]
-            }
+            my NameProcess $arguments [self object]
             lappend params "variation [dget $arguments variation] -posnocheck"
             set paramsOrder [list n fstart fstop]
-            foreach param $paramsOrder {
-                dict append argsOrdered $param [dget $arguments $param]
-            }
-            dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
-                    lappend params "$paramName [@ $value 0] -poseq"
-                } else {
-                    lappend params "$paramName $value -pos"
-                }
-            }
+            my ParamsProcess $paramsOrder $arguments params
             if {[dexist $arguments donoise]} {
                 lappend params "donoise 1 -pos" 
             }
@@ -173,6 +138,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
 
     oo::class create SensAc {
         superclass ::SpiceGenTcl::Analysis
+        mixin ::SpiceGenTcl::Utility
         constructor {args} {
             # Creates object of class `SensAc` that describes SENS ac analysis. 
             #  -outvar - output variable
@@ -197,25 +163,12 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
                 {-fstart= -required}
                 {-fstop= -required}
             }]
-            if {[dexist $arguments name]} {
-                set name [dget $arguments name]
-            } else {
-                set name [self object]
-            }
+            my NameProcess $arguments [self object]
             lappend params "outvar [dget $arguments outvar] -posnocheck"
             lappend params "ac -sw"
             lappend params "variation [dget $arguments variation] -posnocheck"
             set paramsOrder [list n fstart fstop]
-            foreach param $paramsOrder {
-                dict append argsOrdered $param [dget $arguments $param]
-            }
-            dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
-                    lappend params "$paramName [@ $value 0] -poseq"
-                } else {
-                    lappend params "$paramName $value -pos"
-                }
-            }
+            my ParamsProcess $paramsOrder $arguments params
             next sens $params -name $name
         }
     }
@@ -240,11 +193,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
                 -name=
                 {-outvar= -required}
             }]
-            if {[dexist $arguments name]} {
-                set name [dget $arguments name]
-            } else {
-                set name [self object]
-            }
+            my NameProcess $arguments [self object]
             lappend params "outvar [dget $arguments outvar] -posnocheck"
             next sens $params -name $name
         }
@@ -254,6 +203,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
 
     oo::class create Tran {
         superclass ::SpiceGenTcl::Analysis
+        mixin ::SpiceGenTcl::Utility
         constructor {args} {
             # Creates object of class `Tran` that describes TRAN analysis. 
             #  -tstep - size of maximum time step for plotting
@@ -278,24 +228,9 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
                 {-tmax= -require {tstart}}
                 {-uic -boolean}
             }]
-            if {[dexist $arguments name]} {
-                set name [dget $arguments name]
-            } else {
-                set name [self object]
-            }
+            my NameProcess $arguments [self object]
             set paramsOrder [list tstep tstop tstart tmax]
-            foreach param $paramsOrder {
-                if {[dexist $arguments $param]} {
-                    dict append argsOrdered $param [dget $arguments $param]
-                }
-            }
-            dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
-                    lappend params "$paramName [@ $value 0] -poseq"
-                } else {
-                    lappend params "$paramName $value -pos"
-                }
-            }
+            my ParamsProcess $paramsOrder $arguments params
             if {[dget $arguments uic]==1} {
                 lappend params "uic -sw"
             }
@@ -321,11 +256,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             set arguments [argparse -inline {
                 -name=
             }]
-            if {[dexist $arguments name]} {
-                set name [dget $arguments name]
-            } else {
-                set name [self object]
-            }
+            my NameProcess $arguments [self object]
             next op "" -name $name
         }
     }

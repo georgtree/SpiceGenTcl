@@ -148,6 +148,36 @@ namespace eval ::SpiceGenTcl {
             return $params
         }
     }
+
+###  Utility class definition 
+
+    oo::class create Utility {
+        self mixin -append oo::abstract
+        method ParamsProcess {paramsOrder arguments params} {
+            upvar $params paramsLoc
+            foreach param $paramsOrder {
+                if {[dexist $arguments $param]} {
+                    dict append argsOrdered $param [dget $arguments $param]
+                }
+            }
+            dict for {paramName value} $argsOrdered {
+                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
+                    lappend paramsLoc "$paramName [@ $value 0] -poseq"
+                } else {
+                    lappend paramsLoc "$paramName $value -pos"
+                }
+            }
+            return
+        }
+        method NameProcess {arguments object} {
+            upvar name name
+            if {[dexist $arguments name]} {
+                set name [dget $arguments name]
+            } else {
+                set name $object
+            }
+        }
+    }
     
 ###  Pin class definition 
 
@@ -533,11 +563,7 @@ namespace eval ::SpiceGenTcl {
             # Gets the dictionary that contains pin name as keys and
             #  connected node name as the values.
             # Returns: parameters dictionary
-            set tempDict [dcreate]
-            dict for {pinName pin} $Pins {
-                dict append tempDict $pinName [$pin configure -nodename]
-            }
-            return $tempDict
+            return [dict map {pinName pin} $Pins {$pin configure -nodename}]
         }
         method setPinNodeName {pinName nodeName} {
             # Sets node name of particular pin, so,
@@ -641,8 +667,7 @@ namespace eval ::SpiceGenTcl {
             # Deletes existing `Parameter` object from list `Params`.
             #  paramName - name of parameter that will be deleted
             set paramName [string tolower $paramName]
-            set error [catch {dget $Params $paramName}]
-            if {$error>0} {
+            if {[catch {dget $Params $paramName}]} {
                 return -code error "Parameter with name '$paramName' was not found in device's '[my configure -name]'\
                         list of parameters '[dict keys [my getParams]]'"
             } else {
@@ -665,11 +690,7 @@ namespace eval ::SpiceGenTcl {
             # Gets the dictionary that contains parameter name as keys and
             #  parameter values as the values.
             # Returns: parameters dictionary
-            set tempDict [dcreate]
-            dict for {paramName param} $Params {
-                dict append tempDict $paramName [$param configure -value]
-            }
-            return $tempDict
+            return [dict map {paramName param} $Params {$param configure -value}]
         }
         method genSPICEString {} {
             # Creates device string for SPICE netlist.
@@ -687,9 +708,7 @@ namespace eval ::SpiceGenTcl {
                 lappend params ""
                 return "[my configure -name] [join $nodes]"
             } else {
-                dict for {paramName param} $Params {
-                    lappend params [$param genSPICEString]
-                }
+                set params [lmap param [dict values $Params] {$param genSPICEString}]
                 return "[my configure -name] [join $nodes] [join $params]"
             }
         }
@@ -757,9 +776,7 @@ namespace eval ::SpiceGenTcl {
                 lappend params ""
                 return ".model [my configure -name] [my configure -type]"
             } else {
-                dict for {paramName param} $Params {
-                    lappend params [$param genSPICEString]
-                }
+                set params [lmap param [dict values $Params] {$param genSPICEString}]
                 return ".model [my configure -name] [my configure -type]([join $params])"
             }
         }
@@ -936,16 +953,8 @@ namespace eval ::SpiceGenTcl {
             # Gets the dictionary that contains parameter name as keys and
             #  parameter values as the values.
             # Returns: parameters dictionary
-            set tempDict [dcreate]
-            dict for {paramName param} $Params {
-                # check if parameter doesn't have value, it means that we return {} for switch parameter
-                if {[catch {$param configure -value}]} {
-                    dict append tempDict $paramName ""
-                } else {
-                    dict append tempDict $paramName [$param configure -value]
-                }
-            }
-            return $tempDict
+            return [dict map {paramName param} $Params\
+                            {expr {[catch {$param configure -value}] ? "" : [$param configure -value]}}]
         }
         method addParam {paramName value} {
             # Creates new parameter object and add it to the list `Params`.
@@ -971,10 +980,7 @@ namespace eval ::SpiceGenTcl {
         method genSPICEString {} {
             # Creates options string for SPICE netlist.
             # Returns: SPICE netlist's string
-            dict for {paramName param} $Params {
-                lappend params [$param genSPICEString]
-            }
-            return ".options [join $params]"
+            return ".options [join [lmap param [dict values $Params] {$param genSPICEString}]]"
         }
     }
     
@@ -1043,10 +1049,7 @@ namespace eval ::SpiceGenTcl {
         method genSPICEString {} {
             # Creates parameter statement string for SPICE netlist.
             # Returns: SPICE netlist's string
-            dict for {paramName param} $Params {
-                lappend params [$param genSPICEString]
-            }
-            return ".param [join $params]"
+            return ".param [join [join [lmap param [dict values $Params] {$param genSPICEString}]]]"
         }
     }
     
@@ -1186,18 +1189,12 @@ namespace eval ::SpiceGenTcl {
         method getAllElemNames {} {
             # Gets names of all elements in netlist.
             # Returns: list of elements names
-            dict for {elemName elem} $Elements {
-                lappend names $elemName
-            }
-            return $names
+            return [dict keys $Elements]
         }
         method genSPICEString {} {
             # Creates netlist string for SPICE netlist.
             # Returns: SPICE netlist's string
-            dict for {elemName element} $Elements {
-                lappend totalStr [$element genSPICEString]
-            }
-            return [join $totalStr \n]
+            return [join [lmap element [dict values $Elements] {$element genSPICEString}] \n]
         }
     }
 
@@ -1302,10 +1299,7 @@ namespace eval ::SpiceGenTcl {
         method genSPICEString {} {
             # Creates circuit string for SPICE netlist.
             # Returns: SPICE netlist's string
-            lappend totalStr [my configure -name]
-            dict for {elemName element} $Elements {
-                lappend totalStr [$element genSPICEString]
-            }
+            lappend totalStr [my configure -name] {*}[lmap element [dict values $Elements] {$element genSPICEString}]
             return [join $totalStr \n]
         }
         method runAndRead {args} {
@@ -1404,22 +1398,16 @@ namespace eval ::SpiceGenTcl {
             # Creates subcircuit string for SPICE subcircuit.
             # Returns: SPICE netlist's string
             set name [my configure -name]
-            dict for {pinName pin} $Pins {
-                lappend nodes [$pin configure -name]
-            }
+            set nodes [lmap pin [dict values $Pins] {$pin configure -name}]
             if {$Params==""} {
-                lappend params ""
                 set header ".subckt $name [join $nodes]"
             } else {
-                dict for {paramName param} $Params {
-                    lappend params [$param genSPICEString]
-                }
+                set params [lmap param [dict values $Params] {$param genSPICEString}]
                 set header ".subckt $name [join $nodes] [join $params]"
             }
             # get netlist elements from netlist genSPICEString method 
             set resStr [next]
-            set end ".ends"
-            return [join [list $header $resStr $end] \n]
+            return [join [list $header $resStr .ends] \n]
         }
     }
     
@@ -1482,10 +1470,7 @@ namespace eval ::SpiceGenTcl {
             # Creates analysis for SPICE netlist.
             # Returns: string SPICE netlist's string
             if {[info exists Params]} {
-                dict for {paramName param} $Params {
-                    lappend params [$param genSPICEString]
-                }
-                return ".[my configure -type] [join $params]"
+                return ".[my configure -type] [join [lmap param [dict values $Params] {$param genSPICEString}]]"
             } else {
                 return ".[my configure -type]"
             }
@@ -1921,35 +1906,22 @@ namespace eval ::SpiceGenTcl {
         }
         method getVariablesNames {} {
             # Returns list that contains names of all variables
-            foreach trace [my configure -Traces] {
-                lappend tracesNames [$trace configure -name]
-            }
-            return $tracesNames
+            return [lmap trace [my configure -Traces] {$trace configure -name}]
         }
         method getVoltagesNames {} {
             # Returns list that contains names of all voltage variables
-            foreach trace [my configure -Traces] {
-                if {[$trace configure -Type]=="voltage"} {
-                    lappend voltNames [$trace configure -name]
-                }
-            }
-            return $voltNames
+            return [lmap trace [my configure -Traces]\
+                            {expr {[$trace configure -Type]=="voltage" ? [$trace configure -name] : [continue]}}]
         }
         method getCurrentsNames {} {
             # Returns list that contains names of all current variables
-            foreach trace [my configure -Traces] {
-                if {[$trace configure -Type]=="current"} {
-                    lappend currNames [$trace configure -name]
-                }
-            }
-            return $currNames
+            return [lmap trace [my configure -Traces]\
+                            {expr {[$trace configure -Type]=="current" ? [$trace configure -name] : [continue]}}]
         }
         method getTracesStr {} {
             # Returns information about all Traces in raw file in form of string
-            foreach trace [my configure -Traces] {
-                lappend tracesList "[$trace configure -name] [$trace configure -Type] [$trace configure -NumType]"
-            }
-            return $tracesList
+            return [lmap trace [my configure -Traces]\
+                            {join [list [$trace configure -name] [$trace configure -Type] [$trace configure -NumType]]}]
         }
         method getTracesData {} {
             # Returns dictionary that contains all data in value and name as a key
@@ -1974,11 +1946,7 @@ namespace eval ::SpiceGenTcl {
                 set tracesDict [my getTracesData]
                 set tracesList [list [dict keys $tracesDict]]
                 for {set i 0} {$i<[my configure -NPoints]} {incr i} {
-                    dict for {traceName traceValues} $tracesDict {
-                        lappend row [@ $traceValues $i]
-                    }
-                    lappend tracesList $row
-                    unset row
+                    lappend tracesList [lmap traceValues [dict values $tracesDict] {@ $traceValues $i}]
                 }
             } elseif {[dget $arguments traces]!=""} {
                 foreach traceName [dget $arguments traces] {
@@ -1987,11 +1955,7 @@ namespace eval ::SpiceGenTcl {
                 }
                 set tracesList [list [dict keys $tracesDict]]
                 for {set i 0} {$i<[my configure -NPoints]} {incr i} {
-                    dict for {traceName traceValues} $tracesDict {
-                        lappend row [@ $traceValues $i]
-                    }
-                    lappend tracesList $row
-                    unset row
+                    lappend tracesList [lmap traceValues [dict values $tracesDict] {@ $traceValues $i}]
                 }
             } else {
                 return -code error "Arguments '-all' or '-traces traceName1 traceName2 ...' must be provided to\

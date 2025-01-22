@@ -769,7 +769,7 @@ test testOptionsClass-3 {test creation of Options class instance and addParam in
     $elemInst addParam vntol 1e-4
 } -body {
     set result [$elemInst getParams]
-} -result [dcreate abstol 1e-12 noopiter "" gmin 1e-12 vntol 1e-4] -cleanup {
+} -result [dcreate abstol 1e-12 noopiter {} gmin 1e-12 vntol 0.0001] -cleanup {
     unset elemInst result
 }
 
@@ -778,7 +778,7 @@ test testOptionsClass-4 {test creation of Options class instance and addParam in
     $elemInst addParam noopiter -sw
 } -body {
     set result [$elemInst getParams]
-} -result [dcreate abstol 1e-12 vntol 1e-4 gmin 1e-12  noopiter {}] -cleanup {
+} -result [dcreate abstol 1e-12 vntol 0.0001 gmin 1e-12 noopiter {}] -cleanup {
     unset elemInst result
 }
 
@@ -1361,6 +1361,40 @@ test testRawFileClass-5 {test creation of RawFile class instance and getTracesCs
     return $errorStr
 } -result "Arguments '-all' or '-traces traceName1 traceName2 ...' must be provided to 'getTracesCsv' method" -cleanup {
     unset circuit errorStr simulator dataObj
+}
+
+test testRawFileClass-6 {test creation of RawFile class instance and getDataCsv interface} -setup {
+    set circuit [Circuit new {voltage divider netlist}]
+    $circuit add [Vdc new 1 in 0 -dc 1]
+    $circuit add [R new 1 in out -r 1e3]
+    $circuit add [R new 2 out 0 -r 2e3]
+    $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1]
+    set simulator [Batch new {batch1}]
+    $circuit configure -simulator $simulator
+    $circuit runAndRead
+    set dataObj [$circuit configure -data]
+} -body {
+    set data [$dataObj getVoltagesNames]
+    return $data
+} -result "v(v-sweep) v(in) v(out)" -cleanup {
+    unset circuit data simulator dataObj
+}
+
+test testRawFileClass-6 {test creation of RawFile class instance and getDataCsv interface} -setup {
+    set circuit [Circuit new {voltage divider netlist}]
+    $circuit add [Vdc new 1 in 0 -dc 1]
+    $circuit add [R new 1 in out -r 1e3]
+    $circuit add [R new 2 out 0 -r 2e3]
+    $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1]
+    set simulator [Batch new {batch1}]
+    $circuit configure -simulator $simulator
+    $circuit runAndRead
+    set dataObj [$circuit configure -data]
+} -body {
+    set data [$dataObj getCurrentsNames]
+    return $data
+} -result "i(v1)" -cleanup {
+    unset circuit data simulator dataObj
 }
 
 ###  Circuit class tests 
