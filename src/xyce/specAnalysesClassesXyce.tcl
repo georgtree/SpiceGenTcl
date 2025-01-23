@@ -98,6 +98,7 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
 
     oo::class create Sens {
         superclass ::SpiceGenTcl::Analysis
+        mixin ::SpiceGenTcl::Utility
         constructor {args} {
             # Creates object of class `Sens` that describes SENS ac analysis. 
             #  -objfunc - output expression
@@ -167,6 +168,7 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
 
     oo::class create Op {
         superclass ::SpiceGenTcl::Analysis
+        mixin ::SpiceGenTcl::Utility
         constructor {args} {
             # Creates object of class `Op` that describes OP analysis. 
             #  -name - name argument, optional

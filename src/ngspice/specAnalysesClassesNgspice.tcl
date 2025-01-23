@@ -177,6 +177,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
 
     oo::class create SensDc {
         superclass ::SpiceGenTcl::Analysis
+        mixin ::SpiceGenTcl::Utility
         constructor {args} {
             # Creates object of class `SensDc` that describes SENS dc analysis. 
             #  -outvar - output variable
@@ -242,6 +243,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
 
     oo::class create Op {
         superclass ::SpiceGenTcl::Analysis
+        mixin ::SpiceGenTcl::Utility
         constructor {args} {
             # Creates object of class `Op` that describes OP analysis. 
             #  -name - name argument, optional

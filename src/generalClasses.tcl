@@ -630,11 +630,11 @@ namespace eval ::SpiceGenTcl {
             #  -nocheck - parameter is of class [::SpiceGenTcl::ParameterNoCheck], optional, forbids other switches
             # Synopsis: paramName value ?-name value? ?-eq|-poseq|-posnocheck|-pos|-nocheck?
             argparse {
-                {-pos -forbid {eq poseq posnocheck nocheck}}
-                {-eq -forbid {pos poseq posnocheck nocheck}}
-                {-poseq -forbid {pos eq posnocheck nocheck}}
-                {-posnocheck -forbid {pos eq poseq nocheck}}
-                {-nocheck -forbid {pos eq poseq posnocheck}}
+                {-pos -key paramQual -value pos}
+                {-eq -key paramQual -value eq}
+                {-poseq -key paramQual -value poseq}
+                {-posnocheck -key paramQual -value posnocheck}
+                {-nocheck -key paramQual -value nocheck -default ""}
             }
             # method adds new Parameter object to the list Params
             set paramName [string tolower $paramName]
@@ -648,15 +648,15 @@ namespace eval ::SpiceGenTcl {
             # select parameter object according to parameter qualificator
             if {$value=="-sw"} {
                 dict append Params $paramName [::SpiceGenTcl::ParameterSwitch new $paramName]
-            } elseif {[info exists pos]} {
+            } elseif {$paramQual=="pos"} {
                 dict append Params $paramName [::SpiceGenTcl::ParameterPositional new $paramName $value]
-            } elseif {[info exists eq]} {
+            } elseif {$paramQual=="eq"} {
                 dict append Params $paramName [::SpiceGenTcl::ParameterEquation new $paramName $value]
-            } elseif {[info exists poseq]} {
+            } elseif {$paramQual=="poseq"} {
                 dict append Params $paramName [::SpiceGenTcl::ParameterPositionalEquation new $paramName $value]
-            } elseif {[info exists posnocheck]} {
+            } elseif {$paramQual=="posnocheck"} {
                 dict append Params $paramName [::SpiceGenTcl::ParameterPositionalNoCheck new $paramName $value]
-            } elseif {[info exists nocheck]} {
+            } elseif {$paramQual=="nocheck"} {
                 dict append Params $paramName [::SpiceGenTcl::ParameterNoCheck new $paramName $value]
             } else {
                 dict append Params $paramName [::SpiceGenTcl::Parameter new $paramName $value]
