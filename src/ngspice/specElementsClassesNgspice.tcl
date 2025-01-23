@@ -481,15 +481,15 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
         mixin ::SpiceGenTcl::Utility
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
-                {-v0= -required}
-                {-va= -required}
+                {-v0|i0= -required}
+                {-va|ia= -required}
                 {-fc= -required}
                 {-mdi= -required}
                 {-fs= -required}
                 -phasec=
                 {-phases= -require {phasec}}
             }]
-            set paramsOrder [list v0 va fc mdi fs phasec phases]
+            set paramsOrder [list v0 i0 va ia fc mdi fs phasec phases]
             lappend params "model sffm -posnocheck"
             my ParamsProcess $paramsOrder $arguments params
             next $type$name [list "np $npNode" "nm $nmNode"] $params
@@ -503,14 +503,14 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
         mixin ::SpiceGenTcl::Utility
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
-                {-v0= -required}
-                {-va= -required}
+                {-v0|i0= -required}
+                {-va|ia= -required}
                 {-mf= -required}
                 {-fc= -required}
                 {-td= -required}
                 -phases=
             }]
-            set paramsOrder [list v0 va mf fc td phases]
+            set paramsOrder [list v0 i0 va ia mf fc td phases]
             lappend params "model am -posnocheck"
             my ParamsProcess $paramsOrder $arguments params
             next $type$name [list "np $npNode" "nm $nmNode"] $params
@@ -748,8 +748,8 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             #  name - name of the device without first-letter designator I
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  -v0 - initial value
-            #  -va - pulsed value
+            #  -i0 - initial value
+            #  -ia - pulsed value
             #  -fc - carrier frequency
             #  -mdi - modulation index
             #  -fs - signal frequency
@@ -760,9 +760,9 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Sources::Isin new 1 net1 net2 -v0 0 -va 1 -fc {freq -eq} -mdi 0 -fs 1e3 -phasec {phase -eq}
+            # ::SpiceGenTcl::Ngspice::Sources::Isin new 1 net1 net2 -i0 0 -ia 1 -fc {freq -eq} -mdi 0 -fs 1e3 -phasec {phase -eq}
             # ```
-            # Synopsis: name npNode nmNode -v0 value -va value -fc value -mdi value -fs value ?-phasec value 
+            # Synopsis: name npNode nmNode -i0 value -ia value -fc value -mdi value -fs value ?-phasec value 
             #   ?-phases value??
             next $name i $npNode $nmNode {*}$args
         }
@@ -777,8 +777,8 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             #  name - name of the device without first-letter designator I
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  -v0 - initial value
-            #  -va - pulsed value
+            #  -i0 - initial value
+            #  -ia - pulsed value
             #  -mf - modulating frequency
             #  -fc - carrier frequency
             #  -td - signal delay, optional
@@ -788,9 +788,9 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Sources::Iam new 1 net1 net2 -v0 0 -va 2 -mf 1e3 -fc {freq -eq} -td 1e-6 -phases {phase -eq}
+            # ::SpiceGenTcl::Ngspice::Sources::Iam new 1 net1 net2 -i0 0 -ia 2 -mf 1e3 -fc {freq -eq} -td 1e-6 -phases {phase -eq}
             # ```
-            # Synopsis: name npNode nmNode -v0 value -va value -mf value -fc value ?-td value ?-phases value??
+            # Synopsis: name npNode nmNode -i0 value -ia value -mf value -fc value ?-td value ?-phases value??
             next $name i $npNode $nmNode {*}$args
         }
     }

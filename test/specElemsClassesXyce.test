@@ -683,7 +683,7 @@ test testIpulseClass-5 {test Ipulse class with different order} -setup {
 
 
 test testIsinClass-1 {test Isin class} -setup {
-    set isin [Isin new 1 net1 net2 -v0 0 -va 2 -freq 50 -td 1e-6]
+    set isin [Isin new 1 net1 net2 -i0 0 -ia 2 -freq 50 -td 1e-6]
 } -body {
     set result [$isin genSPICEString]
 } -result "i1 net1 net2 sin 0 2 50 1e-6" -cleanup {
@@ -691,7 +691,7 @@ test testIsinClass-1 {test Isin class} -setup {
 }
 
 test testIsinClass-2 {test Isin class} -setup {
-    set isin [Isin new 1 net1 net2 -v0 0 -va 2 -freq 50 -td 1e-6 -theta {theta -eq}]
+    set isin [Isin new 1 net1 net2 -i0 0 -ia 2 -freq 50 -td 1e-6 -theta {theta -eq}]
 } -body {
     set result [$isin genSPICEString]
 } -result "i1 net1 net2 sin 0 2 50 1e-6 \{theta\}" -cleanup {
@@ -699,7 +699,7 @@ test testIsinClass-2 {test Isin class} -setup {
 }
 
 test testIsinClass-3 {test Isin class} -setup {
-    set isin [Isin new 1 net1 net2 -v0 0 -va 2 -freq {freq -eq} -td 1e-6 -theta {theta -eq}]
+    set isin [Isin new 1 net1 net2 -i0 0 -ia 2 -freq {freq -eq} -td 1e-6 -theta {theta -eq}]
 } -body {
     set result [$isin genSPICEString]
 } -result "i1 net1 net2 sin 0 2 \{freq\} 1e-6 \{theta\}" -cleanup {
@@ -707,7 +707,7 @@ test testIsinClass-3 {test Isin class} -setup {
 }
 
 test testIsinClass-4 {test Isin class} -setup {
-    set isin [Isin new 1 net1 net2 -v0 0 -va 2 -freq 50]
+    set isin [Isin new 1 net1 net2 -i0 0 -ia 2 -freq 50]
 } -body {
     set result [$isin genSPICEString]
 } -result "i1 net1 net2 sin 0 2 50" -cleanup {
@@ -715,7 +715,7 @@ test testIsinClass-4 {test Isin class} -setup {
 }
 
 test testIsinClass-5 {test Isin class with different order} -setup {
-    set isin [Isin new 1 net1 net2 -v0 0 -theta {theta -eq} -va 2 -freq 50 -td 1e-6 ]
+    set isin [Isin new 1 net1 net2 -i0 0 -theta {theta -eq} -ia 2 -freq 50 -td 1e-6 ]
 } -body {
     set result [$isin genSPICEString]
 } -result "i1 net1 net2 sin 0 2 50 1e-6 \{theta\}" -cleanup {
@@ -725,7 +725,7 @@ test testIsinClass-5 {test Isin class with different order} -setup {
 ####  Iexp class test 
 
 test testIexpClass-1 {test Iexp class} -setup {
-    set iexp [Iexp new 1 net1 net2 -v1 0 -v2 1 -td1 1e-9 -tau1 1e-9 -td2 1e-9 -tau2 10e-6]
+    set iexp [Iexp new 1 net1 net2 -i1 0 -i2 1 -td1 1e-9 -tau1 1e-9 -td2 1e-9 -tau2 10e-6]
 } -body {
     set result [$iexp genSPICEString]
 } -result "i1 net1 net2 exp 0 1 1e-9 1e-9 1e-9 10e-6" -cleanup {
@@ -733,7 +733,7 @@ test testIexpClass-1 {test Iexp class} -setup {
 }
     
 test testIexpClass-2 {test Iexp class} -setup {
-    set iexp [Iexp new 1 net1 net2 -v1 0 -v2 1 -td1 1e-9 -tau1 1e-9 -td2 {td2 -eq} -tau2 10e-6]
+    set iexp [Iexp new 1 net1 net2 -i1 0 -i2 1 -td1 1e-9 -tau1 1e-9 -td2 {td2 -eq} -tau2 10e-6]
 } -body {
     set result [$iexp genSPICEString]
 } -result "i1 net1 net2 exp 0 1 1e-9 1e-9 \{td2\} 10e-6" -cleanup {
@@ -741,7 +741,7 @@ test testIexpClass-2 {test Iexp class} -setup {
 }
 
 test testIexpClass-3 {test Iexp class with different order} -setup {
-    set iexp [Iexp new 1 net1 net2 -v1 0 -tau1 1e-9 -v2 1 -td2 1e-9 -td1 1e-9 -tau2 10e-6]
+    set iexp [Iexp new 1 net1 net2 -i1 0 -tau1 1e-9 -i2 1 -td2 1e-9 -td1 1e-9 -tau2 10e-6]
 } -body {
     set result [$iexp genSPICEString]
 } -result "i1 net1 net2 exp 0 1 1e-9 1e-9 1e-9 10e-6" -cleanup {
@@ -777,7 +777,7 @@ test testIpwlClass-3 {test Ipwl class} -setup {
 ####  Isffm class test 
                 
 test testIsffmClass-1 {test Isffm class} -setup {
-    set isffm [Isffm new 1 net1 net2 -v0 0 -va 1 -fc 1e6 -mdi 0 -fs 1e3]
+    set isffm [Isffm new 1 net1 net2 -i0 0 -ia 1 -fc 1e6 -mdi 0 -fs 1e3]
 } -body {
     set result [$isffm genSPICEString]
 } -result "i1 net1 net2 sffm 0 1 1e6 0 1e3" -cleanup {
@@ -785,7 +785,7 @@ test testIsffmClass-1 {test Isffm class} -setup {
 }
 
 test testIsffmClass-2 {test Isffm class} -setup {
-    set isffm [Isffm new 1 net1 net2 -v0 0 -va 1 -fc 1e6 -mdi 0 -fs 1e3]
+    set isffm [Isffm new 1 net1 net2 -i0 0 -ia 1 -fc 1e6 -mdi 0 -fs 1e3]
 } -body {
     set result [$isffm genSPICEString]
 } -result "i1 net1 net2 sffm 0 1 1e6 0 1e3" -cleanup {
@@ -793,7 +793,7 @@ test testIsffmClass-2 {test Isffm class} -setup {
 }
 
 test testIsffmClass-3 {test Isffm class} -setup {
-    set isffm [Isffm new 1 net1 net2 -v0 0 -va 1 -fc {freq -eq} -mdi 0 -fs 1e3]
+    set isffm [Isffm new 1 net1 net2 -i0 0 -ia 1 -fc {freq -eq} -mdi 0 -fs 1e3]
 } -body {
     set result [$isffm genSPICEString]
 } -result "i1 net1 net2 sffm 0 1 \{freq\} 0 1e3" -cleanup {
@@ -801,7 +801,7 @@ test testIsffmClass-3 {test Isffm class} -setup {
 }
 
 test testIsffmClass-4 {test Isffm class} -setup {
-    set isffm [Isffm new 1 net1 net2 -v0 0 -va 1 -fc 1e6 -mdi 0 -fs 1e3]
+    set isffm [Isffm new 1 net1 net2 -i0 0 -ia 1 -fc 1e6 -mdi 0 -fs 1e3]
 } -body {
     set result [$isffm genSPICEString]
 } -result "i1 net1 net2 sffm 0 1 1e6 0 1e3" -cleanup {
@@ -809,7 +809,7 @@ test testIsffmClass-4 {test Isffm class} -setup {
 }
 
 test testIsffmClass-5 {test Isffm class with different order} -setup {
-    set isffm [Isffm new 1 net1 net2 -v0 0 -fs 1e3 -va 1 -fc {freq -eq} -mdi 0]
+    set isffm [Isffm new 1 net1 net2 -i0 0 -fs 1e3 -ia 1 -fc {freq -eq} -mdi 0]
 } -body {
     set result [$isffm genSPICEString]
 } -result "i1 net1 net2 sffm 0 1 \{freq\} 0 1e3" -cleanup {

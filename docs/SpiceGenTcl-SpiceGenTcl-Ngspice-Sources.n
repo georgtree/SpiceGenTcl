@@ -13,11 +13,11 @@ SpiceGenTcl::Ngspice::Sources - Commands in namespace SpiceGenTcl::Ngspice::Sour
 .br
 \fBOBJECT constructor\fP \fIname npNode nmNode -v value ?-tc1 value? ?-tc2 value? ?-noisy 0|1? ?-temp value|-dtemp value?\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -mf value -fc value ?-td value ?-phases value??\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -i0 value -ia value -mf value -fc value ?-td value ?-phases value??\fP
 .br
 \fBOBJECT constructor\fP \fIname npNode nmNode -low value -high value -td value -tr value -tf value -pw value -per value ?-np value?\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -fc value -mdi value -fs value ?-phasec value ?-phases value??\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -i0 value -ia value -fc value -mdi value -fs value ?-phasec value ?-phases value??\fP
 .br
 \fBpulse create OBJNAME\fP \fIname type npNode nmNode ?args?\fP
 .br
@@ -770,7 +770,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Iam that describes single-frequency FM current source\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -mf value -fc value ?-td value ?-phases value??\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -i0 value -ia value -mf value -fc value ?-td value ?-phases value??\fP
 .br
 .RE
 .PP
@@ -789,6 +789,12 @@ Name of node connected to negative pin\&.
 -fc
 Carrier frequency\&.
 .TP
+-i0
+Initial value\&.
+.TP
+-ia
+Pulsed value\&.
+.TP
 -mf
 Modulating frequency\&.
 .TP
@@ -797,12 +803,6 @@ Phase, optional, require -td\&.
 .TP
 -td
 Signal delay, optional\&.
-.TP
--v0
-Initial value\&.
-.TP
--va
-Pulsed value\&.
 .RE
 .PP
 \fBDescription\fR
@@ -817,7 +817,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Ngspice::Sources::Iam new 1 net1 net2 -v0 0 -va 2 -mf 1e3 -fc {freq -eq} -td 1e-6 -phases {phase -eq}
+::SpiceGenTcl::Ngspice::Sources::Iam new 1 net1 net2 -i0 0 -ia 2 -mf 1e3 -fc {freq -eq} -td 1e-6 -phases {phase -eq}
 .fi
 .RE
 .PP
@@ -1179,7 +1179,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Isffm that describes single-frequency FM current source\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -fc value -mdi value -fs value ?-phasec value ?-phases value??\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -i0 value -ia value -fc value -mdi value -fs value ?-phasec value ?-phases value??\fP
 .br
 .RE
 .PP
@@ -1201,6 +1201,12 @@ Carrier frequency\&.
 -fs
 Signal frequency\&.
 .TP
+-i0
+Initial value\&.
+.TP
+-ia
+Pulsed value\&.
+.TP
 -mdi
 Modulation index\&.
 .TP
@@ -1209,12 +1215,6 @@ Carrier phase, optional\&.
 .TP
 -phases
 Signal phase, optional, require -phasec\&.
-.TP
--v0
-Initial value\&.
-.TP
--va
-Pulsed value\&.
 .RE
 .PP
 \fBDescription\fR
@@ -1229,7 +1229,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Ngspice::Sources::Isin new 1 net1 net2 -v0 0 -va 1 -fc {freq -eq} -mdi 0 -fs 1e3 -phasec {phase -eq}
+::SpiceGenTcl::Ngspice::Sources::Isin new 1 net1 net2 -i0 0 -ia 1 -fc {freq -eq} -mdi 0 -fs 1e3 -phasec {phase -eq}
 .fi
 .RE
 .PP

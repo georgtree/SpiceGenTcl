@@ -27,15 +27,15 @@ SpiceGenTcl::Common::Sources - Commands in namespace SpiceGenTcl::Common::Source
 .br
 \fBOBJECT constructor\fP \fIname npNode nmNode -dc value\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -v1 value -v2 value -td1 value -tau1 value -td2 value -tau2 value\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -i1 value -i2 value -td1 value -tau1 value -td2 value -tau2 value\fP
 .br
 \fBOBJECT constructor\fP \fIname npNode nmNode -low value -high value -td value -tr value -tf value -pw value -per value\fP
 .br
 \fBOBJECT constructor\fP \fIname npNode nmNode -seq list\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -fc value -mdi value -fs value\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -i0 value -ia value -fc value -mdi value -fs value\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -freq value ?-td value ?-theta value ?-phase value???\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -i0 value -ia value -freq value ?-td value ?-theta value ?-phase value???\fP
 .br
 \fBpulse create OBJNAME\fP \fIname type npNode nmNode ?args?\fP
 .br
@@ -1077,7 +1077,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Iexp that describes exponential current source\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -v1 value -v2 value -td1 value -tau1 value -td2 value -tau2 value\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -i1 value -i2 value -td1 value -tau1 value -td2 value -tau2 value\fP
 .br
 .RE
 .PP
@@ -1093,6 +1093,12 @@ Name of node connected to positive pin\&.
 nmNode
 Name of node connected to negative pin\&.
 .TP
+-i1
+Initial value\&.
+.TP
+-i2
+Pulsed value\&.
+.TP
 -tau1
 Rise time constant\&.
 .TP
@@ -1104,12 +1110,6 @@ Rise delay time\&.
 .TP
 -td2
 Fall delay time\&.
-.TP
--v1
-Initial value\&.
-.TP
--v2
-Pulsed value\&.
 .RE
 .PP
 \fBDescription\fR
@@ -1124,7 +1124,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Common::Sources::Iexp new 1 net1 net2 -v1 0 -v2 1 -td1 1e-9 -tau1 1e-9 -td2 {td2 -eq} -tau2 10e-6
+::SpiceGenTcl::Common::Sources::Iexp new 1 net1 net2 -i1 0 -i2 1 -td1 1e-9 -tau1 1e-9 -td2 {td2 -eq} -tau2 10e-6
 .fi
 .RE
 .PP
@@ -1425,7 +1425,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Isffm that describes single-frequency FM current source\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -fc value -mdi value -fs value\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -i0 value -ia value -fc value -mdi value -fs value\fP
 .br
 .RE
 .PP
@@ -1447,14 +1447,14 @@ Carrier frequency\&.
 -fs
 Signal frequency\&.
 .TP
--mdi
-Modulation index\&.
-.TP
--v0
+-i0
 Initial value\&.
 .TP
--va
+-ia
 Pulsed value\&.
+.TP
+-mdi
+Modulation index\&.
 .RE
 .PP
 \fBDescription\fR
@@ -1469,7 +1469,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Common::Sources::Isin new 1 net1 net2 -v0 0 -va 1 -fc {freq -eq} -mdi 0 -fs 1e3
+::SpiceGenTcl::Common::Sources::Isin new 1 net1 net2 -i0 0 -ia 1 -fc {freq -eq} -mdi 0 -fs 1e3
 .fi
 .RE
 .PP
@@ -1542,7 +1542,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Isin that describes sinusoidal current source\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -freq value ?-td value ?-theta value ?-phase value???\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -i0 value -ia value -freq value ?-td value ?-theta value ?-phase value???\fP
 .br
 .RE
 .PP
@@ -1561,6 +1561,12 @@ Name of node connected to negative pin\&.
 -freq
 Frequency of sinusoidal signal\&.
 .TP
+-i0
+DC shift value\&.
+.TP
+-ia
+Amplitude value\&.
+.TP
 -phase
 Phase of signal, optional, require -td and -phase\&.
 .TP
@@ -1569,12 +1575,6 @@ Time delay, optional\&.
 .TP
 -theta
 Damping factor, optional, require -td\&.
-.TP
--v0
-DC shift value\&.
-.TP
--va
-Amplitude value\&.
 .RE
 .PP
 \fBDescription\fR
@@ -1589,7 +1589,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Common::Sources::Isin new 1 net1 net2 -v0 0 -va 2 -freq {freq -eq} -td 1e-6 -theta {theta -eq}
+::SpiceGenTcl::Common::Sources::Isin new 1 net1 net2 -i0 0 -ia 2 -freq {freq -eq} -td 1e-6 -theta {theta -eq}
 .fi
 .RE
 .PP

@@ -443,14 +443,14 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         mixin ::SpiceGenTcl::Utility
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
-                {-v0= -required}
-                {-va= -required}
+                {-v0|i0= -required}
+                {-va|ia= -required}
                 {-freq= -required}
                 -td=
                 {-theta= -require {td}}
                 {-phase= -require {td theta}}
             }]
-            set paramsOrder [list v0 va freq td theta phase]
+            set paramsOrder [list v0 i0 va ia freq td theta phase]
             lappend params "model sin -posnocheck"
             my ParamsProcess $paramsOrder $arguments params
             next $type$name [list "np $npNode" "nm $nmNode"] $params
@@ -464,14 +464,14 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         mixin ::SpiceGenTcl::Utility
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
-                {-v1= -required}
-                {-v2= -required}
+                {-v1|i1= -required}
+                {-v2|i2= -required}
                 {-td1= -required}
                 {-tau1= -required}
                 {-td2= -required}
                 {-tau2= -required}
             }]
-            set paramsOrder [list v1 v2 td1 tau1 td2 tau2]
+            set paramsOrder [list v1 i1 v2 i2 td1 tau1 td2 tau2]
             lappend params "model exp -posnocheck"
             my ParamsProcess $paramsOrder $arguments params
             next $type$name [list "np $npNode" "nm $nmNode"] $params
@@ -519,13 +519,13 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         mixin ::SpiceGenTcl::Utility
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
-                {-v0= -required}
-                {-va= -required}
+                {-v0|i0= -required}
+                {-va|ia= -required}
                 {-fc= -required}
                 {-mdi= -required}
                 {-fs= -required}
             }]
-            set paramsOrder [list v0 va fc mdi fs]
+            set paramsOrder [list v0 i0 va ia fc mdi fs]
             lappend params "model sffm -posnocheck"
             my ParamsProcess $paramsOrder $arguments params
             next $type$name [list "np $npNode" "nm $nmNode"] $params
@@ -791,8 +791,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  name - name of the device without first-letter designator I
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  -v0 - DC shift value
-            #  -va - amplitude value
+            #  -i0 - DC shift value
+            #  -ia - amplitude value
             #  -freq - frequency of sinusoidal signal
             #  -td - time delay, optional
             #  -theta - damping factor, optional, require -td
@@ -802,9 +802,9 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::Sources::Isin new 1 net1 net2 -v0 0 -va 2 -freq {freq -eq} -td 1e-6 -theta {theta -eq}
+            # ::SpiceGenTcl::Common::Sources::Isin new 1 net1 net2 -i0 0 -ia 2 -freq {freq -eq} -td 1e-6 -theta {theta -eq}
             # ```
-            # Synopsis: name npNode nmNode -v0 value -va value -freq value ?-td value ?-theta value ?-phase value???
+            # Synopsis: name npNode nmNode -i0 value -ia value -freq value ?-td value ?-theta value ?-phase value???
             next $name i $npNode $nmNode {*}$args
         }
     }
@@ -818,8 +818,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  name - name of the device without first-letter designator I
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  -v1 - initial value
-            #  -v2 - pulsed value
+            #  -i1 - initial value
+            #  -i2 - pulsed value
             #  -td1 - rise delay time
             #  -tau1 - rise time constant
             #  -td2 - fall delay time
@@ -829,9 +829,9 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::Sources::Iexp new 1 net1 net2 -v1 0 -v2 1 -td1 1e-9 -tau1 1e-9 -td2 {td2 -eq} -tau2 10e-6
+            # ::SpiceGenTcl::Common::Sources::Iexp new 1 net1 net2 -i1 0 -i2 1 -td1 1e-9 -tau1 1e-9 -td2 {td2 -eq} -tau2 10e-6
             # ```
-            # Synopsis: name npNode nmNode -v1 value -v2 value -td1 value -tau1 value -td2 value -tau2 value
+            # Synopsis: name npNode nmNode -i1 value -i2 value -td1 value -tau1 value -td2 value -tau2 value
             next $name i $npNode $nmNode {*}$args
         }
     }
@@ -867,8 +867,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  name - name of the device without first-letter designator I
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  -v0 - initial value
-            #  -va - pulsed value
+            #  -i0 - initial value
+            #  -ia - pulsed value
             #  -fc - carrier frequency
             #  -mdi - modulation index
             #  -fs - signal frequency
@@ -877,9 +877,9 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::Sources::Isin new 1 net1 net2 -v0 0 -va 1 -fc {freq -eq} -mdi 0 -fs 1e3
+            # ::SpiceGenTcl::Common::Sources::Isin new 1 net1 net2 -i0 0 -ia 1 -fc {freq -eq} -mdi 0 -fs 1e3
             # ```
-            # Synopsis: name npNode nmNode -v0 value -va value -fc value -mdi value -fs value
+            # Synopsis: name npNode nmNode -i0 value -ia value -fc value -mdi value -fs value
             next $name i $npNode $nmNode {*}$args
         }
     }
