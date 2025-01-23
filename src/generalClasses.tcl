@@ -648,18 +648,27 @@ namespace eval ::SpiceGenTcl {
             # select parameter object according to parameter qualificator
             if {$value=="-sw"} {
                 dict append Params $paramName [::SpiceGenTcl::ParameterSwitch new $paramName]
-            } elseif {$paramQual=="pos"} {
-                dict append Params $paramName [::SpiceGenTcl::ParameterPositional new $paramName $value]
-            } elseif {$paramQual=="eq"} {
-                dict append Params $paramName [::SpiceGenTcl::ParameterEquation new $paramName $value]
-            } elseif {$paramQual=="poseq"} {
-                dict append Params $paramName [::SpiceGenTcl::ParameterPositionalEquation new $paramName $value]
-            } elseif {$paramQual=="posnocheck"} {
-                dict append Params $paramName [::SpiceGenTcl::ParameterPositionalNoCheck new $paramName $value]
-            } elseif {$paramQual=="nocheck"} {
-                dict append Params $paramName [::SpiceGenTcl::ParameterNoCheck new $paramName $value]
             } else {
-                dict append Params $paramName [::SpiceGenTcl::Parameter new $paramName $value]
+                switch $paramQual {
+                    pos {
+                        dict append Params $paramName [::SpiceGenTcl::ParameterPositional new $paramName $value]
+                    }
+                    eq {
+                        dict append Params $paramName [::SpiceGenTcl::ParameterEquation new $paramName $value]
+                    }
+                    poseq {
+                        dict append Params $paramName [::SpiceGenTcl::ParameterPositionalEquation new $paramName $value]
+                    }
+                    posnocheck {
+                        dict append Params $paramName [::SpiceGenTcl::ParameterPositionalNoCheck new $paramName $value]
+                    }
+                    nocheck {
+                        dict append Params $paramName [::SpiceGenTcl::ParameterNoCheck new $paramName $value]
+                    }
+                    default {
+                        dict append Params $paramName [::SpiceGenTcl::Parameter new $paramName $value]
+                    }
+                }
             }
             return
         }

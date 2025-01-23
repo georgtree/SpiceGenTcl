@@ -194,11 +194,11 @@
     <i><font color=#76a396>#  -nocheck - parameter is of class [::SpiceGenTcl::ParameterNoCheck], optional, forbids other switches</font></i>
     <i><font color=#76a396># Synopsis: paramName value ?-name value? ?-eq|-poseq|-posnocheck|-pos|-nocheck?</font></i>
     argparse {
-        {<font color=#b9b96e>-pos</font> <font color=#b9b96e>-forbid</font> {eq poseq posnocheck nocheck}}
-        {<font color=#b9b96e>-eq</font> <font color=#b9b96e>-forbid</font> {pos poseq posnocheck nocheck}}
-        {<font color=#b9b96e>-poseq</font> <font color=#b9b96e>-forbid</font> {pos eq posnocheck nocheck}}
-        {<font color=#b9b96e>-posnocheck</font> <font color=#b9b96e>-forbid</font> {pos eq poseq nocheck}}
-        {<font color=#b9b96e>-nocheck</font> <font color=#b9b96e>-forbid</font> {pos eq poseq posnocheck}}
+        {<font color=#b9b96e>-pos</font> <font color=#b9b96e>-key</font> paramQual <font color=#b9b96e>-value</font> pos}
+        {<font color=#b9b96e>-eq</font> <font color=#b9b96e>-key</font> paramQual <font color=#b9b96e>-value</font> eq}
+        {<font color=#b9b96e>-poseq</font> <font color=#b9b96e>-key</font> paramQual <font color=#b9b96e>-value</font> poseq}
+        {<font color=#b9b96e>-posnocheck</font> <font color=#b9b96e>-key</font> paramQual <font color=#b9b96e>-value</font> posnocheck}
+        {<font color=#b9b96e>-nocheck</font> <font color=#b9b96e>-key</font> paramQual <font color=#b9b96e>-value</font> nocheck <font color=#b9b96e>-default</font> <font color=#90ee90>&quot;&quot;</font>}
     }
     <i><font color=#76a396># method adds new Parameter object to the list Params</font></i>
     <b><font color=#ffa500>set</font></b> paramName [<b><font color=#ffa500>string</font></b> tolower <font color=#f1b479>$paramName</font>]
@@ -212,18 +212,27 @@
     <i><font color=#76a396># select parameter object according to parameter qualificator</font></i>
     <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$value</font>==&quot;-sw&quot;} {
         <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterSwitch new <font color=#f1b479>$paramName</font>]
-    } <b><font color=#ffa500>elseif</font></b> {[<b><font color=#ffa500>info</font></b> exists pos]} {
-        <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterPositional new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
-    } <b><font color=#ffa500>elseif</font></b> {[<b><font color=#ffa500>info</font></b> exists eq]} {
-        <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterEquation new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
-    } <b><font color=#ffa500>elseif</font></b> {[<b><font color=#ffa500>info</font></b> exists poseq]} {
-        <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterPositionalEquation new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
-    } <b><font color=#ffa500>elseif</font></b> {[<b><font color=#ffa500>info</font></b> exists posnocheck]} {
-        <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterPositionalNoCheck new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
-    } <b><font color=#ffa500>elseif</font></b> {[<b><font color=#ffa500>info</font></b> exists nocheck]} {
-        <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterNoCheck new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
     } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::Parameter new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
+        <b><font color=#ffa500>switch</font></b> <font color=#f1b479>$paramQual</font> {
+            pos {
+                <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterPositional new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
+            }
+            eq {
+                <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterEquation new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
+            }
+            poseq {
+                <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterPositionalEquation new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
+            }
+            posnocheck {
+                <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterPositionalNoCheck new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
+            }
+            nocheck {
+                <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterNoCheck new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
+            }
+            <b><font color=#ffa500>default</font></b> {
+                <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::Parameter new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
+            }
+        }
     }
     <b><font color=#fe6efe>return</font></b>
 }</pre></div>
@@ -966,11 +975,11 @@
     <i><font color=#76a396>#  -nocheck - parameter is of class [::SpiceGenTcl::ParameterNoCheck], optional, forbids other switches</font></i>
     <i><font color=#76a396># Synopsis: paramName value ?-name value? ?-eq|-poseq|-posnocheck|-pos|-nocheck?</font></i>
     argparse {
-        {<font color=#b9b96e>-pos</font> <font color=#b9b96e>-forbid</font> {eq poseq posnocheck nocheck}}
-        {<font color=#b9b96e>-eq</font> <font color=#b9b96e>-forbid</font> {pos poseq posnocheck nocheck}}
-        {<font color=#b9b96e>-poseq</font> <font color=#b9b96e>-forbid</font> {pos eq posnocheck nocheck}}
-        {<font color=#b9b96e>-posnocheck</font> <font color=#b9b96e>-forbid</font> {pos eq poseq nocheck}}
-        {<font color=#b9b96e>-nocheck</font> <font color=#b9b96e>-forbid</font> {pos eq poseq posnocheck}}
+        {<font color=#b9b96e>-pos</font> <font color=#b9b96e>-key</font> paramQual <font color=#b9b96e>-value</font> pos}
+        {<font color=#b9b96e>-eq</font> <font color=#b9b96e>-key</font> paramQual <font color=#b9b96e>-value</font> eq}
+        {<font color=#b9b96e>-poseq</font> <font color=#b9b96e>-key</font> paramQual <font color=#b9b96e>-value</font> poseq}
+        {<font color=#b9b96e>-posnocheck</font> <font color=#b9b96e>-key</font> paramQual <font color=#b9b96e>-value</font> posnocheck}
+        {<font color=#b9b96e>-nocheck</font> <font color=#b9b96e>-key</font> paramQual <font color=#b9b96e>-value</font> nocheck <font color=#b9b96e>-default</font> <font color=#90ee90>&quot;&quot;</font>}
     }
     <i><font color=#76a396># method adds new Parameter object to the list Params</font></i>
     <b><font color=#ffa500>set</font></b> paramName [<b><font color=#ffa500>string</font></b> tolower <font color=#f1b479>$paramName</font>]
@@ -984,18 +993,27 @@
     <i><font color=#76a396># select parameter object according to parameter qualificator</font></i>
     <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$value</font>==&quot;-sw&quot;} {
         <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterSwitch new <font color=#f1b479>$paramName</font>]
-    } <b><font color=#ffa500>elseif</font></b> {[<b><font color=#ffa500>info</font></b> exists pos]} {
-        <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterPositional new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
-    } <b><font color=#ffa500>elseif</font></b> {[<b><font color=#ffa500>info</font></b> exists eq]} {
-        <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterEquation new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
-    } <b><font color=#ffa500>elseif</font></b> {[<b><font color=#ffa500>info</font></b> exists poseq]} {
-        <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterPositionalEquation new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
-    } <b><font color=#ffa500>elseif</font></b> {[<b><font color=#ffa500>info</font></b> exists posnocheck]} {
-        <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterPositionalNoCheck new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
-    } <b><font color=#ffa500>elseif</font></b> {[<b><font color=#ffa500>info</font></b> exists nocheck]} {
-        <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterNoCheck new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
     } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::Parameter new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
+        <b><font color=#ffa500>switch</font></b> <font color=#f1b479>$paramQual</font> {
+            pos {
+                <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterPositional new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
+            }
+            eq {
+                <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterEquation new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
+            }
+            poseq {
+                <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterPositionalEquation new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
+            }
+            posnocheck {
+                <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterPositionalNoCheck new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
+            }
+            nocheck {
+                <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterNoCheck new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
+            }
+            <b><font color=#ffa500>default</font></b> {
+                <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::Parameter new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
+            }
+        }
     }
     <b><font color=#fe6efe>return</font></b>
 }</pre></div>
@@ -1532,11 +1550,11 @@
     <i><font color=#76a396>#  -nocheck - parameter is of class [::SpiceGenTcl::ParameterNoCheck], optional, forbids other switches</font></i>
     <i><font color=#76a396># Synopsis: paramName value ?-name value? ?-eq|-poseq|-posnocheck|-pos|-nocheck?</font></i>
     argparse {
-        {<font color=#b9b96e>-pos</font> <font color=#b9b96e>-forbid</font> {eq poseq posnocheck nocheck}}
-        {<font color=#b9b96e>-eq</font> <font color=#b9b96e>-forbid</font> {pos poseq posnocheck nocheck}}
-        {<font color=#b9b96e>-poseq</font> <font color=#b9b96e>-forbid</font> {pos eq posnocheck nocheck}}
-        {<font color=#b9b96e>-posnocheck</font> <font color=#b9b96e>-forbid</font> {pos eq poseq nocheck}}
-        {<font color=#b9b96e>-nocheck</font> <font color=#b9b96e>-forbid</font> {pos eq poseq posnocheck}}
+        {<font color=#b9b96e>-pos</font> <font color=#b9b96e>-key</font> paramQual <font color=#b9b96e>-value</font> pos}
+        {<font color=#b9b96e>-eq</font> <font color=#b9b96e>-key</font> paramQual <font color=#b9b96e>-value</font> eq}
+        {<font color=#b9b96e>-poseq</font> <font color=#b9b96e>-key</font> paramQual <font color=#b9b96e>-value</font> poseq}
+        {<font color=#b9b96e>-posnocheck</font> <font color=#b9b96e>-key</font> paramQual <font color=#b9b96e>-value</font> posnocheck}
+        {<font color=#b9b96e>-nocheck</font> <font color=#b9b96e>-key</font> paramQual <font color=#b9b96e>-value</font> nocheck <font color=#b9b96e>-default</font> <font color=#90ee90>&quot;&quot;</font>}
     }
     <i><font color=#76a396># method adds new Parameter object to the list Params</font></i>
     <b><font color=#ffa500>set</font></b> paramName [<b><font color=#ffa500>string</font></b> tolower <font color=#f1b479>$paramName</font>]
@@ -1550,18 +1568,27 @@
     <i><font color=#76a396># select parameter object according to parameter qualificator</font></i>
     <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$value</font>==&quot;-sw&quot;} {
         <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterSwitch new <font color=#f1b479>$paramName</font>]
-    } <b><font color=#ffa500>elseif</font></b> {[<b><font color=#ffa500>info</font></b> exists pos]} {
-        <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterPositional new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
-    } <b><font color=#ffa500>elseif</font></b> {[<b><font color=#ffa500>info</font></b> exists eq]} {
-        <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterEquation new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
-    } <b><font color=#ffa500>elseif</font></b> {[<b><font color=#ffa500>info</font></b> exists poseq]} {
-        <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterPositionalEquation new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
-    } <b><font color=#ffa500>elseif</font></b> {[<b><font color=#ffa500>info</font></b> exists posnocheck]} {
-        <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterPositionalNoCheck new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
-    } <b><font color=#ffa500>elseif</font></b> {[<b><font color=#ffa500>info</font></b> exists nocheck]} {
-        <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterNoCheck new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
     } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::Parameter new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
+        <b><font color=#ffa500>switch</font></b> <font color=#f1b479>$paramQual</font> {
+            pos {
+                <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterPositional new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
+            }
+            eq {
+                <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterEquation new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
+            }
+            poseq {
+                <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterPositionalEquation new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
+            }
+            posnocheck {
+                <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterPositionalNoCheck new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
+            }
+            nocheck {
+                <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterNoCheck new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
+            }
+            <b><font color=#ffa500>default</font></b> {
+                <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::Parameter new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
+            }
+        }
     }
     <b><font color=#fe6efe>return</font></b>
 }</pre></div>
@@ -3414,7 +3441,7 @@
 <div style='clear:both;'></div>
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 </table>
-<h5 class='ruff'>Subclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::pulse" title="::SpiceGenTcl::Common::Sources::pulse" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::pulse</a>, <a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::sin" title="::SpiceGenTcl::Common::Sources::sin" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::sin</a>, <a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::exp" title="::SpiceGenTcl::Common::Sources::exp" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::exp</a>, <a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::sffm" title="::SpiceGenTcl::Common::Sources::sffm" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::sffm</a>, <a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::pulse" title="::SpiceGenTcl::Ngspice::Sources::pulse" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources::pulse</a>, <a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::sffm" title="::SpiceGenTcl::Ngspice::Sources::sffm" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources::sffm</a>, <a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::am" title="::SpiceGenTcl::Ngspice::Sources::am" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources::am</a>, <a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Dc" title="::SpiceGenTcl::Ngspice::Analyses::Dc" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::Dc</a>, <a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Ac" title="::SpiceGenTcl::Ngspice::Analyses::Ac" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::Ac</a>, <a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Sp" title="::SpiceGenTcl::Ngspice::Analyses::Sp" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::Sp</a>, <a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::SensAc" title="::SpiceGenTcl::Ngspice::Analyses::SensAc" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::SensAc</a>, <a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Tran" title="::SpiceGenTcl::Ngspice::Analyses::Tran" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::Tran</a>, <a href="index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Dc" title="::SpiceGenTcl::Xyce::Analyses::Dc" class='ruff_cmd'>::SpiceGenTcl::Xyce::Analyses::Dc</a>, <a href="index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Ac" title="::SpiceGenTcl::Xyce::Analyses::Ac" class='ruff_cmd'>::SpiceGenTcl::Xyce::Analyses::Ac</a>, <a href="index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Tran" title="::SpiceGenTcl::Xyce::Analyses::Tran" class='ruff_cmd'>::SpiceGenTcl::Xyce::Analyses::Tran</a></p>
+<h5 class='ruff'>Subclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::pulse" title="::SpiceGenTcl::Common::Sources::pulse" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::pulse</a>, <a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::sin" title="::SpiceGenTcl::Common::Sources::sin" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::sin</a>, <a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::exp" title="::SpiceGenTcl::Common::Sources::exp" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::exp</a>, <a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::sffm" title="::SpiceGenTcl::Common::Sources::sffm" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::sffm</a>, <a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::pulse" title="::SpiceGenTcl::Ngspice::Sources::pulse" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources::pulse</a>, <a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::sffm" title="::SpiceGenTcl::Ngspice::Sources::sffm" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources::sffm</a>, <a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::am" title="::SpiceGenTcl::Ngspice::Sources::am" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources::am</a>, <a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Dc" title="::SpiceGenTcl::Ngspice::Analyses::Dc" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::Dc</a>, <a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Ac" title="::SpiceGenTcl::Ngspice::Analyses::Ac" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::Ac</a>, <a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Sp" title="::SpiceGenTcl::Ngspice::Analyses::Sp" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::Sp</a>, <a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::SensAc" title="::SpiceGenTcl::Ngspice::Analyses::SensAc" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::SensAc</a>, <a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::SensDc" title="::SpiceGenTcl::Ngspice::Analyses::SensDc" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::SensDc</a>, <a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Tran" title="::SpiceGenTcl::Ngspice::Analyses::Tran" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::Tran</a>, <a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Op" title="::SpiceGenTcl::Ngspice::Analyses::Op" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::Op</a>, <a href="index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Dc" title="::SpiceGenTcl::Xyce::Analyses::Dc" class='ruff_cmd'>::SpiceGenTcl::Xyce::Analyses::Dc</a>, <a href="index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Ac" title="::SpiceGenTcl::Xyce::Analyses::Ac" class='ruff_cmd'>::SpiceGenTcl::Xyce::Analyses::Ac</a>, <a href="index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Sens" title="::SpiceGenTcl::Xyce::Analyses::Sens" class='ruff_cmd'>::SpiceGenTcl::Xyce::Analyses::Sens</a>, <a href="index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Tran" title="::SpiceGenTcl::Xyce::Analyses::Tran" class='ruff_cmd'>::SpiceGenTcl::Xyce::Analyses::Tran</a>, <a href="index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Op" title="::SpiceGenTcl::Xyce::Analyses::Op" class='ruff_cmd'>::SpiceGenTcl::Xyce::Analyses::Op</a></p>
 </main><nav class='ruff-nav'><ul ><li class='ruff-toc1'><a style='padding-top:2px;' href='index.html'>Start page</a></li>
 <li class='ruff-toc1'><a href='index-docindex.html' accesskey='i'>Index</a></li>
 <hr>
