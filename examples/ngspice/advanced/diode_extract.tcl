@@ -3,11 +3,9 @@ package require ticklecharts
 package require tclcsv
 package require tclopt
 package require tclinterp
-package require gnuplotutil
 
 namespace import ::tcl::mathfunc::*
 namespace import ::tclinterp::interpolation::*
-namespace import ::gnuplotutil::*
 set ::ticklecharts::theme "dark"
 
 namespace import ::tclcsv::*
