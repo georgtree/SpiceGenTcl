@@ -443,13 +443,17 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         mixin ::SpiceGenTcl::Utility
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
-                {-v0|i0= -required}
-                {-va|ia= -required}
+                {-v0= -forbid i0}
+                {-i0= -forbid v0}
+                {-va= -forbid ia}
+                {-ia= -forbid va}
                 {-freq= -required}
                 -td=
                 {-theta= -require {td}}
                 {-phase= -require {td theta}}
             }]
+            my AliasesKeysCheck $arguments [list v0 i0]
+            my AliasesKeysCheck $arguments [list va ia]
             set paramsOrder [list v0 i0 va ia freq td theta phase]
             lappend params "model sin -posnocheck"
             my ParamsProcess $paramsOrder $arguments params
@@ -464,13 +468,17 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         mixin ::SpiceGenTcl::Utility
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
-                {-v1|i1= -required}
-                {-v2|i2= -required}
+                {-v1= -forbid i1}
+                {-i1= -forbid v1}
+                {-v2= -forbid i2}
+                {-i2= -forbid v2}
                 {-td1= -required}
                 {-tau1= -required}
                 {-td2= -required}
                 {-tau2= -required}
             }]
+            my AliasesKeysCheck $arguments [list v1 i1]
+            my AliasesKeysCheck $arguments [list v2 i2]
             set paramsOrder [list v1 i1 v2 i2 td1 tau1 td2 tau2]
             lappend params "model exp -posnocheck"
             my ParamsProcess $paramsOrder $arguments params
@@ -519,12 +527,16 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         mixin ::SpiceGenTcl::Utility
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
-                {-v0|i0= -required}
-                {-va|ia= -required}
+                {-v0= -forbid i0}
+                {-i0= -forbid v0}
+                {-va= -forbid ia}
+                {-ia= -forbid va}
                 {-fc= -required}
                 {-mdi= -required}
                 {-fs= -required}
             }]
+            my AliasesKeysCheck $arguments [list v0 i0]
+            my AliasesKeysCheck $arguments [list va ia]
             set paramsOrder [list v0 i0 va ia fc mdi fs]
             lappend params "model sffm -posnocheck"
             my ParamsProcess $paramsOrder $arguments params
@@ -563,7 +575,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  name - name of the device without first-letter designator V
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  -dc - AC voltage value
+            #  -ac - AC voltage value
             #  -acphase - phase of AC voltage
             # ```
             # VYYYYYYY n+ n- <AC<ACMAG<ACPHASE>>>

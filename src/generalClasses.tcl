@@ -20,7 +20,8 @@ namespace eval ::SpiceGenTcl {
             ParameterDefault ParameterEquation ParameterPositionalEquation Device Model RawString Comment Include\
             Options ParamStatement Temp Netlist Circuit Library Subcircuit Analysis Simulator Dataset Axis Trace\
             EmptyTrace RawFile
-    namespace export importNgspice importXyce importCommon forgetNgspice forgetXyce forgetCommon
+    namespace export importNgspice importXyce importCommon importLtspice forgetNgspice forgetXyce forgetCommon\
+            forgetLtspice
     
     proc importCommon {} {
         # Imports all ::SpiceGenTcl::Common commands to caller namespace
@@ -40,6 +41,12 @@ namespace eval ::SpiceGenTcl {
             namespace import ${nameSpc}::*
         }}
     }
+    proc importLtspice {} {
+        # Imports all ::SpiceGenTcl::Ltspice commands to caller namespace
+        uplevel 1 {foreach nameSpc [namespace children ::SpiceGenTcl::Ltspice] {
+            namespace import ${nameSpc}::*
+        }}
+    }
     proc forgetNgspice {} {
         # Forgets all ::SpiceGenTcl::Ngspice commands from caller namespace
         uplevel 1 {foreach nameSpc [namespace children ::SpiceGenTcl::Ngspice] {
@@ -55,6 +62,12 @@ namespace eval ::SpiceGenTcl {
     proc forgetXyce {} {
         # Forgets all ::SpiceGenTcl::Xyce commands from caller namespace
         uplevel 1 {foreach nameSpc [namespace children ::SpiceGenTcl::Xyce] {
+            namespace forget ${nameSpc}::*
+        }}
+    }
+    proc forgetLtspice {} {
+        # Forgets all ::SpiceGenTcl::Ltspice commands from caller namespace
+        uplevel 1 {foreach nameSpc [namespace children ::SpiceGenTcl::Ltspice] {
             namespace forget ${nameSpc}::*
         }}
     }
@@ -176,6 +189,15 @@ namespace eval ::SpiceGenTcl {
             } else {
                 set name $object
             }
+        }
+        method AliasesKeysCheck {arguments keys} {
+            foreach key $keys {
+                if {[dexist $arguments $key]} {
+                    return
+                }
+            }
+            set formKeys [lmap key $keys {subst "-$key"}]
+            return -code error "[join [lrange $formKeys 0 end-1] ", "] or [@ $formKeys end] must be presented"
         }
     }
     
@@ -1395,9 +1417,10 @@ namespace eval ::SpiceGenTcl {
             #  args - elements objects references
             foreach arg $args {
                 set argClass [info object class $arg]
+                set argSuperclass [info class superclasses $argClass]
                 if {$argClass in {::SpiceGenTcl::Include ::SpiceGenTcl::Library ::SpiceGenTcl::Options}} {
                     return -code error "$argClass element can't be included in subcircuit"
-                } elseif {[info class superclasses $argClass]=={::SpiceGenTcl::Analysis}} {
+                } elseif {[string match *::Analysis* $argSuperclass] || [string match *::Analyses* $argSuperclass]} {
                     return -code error "Analysis element can't be included in subcircuit"
                 }
             }

@@ -606,7 +606,7 @@ namespace eval ::SpiceGenTcl::Xyce::Sources {
         superclass ::SpiceGenTcl::Device
         constructor {name npNode nmNode args} {
             # Creates object of class `BehaviouralSource` that describes behavioural source.
-            #  name - name of the device without first-letter designator R
+            #  name - name of the device without first-letter designator B
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
             #  -i - current expression
@@ -941,7 +941,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             #  -nrd - equivalent number of squares of the drain diffusions
             #  -nrs - equivalent number of squares of the source diffusions
             #  -temp - device temperature
-            #  -ic - initial conditions for vds, vgs and vbs, in form of two element list, optional, require 4th node
+            #  -ic - initial conditions for vds, vgs and vbs, in form of three element list, optional, require 4th node
             #  -off - initial state, optional
             #  -n4 - name of 4th node;
             #  -n5 - name of 5th node, require -n4, optional

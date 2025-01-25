@@ -93,7 +93,7 @@ install-libraries:
 	done
 	@echo " Install pkgIndex.tcl $(DESTDIR)$(pkglibdir)"; \
 	$(INSTALL_DATA) pkgIndex.tcl $(DESTDIR)$(pkglibdir);
-	$(INSTALL_DATA_DIR) "$(DESTDIR)$(pkglibdir)/src" "$(DESTDIR)$(pkglibdir)/src/ngspice" "$(DESTDIR)$(pkglibdir)/src/xyce" "$(DESTDIR)$(pkglibdir)/lib" "$(DESTDIR)$(pkglibdir)/lib/argparse"
+	$(INSTALL_DATA_DIR) "$(DESTDIR)$(pkglibdir)/src" "$(DESTDIR)$(pkglibdir)/src/ngspice" "$(DESTDIR)$(pkglibdir)/src/xyce" "$(DESTDIR)$(pkglibdir)/src/ltspice" "$(DESTDIR)$(pkglibdir)/lib" "$(DESTDIR)$(pkglibdir)/lib/argparse"
 	@echo " Install $(srcdir)/lib/argparse/argparse.tcl $(DESTDIR)$(pkglibdir)/lib/argparse"; \
 	$(INSTALL_DATA) $(srcdir)/lib/argparse/argparse.tcl $(DESTDIR)$(pkglibdir)/lib/argparse;
 	@echo " Install $(srcdir)/lib/argparse/pkgIndex.tcl $(DESTDIR)$(pkglibdir)/lib/argparse"; \
@@ -102,6 +102,8 @@ install-libraries:
 	$(INSTALL_DATA) $(srcdir)/src/generalClasses.tcl $(DESTDIR)$(pkglibdir)/src;
 	@echo " Install $(srcdir)/src/specElementsClassesCommon.tcl $(DESTDIR)$(pkglibdir)/src"; \
 	$(INSTALL_DATA) $(srcdir)/src/specElementsClassesCommon.tcl $(DESTDIR)$(pkglibdir)/src;
+	@echo " Install $(srcdir)/src/specAnalysesClassesCommon.tcl $(DESTDIR)$(pkglibdir)/src"; \
+	$(INSTALL_DATA) $(srcdir)/src/specAnalysesClassesCommon.tcl $(DESTDIR)$(pkglibdir)/src;
 	@echo " Install $(srcdir)/src/ngspice/specAnalysesClassesNgspice.tcl $(DESTDIR)$(pkglibdir)/src/ngspice"; \
 	$(INSTALL_DATA) $(srcdir)/src/ngspice/specAnalysesClassesNgspice.tcl $(DESTDIR)$(pkglibdir)/src/ngspice;
 	@echo " Install $(srcdir)/src/ngspice/specElementsClassesNgspice.tcl $(DESTDIR)$(pkglibdir)/src/ngspice"; \
@@ -118,6 +120,14 @@ install-libraries:
 	$(INSTALL_DATA) $(srcdir)/src/xyce/specModelsClassesXyce.tcl $(DESTDIR)$(pkglibdir)/src/xyce;
 	@echo " Install $(srcdir)/src/xyce/specSimulatorClassesXyce.tcl $(DESTDIR)$(pkglibdir)/src/xyce"; \
 	$(INSTALL_DATA) $(srcdir)/src/xyce/specSimulatorClassesXyce.tcl $(DESTDIR)$(pkglibdir)/src/xyce;
+	@echo " Install $(srcdir)/src/ltspice/specAnalysesClassesLtspice.tcl $(DESTDIR)$(pkglibdir)/src/ltspice"; \
+	$(INSTALL_DATA) $(srcdir)/src/ltspice/specAnalysesClassesLtspice.tcl $(DESTDIR)$(pkglibdir)/src/ltspice;
+	@echo " Install $(srcdir)/src/ltspice/specElementsClassesLtspice.tcl $(DESTDIR)$(pkglibdir)/src/ltspice"; \
+	$(INSTALL_DATA) $(srcdir)/src/ltspice/specElementsClassesLtspice.tcl $(DESTDIR)$(pkglibdir)/src/ltspice;
+	@echo " Install $(srcdir)/src/ltspice/specModelsClassesLtspice.tcl $(DESTDIR)$(pkglibdir)/src/ltspice"; \
+	$(INSTALL_DATA) $(srcdir)/src/ltspice/specModelsClassesLtspice.tcl $(DESTDIR)$(pkglibdir)/src/ltspice;
+	@echo " Install $(srcdir)/src/ltspice/specSimulatorClassesLtspice.tcl $(DESTDIR)$(pkglibdir)/src/ltspice"; \
+	$(INSTALL_DATA) $(srcdir)/src/ltspice/specSimulatorClassesLtspice.tcl $(DESTDIR)$(pkglibdir)/src/ltspice;
 
 install-doc:
 	@$(INSTALL_DATA_DIR) "$(DESTDIR)$(mandir)/mann"
