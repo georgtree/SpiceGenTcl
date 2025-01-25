@@ -413,15 +413,15 @@ test testVacClass-1 {test Vac class} -setup {
     set vac [Vac new 1 netp netm -ac 10]
 } -body {
     set result [$vac genSPICEString]
-} -result "v1 netp netm ac 10" -cleanup {
+} -result "v1 netp netm 0 ac 10" -cleanup {
     unset vac result
 }
 
 test testVacClass-2 {test Vac class} -setup {
-    set vac [Vac new 1 netp netm -ac 10 -acphase 45]
+    set vac [Vac new 1 netp netm -dc 1 -ac 10 -acphase 45]
 } -body {
     set result [$vac genSPICEString]
-} -result "v1 netp netm ac 10 45" -cleanup {
+} -result "v1 netp netm 1 ac 10 45" -cleanup {
     unset vac result
 }
 
@@ -429,7 +429,7 @@ test testVacClass-3 {test Vac class} -setup {
     set vac [Vac new 1 netp netm -ac 10 -acphase {phase -eq}]
 } -body {
     set result [$vac genSPICEString]
-} -result "v1 netp netm ac 10 \{phase\}" -cleanup {
+} -result "v1 netp netm 0 ac 10 \{phase\}" -cleanup {
     unset vac result
 }
 
@@ -437,7 +437,7 @@ test testVacClass-4 {test Vac class} -setup {
     set vac [Vac new 1 netp netm -ac {acmag -eq} -acphase 45]
 } -body {
     set result [$vac genSPICEString]
-} -result "v1 netp netm ac {acmag} 45" -cleanup {
+} -result "v1 netp netm 0 ac {acmag} 45" -cleanup {
     unset vac result
 }
 
@@ -712,7 +712,7 @@ test testIacClass-1 {test Iac class} -setup {
     set iac [Iac new 1 netp netm -ac 10]
 } -body {
     set result [$iac genSPICEString]
-} -result "i1 netp netm ac 10" -cleanup {
+} -result "i1 netp netm 0 ac 10" -cleanup {
     unset iac result
 }
 
@@ -720,7 +720,7 @@ test testIacClass-2 {test Iac class} -setup {
     set iac [Iac new 1 netp netm -ac 10 -acphase 45]
 } -body {
     set result [$iac genSPICEString]
-} -result "i1 netp netm ac 10 45" -cleanup {
+} -result "i1 netp netm 0 ac 10 45" -cleanup {
     unset iac result
 }
 
@@ -728,7 +728,7 @@ test testIacClass-3 {test Iac class} -setup {
     set iac [Iac new 1 netp netm -ac 10 -acphase {phase -eq}]
 } -body {
     set result [$iac genSPICEString]
-} -result "i1 netp netm ac 10 \{phase\}" -cleanup {
+} -result "i1 netp netm 0 ac 10 \{phase\}" -cleanup {
     unset iac result
 }
 
@@ -736,7 +736,7 @@ test testIacClass-4 {test Iac class} -setup {
     set iac [Iac new 1 netp netm -ac {acmag -eq} -acphase 45]
 } -body {
     set result [$iac genSPICEString]
-} -result "i1 netp netm ac {acmag} 45" -cleanup {
+} -result "i1 netp netm 0 ac {acmag} 45" -cleanup {
     unset iac result
 }
 

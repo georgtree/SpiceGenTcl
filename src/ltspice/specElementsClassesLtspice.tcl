@@ -395,11 +395,10 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
                 lappend params "dc $dcVal -pos"
             }
             set acVal [dget $arguments ac]
-            lappend params "ac -sw"
             if {([llength $acVal]>1) && ([@ $acVal 1]=="-eq")} {
-                lappend params "acval [@ $acVal 0] -poseq"
+                lappend params "ac [@ $acVal 0] -eq"
             } else {
-                lappend params "acval $acVal -pos"
+                lappend params "ac $acVal"
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {dc ac}} {
@@ -466,14 +465,14 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
         mixin ::SpiceGenTcl::Utility
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
-                {-v0 -forbid {i0 voffset ioffset}}
-                {-i0 -forbid {v0 voffset ioffset}}
-                {-voffset -forbid {v0 i0 ioffset}}
-                {-ioffset -forbid {v0 i0 voffset}}
-                {-va -forbid {ia vamp iamp}}
-                {-ia -forbid {va vamp iamp}}
-                {-vamp -forbid {va ia iamp}}
-                {-iamp -forbid {va ia vamp}}
+                {-v0= -forbid {i0 voffset ioffset}}
+                {-i0= -forbid {v0 voffset ioffset}}
+                {-voffset= -forbid {v0 i0 ioffset}}
+                {-ioffset= -forbid {v0 i0 voffset}}
+                {-va= -forbid {ia vamp iamp}}
+                {-ia= -forbid {va vamp iamp}}
+                {-vamp= -forbid {va ia iamp}}
+                {-iamp= -forbid {va ia vamp}}
                 {-freq= -required}
                 -td=
                 {-theta= -require {td}}
@@ -483,12 +482,11 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
                 -rser=
                 -cpar=
             }]
-            if {([dexist $arguments phase] || [dexist $arguments phi]) && [dexist $arguments ncycles]} {
-                return -code error "-ncycles switch requires -phase or -phi switches"
+            if {(![dexist $arguments phase] && ![dexist $arguments phi]) && [dexist $arguments ncycles]} {
+                return -code error "-ncycles switch requires -phase or -phi switch"
             }
             my AliasesKeysCheck $arguments [list v0 i0 voffset ioffset]
             my AliasesKeysCheck $arguments [list va ia vamp iamp]
-            my AliasesKeysCheck $arguments [list phase phi]
             set paramsOrder [list v0 i0 voffset ioffset va ia vamp iamp freq td theta phase phi ncycles]
             lappend params "model sin -posnocheck"
             my ParamsProcess $paramsOrder $arguments params
@@ -1233,7 +1231,7 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
                 -area=
                 {-off -boolean}
                 -m=
-                {-temp= -forbid {dtemp}}
+                -temp=
                 -ns=
             }]            
             lappend params "model [dget $arguments model] -posnocheck"

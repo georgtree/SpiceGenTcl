@@ -391,9 +391,16 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         superclass ::SpiceGenTcl::Device
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
+                {-dc= -default 0}
                 {-ac= -required}
                 -acphase=
             }]
+            set dcVal [dget $arguments dc]
+            if {([llength $dcVal]>1) && ([@ $dcVal 1]=="-eq")} {
+                lappend params "dc [@ $dcVal 0] -poseq"
+            } else {
+                lappend params "dc $dcVal -pos"
+            }
             set acVal [dget $arguments ac]
             lappend params "ac -sw"
             if {([llength $acVal]>1) && ([@ $acVal 1]=="-eq")} {
@@ -402,7 +409,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 lappend params "acval $acVal -pos"
             }
             dict for {paramName value} $arguments {
-                if {$paramName ni {ac}} {
+                if {$paramName ni {ac dc}} {
                     if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
                         lappend params "$paramName [@ $value 0] -poseq"
                     } else {
