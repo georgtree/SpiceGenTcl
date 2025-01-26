@@ -131,15 +131,10 @@ namespace eval ::SpiceGenTcl {
         self mixin -append oo::abstract
         method buildArgStr {paramsNames} {
             # Builds argument list for argparse.
-            #  paramsNames - list of parameter names, define alias for parameter name by
-            #  using two element list {paramName aliasName}
-            # Returns: string in form *-paramName= \n {-paramName= -alias aliasName} \n ...*
+            #  paramsNames - list of parameter names
+            # Returns: string in form *-paramName= ...*
             foreach paramName $paramsNames {
-                if {[llength $paramName]>1} { 
-                    lappend paramDefList "\{-[@ $paramName 0]= -alias [@ $paramName 1]\}"
-                } else {
                     lappend paramDefList "-${paramName}="
-                }
             }
             set paramDefStr [join $paramDefList \n]
             return $paramDefStr
@@ -1743,18 +1738,19 @@ namespace eval ::SpiceGenTcl {
             my configure -Path $path
             set fileSize [file size $path]
             set file [open $path r]
+            #chan configure $file -encoding iso8859-1
             fconfigure $file -translation binary
             
 ####  read header 
 
             set ch [read $file 6]
-            if {$ch=={Title:}} {
+            if {[encoding convertfrom utf-8 $ch]=={Title:}} {
                 set encSize 1
                 set encode "utf-8"
                 set line "Title:"
-            } elseif {$ch=={Tit}} {
+            } elseif {[encoding convertfrom utf-16le $ch]=={Tit}} {
                 set encSize 2
-                set encode "utf-16-le"
+                set encode "utf-16le"
                 set line "Tit"
             } else {
                 error "Unknown encoding"
@@ -1763,7 +1759,7 @@ namespace eval ::SpiceGenTcl {
             set header ""
             set binaryStart 6            
             while true {
-                set ch [read $file $encSize]
+                set ch [encoding convertfrom $encode [read $file $encSize]]
                 incr binaryStart $encSize
                 if {$ch=="\n"} {
                     if {$encode=="utf-8"} {
@@ -1841,7 +1837,6 @@ namespace eval ::SpiceGenTcl {
             }
             
 ####  read data 
-            
             if {$rawType=="Binary:"} {
                 my configure -BlockSize [= {($fileSize - $binaryStart)/$NPoints}]
                 set scanFunctions ""

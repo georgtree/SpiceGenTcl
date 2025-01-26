@@ -20,8 +20,8 @@ $circuit add [Q new 3 7 7 9 -model qnl]
 $circuit add [Q new 4 6 7 9 -model qnr]
 $circuit add [R new bias 7 8 -r 20e3]
 
-$circuit add [BjtGPModel new qnl npn -bf 80 -rb 100 -cjc 2e-12 -tf 0.3e-9 -tr 6e-9 -cje 3e-12 -cjc 2e-12 -va 50]
-$circuit add [BjtGPModel new qnr npn -bf 80 -rb 100 -cjc 2e-12 -tf 0.3e-9 -tr 6e-9 -cje 3e-12 -cjc 2e-12 -va 50]
+$circuit add [BjtGPModel new qnl npn -bf 80 -rb 100 -cjc 2e-12 -tf 0.3e-9 -tr 6e-9 -cje 3e-12 -cjc 2e-12 -vaf 50]
+$circuit add [BjtGPModel new qnr npn -bf 80 -rb 100 -cjc 2e-12 -tf 0.3e-9 -tr 6e-9 -cje 3e-12 -cjc 2e-12 -vaf 50]
 
 $circuit add [SensDc new -outvar v(5,4)]
 #set simulator with default 

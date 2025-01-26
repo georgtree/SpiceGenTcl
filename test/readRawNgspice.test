@@ -17,10 +17,7 @@ package require tcltest
 namespace import ::tcltest::*
 package require SpiceGenTcl
 namespace import ::SpiceGenTcl::*
-set ngspiceNameSpc [namespace children ::SpiceGenTcl::Ngspice]
-foreach nameSpc $ngspiceNameSpc {
-    namespace import ${nameSpc}::*
-}
+importNgspice
 
 set epsilon 1e-8
 set testDir [file dirname [info script]]
@@ -33,7 +30,7 @@ proc matchList {expected actual} {
     for {set i 0} {$i<$len} {incr i} {
         set exp [@ $expected $i]
         set act [@ $actual $i]
-        if {(abs($act-$exp) > $epsilon) || (abs($act-$exp) > $epsilon)} {
+        if {abs($act-$exp) > $epsilon} {
             set match 0
             break
         }
@@ -312,8 +309,6 @@ test testRawFileClass-15 {test RawFile class object construction and reading (wi
     unset data trace refData vOscOut traceMatch result
 }
 
-foreach nameSpc $ngspiceNameSpc {
-    namespace forget ${nameSpc}::*
-}
+forgetNgspice
 
 cleanupTests

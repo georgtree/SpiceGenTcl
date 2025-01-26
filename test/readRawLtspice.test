@@ -1,0 +1,174 @@
+#  .|'''.|            ||                   ..|'''.|                   |''||''|         '||'
+#  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||  
+#   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||  
+# .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||  
+# |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||. 
+#            ||                                                                             
+#           ''''                                                                            
+# readRawLtspice.test
+# Tests LTspice raw files classes
+#
+# Copyright (c) 2024 George Yashin, georgtree@gmail.com
+#
+# MIT License
+# See the file "LICENSE.txt" for information on usage and redistribution
+# of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+package require tcltest
+namespace import ::tcltest::*
+package require SpiceGenTcl
+namespace import ::SpiceGenTcl::*
+importLtspice
+
+set epsilon 1e-6
+set testDir [file dirname [info script]]
+set rawDataLoc [file join $testDir raw_data_ltspice]
+
+proc matchList {expected actual} {
+    variable epsilon
+    set match 1
+    set len [llength $expected]
+    for {set i 0} {$i<$len} {incr i} {
+        set exp [@ $expected $i]
+        set act [@ $actual $i]
+        if {abs($act-$exp) > $epsilon} {
+            puts "$act $exp"
+            set match 0
+            break
+        }
+    }
+    return $match
+}
+    
+    
+proc readResultFile {path} {
+    set file [open $path r+]
+    set lines [split [read $file] "\n"]
+    close $file                     
+    foreach line $lines {
+        set data [textutil::split::splitx [string trim $line]]
+        lappend timeData [@ $data 0]
+        lappend traceData [@ $data 1]
+    }
+    return [list $timeData $traceData]
+}
+
+test testRawFileClass-1 {read binary ac data} -setup {
+    set data [RawFile new "${rawDataLoc}/ac.raw" * ltspice]
+    set traceAxis [$data configure -Axis]
+    set trace [$data getTrace v(2)]
+    set refData [readResultFile "${rawDataLoc}/v(2).csv"]
+    set axisData [$traceAxis getDataPoints]
+    set traceData [$trace getDataPoints]
+} -body {    
+    set axisMatchRe [matchList [@ $refData 0 0] [@ $axisData 0]]
+    set traceMatchRe [matchList [@ $refData 1 0] [@ $traceData 0]]
+    set axisMatchIm [matchList [@ $refData 0 1] [@ $axisData 1]]
+    set traceMatchIm [matchList [@ $refData 1 1] [@ $traceData 1]]
+    if {$axisMatchRe && $traceMatchRe && $axisMatchIm && $traceMatchIm} {
+        set result pass
+    } else {
+        set result fail
+    }
+} -result pass -cleanup {
+    unset data traceAxis trace refData axisData traceData axisMatchRe traceMatchRe axisMatchIm traceMatchIm result
+}
+
+test testRawFileClass-2 {read ascii ac data} -setup {
+    set data [RawFile new "${rawDataLoc}/ac_ascii.raw" * ltspice]
+    set traceAxis [$data configure -Axis]
+    set trace [$data getTrace v(2)]
+    set refData [readResultFile "${rawDataLoc}/v(2).csv"]
+    set axisData [$traceAxis getDataPoints]
+    set traceData [$trace getDataPoints]
+} -body {    
+    set axisMatchRe [matchList [@ $refData 0 0] [@ $axisData 0]]
+    set traceMatchRe [matchList [@ $refData 1 0] [@ $traceData 0]]
+    set axisMatchIm [matchList [@ $refData 0 1] [@ $axisData 1]]
+    set traceMatchIm [matchList [@ $refData 1 1] [@ $traceData 1]]
+    if {$axisMatchRe && $traceMatchRe && $axisMatchIm && $traceMatchIm} {
+        set result pass
+    } else {
+        set result fail
+    }
+} -result pass -cleanup {
+    unset data traceAxis trace refData axisData traceData axisMatchRe traceMatchRe axisMatchIm traceMatchIm result
+}
+
+test testRawFileClass-3 {read binary dc data} -setup {
+    set data [RawFile new "${rawDataLoc}/dc.raw" * ltspice]
+    set traceAxis [$data configure -Axis]
+    set trace [$data getTrace i(d1)]
+    set refData [readResultFile "${rawDataLoc}/i(d1).csv"]
+    set axisData [$traceAxis getDataPoints]
+    set traceData [$trace getDataPoints]
+} -body {
+    set axisMatch [matchList [@ $refData 0] $axisData]
+    set traceMatch [matchList [@ $refData 1] $traceData]
+    if {$axisMatch && $traceMatch} {
+        set result pass
+    } else {
+        set result fail
+    }
+} -result pass -cleanup {
+    unset data traceAxis trace refData axisData traceData axisMatch traceMatch result
+}
+
+test testRawFileClass-4 {read ascii dc data} -setup {
+    set data [RawFile new "${rawDataLoc}/dc_ascii.raw" * ltspice]
+    set traceAxis [$data configure -Axis]
+    set trace [$data getTrace i(d1)]
+    set refData [readResultFile "${rawDataLoc}/i(d1).csv"]
+    set axisData [$traceAxis getDataPoints]
+    set traceData [$trace getDataPoints]
+} -body {
+    set axisMatch [matchList [@ $refData 0] $axisData]
+    set traceMatch [matchList [@ $refData 1] $traceData]
+    if {$axisMatch && $traceMatch} {
+        set result pass
+    } else {
+        set result fail
+    }
+} -result pass -cleanup {
+    unset data traceAxis trace refData axisData traceData axisMatch traceMatch result
+}
+
+test testRawFileClass-5 {read binary tran data} -setup {
+    set data [RawFile new "${rawDataLoc}/tran.raw" * ltspice]
+    set traceTime [$data getTrace time]
+    set trace [$data getTrace v(out)]
+    set refData [readResultFile "${rawDataLoc}/out.csv"]
+    set timeData [$traceTime getDataPoints]
+    set traceData [$trace getDataPoints]
+} -body {
+    set timeMatch [matchList [lrange [@ $refData 0] 0 end-1] $timeData]
+    set traceMatch [matchList [lrange [@ $refData 1] 0 end-1] $traceData]
+    if {$timeMatch && $traceMatch} {
+        set result pass
+    } else {
+        set result fail
+    }
+} -result pass -cleanup {
+    unset data traceTime trace refData timeData traceData traceMatch result
+}
+
+set epsilon 1e-2; # issue with riunding in LTspice when save to csv data, will be fixed in future
+
+test testRawFileClass-6 {read ascii tran data} -setup {
+    set data [RawFile new "${rawDataLoc}/tran_ascii.raw" * ltspice]
+    set traceTime [$data getTrace time]
+    set trace [$data getTrace v(out)]
+    set refData [readResultFile "${rawDataLoc}/out.csv"]
+    set timeData [$traceTime getDataPoints]
+    set traceData [$trace getDataPoints]
+
+} -body {
+    set timeMatch [matchList [@ $refData 0] $timeData]
+    set traceMatch [matchList [@ $refData 1] $traceData]
+    if {$timeMatch && $traceMatch} {
+        set result pass
+    } else {
+        set result fail
+    }
+} -result pass -cleanup {
+    unset data traceTime trace refData timeData traceData timeMatch traceMatch result
+}

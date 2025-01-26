@@ -5,8 +5,8 @@
 # |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||. 
 #            ||                                                                             
 #           ''''                                                                            
-# specModsClassesNgspice.test
-# Tests Ngspice models classes
+# specModsClassesLtspice.test
+# Tests LTspice models classes
 #
 # Copyright (c) 2024 George Yashin, georgtree@gmail.com
 #
@@ -17,37 +17,8 @@ package require tcltest
 namespace import ::tcltest::*
 package require SpiceGenTcl
 namespace import ::SpiceGenTcl::*
-importNgspice
+importLtspice
     
-### ________________________ RModel class tests _________________________ ###
-    
-test testRModelClass-1 {test RModel class} -setup {
-    set mod [RModel new resmod -tc1 1 -tc2 2]
-} -body {
-    set result [$mod genSPICEString]
-} -result ".model resmod r(tc1=1 tc2=2)" -cleanup {
-    unset mod result
-}
-
-### ________________________ CModel class tests _________________________ ###
-    
-test testCModelClass-1 {test CModel class} -setup {
-    set mod [CModel new capmod -tc1 1 -tc2 2]
-} -body {
-    set result [$mod genSPICEString]
-} -result ".model capmod c(tc1=1 tc2=2)" -cleanup {
-    unset mod result
-}
-
-### ________________________ LModel class tests _________________________ ###
-    
-test testLModelClass-1 {test LModel class} -setup {
-    set mod [LModel new indmod -tc1 1 -tc2 2]
-} -body {
-    set result [$mod genSPICEString]
-} -result ".model indmod l(tc1=1 tc2=2)" -cleanup {
-    unset mod result
-}
 ### ________________________ VSwitchModel class tests _________________________ ###
     
 test testVSwitchModelClass-1 {test VSwitchModel class} -setup {
@@ -84,37 +55,27 @@ test testBjtGPModelClass-1 {test BjtGPModel class} -setup {
     set mod [BjtGPModel new bjtmod npn -is 1e-15 -bf 200 -vaf 100 -cje 1e-10]
 } -body {
     set result [$mod genSPICEString]
-} -result ".model bjtmod npn(level=1 is=1e-15 bf=200 vaf=100 cje=1e-10)" -cleanup {
+} -result ".model bjtmod npn(is=1e-15 bf=200 vaf=100 cje=1e-10)" -cleanup {
     unset mod result
 }
 
-###  Jfet1Model class tests 
+###  JfetModel class tests 
     
-test testJfet1ModelClass-1 {test Jfet1Model class} -setup {
-    set mod [Jfet1Model new jfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4 -cgd 1e-12]
+test testJfetModelClass-1 {test JfetModel class} -setup {
+    set mod [JfetModel new jfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4 -cgd 1e-12]
 } -body {
     set result [$mod genSPICEString]
-} -result ".model jfetmod njf(level=1 vto=2 beta=1e-3 lambda=1e-4 cgd=1e-12)" -cleanup {
-    unset mod result
-}
-
-###  Jfet2Model class tests 
-    
-test testJfet2ModelClass-1 {test Jfet2Model class} -setup {
-    set mod [Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4 -vbi 1.2]
-} -body {
-    set result [$mod genSPICEString]
-} -result ".model jfetmod njf(level=2 vto=-2 beta=10e-4 rs=1e-4 vbi=1.2)" -cleanup {
+} -result ".model jfetmod njf(vto=2 beta=1e-3 lambda=1e-4 cgd=1e-12)" -cleanup {
     unset mod result
 }
     
-###  Mesfet1Model class tests 
+###  MesfetModel class tests 
     
-test testMesfet1ModelClass-1 {test Mesfet1Model class} -setup {
-    set mod [Mesfet1Model new mesfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4 -cgd 1e-12]
+test testMesfetModelClass-1 {test MesfetModel class} -setup {
+    set mod [MesfetModel new mesfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4 -cgd 1e-12]
 } -body {
     set result [$mod genSPICEString]
-} -result ".model mesfetmod njf(level=1 vto=2 beta=1e-3 lambda=1e-4 cgd=1e-12)" -cleanup {
+} -result ".model mesfetmod njf(vto=2 beta=1e-3 lambda=1e-4 cgd=1e-12)" -cleanup {
     unset mod result
 }
 

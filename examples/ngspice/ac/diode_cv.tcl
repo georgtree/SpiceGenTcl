@@ -15,7 +15,7 @@ $circuit add [D new 1 0 c -model diomod -area 1 -lm 1e-6]
 set vdc [Vdc new a c nin -dc 0]
 $circuit add $vdc
 $circuit add [Vac new b nin 0 -ac 1]
-$circuit add [DiodeModel new diomod -is 1e-12 -n 1.2 -rs 0.01 -cj0 1e-9 -trs1 0.001 -xti 5]
+$circuit add [DiodeModel new diomod -is 1e-12 -n 1.2 -rs 0.01 -cjo 1e-9 -trs1 0.001 -xti 5]
 $circuit add [Ac new -variation lin -n 1 -fstart 1e5 -fstop 1e5]
 # add voltage sweep
 set voltSweep [lseq 0 20.0 0.1]

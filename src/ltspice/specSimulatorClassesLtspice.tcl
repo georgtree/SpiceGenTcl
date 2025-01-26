@@ -96,7 +96,8 @@ namespace eval ::SpiceGenTcl::Ltspice::Simulators {
         method readData {} {
             # Reads raw data file, create RawFile object and return it's reference name.
             my variable data
-            set data [::SpiceGenTcl::RawFile new "[my configure -runlocation]/[my configure -LastRunFileName].raw"]
+            set data [::SpiceGenTcl::RawFile new "[my configure -runlocation]/[my configure -LastRunFileName].raw"\
+                             * ltspice]
             return
         }
     }

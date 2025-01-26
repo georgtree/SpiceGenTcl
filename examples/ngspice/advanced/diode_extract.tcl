@@ -29,7 +29,7 @@ proc diodeIVcalc {xall pdata args} {
 }
 
 # define circuit, diode model and voltage source
-set diodeModel [DiodeModel new diomod -is 1e-12 -n 1.0 -rs 30 -cj0 1e-9 -trs1 0.001 -xti 5 -ikf 1e-4]
+set diodeModel [DiodeModel new diomod -is 1e-12 -n 1.0 -rs 30 -cjo 1e-9 -trs1 0.001 -xti 5 -ikf 1e-4]
 set vSrc [Dc new -src va -start 0 -stop 2 -incr 0.02]
 set circuit [Circuit new {diode IV}]
 $circuit add [D new 1 anode 0 -model diomod -area 1]
