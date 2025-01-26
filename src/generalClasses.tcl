@@ -1796,7 +1796,7 @@ namespace eval ::SpiceGenTcl {
             if {("complex" in $flags) || ([dget [my configure -RawParams] "Plotname"]=="AC Analysis")} {
                 set numType complex
             } else {
-                if {("double" in $flags) || ($simulator=="ngspice")} {
+                if {("double" in $flags) || ($simulator=="ngspice") || ($simulator=="xyce")} {
                     set numType double
                 } else {
                     set numType real
@@ -1811,6 +1811,10 @@ namespace eval ::SpiceGenTcl {
                 set lineList [split [string trim $line] \t]
                 lassign $lineList idx name varType
                 if {$ivar==0} {
+                    if {$simulator=="ltspice" && $name=="time"} {
+                        # workaround for bug with negative values in time axis
+                        set axisIsTime true
+                    }
                     if {$numType=="real"} {
                         set axisNumType double
                     } else {
@@ -1876,6 +1880,12 @@ namespace eval ::SpiceGenTcl {
                     for {set j 0} {$j<[llength [my configure -Traces]]} {incr j} {
                         set value [eval "my [@ $scanFunctions $j]" $file] 
                         set trace [@ [my configure -Traces] $j]
+                        if {$j==0} {
+                            # workaround for bug with negative values in time axis
+                            if {[info exists axisIsTime]} {
+                                set value [= {abs($value)}]
+                            }
+                        }
                         if {[info object class $trace]!="::SpiceGenTcl::EmptyTrace"} {
                             $trace appendDataPoints $value 
                         }  

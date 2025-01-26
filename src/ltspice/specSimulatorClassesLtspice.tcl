@@ -75,6 +75,9 @@ namespace eval ::SpiceGenTcl::Ltspice::Simulators {
                 file delete $rawFileName
                 file delete $logFileName
                 file delete $cirFileName
+                if {[file exists "${runLocation}/${firstLine}.op.raw"]} {
+                    file delete "${runLocation}/${firstLine}.op.raw"
+                }
             }
         }
         method readLog {} {

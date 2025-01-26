@@ -1,3 +1,4 @@
+# ngspice
 tclsh ./subcircuit.tcl
 tclsh ./netlist_manipulations.tcl
 cd ngspice/dc
@@ -12,6 +13,7 @@ cd ../advanced
 tclsh ./monte_carlo.tcl
 tclsh ./diode_extract.tcl
 tclsh ./verilog_a_magnetic.tcl
+# xyce
 cd ../../xyce/dc
 tclsh ./resistor_divider.tcl
 tclsh ./diode_iv.tcl
@@ -22,4 +24,12 @@ tclsh ./switch_oscillator.tcl
 tclsh ./fourbitadder.tcl
 cd ../advanced
 tclsh ./monte_carlo.tcl
-cd ../advanced
+# ltspice
+cd ../../ltspice/dc
+tclsh ./resistor_divider.tcl
+tclsh ./diode_iv.tcl
+cd ../ac
+tclsh ./diode_cv.tcl
+cd ../transient
+tclsh ./switch_oscillator.tcl
+tclsh ./fourbitadder.tcl
