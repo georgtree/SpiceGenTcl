@@ -8,14 +8,17 @@ namespace eval "List of devices" {
         Common - [::SpiceGenTcl::Common::BasicDevices::Resistor] | [::SpiceGenTcl::Common::BasicDevices::R]
         Ngspice - [::SpiceGenTcl::Ngspice::BasicDevices::Resistor] | [::SpiceGenTcl::Ngspice::BasicDevices::R]
         Xyce - [::SpiceGenTcl::Xyce::BasicDevices::Resistor] | [::SpiceGenTcl::Xyce::BasicDevices::R]
+        LTspice - [::SpiceGenTcl::Ltspice::BasicDevices::Resistor] | [::SpiceGenTcl::Ltspice::BasicDevices::R]
         ### Capacitor
         Common - [::SpiceGenTcl::Common::BasicDevices::Capacitor] | [::SpiceGenTcl::Common::BasicDevices::C]
         Ngspice - [::SpiceGenTcl::Ngspice::BasicDevices::Capacitor] | [::SpiceGenTcl::Ngspice::BasicDevices::C]
         Xyce - [::SpiceGenTcl::Xyce::BasicDevices::Capacitor] | [::SpiceGenTcl::Xyce::BasicDevices::C]
+        LTspice - [::SpiceGenTcl::Ltspice::BasicDevices::Capacitor] | [::SpiceGenTcl::Ltspice::BasicDevices::C]
         ### Inductor
         Common - [::SpiceGenTcl::Common::BasicDevices::Inductor] | [::SpiceGenTcl::Common::BasicDevices::L]
         Ngspice - [::SpiceGenTcl::Ngspice::BasicDevices::Inductor] | [::SpiceGenTcl::Ngspice::BasicDevices::L]
         Xyce - [::SpiceGenTcl::Xyce::BasicDevices::Inductor] | [::SpiceGenTcl::Xyce::BasicDevices::L]
+        LTspice - [::SpiceGenTcl::Ltspice::BasicDevices::Inductor] | [::SpiceGenTcl::Ltspice::BasicDevices::L]
         ### Subcircuit instance
         Common - [::SpiceGenTcl::Common::BasicDevices::SubcircuitInstance] | [::SpiceGenTcl::Common::BasicDevices::X]
                  [::SpiceGenTcl::Common::BasicDevices::SubcircuitInstanceAuto] | [::SpiceGenTcl::Common::BasicDevices::XAuto]
@@ -23,113 +26,141 @@ namespace eval "List of devices" {
                  [::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstanceAuto] | [::SpiceGenTcl::Ngspice::BasicDevices::XAuto]
         Xyce - [::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstance] | [::SpiceGenTcl::Xyce::BasicDevices::X]
                  [::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstanceAuto] | [::SpiceGenTcl::Xyce::BasicDevices::XAuto]      
-        
+        LTspice - [::SpiceGenTcl::Ltspice::BasicDevices::SubcircuitInstance] | [::SpiceGenTcl::Ltspice::BasicDevices::X]
+                 [::SpiceGenTcl::Ltspice::BasicDevices::SubcircuitInstanceAuto] | [::SpiceGenTcl::Ltspice::BasicDevices::XAuto] 
         ## Sources
         ### Constant voltage source
         Common - [::SpiceGenTcl::Common::Sources::Vdc]
         Ngspice - [::SpiceGenTcl::Ngspice::Sources::Vdc]
         Xyce - [::SpiceGenTcl::Xyce::Sources::Vdc]
+        LTspice - [::SpiceGenTcl::Ltspice::Sources::Vdc]
         ### RF voltage source
         Common - not supported
         Ngspice - [::SpiceGenTcl::Ngspice::Sources::Vport]
         Xyce - not supported
+        LTspice - not supported
         ### AC voltage source
         Common - [::SpiceGenTcl::Common::Sources::Vac]
         Ngspice - [::SpiceGenTcl::Ngspice::Sources::Vac]
         Xyce - [::SpiceGenTcl::Xyce::Sources::Vac]
+        LTspice - [::SpiceGenTcl::Ltspice::Sources::Vac]
         ### Pulse voltage source
         Common - [::SpiceGenTcl::Common::Sources::Vpulse]
         Ngspice - [::SpiceGenTcl::Ngspice::Sources::Vpulse]
         Xyce - [::SpiceGenTcl::Xyce::Sources::Vpulse]
+        LTspice - [::SpiceGenTcl::Ltspice::Sources::Vpulse]
         ### Sinusoidal voltage source
         Common - [::SpiceGenTcl::Common::Sources::Vsin]
         Ngspice - [::SpiceGenTcl::Ngspice::Sources::Vsin]
         Xyce - [::SpiceGenTcl::Xyce::Sources::Vsin]
+        LTspice - [::SpiceGenTcl::Ltspice::Sources::Vsin]
         ### Exponential voltage source
         Common - [::SpiceGenTcl::Common::Sources::Vexp]
         Ngspice - [::SpiceGenTcl::Ngspice::Sources::Vexp]
         Xyce - [::SpiceGenTcl::Xyce::Sources::Vexp]
+        LTspice - [::SpiceGenTcl::Ltspice::Sources::Vexp]
         ### Piece-wise linear (PWL) voltage source
         Common - [::SpiceGenTcl::Common::Sources::Vpwl]
         Ngspice - [::SpiceGenTcl::Ngspice::Sources::Vpwl]
         Xyce - [::SpiceGenTcl::Xyce::Sources::Vpwl]
+        LTspice - [::SpiceGenTcl::Ltspice::Sources::Vpwl]
         ### Frequency modulated voltage source
         Common - [::SpiceGenTcl::Common::Sources::Vsffm]
         Ngspice - [::SpiceGenTcl::Ngspice::Sources::Vsffm]
         Xyce - [::SpiceGenTcl::Xyce::Sources::Vsffm]
+        LTspice - [::SpiceGenTcl::Ltspice::Sources::Vsffm]
         ### Amplitude modulated voltage source
         Common - not supported
         Ngspice - [::SpiceGenTcl::Ngspice::Sources::Vam]
         Xyce - not supported
+        LTspice - not supported
         ### Constant current source
         Common - [::SpiceGenTcl::Common::Sources::Idc]
         Ngspice - [::SpiceGenTcl::Ngspice::Sources::Idc]
         Xyce - [::SpiceGenTcl::Xyce::Sources::Idc]
+        LTspice - [::SpiceGenTcl::Ltspice::Sources::Idc]
         ### AC current source
         Common - [::SpiceGenTcl::Common::Sources::Iac]
         Ngspice - [::SpiceGenTcl::Ngspice::Sources::Iac]
         Xyce - [::SpiceGenTcl::Xyce::Sources::Iac]
+        LTspice - [::SpiceGenTcl::Ltspice::Sources::Iac]
         ### Pulse current source
         Common - [::SpiceGenTcl::Common::Sources::Ipulse]
         Ngspice - [::SpiceGenTcl::Ngspice::Sources::Ipulse]
         Xyce - [::SpiceGenTcl::Xyce::Sources::Ipulse]
+        LTspice - [::SpiceGenTcl::Ltspice::Sources::Ipulse]
         ### Sinusoidal current source
         Common - [::SpiceGenTcl::Common::Sources::Isin]
         Ngspice - [::SpiceGenTcl::Ngspice::Sources::Isin]
         Xyce - [::SpiceGenTcl::Xyce::Sources::Isin]
+        LTspice - [::SpiceGenTcl::Ltspice::Sources::Isin]
         ### Exponential current source
         Common - [::SpiceGenTcl::Common::Sources::Iexp]
         Ngspice - [::SpiceGenTcl::Ngspice::Sources::Iexp]
         Xyce - [::SpiceGenTcl::Xyce::Sources::Iexp]
+        LTspice - [::SpiceGenTcl::Ltspice::Sources::Iexp]
         ### Piece-wise linear (PWL) current source
         Common - [::SpiceGenTcl::Common::Sources::Ipwl]
         Ngspice - [::SpiceGenTcl::Ngspice::Sources::Ipwl]
         Xyce - [::SpiceGenTcl::Xyce::Sources::Ipwl]
+        LTspice - [::SpiceGenTcl::Ltspice::Sources::Ipwl]
         ### Frequency modulated current source
         Common - [::SpiceGenTcl::Common::Sources::Isffm]
         Ngspice - [::SpiceGenTcl::Ngspice::Sources::Isffm]
         Xyce - [::SpiceGenTcl::Xyce::Sources::Isffm]
+        LTspice - [::SpiceGenTcl::Ltspice::Sources::Isffm]
         ### Amplitude modulated current source
         Common - not supported
         Ngspice - [::SpiceGenTcl::Ngspice::Sources::Iam]
         Xyce - not supported
+        LTspice - not supported
         ### Voltage-controlled current source
         Common - [::SpiceGenTcl::Common::Sources::Vccs] | [::SpiceGenTcl::Common::Sources::G]
         Ngspice - [::SpiceGenTcl::Ngspice::Sources::Vccs] | [::SpiceGenTcl::Ngspice::Sources::G]
         Xyce - [::SpiceGenTcl::Xyce::Sources::Vccs] | [::SpiceGenTcl::Xyce::Sources::G]
+        LTspice - [::SpiceGenTcl::Ltspice::Sources::Vccs] | [::SpiceGenTcl::Ltspice::Sources::G]
         ### Voltage-controlled voltage source
         Common - [::SpiceGenTcl::Common::Sources::Vcvs] | [::SpiceGenTcl::Common::Sources::E]
         Ngspice - [::SpiceGenTcl::Ngspice::Sources::Vcvs] | [::SpiceGenTcl::Ngspice::Sources::E]
         Xyce - [::SpiceGenTcl::Xyce::Sources::Vcvs] | [::SpiceGenTcl::Xyce::Sources::E]
+        LTspice - [::SpiceGenTcl::Ltspice::Sources::Vcvs] | [::SpiceGenTcl::Ltspice::Sources::E]
         ### Current-controlled current source
         Common - [::SpiceGenTcl::Common::Sources::Cccs] | [::SpiceGenTcl::Common::Sources::F]
         Ngspice - [::SpiceGenTcl::Ngspice::Sources::Cccs] | [::SpiceGenTcl::Ngspice::Sources::F]
         Xyce - [::SpiceGenTcl::Xyce::Sources::Cccs] | [::SpiceGenTcl::Xyce::Sources::F]
+        LTspice - [::SpiceGenTcl::Ltspice::Sources::Cccs] | [::SpiceGenTcl::Ltspice::Sources::F]
         ### Current-controlled voltage source
         Common - [::SpiceGenTcl::Common::Sources::Ccvs] | [::SpiceGenTcl::Common::Sources::H]
         Ngspice - [::SpiceGenTcl::Ngspice::Sources::Ccvs] | [::SpiceGenTcl::Ngspice::Sources::H]
         Xyce - [::SpiceGenTcl::Xyce::Sources::Ccvs] | [::SpiceGenTcl::Xyce::Sources::H]
+        LTspice - [::SpiceGenTcl::Ltspice::Sources::Ccvs] | [::SpiceGenTcl::Ltspice::Sources::H]
         
         ## Semiconductor devices
         ### Diode
         Common - not supported
         Ngspice - [::SpiceGenTcl::Ngspice::SemiconductorDevices::Diode] | [::SpiceGenTcl::Ngspice::SemiconductorDevices::D]
         Xyce - [::SpiceGenTcl::Xyce::SemiconductorDevices::Diode] | [::SpiceGenTcl::Xyce::SemiconductorDevices::D]
+        LTspice - [::SpiceGenTcl::Ltspice::SemiconductorDevices::Diode] | [::SpiceGenTcl::Ltspice::SemiconductorDevices::D]
         ### Bipolar junction transistor
         Common - not supported
         Ngspice - [::SpiceGenTcl::Ngspice::SemiconductorDevices::Bjt] | [::SpiceGenTcl::Ngspice::SemiconductorDevices::Q]
         Xyce - [::SpiceGenTcl::Xyce::SemiconductorDevices::Bjt] | [::SpiceGenTcl::Xyce::SemiconductorDevices::Q]
+        LTspice - [::SpiceGenTcl::Ltspice::SemiconductorDevices::Bjt] | [::SpiceGenTcl::Ltspice::SemiconductorDevices::Q]
         ### Junction field-effect transistor
         Common - not supported
         Ngspice - [::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet] | [::SpiceGenTcl::Ngspice::SemiconductorDevices::J]
         Xyce - [::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet] | [::SpiceGenTcl::Xyce::SemiconductorDevices::J]
+        LTspice - [::SpiceGenTcl::Ltspice::SemiconductorDevices::Jfet] | [::SpiceGenTcl::Ltspice::SemiconductorDevices::J]
         ### Metal-semiconductor FET
         Common - not supported
         Ngspice - [::SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet] | [::SpiceGenTcl::Ngspice::SemiconductorDevices::Z]
         Xyce - [::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet] | [::SpiceGenTcl::Xyce::SemiconductorDevices::Z]
+        LTspice - [::SpiceGenTcl::Ltspice::SemiconductorDevices::Mesfet] | [::SpiceGenTcl::Ltspice::SemiconductorDevices::Z]
         ### MOS field effect transistor
         Common - not supported
         Ngspice - [::SpiceGenTcl::Ngspice::SemiconductorDevices::Mosfet] | [::SpiceGenTcl::Ngspice::SemiconductorDevices::M]
         Xyce - [::SpiceGenTcl::Xyce::SemiconductorDevices::Mosfet] | [::SpiceGenTcl::Xyce::SemiconductorDevices::M]
+        Xyce - [::SpiceGenTcl::Xyce::SemiconductorDevices::Mosfet] | [::SpiceGenTcl::Xyce::SemiconductorDevices::M]
+        LTspice - [::SpiceGenTcl::Ltspice::SemiconductorDevices::Mosfet] | [::SpiceGenTcl::Ltspice::SemiconductorDevices::M]
     }
 }

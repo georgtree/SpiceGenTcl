@@ -22,7 +22,9 @@ interp alias {} dcreate {} dict create
 interp alias {} dset {} dict set
 
 global env
-set nagelfarPath "/home/$env(USER)/tcl/nagelfar/"
+#set nagelfarPath "/home/$env(USER)/tcl/nagelfar/nagelfar.tcl"
+set nagelfarPath "C:\\msys64\\home\\georgtree1\\nagelfar\\nagelfar.tcl"
+#package require nagelfar
 set currentDir [file dirname [file normalize [info script]]]
 #cd $nagelfarPath
 set srcList [list generalClasses.tcl specElementsClassesCommon.tcl\
@@ -33,10 +35,14 @@ set srcList [list generalClasses.tcl specElementsClassesCommon.tcl\
                      [list xyce specAnalysesClassesXyce.tcl]\
                      [list xyce specElementsClassesXyce.tcl]\
                      [list xyce specModelsClassesXyce.tcl]\
-                     [list xyce specSimulatorClassesXyce.tcl]]
+                     [list xyce specSimulatorClassesXyce.tcl]\
+                     [list ltspice specAnalysesClassesLtspice.tcl]\
+                     [list ltspice specElementsClassesLtspice.tcl]\
+                     [list ltspice specModelsClassesLtspice.tcl]\
+                     [list ltspice specSimulatorClassesLtspice.tcl]]
 # instrument all files in src folder
 foreach file $srcList {
-    exec [file join ${nagelfarPath} nagelfar.tcl] -instrument [file join ${currentDir} .. src {*}$file]
+    exec tclsh ${nagelfarPath} -instrument [file join ${currentDir} .. src {*}$file]
 }
 # rename initial source files, then rename instrument files to the original name of the source file
 foreach file $srcList {
@@ -71,7 +77,7 @@ foreach file $srcList {
 }
 # create markup files
 foreach file $srcList {
-    lappend results [exec [file join ${nagelfarPath} nagelfar.tcl] -markup [file join ${currentDir} .. src {*}$file]]
+    lappend results [exec tclsh ${nagelfarPath} -markup [file join ${currentDir} .. src {*}$file]]
 }
 # view results
 foreach file $srcList {

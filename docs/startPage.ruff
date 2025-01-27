@@ -27,7 +27,20 @@ variable startPage {
     - change netlist structure on the fly
     - simulate different models in the same circuit setup
     - run circuit optimization with parameters variations as well as variations in circuit topology
-    
+
+    Currently, there are range of examples for common analyses (DC, AC, transient) for all simulators, and advanced examples
+    for some of them:
+    - [Monte-Carlo example](https://georgtree.github.io/SpiceGenTcl/index-Advanced.html#::Advanced-Monte-Carlo%20simulation):
+    Ngspice, Xyce and LTspice
+    - [Diode parameters extraction via fitting](https://georgtree.github.io/SpiceGenTcl/index-Advanced.html#::Advanced-Parameters%20extraction%20of%20diode%20model%20parameters):
+    Ngspice, Xyce and LTspice
+    - Example of creating custom Verilog-A magnetic core model and simulating transformer with saturation: Ngspice
+
+    ## Supported simulators
+    - [Ngspice](https://ngspice.sourceforge.io/download.html) - Linux and Windows
+    - [Xyce](https://xyce.sandia.gov/downloads/executables/) - Linux and Windows
+    - [LTspice](https://www.analog.com/en/resources/design-tools-and-calculators/ltspice-simulator.html) - Windows
+
     ## Installing
 
     You have two ways: install from git repo (convinient for Linux users) or from archive package release.
@@ -58,10 +71,13 @@ variable startPage {
     Package is written in pure Tcl with relying on Tcllib and ticklecharts, tcl version is 9.0. The only necessary
     external dependency is the simulator itself.
 
-    - [Ngspice](https://ngspice.sourceforge.io/download.html)
-    - [Xyce](https://xyce.sandia.gov/downloads/executables/)
     - [Tcllib](https://www.tcl.tk/software/tcllib/)
     - [ticklecharts](https://github.com/nico-robert/ticklecharts)
+
+    For some examples you also need these packages:
+
+    - [tclinterp](https://github.com/georgtree/tclinterp)
+    - [tclopt](https://github.com/georgtree/tclopt)
 
     After simulator installation add path to executable to `PATH` environment variable.
     

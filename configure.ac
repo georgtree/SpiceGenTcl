@@ -3,7 +3,7 @@ dnl	This file is an input file used by the GNU "autoconf" program to
 dnl	generate the file "configure", which is run during Tcl installation
 dnl	to configure the system for the local environment.
 
-AC_INIT([SpiceGenTcl],[0.61])
+AC_INIT([SpiceGenTcl],[0.65])
 TEA_INIT()
 AC_CONFIG_AUX_DIR(tclconfig)
 TEA_PATH_TCLCONFIG

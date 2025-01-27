@@ -19,7 +19,7 @@ package require textutil::split
 package require csv
 namespace import ::tcl::mathop::*
 
-package provide SpiceGenTcl 0.61
+package provide SpiceGenTcl 0.65
 
 interp alias {} dget {} dict get
 interp alias {} @ {} lindex

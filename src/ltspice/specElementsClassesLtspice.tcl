@@ -843,7 +843,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             # ::SpiceGenTcl::Ltspice::Sources::Idc new 1 netp netm -dc 10
             # ```
             # Synopsis: name npNode nmNode -dc value
-            if {"rpar" in $args || "cpar" in $args} {
+            if {"-rser" in $args || "-cpar" in $args} {
                 return -code error "Current source doesn't support rser and cpar parameters"
             }
             next $name i $npNode $nmNode {*}$args
@@ -869,7 +869,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             # ::SpiceGenTcl::Ltspice::Sources::Iac new 1 netp netm -ac 10
             # ```
             # Synopsis: name npNode nmNode -ac value ?-dc value?
-            if {"rpar" in $args || "cpar" in $args} {
+            if {"-rser" in $args || "-cpar" in $args} {
                 return -code error "Current source doesn't support rser and cpar parameters"
             }
             next $name i $npNode $nmNode {*}$args
@@ -904,7 +904,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             # ```
             # Synopsis: name npNode nmNode -low|ioff value -high|ion value -td value -tr value -tf value -pw|ton value 
             #   -per|tper value ?-np|ncycles value?
-            if {"rpar" in $args || "cpar" in $args} {
+            if {"-rser" in $args || "-cpar" in $args} {
                 return -code error "Current source doesn't support rser and cpar parameters"
             }
             next $name i $npNode $nmNode {*}$args
@@ -936,7 +936,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             # ```
             # Synopsis: name npNode nmNode -v0|ioffset value -va|iamp value -freq value ?-td value ?-theta value 
             #   ?-phase|phi value ?-ncycles value????
-            if {"rpar" in $args || "cpar" in $args} {
+            if {"-rser" in $args || "-cpar" in $args} {
                 return -code error "Current source doesn't support rser and cpar parameters"
             }
             next $name i $npNode $nmNode {*}$args

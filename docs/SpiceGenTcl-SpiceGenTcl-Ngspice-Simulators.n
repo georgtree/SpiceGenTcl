@@ -1,7 +1,7 @@
 '\"
 '\" '\" Copyright (c) George Yashin
 '\"
-.TH "SpiceGenTcl::Ngspice::Simulators" 3tcl 0\&.61 "SpiceGenTcl" "Tcl SpiceGenTcl package"
+.TH "SpiceGenTcl::Ngspice::Simulators" 3tcl 0\&.65 "SpiceGenTcl" "Tcl SpiceGenTcl package"
 .SH NAME
 SpiceGenTcl::Ngspice::Simulators - Commands in namespace SpiceGenTcl::Ngspice::Simulators
 .SH SYNOPSIS
@@ -9,13 +9,17 @@ SpiceGenTcl::Ngspice::Simulators - Commands in namespace SpiceGenTcl::Ngspice::S
 .br
 \fBBatch new\fP \fIname ?runLocation?\fP
 .br
-\fBOBJECT clearLog\fP
+\fBBATCHOBJ clearLog\fP
 .br
-\fBOBJECT readData\fP
+\fBBATCHOBJ readData\fP
 .br
-\fBOBJECT readLog\fP
+\fBBATCHOBJ readLog\fP
 .br
 \fBOBJECT runAndRead\fP \fIcircuitStr ?-nodelete?\fP
+.br
+\fBBatchLiveLog create OBJNAME\fP
+.br
+\fBBatchLiveLog new\fP
 .br
 \fBOBJECT runAndRead\fP \fIcircuitStr ?-nodelete?\fP
 .br
@@ -55,10 +59,26 @@ Runs netlist circuit file\&.
 .RE
 .PP
 \fBProperties\fR
-.PP
-Readable: -Command, -LastRunFileName, -data, -log, -name, -runlocation
-.PP
-Writable: -Command, -LastRunFileName, -data, -log, -name, -runlocation
+.RS 4n
+.TP
+-Command
+Readable, writable\&.
+.TP
+-LastRunFileName
+Readable, writable\&.
+.TP
+-data
+Readable, writable\&.
+.TP
+-log
+Readable, writable\&.
+.TP
+-name
+Readable, writable\&.
+.TP
+-runlocation
+Readable, writable\&.
+.RE
 .PP
 \fBSuperclasses\fR
 .PP
@@ -73,7 +93,8 @@ Writable: -Command, -LastRunFileName, -data, -log, -name, -runlocation
 .RE
 .PP
 Creates batch ngspice simulator that can be attached to top-level Circuit\&.
-.RS 4n\fBBatch create OBJNAME\fP \fIname ?runLocation?\fP
+.RS 4n
+\fBBatch create OBJNAME\fP \fIname ?runLocation?\fP
 .br
 \fBBatch new\fP \fIname ?runLocation?\fP
 .br
@@ -94,7 +115,8 @@ Location at which input netlist is stored and all output files will be saved, de
 .RE
 .PP
 Clear saved log by unsetting Log variable\&.
-.RS 4n\fBOBJECT clearLog\fP
+.RS 4n
+\fBBATCHOBJ clearLog\fP
 .br
 .RE
 .PP
@@ -103,7 +125,8 @@ Clear saved log by unsetting Log variable\&.
 .RE
 .PP
 Reads raw data file, create RawFile object and return it's reference name\&.
-.RS 4n\fBOBJECT readData\fP
+.RS 4n
+\fBBATCHOBJ readData\fP
 .br
 .RE
 .PP
@@ -112,7 +135,8 @@ Reads raw data file, create RawFile object and return it's reference name\&.
 .RE
 .PP
 Reads log file of last simulation and save it's content to Log variable\&.
-.RS 4n\fBOBJECT readLog\fP
+.RS 4n
+\fBBATCHOBJ readLog\fP
 .br
 .RE
 .PP
@@ -121,7 +145,8 @@ Reads log file of last simulation and save it's content to Log variable\&.
 .RE
 .PP
 Runs netlist circuit file\&.
-.RS 4n\fBOBJECT runAndRead\fP \fIcircuitStr ?-nodelete?\fP
+.RS 4n
+\fBOBJECT runAndRead\fP \fIcircuitStr ?-nodelete?\fP
 .br
 .RE
 .PP
@@ -165,10 +190,26 @@ Runs netlist circuit file\&.
 .RE
 .PP
 \fBProperties\fR
-.PP
-Readable: -Command, -LastRunFileName, -data, -log, -name, -runlocation
-.PP
-Writable: -Command, -LastRunFileName, -data, -log, -name, -runlocation
+.RS 4n
+.TP
+-Command
+Readable, writable\&.
+.TP
+-LastRunFileName
+Readable, writable\&.
+.TP
+-data
+Readable, writable\&.
+.TP
+-log
+Readable, writable\&.
+.TP
+-name
+Readable, writable\&.
+.TP
+-runlocation
+Readable, writable\&.
+.RE
 .PP
 \fBSuperclasses\fR
 .PP
@@ -179,7 +220,8 @@ Writable: -Command, -LastRunFileName, -data, -log, -name, -runlocation
 .RE
 .PP
 Runs netlist circuit file\&.
-.RS 4n\fBOBJECT runAndRead\fP \fIcircuitStr ?-nodelete?\fP
+.RS 4n
+\fBOBJECT runAndRead\fP \fIcircuitStr ?-nodelete?\fP
 .br
 .RE
 .PP

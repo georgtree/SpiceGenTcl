@@ -55,7 +55,7 @@ namespace eval ::SpiceGenTcl::Ltspice::BasicDevices {
     
 namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {    
     
-    namespace export DiodeModel BjtGPModel JfetModel MesfetModel
+    namespace export DiodeModel DiodeIdealModel BjtGPModel JfetModel MesfetModel
     
 ###  DiodeModel class 
     

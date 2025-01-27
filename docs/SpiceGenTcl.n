@@ -1,7 +1,7 @@
 '\"
 '\" '\" Copyright (c) George Yashin
 '\"
-.TH "SpiceGenTcl" 3tcl 0\&.61 "SpiceGenTcl" "Tcl SpiceGenTcl package"
+.TH "SpiceGenTcl" 3tcl 0\&.65 "SpiceGenTcl" "Tcl SpiceGenTcl package"
 .SH NAME
 Introduction - Tcl SpiceGenTcl package
 .PP
@@ -37,6 +37,28 @@ simulate different models in the same circuit setup
 .TP
 \(bu
 run circuit optimization with parameters variations as well as variations in circuit topology
+.PP
+Currently, there are range of examples for common analyses (DC, AC, transient) for all simulators, and advanced examples
+for some of them:
+.TP
+\(bu
+\fIMonte-Carlo example\fP [URL: https://georgtree\&.github\&.io/SpiceGenTcl/index-Advanced\&.html#::Advanced-Monte-Carlo%20simulation]: Ngspice, Xyce and LTspice
+.TP
+\(bu
+\fIDiode parameters extraction via fitting\fP [URL: https://georgtree\&.github\&.io/SpiceGenTcl/index-Advanced\&.html#::Advanced-Parameters%20extraction%20of%20diode%20model%20parameters]: Ngspice, Xyce and LTspice
+.TP
+\(bu
+Example of creating custom Verilog-A magnetic core model and simulating transformer with saturation: Ngspice
+.SH "SUPPORTED SIMULATORS"
+.TP
+\(bu
+\fINgspice\fP [URL: https://ngspice\&.sourceforge\&.io/download\&.html] - Linux and Windows
+.TP
+\(bu
+\fIXyce\fP [URL: https://xyce\&.sandia\&.gov/downloads/executables/] - Linux and Windows
+.TP
+\(bu
+\fILTspice\fP [URL: https://www\&.analog\&.com/en/resources/design-tools-and-calculators/ltspice-simulator\&.html] - Windows
 .SH INSTALLING
 .PP
 You have two ways: install from git repo (convinient for Linux users) or from archive package release\&.
@@ -74,16 +96,18 @@ Package is written in pure Tcl with relying on Tcllib and ticklecharts, tcl vers
 external dependency is the simulator itself\&.
 .TP
 \(bu
-\fINgspice\fP [URL: https://ngspice\&.sourceforge\&.io/download\&.html]
-.TP
-\(bu
-\fIXyce\fP [URL: https://xyce\&.sandia\&.gov/downloads/executables/]
-.TP
-\(bu
 \fITcllib\fP [URL: https://www\&.tcl\&.tk/software/tcllib/]
 .TP
 \(bu
 \fIticklecharts\fP [URL: https://github\&.com/nico-robert/ticklecharts]
+.PP
+For some examples you also need these packages:
+.TP
+\(bu
+\fItclinterp\fP [URL: https://github\&.com/georgtree/tclinterp]
+.TP
+\(bu
+\fItclopt\fP [URL: https://github\&.com/georgtree/tclopt]
 .PP
 After simulator installation add path to executable to PATH environment variable\&.
 .PP

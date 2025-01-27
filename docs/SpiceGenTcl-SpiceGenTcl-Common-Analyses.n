@@ -1,0 +1,417 @@
+'\"
+'\" '\" Copyright (c) George Yashin
+'\"
+.TH "SpiceGenTcl::Common::Analyses" 3tcl 0\&.65 "SpiceGenTcl" "Tcl SpiceGenTcl package"
+.SH NAME
+SpiceGenTcl::Common::Analyses - Commands in namespace SpiceGenTcl::Common::Analyses
+.SH SYNOPSIS
+\fBOBJECT constructor\fP \fI-variation value -n value -fstart value -fstop value ?-name value?\fP
+.br
+\fBOBJECT constructor\fP \fI-src value -start value -stop value -incr value ?-name value?\fP
+.br
+\fBOBJECT constructor\fP \fI?-name value?\fP
+.br
+\fBOBJECT constructor\fP \fI-tstep value -tstop value ?-tstart value ?-tmax value?? ?-uic? ?-name value?\fP
+.br
+.SH ::SPICEGENTCL::COMMON::ANALYSES
+.SH CLASSES
+.PP
+.RS -4n
+\fBAc\fR (::SpiceGenTcl::Common::Analyses)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Analysis\&.addParam\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Analysis\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+duplListCheckRet
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheckRet\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Analysis\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Analysis\&.getParams\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Analysis\&.setParamValue\fP
+.RE
+.PP
+\fBProperties\fR
+.RS 4n
+.TP
+-name
+Readable, writable\&.
+.TP
+-type
+Readable, writable\&.
+.RE
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Analysis\fP
+.PP
+\fBMixins\fR
+.PP
+\fI::SpiceGenTcl::Utility\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fI::SpiceGenTcl::Ngspice::Analyses::Ac\fP, \fI::SpiceGenTcl::Xyce::Analyses::Ac\fP, \fI::SpiceGenTcl::Ltspice::Analyses::Ac\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Common::Analyses::Ac)
+.RE
+.PP
+Creates object of class Ac that describes AC analysis\&.
+.RS 4n
+\fBOBJECT constructor\fP \fI-variation value -n value -fstart value -fstop value ?-name value?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+-fstart
+Start frequency\&.
+.TP
+-fstop
+Start frequency\&.
+.TP
+-n
+Number of points\&.
+.TP
+-name
+Name argument, optional\&.
+.TP
+-variation
+Parameter that defines frequency scale, could be dec, oct or lin\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+.RS 4n
+.nf
+\&.ac variation n fstart fstop
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Common::Analyses::Ac new -variation dec -n 10 -fstart 1 -fstop 1e6 -name dc1
+.fi
+.RE
+.PP
+.RS -4n
+\fBDc\fR (::SpiceGenTcl::Common::Analyses)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Analysis\&.addParam\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Analysis\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+duplListCheckRet
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheckRet\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Analysis\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Analysis\&.getParams\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Analysis\&.setParamValue\fP
+.RE
+.PP
+\fBProperties\fR
+.RS 4n
+.TP
+-name
+Readable, writable\&.
+.TP
+-type
+Readable, writable\&.
+.RE
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Analysis\fP
+.PP
+\fBMixins\fR
+.PP
+\fI::SpiceGenTcl::Utility\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fI::SpiceGenTcl::Ngspice::Analyses::Dc\fP, \fI::SpiceGenTcl::Xyce::Analyses::Dc\fP, \fI::SpiceGenTcl::Ltspice::Analyses::Dc\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Common::Analyses::Dc)
+.RE
+.PP
+Creates object of class Dc that describes DC analysis\&.
+.RS 4n
+\fBOBJECT constructor\fP \fI-src value -start value -stop value -incr value ?-name value?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+-incr
+Incrementing value\&.
+.TP
+-name
+Name argument, optional\&.
+.TP
+-src
+Name of independent voltage or current source, a resistor, or the circuit temperature\&.
+.TP
+-start
+Start value\&.
+.TP
+-stop
+Stop value\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+.RS 4n
+.nf
+\&.dc src start stop vincr
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Common::Analyses::Dc new -src v1 -start {time1 -eq} -stop 5 -incr 0\&.1 -name dc1
+.fi
+.RE
+.PP
+.RS -4n
+\fBOp\fR (::SpiceGenTcl::Common::Analyses)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Analysis\&.addParam\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Analysis\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+duplListCheckRet
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheckRet\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Analysis\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Analysis\&.getParams\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Analysis\&.setParamValue\fP
+.RE
+.PP
+\fBProperties\fR
+.RS 4n
+.TP
+-name
+Readable, writable\&.
+.TP
+-type
+Readable, writable\&.
+.RE
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Analysis\fP
+.PP
+\fBMixins\fR
+.PP
+\fI::SpiceGenTcl::Utility\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fI::SpiceGenTcl::Ngspice::Analyses::Op\fP, \fI::SpiceGenTcl::Xyce::Analyses::Op\fP, \fI::SpiceGenTcl::Ltspice::Analyses::Op\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Common::Analyses::Op)
+.RE
+.PP
+Creates object of class Op that describes OP analysis\&.
+.RS 4n
+\fBOBJECT constructor\fP \fI?-name value?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+-name
+Name argument, optional\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+.RS 4n
+.nf
+\&.op
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Common::Analyses::Op new -name op1
+.fi
+.RE
+.PP
+.RS -4n
+\fBTran\fR (::SpiceGenTcl::Common::Analyses)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Analysis\&.addParam\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Analysis\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+.TP
+duplListCheckRet
+See \fI::SpiceGenTcl::DuplChecker\&.duplListCheckRet\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Analysis\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Analysis\&.getParams\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Analysis\&.setParamValue\fP
+.RE
+.PP
+\fBProperties\fR
+.RS 4n
+.TP
+-name
+Readable, writable\&.
+.TP
+-type
+Readable, writable\&.
+.RE
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Analysis\fP
+.PP
+\fBMixins\fR
+.PP
+\fI::SpiceGenTcl::Utility\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fI::SpiceGenTcl::Ngspice::Analyses::Tran\fP, \fI::SpiceGenTcl::Xyce::Analyses::Tran\fP, \fI::SpiceGenTcl::Ltspice::Analyses::Tran\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Common::Analyses::Tran)
+.RE
+.PP
+Creates object of class Tran that describes TRAN analysis\&.
+.RS 4n
+\fBOBJECT constructor\fP \fI-tstep value -tstop value ?-tstart value ?-tmax value?? ?-uic? ?-name value?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+-name
+Name argument, optional\&.
+.TP
+-tmax
+Size of maximum time step in actual simulation, optional, require -tstart\&.
+.TP
+-tstart
+Start time of saving data, optional\&.
+.TP
+-tstep
+Size of maximum time step for plotting\&.
+.TP
+-tstop
+Stop time value\&.
+.TP
+-uic
+Skip initial operating point solution, optional\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+.RS 4n
+.nf
+\&.tran tstep tstop <tstart<tmax>> <uic>
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Common::Analyses::Tran new -tstep 1e-9 -tstop 10e-6 -name dc1
+.fi
+.RE
+

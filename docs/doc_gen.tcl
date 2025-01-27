@@ -1,5 +1,6 @@
 
-set path_to_hl_tcl "/home/georgtree/tcl/hl_tcl"
+#set path_to_hl_tcl "/home/georgtree/tcl/hl_tcl"
+set path_to_hl_tcl "C:/msys64/mingw64/lib/hl_tcl"
 package require ruff
 package require fileutil
 set docDir [file dirname [file normalize [info script]]]
@@ -26,20 +27,24 @@ set commonNroff [list -title $title -sortnamespaces false -preamble $startPage -
                          -product SpiceGenTcl -diagrammer "ditaa --border-width 1" -version $packageVersion \
                          -copyright "George Yashin" {*}$::argv]
 set namespaces [list "::List of devices" ::FAQ ::Tutorials ::Tips ::Advanced ::SpiceGenTcl \
-                ::SpiceGenTcl::Common::BasicDevices \
+                ::SpiceGenTcl::Common::BasicDevices ::SpiceGenTcl::Common::Analyses \
                 ::SpiceGenTcl::Common::Sources ::SpiceGenTcl::Ngspice::BasicDevices \
                 ::SpiceGenTcl::Ngspice::Sources ::SpiceGenTcl::Ngspice::SemiconductorDevices \
                 ::SpiceGenTcl::Ngspice::Analyses ::SpiceGenTcl::Ngspice::Simulators \
                 ::SpiceGenTcl::Xyce::BasicDevices ::SpiceGenTcl::Xyce::Sources \
                 ::SpiceGenTcl::Xyce::SemiconductorDevices ::SpiceGenTcl::Xyce::Analyses \
-                ::SpiceGenTcl::Xyce::Simulators]
+                ::SpiceGenTcl::Xyce::Simulators ::SpiceGenTcl::Ltspice::BasicDevices ::SpiceGenTcl::Ltspice::Sources \
+                ::SpiceGenTcl::Ltspice::SemiconductorDevices ::SpiceGenTcl::Ltspice::Analyses \
+                ::SpiceGenTcl::Ltspice::Simulators]
 set namespacesNroff [list "::List of devices" ::SpiceGenTcl ::SpiceGenTcl::Common::BasicDevices \
-                ::SpiceGenTcl::Common::Sources ::SpiceGenTcl::Ngspice::BasicDevices \
+                ::SpiceGenTcl::Common::Analyses ::SpiceGenTcl::Common::Sources ::SpiceGenTcl::Ngspice::BasicDevices \
                 ::SpiceGenTcl::Ngspice::Sources ::SpiceGenTcl::Ngspice::SemiconductorDevices \
                 ::SpiceGenTcl::Ngspice::Analyses ::SpiceGenTcl::Ngspice::Simulators \
                 ::SpiceGenTcl::Xyce::BasicDevices ::SpiceGenTcl::Xyce::Sources \
                 ::SpiceGenTcl::Xyce::SemiconductorDevices ::SpiceGenTcl::Xyce::Analyses \
-                ::SpiceGenTcl::Xyce::Simulators]                
+                ::SpiceGenTcl::Xyce::Simulators ::SpiceGenTcl::Ltspice::BasicDevices ::SpiceGenTcl::Ltspice::Sources \
+                ::SpiceGenTcl::Ltspice::SemiconductorDevices ::SpiceGenTcl::Ltspice::Analyses \
+                ::SpiceGenTcl::Ltspice::Simulators]                
 
 if {[llength $argv] == 0 || "html" in $argv} {
     ruff::document $namespaces -outdir $docDir -format html -outfile index.html {*}$common

@@ -574,6 +574,13 @@ test testIdcClass-2 {test Idc class} -setup {
     unset idc result
 }
 
+test testIdcClass-3 {test Idc class} -body {
+    catch {Idc new 1 netp netm -dc {inom -eq} -rser 1} errorStr
+    return $errorStr
+} -result "Current source doesn't support rser and cpar parameters" -cleanup {
+    unset errorStr
+}
+
 ####  Iac class test 
     
 test testIacClass-1 {test Iac class} -setup {
@@ -606,6 +613,13 @@ test testIacClass-4 {test Iac class} -setup {
     set result [$iac genSPICEString]
 } -result "i1 netp netm 0 ac={acmag}" -cleanup {
     unset iac result
+}
+
+test testIacClass-5 {test Iac class} -body {
+    catch {Iac new 1 netp netm -ac {inom -eq} -rser 1} errorStr
+    return $errorStr
+} -result "Current source doesn't support rser and cpar parameters" -cleanup {
+    unset errorStr
 }
 
 ####  Ipulse class test 
@@ -643,11 +657,18 @@ test testIpulseClass-4 {test Ipulse class} -setup {
 }
 
 test testIpulseClass-5 {test Ipulse class with different order} -setup {
-    set ipulse [Ipulse new 1 net1 net2 -tf 1e-9 -pw 10e-6 -per 20e-6 -np 10 -low 0 -high 1 -td 1e-9 -tr 1e-9 -rser 1]
+    set ipulse [Ipulse new 1 net1 net2 -tf 1e-9 -pw 10e-6 -per 20e-6 -np 10 -low 0 -high 1 -td 1e-9 -tr 1e-9]
 } -body {
     set result [$ipulse genSPICEString]
-} -result "i1 net1 net2 pulse 0 1 1e-9 1e-9 1e-9 10e-6 20e-6 10 rser=1" -cleanup {
+} -result "i1 net1 net2 pulse 0 1 1e-9 1e-9 1e-9 10e-6 20e-6 10" -cleanup {
     unset ipulse result
+}
+
+test testIpulseClass-6 {test Iac class} -body {
+    catch {Ipulse new 1 net1 net2 -tf 1e-9 -pw 10e-6 -per 20e-6 -np 10 -low 0 -high 1 -td 1e-9 -tr 1e-9 -rser 1} errorStr
+    return $errorStr
+} -result "Current source doesn't support rser and cpar parameters" -cleanup {
+    unset errorStr
 }
 
 ####  Isin class test 
@@ -685,11 +706,18 @@ test testIsinClass-4 {test Isin class} -setup {
 }
 
 test testIsinClass-5 {test Isin class with different order} -setup {
-    set isin [Isin new 1 net1 net2 -i0 0 -theta {theta -eq} -ia 2 -freq 50 -td 1e-6 ]
+    set isin [Isin new 1 net1 net2 -i0 0 -theta {theta -eq} -ia 2 -freq 50 -td 1e-6]
 } -body {
     set result [$isin genSPICEString]
 } -result "i1 net1 net2 sin 0 2 50 1e-6 \{theta\}" -cleanup {
     unset isin result
+}
+
+test testIsinClass-6 {test Iac class} -body {
+    catch {Isin new 1 net1 net2 -i0 0 -theta {theta -eq} -ia 2 -freq 50 -td 1e-6 -rser 1} errorStr
+    return $errorStr
+} -result "Current source doesn't support rser and cpar parameters" -cleanup {
+    unset errorStr
 }
 
 ####  Iexp class test 
@@ -1010,6 +1038,22 @@ test testDiodeClass-1 {test Diode class} -setup {
     unset dio result
 }
 
+test testDiodeClass-2 {test Diode class} -setup {
+    set dio [Diode new 1 netp netm -model diomod -area {area -eq} -temp 25 -off]
+} -body {
+    set result [$dio genSPICEString]
+} -result "d1 netp netm diomod \{area\} off temp=25" -cleanup {
+    unset dio result
+}
+
+test testDiodeClass-3 {test Diode class} -setup {
+    set dio [Diode new 1 netp netm -model diomod -temp 25]
+} -body {
+    set result [$dio genSPICEString]
+} -result "d1 netp netm diomod temp=25" -cleanup {
+    unset dio result
+}
+
 ####  D class tests 
 
 test testDClass-1 {test RSem alias for Diode class} -setup {
@@ -1035,6 +1079,22 @@ test testBjtClass-2 {test Bjt class} -setup {
 } -body {
     set result [$bjt genSPICEString]
 } -result "q1 netc netb nete nets bjtmod 1e-3 temp=25" -cleanup {
+    unset bjt result
+}
+
+test testBjtClass-3 {test Bjt class} -setup {
+    set bjt [Bjt new 1 netc netb nete -model bjtmod -ns nets -area {area -eq} -temp 25 -off]
+} -body {
+    set result [$bjt genSPICEString]
+} -result "q1 netc netb nete nets bjtmod \{area\} off temp=25" -cleanup {
+    unset bjt result
+}
+
+test testBjtClass-4 {test Bjt class} -setup {
+    set bjt [Bjt new 1 netc netb nete -model bjtmod -temp 25]
+} -body {
+    set result [$bjt genSPICEString]
+} -result "q1 netc netb nete bjtmod temp=25" -cleanup {
     unset bjt result
 }
 
@@ -1139,6 +1199,14 @@ test testMesfetClass-4 {test Mesfet class} -setup {
 } -body {
     set result [$mesfet genSPICEString]
 } -result "z1 netd netg nets mesfetmod" -cleanup {
+    unset mesfet result
+}
+
+test testMesfetClass-5 {test Mesfet class} -setup {
+    set mesfet [Mesfet new 1 netd netg nets -model mesfetmod -temp 25]
+} -body {
+    set result [$mesfet genSPICEString]
+} -result "z1 netd netg nets mesfetmod temp=25" -cleanup {
     unset mesfet result
 }
 

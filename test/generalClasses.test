@@ -274,6 +274,13 @@ test testParameterClass-15 {test creation of Parameter class instance and handli
     unset errorStr
 }
 
+test testParameterClass-16 {test creation of Parameter class instance and handling wrong form of the value}  -body {
+    catch {set parInst [Parameter new VTH 70!0meg]} errorStr
+    return $errorStr
+} -result "Value '70!0meg' is not a valid value" -cleanup {
+    unset errorStr
+}
+
 ###  ParameterNoCheck class tests 
 
 test testParameterNoCheckClass-1 {test creation of ParameterNoCheck class instance} -setup {
@@ -373,7 +380,14 @@ test testParameterPositionalNoCheckClass-2 {test creation of ParameterPositional
     set result [$parInst genSPICEString]
 } -result 1...1 -cleanup {
     unset parInst result
-}  
+}
+
+test testParameterPositionalNoCheckClass-3 {test creation of ParameterPositionalNoCheck class instance} -body {
+    catch {ParameterPositionalNoCheck new U0 ""} errorStr
+    return $errorStr
+} -result "Value '' is not a valid value" -cleanup {
+    unset errorStr
+} 
 
 ###  ParameterEquation class tests 
 
@@ -716,6 +730,14 @@ test testTempClass-5 {test creation of Temp class instance and setValue interfac
     set result [$temp configure -value]
 } -result "temp1" -cleanup {
     unset temp result
+}
+
+test testTempClass-6 {test creation of Temp class instance and genSPICEString interface} -body {
+    set temp [Temp new 10]
+    catch {$temp configure -value [list temp1 -e2q]} errorStr
+    return $errorStr
+} -result "Wrong value '-e2q' of qualifier" -cleanup {
+    unset errorStr temp
 }
     
 ###  Include class definition 

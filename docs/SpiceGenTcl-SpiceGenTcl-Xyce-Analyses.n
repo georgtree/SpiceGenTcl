@@ -1,19 +1,27 @@
 '\"
 '\" '\" Copyright (c) George Yashin
 '\"
-.TH "SpiceGenTcl::Xyce::Analyses" 3tcl 0\&.61 "SpiceGenTcl" "Tcl SpiceGenTcl package"
+.TH "SpiceGenTcl::Xyce::Analyses" 3tcl 0\&.65 "SpiceGenTcl" "Tcl SpiceGenTcl package"
 .SH NAME
 SpiceGenTcl::Xyce::Analyses - Commands in namespace SpiceGenTcl::Xyce::Analyses
 .SH SYNOPSIS
-\fBOBJECT constructor\fP \fI-variation value -n value -fstart value -fstop value ?-name value?\fP
+\fBAc create OBJNAME\fP
 .br
-\fBOBJECT constructor\fP \fI-src value -start value -stop value -incr value ?-name value?\fP
+\fBAc new\fP
 .br
-\fBOBJECT constructor\fP \fI?-name value?\fP
+\fBDc create OBJNAME\fP
+.br
+\fBDc new\fP
+.br
+\fBOp create OBJNAME\fP
+.br
+\fBOp new\fP
 .br
 \fBOBJECT constructor\fP \fI-objfunc value -param value ?-name value?\fP
 .br
-\fBOBJECT constructor\fP \fI-tstep value -tstop value ?-tstart value ?-tmax value?? ?-uic? ?-name value?\fP
+\fBTran create OBJNAME\fP
+.br
+\fBTran new\fP
 .br
 .SH ::SPICEGENTCL::XYCE::ANALYSES
 .SH CLASSES
@@ -25,9 +33,6 @@ SpiceGenTcl::Xyce::Analyses - Commands in namespace SpiceGenTcl::Xyce::Analyses
 \fBMethod summary\fR
 .RS 4n
 .TP
-constructor
-Constructor for the class\&.
-.TP
 addParam
 See \fI::SpiceGenTcl::Analysis\&.addParam\fP
 .TP
@@ -54,63 +59,18 @@ See \fI::SpiceGenTcl::Analysis\&.setParamValue\fP
 .RE
 .PP
 \fBProperties\fR
-.PP
-Readable: -name, -type
-.PP
-Writable: -name, -type
+.RS 4n
+.TP
+-name
+Readable, writable\&.
+.TP
+-type
+Readable, writable\&.
+.RE
 .PP
 \fBSuperclasses\fR
 .PP
-\fI::SpiceGenTcl::Analysis\fP
-.PP
-\fBMixins\fR
-.PP
-\fI::SpiceGenTcl::Utility\fP
-.PP
-.RS -4n
-\fBconstructor\fR (::SpiceGenTcl::Xyce::Analyses::Ac)
-.RE
-.PP
-Creates object of class Ac that describes AC analysis\&.
-.RS 4n\fBOBJECT constructor\fP \fI-variation value -n value -fstart value -fstop value ?-name value?\fP
-.br
-.RE
-.PP
-\fBParameters\fR
-.RS 4n
-.TP
--fstart
-Start frequency\&.
-.TP
--fstop
-Start frequency\&.
-.TP
--n
-Number of points\&.
-.TP
--name
-Name argument, optional\&.
-.TP
--variation
-Parameter that defines frequency scale, could be dec, oct or lin\&.
-.RE
-.PP
-\fBDescription\fR
-.PP
-.RS 4n
-.nf
-\&.AC <sweep type> <points value>
-+ <start frequency value> <end frequency value>
-.fi
-.RE
-.PP
-Example of class initialization:
-.PP
-.RS 4n
-.nf
-::SpiceGenTcl::Xyce::Analyses::Ac new -variation dec -n 10 -fstart 1 -fstop 1e6 -name dc1
-.fi
-.RE
+\fI::SpiceGenTcl::Common::Analyses::Ac\fP
 .PP
 .RS -4n
 \fBDc\fR (::SpiceGenTcl::Xyce::Analyses)
@@ -119,9 +79,6 @@ Example of class initialization:
 \fBMethod summary\fR
 .RS 4n
 .TP
-constructor
-Constructor for the class\&.
-.TP
 addParam
 See \fI::SpiceGenTcl::Analysis\&.addParam\fP
 .TP
@@ -148,62 +105,18 @@ See \fI::SpiceGenTcl::Analysis\&.setParamValue\fP
 .RE
 .PP
 \fBProperties\fR
-.PP
-Readable: -name, -type
-.PP
-Writable: -name, -type
+.RS 4n
+.TP
+-name
+Readable, writable\&.
+.TP
+-type
+Readable, writable\&.
+.RE
 .PP
 \fBSuperclasses\fR
 .PP
-\fI::SpiceGenTcl::Analysis\fP
-.PP
-\fBMixins\fR
-.PP
-\fI::SpiceGenTcl::Utility\fP
-.PP
-.RS -4n
-\fBconstructor\fR (::SpiceGenTcl::Xyce::Analyses::Dc)
-.RE
-.PP
-Creates object of class Dc that describes DC analysis\&.
-.RS 4n\fBOBJECT constructor\fP \fI-src value -start value -stop value -incr value ?-name value?\fP
-.br
-.RE
-.PP
-\fBParameters\fR
-.RS 4n
-.TP
--incr
-Incrementing value\&.
-.TP
--name
-Name argument, optional\&.
-.TP
--src
-Name of independent voltage or current source, a resistor, or the circuit temperature\&.
-.TP
--start
-Start value\&.
-.TP
--stop
-Stop value\&.
-.RE
-.PP
-\fBDescription\fR
-.PP
-.RS 4n
-.nf
-\&.DC [LIN] <sweep variable name> <start> <stop> <step>
-.fi
-.RE
-.PP
-Example of class initialization:
-.PP
-.RS 4n
-.nf
-::SpiceGenTcl::Xyce::Analyses::Dc new -src v1 -start {time1 -eq} -stop 5 -incr 0\&.1 -name dc1
-.fi
-.RE
+\fI::SpiceGenTcl::Common::Analyses::Dc\fP
 .PP
 .RS -4n
 \fBOp\fR (::SpiceGenTcl::Xyce::Analyses)
@@ -212,9 +125,6 @@ Example of class initialization:
 \fBMethod summary\fR
 .RS 4n
 .TP
-constructor
-Constructor for the class\&.
-.TP
 addParam
 See \fI::SpiceGenTcl::Analysis\&.addParam\fP
 .TP
@@ -241,50 +151,18 @@ See \fI::SpiceGenTcl::Analysis\&.setParamValue\fP
 .RE
 .PP
 \fBProperties\fR
-.PP
-Readable: -name, -type
-.PP
-Writable: -name, -type
-.PP
-\fBSuperclasses\fR
-.PP
-\fI::SpiceGenTcl::Analysis\fP
-.PP
-\fBMixins\fR
-.PP
-\fI::SpiceGenTcl::Utility\fP
-.PP
-.RS -4n
-\fBconstructor\fR (::SpiceGenTcl::Xyce::Analyses::Op)
-.RE
-.PP
-Creates object of class Op that describes OP analysis\&.
-.RS 4n\fBOBJECT constructor\fP \fI?-name value?\fP
-.br
-.RE
-.PP
-\fBParameters\fR
 .RS 4n
 .TP
 -name
-Name argument, optional\&.
+Readable, writable\&.
+.TP
+-type
+Readable, writable\&.
 .RE
 .PP
-\fBDescription\fR
+\fBSuperclasses\fR
 .PP
-.RS 4n
-.nf
-\&.op
-.fi
-.RE
-.PP
-Example of class initialization:
-.PP
-.RS 4n
-.nf
-::SpiceGenTcl::Xyce::Analyses::Op new -name op1
-.fi
-.RE
+\fI::SpiceGenTcl::Common::Analyses::Op\fP
 .PP
 .RS -4n
 \fBSens\fR (::SpiceGenTcl::Xyce::Analyses)
@@ -322,10 +200,14 @@ See \fI::SpiceGenTcl::Analysis\&.setParamValue\fP
 .RE
 .PP
 \fBProperties\fR
-.PP
-Readable: -name, -type
-.PP
-Writable: -name, -type
+.RS 4n
+.TP
+-name
+Readable, writable\&.
+.TP
+-type
+Readable, writable\&.
+.RE
 .PP
 \fBSuperclasses\fR
 .PP
@@ -340,7 +222,8 @@ Writable: -name, -type
 .RE
 .PP
 Creates object of class Sens that describes SENS ac analysis\&.
-.RS 4n\fBOBJECT constructor\fP \fI-objfunc value -param value ?-name value?\fP
+.RS 4n
+\fBOBJECT constructor\fP \fI-objfunc value -param value ?-name value?\fP
 .br
 .RE
 .PP
@@ -380,9 +263,6 @@ Example of class initialization:
 \fBMethod summary\fR
 .RS 4n
 .TP
-constructor
-Constructor for the class\&.
-.TP
 addParam
 See \fI::SpiceGenTcl::Analysis\&.addParam\fP
 .TP
@@ -409,64 +289,16 @@ See \fI::SpiceGenTcl::Analysis\&.setParamValue\fP
 .RE
 .PP
 \fBProperties\fR
-.PP
-Readable: -name, -type
-.PP
-Writable: -name, -type
-.PP
-\fBSuperclasses\fR
-.PP
-\fI::SpiceGenTcl::Analysis\fP
-.PP
-\fBMixins\fR
-.PP
-\fI::SpiceGenTcl::Utility\fP
-.PP
-.RS -4n
-\fBconstructor\fR (::SpiceGenTcl::Xyce::Analyses::Tran)
-.RE
-.PP
-Creates object of class Tran that describes TRAN analysis\&.
-.RS 4n\fBOBJECT constructor\fP \fI-tstep value -tstop value ?-tstart value ?-tmax value?? ?-uic? ?-name value?\fP
-.br
-.RE
-.PP
-\fBParameters\fR
 .RS 4n
 .TP
 -name
-Name argument, optional\&.
+Readable, writable\&.
 .TP
--tmax
-Size of maximum time step in actual simulation, optional, require -tstart\&.
-.TP
--tstart
-Start time of saving data, optional\&.
-.TP
--tstep
-Initial step value\&.
-.TP
--tstop
-Final time value\&.
-.TP
--uic
-Skip initial operating point solution, optional\&.
+-type
+Readable, writable\&.
 .RE
 .PP
-\fBDescription\fR
+\fBSuperclasses\fR
 .PP
-.RS 4n
-.nf
-\&.TRAN <initial step value> <final time value>
-+ [<start time value> [<step ceiling value>]] [NOOP] [UIC]
-.fi
-.RE
-.PP
-Example of class initialization:
-.PP
-.RS 4n
-.nf
-::SpiceGenTcl::Xyce::Analyses::Tran new -tstep 1e-9 -tstop 10e-6 -name dc1
-.fi
-.RE
+\fI::SpiceGenTcl::Common::Analyses::Tran\fP
 

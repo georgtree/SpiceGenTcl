@@ -49,6 +49,16 @@ test testDiodeModelClass-1 {test DiodeModel class} -setup {
     unset mod result
 }
 
+### ________________________ DiodeIdealModel class tests _________________________ ###
+    
+test testDiodeIdealModelClass-1 {test DiodeIdealModel class} -setup {
+    set mod [DiodeIdealModel new diodemod -ron 1 -roff 1e9]
+} -body {
+    set result [$mod genSPICEString]
+} -result ".model diodemod d(ron=1 roff=1e9)" -cleanup {
+    unset mod result
+}
+
 ### ________________________ BjtGPModel class tests _________________________ ###
     
 test testBjtGPModelClass-1 {test BjtGPModel class} -setup {
@@ -79,6 +89,6 @@ test testMesfetModelClass-1 {test MesfetModel class} -setup {
     unset mod result
 }
 
-forgetNgspice
+forgetLtspice
 
 cleanupTests
