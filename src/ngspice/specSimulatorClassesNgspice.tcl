@@ -61,14 +61,14 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
             }]
             set firstLine [@ [split $circuitStr \n] 0]
             set runLocation [my configure -runlocation]
-            set cirFile [open "${runLocation}/${firstLine}.cir" w+]
+            set cirFile [open [file join $runLocation ${firstLine}.cir] w+]
             puts $cirFile $circuitStr
             close $cirFile
-            set rawFileName "${runLocation}/${firstLine}.raw"
-            set logFileName "${runLocation}/${firstLine}.log"
-            set cirFileName "${runLocation}/${firstLine}.cir"
-            exec "[my configure -Command]" -b -r $rawFileName -o $logFileName $cirFileName
-            my configure -LastRunFileName ${firstLine}
+            set rawFileName [file join $runLocation ${firstLine}.raw]
+            set logFileName [file join $runLocation ${firstLine}.log]
+            set cirFileName [file join $runLocation ${firstLine}.cir]
+            exec {*}[list [my configure -Command] -b -r $rawFileName -o $logFileName $cirFileName]
+            my configure -LastRunFileName $firstLine
             my readLog
             my readData
             if {![info exists nodelete]} {
@@ -79,7 +79,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
         }
         method readLog {} {
             # Reads log file of last simulation and save it's content to Log variable.
-            set logFile [open "[my configure -runlocation]/[my configure -LastRunFileName].log" r+]
+            set logFile [open [file join [my configure -runlocation] [my configure -LastRunFileName].log] r+]
             set log [read $logFile]
             close $logFile
             return 
@@ -96,7 +96,8 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
         method readData {} {
             # Reads raw data file, create RawFile object and return it's reference name.
             my variable data
-            set data [::SpiceGenTcl::RawFile new "[my configure -runlocation]/[my configure -LastRunFileName].raw"]
+            set data [::SpiceGenTcl::RawFile new [file join [my configure -runlocation]\
+                                                          [my configure -LastRunFileName].raw] * ngspice]
             return
         }
     }
@@ -114,12 +115,12 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
             }]
             set firstLine [@ [split $circuitStr \n] 0]
             set runLocation [my configure -runlocation]
-            set cirFile [open "${runLocation}/${firstLine}.cir" w+]
+            set cirFile [open [file join $runLocation ${firstLine}.cir] w+]
             puts $cirFile $circuitStr
             close $cirFile
-            set rawFileName "${runLocation}/${firstLine}.raw"
-            set logFileName "${runLocation}/${firstLine}.log"
-            set cirFileName "${runLocation}/${firstLine}.cir"
+            set rawFileName [file join $runLocation ${firstLine}.raw]
+            set logFileName [file join $runLocation ${firstLine}.log]
+            set cirFileName [file join $runLocation ${firstLine}.cir]
             set command [list [my configure -Command] -b $cirFileName -r $rawFileName]
             set chan [open "|$command 2>@1"]
             set logData ""

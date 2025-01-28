@@ -63,12 +63,12 @@ namespace eval ::SpiceGenTcl::Ltspice::Simulators {
             global tcl_platform
             set firstLine [@ [split $circuitStr \n] 0]
             set runLocation [my configure -runlocation]
-            set cirFile [open "${runLocation}/${firstLine}.cir" w+]
+            set cirFile [open [file join $runLocation ${firstLine}.cir] w+]
             puts $cirFile $circuitStr
             close $cirFile
-            set rawFileName "${runLocation}/${firstLine}.raw"
-            set logFileName "${runLocation}/${firstLine}.log"
-            set cirFileName "${runLocation}/${firstLine}.cir"
+            set rawFileName [file join $runLocation ${firstLine}.raw]
+            set logFileName [file join $runLocation ${firstLine}.log]
+            set cirFileName [file join $runLocation ${firstLine}.cir]
             if {[string match -nocase *linux* $tcl_platform(os)]} {
                 catch {exec {*}[my configure -Command] -b $cirFileName} errorStr
                 #puts $errorStr
@@ -78,23 +78,23 @@ namespace eval ::SpiceGenTcl::Ltspice::Simulators {
                     error "LTspice failed with error '$errorStr'"
                 }
             } elseif {[string match -nocase "*windows nt*" $tcl_platform(os)]} {
-                exec [my configure -Command] -b $cirFileName
+                exec {*}[list [my configure -Command] -b $cirFileName]
             }
-            my configure -LastRunFileName ${firstLine}
+            my configure -LastRunFileName $firstLine
             my readLog
             my readData
             if {![info exists nodelete]} {
                 file delete $rawFileName
                 file delete $logFileName
                 file delete $cirFileName
-                if {[file exists "${runLocation}/${firstLine}.op.raw"]} {
-                    file delete "${runLocation}/${firstLine}.op.raw"
+                if {[file exists [file join $runLocation ${firstLine}.op.raw]]} {
+                    file delete [file join $runLocation ${firstLine}.op.raw]
                 }
             }
         }
         method readLog {} {
             # Reads log file of last simulation and save it's content to Log variable.
-            set logFile [open "[my configure -runlocation]/[my configure -LastRunFileName].log" r+]
+            set logFile [open [file join [my configure -runlocation] [my configure -LastRunFileName].log] r+]
             set log [read $logFile]
             close $logFile
             return 
@@ -111,8 +111,8 @@ namespace eval ::SpiceGenTcl::Ltspice::Simulators {
         method readData {} {
             # Reads raw data file, create RawFile object and return it's reference name.
             my variable data
-            set data [::SpiceGenTcl::RawFile new "[my configure -runlocation]/[my configure -LastRunFileName].raw"\
-                             * ltspice]
+            set data [::SpiceGenTcl::RawFile new [file join [my configure -runlocation]\
+                                                          [my configure -LastRunFileName].raw] * ltspice]
             return
         }
     }

@@ -240,7 +240,7 @@ namespace eval ::SpiceGenTcl {
         method checkFloating {} {
             # Determines if pin is connected to the node.
             # Returns: `true` if connected and `false` if not
-            if {[my configure -nodename] eq {}} {
+            if {[my configure -nodename] eq ""} {
                 set floating true
             } else {
                 set floating false
@@ -253,7 +253,7 @@ namespace eval ::SpiceGenTcl {
             if {[my checkFloating] eq "true"} {
                 return -code error "Pin '[my configure -name]' is not connected to the node so can't be netlisted"
             }
-            return "[my configure -nodename]"
+            return [my configure -nodename]
         }
     }
     
@@ -285,7 +285,7 @@ namespace eval ::SpiceGenTcl {
         method genSPICEString {} {
             # Creates string for SPICE netlist.
             # Returns: string '$name'
-            return "[my configure -name]"
+            return [my configure -name]
         }
     }
     
@@ -379,7 +379,7 @@ namespace eval ::SpiceGenTcl {
         method genSPICEString {} {
             # Creates string for SPICE netlist.
             # Returns: SPICE netlist's string
-            return "[my configure -value]"
+            return [my configure -value]
         }
     }
     
@@ -398,7 +398,7 @@ namespace eval ::SpiceGenTcl {
         method genSPICEString {} {
             # Creates string for SPICE netlist.
             # Results: SPICE netlist's string
-            return "[my configure -value]"
+            return [my configure -value]
         }
     }
     oo::define ParameterPositionalNoCheck {
@@ -587,8 +587,7 @@ namespace eval ::SpiceGenTcl {
             #  in other words, connect particular pin to particular node.
             #  pinName - name of the pin
             #  nodeName - name of the node that we want connect to pin
-            set error [catch {dget $Pins $pinName}]
-            if {$error>0} {
+            if {[catch {dget $Pins $pinName}]} {
                 return -code error "Pin with name '$pinName' was not found in device's '[my configure -name]'\
                         list of pins '[dict keys [my getPins]]'"
             } else {
@@ -722,15 +721,14 @@ namespace eval ::SpiceGenTcl {
             # Creates device string for SPICE netlist.
             # Returns: SPICE netlist's string
             dict for {pinName pin} $Pins {
-                set error [catch {$pin genSPICEString} errStr] 
-                if {$error!=1} {
+                if {![catch {$pin genSPICEString}]} {
                     lappend nodes [$pin genSPICEString]
                 } else {
                     return -code error "Device '[my configure -name]' can't be netlisted because '$pinName' pin is\
                             floating"
                 }
             }
-            if {($Params eq "") || (![info exists Params])} {
+            if {($Params eq "") || ![info exists Params]} {
                 lappend params ""
                 return "[my configure -name] [join $nodes]"
             } else {
@@ -1203,8 +1201,7 @@ namespace eval ::SpiceGenTcl {
             # Gets particular element object reference by its name.
             #  elemName - name of element
             set elemName [string tolower $elemName]
-            set error [catch {dget $Elements $elemName}]
-            if {$error>0} {
+            if {[catch {dget $Elements $elemName}]} {
                 return -code error "Element with name '$elemName' was not found in netlist's '[my configure -name]'\
                         list of elements"
             } else {
@@ -1294,9 +1291,8 @@ namespace eval ::SpiceGenTcl {
         method getElement {elemName} {
             # Gets particular element object reference by its name.
             #  elemName - name of element
-            set elemName [string tolower $elemName]
-            set error [catch {dget $Elements $elemName}]
-            if {$error>0} {
+            set elemName [string tolower $elemName] 
+            if {[catch {dget $Elements $elemName}]} {
                 return -code error "Element with name '$elemName' was not found in netlist's '[my configure -name]'\
                         list of elements"
             } else {
@@ -1598,7 +1594,7 @@ namespace eval ::SpiceGenTcl {
         # Numerical type of dataset, real, double or complex
         property NumType -set {
             # method to set the numerical type of the dataset
-            if {$value ni [list real complex double]} {
+            if {$value ni {real complex double}} {
                 error "Unknown numerical type '$value' of data"
             }
             set NumType $value
@@ -1738,7 +1734,6 @@ namespace eval ::SpiceGenTcl {
             my configure -Path $path
             set fileSize [file size $path]
             set file [open $path r]
-            #chan configure $file -encoding iso8859-1
             fconfigure $file -translation binary
             
 ####  read header 
@@ -1835,7 +1830,7 @@ namespace eval ::SpiceGenTcl {
                 lappend Traces $trace
                 incr ivar
             }
-            if {($traces2read eq "") || (![llength $traces2read])} {
+            if {($traces2read eq "") || ![llength $traces2read]} {
                 close $file
                 return
             }
