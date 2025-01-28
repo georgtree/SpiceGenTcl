@@ -141,7 +141,7 @@
     <b><font color=#ffa500>set</font></b> params <font color=#90ee90>&quot;&quot;</font>
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> c]} {
         <b><font color=#ffa500>set</font></b> cVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> c]
-        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$cVal</font>]&gt;1) && ([@ <font color=#f1b479>$cVal</font> 1]==<font color=#90ee90>&quot;-eq&quot;</font>)} {
+        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$cVal</font>]&gt;1) && ([@ <font color=#f1b479>$cVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
             <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;c <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>cVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
         } <b><font color=#ffa500>else</font></b> {
             <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;c <font color=#f1b479>$</font>cVal -pos&quot;</font>
@@ -362,7 +362,7 @@
     <b><font color=#ffa500>set</font></b> params <font color=#90ee90>&quot;&quot;</font>
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> l]} {
         <b><font color=#ffa500>set</font></b> lVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> l]
-        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$lVal</font>]&gt;1) && ([@ <font color=#f1b479>$lVal</font> 1]==<font color=#90ee90>&quot;-eq&quot;</font>)} {
+        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$lVal</font>]&gt;1) && ([@ <font color=#f1b479>$lVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
             <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;l <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>lVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
         } <b><font color=#ffa500>else</font></b> {
             <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;l <font color=#f1b479>$</font>lVal -pos&quot;</font>
@@ -565,7 +565,7 @@
     <i><font color=#76a396># Synopsis: subcktObj name nodes ?-paramName {paramValue ?-eq?} ...?</font></i>
 
     <i><font color=#76a396># check that inputs object class is Subcircuit</font></i>
-    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> object class <font color=#f1b479>$subcktObj</font> <font color=#90ee90>&quot;::SpiceGenTcl::Subcircuit&quot;</font>]!=1} {
+    <b><font color=#ffa500>if</font></b> {![<b><font color=#ffa500>info</font></b> object class <font color=#f1b479>$subcktObj</font> <font color=#90ee90>&quot;::SpiceGenTcl::Subcircuit&quot;</font>]} {
         <b><font color=#ffa500>set</font></b> objClass [<b><font color=#ffa500>info</font></b> object class <font color=#f1b479>$subcktObj</font>]
         <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Wrong object class '<font color=#f1b479>$</font>objClass' is passed as subcktObj, should be '::SpiceGenTcl::Subcircuit'&quot;</font>
     }

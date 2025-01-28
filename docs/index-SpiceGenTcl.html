@@ -183,9 +183,9 @@
     <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-type</font> <font color=#f1b479>$type</font>
     <i><font color=#76a396># create Analysis objects</font></i>
     <b><font color=#ffa500>foreach</font></b> param <font color=#f1b479>$params</font> {
-        <b><font color=#ffa500>if</font></b> {[@ <font color=#f1b479>$param</font> 2]=={}} {
+        <b><font color=#ffa500>if</font></b> {[@ <font color=#f1b479>$param</font> 2] eq {}} {
             <b><font color=#fe6efe>my</font></b> addParam [@ <font color=#f1b479>$param</font> 0] [@ <font color=#f1b479>$param</font> 1]
-        } <b><font color=#ffa500>elseif</font></b> {[@ <font color=#f1b479>$param</font> 1]==<font color=#90ee90>&quot;-sw&quot;</font>} {
+        } <b><font color=#ffa500>elseif</font></b> {[@ <font color=#f1b479>$param</font> 1] eq <font color=#90ee90>&quot;-sw&quot;</font>} {
             <b><font color=#fe6efe>my</font></b> addParam [@ <font color=#f1b479>$param</font> 0] <font color=#b9b96e>-sw</font>
         } <b><font color=#ffa500>else</font></b> {
             <b><font color=#fe6efe>my</font></b> addParam {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$param</font>
@@ -238,7 +238,7 @@
         <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Parameters list '<font color=#f1b479>$</font>paramList' has already contains parameter with name '<font color=#f1b479>$</font>paramName'&quot;</font>
     }
     <i><font color=#76a396># select parameter object according to parameter qualificator</font></i>
-    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$value</font>==&quot;-sw&quot;} {
+    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$value</font> eq <font color=#90ee90>&quot;-sw&quot;</font>} {
         <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterSwitch new <font color=#f1b479>$paramName</font>]
     } <b><font color=#ffa500>else</font></b> {
         <b><font color=#ffa500>switch</font></b> <font color=#f1b479>$paramQual</font> {
@@ -574,7 +574,7 @@
         <b><font color=#ffa500>lappend</font></b> elementsNamesList {<b><font color=#ffa500>*</font></b>}[<b><font color=#fe6efe>my</font></b> getAllElemNames]
     }
     <b><font color=#ffa500>set</font></b> dup [<b><font color=#fe6efe>my</font></b> duplListCheckRet <font color=#f1b479>$elementsNamesList</font>]
-    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$dup</font>!=&quot;&quot;} {
+    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$dup</font> ne <font color=#90ee90>&quot;&quot;</font>} {
         <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Netlist '<font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font>' already contains element with name <font color=#f1b479>$</font>dup&quot;</font>
     }
     <b><font color=#ffa500>foreach</font></b> arg <font color=#f1b479>$args</font> {
@@ -718,7 +718,7 @@
     <b><font color=#ffa500>set</font></b> arguments [argparse {
         <font color=#b9b96e>-nodelete</font>
     }]
-    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> exists simulator]==0} {
+    <b><font color=#ffa500>if</font></b> {![<b><font color=#ffa500>info</font></b> exists simulator]} {
         <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Simulator is not attached to '<font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font>' circuit&quot;</font>
     }
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> exists nodelete]} {
@@ -959,11 +959,11 @@
     <i><font color=#76a396>#  - eq - parameter may contain equation in terms of functions and other parsmeters,</font></i>
     <i><font color=#76a396>#    printed as '$name={$equation}'</font></i>
     <i><font color=#76a396>#  - poseq - combination of both flags, print only '{$equation}'</font></i>
-    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$params</font>!=&quot;&quot;} {
+    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$params</font> ne <font color=#90ee90>&quot;&quot;</font>} {
         <b><font color=#ffa500>foreach</font></b> param <font color=#f1b479>$params</font> {
-            <b><font color=#ffa500>if</font></b> {[@ <font color=#f1b479>$param</font> 2]=={}} {
+            <b><font color=#ffa500>if</font></b> {[@ <font color=#f1b479>$param</font> 2] eq {}} {
                 <b><font color=#fe6efe>my</font></b> addParam [@ <font color=#f1b479>$param</font> 0] [@ <font color=#f1b479>$param</font> 1]
-            } <b><font color=#ffa500>elseif</font></b> {[@ <font color=#f1b479>$param</font> 1]==<font color=#90ee90>&quot;-sw&quot;</font>} {
+            } <b><font color=#ffa500>elseif</font></b> {[@ <font color=#f1b479>$param</font> 1] eq <font color=#90ee90>&quot;-sw&quot;</font>} {
                 <b><font color=#fe6efe>my</font></b> addParam [@ <font color=#f1b479>$param</font> 0] <font color=#b9b96e>-sw</font>
             } <b><font color=#ffa500>else</font></b> {
                 <b><font color=#fe6efe>my</font></b> addParam {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$param</font>
@@ -1019,7 +1019,7 @@
         <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Parameters list '<font color=#f1b479>$</font>paramList' has already contains parameter with name '<font color=#f1b479>$</font>paramName'&quot;</font>
     }
     <i><font color=#76a396># select parameter object according to parameter qualificator</font></i>
-    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$value</font>==&quot;-sw&quot;} {
+    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$value</font> eq <font color=#90ee90>&quot;-sw&quot;</font>} {
         <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterSwitch new <font color=#f1b479>$paramName</font>]
     } <b><font color=#ffa500>else</font></b> {
         <b><font color=#ffa500>switch</font></b> <font color=#f1b479>$paramQual</font> {
@@ -1059,7 +1059,7 @@
     <i><font color=#76a396># Returns: list of floating pins</font></i>
     <b><font color=#ffa500>set</font></b> floatingPins {}
     <b><font color=#ffa500>dict</font></b> for {pinName pin} <font color=#f1b479>$Pins</font> {
-        <b><font color=#ffa500>if</font></b> {[<font color=#f1b479>$pin</font> checkFloating]==<font color=#90ee90>&quot;true&quot;</font>} {
+        <b><font color=#ffa500>if</font></b> {[<font color=#f1b479>$pin</font> checkFloating] eq <font color=#90ee90>&quot;true&quot;</font>} {
             <b><font color=#ffa500>lappend</font></b> floatingPins [<font color=#f1b479>$pin</font> configure <font color=#b9b96e>-name</font>]
         }
     }
@@ -1107,7 +1107,7 @@
             <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Device '<font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font>' can't be netlisted because '<font color=#f1b479>$</font>pinName' pin is floating&quot;</font>
         }
     }
-    <b><font color=#ffa500>if</font></b> {(<font color=#f1b479>$Params</font>==&quot;&quot;) || ([<b><font color=#ffa500>info</font></b> exists Params]==0)} {
+    <b><font color=#ffa500>if</font></b> {(<font color=#f1b479>$Params</font> eq <font color=#90ee90>&quot;&quot;</font>) || (![<b><font color=#ffa500>info</font></b> exists Params])} {
         <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;&quot;</font>
         <b><font color=#fe6efe>return</font></b> <font color=#90ee90>&quot;<font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font> <font color=#f1b479>[</font>join <font color=#f1b479>$</font>nodes<font color=#f1b479>]</font>&quot;</font>
     } <b><font color=#ffa500>else</font></b> {
@@ -1529,11 +1529,11 @@
     <i><font color=#76a396># Class represents model card in SPICE netlist.</font></i>
     <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-name</font> <font color=#f1b479>$name</font> <font color=#b9b96e>-type</font> <font color=#f1b479>$type</font>
     <i><font color=#76a396># create Params objects</font></i>
-    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$params</font>!=&quot;&quot;} {
+    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$params</font> ne <font color=#90ee90>&quot;&quot;</font>} {
         <b><font color=#ffa500>foreach</font></b> param <font color=#f1b479>$params</font> {
-            <b><font color=#ffa500>if</font></b> {[@ <font color=#f1b479>$param</font> 2]=={}} {
+            <b><font color=#ffa500>if</font></b> {[@ <font color=#f1b479>$param</font> 2] eq {}} {
                 <b><font color=#fe6efe>my</font></b> addParam [@ <font color=#f1b479>$param</font> 0] [@ <font color=#f1b479>$param</font> 1]
-            } <b><font color=#ffa500>elseif</font></b> {[@ <font color=#f1b479>$param</font> 2]==<font color=#90ee90>&quot;-eq&quot;</font>} {
+            } <b><font color=#ffa500>elseif</font></b> {[@ <font color=#f1b479>$param</font> 2] eq <font color=#90ee90>&quot;-eq&quot;</font>} {
                 <b><font color=#fe6efe>my</font></b> addParam [@ <font color=#f1b479>$param</font> 0] [@ <font color=#f1b479>$param</font> 1] <font color=#b9b96e>-eq</font>
             } <b><font color=#ffa500>else</font></b> {
                 <b><font color=#ffa500>error</font></b> <font color=#90ee90>&quot;Wrong parameter definition in model <font color=#f1b479>$</font>name&quot;</font>
@@ -1589,7 +1589,7 @@
         <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Parameters list '<font color=#f1b479>$</font>paramList' has already contains parameter with name '<font color=#f1b479>$</font>paramName'&quot;</font>
     }
     <i><font color=#76a396># select parameter object according to parameter qualificator</font></i>
-    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$value</font>==&quot;-sw&quot;} {
+    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$value</font> eq <font color=#90ee90>&quot;-sw&quot;</font>} {
         <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterSwitch new <font color=#f1b479>$paramName</font>]
     } <b><font color=#ffa500>else</font></b> {
         <b><font color=#ffa500>switch</font></b> <font color=#f1b479>$paramQual</font> {
@@ -1649,7 +1649,7 @@
 
     <i><font color=#76a396># Creates model string for SPICE netlist.</font></i>
     <i><font color=#76a396># Returns: SPICE netlist's string</font></i>
-    <b><font color=#ffa500>if</font></b> {(<font color=#f1b479>$Params</font>==&quot;&quot;) || ([<b><font color=#ffa500>info</font></b> exists Params]==0)} {
+    <b><font color=#ffa500>if</font></b> {(<font color=#f1b479>$Params</font> eq <font color=#90ee90>&quot;&quot;</font>) || (![<b><font color=#ffa500>info</font></b> exists Params])} {
         <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;&quot;</font>
         <b><font color=#fe6efe>return</font></b> <font color=#90ee90>&quot;.model <font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font> <font color=#f1b479>[</font>my configure -type<font color=#f1b479>]</font>&quot;</font>
     } <b><font color=#ffa500>else</font></b> {
@@ -1766,7 +1766,7 @@
         <b><font color=#ffa500>lappend</font></b> elementsNamesList {<b><font color=#ffa500>*</font></b>}[<b><font color=#fe6efe>my</font></b> getAllElemNames]
     }
     <b><font color=#ffa500>set</font></b> dup [<b><font color=#fe6efe>my</font></b> duplListCheckRet <font color=#f1b479>$elementsNamesList</font>]
-    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$dup</font>!=&quot;&quot;} {
+    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$dup</font> ne <font color=#90ee90>&quot;&quot;</font>} {
         <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Netlist '<font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font>' already contains element with name <font color=#f1b479>$</font>dup&quot;</font>
     }
     <b><font color=#ffa500>foreach</font></b> arg <font color=#f1b479>$args</font> {
@@ -1900,8 +1900,8 @@
         <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-name</font> [<b><font color=#fe6efe>self</font></b> object]
     }
     <b><font color=#ffa500>foreach</font></b> param <font color=#f1b479>$params</font> {
-        <b><font color=#ffa500>if</font></b> {[@ <font color=#f1b479>$param</font> 2]=={}} {
-            <b><font color=#ffa500>if</font></b> {[@ <font color=#f1b479>$param</font> 1]==<font color=#90ee90>&quot;-sw&quot;</font>} {
+        <b><font color=#ffa500>if</font></b> {[@ <font color=#f1b479>$param</font> 2] eq {}} {
+            <b><font color=#ffa500>if</font></b> {[@ <font color=#f1b479>$param</font> 1] eq <font color=#90ee90>&quot;-sw&quot;</font>} {
                 <b><font color=#fe6efe>my</font></b> addParam [@ <font color=#f1b479>$param</font> 0] <font color=#b9b96e>-sw</font>
             } <b><font color=#ffa500>else</font></b> {
                 <b><font color=#fe6efe>my</font></b> addParam [@ <font color=#f1b479>$param</font> 0] [@ <font color=#f1b479>$param</font> 1]
@@ -1935,7 +1935,7 @@
     <b><font color=#ffa500>if</font></b> {[<b><font color=#fe6efe>my</font></b> duplListCheck <font color=#f1b479>$paramList</font>]} {
         <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Parameters list '<font color=#f1b479>$</font>paramList' has already contains parameter with name '<font color=#f1b479>$</font>paramName'&quot;</font>
     }
-    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$value</font>==&quot;-sw&quot;} {
+    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$value</font> eq <font color=#90ee90>&quot;-sw&quot;</font>} {
         <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterSwitch new <font color=#f1b479>$paramName</font>]
     } <b><font color=#ffa500>else</font></b> {
         <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterNoCheck new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
@@ -2428,9 +2428,9 @@
         <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-name</font> [<b><font color=#fe6efe>self</font></b> object]
     }
     <b><font color=#ffa500>foreach</font></b> param <font color=#f1b479>$params</font> {
-        <b><font color=#ffa500>if</font></b> {[@ <font color=#f1b479>$param</font> 2]=={}} {
+        <b><font color=#ffa500>if</font></b> {[@ <font color=#f1b479>$param</font> 2] eq {}} {
             <b><font color=#fe6efe>my</font></b> addParam [@ <font color=#f1b479>$param</font> 0] [@ <font color=#f1b479>$param</font> 1]
-        } <b><font color=#ffa500>elseif</font></b> {[@ <font color=#f1b479>$param</font> 2]==<font color=#90ee90>&quot;-eq&quot;</font>} {
+        } <b><font color=#ffa500>elseif</font></b> {[@ <font color=#f1b479>$param</font> 2] eq <font color=#90ee90>&quot;-eq&quot;</font>} {
             <b><font color=#fe6efe>my</font></b> addParam [@ <font color=#f1b479>$param</font> 0] [@ <font color=#f1b479>$param</font> 1] <font color=#b9b96e>-eq</font>
         } <b><font color=#ffa500>else</font></b> {
             <b><font color=#ffa500>error</font></b> <font color=#90ee90>&quot;Wrong parameter definition in ParamStatement&quot;</font>
@@ -2609,7 +2609,7 @@
 
     <i><font color=#76a396># Determines if pin is connected to the node.</font></i>
     <i><font color=#76a396># Returns: `true` if connected and `false` if not</font></i>
-    <b><font color=#ffa500>if</font></b> {[<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-nodename</font>]=={}} {
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-nodename</font>] eq {}} {
         <b><font color=#ffa500>set</font></b> floating true
     } <b><font color=#ffa500>else</font></b> {
         <b><font color=#ffa500>set</font></b> floating false
@@ -2628,7 +2628,7 @@
 
     <i><font color=#76a396># Creates string for SPICE netlist.</font></i>
     <i><font color=#76a396># Returns: SPICE netlist's string</font></i>
-    <b><font color=#ffa500>if</font></b> {[<b><font color=#fe6efe>my</font></b> checkFloating]==<font color=#90ee90>&quot;true&quot;</font>} {
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#fe6efe>my</font></b> checkFloating] eq <font color=#90ee90>&quot;true&quot;</font>} {
         <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Pin '<font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font>' is not connected to the node so can't be netlisted&quot;</font>
     }
     <b><font color=#fe6efe>return</font></b> <font color=#90ee90>&quot;<font color=#f1b479>[</font>my configure -nodename<font color=#f1b479>]</font>&quot;</font>
@@ -2695,11 +2695,11 @@
     <i><font color=#76a396>####  read header</font></i>
 
                 <b><font color=#ffa500>set</font></b> ch [<b><font color=#ffa500>read</font></b> <font color=#f1b479>$file</font> 6]
-                <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>encoding</font></b> convertfrom utf-8 <font color=#f1b479>$ch</font>]=={Title:}} {
+                <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>encoding</font></b> convertfrom utf-8 <font color=#f1b479>$ch</font>] eq {Title:}} {
                     <b><font color=#ffa500>set</font></b> encSize 1
                     <b><font color=#ffa500>set</font></b> encode <font color=#90ee90>&quot;utf-8&quot;</font>
                     <b><font color=#ffa500>set</font></b> line <font color=#90ee90>&quot;Title:&quot;</font>
-                } <b><font color=#ffa500>elseif</font></b> {[<b><font color=#ffa500>encoding</font></b> convertfrom utf-16le <font color=#f1b479>$ch</font>]=={Tit}} {
+                } <b><font color=#ffa500>elseif</font></b> {[<b><font color=#ffa500>encoding</font></b> convertfrom utf-16le <font color=#f1b479>$ch</font>] eq {Tit}} {
                     <b><font color=#ffa500>set</font></b> encSize 2
                     <b><font color=#ffa500>set</font></b> encode <font color=#90ee90>&quot;utf-16le&quot;</font>
                     <b><font color=#ffa500>set</font></b> line <font color=#90ee90>&quot;Tit&quot;</font>
@@ -2712,8 +2712,8 @@
                 <b><font color=#ffa500>while</font></b> true {
                     <b><font color=#ffa500>set</font></b> ch [<b><font color=#ffa500>encoding</font></b> convertfrom <font color=#f1b479>$encode</font> [<b><font color=#ffa500>read</font></b> <font color=#f1b479>$file</font> <font color=#f1b479>$encSize</font>]]
                     <b><font color=#ffa500>incr</font></b> binaryStart <font color=#f1b479>$encSize</font>
-                    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$ch</font>==&quot;\n&quot;} {
-                        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$encode</font>==&quot;utf-8&quot;} {
+                    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$ch</font> eq <font color=#90ee90>&quot;\n&quot;</font>} {
+                        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$encode</font> eq <font color=#90ee90>&quot;utf-8&quot;</font>} {
                             <b><font color=#ffa500>set</font></b> line [<b><font color=#ffa500>string</font></b> trimright <font color=#f1b479>$line</font> <font color=#90ee90>&quot;\r&quot;</font>]
                         }
                         <b><font color=#ffa500>lappend</font></b> header <font color=#f1b479>$line</font>
@@ -2731,7 +2731,7 @@
 
                 <b><font color=#ffa500>foreach</font></b> line <font color=#f1b479>$header</font> {
                     <b><font color=#ffa500>set</font></b> lineList [<b><font color=#ffa500>split</font></b> <font color=#f1b479>$line</font> <font color=#90ee90>&quot;:&quot;</font>]
-                    <b><font color=#ffa500>if</font></b> {[@ <font color=#f1b479>$lineList</font> 0]==<font color=#90ee90>&quot;Variables&quot;</font>} {
+                    <b><font color=#ffa500>if</font></b> {[@ <font color=#f1b479>$lineList</font> 0] eq <font color=#90ee90>&quot;Variables&quot;</font>} {
                         <b><font color=#fe6efe>break</font></b>
                     }
                     <b><font color=#ffa500>dict</font></b> append RawParams [@ <font color=#f1b479>$lineList</font> 0] [<b><font color=#ffa500>string</font></b> trim [@ <font color=#f1b479>$lineList</font> 1]]
@@ -2743,10 +2743,10 @@
                     <b><font color=#ffa500>set</font></b> hasAxis 1
                 }
                 <b><font color=#ffa500>set</font></b> flags [<b><font color=#ffa500>split</font></b> [<b><font color=#ffa500>dget</font></b> [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-RawParams</font>] <font color=#90ee90>&quot;Flags&quot;</font>]]
-                <b><font color=#ffa500>if</font></b> {(&quot;complex&quot; in <font color=#f1b479>$flags</font>) || ([<b><font color=#ffa500>dget</font></b> [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-RawParams</font>] &quot;Plotname&quot;]==&quot;AC Analysis&quot;)} {
+                <b><font color=#ffa500>if</font></b> {(&quot;complex&quot; in <font color=#f1b479>$flags</font>) || ([<b><font color=#ffa500>dget</font></b> [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-RawParams</font>] &quot;Plotname&quot;] eq &quot;AC Analysis&quot;)} {
                     <b><font color=#ffa500>set</font></b> numType complex
                 } <b><font color=#ffa500>else</font></b> {
-                    <b><font color=#ffa500>if</font></b> {(&quot;double&quot; in <font color=#f1b479>$flags</font>) || (<font color=#f1b479>$simulator</font>==&quot;ngspice&quot;) || (<font color=#f1b479>$simulator</font>==&quot;xyce&quot;)} {
+                    <b><font color=#ffa500>if</font></b> {(&quot;double&quot; in <font color=#f1b479>$flags</font>) || (<font color=#f1b479>$simulator</font> eq &quot;ngspice&quot;) || (<font color=#f1b479>$simulator</font> eq &quot;xyce&quot;)} {
                         <b><font color=#ffa500>set</font></b> numType double
                     } <b><font color=#ffa500>else</font></b> {
                         <b><font color=#ffa500>set</font></b> numType real
@@ -2761,18 +2761,18 @@
                     <b><font color=#ffa500>set</font></b> lineList [<b><font color=#ffa500>split</font></b> [<b><font color=#ffa500>string</font></b> trim <font color=#f1b479>$line</font>] \t]
                     <b><font color=#ffa500>lassign</font></b> <font color=#f1b479>$lineList</font> idx name varType
                     <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$ivar</font>==0} {
-                        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$simulator</font>==&quot;ltspice&quot; && <font color=#f1b479>$name</font>==&quot;time&quot;} {
+                        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$simulator</font> eq <font color=#90ee90>&quot;ltspice&quot;</font> && <font color=#f1b479>$name</font> eq <font color=#90ee90>&quot;time&quot;</font>} {
                             <i><font color=#76a396># workaround for bug with negative values in time axis</font></i>
                             <b><font color=#ffa500>set</font></b> axisIsTime true
                         }
-                        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$numType</font>==&quot;real&quot;} {
+                        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$numType</font> eq <font color=#90ee90>&quot;real&quot;</font>} {
                             <b><font color=#ffa500>set</font></b> axisNumType double
                         } <b><font color=#ffa500>else</font></b> {
                             <b><font color=#ffa500>set</font></b> axisNumType <font color=#f1b479>$numType</font>
                         }
                         <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-Axis</font> [::SpiceGenTcl::Axis new <font color=#f1b479>$name</font> <font color=#f1b479>$varType</font> <font color=#f1b479>$NPoints</font> <font color=#f1b479>$axisNumType</font>]
                         <b><font color=#ffa500>set</font></b> trace <font color=#f1b479>$Axis</font>
-                    } <b><font color=#ffa500>elseif</font></b> {(<font color=#f1b479>$traces2read</font>==&quot;*&quot;) || (<font color=#f1b479>$name</font> in <font color=#f1b479>$traces2read</font>)} {
+                    } <b><font color=#ffa500>elseif</font></b> {(<font color=#f1b479>$traces2read</font> eq <font color=#90ee90>&quot;*&quot;</font>) || (<font color=#f1b479>$name</font> in <font color=#f1b479>$traces2read</font>)} {
                         <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$hasAxis</font>} {
                             <b><font color=#ffa500>set</font></b> trace [::SpiceGenTcl::Trace new <font color=#f1b479>$name</font> <font color=#f1b479>$varType</font> <font color=#f1b479>$NPoints</font> [[<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-Axis</font>] configure <font color=#b9b96e>-name</font>] <font color=#f1b479>$numType</font>]
                         } <b><font color=#ffa500>else</font></b> {
@@ -2784,32 +2784,32 @@
                     <b><font color=#ffa500>lappend</font></b> Traces <font color=#f1b479>$trace</font>
                     <b><font color=#ffa500>incr</font></b> ivar
                 }
-                <b><font color=#ffa500>if</font></b> {(<font color=#f1b479>$traces2read</font>==&quot;&quot;) || ([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$traces2read</font>]==0)} {
+                <b><font color=#ffa500>if</font></b> {(<font color=#f1b479>$traces2read</font> eq <font color=#90ee90>&quot;&quot;</font>) || (![<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$traces2read</font>])} {
                     <b><font color=#ffa500>close</font></b> <font color=#f1b479>$file</font>
                     <b><font color=#fe6efe>return</font></b>
                 }
 
     <i><font color=#76a396>####  read data</font></i>
-                <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$rawType</font>==&quot;Binary:&quot;} {
+                <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$rawType</font> eq <font color=#90ee90>&quot;Binary:&quot;</font>} {
                     <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-BlockSize</font> [= {(<font color=#f1b479>$fileSize</font> - <font color=#f1b479>$binaryStart</font>)/<font color=#f1b479>$NPoints</font>}]
                     <b><font color=#ffa500>set</font></b> scanFunctions <font color=#90ee90>&quot;&quot;</font>
                     <b><font color=#ffa500>set</font></b> calcBlockSize 0
                     <b><font color=#ffa500>foreach</font></b> trace [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-Traces</font>] {
-                        <b><font color=#ffa500>if</font></b> {[<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-NumType</font>]==<font color=#90ee90>&quot;double&quot;</font>} {
+                        <b><font color=#ffa500>if</font></b> {[<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-NumType</font>] eq <font color=#90ee90>&quot;double&quot;</font>} {
                             <b><font color=#ffa500>incr</font></b> calcBlockSize 8
                             <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> object class <font color=#f1b479>$trace</font> ::SpiceGenTcl::EmptyTrace]} {
                                 <b><font color=#ffa500>set</font></b> fun skip8bytes
                             } <b><font color=#ffa500>else</font></b> {
                                 <b><font color=#ffa500>set</font></b> fun readFloat64
                             }
-                        } <b><font color=#ffa500>elseif</font></b> {[<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-NumType</font>]==<font color=#90ee90>&quot;complex&quot;</font>} {
+                        } <b><font color=#ffa500>elseif</font></b> {[<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-NumType</font>] eq <font color=#90ee90>&quot;complex&quot;</font>} {
                             <b><font color=#ffa500>incr</font></b> calcBlockSize 16
                             <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> object class <font color=#f1b479>$trace</font> ::SpiceGenTcl::EmptyTrace]} {
                                 <b><font color=#ffa500>set</font></b> fun skip16bytes
                             } <b><font color=#ffa500>else</font></b> {
                                 <b><font color=#ffa500>set</font></b> fun readComplex
                             }
-                        } <b><font color=#ffa500>elseif</font></b> {[<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-NumType</font>]==<font color=#90ee90>&quot;real&quot;</font>} {
+                        } <b><font color=#ffa500>elseif</font></b> {[<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-NumType</font>] eq <font color=#90ee90>&quot;real&quot;</font>} {
                             <b><font color=#ffa500>incr</font></b> calcBlockSize 4
                             <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> object class <font color=#f1b479>$trace</font> ::SpiceGenTcl::EmptyTrace]} {
                                 <b><font color=#ffa500>set</font></b> fun skip4bytes
@@ -2834,33 +2834,33 @@
                                     <b><font color=#ffa500>set</font></b> value [= {abs(<font color=#f1b479>$value</font>)}]
                                 }
                             }
-                            <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> object class <font color=#f1b479>$trace</font>]!=<font color=#90ee90>&quot;::SpiceGenTcl::EmptyTrace&quot;</font>} {
+                            <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> object class <font color=#f1b479>$trace</font>] ne <font color=#90ee90>&quot;::SpiceGenTcl::EmptyTrace&quot;</font>} {
                                 <font color=#f1b479>$trace</font> appendDataPoints <font color=#f1b479>$value</font>
                             }
                         }
                     }
-                } <b><font color=#ffa500>elseif</font></b> {<font color=#f1b479>$rawType</font>==&quot;Values:&quot;} {
+                } <b><font color=#ffa500>elseif</font></b> {<font color=#f1b479>$rawType</font> eq <font color=#90ee90>&quot;Values:&quot;</font>} {
                     <b><font color=#ffa500>for</font></b> {<b><font color=#ffa500>set</font></b> i 0} {<font color=#f1b479>$i</font>&lt;<font color=#f1b479>$NPoints</font>} {<b><font color=#ffa500>incr</font></b> i} {
                         <b><font color=#ffa500>set</font></b> firstVar true
                         <b><font color=#ffa500>for</font></b> {<b><font color=#ffa500>set</font></b> j 0} {<font color=#f1b479>$j</font>&lt;[<b><font color=#ffa500>llength</font></b> [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-Traces</font>]]} {<b><font color=#ffa500>incr</font></b> j} {
                             <b><font color=#ffa500>set</font></b> line [<b><font color=#ffa500>gets</font></b> <font color=#f1b479>$file</font>]
-                            <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$line</font>==&quot;&quot;} {
+                            <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$line</font> eq <font color=#90ee90>&quot;&quot;</font>} {
                                 <b><font color=#fe6efe>continue</font></b>
                             }
                             <b><font color=#ffa500>set</font></b> lineList [textutil::split::splitx <font color=#f1b479>$line</font>]
-                            <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$firstVar</font>==&quot;true&quot;} {
+                            <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$firstVar</font> eq <font color=#90ee90>&quot;true&quot;</font>} {
                                 <b><font color=#ffa500>set</font></b> firstVar false
                                 <b><font color=#ffa500>set</font></b> sPoint [@ <font color=#f1b479>$lineList</font> 0]
                                 <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$i</font>!=int(<font color=#f1b479>$sPoint</font>)} {
                                     <b><font color=#ffa500>error</font></b> <font color=#90ee90>&quot;Error reading file&quot;</font>
                                 }
-                                <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$numType</font>==&quot;complex&quot;} {
+                                <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$numType</font> eq <font color=#90ee90>&quot;complex&quot;</font>} {
                                     <b><font color=#ffa500>set</font></b> value [<b><font color=#ffa500>split</font></b> [@ <font color=#f1b479>$lineList</font> 1] <font color=#90ee90>&quot;,&quot;</font>]
                                 } <b><font color=#ffa500>else</font></b> {
                                     <b><font color=#ffa500>set</font></b> value [@ <font color=#f1b479>$lineList</font> 1]
                                 }
                             } <b><font color=#ffa500>else</font></b> {
-                                <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$numType</font>==&quot;complex&quot;} {
+                                <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$numType</font> eq <font color=#90ee90>&quot;complex&quot;</font>} {
                                     <b><font color=#ffa500>set</font></b> value [<b><font color=#ffa500>split</font></b> [@ <font color=#f1b479>$lineList</font> 1] <font color=#90ee90>&quot;,&quot;</font>]
                                 } <b><font color=#ffa500>else</font></b> {
                                     <b><font color=#ffa500>set</font></b> value [@ <font color=#f1b479>$lineList</font> 1]
@@ -2884,7 +2884,7 @@
 <div id='SpiceGenTcl_RawFile_getCurrentsNames' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> getCurrentsNames {} {
 
     <i><font color=#76a396># Returns list that contains names of all current variables</font></i>
-    <b><font color=#fe6efe>return</font></b> [<b><font color=#ffa500>lmap</font></b> trace [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-Traces</font>] {<b><font color=#ffa500>expr</font></b> {[<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-Type</font>]==<font color=#90ee90>&quot;current&quot;</font> ? [<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-name</font>] : [<b><font color=#fe6efe>continue</font></b>]}}]
+    <b><font color=#fe6efe>return</font></b> [<b><font color=#ffa500>lmap</font></b> trace [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-Traces</font>] {<b><font color=#ffa500>expr</font></b> {[<b><font color=#ffa500>string</font></b> match <font color=#b9b96e>-nocase</font> <font color=#90ee90>&quot;*current*&quot;</font> [<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-Type</font>]] ? [<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-name</font>] : [<b><font color=#fe6efe>continue</font></b>]}}]
 }</pre></div>
 </div></details>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::RawFile::getTrace'>getTrace</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile" title="::SpiceGenTcl::RawFile" class='ruff_cmd'>::SpiceGenTcl::RawFile</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawFile'>RawFile</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
@@ -2902,7 +2902,7 @@
     <i><font color=#76a396># Returns trace object reference by it's name</font></i>
     <b><font color=#ffa500>set</font></b> traceFoundFlag false
     <b><font color=#ffa500>foreach</font></b> trace [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-Traces</font>] {
-        <b><font color=#ffa500>if</font></b> {[<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-name</font>]==<font color=#f1b479>$traceName</font>} {
+        <b><font color=#ffa500>if</font></b> {[<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-name</font>] eq <font color=#f1b479>$traceName</font>} {
             <b><font color=#ffa500>set</font></b> traceFound <font color=#f1b479>$trace</font>
             <b><font color=#ffa500>set</font></b> traceFoundFlag true
             <b><font color=#fe6efe>break</font></b>
@@ -2944,7 +2944,7 @@
         <b><font color=#ffa500>for</font></b> {<b><font color=#ffa500>set</font></b> i 0} {<font color=#f1b479>$i</font>&lt;[<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-NPoints</font>]} {<b><font color=#ffa500>incr</font></b> i} {
             <b><font color=#ffa500>lappend</font></b> tracesList [<b><font color=#ffa500>lmap</font></b> traceValues [<b><font color=#ffa500>dict</font></b> values <font color=#f1b479>$tracesDict</font>] {@ <font color=#f1b479>$traceValues</font> <font color=#f1b479>$i</font>}]
         }
-    } <b><font color=#ffa500>elseif</font></b> {[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> traces]!=<font color=#90ee90>&quot;&quot;</font>} {
+    } <b><font color=#ffa500>elseif</font></b> {[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> traces] ne <font color=#90ee90>&quot;&quot;</font>} {
         <b><font color=#ffa500>foreach</font></b> traceName [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> traces] {
             <b><font color=#ffa500>set</font></b> traceObj [<b><font color=#fe6efe>my</font></b> getTrace <font color=#f1b479>$traceName</font>]
             <b><font color=#ffa500>dict</font></b> append tracesDict [<font color=#f1b479>$traceObj</font> configure <font color=#b9b96e>-name</font>] [<font color=#f1b479>$traceObj</font> getDataPoints]
@@ -3012,7 +3012,7 @@
 <div id='SpiceGenTcl_RawFile_getVoltagesNames' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> getVoltagesNames {} {
 
     <i><font color=#76a396># Returns list that contains names of all voltage variables</font></i>
-    <b><font color=#fe6efe>return</font></b> [<b><font color=#ffa500>lmap</font></b> trace [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-Traces</font>] {<b><font color=#ffa500>expr</font></b> {[<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-Type</font>]==<font color=#90ee90>&quot;voltage&quot;</font> ? [<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-name</font>] : [<b><font color=#fe6efe>continue</font></b>]}}]
+    <b><font color=#fe6efe>return</font></b> [<b><font color=#ffa500>lmap</font></b> trace [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-Traces</font>] {<b><font color=#ffa500>expr</font></b> {[<b><font color=#ffa500>string</font></b> match <font color=#b9b96e>-nocase</font> <font color=#90ee90>&quot;*voltage*&quot;</font> [<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-Type</font>]] ? [<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-name</font>] : [<b><font color=#fe6efe>continue</font></b>]}}]
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::RawString'>RawString</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl" title="::SpiceGenTcl" class='ruff_cmd'>::SpiceGenTcl</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -3202,7 +3202,7 @@
         <b><font color=#fe6efe>my</font></b> AddPin [@ <font color=#f1b479>$pin</font> 0] {}
     }
     <i><font color=#76a396># create Params objects that are input parameters of subcircuit</font></i>
-    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$params</font>!=&quot;&quot;} {
+    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$params</font> ne <font color=#90ee90>&quot;&quot;</font>} {
         <b><font color=#ffa500>foreach</font></b> param <font color=#f1b479>$params</font> {
             <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$param</font>]&lt;=2} {
                 <b><font color=#fe6efe>my</font></b> addParam [@ <font color=#f1b479>$param</font> 0] [@ <font color=#f1b479>$param</font> 1]
@@ -3306,7 +3306,7 @@
     <i><font color=#76a396># Returns: SPICE netlist's string</font></i>
     <b><font color=#ffa500>set</font></b> name [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-name</font>]
     <b><font color=#ffa500>set</font></b> nodes [<b><font color=#ffa500>lmap</font></b> pin [<b><font color=#ffa500>dict</font></b> values <font color=#f1b479>$Pins</font>] {<font color=#f1b479>$pin</font> configure <font color=#b9b96e>-name</font>}]
-    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$Params</font>==&quot;&quot;} {
+    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$Params</font> eq <font color=#90ee90>&quot;&quot;</font>} {
         <b><font color=#ffa500>set</font></b> header <font color=#90ee90>&quot;.subckt <font color=#f1b479>$</font>name <font color=#f1b479>[</font>join <font color=#f1b479>$</font>nodes<font color=#f1b479>]</font>&quot;</font>
     } <b><font color=#ffa500>else</font></b> {
         <b><font color=#ffa500>set</font></b> params [<b><font color=#ffa500>lmap</font></b> param [<b><font color=#ffa500>dict</font></b> values <font color=#f1b479>$Params</font>] {<font color=#f1b479>$param</font> genSPICEString}]

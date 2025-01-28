@@ -451,7 +451,7 @@
     <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;model <font color=#f1b479>[</font>dget <font color=#f1b479>$</font>arguments model<font color=#f1b479>]</font> -posnocheck&quot;</font>
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> area]} {
         <b><font color=#ffa500>set</font></b> areaVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> area]
-        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$areaVal</font>]&gt;1) && ([@ <font color=#f1b479>$areaVal</font> 1]==<font color=#90ee90>&quot;-eq&quot;</font>)} {
+        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$areaVal</font>]&gt;1) && ([@ <font color=#f1b479>$areaVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
             <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;area <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>areaVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
         } <b><font color=#ffa500>else</font></b> {
             <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;area <font color=#f1b479>$</font>areaVal -pos&quot;</font>
@@ -664,7 +664,7 @@
     <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;model <font color=#f1b479>[</font>dget <font color=#f1b479>$</font>arguments model<font color=#f1b479>]</font> -posnocheck&quot;</font>
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> area]} {
         <b><font color=#ffa500>set</font></b> areaVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> area]
-        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$areaVal</font>]&gt;1) && ([@ <font color=#f1b479>$areaVal</font> 1]==<font color=#90ee90>&quot;-eq&quot;</font>)} {
+        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$areaVal</font>]&gt;1) && ([@ <font color=#f1b479>$areaVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
             <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;area <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>areaVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
         } <b><font color=#ffa500>else</font></b> {
             <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;area <font color=#f1b479>$</font>areaVal -pos&quot;</font>
@@ -863,7 +863,7 @@
             <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;<font color=#f1b479>$</font>paramName <font color=#f1b479>$</font>value&quot;</font>
         }
     }
-    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> custparams]!=<font color=#90ee90>&quot;&quot;</font>} {
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> custparams] ne <font color=#90ee90>&quot;&quot;</font>} {
         <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>llength</font></b> [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> custparams]]%2!=0} {
             <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Custom parameters list must be even length&quot;</font>
         }

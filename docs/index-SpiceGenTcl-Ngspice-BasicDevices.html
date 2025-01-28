@@ -183,12 +183,12 @@
         <b><font color=#ffa500>set</font></b> cVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> c]
         <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> beh]} {
             <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;c <font color=#f1b479>$</font>cVal -eq&quot;</font>
-        } <b><font color=#ffa500>elseif</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$cVal</font>]&gt;1) && ([@ <font color=#f1b479>$cVal</font> 1]==<font color=#90ee90>&quot;-eq&quot;</font>)} {
+        } <b><font color=#ffa500>elseif</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$cVal</font>]&gt;1) && ([@ <font color=#f1b479>$cVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
             <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;c <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>cVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
         } <b><font color=#ffa500>else</font></b> {
             <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;c <font color=#f1b479>$</font>cVal -pos&quot;</font>
         }
-    } <b><font color=#ffa500>elseif</font></b> {([<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> model]==0) && ([<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> q]==0)} {
+    } <b><font color=#ffa500>elseif</font></b> {![<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> model] && ![<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> q]} {
         <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Capacitor value must be specified with '-c value'&quot;</font>
     }
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> q]} {
@@ -448,12 +448,12 @@
         <b><font color=#ffa500>set</font></b> lVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> l]
         <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> beh]} {
             <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;l <font color=#f1b479>$</font>lVal -eq&quot;</font>
-        } <b><font color=#ffa500>elseif</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$lVal</font>]&gt;1) && ([@ <font color=#f1b479>$lVal</font> 1]==<font color=#90ee90>&quot;-eq&quot;</font>)} {
+        } <b><font color=#ffa500>elseif</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$lVal</font>]&gt;1) && ([@ <font color=#f1b479>$lVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
             <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;l <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>lVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
         } <b><font color=#ffa500>else</font></b> {
             <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;l <font color=#f1b479>$</font>lVal -pos&quot;</font>
         }
-    } <b><font color=#ffa500>elseif</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> model]==0} {
+    } <b><font color=#ffa500>elseif</font></b> {![<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> model]} {
         <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Inductor value must be specified with '-l value'&quot;</font>
     }
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> model]} {
@@ -684,12 +684,12 @@
         <b><font color=#ffa500>set</font></b> rVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> r]
         <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> beh]} {
             <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;r <font color=#f1b479>$</font>rVal -eq&quot;</font>
-        } <b><font color=#ffa500>elseif</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$rVal</font>]&gt;1) && ([@ <font color=#f1b479>$rVal</font> 1]==<font color=#90ee90>&quot;-eq&quot;</font>)} {
+        } <b><font color=#ffa500>elseif</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$rVal</font>]&gt;1) && ([@ <font color=#f1b479>$rVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
             <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;r <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>rVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
         } <b><font color=#ffa500>else</font></b> {
             <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;r <font color=#f1b479>$</font>rVal -pos&quot;</font>
         }
-    } <b><font color=#ffa500>elseif</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> model]==0} {
+    } <b><font color=#ffa500>elseif</font></b> {![<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> model]} {
         <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Resistor value must be specified with '-r value'&quot;</font>
     }
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> model]} {
@@ -871,7 +871,7 @@
     <i><font color=#76a396># Synopsis: subcktObj name nodes ?-paramName {paramValue ?-eq?} ...?</font></i>
 
     <i><font color=#76a396># check that inputs object class is Subcircuit</font></i>
-    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> object class <font color=#f1b479>$subcktObj</font> <font color=#90ee90>&quot;::SpiceGenTcl::Subcircuit&quot;</font>]!=1} {
+    <b><font color=#ffa500>if</font></b> {![<b><font color=#ffa500>info</font></b> object class <font color=#f1b479>$subcktObj</font> <font color=#90ee90>&quot;::SpiceGenTcl::Subcircuit&quot;</font>]} {
         <b><font color=#ffa500>set</font></b> objClass [<b><font color=#ffa500>info</font></b> object class <font color=#f1b479>$subcktObj</font>]
         <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Wrong object class '<font color=#f1b479>$</font>objClass' is passed as subcktObj, should be '::SpiceGenTcl::Subcircuit'&quot;</font>
     }
