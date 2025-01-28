@@ -44,8 +44,9 @@ namespace eval ::SpiceGenTcl::Ltspice::Simulators {
             #   default is current directory
             my configure -name $name
             global tcl_platform
+            global env
             if {[string match -nocase *linux* $tcl_platform(os)]} {
-                my configure -Command LTspice
+                my configure -Command [list wine "$env(LTSPICE_PREFIX)"]
             } elseif {[string match -nocase "*windows nt*" $tcl_platform(os)]} {
                 my configure -Command LTspice
             }
@@ -59,6 +60,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Simulators {
             set arguments [argparse {
                 -nodelete
             }]
+            global tcl_platform
             set firstLine [@ [split $circuitStr \n] 0]
             set runLocation [my configure -runlocation]
             set cirFile [open "${runLocation}/${firstLine}.cir" w+]
@@ -67,7 +69,17 @@ namespace eval ::SpiceGenTcl::Ltspice::Simulators {
             set rawFileName "${runLocation}/${firstLine}.raw"
             set logFileName "${runLocation}/${firstLine}.log"
             set cirFileName "${runLocation}/${firstLine}.cir"
-            exec "[my configure -Command]" -b $cirFileName
+            if {[string match -nocase *linux* $tcl_platform(os)]} {
+                catch {exec {*}[my configure -Command] -b $cirFileName} errorStr
+                #puts $errorStr
+                set falseError {wine: Read access denied for device L"\\??\\Z:\\", FS volume label and serial are not\
+                                        available.}
+                if {$errorStr ni [list "$falseError\n$falseError\n$falseError" ""]} {
+                    error "LTspice failed with error '$errorStr'"
+                }
+            } elseif {[string match -nocase "*windows nt*" $tcl_platform(os)]} {
+                exec [my configure -Command] -b $cirFileName
+            }
             my configure -LastRunFileName ${firstLine}
             my readLog
             my readData
