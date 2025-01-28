@@ -22,23 +22,19 @@ interp alias {} dcreate {} dict create
 interp alias {} dset {} dict set
 
 global env
-set nagelfarPath "/home/$env(USER)/tcl/nagelfar/nagelfar.tcl"
-#set nagelfarPath "C:\\msys64\\home\\georgtree1\\nagelfar\\nagelfar.tcl"
-#package require nagelfar
+if {[string match -nocase *linux* $tcl_platform(os)]} {
+    set nagelfarPath "/home/$env(USER)/tcl/nagelfar/nagelfar.tcl"
+} elseif {[string match -nocase "*windows nt*" $tcl_platform(os)]} {
+    set nagelfarPath "C:\\msys64\\home\\georgtree1\\nagelfar\\nagelfar.tcl"
+}
+
 set currentDir [file dirname [file normalize [info script]]]
-#cd $nagelfarPath
-set srcList [list generalClasses.tcl specElementsClassesCommon.tcl\
-                     [list ngspice specAnalysesClassesNgspice.tcl]\
-                     [list ngspice specElementsClassesNgspice.tcl]\
-                     [list ngspice specModelsClassesNgspice.tcl]\
-                     [list ngspice specSimulatorClassesNgspice.tcl]\
-                     [list xyce specAnalysesClassesXyce.tcl]\
-                     [list xyce specElementsClassesXyce.tcl]\
-                     [list xyce specModelsClassesXyce.tcl]\
-                     [list xyce specSimulatorClassesXyce.tcl]\
-                     [list ltspice specAnalysesClassesLtspice.tcl]\
-                     [list ltspice specElementsClassesLtspice.tcl]\
-                     [list ltspice specModelsClassesLtspice.tcl]\
+set srcList [list generalClasses.tcl specElementsClassesCommon.tcl [list ngspice specAnalysesClassesNgspice.tcl]\
+                     [list ngspice specElementsClassesNgspice.tcl] [list ngspice specModelsClassesNgspice.tcl]\
+                     [list ngspice specSimulatorClassesNgspice.tcl] [list xyce specAnalysesClassesXyce.tcl]\
+                     [list xyce specElementsClassesXyce.tcl] [list xyce specModelsClassesXyce.tcl]\
+                     [list xyce specSimulatorClassesXyce.tcl] [list ltspice specAnalysesClassesLtspice.tcl]\
+                     [list ltspice specElementsClassesLtspice.tcl] [list ltspice specModelsClassesLtspice.tcl]\
                      [list ltspice specSimulatorClassesLtspice.tcl]]
 # instrument all files in src folder
 foreach file $srcList {
@@ -47,15 +43,13 @@ foreach file $srcList {
 # rename initial source files, then rename instrument files to the original name of the source file
 foreach file $srcList {
     if {[llength $file]>1} {
-        file rename [file join $currentDir .. src [@ $file 0] "[@ $file 1]"]\
-                [file join $currentDir .. src [@ $file 0] "[@ $file 1]_orig"]
-        file rename [file join $currentDir .. src [@ $file 0] "[@ $file 1]_i"]\
-                [file join $currentDir .. src [@ $file 0] "[@ $file 1]"]
+        file rename [file join $currentDir .. src [@ $file 0] [@ $file 1]]\
+                [file join $currentDir .. src [@ $file 0] [@ $file 1]_orig]
+        file rename [file join $currentDir .. src [@ $file 0] [@ $file 1]_i]\
+                [file join $currentDir .. src [@ $file 0] [@ $file 1]]
     } else {
-        file rename [file join $currentDir .. src "[@ $file 0]"]\
-                [file join $currentDir .. src "[@ $file 0]_orig"]
-        file rename [file join $currentDir .. src "[@ $file 0]_i"]\
-                [file join $currentDir .. src "[@ $file 0]"]
+        file rename [file join $currentDir .. src [@ $file 0]] [file join $currentDir .. src [@ $file 0]_orig]
+        file rename [file join $currentDir .. src [@ $file 0]_i] [file join $currentDir .. src [@ $file 0]]
     }
 }
 
@@ -64,15 +58,13 @@ exec tclsh [file join $currentDir all_codeCoverage.tcl]
 # revert renaming
 foreach file $srcList {
     if {[llength $file]>1} {
-        file rename [file join $currentDir .. src [@ $file 0] "[@ $file 1]"]\
-                [file join $currentDir .. src [@ $file 0] "[@ $file 1]_i"]
-        file rename [file join $currentDir .. src [@ $file 0] "[@ $file 1]_orig"]\
-                [file join $currentDir .. src [@ $file 0] "[@ $file 1]"]
+        file rename [file join $currentDir .. src [@ $file 0] [@ $file 1]]\
+                [file join $currentDir .. src [@ $file 0] [@ $file 1]_i]
+        file rename [file join $currentDir .. src [@ $file 0] [@ $file 1]_orig]\
+                [file join $currentDir .. src [@ $file 0] [@ $file 1]]
     } else {
-        file rename [file join $currentDir .. src "[@ $file 0]"]\
-                [file join $currentDir .. src "[@ $file 0]_i"]
-        file rename [file join $currentDir .. src "[@ $file 0]_orig"]\
-                [file join $currentDir .. src "[@ $file 0]"]
+        file rename [file join $currentDir .. src [@ $file 0]] [file join $currentDir .. src [@ $file 0]_i]
+        file rename [file join $currentDir .. src [@ $file 0]_orig] [file join $currentDir .. src [@ $file 0]]
     }
 }
 # create markup files
@@ -82,23 +74,23 @@ foreach file $srcList {
 # view results
 foreach file $srcList {
     if {[llength $file]>1} {
-        exec eskil -noparse [file join $currentDir .. src [@ $file 0] "[@ $file 1]"]\
-                [file join $currentDir .. src [@ $file 0] "[@ $file 1]_m"]
+        exec eskil -noparse [file join $currentDir .. src [@ $file 0] [@ $file 1]]\
+                [file join $currentDir .. src [@ $file 0] [@ $file 1]_m]
     } else {
         exec eskil -noparse [file join ${currentDir} .. src [@ $file 0]]\
-                [file join $currentDir .. src "[@ $file 0]_m"]
+                [file join $currentDir .. src [@ $file 0]_m]
     }
 }
 puts [join $results "\n"]
 # remove tests files
 foreach file $srcList {
     if {[llength $file]>1} {
-        file delete [file join $currentDir .. src [@ $file 0] "[@ $file 1]_i"]
-        file delete [file join $currentDir .. src [@ $file 0] "[@ $file 1]_log"]
-        file delete [file join $currentDir .. src [@ $file 0] "[@ $file 1]_m"]
+        file delete [file join $currentDir .. src [@ $file 0] [@ $file 1]_i]
+        file delete [file join $currentDir .. src [@ $file 0] [@ $file 1]_log]
+        file delete [file join $currentDir .. src [@ $file 0] [@ $file 1]_m]
     } else {
-        file delete [file join $currentDir .. src "[@ $file 0]_i"]
-        file delete [file join $currentDir .. src "[@ $file 0]_log"]
-        file delete [file join $currentDir .. src "[@ $file 0]_m"]
+        file delete [file join $currentDir .. src [@ $file 0]_i]
+        file delete [file join $currentDir .. src [@ $file 0]_log]
+        file delete [file join $currentDir .. src [@ $file 0]_m]
     }
 }

@@ -106,7 +106,7 @@ test testCapacitorClass-4 {test Capacitor class with Q behavioural equation} -se
     unset cap result
 }         
 
-test testCapacitorClass-7 {test Capacitor class without capacitance value, error generated} -body {
+test testCapacitorClass-5 {test Capacitor class without capacitance value, error generated} -body {
     catch {Capacitor new 1 netp netm} errorStr
     return $errorStr
 } -result "Capacitor value must be specified with '-c value'" -cleanup {
@@ -131,7 +131,7 @@ test testInductorClass-2 {test Inductor class} -setup {
     unset ind result
 }
 
-test testInductorClass-5 {test Inductor class with beh switch} -setup {
+test testInductorClass-3 {test Inductor class with beh switch} -setup {
     set ind [Inductor new 1 netp netm -flux "V(a)+V(b)+pow(V(c),2)" -tc1 1]
 } -body {
     set result [$ind genSPICEString]
@@ -139,7 +139,7 @@ test testInductorClass-5 {test Inductor class with beh switch} -setup {
     unset ind result
 } 
 
-test testInductorClass-6 {test Inductor class with beh switch with different arguments order} -setup {
+test testInductorClass-4 {test Inductor class with beh switch with different arguments order} -setup {
     set ind [Inductor new 1 netp netm -tc1 1 -flux "V(a)+V(b)+pow(V(c),2)" ]
 } -body {
     set result [$ind genSPICEString]
@@ -147,7 +147,7 @@ test testInductorClass-6 {test Inductor class with beh switch with different arg
     unset ind result
 }
 
-test testInductorClass-7 {test Inductor class with l as equation} -setup {
+test testInductorClass-5 {test Inductor class with l as equation} -setup {
     set ind [Inductor new 1 netp netm -l "l1*l2 -eq" -tc1 1]
 } -body {
     set result [$ind genSPICEString]
@@ -155,7 +155,7 @@ test testInductorClass-7 {test Inductor class with l as equation} -setup {
     unset ind result
 }
 
-test testInductorClass-8 {test Inductor class with l as equation} -setup {
+test testInductorClass-6 {test Inductor class with l as equation} -setup {
     set ind [Inductor new 1 netp netm -l "l1*l2 -eq" -tc1 1]
 } -body {
     set result [$ind genSPICEString]
@@ -163,7 +163,7 @@ test testInductorClass-8 {test Inductor class with l as equation} -setup {
     unset ind result
 }
 
-test testInductorClass-9 {test Inductor class without specified l, error generated} -setup {
+test testInductorClass-7 {test Inductor class without specified l, error generated} -setup {
     catch {Inductor new 1 netp netm -tc1 1} errorStr
 } -body {
     return $errorStr
@@ -171,7 +171,7 @@ test testInductorClass-9 {test Inductor class without specified l, error generat
     unset errorStr
 }
 
-test testInductorClass-9 {test Inductor class with hysteresis} -setup {
+test testInductorClass-8 {test Inductor class with hysteresis} -setup {
     set ind [Inductor new 1 netp netm -hyst -tc1 1 -hc 10 -bs 0.4 -br 0.1 -a 1e-6 -lm 0.02 -lg 0.0007 -n 1000]
 } -body {
     set result [$ind genSPICEString]
@@ -196,7 +196,7 @@ test testLClass-1 {test L alias for Inductor class} -setup {
     unset ind result
 }
   
-test testLClass-1 {test L alias for Inductor class with beh switch} -setup {
+test testLClass-2 {test L alias for Inductor class with beh switch} -setup {
     set ind [L new 1 netp netm -flux "V(a)+V(b)+pow(V(c),2)" -tc1 1]
 } -body {
     set result [$ind genSPICEString]
@@ -273,7 +273,7 @@ test testCSwitchClass-3 {test CSwitch class} -setup {
 
 ####  W class tests
 
-test testWClass-2 {test CSwitch class alias} -setup {
+test testWClass-1 {test CSwitch class alias} -setup {
     set csw [W new 1 net1 0 -icntrl v1 -model sw1]
 } -body {
     set result [$csw genSPICEString]
@@ -319,7 +319,7 @@ test testVacClass-2 {test Vac class} -setup {
     unset vac result
 }
 
-test testVacClass-4 {test Vac class} -setup {
+test testVacClass-3 {test Vac class} -setup {
     set vac [Vac new 1 netp netm -ac {acmag -eq}]
 } -body {
     set result [$vac genSPICEString]

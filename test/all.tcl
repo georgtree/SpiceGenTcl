@@ -16,7 +16,12 @@
 
 package require tcltest
 namespace import ::tcltest::*
-set testDir [file normalize [file dirname [info script]]]
-configure {*}$argv -testdir $testDir
 package require SpiceGenTcl
+set currentDir [file normalize [file dirname [info script]]]
+configure {*}$argv -testdir $currentDir
 runAllTests
+set dirs [list ngspice ltspice xyce]
+foreach dir $dirs {
+    configure {*}$argv -testdir [file join $currentDir $dir]
+    runAllTests
+}

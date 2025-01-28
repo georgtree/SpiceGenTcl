@@ -18,8 +18,10 @@ package require tcltest
 namespace import ::tcltest::*
 set testDir [file normalize [file dirname [info script]]]
 source [file join $testDir .. SpiceGenTcl.tcl]
-set testFiles [glob ./*.test]
+set testFiles [glob *.test]
+lappend testFiles {*}[glob ${testDir}/ngspice/*.test]
+lappend testFiles {*}[glob ${testDir}/ltspice/*.test]
+lappend testFiles {*}[glob ${testDir}/xyce/*.test]
 foreach file $testFiles {
-    puts $file
-    source [file join $testDir $file]
+    source $file
 }
