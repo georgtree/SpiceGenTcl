@@ -5,7 +5,7 @@ This package provides Tcl interface to different SPICE and SPICE-like simulator,
 It was inspired by [PySpice](https://github.com/PySpice-org/PySpice) project, object-oriented interface to
 SPICE-like simulators written in Python.
 
-![Static Badge](https://img.shields.io/badge/version-0.61-blue)
+![Static Badge](https://img.shields.io/badge/version-0.65-blue)
 
 ![Static Badge](https://img.shields.io/badge/license-MIT-blue)
 
@@ -48,7 +48,8 @@ for some of them:
 ## Supported simulators
 - [Ngspice](https://ngspice.sourceforge.io/download.html) - Linux and Windows
 - [Xyce](https://xyce.sandia.gov/downloads/executables/) - Linux and Windows
-- [LTspice](https://www.analog.com/en/resources/design-tools-and-calculators/ltspice-simulator.html) - Windows
+- [LTspice](https://www.analog.com/en/resources/design-tools-and-calculators/ltspice-simulator.html) - Windows and Linux
+  (wine)
 
 ## Installing
 You have two ways: install from git repo (convinient for Linux users) or from archive package release.
