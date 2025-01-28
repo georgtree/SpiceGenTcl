@@ -102,12 +102,12 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
                 set rVal [dget $arguments r]
                 if {[dexist $arguments beh]} {
                     lappend params "r $rVal -eq"
-                } elseif {([llength $rVal]>1) && ([@ $rVal 1]=="-eq")} {
+                } elseif {([llength $rVal]>1) && ([@ $rVal 1] eq "-eq")} {
                     lappend params "r [@ $rVal 0] -poseq"
                 } else {
                     lappend params "r $rVal -pos"
                 }
-            } elseif {[dexist $arguments model]==0} {
+            } elseif {![dexist $arguments model]} {
                 return -code error "Resistor value must be specified with '-r value'"
             }
             if {[dexist $arguments model]} {
@@ -200,12 +200,12 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
                 set cVal [dget $arguments c]
                 if {[dexist $arguments beh]} {
                     lappend params "c $cVal -eq"
-                } elseif {([llength $cVal]>1) && ([@ $cVal 1]=="-eq")} {
+                } elseif {([llength $cVal]>1) && ([@ $cVal 1] eq "-eq")} {
                     lappend params "c [@ $cVal 0] -poseq"
                 } else {
                     lappend params "c $cVal -pos"
                 }
-            } elseif {([dexist $arguments model]==0) && ([dexist $arguments q]==0)} {
+            } elseif {![dexist $arguments model] && ![dexist $arguments q]} {
                 return -code error "Capacitor value must be specified with '-c value'"
             }
             if {[dexist $arguments q]} {
@@ -293,12 +293,12 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
                 set lVal [dget $arguments l]
                 if {[dexist $arguments beh]} {
                     lappend params "l $lVal -eq"
-                } elseif {([llength $lVal]>1) && ([@ $lVal 1]=="-eq")} {
+                } elseif {([llength $lVal]>1) && ([@ $lVal 1] eq "-eq")} {
                     lappend params "l [@ $lVal 0] -poseq"
                 } else {
                     lappend params "l $lVal -pos"
                 }
-            } elseif {[dexist $arguments model]==0} {
+            } elseif {![dexist $arguments model]} {
                 return -code error "Inductor value must be specified with '-l value'"
             }
             if {[dexist $arguments model]} {
@@ -397,7 +397,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # Synopsis: subcktObj name nodes ?-paramName {paramValue ?-eq?} ...?
 
             # check that inputs object class is Subcircuit
-            if {[info object class $subcktObj "::SpiceGenTcl::Subcircuit"]!=1} {
+            if {![info object class $subcktObj "::SpiceGenTcl::Subcircuit"]} {
                 set objClass [info object class $subcktObj]
                 return -code error "Wrong object class '$objClass' is passed as subcktObj, should be\
                         '::SpiceGenTcl::Subcircuit'"
@@ -572,7 +572,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             }
             dict for {paramName value} $argsOrdered {
                 lappend params "$paramName -sw"
-                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
+                if {([llength $value]>1) && ([@ $value 1] eq "-eq")} {
                     lappend params "${paramName}val [@ $value 0] -poseq"
                 } else {
                     lappend params "${paramName}val $value -pos"
@@ -1075,7 +1075,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             lappend params "model [dget $arguments model] -posnocheck"
             if {[dexist $arguments area]} {
                 set areaVal [dget $arguments area]
-                if {([llength $areaVal]>1) && ([@ $areaVal 1]=="-eq")} {
+                if {([llength $areaVal]>1) && ([@ $areaVal 1] eq "-eq")} {
                     lappend params "area [@ $areaVal 0] -poseq"
                 } else {
                     lappend params "area $areaVal -pos"
@@ -1134,7 +1134,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             lappend params "model [dget $arguments model] -posnocheck"
             if {[dexist $arguments area]} {
                 set areaVal [dget $arguments area]
-                if {([llength $areaVal]>1) && ([@ $areaVal 1]=="-eq")} {
+                if {([llength $areaVal]>1) && ([@ $areaVal 1] eq "-eq")} {
                     lappend params "area [@ $areaVal 0] -poseq"
                 } else {
                     lappend params "area $areaVal -pos"
@@ -1233,7 +1233,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
                     lappend params "$paramName $value"
                 }
             }
-            if {[dget $arguments custparams]!=""} {
+            if {[dget $arguments custparams] ne ""} {
                 if {[llength [dget $arguments custparams]]%2!=0} {
                     return -code error "Custom parameters list must be even length"
                 }

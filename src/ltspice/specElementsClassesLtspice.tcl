@@ -97,7 +97,7 @@ namespace eval ::SpiceGenTcl::Ltspice::BasicDevices {
             set params ""
             if {[dexist $arguments c]} {
                 set cVal [dget $arguments c]
-                if {([llength $cVal]>1) && ([@ $cVal 1]=="-eq")} {
+                if {([llength $cVal]>1) && ([@ $cVal 1] eq "-eq")} {
                     lappend params "c [@ $cVal 0] -poseq"
                 } else {
                     lappend params "c $cVal -pos"
@@ -192,7 +192,7 @@ namespace eval ::SpiceGenTcl::Ltspice::BasicDevices {
             set params ""
             if {[dexist $arguments l]} {
                 set lVal [dget $arguments l]
-                if {([llength $lVal]>1) && ([@ $lVal 1]=="-eq")} {
+                if {([llength $lVal]>1) && ([@ $lVal 1] eq "-eq")} {
                     lappend params "l [@ $lVal 0] -poseq"
                 } else {
                     lappend params "l $lVal -pos"
@@ -296,7 +296,7 @@ namespace eval ::SpiceGenTcl::Ltspice::BasicDevices {
             # Synopsis: subcktObj name nodes ?-paramName {paramValue ?-eq?} ...?
 
             # check that inputs object class is Subcircuit
-            if {[info object class $subcktObj "::SpiceGenTcl::Subcircuit"]!=1} {
+            if {![info object class $subcktObj "::SpiceGenTcl::Subcircuit"]} {
                 set objClass [info object class $subcktObj]
                 return -code error "Wrong object class '$objClass' is passed as subcktObj, should be\
                         '::SpiceGenTcl::Subcircuit'"
@@ -359,14 +359,14 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
                 -cpar=
             }]
             set dcVal [dget $arguments dc]
-            if {([llength $dcVal]>1) && ([@ $dcVal 1]=="-eq")} {
+            if {([llength $dcVal]>1) && ([@ $dcVal 1] eq "-eq")} {
                 lappend params "dc [@ $dcVal 0] -poseq"
             } else {
                 lappend params "dc $dcVal -pos"
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {dc}} {
-                    if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
+                    if {([llength $value]>1) && ([@ $value 1] eq "-eq")} {
                         lappend params "$paramName [@ $value 0] -eq"
                     } else {
                         lappend params "$paramName $value"
@@ -389,20 +389,20 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
                 -cpar=
             }]
             set dcVal [dget $arguments dc]
-            if {([llength $dcVal]>1) && ([@ $dcVal 1]=="-eq")} {
+            if {([llength $dcVal]>1) && ([@ $dcVal 1] eq "-eq")} {
                 lappend params "dc [@ $dcVal 0] -poseq"
             } else {
                 lappend params "dc $dcVal -pos"
             }
             set acVal [dget $arguments ac]
-            if {([llength $acVal]>1) && ([@ $acVal 1]=="-eq")} {
+            if {([llength $acVal]>1) && ([@ $acVal 1] eq "-eq")} {
                 lappend params "ac [@ $acVal 0] -eq"
             } else {
                 lappend params "ac $acVal"
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {dc ac}} {
-                    if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
+                    if {([llength $value]>1) && ([@ $value 1] eq "-eq")} {
                         lappend params "$paramName [@ $value 0] -eq"
                     } else {
                         lappend params "$paramName $value"
@@ -447,7 +447,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             my ParamsProcess $paramsOrder $arguments params
             dict for {paramName value} $arguments {
                 if {$paramName ni $paramsOrder} {
-                    if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
+                    if {([llength $value]>1) && ([@ $value 1] eq "-eq")} {
                         lappend params "$paramName [@ $value 0] -eq"
                     } else {
                         lappend params "$paramName $value"
@@ -492,7 +492,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             my ParamsProcess $paramsOrder $arguments params
             dict for {paramName value} $arguments {
                 if {$paramName ni $paramsOrder} {
-                    if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
+                    if {([llength $value]>1) && ([@ $value 1] eq "-eq")} {
                         lappend params "$paramName [@ $value 0] -eq"
                     } else {
                         lappend params "$paramName $value"
@@ -528,7 +528,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             my ParamsProcess $paramsOrder $arguments params
             dict for {paramName value} $arguments {
                 if {$paramName ni $paramsOrder} {
-                    if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
+                    if {([llength $value]>1) && ([@ $value 1] eq "-eq")} {
                         lappend params "$paramName [@ $value 0] -eq"
                     } else {
                         lappend params "$paramName $value"
@@ -564,7 +564,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
                 lappend params "t$i [list [@ $pwlSeqVal $2i]]" "$type$i [list [@ $pwlSeqVal $2ip1]]"
             }
             foreach param $params {
-                if {([llength [@ $param 1]]>1) && ([@ [@ $param 1] 1]=="-eq")} {
+                if {([llength [@ $param 1]]>1) && ([@ [@ $param 1] 1] eq "-eq")} {
                     lappend paramList "[@ $param 0] [@ [@ $param 1] 0] -poseq"
                 } else {
                     lappend paramList "[@ $param 0] [@ $param 1] -pos"
@@ -573,7 +573,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             foreach paramName {rser cpar} {
                 if {[dexist $arguments $paramName]} {
                     set paramVal [dget $arguments $paramName]
-                    if {([llength $paramVal]>1) && ([@ $paramVal 1]=="-eq")} {
+                    if {([llength $paramVal]>1) && ([@ $paramVal 1] eq "-eq")} {
                         lappend paramList "$paramName [@ $paramVal 0] -eq"
                     } else {
                         lappend paramList "$paramName $paramVal"
@@ -617,7 +617,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             my ParamsProcess $paramsOrder $arguments params
             dict for {paramName value} $arguments {
                 if {$paramName ni $paramsOrder} {
-                    if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
+                    if {([llength $value]>1) && ([@ $value 1] eq "-eq")} {
                         lappend params "$paramName [@ $value 0] -eq"
                     } else {
                         lappend params "$paramName $value"
@@ -1178,7 +1178,7 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
             lappend params "model [dget $arguments model] -posnocheck"
             if {[dexist $arguments area]} {
                 set areaVal [dget $arguments area]
-                if {([llength $areaVal]>1) && ([@ $areaVal 1]=="-eq")} {
+                if {([llength $areaVal]>1) && ([@ $areaVal 1] eq "-eq")} {
                     lappend params "area [@ $areaVal 0] -poseq"
                 } else {
                     lappend params "area $areaVal -pos"
@@ -1237,7 +1237,7 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
             lappend params "model [dget $arguments model] -posnocheck"
             if {[dexist $arguments area]} {
                 set areaVal [dget $arguments area]
-                if {([llength $areaVal]>1) && ([@ $areaVal 1]=="-eq")} {
+                if {([llength $areaVal]>1) && ([@ $areaVal 1] eq "-eq")} {
                     lappend params "area [@ $areaVal 0] -poseq"
                 } else {
                     lappend params "area $areaVal -pos"
@@ -1299,7 +1299,7 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
             lappend params "model [dget $arguments model] -posnocheck"
             if {[dexist $arguments area]} {
                 set areaVal [dget $arguments area]
-                if {([llength $areaVal]>1) && ([@ $areaVal 1]=="-eq")} {
+                if {([llength $areaVal]>1) && ([@ $areaVal 1] eq "-eq")} {
                     lappend params "area [@ $areaVal 0] -poseq"
                 } else {
                     lappend params "area $areaVal -pos"
@@ -1357,7 +1357,7 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
             lappend params "model [dget $arguments model] -posnocheck"
             if {[dexist $arguments area]} {
                 set areaVal [dget $arguments area]
-                if {([llength $areaVal]>1) && ([@ $areaVal 1]=="-eq")} {
+                if {([llength $areaVal]>1) && ([@ $areaVal 1] eq "-eq")} {
                     lappend params "area [@ $areaVal 0] -poseq"
                 } else {
                     lappend params "area $areaVal -pos"
@@ -1469,7 +1469,7 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
                     lappend params "$paramName $value"
                 }
             }
-            if {[dget $arguments custparams]!=""} {
+            if {[dget $arguments custparams] ne ""} {
                 if {[llength [dget $arguments custparams]]%2!=0} {
                     return -code error "Custom parameters list must be even length"
                 }

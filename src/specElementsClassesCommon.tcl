@@ -63,7 +63,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 -tc2=
             }]
             set rVal [dget $arguments r]
-            if {([llength $rVal]>1) && ([@ $rVal 1]=="-eq")} {
+            if {([llength $rVal]>1) && ([@ $rVal 1] eq "-eq")} {
                 lappend params "r [@ $rVal 0] -poseq"
             } else {
                 lappend params "r $rVal -pos"
@@ -115,7 +115,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 -ic=
             }]
             set cVal [dget $arguments c]
-            if {([llength $cVal]>1) && ([@ $cVal 1]=="-eq")} {
+            if {([llength $cVal]>1) && ([@ $cVal 1] eq "-eq")} {
                 lappend params "c [@ $cVal 0] -poseq"
             } else {
                 lappend params "c $cVal -pos"
@@ -166,7 +166,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 -tc2=
             }]
             set lVal [dget $arguments l]
-            if {([llength $lVal]>1) && ([@ $lVal 1]=="-eq")} {
+            if {([llength $lVal]>1) && ([@ $lVal 1] eq "-eq")} {
                 lappend params "l [@ $lVal 0] -poseq"
             } else {
                 lappend params "l $lVal -pos"
@@ -325,7 +325,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             # Synopsis: subcktObj name nodes ?-paramName {paramValue ?-eq?} ...?
             
             # check that inputs object class is Subcircuit
-            if {[info object class $subcktObj "::SpiceGenTcl::Subcircuit"]!=1} {
+            if {![info object class $subcktObj "::SpiceGenTcl::Subcircuit"]} {
                 set objClass [info object class $subcktObj]
                 error "Wrong object class '$objClass' is passed as subcktObj, should be '::SpiceGenTcl::Subcircuit'"
             }
@@ -338,7 +338,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             }
             set pinsList [lmap pinName $pinsNames node $nodes {join [list $pinName $node]}]
             set paramDefList [lmap paramName [dict keys [$subcktObj getParams]] {subst "-${paramName}="}]
-            if {$paramDefList!=""} {
+            if {$paramDefList ne ""} {
                 # create definition for argparse module for passing parameters as optional arguments
                 set arguments [argparse -inline "
                     [join $paramDefList \n]
@@ -376,7 +376,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {-dc= -required}
             }]
             set dcVal [dget $arguments dc]
-            if {([llength $dcVal]>1) && ([@ $dcVal 1]=="-eq")} {
+            if {([llength $dcVal]>1) && ([@ $dcVal 1] eq "-eq")} {
                 lappend params "dc [@ $dcVal 0] -poseq"
             } else {
                 lappend params "dc $dcVal -pos"
@@ -396,21 +396,21 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 -acphase=
             }]
             set dcVal [dget $arguments dc]
-            if {([llength $dcVal]>1) && ([@ $dcVal 1]=="-eq")} {
+            if {([llength $dcVal]>1) && ([@ $dcVal 1] eq "-eq")} {
                 lappend params "dc [@ $dcVal 0] -poseq"
             } else {
                 lappend params "dc $dcVal -pos"
             }
             set acVal [dget $arguments ac]
             lappend params "ac -sw"
-            if {([llength $acVal]>1) && ([@ $acVal 1]=="-eq")} {
+            if {([llength $acVal]>1) && ([@ $acVal 1] eq "-eq")} {
                 lappend params "acval [@ $acVal 0] -poseq"
             } else {
                 lappend params "acval $acVal -pos"
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {ac dc}} {
-                    if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
+                    if {([llength $value]>1) && ([@ $value 1] eq "-eq")} {
                         lappend params "$paramName [@ $value 0] -poseq"
                     } else {
                         lappend params "$paramName $value -pos"
@@ -516,7 +516,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 lappend params "t$i [list [@ $pwlSeqVal $2i]]" "$type$i [list [@ $pwlSeqVal $2ip1]]"
             }
             foreach param $params {
-                if {([llength [@ $param 1]]>1) && ([@ [@ $param 1] 1]=="-eq")} {
+                if {([llength [@ $param 1]]>1) && ([@ [@ $param 1] 1] eq "-eq")} {
                     lappend paramList "[@ $param 0] [@ [@ $param 1] 0] -poseq"
                 } else {
                     lappend paramList "[@ $param 0] [@ $param 1] -pos"
@@ -929,14 +929,14 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 -m=
             }]
             set trcondVal [dget $arguments trcond]
-            if {([llength $trcondVal]>1) && ([@ $trcondVal 1]=="-eq")} {
+            if {([llength $trcondVal]>1) && ([@ $trcondVal 1] eq "-eq")} {
                 lappend params "trcond [@ $trcondVal 0] -poseq"
             } else {
                 lappend params "trcond $trcondVal -pos"
             }
             if {[dexist $arguments m]} {
                 set mVal [dget $arguments m]
-                if {([llength $mVal]>1) && ([@ $mVal 1]=="-eq")} {
+                if {([llength $mVal]>1) && ([@ $mVal 1] eq "-eq")} {
                     lappend params "m [@ $mVal 0] -eq"
                 } else {
                     lappend params "m $mVal"
@@ -977,7 +977,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {-gain -required}
             }]
             set gainVal [dget $arguments gain]
-            if {([llength $gainVal]>1) && ([@ $gainVal 1]=="-eq")} {
+            if {([llength $gainVal]>1) && ([@ $gainVal 1] eq "-eq")} {
                 lappend params "vgain [@ $gainVal 0] -poseq"
             } else {
                 lappend params "vgain $gainVal -pos"
@@ -1021,14 +1021,14 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             set consrcVal [dget $arguments consrc]
             lappend params "consrc $consrcVal -posnocheck"
             set gainVal [dget $arguments gain]
-            if {([llength $gainVal]>1) && ([@ $gainVal 1]=="-eq")} {
+            if {([llength $gainVal]>1) && ([@ $gainVal 1] eq "-eq")} {
                 lappend params "igain [@ $gainVal 0] -poseq"
             } else {
                 lappend params "igain $gainVal -pos"
             }
             if {[dexist $arguments m]} {
                 set mVal [dget $arguments m]
-                if {([llength $mVal]>1) && ([@ $mVal 1]=="-eq")} {
+                if {([llength $mVal]>1) && ([@ $mVal 1] eq "-eq")} {
                     lappend params "m [@ $mVal 0] -eq"
                 } else {
                     lappend params "m $mVal"
@@ -1071,7 +1071,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             set consrcVal [dget $arguments consrc]
             lappend params "consrc $consrcVal -posnocheck"
             set transrVal [dget $arguments transr]
-            if {([llength $transrVal]>1) && ([@ $transrVal 1]=="-eq")} {
+            if {([llength $transrVal]>1) && ([@ $transrVal 1] eq "-eq")} {
                 lappend params "transr [@ $transrVal 0] -poseq"
             } else {
                 lappend params "transr $transrVal -pos"

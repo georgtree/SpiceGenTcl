@@ -94,7 +94,15 @@ test testRawFileClass-2 {read ascii ac data} -setup {
     unset data traceAxis trace refData axisData traceData axisMatchRe traceMatchRe axisMatchIm traceMatchIm result
 }
 
-test testRawFileClass-3 {read binary dc data} -setup {
+test testRawFileClass-3 {read ascii ac data} -setup {
+    set data [RawFile new "${rawDataLoc}/ac_ascii.raw" * ltspice]
+} -body {    
+    set currents [$data getCurrentsNames]
+} -result "i(l2) i(r1) i(r2) i(r3) i(g1) i(g2) i(g3) i(g4) i(v1)" -cleanup {
+    unset data currents
+}
+
+test testRawFileClass-4 {read binary dc data} -setup {
     set data [RawFile new "${rawDataLoc}/dc.raw" * ltspice]
     set traceAxis [$data configure -Axis]
     set trace [$data getTrace i(d1)]
@@ -113,7 +121,7 @@ test testRawFileClass-3 {read binary dc data} -setup {
     unset data traceAxis trace refData axisData traceData axisMatch traceMatch result
 }
 
-test testRawFileClass-4 {read ascii dc data} -setup {
+test testRawFileClass-5 {read ascii dc data} -setup {
     set data [RawFile new "${rawDataLoc}/dc_ascii.raw" * ltspice]
     set traceAxis [$data configure -Axis]
     set trace [$data getTrace i(d1)]
@@ -132,7 +140,7 @@ test testRawFileClass-4 {read ascii dc data} -setup {
     unset data traceAxis trace refData axisData traceData axisMatch traceMatch result
 }
 
-test testRawFileClass-5 {read binary tran data} -setup {
+test testRawFileClass-6 {read binary tran data} -setup {
     set data [RawFile new "${rawDataLoc}/tran.raw" * ltspice]
     set traceTime [$data getTrace time]
     set trace [$data getTrace v(out)]
@@ -153,7 +161,7 @@ test testRawFileClass-5 {read binary tran data} -setup {
 
 set epsilon 1e-2; # issue with riunding in LTspice when save to csv data, will be fixed in future
 
-test testRawFileClass-6 {read ascii tran data} -setup {
+test testRawFileClass-7 {read ascii tran data} -setup {
     set data [RawFile new "${rawDataLoc}/tran_ascii.raw" * ltspice]
     set traceTime [$data getTrace time]
     set trace [$data getTrace v(out)]

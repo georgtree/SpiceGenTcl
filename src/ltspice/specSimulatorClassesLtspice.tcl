@@ -22,7 +22,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Simulators {
         # this class represent batch simulation of LTspice
         superclass ::SpiceGenTcl::Simulator
         property log -get {
-            if {[info exists log]!=0} {
+            if {[info exists log]} {
                 return $log
             } else {
                 return -code error "Log does not exists for simulator '[my configure -name]'" 
@@ -83,7 +83,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Simulators {
             my configure -LastRunFileName ${firstLine}
             my readLog
             my readData
-            if {[info exists nodelete]==0} {
+            if {![info exists nodelete]} {
                 file delete $rawFileName
                 file delete $logFileName
                 file delete $cirFileName

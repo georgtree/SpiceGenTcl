@@ -169,7 +169,7 @@ namespace eval ::SpiceGenTcl {
                 }
             }
             dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([@ $value 1]=="-eq")} {
+                if {([llength $value]>1) && ([@ $value 1] eq "-eq")} {
                     lappend paramsLoc "$paramName [@ $value 0] -poseq"
                 } else {
                     lappend paramsLoc "$paramName $value -pos"
@@ -208,7 +208,7 @@ namespace eval ::SpiceGenTcl {
             set nodename [string tolower $value]
         }
         property name -set {
-            if {$value==""} {
+            if {$value eq ""} {
                 return -code error "Pin must have a name, empty string was provided"
             } elseif {[regexp {[^A-Za-z0-9_]+} $value]} {
                 return -code error "Pin name '$value' is not a valid name"
@@ -240,7 +240,7 @@ namespace eval ::SpiceGenTcl {
         method checkFloating {} {
             # Determines if pin is connected to the node.
             # Returns: `true` if connected and `false` if not
-            if {[my configure -nodename]=={}} {
+            if {[my configure -nodename] eq {}} {
                 set floating true
             } else {
                 set floating false
@@ -250,7 +250,7 @@ namespace eval ::SpiceGenTcl {
         method genSPICEString {} {
             # Creates string for SPICE netlist.
             # Returns: SPICE netlist's string
-            if {[my checkFloating]=="true"} {
+            if {[my checkFloating] eq "true"} {
                 return -code error "Pin '[my configure -name]' is not connected to the node so can't be netlisted"
             }
             return "[my configure -nodename]"
@@ -262,7 +262,7 @@ namespace eval ::SpiceGenTcl {
     oo::configurable create ParameterSwitch {
         superclass SPICEElement
         property name -set {
-            if {$value==""} {
+            if {$value eq ""} {
                 return -code error "Parameter must have a name, empty string was provided"
             } elseif {[regexp {[^A-Za-z0-9_]+} $value]} {
                 return -code error "Parameter name '$value' is not a valid name"
@@ -315,7 +315,7 @@ namespace eval ::SpiceGenTcl {
             if {[string is double -strict $val]} {
                 set value $val
             } else {
-                if {[string tolower [string range $val end-2 end]]=={meg}} {
+                if {[string tolower [string range $val end-2 end]] eq {meg}} {
                     if {[string is double -strict [string range $val 0 end-3]]} {
                         set value [string tolower $val]
                     } else {
@@ -353,7 +353,7 @@ namespace eval ::SpiceGenTcl {
     oo::define ParameterNoCheck {
         variable value
         method <WriteProp-value> val {
-            if {$val==""} {
+            if {$val eq ""} {
                 return -code error "Value '$val' is not a valid value"
             } 
             set value $val
@@ -404,7 +404,7 @@ namespace eval ::SpiceGenTcl {
     oo::define ParameterPositionalNoCheck {
         variable value
         method <WriteProp-value> val {
-            if {$val==""} {
+            if {$val eq ""} {
                 return -code error "Value '$val' is not a valid value"
             } 
             set value $val
@@ -419,7 +419,7 @@ namespace eval ::SpiceGenTcl {
             if {[string is double -strict $value]} {
                 set defvalue $value
             } else {
-                if {[string tolower [string range $value end-2 end]]=={meg}} {
+                if {[string tolower [string range $value end-2 end]] eq {meg}} {
                     if {[string is double -strict [string range $value 0 end-3]]} {
                         set defvalue [string tolower $value]
                     } else {
@@ -481,7 +481,7 @@ namespace eval ::SpiceGenTcl {
     oo::define ParameterEquation {
         variable value
         method <WriteProp-value> val {
-            if {$val!=""} {
+            if {$val ne ""} {
                 set value $val
             } else {
                 return -code error "Parameter '[my configure -name]' equation can't be empty"
@@ -562,11 +562,11 @@ namespace eval ::SpiceGenTcl {
             #  - eq - parameter may contain equation in terms of functions and other parsmeters,
             #    printed as '$name={$equation}'
             #  - poseq - combination of both flags, print only '{$equation}'
-            if {$params!=""} {
+            if {$params ne ""} {
                 foreach param $params {
-                    if {[@ $param 2]=={}} {
+                    if {[@ $param 2] eq {}} {
                         my addParam [@ $param 0] [@ $param 1] 
-                    } elseif {[@ $param 1]=="-sw"} {
+                    } elseif {[@ $param 1] eq "-sw"} {
                         my addParam [@ $param 0] -sw 
                     } else {
                         my addParam {*}$param
@@ -663,7 +663,7 @@ namespace eval ::SpiceGenTcl {
                 return -code error "Parameters list '$paramList' has already contains parameter with name '$paramName'"
             }
             # select parameter object according to parameter qualificator
-            if {$value=="-sw"} {
+            if {$value eq "-sw"} {
                 dict append Params $paramName [::SpiceGenTcl::ParameterSwitch new $paramName]
             } else {
                 switch $paramQual {
@@ -706,7 +706,7 @@ namespace eval ::SpiceGenTcl {
             # Returns: list of floating pins
             set floatingPins {}
             dict for {pinName pin} $Pins {
-                if {[$pin checkFloating]=="true"} {
+                if {[$pin checkFloating] eq "true"} {
                     lappend floatingPins [$pin configure -name]
                 }
             }
@@ -730,7 +730,7 @@ namespace eval ::SpiceGenTcl {
                             floating"
                 }
             }
-            if {($Params=="") || ([info exists Params]==0)} {
+            if {($Params eq "") || (![info exists Params])} {
                 lappend params ""
                 return "[my configure -name] [join $nodes]"
             } else {
@@ -746,7 +746,7 @@ namespace eval ::SpiceGenTcl {
         superclass SPICEElement
         mixin DuplChecker KeyArgsBuilder
         property name -set {
-            if {$value==""} {
+            if {$value eq ""} {
                 return -code error "Model must have a name, empty string was provided"
             } elseif {[regexp {[^A-Za-z0-9_]+} $value]} {
                 return -code error "Model name '$value' is not a valid name"
@@ -755,7 +755,7 @@ namespace eval ::SpiceGenTcl {
             }
         }
         property type -set {
-            if {$value==""} {
+            if {$value eq ""} {
                 return -code error "Model must have a type, empty string was provided"
             } elseif {[regexp {[^A-Za-z0-9]+} $value]} {
                 return -code error "Model type '$value' is not a valid type"
@@ -777,11 +777,11 @@ namespace eval ::SpiceGenTcl {
             # Class represents model card in SPICE netlist.
             my configure -name $name -type $type
             # create Params objects
-            if {$params!=""} {
+            if {$params ne ""} {
                 foreach param $params {
-                    if {[@ $param 2]=={}} {
+                    if {[@ $param 2] eq {}} {
                         my addParam [@ $param 0] [@ $param 1] 
-                    } elseif {[@ $param 2]=="-eq"} {
+                    } elseif {[@ $param 2] eq "-eq"} {
                         my addParam [@ $param 0] [@ $param 1] -eq
                     } else {
                         error "Wrong parameter definition in model $name"
@@ -798,7 +798,7 @@ namespace eval ::SpiceGenTcl {
         method genSPICEString {} {
             # Creates model string for SPICE netlist.
             # Returns: SPICE netlist's string
-            if {($Params=="") || ([info exists Params]==0)} {
+            if {($Params eq "") || (![info exists Params])} {
                 lappend params ""
                 return ".model [my configure -name] [my configure -type]"
             } else {
@@ -964,8 +964,8 @@ namespace eval ::SpiceGenTcl {
                 my configure -name [self object]
             }
             foreach param $params {
-                if {[@ $param 2]=={}} {
-                    if {[@ $param 1]=="-sw"} {
+                if {[@ $param 2] eq {}} {
+                    if {[@ $param 1] eq "-sw"} {
                         my addParam [@ $param 0] -sw  
                     } else {
                         my addParam [@ $param 0] [@ $param 1] 
@@ -994,7 +994,7 @@ namespace eval ::SpiceGenTcl {
             if {[my duplListCheck $paramList]} {
                 return -code error "Parameters list '$paramList' has already contains parameter with name '$paramName'"
             }
-            if {$value=="-sw"} {
+            if {$value eq "-sw"} {
                 dict append Params $paramName [::SpiceGenTcl::ParameterSwitch new $paramName]
             } else {
                 dict append Params $paramName [::SpiceGenTcl::ParameterNoCheck new $paramName $value]
@@ -1036,9 +1036,9 @@ namespace eval ::SpiceGenTcl {
                 my configure -name [self object]
             }
             foreach param $params {
-                if {[@ $param 2]=={}} {
+                if {[@ $param 2] eq {}} {
                     my addParam [@ $param 0] [@ $param 1]    
-                } elseif {[@ $param 2]=="-eq"} {
+                } elseif {[@ $param 2] eq "-eq"} {
                     my addParam [@ $param 0] [@ $param 1] -eq  
                 } else { 
                     error "Wrong parameter definition in ParamStatement"
@@ -1132,9 +1132,9 @@ namespace eval ::SpiceGenTcl {
     oo::define Temp {
         method <WriteProp-value> val {
             lassign $val value eq
-            if {$eq=="-eq"} {
+            if {$eq eq "-eq"} {
                 my AddParam temp $value -eq
-            } elseif {$eq==""} {
+            } elseif {$eq eq ""} {
                 my AddParam temp $value
             } else {
                 return -code error "Wrong value '$eq' of qualifier"
@@ -1173,7 +1173,7 @@ namespace eval ::SpiceGenTcl {
                 lappend elementsNamesList {*}[my getAllElemNames]
             }
             set dup [my duplListCheckRet $elementsNamesList]
-            if {$dup!=""} {
+            if {$dup ne ""} {
                 return -code error "Netlist '[my configure -name]' already contains element with name $dup"
             }
             foreach arg $args {
@@ -1262,7 +1262,7 @@ namespace eval ::SpiceGenTcl {
                 lappend elementsNamesList {*}[my getAllElemNames]
             }
             set dup [my duplListCheckRet $elementsNamesList]
-            if {$dup!=""} {
+            if {$dup ne ""} {
                 return -code error "Netlist '[my configure -name]' already contains element with name $dup"
             }
             foreach arg $args {
@@ -1335,7 +1335,7 @@ namespace eval ::SpiceGenTcl {
             set arguments [argparse {
                 -nodelete
             }]
-            if {[info exists simulator]==0} {
+            if {![info exists simulator]} {
                 return -code error "Simulator is not attached to '[my configure -name]' circuit"
             }
             if {[info exists nodelete]} {
@@ -1369,7 +1369,7 @@ namespace eval ::SpiceGenTcl {
                 my AddPin [@ $pin 0] {}
             }
             # create Params objects that are input parameters of subcircuit
-            if {$params!=""} {
+            if {$params ne ""} {
                 foreach param $params {
                     if {[llength $param]<=2} {
                         my addParam [@ $param 0] [@ $param 1] 
@@ -1426,7 +1426,7 @@ namespace eval ::SpiceGenTcl {
             # Returns: SPICE netlist's string
             set name [my configure -name]
             set nodes [lmap pin [dict values $Pins] {$pin configure -name}]
-            if {$Params==""} {
+            if {$Params eq ""} {
                 set header ".subckt $name [join $nodes]"
             } else {
                 set params [lmap param [dict values $Params] {$param genSPICEString}]
@@ -1480,9 +1480,9 @@ namespace eval ::SpiceGenTcl {
             my configure -type $type
             # create Analysis objects
             foreach param $params {
-                if {[@ $param 2]=={}} {
+                if {[@ $param 2] eq {}} {
                     my addParam [@ $param 0] [@ $param 1]    
-                } elseif {[@ $param 1]=="-sw"} {
+                } elseif {[@ $param 1] eq "-sw"} {
                     my addParam [@ $param 0] -sw 
                 } else {
                     my addParam {*}$param
@@ -1744,11 +1744,11 @@ namespace eval ::SpiceGenTcl {
 ####  read header 
 
             set ch [read $file 6]
-            if {[encoding convertfrom utf-8 $ch]=={Title:}} {
+            if {[encoding convertfrom utf-8 $ch] eq {Title:}} {
                 set encSize 1
                 set encode "utf-8"
                 set line "Title:"
-            } elseif {[encoding convertfrom utf-16le $ch]=={Tit}} {
+            } elseif {[encoding convertfrom utf-16le $ch] eq {Tit}} {
                 set encSize 2
                 set encode "utf-16le"
                 set line "Tit"
@@ -1761,8 +1761,8 @@ namespace eval ::SpiceGenTcl {
             while true {
                 set ch [encoding convertfrom $encode [read $file $encSize]]
                 incr binaryStart $encSize
-                if {$ch=="\n"} {
-                    if {$encode=="utf-8"} {
+                if {$ch eq "\n"} {
+                    if {$encode eq "utf-8"} {
                         set line [string trimright $line "\r"]
                     }
                     lappend header $line
@@ -1780,7 +1780,7 @@ namespace eval ::SpiceGenTcl {
 
             foreach line $header {
                 set lineList [split $line ":"]
-                if {[@ $lineList 0]=="Variables"} {
+                if {[@ $lineList 0] eq "Variables"} {
                     break
                 }
                 dict append RawParams [@ $lineList 0] [string trim [@ $lineList 1]]
@@ -1793,10 +1793,10 @@ namespace eval ::SpiceGenTcl {
                 set hasAxis 1
             }
             set flags [split [dget [my configure -RawParams] "Flags"]]
-            if {("complex" in $flags) || ([dget [my configure -RawParams] "Plotname"]=="AC Analysis")} {
+            if {("complex" in $flags) || ([dget [my configure -RawParams] "Plotname"] eq "AC Analysis")} {
                 set numType complex
             } else {
-                if {("double" in $flags) || ($simulator=="ngspice") || ($simulator=="xyce")} {
+                if {("double" in $flags) || ($simulator eq "ngspice") || ($simulator eq "xyce")} {
                     set numType double
                 } else {
                     set numType real
@@ -1811,18 +1811,18 @@ namespace eval ::SpiceGenTcl {
                 set lineList [split [string trim $line] \t]
                 lassign $lineList idx name varType
                 if {$ivar==0} {
-                    if {$simulator=="ltspice" && $name=="time"} {
+                    if {$simulator eq "ltspice" && $name eq "time"} {
                         # workaround for bug with negative values in time axis
                         set axisIsTime true
                     }
-                    if {$numType=="real"} {
+                    if {$numType eq "real"} {
                         set axisNumType double
                     } else {
                         set axisNumType $numType
                     }
                     my configure -Axis [::SpiceGenTcl::Axis new $name $varType $NPoints $axisNumType]
                     set trace $Axis
-                } elseif {($traces2read=="*") || ($name in $traces2read)} {
+                } elseif {($traces2read eq "*") || ($name in $traces2read)} {
                     if {$hasAxis} {
                         set trace [::SpiceGenTcl::Trace new $name $varType $NPoints\
                                            [[my configure -Axis] configure -name] $numType]
@@ -1835,32 +1835,32 @@ namespace eval ::SpiceGenTcl {
                 lappend Traces $trace
                 incr ivar
             }
-            if {($traces2read=="") || ([llength $traces2read]==0)} {
+            if {($traces2read eq "") || (![llength $traces2read])} {
                 close $file
                 return
             }
             
 ####  read data 
-            if {$rawType=="Binary:"} {
+            if {$rawType eq "Binary:"} {
                 my configure -BlockSize [= {($fileSize - $binaryStart)/$NPoints}]
                 set scanFunctions ""
                 set calcBlockSize 0
                 foreach trace [my configure -Traces] {
-                    if {[$trace configure -NumType]=="double"} {
+                    if {[$trace configure -NumType] eq "double"} {
                         incr calcBlockSize 8
                         if {[info object class $trace ::SpiceGenTcl::EmptyTrace]} {
                             set fun skip8bytes 
                         } else {
                             set fun readFloat64
                         }
-                    } elseif {[$trace configure -NumType]=="complex"} {
+                    } elseif {[$trace configure -NumType] eq "complex"} {
                         incr calcBlockSize 16
                         if {[info object class $trace ::SpiceGenTcl::EmptyTrace]} {
                             set fun skip16bytes 
                         } else {
                             set fun readComplex 
                         }
-                    } elseif {[$trace configure -NumType]=="real"} {
+                    } elseif {[$trace configure -NumType] eq "real"} {
                         incr calcBlockSize 4
                         if {[info object class $trace ::SpiceGenTcl::EmptyTrace]} {
                             set fun skip4bytes 
@@ -1886,33 +1886,33 @@ namespace eval ::SpiceGenTcl {
                                 set value [= {abs($value)}]
                             }
                         }
-                        if {[info object class $trace]!="::SpiceGenTcl::EmptyTrace"} {
+                        if {[info object class $trace] ne "::SpiceGenTcl::EmptyTrace"} {
                             $trace appendDataPoints $value 
                         }  
                     }
                 }                 
-            } elseif {$rawType=="Values:"} {
+            } elseif {$rawType eq "Values:"} {
                 for {set i 0} {$i<$NPoints} {incr i} {
                     set firstVar true
                     for {set j 0} {$j<[llength [my configure -Traces]]} {incr j} {
                         set line [gets $file]
-                        if {$line==""} {
+                        if {$line eq ""} {
                             continue
                         }
                         set lineList [textutil::split::splitx $line]
-                        if {$firstVar=="true"} {
+                        if {$firstVar eq "true"} {
                             set firstVar false
                             set sPoint [@ $lineList 0]
                             if {$i!=int($sPoint)} {
                                 error "Error reading file"
                             }
-                            if {$numType=="complex"} {
+                            if {$numType eq "complex"} {
                                 set value [split [@ $lineList 1] ","]
                             } else {
                                 set value [@ $lineList 1]
                             } 
                         } else {
-                            if {$numType=="complex"} {
+                            if {$numType eq "complex"} {
                                 set value [split [@ $lineList 1] ","]
                             } else {
                                 set value [@ $lineList 1]
@@ -1929,7 +1929,7 @@ namespace eval ::SpiceGenTcl {
             # Returns trace object reference by it's name
             set traceFoundFlag false
             foreach trace [my configure -Traces] {
-                if {[$trace configure -name]==$traceName} {
+                if {[$trace configure -name] eq $traceName} {
                     set traceFound $trace
                     set traceFoundFlag true
                     break
@@ -1948,12 +1948,14 @@ namespace eval ::SpiceGenTcl {
         method getVoltagesNames {} {
             # Returns list that contains names of all voltage variables
             return [lmap trace [my configure -Traces]\
-                            {expr {[$trace configure -Type]=="voltage" ? [$trace configure -name] : [continue]}}]
+                            {expr {[string match -nocase "*voltage*" [$trace configure -Type]] ?\
+                                           [$trace configure -name] : [continue]}}]
         }
         method getCurrentsNames {} {
             # Returns list that contains names of all current variables
             return [lmap trace [my configure -Traces]\
-                            {expr {[$trace configure -Type]=="current" ? [$trace configure -name] : [continue]}}]
+                            {expr {[string match -nocase "*current*" [$trace configure -Type]] ?\
+                                           [$trace configure -name] : [continue]}}]
         }
         method getTracesStr {} {
             # Returns information about all Traces in raw file in form of string
@@ -1985,7 +1987,7 @@ namespace eval ::SpiceGenTcl {
                 for {set i 0} {$i<[my configure -NPoints]} {incr i} {
                     lappend tracesList [lmap traceValues [dict values $tracesDict] {@ $traceValues $i}]
                 }
-            } elseif {[dget $arguments traces]!=""} {
+            } elseif {[dget $arguments traces] ne ""} {
                 foreach traceName [dget $arguments traces] {
                     set traceObj [my getTrace $traceName]
                     dict append tracesDict [$traceObj configure -name] [$traceObj getDataPoints]

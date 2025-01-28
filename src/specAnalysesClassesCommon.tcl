@@ -124,7 +124,7 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
             my NameProcess $arguments [self object]
             set paramsOrder [list tstep tstop tstart tmax]
             my ParamsProcess $paramsOrder $arguments params
-            if {[dget $arguments uic]==1} {
+            if {[dget $arguments uic]} {
                 lappend params "uic -sw"
             }
             next tran $params -name $name
