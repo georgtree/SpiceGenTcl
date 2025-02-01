@@ -428,15 +428,25 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         mixin ::SpiceGenTcl::Utility
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
-                {-low= -required}
-                {-high= -required}
+                {-low= -forbid {voff ioff}}
+                {-voff= -forbid {low ioff}}
+                {-ioff= -forbid {low voff}}
+                {-high= -forbid {von ion}}
+                {-von= -forbid {high ion}}
+                {-ion= -forbid {high von}}
                 {-td= -required}
                 {-tr= -required}
                 {-tf= -required}
-                {-pw= -required}
-                {-per= -required}
+                {-pw= -forbid ton}
+                {-ton= -forbid pw}
+                {-per= -forbid tper}
+                {-tper= -forbid per}
             }]
-            set paramsOrder [list low high td tr tf pw per]
+            my AliasesKeysCheck $arguments [list low voff ioff]
+            my AliasesKeysCheck $arguments [list high von ion]
+            my AliasesKeysCheck $arguments [list pw ton]
+            my AliasesKeysCheck $arguments [list per tper]
+            set paramsOrder [list low voff ioff high von ion td tr tf pw ton per tper]
             lappend params "model pulse -posnocheck"
             my ParamsProcess $paramsOrder $arguments params
             next $type$name [list "np $npNode" "nm $nmNode"] $params
@@ -450,18 +460,23 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         mixin ::SpiceGenTcl::Utility
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
-                {-v0= -forbid i0}
-                {-i0= -forbid v0}
-                {-va= -forbid ia}
-                {-ia= -forbid va}
+                {-v0= -forbid {i0 voffset ioffset}}
+                {-i0= -forbid {v0 voffset ioffset}}
+                {-voffset= -forbid {v0 i0 ioffset}}
+                {-ioffset= -forbid {v0 i0 voffset}}
+                {-va= -forbid {ia vamp iamp}}
+                {-ia= -forbid {va vamp iamp}}
+                {-vamp= -forbid {va ia iamp}}
+                {-iamp= -forbid {va ia vamp}}
                 {-freq= -required}
                 -td=
                 {-theta= -require {td}}
-                {-phase= -require {td theta}}
+                {-phase= -require {td theta} -forbid phi}
+                {-phi= -require {td theta} -forbid phase}
             }]
-            my AliasesKeysCheck $arguments [list v0 i0]
-            my AliasesKeysCheck $arguments [list va ia]
-            set paramsOrder [list v0 i0 va ia freq td theta phase]
+            my AliasesKeysCheck $arguments [list v0 i0 voffset ioffset]
+            my AliasesKeysCheck $arguments [list va ia vamp iamp]
+            set paramsOrder [list v0 i0 voffset ioffset va ia vamp iamp freq td theta phase phi]
             lappend params "model sin -posnocheck"
             my ParamsProcess $paramsOrder $arguments params
             next $type$name [list "np $npNode" "nm $nmNode"] $params
@@ -534,17 +549,25 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         mixin ::SpiceGenTcl::Utility
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
-                {-v0= -forbid i0}
-                {-i0= -forbid v0}
-                {-va= -forbid ia}
-                {-ia= -forbid va}
-                {-fc= -required}
+                {-v0= -forbid {i0 voff ioff}}
+                {-i0= -forbid {v0 voff ioff}}
+                {-voff= -forbid {v0 i0 ioff}}
+                {-ioff= -forbid {v0 i0 voff}}
+                {-va= -forbid {ia vamp iamp}}
+                {-ia= -forbid {va vamp iamp}}
+                {-vamp= -forbid {va ia iamp}}
+                {-iamp= -forbid {va ia vamp}}
+                {-fc= -forbid fcar}
+                {-fcar= -forbid fc}
                 {-mdi= -required}
-                {-fs= -required}
+                {-fs= -forbid fsig}
+                {-fsig= -forbid fs}
             }]
-            my AliasesKeysCheck $arguments [list v0 i0]
-            my AliasesKeysCheck $arguments [list va ia]
-            set paramsOrder [list v0 i0 va ia fc mdi fs]
+            my AliasesKeysCheck $arguments [list v0 i0 voff ioff]
+            my AliasesKeysCheck $arguments [list va ia vamp iamp]
+            my AliasesKeysCheck $arguments [list fc fcar]
+            my AliasesKeysCheck $arguments [list fs fsig]
+            set paramsOrder [list v0 i0 voff ioff va ia vamp iamp fc fcar mdi fs fsig]
             lappend params "model sffm -posnocheck"
             my ParamsProcess $paramsOrder $arguments params
             next $type$name [list "np $npNode" "nm $nmNode"] $params
@@ -606,13 +629,13 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  name - name of the device without first-letter designator V
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  -low - low value
-            #  -high - high value
+            #  -low - low value, aliases: -voff, -ioff
+            #  -high - high value, aliases: -von, ion
             #  -td - time delay
             #  -tr - rise time
             #  -tf - fall time
-            #  -pw - width of pulse
-            #  -per - period time
+            #  -pw - width of pulse, alias -ton
+            #  -per - period time, alias -tper
             # ```
             # VYYYYYYY n+ n- PULSE(V1 V2 TD TR TF PW PER)
             # ```
@@ -620,7 +643,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Vpulse new 1 net1 net2 -low 0 -high 1 -td {td -eq} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6
             # ```
-            # Synopsis: name npNode nmNode -low value -high value -td value -tr value -tf value -pw value -per value
+            # Synopsis: name npNode nmNode -low|voff value -high|von value -td value -tr value -tf value -pw|ton value 
             next $name v $npNode $nmNode {*}$args
         }
     }  
@@ -634,12 +657,12 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  name - name of the device without first-letter designator V
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  -v0 - DC shift value
-            #  -va - amplitude value
+            #  -v0 - DC shift value, aliases: -voffset, -i0, -ioffset
+            #  -va - amplitude value, aliases: -vamp, -ia, -iamp
             #  -freq - frequency of sinusoidal signal
             #  -td - time delay, optional
             #  -theta - damping factor, optional, require -td
-            #  -phase - phase of signal, optional, require -td and -phase
+            #  -phase - phase of signal, optional, require -td and -phase, alias -phi
             # ```
             # VYYYYYYY n+ n- SIN(VO VA FREQ TD THETA PHASE)
             # ```
@@ -647,7 +670,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Vsin new 1 net1 net2 -v0 0 -va 2 -freq {freq -eq} -td 1e-6 -theta {theta -eq}
             # ```
-            # Synopsis: name npNode nmNode -v0 value -va value -freq value ?-td value ?-theta value ?-phase value???
+            # Synopsis: name npNode nmNode -v0|voffset value -va|vamp  value -freq value ?-td value ?-theta value 
+            #   ?-phase|phi value???
             next $name v $npNode $nmNode {*}$args
         }
     }
@@ -710,11 +734,11 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  name - name of the device without first-letter designator V
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  -v0 - initial value
-            #  -va - pulsed value
-            #  -fc - carrier frequency
+            #  -v0 - initial value, aliases: -voff, -i0, -ioff
+            #  -va - pulsed value, aliases: -vamp, -ia, -iamp
+            #  -fc - carrier frequency, alias -fcar
             #  -mdi - modulation index
-            #  -fs - signal frequency
+            #  -fs - signal frequency, alias -fsig
             # ```
             # VYYYYYYY n+ n- SFFM(VO VA FC MDI FS)
             # ```
@@ -722,7 +746,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Vsin new 1 net1 net2 -v0 0 -va 1 -fc {freq -eq} -mdi 0 -fs 1e3
             # ```
-            # Synopsis: name npNode nmNode -v0 value -va value -fc value -mdi value -fs value
+            # Synopsis: name npNode nmNode -v0|voff value -va|vamp value -fc|fcar value -mdi value -fs|fsig
             next $name v $npNode $nmNode {*}$args
         }
     }
@@ -782,13 +806,13 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  name - name of the device without first-letter designator I
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  -low - low value
-            #  -high - high value
+            #  -low - low value, aliases: -voff, -ioff
+            #  -high - high value, aliases: -von, ion
             #  -td - time delay
             #  -tr - rise time
             #  -tf - fall time
-            #  -pw - width of pulse
-            #  -per - period time
+            #  -pw - width of pulse, alias -ton
+            #  -per - period time, alias -tper
             # ```
             # IYYYYYYY n+ n- PULSE(V1 V2 TD TR TF PW PER)
             # ```
@@ -796,7 +820,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Ipulse new 1 net1 net2 -low 0 -high 1 -td {td -eq} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6
             # ```
-            # Synopsis: name npNode nmNode -low value -high value -td value -tr value -tf value -pw value -per value
+            # Synopsis: name npNode nmNode -low|ioff value -high|ion value -td value -tr value -tf value -pw|ton value
             next $name i $npNode $nmNode {*}$args
         }
     }
@@ -810,12 +834,12 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  name - name of the device without first-letter designator I
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  -i0 - DC shift value
-            #  -ia - amplitude value
+            #  -i0 - DC shift value, aliases: -voffset, -v0, -ioffset
+            #  -ia - amplitude value, aliases: -vamp, -va, -iamp
             #  -freq - frequency of sinusoidal signal
             #  -td - time delay, optional
             #  -theta - damping factor, optional, require -td
-            #  -phase - phase of signal, optional, require -td and -phase
+            #  -phase - phase of signal, optional, require -td and -phase, alias -phi
             # ```
             # IYYYYYYY n+ n- SIN(VO VA FREQ TD THETA PHASE)
             # ```
@@ -823,7 +847,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Isin new 1 net1 net2 -i0 0 -ia 2 -freq {freq -eq} -td 1e-6 -theta {theta -eq}
             # ```
-            # Synopsis: name npNode nmNode -i0 value -ia value -freq value ?-td value ?-theta value ?-phase value???
+            # Synopsis: name npNode nmNode -i0|ioffset value -ia|iamp value -freq value ?-td value ?-theta value 
+            #   ?-phase|phi value???
             next $name i $npNode $nmNode {*}$args
         }
     }
@@ -886,11 +911,11 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  name - name of the device without first-letter designator I
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  -i0 - initial value
-            #  -ia - pulsed value
-            #  -fc - carrier frequency
+            #  -i0 - initial value, aliases: -voff, -v0, -ioff
+            #  -ia - pulsed value, aliases: -vamp, -va, -iamp
+            #  -fc - carrier frequency, alias -fcar
             #  -mdi - modulation index
-            #  -fs - signal frequency
+            #  -fs - signal frequency, alias -fsig
             # ```
             # IYYYYYYY n+ n- SFFM(VO VA FC MDI FS)
             # ```
@@ -898,7 +923,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Isin new 1 net1 net2 -i0 0 -ia 1 -fc {freq -eq} -mdi 0 -fs 1e3
             # ```
-            # Synopsis: name npNode nmNode -i0 value -ia value -fc value -mdi value -fs value
+            # Synopsis: name npNode nmNode -i0|ioff value -ia|iamp value -fc|fcar value -mdi value -fs|fsig value
             next $name i $npNode $nmNode {*}$args
         }
     }

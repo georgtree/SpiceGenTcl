@@ -509,6 +509,14 @@ test testVpulseClass-5 {test Vpulse class with different order} -setup {
     unset vpulse result
 }
 
+test testVpulseClass-6 {test Vpulse class with different order} -setup {
+    set vpulse [Vpulse new 1 net1 net2 -tf 1e-9 -pw 10e-6 -per 20e-6 -np 10 -voff 0 -von 1 -td 1e-9 -tr 1e-9]
+} -body {
+    set result [$vpulse genSPICEString]
+} -result "v1 net1 net2 pulse 0 1 1e-9 1e-9 1e-9 10e-6 20e-6 10" -cleanup {
+    unset vpulse result
+}
+
 ####  Vsin class test 
 
 
@@ -545,7 +553,7 @@ test testVsinClass-4 {test Vsin class} -setup {
 }
 
 test testVsinClass-5 {test Vsin class with different order} -setup {
-    set vsin [Vsin new 1 net1 net2 -v0 0 -theta {theta -eq} -va 2 -freq 50 -td 1e-6 ]
+    set vsin [Vsin new 1 net1 net2 -voffset 0 -theta {theta -eq} -va 2 -freq 50 -td 1e-6 ]
 } -body {
     set result [$vsin genSPICEString]
 } -result "v1 net1 net2 sin 0 2 50 1e-6 \{theta\}" -cleanup {
@@ -623,7 +631,7 @@ test testVsffmClass-2 {test Vsffm class} -setup {
 }
 
 test testVsffmClass-3 {test Vsffm class} -setup {
-    set vsffm [Vsffm new 1 net1 net2 -v0 0 -va 1 -fc {freq -eq} -mdi 0 -fs 1e3 -phasec {phase -eq}]
+    set vsffm [Vsffm new 1 net1 net2 -voff 0 -va 1 -fc {freq -eq} -mdi 0 -fs 1e3 -phasec {phase -eq}]
 } -body {
     set result [$vsffm genSPICEString]
 } -result "v1 net1 net2 sffm 0 1 \{freq\} 0 1e3 \{phase\}" -cleanup {

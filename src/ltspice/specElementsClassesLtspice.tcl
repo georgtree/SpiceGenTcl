@@ -688,8 +688,8 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             #  name - name of the device without first-letter designator V
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  -low - low value, alias -voff
-            #  -high - high value, alias -von
+            #  -low - low value, aliases: -voff, -ioff
+            #  -high - high value, aliases: -von, ion
             #  -td - time delay
             #  -tr - rise time
             #  -tf - fall time
@@ -720,8 +720,8 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             #  name - name of the device without first-letter designator V
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  -v0 - DC shift value, alias -voffset
-            #  -va - amplitude value, alias -vamp
+            #  -v0 - DC shift value, aliases: -voffset, -i0, -ioffset
+            #  -va - amplitude value, aliases: -vamp, -ia, -iamp
             #  -freq - frequency of sinusoidal signal
             #  -td - time delay, optional
             #  -theta - damping factor, optional, require -td
@@ -805,8 +805,8 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             #  name - name of the device without first-letter designator V
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  -v0 - initial value, alias -voff
-            #  -va - pulsed value, alias -vamp
+            #  -v0 - initial value, aliases: -voff, -i0, -ioff
+            #  -va - pulsed value, aliases: -vamp, -ia, -iamp
             #  -fc - carrier frequency, alias -fcar
             #  -mdi - modulation index
             #  -fs - signal frequency, alias -fsig
@@ -887,8 +887,8 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             #  name - name of the device without first-letter designator I
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  -low - low value, alias -ioff
-            #  -high - high value, alias -ion
+            #  -low - low value, aliases: -voff, -ioff
+            #  -high - high value, aliases: -von, ion
             #  -td - time delay
             #  -tr - rise time
             #  -tf - fall time
@@ -920,8 +920,8 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             #  name - name of the device without first-letter designator I
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  -v0 - DC shift value, alias -ioffset
-            #  -va - amplitude value, alias -iamp
+            #  -v0 - DC shift value, aliases: -voffset, -v0, -ioffset
+            #  -va - amplitude value, aliases: -vamp, -va, -iamp
             #  -freq - frequency of sinusoidal signal
             #  -td - time delay, optional
             #  -theta - damping factor, optional, require -td
@@ -934,7 +934,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             # ```
             # ::SpiceGenTcl::Ltspice::Sources::Isin new 1 net1 net2 -v0 0 -va 2 -freq {freq -eq} -td 1e-6 -theta {theta -eq}
             # ```
-            # Synopsis: name npNode nmNode -v0|ioffset value -va|iamp value -freq value ?-td value ?-theta value 
+            # Synopsis: name npNode nmNode -i0|ioffset value -ia|iamp value -freq value ?-td value ?-theta value 
             #   ?-phase|phi value ?-ncycles value????
             if {"-rser" in $args || "-cpar" in $args} {
                 return -code error "Current source doesn't support rser and cpar parameters"
@@ -1003,8 +1003,8 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             #  name - name of the device without first-letter designator I
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
-            #  -i0 - initial value, alias -ioff
-            #  -ia - pulsed value, alias -iamp
+            #  -i0 - initial value, aliases: -voff, -v0, -ioff
+            #  -ia - pulsed value, aliases: -vamp, -va, -iamp
             #  -fc - carrier frequency, alias -fcar
             #  -mdi - modulation index
             #  -fs - signal frequency, alias -fsig
