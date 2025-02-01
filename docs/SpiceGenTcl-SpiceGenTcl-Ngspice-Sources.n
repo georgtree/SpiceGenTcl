@@ -17,7 +17,7 @@ SpiceGenTcl::Ngspice::Sources - Commands in namespace SpiceGenTcl::Ngspice::Sour
 .br
 \fBOBJECT constructor\fP \fIname npNode nmNode -low value -high value -td value -tr value -tf value -pw value -per value ?-np value?\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -i0 value -ia value -fc value -mdi value -fs value ?-phasec value ?-phases value??\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -i0|ioff value -ia|iamp value -fc|fcar value -mdi value -fs|fsig value ?-phasec value ?-phases value??\fP
 .br
 \fBpulse create OBJNAME\fP \fIname type npNode nmNode ?args?\fP
 .br
@@ -31,9 +31,9 @@ SpiceGenTcl::Ngspice::Sources - Commands in namespace SpiceGenTcl::Ngspice::Sour
 .br
 \fBOBJECT constructor\fP \fIname npNode nmNode -dc value -ac value -portnum value ?-z0 value?\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -low value -high value -td value -tr value -tf value -pw value -per value ?-np value?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -low|voff value -high|von value -td value -tr value -tf value -pw|ton value -per|tper value ?-np value?\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -fc value -mdi value -fs value ?-phasec value ?-phases value??\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -v0|voff value -va|vamp value -fc|fcar value -mdi value -fs|fsig value ?-phasec value ?-phases value??\fP
 .br
 .SH ::SPICEGENTCL::NGSPICE::SOURCES
 .SH CLASSES
@@ -1179,7 +1179,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Isffm that describes single-frequency FM current source\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -i0 value -ia value -fc value -mdi value -fs value ?-phasec value ?-phases value??\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -i0|ioff value -ia|iamp value -fc|fcar value -mdi value -fs|fsig value ?-phasec value ?-phases value??\fP
 .br
 .RE
 .PP
@@ -1196,16 +1196,16 @@ nmNode
 Name of node connected to negative pin\&.
 .TP
 -fc
-Carrier frequency\&.
+Carrier frequency, alias -fcar\&.
 .TP
 -fs
-Signal frequency\&.
+Signal frequency, alias -fsig\&.
 .TP
 -i0
-Initial value\&.
+Initial value, aliases: -voff, -v0, -ioff\&.
 .TP
 -ia
-Pulsed value\&.
+Pulsed value, aliases: -vamp, -va, -iamp\&.
 .TP
 -mdi
 Modulation index\&.
@@ -2060,7 +2060,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Vpulse that describes pulse voltage source\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -low value -high value -td value -tr value -tf value -pw value -per value ?-np value?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -low|voff value -high|von value -td value -tr value -tf value -pw|ton value -per|tper value ?-np value?\fP
 .br
 .RE
 .PP
@@ -2077,19 +2077,19 @@ nmNode
 Name of node connected to negative pin\&.
 .TP
 -high
-High value\&.
+High value, aliases: -von, ion\&.
 .TP
 -low
-Low value\&.
+Low value, aliases: -voff, -ioff\&.
 .TP
 -np
 Number of pulses, optional\&.
 .TP
 -per
-Period time\&.
+Period time, alias -tper\&.
 .TP
 -pw
-Width of pulse\&.
+Width of pulse, alias -ton\&.
 .TP
 -td
 Time delay\&.
@@ -2239,7 +2239,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Vsffm that describes single-frequency FM voltage source\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -fc value -mdi value -fs value ?-phasec value ?-phases value??\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -v0|voff value -va|vamp value -fc|fcar value -mdi value -fs|fsig value ?-phasec value ?-phases value??\fP
 .br
 .RE
 .PP
@@ -2256,10 +2256,10 @@ nmNode
 Name of node connected to negative pin\&.
 .TP
 -fc
-Carrier frequency\&.
+Carrier frequency, alias -fcar\&.
 .TP
 -fs
-Signal frequency\&.
+Signal frequency, alias -fsig\&.
 .TP
 -mdi
 Modulation index\&.
@@ -2271,10 +2271,10 @@ Carrier phase, optional\&.
 Signal phase, optional, require -phasec\&.
 .TP
 -v0
-Initial value\&.
+Initial value, aliases: -voff, -i0, -ioff\&.
 .TP
 -va
-Pulsed value\&.
+Pulsed value, aliases: -vamp, -ia, -iamp\&.
 .RE
 .PP
 \fBDescription\fR

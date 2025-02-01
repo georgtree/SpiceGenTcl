@@ -29,13 +29,13 @@ SpiceGenTcl::Common::Sources - Commands in namespace SpiceGenTcl::Common::Source
 .br
 \fBOBJECT constructor\fP \fIname npNode nmNode -i1 value -i2 value -td1 value -tau1 value -td2 value -tau2 value\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -low value -high value -td value -tr value -tf value -pw value -per value\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -low|ioff value -high|ion value -td value -tr value -tf value -pw|ton value\fP
 .br
 \fBOBJECT constructor\fP \fIname npNode nmNode -seq list\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -i0 value -ia value -fc value -mdi value -fs value\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -i0|ioff value -ia|iamp value -fc|fcar value -mdi value -fs|fsig value\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -i0 value -ia value -freq value ?-td value ?-theta value ?-phase value???\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -i0|ioffset value -ia|iamp value -freq value ?-td value ?-theta value ?-phase|phi value???\fP
 .br
 \fBpulse create OBJNAME\fP \fIname type npNode nmNode ?args?\fP
 .br
@@ -63,13 +63,13 @@ SpiceGenTcl::Common::Sources - Commands in namespace SpiceGenTcl::Common::Source
 .br
 \fBOBJECT constructor\fP \fIname npNode nmNode -v1 value -v2 value -td1 value -tau1 value -td2 value -tau2 value\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -low value -high value -td value -tr value -tf value -pw value -per value\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -low|voff value -high|von value -td value -tr value -tf value -pw|ton value\fP
 .br
 \fBOBJECT constructor\fP \fIname npNode nmNode -seq list\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -fc value -mdi value -fs value\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -v0|voff value -va|vamp value -fc|fcar value -mdi value -fs|fsig\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -freq value ?-td value ?-theta value ?-phase value???\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -v0|voffset value -va|vamp value -freq value ?-td value ?-theta value ?-phase|phi value???\fP
 .br
 .SH ::SPICEGENTCL::COMMON::SOURCES
 .SH CLASSES
@@ -1197,7 +1197,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Ipulse that describes pulse current source\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -low value -high value -td value -tr value -tf value -pw value -per value\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -low|ioff value -high|ion value -td value -tr value -tf value -pw|ton value\fP
 .br
 .RE
 .PP
@@ -1214,16 +1214,16 @@ nmNode
 Name of node connected to negative pin\&.
 .TP
 -high
-High value\&.
+High value, aliases: -von, ion\&.
 .TP
 -low
-Low value\&.
+Low value, aliases: -voff, -ioff\&.
 .TP
 -per
-Period time\&.
+Period time, alias -tper\&.
 .TP
 -pw
-Width of pulse\&.
+Width of pulse, alias -ton\&.
 .TP
 -td
 Time delay\&.
@@ -1425,7 +1425,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Isffm that describes single-frequency FM current source\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -i0 value -ia value -fc value -mdi value -fs value\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -i0|ioff value -ia|iamp value -fc|fcar value -mdi value -fs|fsig value\fP
 .br
 .RE
 .PP
@@ -1442,16 +1442,16 @@ nmNode
 Name of node connected to negative pin\&.
 .TP
 -fc
-Carrier frequency\&.
+Carrier frequency, alias -fcar\&.
 .TP
 -fs
-Signal frequency\&.
+Signal frequency, alias -fsig\&.
 .TP
 -i0
-Initial value\&.
+Initial value, aliases: -voff, -v0, -ioff\&.
 .TP
 -ia
-Pulsed value\&.
+Pulsed value, aliases: -vamp, -va, -iamp\&.
 .TP
 -mdi
 Modulation index\&.
@@ -1542,7 +1542,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Isin that describes sinusoidal current source\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -i0 value -ia value -freq value ?-td value ?-theta value ?-phase value???\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -i0|ioffset value -ia|iamp value -freq value ?-td value ?-theta value ?-phase|phi value???\fP
 .br
 .RE
 .PP
@@ -1562,13 +1562,13 @@ Name of node connected to negative pin\&.
 Frequency of sinusoidal signal\&.
 .TP
 -i0
-DC shift value\&.
+DC shift value, aliases: -voffset, -v0, -ioffset\&.
 .TP
 -ia
-Amplitude value\&.
+Amplitude value, aliases: -vamp, -va, -iamp\&.
 .TP
 -phase
-Phase of signal, optional, require -td and -phase\&.
+Phase of signal, optional, require -td and -phase, alias -phi\&.
 .TP
 -td
 Time delay, optional\&.
@@ -2588,7 +2588,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Vpulse that describes pulse voltage source\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -low value -high value -td value -tr value -tf value -pw value -per value\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -low|voff value -high|von value -td value -tr value -tf value -pw|ton value\fP
 .br
 .RE
 .PP
@@ -2605,16 +2605,16 @@ nmNode
 Name of node connected to negative pin\&.
 .TP
 -high
-High value\&.
+High value, aliases: -von, ion\&.
 .TP
 -low
-Low value\&.
+Low value, aliases: -voff, -ioff\&.
 .TP
 -per
-Period time\&.
+Period time, alias -tper\&.
 .TP
 -pw
-Width of pulse\&.
+Width of pulse, alias -ton\&.
 .TP
 -td
 Time delay\&.
@@ -2816,7 +2816,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Vsffm that describes single-frequency FM voltage source\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -fc value -mdi value -fs value\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -v0|voff value -va|vamp value -fc|fcar value -mdi value -fs|fsig\fP
 .br
 .RE
 .PP
@@ -2833,19 +2833,19 @@ nmNode
 Name of node connected to negative pin\&.
 .TP
 -fc
-Carrier frequency\&.
+Carrier frequency, alias -fcar\&.
 .TP
 -fs
-Signal frequency\&.
+Signal frequency, alias -fsig\&.
 .TP
 -mdi
 Modulation index\&.
 .TP
 -v0
-Initial value\&.
+Initial value, aliases: -voff, -i0, -ioff\&.
 .TP
 -va
-Pulsed value\&.
+Pulsed value, aliases: -vamp, -ia, -iamp\&.
 .RE
 .PP
 \fBDescription\fR
@@ -2933,7 +2933,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Vsin that describes sinusoidal voltage source\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -freq value ?-td value ?-theta value ?-phase value???\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -v0|voffset value -va|vamp value -freq value ?-td value ?-theta value ?-phase|phi value???\fP
 .br
 .RE
 .PP
@@ -2953,7 +2953,7 @@ Name of node connected to negative pin\&.
 Frequency of sinusoidal signal\&.
 .TP
 -phase
-Phase of signal, optional, require -td and -phase\&.
+Phase of signal, optional, require -td and -phase, alias -phi\&.
 .TP
 -td
 Time delay, optional\&.
@@ -2962,10 +2962,10 @@ Time delay, optional\&.
 Damping factor, optional, require -td\&.
 .TP
 -v0
-DC shift value\&.
+DC shift value, aliases: -voffset, -i0, -ioffset\&.
 .TP
 -va
-Amplitude value\&.
+Amplitude value, aliases: -vamp, -ia, -iamp\&.
 .RE
 .PP
 \fBDescription\fR

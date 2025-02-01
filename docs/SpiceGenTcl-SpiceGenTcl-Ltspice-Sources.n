@@ -33,7 +33,7 @@ SpiceGenTcl::Ltspice::Sources - Commands in namespace SpiceGenTcl::Ltspice::Sour
 .br
 \fBOBJECT constructor\fP \fIname npNode nmNode -i0|ioff value -ia|iamp value -fc|fcar value -mdi value -fs|fsig value\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -v0|ioffset value -va|iamp value -freq value ?-td value ?-theta value ?-phase|phi value ?-ncycles value????\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -i0|ioffset value -ia|iamp value -freq value ?-td value ?-theta value ?-phase|phi value ?-ncycles value????\fP
 .br
 \fBpulse create OBJNAME\fP \fIname type npNode nmNode ?args?\fP
 .br
@@ -1280,10 +1280,10 @@ nmNode
 Name of node connected to negative pin\&.
 .TP
 -high
-High value, alias -ion\&.
+High value, aliases: -von, ion\&.
 .TP
 -low
-Low value, alias -ioff\&.
+Low value, aliases: -voff, -ioff\&.
 .TP
 -np
 Number of pulses, optional, alias -ncycles\&.
@@ -1515,10 +1515,10 @@ Carrier frequency, alias -fcar\&.
 Signal frequency, alias -fsig\&.
 .TP
 -i0
-Initial value, alias -ioff\&.
+Initial value, aliases: -voff, -v0, -ioff\&.
 .TP
 -ia
-Pulsed value, alias -iamp\&.
+Pulsed value, aliases: -vamp, -va, -iamp\&.
 .TP
 -mdi
 Modulation index\&.
@@ -1605,7 +1605,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Isin that describes sinusoidal current source\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -v0|ioffset value -va|iamp value -freq value ?-td value ?-theta value ?-phase|phi value ?-ncycles value????\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -i0|ioffset value -ia|iamp value -freq value ?-td value ?-theta value ?-phase|phi value ?-ncycles value????\fP
 .br
 .RE
 .PP
@@ -1637,10 +1637,10 @@ Time delay, optional\&.
 Damping factor, optional, require -td\&.
 .TP
 -v0
-DC shift value, alias -ioffset\&.
+DC shift value, aliases: -voffset, -v0, -ioffset\&.
 .TP
 -va
-Amplitude value, alias -iamp\&.
+Amplitude value, aliases: -vamp, -va, -iamp\&.
 .RE
 .PP
 \fBDescription\fR
@@ -2573,10 +2573,10 @@ Name of node connected to negative pin\&.
 Parallel capacitor value, optional\&.
 .TP
 -high
-High value, alias -von\&.
+High value, aliases: -von, ion\&.
 .TP
 -low
-Low value, alias -voff\&.
+Low value, aliases: -voff, -ioff\&.
 .TP
 -np
 Number of pulses, optional, alias -ncycles\&.
@@ -2820,10 +2820,10 @@ Modulation index\&.
 Series resistor value, optional\&.
 .TP
 -v0
-Initial value, alias -voff\&.
+Initial value, aliases: -voff, -i0, -ioff\&.
 .TP
 -va
-Pulsed value, alias -vamp\&.
+Pulsed value, aliases: -vamp, -ia, -iamp\&.
 .RE
 .PP
 \fBDescription\fR
@@ -2945,10 +2945,10 @@ Time delay, optional\&.
 Damping factor, optional, require -td\&.
 .TP
 -v0
-DC shift value, alias -voffset\&.
+DC shift value, aliases: -voffset, -i0, -ioffset\&.
 .TP
 -va
-Amplitude value, alias -vamp\&.
+Amplitude value, aliases: -vamp, -ia, -iamp\&.
 .RE
 .PP
 \fBDescription\fR

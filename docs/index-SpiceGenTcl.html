@@ -692,8 +692,7 @@
     <i><font color=#76a396># Gets particular element object reference by its name.</font></i>
     <i><font color=#76a396>#  elemName - name of element</font></i>
     <b><font color=#ffa500>set</font></b> elemName [<b><font color=#ffa500>string</font></b> tolower <font color=#f1b479>$elemName</font>]
-    <b><font color=#ffa500>set</font></b> error [<b><font color=#ffa500>catch</font></b> {<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Elements</font> <font color=#f1b479>$elemName</font>}]
-    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$error</font>&gt;0} {
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>catch</font></b> {<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Elements</font> <font color=#f1b479>$elemName</font>}]} {
         <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Element with name '<font color=#f1b479>$</font>elemName' was not found in netlist's '<font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font>' list of elements&quot;</font>
     } <b><font color=#ffa500>else</font></b> {
         <b><font color=#ffa500>set</font></b> foundElem [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Elements</font> <font color=#f1b479>$elemName</font>]
@@ -1100,14 +1099,13 @@
     <i><font color=#76a396># Creates device string for SPICE netlist.</font></i>
     <i><font color=#76a396># Returns: SPICE netlist's string</font></i>
     <b><font color=#ffa500>dict</font></b> for {pinName pin} <font color=#f1b479>$Pins</font> {
-        <b><font color=#ffa500>set</font></b> error [<b><font color=#ffa500>catch</font></b> {<font color=#f1b479>$pin</font> genSPICEString} errStr]
-        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$error</font>!=1} {
+        <b><font color=#ffa500>if</font></b> {![<b><font color=#ffa500>catch</font></b> {<font color=#f1b479>$pin</font> genSPICEString}]} {
             <b><font color=#ffa500>lappend</font></b> nodes [<font color=#f1b479>$pin</font> genSPICEString]
         } <b><font color=#ffa500>else</font></b> {
             <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Device '<font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font>' can't be netlisted because '<font color=#f1b479>$</font>pinName' pin is floating&quot;</font>
         }
     }
-    <b><font color=#ffa500>if</font></b> {(<font color=#f1b479>$Params</font> eq <font color=#90ee90>&quot;&quot;</font>) || (![<b><font color=#ffa500>info</font></b> exists Params])} {
+    <b><font color=#ffa500>if</font></b> {(<font color=#f1b479>$Params</font> eq <font color=#90ee90>&quot;&quot;</font>) || ![<b><font color=#ffa500>info</font></b> exists Params]} {
         <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;&quot;</font>
         <b><font color=#fe6efe>return</font></b> <font color=#90ee90>&quot;<font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font> <font color=#f1b479>[</font>join <font color=#f1b479>$</font>nodes<font color=#f1b479>]</font>&quot;</font>
     } <b><font color=#ffa500>else</font></b> {
@@ -1194,8 +1192,7 @@
     <i><font color=#76a396>#  in other words, connect particular pin to particular node.</font></i>
     <i><font color=#76a396>#  pinName - name of the pin</font></i>
     <i><font color=#76a396>#  nodeName - name of the node that we want connect to pin</font></i>
-    <b><font color=#ffa500>set</font></b> error [<b><font color=#ffa500>catch</font></b> {<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Pins</font> <font color=#f1b479>$pinName</font>}]
-    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$error</font>&gt;0} {
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>catch</font></b> {<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Pins</font> <font color=#f1b479>$pinName</font>}]} {
         <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Pin with name '<font color=#f1b479>$</font>pinName' was not found in device's '<font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font>' list of pins '<font color=#f1b479>[</font>dict keys <font color=#f1b479>[</font>my getPins<font color=#f1b479>]]</font>'&quot;</font>
     } <b><font color=#ffa500>else</font></b> {
         <b><font color=#ffa500>set</font></b> pin [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Pins</font> <font color=#f1b479>$pinName</font>]
@@ -1845,8 +1842,7 @@
     <i><font color=#76a396># Gets particular element object reference by its name.</font></i>
     <i><font color=#76a396>#  elemName - name of element</font></i>
     <b><font color=#ffa500>set</font></b> elemName [<b><font color=#ffa500>string</font></b> tolower <font color=#f1b479>$elemName</font>]
-    <b><font color=#ffa500>set</font></b> error [<b><font color=#ffa500>catch</font></b> {<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Elements</font> <font color=#f1b479>$elemName</font>}]
-    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$error</font>&gt;0} {
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>catch</font></b> {<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Elements</font> <font color=#f1b479>$elemName</font>}]} {
         <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Element with name '<font color=#f1b479>$</font>elemName' was not found in netlist's '<font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font>' list of elements&quot;</font>
     } <b><font color=#ffa500>else</font></b> {
         <b><font color=#ffa500>set</font></b> foundElem [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Elements</font> <font color=#f1b479>$elemName</font>]
@@ -2245,7 +2241,7 @@
 
     <i><font color=#76a396># Creates string for SPICE netlist.</font></i>
     <i><font color=#76a396># Returns: SPICE netlist's string</font></i>
-    <b><font color=#fe6efe>return</font></b> <font color=#90ee90>&quot;<font color=#f1b479>[</font>my configure -value<font color=#f1b479>]</font>&quot;</font>
+    <b><font color=#fe6efe>return</font></b> [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-value</font>]
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::ParameterPositionalEquation'>ParameterPositionalEquation</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl" title="::SpiceGenTcl" class='ruff_cmd'>::SpiceGenTcl</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -2334,7 +2330,7 @@
 
     <i><font color=#76a396># Creates string for SPICE netlist.</font></i>
     <i><font color=#76a396># Results: SPICE netlist's string</font></i>
-    <b><font color=#fe6efe>return</font></b> <font color=#90ee90>&quot;<font color=#f1b479>[</font>my configure -value<font color=#f1b479>]</font>&quot;</font>
+    <b><font color=#fe6efe>return</font></b> [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-value</font>]
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::ParameterSwitch'>ParameterSwitch</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl" title="::SpiceGenTcl" class='ruff_cmd'>::SpiceGenTcl</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -2380,7 +2376,7 @@
 
     <i><font color=#76a396># Creates string for SPICE netlist.</font></i>
     <i><font color=#76a396># Returns: string '$name'</font></i>
-    <b><font color=#fe6efe>return</font></b> <font color=#90ee90>&quot;<font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font>&quot;</font>
+    <b><font color=#fe6efe>return</font></b> [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-name</font>]
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::ParamStatement'>ParamStatement</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl" title="::SpiceGenTcl" class='ruff_cmd'>::SpiceGenTcl</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -2609,7 +2605,7 @@
 
     <i><font color=#76a396># Determines if pin is connected to the node.</font></i>
     <i><font color=#76a396># Returns: `true` if connected and `false` if not</font></i>
-    <b><font color=#ffa500>if</font></b> {[<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-nodename</font>] eq {}} {
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-nodename</font>] eq <font color=#90ee90>&quot;&quot;</font>} {
         <b><font color=#ffa500>set</font></b> floating true
     } <b><font color=#ffa500>else</font></b> {
         <b><font color=#ffa500>set</font></b> floating false
@@ -2631,7 +2627,7 @@
     <b><font color=#ffa500>if</font></b> {[<b><font color=#fe6efe>my</font></b> checkFloating] eq <font color=#90ee90>&quot;true&quot;</font>} {
         <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Pin '<font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font>' is not connected to the node so can't be netlisted&quot;</font>
     }
-    <b><font color=#fe6efe>return</font></b> <font color=#90ee90>&quot;<font color=#f1b479>[</font>my configure -nodename<font color=#f1b479>]</font>&quot;</font>
+    <b><font color=#fe6efe>return</font></b> [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-nodename</font>]
 }</pre></div>
 </div></details>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Pin::unsetNodeName'>unsetNodeName</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Pin" title="::SpiceGenTcl::Pin" class='ruff_cmd'>::SpiceGenTcl::Pin</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Pin'>Pin</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
@@ -2689,7 +2685,6 @@
                 <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-Path</font> <font color=#f1b479>$path</font>
                 <b><font color=#ffa500>set</font></b> fileSize [<b><font color=#ffa500>file</font></b> size <font color=#f1b479>$path</font>]
                 <b><font color=#ffa500>set</font></b> file [<b><font color=#ffa500>open</font></b> <font color=#f1b479>$path</font> r]
-                <i><font color=#76a396>#chan configure $file -encoding iso8859-1</font></i>
                 <b><font color=#ffa500>fconfigure</font></b> <font color=#f1b479>$file</font> <font color=#b9b96e>-translation</font> binary
 
     <i><font color=#76a396>####  read header</font></i>
@@ -2784,7 +2779,7 @@
                     <b><font color=#ffa500>lappend</font></b> Traces <font color=#f1b479>$trace</font>
                     <b><font color=#ffa500>incr</font></b> ivar
                 }
-                <b><font color=#ffa500>if</font></b> {(<font color=#f1b479>$traces2read</font> eq <font color=#90ee90>&quot;&quot;</font>) || (![<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$traces2read</font>])} {
+                <b><font color=#ffa500>if</font></b> {(<font color=#f1b479>$traces2read</font> eq <font color=#90ee90>&quot;&quot;</font>) || ![<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$traces2read</font>]} {
                     <b><font color=#ffa500>close</font></b> <font color=#f1b479>$file</font>
                     <b><font color=#fe6efe>return</font></b>
                 }

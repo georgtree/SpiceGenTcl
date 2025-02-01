@@ -86,7 +86,7 @@
 
     <i><font color=#76a396># Reads raw data file, create RawFile object and return it's reference name.</font></i>
     <b><font color=#fe6efe>my</font></b> variable data
-    <b><font color=#ffa500>set</font></b> data [::SpiceGenTcl::RawFile new <font color=#90ee90>&quot;<font color=#f1b479>[</font>my configure -runlocation<font color=#f1b479>]</font>/<font color=#f1b479>[</font>my configure -LastRunFileName<font color=#f1b479>]</font>.raw&quot;</font>]
+    <b><font color=#ffa500>set</font></b> data [::SpiceGenTcl::RawFile new [<b><font color=#ffa500>file</font></b> join [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-runlocation</font>] [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-LastRunFileName</font>].raw] * ngspice]
     <b><font color=#fe6efe>return</font></b>
 }</pre></div>
 </div></details>
@@ -99,7 +99,7 @@
 <div id='SpiceGenTcl_Ngspice_Simulators_Batch_readLog' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> readLog {} {
 
     <i><font color=#76a396># Reads log file of last simulation and save it's content to Log variable.</font></i>
-    <b><font color=#ffa500>set</font></b> logFile [<b><font color=#ffa500>open</font></b> <font color=#90ee90>&quot;<font color=#f1b479>[</font>my configure -runlocation<font color=#f1b479>]</font>/<font color=#f1b479>[</font>my configure -LastRunFileName<font color=#f1b479>]</font>.log&quot;</font> r+]
+    <b><font color=#ffa500>set</font></b> logFile [<b><font color=#ffa500>open</font></b> [<b><font color=#ffa500>file</font></b> join [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-runlocation</font>] [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-LastRunFileName</font>].log] r+]
     <b><font color=#ffa500>set</font></b> log [<b><font color=#ffa500>read</font></b> <font color=#f1b479>$logFile</font>]
     <b><font color=#ffa500>close</font></b> <font color=#f1b479>$logFile</font>
     <b><font color=#fe6efe>return</font></b>
@@ -126,14 +126,14 @@
     }]
     <b><font color=#ffa500>set</font></b> firstLine [@ [<b><font color=#ffa500>split</font></b> <font color=#f1b479>$circuitStr</font> \n] 0]
     <b><font color=#ffa500>set</font></b> runLocation [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-runlocation</font>]
-    <b><font color=#ffa500>set</font></b> cirFile [<b><font color=#ffa500>open</font></b> <font color=#90ee90>&quot;<font color=#f1b479>${</font>runLocation<font color=#f1b479>}</font>/<font color=#f1b479>${</font>firstLine<font color=#f1b479>}</font>.cir&quot;</font> w+]
+    <b><font color=#ffa500>set</font></b> cirFile [<b><font color=#ffa500>open</font></b> [<b><font color=#ffa500>file</font></b> join <font color=#f1b479>$runLocation</font> <font color=#f1b479>${firstLine}</font>.cir] w+]
     <b><font color=#ffa500>puts</font></b> <font color=#f1b479>$cirFile</font> <font color=#f1b479>$circuitStr</font>
     <b><font color=#ffa500>close</font></b> <font color=#f1b479>$cirFile</font>
-    <b><font color=#ffa500>set</font></b> rawFileName <font color=#90ee90>&quot;<font color=#f1b479>${</font>runLocation<font color=#f1b479>}</font>/<font color=#f1b479>${</font>firstLine<font color=#f1b479>}</font>.raw&quot;</font>
-    <b><font color=#ffa500>set</font></b> logFileName <font color=#90ee90>&quot;<font color=#f1b479>${</font>runLocation<font color=#f1b479>}</font>/<font color=#f1b479>${</font>firstLine<font color=#f1b479>}</font>.log&quot;</font>
-    <b><font color=#ffa500>set</font></b> cirFileName <font color=#90ee90>&quot;<font color=#f1b479>${</font>runLocation<font color=#f1b479>}</font>/<font color=#f1b479>${</font>firstLine<font color=#f1b479>}</font>.cir&quot;</font>
-    <b><font color=#ffa500>exec</font></b> <font color=#90ee90>&quot;<font color=#f1b479>[</font>my configure -Command<font color=#f1b479>]</font>&quot;</font> <font color=#b9b96e>-b</font> <font color=#b9b96e>-r</font> <font color=#f1b479>$rawFileName</font> <font color=#b9b96e>-o</font> <font color=#f1b479>$logFileName</font> <font color=#f1b479>$cirFileName</font>
-    <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-LastRunFileName</font> <font color=#f1b479>${firstLine}</font>
+    <b><font color=#ffa500>set</font></b> rawFileName [<b><font color=#ffa500>file</font></b> join <font color=#f1b479>$runLocation</font> <font color=#f1b479>${firstLine}</font>.raw]
+    <b><font color=#ffa500>set</font></b> logFileName [<b><font color=#ffa500>file</font></b> join <font color=#f1b479>$runLocation</font> <font color=#f1b479>${firstLine}</font>.log]
+    <b><font color=#ffa500>set</font></b> cirFileName [<b><font color=#ffa500>file</font></b> join <font color=#f1b479>$runLocation</font> <font color=#f1b479>${firstLine}</font>.cir]
+    <b><font color=#ffa500>exec</font></b> {<b><font color=#ffa500>*</font></b>}[<b><font color=#ffa500>list</font></b> [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-Command</font>] <font color=#b9b96e>-b</font> <font color=#b9b96e>-r</font> <font color=#f1b479>$rawFileName</font> <font color=#b9b96e>-o</font> <font color=#f1b479>$logFileName</font> <font color=#f1b479>$cirFileName</font>]
+    <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-LastRunFileName</font> <font color=#f1b479>$firstLine</font>
     <b><font color=#fe6efe>my</font></b> readLog
     <b><font color=#fe6efe>my</font></b> readData
     <b><font color=#ffa500>if</font></b> {![<b><font color=#ffa500>info</font></b> exists nodelete]} {
@@ -178,12 +178,12 @@
     }]
     <b><font color=#ffa500>set</font></b> firstLine [@ [<b><font color=#ffa500>split</font></b> <font color=#f1b479>$circuitStr</font> \n] 0]
     <b><font color=#ffa500>set</font></b> runLocation [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-runlocation</font>]
-    <b><font color=#ffa500>set</font></b> cirFile [<b><font color=#ffa500>open</font></b> <font color=#90ee90>&quot;<font color=#f1b479>${</font>runLocation<font color=#f1b479>}</font>/<font color=#f1b479>${</font>firstLine<font color=#f1b479>}</font>.cir&quot;</font> w+]
+    <b><font color=#ffa500>set</font></b> cirFile [<b><font color=#ffa500>open</font></b> [<b><font color=#ffa500>file</font></b> join <font color=#f1b479>$runLocation</font> <font color=#f1b479>${firstLine}</font>.cir] w+]
     <b><font color=#ffa500>puts</font></b> <font color=#f1b479>$cirFile</font> <font color=#f1b479>$circuitStr</font>
     <b><font color=#ffa500>close</font></b> <font color=#f1b479>$cirFile</font>
-    <b><font color=#ffa500>set</font></b> rawFileName <font color=#90ee90>&quot;<font color=#f1b479>${</font>runLocation<font color=#f1b479>}</font>/<font color=#f1b479>${</font>firstLine<font color=#f1b479>}</font>.raw&quot;</font>
-    <b><font color=#ffa500>set</font></b> logFileName <font color=#90ee90>&quot;<font color=#f1b479>${</font>runLocation<font color=#f1b479>}</font>/<font color=#f1b479>${</font>firstLine<font color=#f1b479>}</font>.log&quot;</font>
-    <b><font color=#ffa500>set</font></b> cirFileName <font color=#90ee90>&quot;<font color=#f1b479>${</font>runLocation<font color=#f1b479>}</font>/<font color=#f1b479>${</font>firstLine<font color=#f1b479>}</font>.cir&quot;</font>
+    <b><font color=#ffa500>set</font></b> rawFileName [<b><font color=#ffa500>file</font></b> join <font color=#f1b479>$runLocation</font> <font color=#f1b479>${firstLine}</font>.raw]
+    <b><font color=#ffa500>set</font></b> logFileName [<b><font color=#ffa500>file</font></b> join <font color=#f1b479>$runLocation</font> <font color=#f1b479>${firstLine}</font>.log]
+    <b><font color=#ffa500>set</font></b> cirFileName [<b><font color=#ffa500>file</font></b> join <font color=#f1b479>$runLocation</font> <font color=#f1b479>${firstLine}</font>.cir]
     <b><font color=#ffa500>set</font></b> command [<b><font color=#ffa500>list</font></b> [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-Command</font>] <font color=#b9b96e>-b</font> <font color=#f1b479>$cirFileName</font> <font color=#b9b96e>-r</font> <font color=#f1b479>$rawFileName</font>]
     <b><font color=#ffa500>set</font></b> chan [<b><font color=#ffa500>open</font></b> <font color=#90ee90>&quot;|<font color=#f1b479>$</font>command 2&gt;@1&quot;</font>]
     <b><font color=#ffa500>set</font></b> logData <font color=#90ee90>&quot;&quot;</font>
