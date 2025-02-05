@@ -1430,7 +1430,7 @@ namespace eval ::SpiceGenTcl {
             }
             # get netlist elements from netlist genSPICEString method 
             set resStr [next]
-            return [join [list $header $resStr .ends] \n]
+            return [join [list $header $resStr ".ends $name"] \n]
         }
     }
     

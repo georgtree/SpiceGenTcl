@@ -1,0 +1,66 @@
+#  .|'''.|            ||                   ..|'''.|                   |''||''|         '||'
+#  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||  
+#   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||  
+# .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||  
+# |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||. 
+#            ||                                                                             
+#           ''''                                                                            
+# netlistParserClassNgpice.test
+# Tests Ngspice netlist parser class
+#
+# Copyright (c) 2024 George Yashin, georgtree@gmail.com
+#
+# MIT License
+# See the file "LICENSE.txt" for information on usage and redistribution
+# of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+package require tcltest
+namespace import ::tcltest::*
+package require SpiceGenTcl
+namespace import ::SpiceGenTcl::*
+importNgspice
+
+set epsilon 1e-8
+set testDir [file dirname [info script]]
+set netlistsLoc [file join $testDir netlists_parser]
+
+proc matchList {expected actual} {
+    variable epsilon
+    set match 1
+    set len [llength $expected]
+    for {set i 0} {$i<$len} {incr i} {
+        set exp [@ $expected $i]
+        set act [@ $actual $i]
+        if {abs($act-$exp) > $epsilon} {
+            set match 0
+            break
+        }
+    }
+    return $match
+}
+    
+    
+proc readResultFile {path} {
+    set file [open $path r+]
+    set lines [split [read $file] "\n"]
+    close $file                     
+    foreach line $lines {
+        set data [textutil::split::splitx [string trim $line]]
+        lappend timeData [@ $data 0]
+        lappend traceData [@ $data 1]
+    }
+    return [list $timeData $traceData]
+}
+    
+
+
+###  Parser class tests 
+
+test testParserClass-1 {test Parser class} -setup {
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc diffpair.cir]]
+    $parser readFile
+} -body {
+    return [$parser configure -FileData]
+} -result "{simple differential pair - CM and DM dc sensitivity} {* Models:} {.model qnl npn(level=1 bf=80 rb=100 ccs=2pf tf=0.3ns tr=6ns cje=3pf cjc=2pf va=50)} {.model qnr npn(level=1 bf=80 rb=100 ccs=2pf tf=0.3ns tr=6ns cje=3pf cjc=2pf va=50)} {.options noacct} {* Circuit description:} {q1 4 2 6 qnr} {q2 5 3 6 qnl} {rs1 11 2 1k} {rs2 3 1 1k} {rc1 4 8 10k} {rc2 5 8 10k} {q3 7 7 9 qnl} {q4 6 7 9 qnr} {rbias 7 8 20k} {* Inputs/Supplies:} {vcm 1 0 dc 0 sin(0 0.1 5meg) ac 1} {vdm 1 11 dc 0 sin(0 0.1 5meg) ac 1} {vcc 8 0 12} {vee 9 0 -12} {* Analysys:} {.tf v(5) vcm} {.tf v(5) vdm} {.sens v(5,4)} .end" -cleanup {
+    unset parser
+}
+

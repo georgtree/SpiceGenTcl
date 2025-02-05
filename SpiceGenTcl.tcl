@@ -22,6 +22,7 @@ namespace import ::tcl::mathop::*
 package provide SpiceGenTcl 0.65
 
 interp alias {} dget {} dict get
+
 interp alias {} @ {} lindex
 interp alias {} = {} expr
 interp alias {} dexist {} dict exists
@@ -41,6 +42,7 @@ source [file join $sourceDir ngspice specElementsClassesNgspice.tcl]
 source [file join $sourceDir ngspice specAnalysesClassesNgspice.tcl]
 source [file join $sourceDir ngspice specModelsClassesNgspice.tcl]
 source [file join $sourceDir ngspice specSimulatorClassesNgspice.tcl]
+source [file join $sourceDir ngspice netlistParserClassNgspice.tcl]
 source [file join $sourceDir xyce specAnalysesClassesXyce.tcl]
 source [file join $sourceDir xyce specElementsClassesXyce.tcl]
 source [file join $sourceDir xyce specModelsClassesXyce.tcl]
