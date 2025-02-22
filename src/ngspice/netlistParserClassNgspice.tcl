@@ -211,23 +211,26 @@ namespace eval ::SpiceGenTcl::Ngspice {
                 }
             }
         }
-        method ParseParams {string {exclude {}}} {
-            # Parses parameters from the line that has substring in form `name=value`, or `name={value}`.
-            #   string - string to parse
-            # Returns: dictionary of the form `{{name1 value1} {name2 value2} ...}`
-            set matches [regexp -all -inline {\S+\s*=\s*\S+} $string]
-            set results ""
-            foreach value $matches {
-                set splitted [split $value =]
-                set name [@ $splitted 0]
-                if {$name in $exclude} {
-                    continue
-                }
-                set val [@ $splitted 1]
-                if {[my CheckBraced $val]} {
-                    lappend results -$name [list [my Unbrace $val] -eq]
+        method ParseParams {list start {exclude {}}} {
+            # Parses parameters from the list starts from `start` that is in form `name=value`, or `name={value}`.
+            #   list - input list
+            #   start - start index
+            #   exclude - list of parameters names that should be omitted from output
+            # Returns: list of the form `{-name1 value1 -name2 value2 ...}`
+            set results {}
+            foreach elem [lrange $list $start end] {
+                if {[my CheckEqual $elem]} {
+                    lassign [my ParseWithEqual $elem] name value
+                    set name -$name
+                } elseif {[my CheckBracedWithEqual $elem]} {
+                    lassign [my ParseBracedWithEqual $elem] name value
+                    set name -$name
+                    set value [list $value -eq]
                 } else {
-                    lappend results -[@ $splitted 0] [@ $splitted 1]
+                    return -code error "Parameter '${elem}' parsing failed"
+                }
+                if {$name ni [lmap nameExc $exclude {subst "-$nameExc"}]} {
+                    lappend results $name $value
                 }
             }
             return $results
@@ -337,11 +340,11 @@ namespace eval ::SpiceGenTcl::Ngspice {
                     # check if rval has form '{param}'
                     set rval [list [my Unbrace $rval] -eq]
                     [my configure -Netlist] add [Resistor new $elemName $pin1 $pin2 -r $rval -model $fourth\
-                                                         {*}[my ParseParams $line {r model beh}]]
+                                                         {*}[my ParseParams $lineList 5 {r model beh}]]
                 } elseif {[my CheckNumber $rval]} {
                     # check if rval is a valid float value
                     [my configure -Netlist] add [Resistor new $elemName $pin1 $pin2 -r $rval -model $fourth\
-                                                         {*}[my ParseParams $line {r model beh}]]
+                                                         {*}[my ParseParams $lineList 5 {r model beh}]]
                 } else {
                     return -code error "Creating resistor object from line '${line}' failed due to wrong or incompatible\
                             syntax"
@@ -352,20 +355,21 @@ namespace eval ::SpiceGenTcl::Ngspice {
                     regexp {^r=\{([^{}]*)\}$} $rval match value
                     set rval $value
                     [my configure -Netlist] add [Resistor new $elemName $pin1 $pin2 -r $rval -beh\
-                                                         {*}[my ParseParams $line {r model beh}]]
+                                                         {*}[my ParseParams $lineList 4 {r model beh}]]
                 } elseif {[my CheckBraced $rval]} {
                     # check if rval has form `{param}`
                     set rval [list [my Unbrace $rval] -eq]
+                    #puts "$elemName $pin1 $pin2 -r $rval [my ParseParams $line {r model beh}]"
                     [my configure -Netlist] add [Resistor new $elemName $pin1 $pin2 -r $rval\
-                                                         {*}[my ParseParams $line {r model beh}]]
+                                                         {*}[my ParseParams $lineList 4 {r model beh}]]
                 } elseif {[my CheckNumber $rval]} {
                     # check if rval is a valid float value
                     [my configure -Netlist] add [Resistor new $elemName $pin1 $pin2 -r $rval\
-                                                         {*}[my ParseParams $line {r model beh}]]
+                                                         {*}[my ParseParams $lineList 4 {r model beh}]]
                 } elseif {[my CheckModelName $rval]} {
                     # check if rval contains valid model value
                     [my configure -Netlist] add [Resistor new $elemName $pin1 $pin2 -model $rval\
-                                                         {*}[my ParseParams $line {r model beh}]]
+                                                         {*}[my ParseParams $lineList 4 {r model beh}]]
                 } else {
                     return -code error "Creating resistor object from line '${line}' failed due to wrong or incompatible\
                         syntax"

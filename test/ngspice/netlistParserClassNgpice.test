@@ -241,3 +241,18 @@ syntax" -cleanup {
     file delete [file join $netlistsLoc temp1]
     unset parser errorStr
 }
+
+test testParserClass-15 {test Parser class, resistors parsing, edge case} -setup {
+    set file [open [file join $netlistsLoc temp1] w+]
+    puts $file ""
+    puts $file {rs2 a b {v} {v(a)+v(b)/i(b)} tc2=1}
+    close $file
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
+    $parser readFile
+    catch {$parser buildNetlist} errorStr
+} -body {
+    return $errorStr
+} -result "Parameter '{v(a)+v(b)/i(b)}' parsing failed" -cleanup {
+    file delete [file join $netlistsLoc temp1]
+    unset parser errorStr
+}
