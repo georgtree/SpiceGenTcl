@@ -16,6 +16,7 @@
 
 package require Tcl 9.0-
 package require textutil::split
+package require struct::list
 package require csv
 namespace import ::tcl::mathop::*
 
@@ -28,6 +29,8 @@ interp alias {} = {} expr
 interp alias {} dexist {} dict exists
 interp alias {} dcreate {} dict create
 interp alias {} dset {} dict set
+interp alias {} dappend {} dict append
+interp alias {} dkeys {} dict keys
 
 set dir [file dirname [file normalize [info script]]]
 set libDir "${dir}/lib"

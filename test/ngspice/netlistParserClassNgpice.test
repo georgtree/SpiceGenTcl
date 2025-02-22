@@ -56,11 +56,188 @@ proc readResultFile {path} {
 ###  Parser class tests 
 
 test testParserClass-1 {test Parser class} -setup {
-    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc diffpair.cir]]
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc diffpair_continue.cir]]
     $parser readFile
 } -body {
     return [$parser configure -FileData]
-} -result "{simple differential pair - CM and DM dc sensitivity} {* Models:} {.model qnl npn(level=1 bf=80 rb=100 ccs=2pf tf=0.3ns tr=6ns cje=3pf cjc=2pf va=50)} {.model qnr npn(level=1 bf=80 rb=100 ccs=2pf tf=0.3ns tr=6ns cje=3pf cjc=2pf va=50)} {.options noacct} {* Circuit description:} {q1 4 2 6 qnr} {q2 5 3 6 qnl} {rs1 11 2 1k} {rs2 3 1 1k} {rc1 4 8 10k} {rc2 5 8 10k} {q3 7 7 9 qnl} {q4 6 7 9 qnr} {rbias 7 8 20k} {* Inputs/Supplies:} {vcm 1 0 dc 0 sin(0 0.1 5meg) ac 1} {vdm 1 11 dc 0 sin(0 0.1 5meg) ac 1} {vcc 8 0 12} {vee 9 0 -12} {* Analysys:} {.tf v(5) vcm} {.tf v(5) vdm} {.sens v(5,4)} .end" -cleanup {
+} -result "{.model qnl npn(level=1 bf=80 rb=100 ccs=2pf tf=0.3ns tr=6ns cje=3pf cjc=2pf va=50)} {.model qnr npn(level=1\
+bf=80 rb=100 ccs=2pf tf=0.3ns tr=6ns cje=3pf cjc=2pf va=50)} {.options noacct} {q1 4 2 6 qnr} {q2 5 3 6 qnl} {rs1 11 2\
+1k} {rs2 3 1 1k} {rc1 4 8 10k} {rc2 5 8 10k} {q3 7 7 9 qnl} {q4 6 7 9 qnr} {rbias 7 8 20k} {vcm 1 0 dc 0 sin(0 0.1 5meg)\
+ac 1} {vdm 1 11 dc 0 sin(0 0.1 5meg) ac 1} {vcc 8 0 12} {vee 9 0 -12} {.tf v(5) vcm} {.tf v(5) vdm} {.sens v(5,4)}\
+.end" -cleanup {
     unset parser
 }
 
+test testParserClass-2 {test Parser class} -setup {
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc adder_mos.cir]]
+    $parser readFile
+} -body {
+    return [$parser configure -FileData]
+} -result "{.subckt nand in1 in2 out vdd} {m1 out in2 vdd vdd p1 w=7.5u l=0.35u pd=13.5u ad=22.5p ps=13.5u as=22.5p}\
+{m2 net.1 in2 0 0 n1 w=3u l=0.35u pd=9u ad=9p ps=9u as=9p} {m3 out in1 vdd vdd p1 w=7.5u l=0.35u pd=13.5u ad=22.5p\
+ps=13.5u as=22.5p} {m4 out in1 net.1 0 n1 w=3u l=0.35u pd=9u ad=9p ps=9u as=9p} {.ends nand} {.subckt onebit 1 2 3 4 5\
+6} {x1 1 2 7 6 nand} {x2 1 7 8 6 nand} {x3 2 7 9 6 nand} {x4 8 9 10 6 nand} {x5 3 10 11 6 nand} {x6 3 11 12 6 nand} {x7\
+10 11 13 6 nand} {x8 12 13 4 6 nand} {x9 11 7 5 6 nand} {.ends onebit} {.subckt twobit 1 2 3 4 5 6 7 8 9} {x1 1 2 7 5\
+10 9 onebit} {x2 3 4 10 6 8 9 onebit} {.ends twobit} {.subckt fourbit 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15} {x1 1 2 3 4\
+9 10 13 16 15 twobit} {x2 5 6 7 8 11 12 16 14 15 twobit} {.ends fourbit} {vcc 99 0 dc 3.3v} {vin1a 1 0 dc 0 pulse(0 3\
+0 5ns 5ns 20ns 50ns)} {vin1b 2 0 dc 0 pulse(0 3 0 5ns 5ns 30ns 100ns)} {vin2a 3 0 dc 0 pulse(0 3 0 5ns 5ns 50ns 200ns)}\
+{vin2b 4 0 dc 0 pulse(0 3 0 5ns 5ns 90ns 400ns)} {vin3a 5 0 dc 0 pulse(0 3 0 5ns 5ns 170ns 800ns)} {vin3b 6 0 dc 0\
+pulse(0 3 0 5ns 5ns 330ns 1600ns)} {vin4a 7 0 dc 0 pulse(0 3 0 5ns 5ns 650ns 3200ns)} {vin4b 8 0 dc 0 pulse(0 3 0 5ns\
+5ns 1290ns 6400ns)} {x1 1 2 3 4 5 6 7 8 9 10 11 12 0 13 99 fourbit} {.option noinit acct} {.tran 500p 6400ns} {.save\
+v(1) v(2) v(3) v(4) v(5) v(6) v(7) v(8)} {.model n1 nmos level=49 version=3.3.0} {.model p1 pmos level=49 version=3.3.0}\
+.end" -cleanup {
+    unset parser
+}
+
+test testParserClass-3 {test Parser class} -setup {
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc adder_mos.cir]]
+    $parser readFile
+} -body {
+    $parser getSubcircuitLines
+    return [$parser configure -SubcktsBoundaries]
+} -result "nand {0 5} onebit {6 16} twobit {17 20} fourbit {21 24}" -cleanup {
+    unset parser
+}
+
+test testParserClass-4 {test Parser class} -setup {
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc adder_mos_unmatched_subckt.cir]]
+    $parser readFile
+} -body {
+    catch {$parser getSubcircuitLines} errorStr
+    return $errorStr
+} -result "Subcircuit 'fourbit' doesn't have matched .ends statement" -cleanup {
+    unset parser
+}
+
+test testParserClass-5 {test Parser class} -setup {
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc adder_mos_unmatched_subckt_1.cir]]
+    $parser readFile
+} -body {
+    catch {$parser getSubcircuitLines} errorStr
+    return $errorStr
+} -result "Netlist contains mismatched .subckt .ends statements near definition of 'fourbit'" -cleanup {
+    unset parser
+}
+
+test testParserClass-6 {test Parser class} -setup {
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc adder_mos_unmatched_subckt_2.cir]]
+    $parser readFile
+} -body {
+    catch {$parser getSubcircuitLines} errorStr
+    return $errorStr
+} -result ".ends statement appears on line 0 (pre-processed netlist) before definition of subcircuit begins" -cleanup {
+    unset parser
+}
+
+test testParserClass-7 {test Parser class with nested subcircuit} -setup {
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc adder_mos_nested_subckt.cir]]
+    $parser readFile
+} -body {
+    catch {$parser getSubcircuitLines} errorStr
+    return $errorStr
+} -result "Subcircuit 'onebit' doesn't have matched .ends statement" -cleanup {
+    unset parser
+}
+
+test testParserClass-8 {test Parser class} -setup {
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc diffpair_cir_build.cir]]
+    $parser readFile
+    $parser buildNetlist
+} -body {
+    return [[$parser configure -Netlist] genSPICEString]
+} -result "rs1 11 2 {res}
+rs2 3 1 r={v(a)+v(b)/i(b)} tc2=1
+rc1 4 8 10k tc1=2 tc2={tcrt}
+rc2 5 8 10k
+rbias 7 8 20k" -cleanup {
+    unset parser
+}
+
+test testParserClass-9 {test Parser class} -setup {
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc diffpair_cir_build_res_err_syntax.cir]]
+    $parser readFile
+    catch {$parser buildNetlist} errorStr
+} -body {
+    return $errorStr
+} -result "Creating resistor object from line 'rs2 3 1 r={v(a)+v(b)/i(b)}}} tc2=1' failed due to wrong or incompatible\
+syntax" -cleanup {
+    unset parser
+}
+
+test testParserClass-10 {test Parser class, resistors parsing} -setup {
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc resistors_test.cir]]
+    $parser readFile
+    $parser buildNetlist
+} -body {
+    return [[$parser configure -Netlist] genSPICEString]
+} -result "rs2 3 1 r={v(a)+v(b)/i(b)} tc2=1
+rc1 4 8 10k tc1=2 tc2={tcrt}
+rc2 5 8 10k
+rc3 9 2 10k res1
+rc4 4 5 res1 l={l1} w=2u
+rc5 4 5 {rpar} res1 l={l1} w=2u
+rb1 netp netm resmod l=1e-6 temp=25" -cleanup {
+    unset parser
+}
+
+test testParserClass-11 {test Parser class, resistors parsing, edge case} -setup {
+    set file [open [file join $netlistsLoc temp1] w+]
+    puts $file ""
+    puts $file {rs2 3 1 3 r={v(a)+v(b)/i(b)} tc2=1}
+    close $file
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
+    $parser readFile
+    $parser buildNetlist
+} -body {
+    return [[$parser configure -Netlist] genSPICEString]
+} -result "rs2 3 1 3 tc2=1" -cleanup {
+    file delete [file join $netlistsLoc temp1]
+    unset parser
+}
+
+test testParserClass-12 {test Parser class, resistors parsing, edge case} -setup {
+    set file [open [file join $netlistsLoc temp1] w+]
+    puts $file ""
+    puts $file {rs2 3 1 n r={v(a)+v(b)/i(b)} tc2=1}
+    close $file
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
+    $parser readFile
+    catch {$parser buildNetlist} errorStr
+} -body {
+    return $errorStr
+} -result "-tc2 conflicts with -model" -cleanup {
+    file delete [file join $netlistsLoc temp1]
+    unset parser errorStr
+}
+
+test testParserClass-13 {test Parser class, resistors parsing, edge case} -setup {
+    set file [open [file join $netlistsLoc temp1] w+]
+    puts $file ""
+    puts $file {rs2 3 1 beh={v(a)+v(b)/i(b)} tc2=1}
+    close $file
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
+    $parser readFile
+    catch {$parser buildNetlist} errorStr
+} -body {
+    return $errorStr
+} -result "Creating resistor object from line 'rs2 3 1 beh={v(a)+v(b)/i(b)} tc2=1' failed due to wrong or incompatible\
+syntax" -cleanup {
+    file delete [file join $netlistsLoc temp1]
+    unset parser errorStr
+}
+
+test testParserClass-14 {test Parser class, resistors parsing, edge case} -setup {
+    set file [open [file join $netlistsLoc temp1] w+]
+    puts $file ""
+    puts $file {rs2 a b ! {v(a)+v(b)/i(b)} tc2=1}
+    close $file
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
+    $parser readFile
+    catch {$parser buildNetlist} errorStr
+} -body {
+    return $errorStr
+} -result "Creating resistor object from line 'rs2 a b ! {v(a)+v(b)/i(b)} tc2=1' failed due to wrong or incompatible\
+syntax" -cleanup {
+    file delete [file join $netlistsLoc temp1]
+    unset parser errorStr
+}
