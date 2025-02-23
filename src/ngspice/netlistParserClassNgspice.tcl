@@ -53,7 +53,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             my configure -dotsMethods [dcreate ac CreateAc dc CreateDc func CreateFunc global CreateGlobal ic CreateIc\
                                                include CreateInclude model CreateModel nodeset CreateNodeset op CreateOp\
                                                options CreateOptions param CreateParam sens CreateSens sp CreateSp\
-                                               temp CreateTemp tran CreateTran]
+                                               temp CreateTemp tran CreateTran params CreateParam]
             my configure -supModelsTypes {r c l sw csw d npn pnp njf pjf nmos pmos nmf pmf}
             my configure -Netlist [Netlist new [file tail $filepath]]
             set ModelTemplate {oo::class create @type@ {
@@ -64,7 +64,6 @@ namespace eval ::SpiceGenTcl::Ngspice {
                 }
             }}
         }
-
         method AddModelName {name} {
             lappend ModelNames $name
         }
@@ -195,7 +194,6 @@ namespace eval ::SpiceGenTcl::Ngspice {
             my configure -SubcktsBoundaries $subckts
             return
         }
-        
         method buildNetlist {} {
             # Builds the rest of the circuit without subckt definitions lines.
             set fileData [my configure -FileData]
@@ -237,6 +235,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
                     continue
                 }
             }
+            return
         }
         method CreateModel {line} {
             # Creates model object from passed line and add it to netlist
@@ -329,12 +328,70 @@ namespace eval ::SpiceGenTcl::Ngspice {
                     }
                 }
             }
+            return
+        }
+        method CreateOp {line} {
+            [my configure -Netlist] add [Op new]
+            return
         }
         method CreateAc {line} {
-
+            set lineList [lrange [split $line] 1 end]
+            [my configure -Netlist] add [Ac new {*}[my ParsePosParams $lineList {variation n fstart fstop}]]
+            return
         }
         method CreateDc {line} {
-
+            set lineList [lrange [split $line] 1 end]
+            set paramsNames {src start stop incr}
+            if {[llength $lineList]>[llength $paramsNames]} {
+                puts "DC analysis with multiple sources is not supported in SpiceGenTcl, skip the other sources in line\
+                        '${line}'"
+            }
+            [my configure -Netlist] add [Dc new {*}[my ParsePosParams $lineList $paramsNames]]
+            return
+        }
+        method CreateTran {line} {
+            set lineList [lrange [split $line] 1 end]
+            set paramsNames {tstep tstop tstart tmax}
+            if {[set index [lsearch -exact $lineList uic]]!=-1} {
+                set lineList [lremove $lineList $index]
+                set configParams [linsert [my ParsePosParams $lineList $paramsNames] end -uic]
+                [my configure -Netlist] add [Tran new {*}$configParams]
+            } else {
+                [my configure -Netlist] add [Tran new {*}[my ParsePosParams $lineList $paramsNames]]
+            }
+            return
+        }
+        method CreateSens {line} {
+            if {[regexp {(v|i)\(([^{}()=]+)\)} $line]} {
+                set line [regsub -command {(v|i)\(([^{}()=]+)\)} $line {apply {{- a b} {
+                    format %s(%s) $a [string map {" " ""} $b]
+                }}}]
+                set lineList [lrange [split $line] 1 end]
+                if {[@ $lineList 1] eq {}} {
+                    [my configure -Netlist] add [SensDc new -outvar [@ $lineList 0]]
+                } elseif {[@ $lineList 1] eq {ac}} {
+                    set lineList [lremove $lineList 1]
+                    set paramsNames {outvar variation n fstart fstop}
+                    [my configure -Netlist] add [SensAc new {*}[my ParsePosParams $lineList $paramsNames]]
+                } else {
+                    error "Sense analysis has usupported type '[@ $lineList 1]'"
+                }
+            } else {
+                error "Sense analysis in line '${line}' doesn't have output variable with proper syntax"
+            }
+            return
+        }
+        method CreateSp {line} {
+            set lineList [lrange [split $line] 1 end]
+            set paramsNames {variation n fstart fstop}
+            if {[@ $lineList 4]==1} {
+                set lineList [lremove $lineList 4]
+                set configParams [linsert [my ParsePosParams $lineList $paramsNames] end -donoise]
+                [my configure -Netlist] add [Sp new {*}$configParams]
+            } else {
+                [my configure -Netlist] add [Sp new {*}[my ParsePosParams $lineList $paramsNames]]
+            }
+            return
         }
         method CreateFunc {line} {
 
@@ -351,52 +408,89 @@ namespace eval ::SpiceGenTcl::Ngspice {
         method CreateNodeset {line} {
 
         }
-        method CreateOp {line} {
-
-        }
         method CreateOptions {line} {
 
         }
         method CreateParam {line} {
-
-        }
-        method CreateSens {line} {
-
-        }
-        method CreateSp {line} {
-
+            set lineList [lrange [split $line] 1 end]
+            [my configure -Netlist] add [ParamStatement new [my ParseParams $lineList 0 {} list]]
+            return
         }
         method CreateTemp {line} {
 
         }
-        method CreateTran {line} {
-
-        }
-
-        method ParseParams {list start {exclude {}}} {
+        method ParseParams {list start {exclude {}} {format arg}} {
             # Parses parameters from the list starts from `start` that is in form `name=value`, or `name={value}`.
             #   list - input list
             #   start - start index
             #   exclude - list of parameters names that should be omitted from output
-            # Returns: list of the form `{-name1 value1 -name2 value2 ...}`
+            #   format - select format of output list, arg: `{-name1 value1 -name2 value2 ...}`, list:
+            #    `{{name1 value1 ?qual?} {name2 value2 ?qual?} ...}`
+            # Returns: formatted list of parameters
             set results {}
             foreach elem [lrange $list $start end] {
                 if {[my CheckEqual $elem]} {
                     lassign [my ParseWithEqual $elem] name value
-                    set name -$name
+                    if {$format eq {arg}} {
+                        set name -$name
+                    } elseif {$format eq {list}} {
+                        set nameValue [list $name $value]
+                    }
                 } elseif {[my CheckBracedWithEqual $elem]} {
                     lassign [my ParseBracedWithEqual $elem] name value
-                    set name -$name
-                    set value [list $value -eq]
+                    if {$format eq {arg}} {
+                        set name -$name
+                        set value [list $value -eq]
+                    } elseif {$format eq {list}} {
+                        set nameValue [list $name $value -eq]
+                    }
                 } else {
                     return -code error "Parameter '${elem}' parsing failed"
                 }
-                if {$name ni [lmap nameExc $exclude {subst "-$nameExc"}]} {
-                    if {$value eq {}} {
-                        return -code error "Parameter '${elem}' parsing failed: value is empty"
+                if {$format eq {arg}} {
+                    if {$name ni [lmap nameExc $exclude {subst "-$nameExc"}]} {
+                        if {$value eq {}} {
+                            return -code error "Parameter '${elem}' parsing failed: value is empty"
+                        }
+                        lappend results $name $value
                     }
-                    lappend results $name $value
+                } elseif {$format eq {list}} {
+                    if {$name ni [lmap nameExc $exclude {subst "$nameExc"}]} {
+                        if {$value eq {}} {
+                            return -code error "Parameter '${elem}' parsing failed: value is empty"
+                        }
+                        lappend results $nameValue
+                    }
                 }
+            }
+            return $results
+        }
+        method ParsePosParams {list names} {
+            # Parses parameters from the list starts from `start` that is in form `value` or `{value}`.
+            #   list - input list of parameters in order of elements in `names` list
+            #   names - names of parameters
+            # Returns: list of the form `{-name1 value1 -name2 value2 ...}`
+            set results {}
+            if {[llength $list]!=[llength $names]} {
+                if {[llength $list]>[llength $names]} {
+                    set upperBound [llength $names]
+                } else {
+                    set upperBound [llength $list]
+                }
+            } else {
+                set upperBound [llength $list]
+            }
+            for {set i 0} {$i<$upperBound} {incr i} {
+                set elem [@ $list $i]
+                set name [@ $names $i]
+                if {[my CheckBraced $elem]} {
+                    set value [list [my Unbrace $elem] -eq]
+                    set name -$name
+                } else {
+                    set name -$name
+                    set value $elem
+                }
+                lappend results $name $value
             }
             return $results
         }
