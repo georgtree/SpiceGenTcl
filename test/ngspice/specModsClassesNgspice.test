@@ -111,10 +111,10 @@ test testJfet2ModelClass-1 {test Jfet2Model class} -setup {
 ###  Mesfet1Model class tests 
     
 test testMesfet1ModelClass-1 {test Mesfet1Model class} -setup {
-    set mod [Mesfet1Model new mesfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4 -cgd 1e-12]
+    set mod [Mesfet1Model new mesfetmod nmf -vto 2 -beta 1e-3 -lambda 1e-4 -cgd 1e-12]
 } -body {
     set result [$mod genSPICEString]
-} -result ".model mesfetmod njf(level=1 vto=2 beta=1e-3 lambda=1e-4 cgd=1e-12)" -cleanup {
+} -result ".model mesfetmod nmf(level=1 vto=2 beta=1e-3 lambda=1e-4 cgd=1e-12)" -cleanup {
     unset mod result
 }
 
