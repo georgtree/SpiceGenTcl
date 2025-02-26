@@ -428,6 +428,9 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         mixin ::SpiceGenTcl::Utility
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
+                -dc=
+                -ac=
+                {-acphase= -require ac}
                 {-low= -forbid {voff ioff}}
                 {-voff= -forbid {low ioff}}
                 {-ioff= -forbid {low voff}}
@@ -442,6 +445,32 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {-per= -forbid tper}
                 {-tper= -forbid per}
             }]
+            if {[dexist $arguments dc]} {
+                lappend params "dc -sw"
+                set dcVal [dget $arguments dc]
+                if {([llength $dcVal]>1) && ([@ $dcVal 1] eq "-eq")} {
+                    lappend params "dcval [@ $dcVal 0] -poseq"
+                } else {
+                    lappend params "dcval $dcVal -pos"
+                }
+            }
+            if {[dexist $arguments ac]} {
+                lappend params "ac -sw"
+                set acVal [dget $arguments ac]
+                if {([llength $acVal]>1) && ([@ $acVal 1] eq "-eq")} {
+                    lappend params "acval [@ $acVal 0] -poseq"
+                } else {
+                    lappend params "acval $acVal -pos"
+                }
+                if {[dexist $arguments acphase]} {
+                    set acphaseVal [dget $arguments acphase]
+                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 1] eq "-eq")} {
+                        lappend params "acphase [@ $acphaseVal 0] -poseq"
+                    } else {
+                        lappend params "acphase $acphaseVal -pos"
+                    }
+                }
+            }
             my AliasesKeysCheck $arguments [list low voff ioff]
             my AliasesKeysCheck $arguments [list high von ion]
             my AliasesKeysCheck $arguments [list pw ton]
@@ -460,6 +489,9 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         mixin ::SpiceGenTcl::Utility
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
+                -dc=
+                -ac=
+                {-acphase= -require ac}
                 {-v0= -forbid {i0 voffset ioffset}}
                 {-i0= -forbid {v0 voffset ioffset}}
                 {-voffset= -forbid {v0 i0 ioffset}}
@@ -474,6 +506,32 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {-phase= -require {td theta} -forbid phi}
                 {-phi= -require {td theta} -forbid phase}
             }]
+            if {[dexist $arguments dc]} {
+                lappend params "dc -sw"
+                set dcVal [dget $arguments dc]
+                if {([llength $dcVal]>1) && ([@ $dcVal 1] eq "-eq")} {
+                    lappend params "dcval [@ $dcVal 0] -poseq"
+                } else {
+                    lappend params "dcval $dcVal -pos"
+                }
+            }
+            if {[dexist $arguments ac]} {
+                lappend params "ac -sw"
+                set acVal [dget $arguments ac]
+                if {([llength $acVal]>1) && ([@ $acVal 1] eq "-eq")} {
+                    lappend params "acval [@ $acVal 0] -poseq"
+                } else {
+                    lappend params "acval $acVal -pos"
+                }
+                if {[dexist $arguments acphase]} {
+                    set acphaseVal [dget $arguments acphase]
+                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 1] eq "-eq")} {
+                        lappend params "acphase [@ $acphaseVal 0] -poseq"
+                    } else {
+                        lappend params "acphase $acphaseVal -pos"
+                    }
+                }
+            }
             my AliasesKeysCheck $arguments [list v0 i0 voffset ioffset]
             my AliasesKeysCheck $arguments [list va ia vamp iamp]
             set paramsOrder [list v0 i0 voffset ioffset va ia vamp iamp freq td theta phase phi]
@@ -490,6 +548,9 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         mixin ::SpiceGenTcl::Utility
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
+                -dc=
+                -ac=
+                {-acphase= -require ac}
                 {-v1= -forbid i1}
                 {-i1= -forbid v1}
                 {-v2= -forbid i2}
@@ -499,6 +560,32 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {-td2= -required}
                 {-tau2= -required}
             }]
+            if {[dexist $arguments dc]} {
+                lappend params "dc -sw"
+                set dcVal [dget $arguments dc]
+                if {([llength $dcVal]>1) && ([@ $dcVal 1] eq "-eq")} {
+                    lappend params "dcval [@ $dcVal 0] -poseq"
+                } else {
+                    lappend params "dcval $dcVal -pos"
+                }
+            }
+            if {[dexist $arguments ac]} {
+                lappend params "ac -sw"
+                set acVal [dget $arguments ac]
+                if {([llength $acVal]>1) && ([@ $acVal 1] eq "-eq")} {
+                    lappend params "acval [@ $acVal 0] -poseq"
+                } else {
+                    lappend params "acval $acVal -pos"
+                }
+                if {[dexist $arguments acphase]} {
+                    set acphaseVal [dget $arguments acphase]
+                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 1] eq "-eq")} {
+                        lappend params "acphase [@ $acphaseVal 0] -poseq"
+                    } else {
+                        lappend params "acphase $acphaseVal -pos"
+                    }
+                }
+            }
             my AliasesKeysCheck $arguments [list v1 i1]
             my AliasesKeysCheck $arguments [list v2 i2]
             set paramsOrder [list v1 i1 v2 i2 td1 tau1 td2 tau2]
@@ -514,8 +601,41 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         superclass ::SpiceGenTcl::Device
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
+                -dc=
+                -ac=
+                {-acphase= -require ac}
                 {-seq= -required}
             }]
+            set start 0
+            if {[dexist $arguments dc]} {
+                lappend paramList "dc -sw"
+                set dcVal [dget $arguments dc]
+                if {([llength $dcVal]>1) && ([@ $dcVal 1] eq "-eq")} {
+                    lappend paramList "dcval [@ $dcVal 0] -poseq"
+                } else {
+                    lappend paramList "dcval $dcVal -pos"
+                }
+                incr start 2
+            }
+            if {[dexist $arguments ac]} {
+                lappend paramList "ac -sw"
+                set acVal [dget $arguments ac]
+                if {([llength $acVal]>1) && ([@ $acVal 1] eq "-eq")} {
+                    lappend paramList "acval [@ $acVal 0] -poseq"
+                } else {
+                    lappend paramList "acval $acVal -pos"
+                }
+                if {[dexist $arguments acphase]} {
+                    set acphaseVal [dget $arguments acphase]
+                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 1] eq "-eq")} {
+                        lappend paramList "acphase [@ $acphaseVal 0] -poseq"
+                    } else {
+                        lappend paramList "acphase $acphaseVal -pos"
+                    }
+                    incr start 1
+                }
+                incr start 2
+            }
             set pwlSeqVal [dget $arguments seq]
             set pwlSeqLen [llength $pwlSeqVal]
             if {$pwlSeqLen%2} {
@@ -537,7 +657,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                     lappend paramList "[@ $param 0] [@ $param 1] -pos"
                 }
             }
-            set paramList [linsert $paramList 0 "model pwl -posnocheck"]
+            set paramList [linsert $paramList $start "model pwl -posnocheck"]
             next $type$name [list "np $npNode" "nm $nmNode"] $paramList
         }
     }
@@ -549,6 +669,9 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         mixin ::SpiceGenTcl::Utility
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
+                -dc=
+                -ac=
+                {-acphase= -require ac}
                 {-v0= -forbid {i0 voff ioff}}
                 {-i0= -forbid {v0 voff ioff}}
                 {-voff= -forbid {v0 i0 ioff}}
@@ -563,6 +686,32 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {-fs= -forbid fsig}
                 {-fsig= -forbid fs}
             }]
+            if {[dexist $arguments dc]} {
+                lappend params "dc -sw"
+                set dcVal [dget $arguments dc]
+                if {([llength $dcVal]>1) && ([@ $dcVal 1] eq "-eq")} {
+                    lappend params "dcval [@ $dcVal 0] -poseq"
+                } else {
+                    lappend params "dcval $dcVal -pos"
+                }
+            }
+            if {[dexist $arguments ac]} {
+                lappend params "ac -sw"
+                set acVal [dget $arguments ac]
+                if {([llength $acVal]>1) && ([@ $acVal 1] eq "-eq")} {
+                    lappend params "acval [@ $acVal 0] -poseq"
+                } else {
+                    lappend params "acval $acVal -pos"
+                }
+                if {[dexist $arguments acphase]} {
+                    set acphaseVal [dget $arguments acphase]
+                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 1] eq "-eq")} {
+                        lappend params "acphase [@ $acphaseVal 0] -poseq"
+                    } else {
+                        lappend params "acphase $acphaseVal -pos"
+                    }
+                }
+            }
             my AliasesKeysCheck $arguments [list v0 i0 voff ioff]
             my AliasesKeysCheck $arguments [list va ia vamp iamp]
             my AliasesKeysCheck $arguments [list fc fcar]
@@ -636,6 +785,9 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  -tf - fall time
             #  -pw - width of pulse, alias -ton
             #  -per - period time, alias -tper
+            #  -dc - DC value, optional
+            #  -ac - AC value, optional
+            #  -acphase - phase of AC signal, optional, requires -ac
             # ```
             # VYYYYYYY n+ n- PULSE(V1 V2 TD TR TF PW PER)
             # ```
@@ -643,7 +795,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Vpulse new 1 net1 net2 -low 0 -high 1 -td {td -eq} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6
             # ```
-            # Synopsis: name npNode nmNode -low|voff value -high|von value -td value -tr value -tf value -pw|ton value 
+            # Synopsis: name npNode nmNode -low|voff value -high|von value -td value -tr value -tf value -pw|ton value
+            #   ?-dc value? ?-ac value ?-acphase value??
             next $name v $npNode $nmNode {*}$args
         }
     }  
@@ -663,6 +816,9 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  -td - time delay, optional
             #  -theta - damping factor, optional, require -td
             #  -phase - phase of signal, optional, require -td and -phase, alias -phi
+            #  -dc - DC value, optional
+            #  -ac - AC value, optional
+            #  -acphase - phase of AC signal, optional, requires -ac
             # ```
             # VYYYYYYY n+ n- SIN(VO VA FREQ TD THETA PHASE)
             # ```
@@ -691,6 +847,9 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  -tau1 - rise time constant
             #  -td2 - fall delay time
             #  -tau2 - fall time constant
+            #  -dc - DC value, optional
+            #  -ac - AC value, optional
+            #  -acphase - phase of AC signal, optional, requires -ac
             # ```
             # VYYYYYYY n+ n- EXP(V1 V2 TD1 TAU1 TD2 TAU2)
             # ```
@@ -699,6 +858,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ::SpiceGenTcl::Common::Sources::Vexp new 1 net1 net2 -v1 0 -v2 1 -td1 1e-9 -tau1 1e-9 -td2 {td2 -eq} -tau2 10e-6
             # ```
             # Synopsis: name npNode nmNode -v1 value -v2 value -td1 value -tau1 value -td2 value -tau2 value
+            #   ?-phase|phi value???
             next $name v $npNode $nmNode {*}$args
         }
     }
@@ -713,6 +873,9 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
             #  -seq - sequence of pwl points in form {t0 v0 t1 v1 t2 v2 t3 v3 ...}
+            #  -dc - DC value, optional
+            #  -ac - AC value, optional
+            #  -acphase - phase of AC signal, optional, requires -ac
             # ```
             # VYYYYYYY n+ n- PWL (T1 V1 <T2 V2 T3 V3 T4 V4 ...>)
             # ```
@@ -720,7 +883,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Vpwl new 1 npNode nmNode -seq {0 0 {t1 -eq} 1 2 2 3 3 4 4}
             # ```
-            # Synopsis: name npNode nmNode -seq list
+            # Synopsis: name npNode nmNode -seq list ?-phase|phi value???
             next $name v $npNode $nmNode {*}$args
         }
     }    
@@ -739,6 +902,9 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  -fc - carrier frequency, alias -fcar
             #  -mdi - modulation index
             #  -fs - signal frequency, alias -fsig
+            #  -dc - DC value, optional
+            #  -ac - AC value, optional
+            #  -acphase - phase of AC signal, optional, requires -ac
             # ```
             # VYYYYYYY n+ n- SFFM(VO VA FC MDI FS)
             # ```
@@ -747,6 +913,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ::SpiceGenTcl::Common::Sources::Vsin new 1 net1 net2 -v0 0 -va 1 -fc {freq -eq} -mdi 0 -fs 1e3
             # ```
             # Synopsis: name npNode nmNode -v0|voff value -va|vamp value -fc|fcar value -mdi value -fs|fsig
+            #   ?-phase|phi value???
             next $name v $npNode $nmNode {*}$args
         }
     }
@@ -813,6 +980,9 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  -tf - fall time
             #  -pw - width of pulse, alias -ton
             #  -per - period time, alias -tper
+            #  -dc - DC value, optional
+            #  -ac - AC value, optional
+            #  -acphase - phase of AC signal, optional, requires -ac
             # ```
             # IYYYYYYY n+ n- PULSE(V1 V2 TD TR TF PW PER)
             # ```
@@ -821,6 +991,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ::SpiceGenTcl::Common::Sources::Ipulse new 1 net1 net2 -low 0 -high 1 -td {td -eq} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6
             # ```
             # Synopsis: name npNode nmNode -low|ioff value -high|ion value -td value -tr value -tf value -pw|ton value
+            #   ?-phase|phi value???
             next $name i $npNode $nmNode {*}$args
         }
     }
@@ -840,6 +1011,9 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  -td - time delay, optional
             #  -theta - damping factor, optional, require -td
             #  -phase - phase of signal, optional, require -td and -phase, alias -phi
+            #  -dc - DC value, optional
+            #  -ac - AC value, optional
+            #  -acphase - phase of AC signal, optional, requires -ac
             # ```
             # IYYYYYYY n+ n- SIN(VO VA FREQ TD THETA PHASE)
             # ```
@@ -847,7 +1021,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Isin new 1 net1 net2 -i0 0 -ia 2 -freq {freq -eq} -td 1e-6 -theta {theta -eq}
             # ```
-            # Synopsis: name npNode nmNode -i0|ioffset value -ia|iamp value -freq value ?-td value ?-theta value 
+            # Synopsis: name npNode nmNode -i0|ioffset value -ia|iamp value -freq value ?-td value ?-theta value
             #   ?-phase|phi value???
             next $name i $npNode $nmNode {*}$args
         }
@@ -868,6 +1042,9 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  -tau1 - rise time constant
             #  -td2 - fall delay time
             #  -tau2 - fall time constant
+            #  -dc - DC value, optional
+            #  -ac - AC value, optional
+            #  -acphase - phase of AC signal, optional, requires -ac
             # ```
             # IYYYYYYY n+ n- EXP(V1 V2 TD1 TAU1 TD2 TAU2)
             # ```
@@ -876,6 +1053,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ::SpiceGenTcl::Common::Sources::Iexp new 1 net1 net2 -i1 0 -i2 1 -td1 1e-9 -tau1 1e-9 -td2 {td2 -eq} -tau2 10e-6
             # ```
             # Synopsis: name npNode nmNode -i1 value -i2 value -td1 value -tau1 value -td2 value -tau2 value
+            #   ?-phase|phi value???
             next $name i $npNode $nmNode {*}$args
         }
     }
@@ -890,6 +1068,9 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
             #  -seq - sequence of pwl points in form {t0 v0 t1 v1 t2 v2 t3 v3 ...}
+            #  -dc - DC value, optional
+            #  -ac - AC value, optional
+            #  -acphase - phase of AC signal, optional, requires -ac
             # ```
             # IYYYYYYY n+ n- PWL (T1 V1 <T2 V2 T3 V3 T4 V4 ...>)
             # ```
@@ -897,7 +1078,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Ipwl new 1 npNode nmNode -seq {0 0 {t1 -eq} 1 2 2 3 3 4 4}
             # ```
-            # Synopsis: name npNode nmNode -seq list
+            # Synopsis: name npNode nmNode -seq list ?-phase|phi value???
             next $name i $npNode $nmNode {*}$args
         }
     }   
@@ -916,6 +1097,9 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  -fc - carrier frequency, alias -fcar
             #  -mdi - modulation index
             #  -fs - signal frequency, alias -fsig
+            #  -dc - DC value, optional
+            #  -ac - AC value, optional
+            #  -acphase - phase of AC signal, optional, requires -ac
             # ```
             # IYYYYYYY n+ n- SFFM(VO VA FC MDI FS)
             # ```
@@ -924,6 +1108,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ::SpiceGenTcl::Common::Sources::Isin new 1 net1 net2 -i0 0 -ia 1 -fc {freq -eq} -mdi 0 -fs 1e3
             # ```
             # Synopsis: name npNode nmNode -i0|ioff value -ia|iamp value -fc|fcar value -mdi value -fs|fsig value
+            #   ?-phase|phi value???
             next $name i $npNode $nmNode {*}$args
         }
     }

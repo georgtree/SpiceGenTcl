@@ -27,13 +27,13 @@ SpiceGenTcl::Common::Sources - Commands in namespace SpiceGenTcl::Common::Source
 .br
 \fBOBJECT constructor\fP \fIname npNode nmNode -dc value\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -i1 value -i2 value -td1 value -tau1 value -td2 value -tau2 value\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -i1 value -i2 value -td1 value -tau1 value -td2 value -tau2 value ?-phase|phi value???\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -low|ioff value -high|ion value -td value -tr value -tf value -pw|ton value\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -low|ioff value -high|ion value -td value -tr value -tf value -pw|ton value ?-phase|phi value???\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -seq list\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -seq list ?-phase|phi value???\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -i0|ioff value -ia|iamp value -fc|fcar value -mdi value -fs|fsig value\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -i0|ioff value -ia|iamp value -fc|fcar value -mdi value -fs|fsig value ?-phase|phi value???\fP
 .br
 \fBOBJECT constructor\fP \fIname npNode nmNode -i0|ioffset value -ia|iamp value -freq value ?-td value ?-theta value ?-phase|phi value???\fP
 .br
@@ -61,13 +61,13 @@ SpiceGenTcl::Common::Sources - Commands in namespace SpiceGenTcl::Common::Source
 .br
 \fBOBJECT constructor\fP \fIname npNode nmNode -dc value\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -v1 value -v2 value -td1 value -tau1 value -td2 value -tau2 value\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -v1 value -v2 value -td1 value -tau1 value -td2 value -tau2 value ?-phase|phi value???\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -low|voff value -high|von value -td value -tr value -tf value -pw|ton value\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -low|voff value -high|von value -td value -tr value -tf value -pw|ton value ?-dc value? ?-ac value ?-acphase value??\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -seq list\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -seq list ?-phase|phi value???\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -v0|voff value -va|vamp value -fc|fcar value -mdi value -fs|fsig\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -v0|voff value -va|vamp value -fc|fcar value -mdi value -fs|fsig ?-phase|phi value???\fP
 .br
 \fBOBJECT constructor\fP \fIname npNode nmNode -v0|voffset value -va|vamp value -freq value ?-td value ?-theta value ?-phase|phi value???\fP
 .br
@@ -1077,7 +1077,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Iexp that describes exponential current source\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -i1 value -i2 value -td1 value -tau1 value -td2 value -tau2 value\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -i1 value -i2 value -td1 value -tau1 value -td2 value -tau2 value ?-phase|phi value???\fP
 .br
 .RE
 .PP
@@ -1092,6 +1092,15 @@ Name of node connected to positive pin\&.
 .TP
 nmNode
 Name of node connected to negative pin\&.
+.TP
+-ac
+AC value, optional\&.
+.TP
+-acphase
+Phase of AC signal, optional, requires -ac\&.
+.TP
+-dc
+DC value, optional\&.
 .TP
 -i1
 Initial value\&.
@@ -1197,7 +1206,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Ipulse that describes pulse current source\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -low|ioff value -high|ion value -td value -tr value -tf value -pw|ton value\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -low|ioff value -high|ion value -td value -tr value -tf value -pw|ton value ?-phase|phi value???\fP
 .br
 .RE
 .PP
@@ -1212,6 +1221,15 @@ Name of node connected to positive pin\&.
 .TP
 nmNode
 Name of node connected to negative pin\&.
+.TP
+-ac
+AC value, optional\&.
+.TP
+-acphase
+Phase of AC signal, optional, requires -ac\&.
+.TP
+-dc
+DC value, optional\&.
 .TP
 -high
 High value, aliases: -von, ion\&.
@@ -1320,7 +1338,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Ipwl that describes piece-wise current source\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -seq list\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -seq list ?-phase|phi value???\fP
 .br
 .RE
 .PP
@@ -1335,6 +1353,15 @@ Name of node connected to positive pin\&.
 .TP
 nmNode
 Name of node connected to negative pin\&.
+.TP
+-ac
+AC value, optional\&.
+.TP
+-acphase
+Phase of AC signal, optional, requires -ac\&.
+.TP
+-dc
+DC value, optional\&.
 .TP
 -seq
 Sequence of pwl points in form {t0 v0 t1 v1 t2 v2 t3 v3 \&.\&.\&.}
@@ -1425,7 +1452,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Isffm that describes single-frequency FM current source\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -i0|ioff value -ia|iamp value -fc|fcar value -mdi value -fs|fsig value\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -i0|ioff value -ia|iamp value -fc|fcar value -mdi value -fs|fsig value ?-phase|phi value???\fP
 .br
 .RE
 .PP
@@ -1440,6 +1467,15 @@ Name of node connected to positive pin\&.
 .TP
 nmNode
 Name of node connected to negative pin\&.
+.TP
+-ac
+AC value, optional\&.
+.TP
+-acphase
+Phase of AC signal, optional, requires -ac\&.
+.TP
+-dc
+DC value, optional\&.
 .TP
 -fc
 Carrier frequency, alias -fcar\&.
@@ -1557,6 +1593,15 @@ Name of node connected to positive pin\&.
 .TP
 nmNode
 Name of node connected to negative pin\&.
+.TP
+-ac
+AC value, optional\&.
+.TP
+-acphase
+Phase of AC signal, optional, requires -ac\&.
+.TP
+-dc
+DC value, optional\&.
 .TP
 -freq
 Frequency of sinusoidal signal\&.
@@ -2468,7 +2513,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Vexp that describes exponential voltage source\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -v1 value -v2 value -td1 value -tau1 value -td2 value -tau2 value\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -v1 value -v2 value -td1 value -tau1 value -td2 value -tau2 value ?-phase|phi value???\fP
 .br
 .RE
 .PP
@@ -2483,6 +2528,15 @@ Name of node connected to positive pin\&.
 .TP
 nmNode
 Name of node connected to negative pin\&.
+.TP
+-ac
+AC value, optional\&.
+.TP
+-acphase
+Phase of AC signal, optional, requires -ac\&.
+.TP
+-dc
+DC value, optional\&.
 .TP
 -tau1
 Rise time constant\&.
@@ -2588,7 +2642,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Vpulse that describes pulse voltage source\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -low|voff value -high|von value -td value -tr value -tf value -pw|ton value\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -low|voff value -high|von value -td value -tr value -tf value -pw|ton value ?-dc value? ?-ac value ?-acphase value??\fP
 .br
 .RE
 .PP
@@ -2603,6 +2657,15 @@ Name of node connected to positive pin\&.
 .TP
 nmNode
 Name of node connected to negative pin\&.
+.TP
+-ac
+AC value, optional\&.
+.TP
+-acphase
+Phase of AC signal, optional, requires -ac\&.
+.TP
+-dc
+DC value, optional\&.
 .TP
 -high
 High value, aliases: -von, ion\&.
@@ -2711,7 +2774,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Vpwl that describes piece-wise voltage source\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -seq list\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -seq list ?-phase|phi value???\fP
 .br
 .RE
 .PP
@@ -2726,6 +2789,15 @@ Name of node connected to positive pin\&.
 .TP
 nmNode
 Name of node connected to negative pin\&.
+.TP
+-ac
+AC value, optional\&.
+.TP
+-acphase
+Phase of AC signal, optional, requires -ac\&.
+.TP
+-dc
+DC value, optional\&.
 .TP
 -seq
 Sequence of pwl points in form {t0 v0 t1 v1 t2 v2 t3 v3 \&.\&.\&.}
@@ -2816,7 +2888,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Vsffm that describes single-frequency FM voltage source\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -v0|voff value -va|vamp value -fc|fcar value -mdi value -fs|fsig\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -v0|voff value -va|vamp value -fc|fcar value -mdi value -fs|fsig ?-phase|phi value???\fP
 .br
 .RE
 .PP
@@ -2831,6 +2903,15 @@ Name of node connected to positive pin\&.
 .TP
 nmNode
 Name of node connected to negative pin\&.
+.TP
+-ac
+AC value, optional\&.
+.TP
+-acphase
+Phase of AC signal, optional, requires -ac\&.
+.TP
+-dc
+DC value, optional\&.
 .TP
 -fc
 Carrier frequency, alias -fcar\&.
@@ -2948,6 +3029,15 @@ Name of node connected to positive pin\&.
 .TP
 nmNode
 Name of node connected to negative pin\&.
+.TP
+-ac
+AC value, optional\&.
+.TP
+-acphase
+Phase of AC signal, optional, requires -ac\&.
+.TP
+-dc
+DC value, optional\&.
 .TP
 -freq
 Frequency of sinusoidal signal\&.

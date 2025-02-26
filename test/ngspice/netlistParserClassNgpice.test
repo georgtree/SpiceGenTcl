@@ -660,4 +660,90 @@ test testParserClassParamStatement-1 {test Parser class, .param parsing} -setup 
     unset parser
 }
 
+### Behavioural source parsing test
+
+test testParserClassBsource-1 {test Parser class, behavioural sources parsing} -setup {
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc  bsources_test.cir]]
+    $parser readFile
+    $parser buildNetlist
+} -body {
+    return [[$parser configure -Netlist] genSPICEString]
+} -result "b1 netp netm i={v(a)+v(b)+pow(v(c),2)} tc1=1
+b2 netp netm v={v(a)+v(b)+pow(v(c),2)} tc1=1
+b3 0 1 v={ln(cos(log(v(1,2)^2)))-v(3)^4+v(2)^v(1)}
+b4 3 4 v={exp(pi^i(vdd))}
+b35 3 4 i={17}" -cleanup {
+    unset parser
+}
+
+test testParserClassBsource-2 {test Parser class, behavioural sources parsing, edge case} -setup {
+    set file [open [file join $netlistsLoc temp1] w+]
+    puts $file ""
+    puts $file {b1 netp netm g={v(a)+v(b)+pow(v(c),2)} tc1=1}
+    close $file
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
+    $parser readFile
+    catch {$parser buildNetlist} errorStr
+} -body {
+    return $errorStr
+} -result "Creating behavioural source object from line 'b1 netp netm g={v(a)+v(b)+pow(v(c),2)} tc1=1' failed due to\
+        wrong or incompatible syntax" -cleanup {
+    file delete [file join $netlistsLoc temp1]
+    unset parser errorStr
+}
+
+test testParserClassBsource-3 {test Parser class, behavioural sources parsing, edge case} -setup {
+    set file [open [file join $netlistsLoc temp1] w+]
+    puts $file ""
+    puts $file {b1 netp netm v={v(a)+v(b)+pow(v(c),2)} i={15} tc1=1}
+    close $file
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
+    $parser readFile
+    catch {$parser buildNetlist} errorStr
+} -body {
+    return $errorStr
+} -result "-i conflicts with -v" -cleanup {
+    file delete [file join $netlistsLoc temp1]
+    unset parser errorStr
+}
+
+### Linear controlled sources parsing test
+
+test testParserClassLctrlsources-1 {test Parser class, linear controlled sources parsing} -setup {
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc lctrlsources_test.cir]]
+    $parser readFile
+    $parser buildNetlist
+} -body {
+    return [[$parser configure -Netlist] genSPICEString]
+} -result "g1 2 0 5 0 0.1 m={m}
+g2 2 0 5 0 {value} m={m}
+e1 2 3 14 1 2.0
+e2 2 3 14 1 {value}
+f1 13 5 vsens 5
+f2 13 5 vsens {value}
+h1 5 17 vz 0.5k
+h2 5 17 vz {value}" -cleanup {
+    unset parser
+}
+
+### Independent sources parsing test
+
+test testParserClassIndsources-1 {test Parser class, independent sources parsing} -setup {
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc indsources_test.cir]]
+    $parser readFile
+    $parser buildNetlist
+} -body {
+    return [[$parser configure -Netlist] genSPICEString]
+} -result "g1 2 0 5 0 0.1 m={m}
+g2 2 0 5 0 {value} m={m}
+e1 2 3 14 1 2.0
+e2 2 3 14 1 {value}
+f1 13 5 vsens 5
+f2 13 5 vsens {value}
+h1 5 17 vz 0.5k
+h2 5 17 vz {value}" -cleanup {
+    unset parser
+}
+
+
 cleanupTests

@@ -46,9 +46,9 @@ namespace eval ::SpiceGenTcl::Ngspice {
         constructor {name filepath} {
             my configure -Name $name -filepath $filepath
             my configure -elemsMethods [dcreate b CreateBehSource c CreateCap d CreateDio e CreateVCVS f CreateCCCS\
-                                                g CreateVCCS h CreateCCVS i CreateIsource j CreateJFET k CreateCoupInd\
+                                                g CreateVCCS h CreateCCVS i CreateVIsource j CreateJFET k CreateCoupInd\
                                                 l CreateInd m CreateMOSFET n CreateVeriloga q CreateBJT r CreateRes\
-                                                s CreateVSwitch v CreateVsource w CreateISwitch x CreateSubcktInst\
+                                                s CreateVSwitch v CreateVIsource w CreateISwitch x CreateSubcktInst\
                                                 z CreateMESFET]
             my configure -dotsMethods [dcreate ac CreateAc dc CreateDc func CreateFunc global CreateGlobal ic CreateIc\
                                                include CreateInclude model CreateModel nodeset CreateNodeset op CreateOp\
@@ -687,22 +687,84 @@ namespace eval ::SpiceGenTcl::Ngspice {
             return
         }
         method CreateBehSource {line} {
-
+            # Creates behavioural source object from passed line and add it to netlist
+            #   line - line to parse
+            # Supports behavioural sources only in canonical form `v|i={equation}` and only braced form `name={value}` of 
+            # parameters.
+            set lineList [split $line]
+            lassign $lineList elemName pin1 pin2 val
+            set elemName [string range $elemName 1 end]
+            if {[regexp {^(i|v)=\{([^{}]*)\}$} $val]} {
+                regexp {^(i|v)=\{([^{}]*)\}$} $val match type value
+                [my configure -Netlist] add [B new $elemName $pin1 $pin2 -$type $value {*}[my ParseParams $lineList 4 {}]]
+            } else {
+                return -code error "Creating behavioural source object from line '${line}' failed due to wrong or\
+                            incompatible syntax"
+            }
+            return
         }
         method CreateDio {line} {
 
         }
         method CreateVCVS {line} {
-
+            set lineList [split $line]
+            lassign $lineList elemName pin1 pin2 pin3 pin4 val
+            set elemName [string range $elemName 1 end]
+            if {[my CheckBraced $val]} {
+                set val [list [my Unbrace $val] -eq]
+                [my configure -Netlist] add [E new $elemName $pin1 $pin2 $pin3 $pin4 -gain $val]
+            } elseif {[my CheckNumber $val]} {
+                [my configure -Netlist] add [E new $elemName $pin1 $pin2 $pin3 $pin4 -gain $val]
+            } else {
+                return -code error "Creating VCVS object from line '${line}' failed due to wrong or incompatible syntax"
+            }
+            return
         }
         method CreateCCCS {line} {
-
+            set lineList [split $line]
+            lassign $lineList elemName pin1 pin2 vnam val
+            set elemName [string range $elemName 1 end]
+            if {[my CheckBraced $val]} {
+                set val [list [my Unbrace $val] -eq]
+                [my configure -Netlist] add [F new $elemName $pin1 $pin2 -consrc $vnam -gain $val\
+                                                     {*}[my ParseParams $lineList 6]]
+            } elseif {[my CheckNumber $val]} {
+                [my configure -Netlist] add [F new $elemName $pin1 $pin2 -consrc $vnam -gain $val\
+                                                     {*}[my ParseParams $lineList 6]]
+            } else {
+                return -code error "Creating CCCS object from line '${line}' failed due to wrong or incompatible syntax"
+            }
+            return
         }
         method CreateVCCS {line} {
-
+            set lineList [split $line]
+            lassign $lineList elemName pin1 pin2 pin3 pin4 val
+            set elemName [string range $elemName 1 end]
+            if {[my CheckBraced $val]} {
+                set val [list [my Unbrace $val] -eq]
+                [my configure -Netlist] add [G new $elemName $pin1 $pin2 $pin3 $pin4 -trcond $val\
+                                                     {*}[my ParseParams $lineList 6]]
+            } elseif {[my CheckNumber $val]} {
+                [my configure -Netlist] add [G new $elemName $pin1 $pin2 $pin3 $pin4 -trcond $val\
+                                                     {*}[my ParseParams $lineList 6]]
+            } else {
+                return -code error "Creating VCCS object from line '${line}' failed due to wrong or incompatible syntax"
+            }
+            return
         }
         method CreateCCVS {line} {
-
+            set lineList [split $line]
+            lassign $lineList elemName pin1 pin2 vnam val
+            set elemName [string range $elemName 1 end]
+            if {[my CheckBraced $val]} {
+                set val [list [my Unbrace $val] -eq]
+                [my configure -Netlist] add [H new $elemName $pin1 $pin2 -consrc $vnam -transr $val]
+            } elseif {[my CheckNumber $val]} {
+                [my configure -Netlist] add [H new $elemName $pin1 $pin2 -consrc $vnam -transr $val]
+            } else {
+                return -code error "Creating CCVS object from line '${line}' failed due to wrong or incompatible syntax"
+            }
+            return
         }
         method CreateIsource {line} {
 
@@ -769,8 +831,41 @@ namespace eval ::SpiceGenTcl::Ngspice {
         method CreateVSwitch {line} {
 
         }
-        method CreateVsource {line} {
-
+        method CreateVIsource {line} {
+            # remove `(` and `)` symbols from string
+            set line [regsub -all {[[:space:]]+} [string trim [string map {"(" " " ")" " "} $line]] { }]
+            set lineList [split $line]
+            lassign $lineList elemName pin1 pin2 form
+            set type [string index $elemName 0]
+            set elemName [string range $elemName 1 end]
+            set availFuncts {pulse sin exp pwl sffm am}
+            foreach func $availFuncts {
+                if {[lsearch -exact $lineList $func]!=-1} {
+                    set function $func
+                }
+            }
+            
+            if {[my CheckBraced $form] || [my CheckNumber $form] || ($form eq {dc})} {
+                
+                #puts $form
+                if {[lsearch -exact $lineList ac]!=-1} {
+                    if {[@ $lineList 4] eq {ac}} {
+                        set lineList [lremove $lineList 4]
+                        set posParamsList [my ParsePosParams [lrange $lineList 3 end] {dc ac acphase}]
+                    } elseif {([@ $lineList 5] eq {ac}) && ($form eq {dc})} {
+                        set lineList [lremove $lineList 4 5]
+                        set posParamsList [my ParsePosParams [lrange $lineList 3 end] {dc ac acphase}]
+                    } else {
+                        return -code error "Line '${line}' contains 'ac' word but located at the wrong position"
+                    }
+                    set lineList [lsearch -all -inline -not -exact $lineList dc]
+                    [my configure -Netlist] add [[string toupper ${type}]ac new $elemName $pin1 $pin2 {*}$posParamsList]
+                } else {
+                    set lineList [lsearch -all -inline -not -exact $lineList dc]
+                    puts $lineList
+                    [my configure -Netlist] add [[string toupper ${type}]dc new $elemName $pin1 $pin2 -dc [@ $lineList 3]]
+                }
+            }
         }
         method CreateISwitch {line} {
 

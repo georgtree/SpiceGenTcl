@@ -448,6 +448,22 @@ test testVpulseClass-5 {test Vpulse class with different order} -setup {
     unset vpulse result
 }
 
+test testVpulseClass-7 {test Vpulse class} -setup {
+    set vpulse [Vpulse new 1 net1 net2 -dc {dc -eq} -ac 0 -tf 1e-9 -pw 10e-6 -per 20e-6 -voff 0 -von 1 -td 1e-9 -tr 1e-9]
+} -body {
+    set result [$vpulse genSPICEString]
+} -result "v1 net1 net2 dc {dc} ac 0 pulse 0 1 1e-9 1e-9 1e-9 10e-6 20e-6" -cleanup {
+    unset vpulse result
+}
+
+test testVpulseClass-8 {test Vpulse class} -setup {
+    set vpulse [Vpulse new 1 net1 net2 -ac 0 -acphase 45 -tf 1e-9 -pw 10e-6 -per 20e-6 -voff 0 -von 1 -td 1e-9 -tr 1e-9]
+} -body {
+    set result [$vpulse genSPICEString]
+} -result "v1 net1 net2 ac 0 45 pulse 0 1 1e-9 1e-9 1e-9 10e-6 20e-6" -cleanup {
+    unset vpulse result
+}
+
 ####  Vsin class test 
 
 
@@ -491,6 +507,22 @@ test testVsinClass-5 {test Vsin class with different order} -setup {
     unset vsin result
 }
 
+test testVsinClass-6 {test Vsin class} -setup {
+    set vsin [Vsin new 1 net1 net2 -dc 1 -ac 0 -voffset 0 -theta {theta -eq} -va 2 -freq 50 -td 1e-6 ]
+} -body {
+    set result [$vsin genSPICEString]
+} -result "v1 net1 net2 dc 1 ac 0 sin 0 2 50 1e-6 \{theta\}" -cleanup {
+    unset vsin result
+}
+
+test testVsinClass-7 {test Vsin class} -setup {
+    set vsin [Vsin new 1 net1 net2 -ac 0 -acphase 45 -voffset 0 -theta {theta -eq} -va 2 -freq 50 -td 1e-6 ]
+} -body {
+    set result [$vsin genSPICEString]
+} -result "v1 net1 net2 ac 0 45 sin 0 2 50 1e-6 \{theta\}" -cleanup {
+    unset vsin result
+}
+
 ####  Vexp class test 
 
 test testVexpClass-1 {test Vexp class} -setup {
@@ -514,6 +546,22 @@ test testVexpClass-3 {test Vexp class with different order} -setup {
 } -body {
     set result [$vexp genSPICEString]
 } -result "v1 net1 net2 exp 0 1 1e-9 1e-9 1e-9 10e-6" -cleanup {
+    unset vexp result
+}
+
+test testVexpClass-4 {test Vexp class} -setup {
+    set vexp [Vexp new 1 net1 net2 -dc 1 -ac 0 -v1 0 -tau1 1e-9 -v2 1 -td2 1e-9 -td1 1e-9 -tau2 10e-6]
+} -body {
+    set result [$vexp genSPICEString]
+} -result "v1 net1 net2 dc 1 ac 0 exp 0 1 1e-9 1e-9 1e-9 10e-6" -cleanup {
+    unset vexp result
+}
+
+test testVexpClass-5 {test Vexp class} -setup {
+    set vexp [Vexp new 1 net1 net2 -ac 0 -acphase 45 -v1 0 -tau1 1e-9 -v2 1 -td2 1e-9 -td1 1e-9 -tau2 10e-6]
+} -body {
+    set result [$vexp genSPICEString]
+} -result "v1 net1 net2 ac 0 45 exp 0 1 1e-9 1e-9 1e-9 10e-6" -cleanup {
     unset vexp result
 }
     
@@ -541,6 +589,22 @@ test testVpwlClass-3 {test Vpwl class} -setup {
     return $errorStr
 } -result "Number of elements '2' in pwl sequence in element 'v1' must be >=4" -cleanup {
     unset errorStr
+}
+
+test testVpwlClass-4 {test Vpwl class} -setup {
+    set vpwl [Vpwl new 1 npNode nmNode -dc 1 -ac 0 -seq {0 0 {t1 -eq} 1 2 2 3 3 4 4}]
+} -body {
+    set result [$vpwl genSPICEString]
+} -result "v1 npnode nmnode dc 1 ac 0 pwl 0 0 \{t1\} 1 2 2 3 3 4 4" -cleanup {
+    unset vpwl result
+}
+
+test testVpwlClass-5 {test Vpwl class} -setup {
+    set vpwl [Vpwl new 1 npNode nmNode -ac 0 -acphase 45 -seq {0 0 {t1 -eq} 1 2 2 3 3 4 4}]
+} -body {
+    set result [$vpwl genSPICEString]
+} -result "v1 npnode nmnode ac 0 45 pwl 0 0 \{t1\} 1 2 2 3 3 4 4" -cleanup {
+    unset vpwl result
 }
 
 ####  Vsffm class test 
@@ -582,6 +646,22 @@ test testVsffmClass-5 {test Vsffm class with different order} -setup {
 } -body {
     set result [$vsffm genSPICEString]
 } -result "v1 net1 net2 sffm 0 1 \{freq\} 0 1e3" -cleanup {
+    unset vsffm result
+}
+
+test testVsffmClass-6 {test Vsffm class} -setup {
+    set vsffm [Vsffm new 1 net1 net2 -dc 1 -ac 0 -v0 0 -fs 1e3 -va 1 -fc {freq -eq} -mdi 0]
+} -body {
+    set result [$vsffm genSPICEString]
+} -result "v1 net1 net2 dc 1 ac 0 sffm 0 1 \{freq\} 0 1e3" -cleanup {
+    unset vsffm result
+}
+
+test testVsffmClass-7 {test Vsffm class} -setup {
+    set vsffm [Vsffm new 1 net1 net2 -ac 0 -acphase 45 -dc 1 -ac 0 -v0 0 -fs 1e3 -va 1 -fc {freq -eq} -mdi 0]
+} -body {
+    set result [$vsffm genSPICEString]
+} -result "v1 net1 net2 dc 1 ac 0 45 sffm 0 1 {freq} 0 1e3" -cleanup {
     unset vsffm result
 }
     

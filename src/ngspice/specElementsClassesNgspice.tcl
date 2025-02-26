@@ -457,6 +457,9 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
         mixin ::SpiceGenTcl::Utility
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
+                -dc=
+                -ac=
+                {-acphase= -require ac}
                 {-low= -forbid {voff ioff}}
                 {-voff= -forbid {low ioff}}
                 {-ioff= -forbid {low voff}}
@@ -473,6 +476,32 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
                 {-np= -forbid ncycles}
                 {-ncycles= -forbid np}
             }]
+            if {[dexist $arguments dc]} {
+                lappend params "dc -sw"
+                set dcVal [dget $arguments dc]
+                if {([llength $dcVal]>1) && ([@ $dcVal 1] eq "-eq")} {
+                    lappend params "dcval [@ $dcVal 0] -poseq"
+                } else {
+                    lappend params "dcval $dcVal -pos"
+                }
+            }
+            if {[dexist $arguments ac]} {
+                lappend params "ac -sw"
+                set acVal [dget $arguments ac]
+                if {([llength $acVal]>1) && ([@ $acVal 1] eq "-eq")} {
+                    lappend params "acval [@ $acVal 0] -poseq"
+                } else {
+                    lappend params "acval $acVal -pos"
+                }
+                if {[dexist $arguments acphase]} {
+                    set acphaseVal [dget $arguments acphase]
+                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 1] eq "-eq")} {
+                        lappend params "acphase [@ $acphaseVal 0] -poseq"
+                    } else {
+                        lappend params "acphase $acphaseVal -pos"
+                    }
+                }
+            }
             my AliasesKeysCheck $arguments [list low voff ioff]
             my AliasesKeysCheck $arguments [list high von ion]
             my AliasesKeysCheck $arguments [list pw ton]
@@ -492,6 +521,9 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
         mixin ::SpiceGenTcl::Utility
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
+                -dc=
+                -ac=
+                {-acphase= -require ac}
                 {-v0= -forbid {i0 voff ioff}}
                 {-i0= -forbid {v0 voff ioff}}
                 {-voff= -forbid {v0 i0 ioff}}
@@ -508,6 +540,32 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
                 -phasec=
                 {-phases= -require {phasec}}
             }]
+            if {[dexist $arguments dc]} {
+                lappend params "dc -sw"
+                set dcVal [dget $arguments dc]
+                if {([llength $dcVal]>1) && ([@ $dcVal 1] eq "-eq")} {
+                    lappend params "dcval [@ $dcVal 0] -poseq"
+                } else {
+                    lappend params "dcval $dcVal -pos"
+                }
+            }
+            if {[dexist $arguments ac]} {
+                lappend params "ac -sw"
+                set acVal [dget $arguments ac]
+                if {([llength $acVal]>1) && ([@ $acVal 1] eq "-eq")} {
+                    lappend params "acval [@ $acVal 0] -poseq"
+                } else {
+                    lappend params "acval $acVal -pos"
+                }
+                if {[dexist $arguments acphase]} {
+                    set acphaseVal [dget $arguments acphase]
+                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 1] eq "-eq")} {
+                        lappend params "acphase [@ $acphaseVal 0] -poseq"
+                    } else {
+                        lappend params "acphase $acphaseVal -pos"
+                    }
+                }
+            }
             my AliasesKeysCheck $arguments [list v0 i0 voff ioff]
             my AliasesKeysCheck $arguments [list va ia vamp iamp]
             my AliasesKeysCheck $arguments [list fc fcar]
@@ -526,6 +584,9 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
         mixin ::SpiceGenTcl::Utility
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
+                -dc=
+                -ac=
+                {-acphase= -require ac}
                 {-v0= -forbid i0}
                 {-i0= -forbid v0}
                 {-va= -forbid ia}
@@ -535,6 +596,32 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
                 {-td= -required}
                 -phases=
             }]
+            if {[dexist $arguments dc]} {
+                lappend params "dc -sw"
+                set dcVal [dget $arguments dc]
+                if {([llength $dcVal]>1) && ([@ $dcVal 1] eq "-eq")} {
+                    lappend params "dcval [@ $dcVal 0] -poseq"
+                } else {
+                    lappend params "dcval $dcVal -pos"
+                }
+            }
+            if {[dexist $arguments ac]} {
+                lappend params "ac -sw"
+                set acVal [dget $arguments ac]
+                if {([llength $acVal]>1) && ([@ $acVal 1] eq "-eq")} {
+                    lappend params "acval [@ $acVal 0] -poseq"
+                } else {
+                    lappend params "acval $acVal -pos"
+                }
+                if {[dexist $arguments acphase]} {
+                    set acphaseVal [dget $arguments acphase]
+                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 1] eq "-eq")} {
+                        lappend params "acphase [@ $acphaseVal 0] -poseq"
+                    } else {
+                        lappend params "acphase $acphaseVal -pos"
+                    }
+                }
+            }
             my AliasesKeysCheck $arguments [list v0 i0]
             my AliasesKeysCheck $arguments [list va ia]
             set paramsOrder [list v0 i0 va ia mf fc td phases]
@@ -618,6 +705,9 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             #  -pw - width of pulse, alias -ton
             #  -per - period time, alias -tper
             #  -np - number of pulses, optional
+            #  -dc - DC value, optional
+            #  -ac - AC value, optional
+            #  -acphase - phase of AC signal, optional, requires -ac
             # ```
             # VYYYYYYY n+ n- PULSE(V1 V2 TD TR TF PW PER NP)
             # ```
@@ -665,6 +755,9 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             #  -fs - signal frequency, alias -fsig
             #  -phasec - carrier phase, optional
             #  -phases - signal phase, optional, require -phasec
+            #  -dc - DC value, optional
+            #  -ac - AC value, optional
+            #  -acphase - phase of AC signal, optional, requires -ac
             # ```
             # VYYYYYYY n+ n- SFFM(VO VA FC MDI FS PHASEC PHASES)
             # ```
@@ -693,6 +786,9 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             #  -fc - carrier frequency
             #  -td - signal delay, optional
             #  -phases - phase, optional, require -td
+            #  -dc - DC value, optional
+            #  -ac - AC value, optional
+            #  -acphase - phase of AC signal, optional, requires -ac
             # ```
             # VYYYYYYY n+ n- AM(VA VO MF FC TD PHASES)
             # ```
@@ -735,6 +831,9 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             #  -pw - width of pulse
             #  -per - period time
             #  -np - number of pulses, optional
+            #  -dc - DC value, optional
+            #  -ac - AC value, optional
+            #  -acphase - phase of AC signal, optional, requires -ac
             # ```
             # IYYYYYYY n+ n- PULSE(V1 V2 TD TR TF PW PER NP)
             # ```
@@ -782,6 +881,9 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             #  -fs - signal frequency, alias -fsig
             #  -phasec - carrier phase, optional
             #  -phases - signal phase, optional, require -phasec
+            #  -dc - DC value, optional
+            #  -ac - AC value, optional
+            #  -acphase - phase of AC signal, optional, requires -ac
             # ```
             # IYYYYYYY n+ n- SFFM(VO VA FC MDI FS PHASEC PHASES)
             # ```

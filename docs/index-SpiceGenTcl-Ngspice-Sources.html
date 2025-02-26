@@ -54,6 +54,9 @@
 <div id='SpiceGenTcl_Ngspice_Sources_am_constructor' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> constructor {name type npNode nmNode args} {
 
     <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> {
+        <font color=#b9b96e>-dc</font>=
+        <font color=#b9b96e>-ac</font>=
+        {<font color=#b9b96e>-acphase</font>= <font color=#b9b96e>-require</font> ac}
         {<font color=#b9b96e>-v0</font>= <font color=#b9b96e>-forbid</font> i0}
         {<font color=#b9b96e>-i0</font>= <font color=#b9b96e>-forbid</font> v0}
         {<font color=#b9b96e>-va</font>= <font color=#b9b96e>-forbid</font> ia}
@@ -63,6 +66,32 @@
         {<font color=#b9b96e>-td</font>= <font color=#b9b96e>-required</font>}
         <font color=#b9b96e>-phases</font>=
     }]
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> dc]} {
+        <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;dc -sw&quot;</font>
+        <b><font color=#ffa500>set</font></b> dcVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> dc]
+        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$dcVal</font>]&gt;1) && ([@ <font color=#f1b479>$dcVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
+            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;dcval <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>dcVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
+        } <b><font color=#ffa500>else</font></b> {
+            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;dcval <font color=#f1b479>$</font>dcVal -pos&quot;</font>
+        }
+    }
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> ac]} {
+        <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;ac -sw&quot;</font>
+        <b><font color=#ffa500>set</font></b> acVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ac]
+        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acVal</font>]&gt;1) && ([@ <font color=#f1b479>$acVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
+            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;acval <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>acVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
+        } <b><font color=#ffa500>else</font></b> {
+            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;acval <font color=#f1b479>$</font>acVal -pos&quot;</font>
+        }
+        <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> acphase]} {
+            <b><font color=#ffa500>set</font></b> acphaseVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> acphase]
+            <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acphaseVal</font>]&gt;1) && ([@ <font color=#f1b479>$acphaseVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
+                <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;acphase <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>acphaseVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
+            } <b><font color=#ffa500>else</font></b> {
+                <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;acphase <font color=#f1b479>$</font>acphaseVal -pos&quot;</font>
+            }
+        }
+    }
     <b><font color=#fe6efe>my</font></b> AliasesKeysCheck <font color=#f1b479>$arguments</font> [<b><font color=#ffa500>list</font></b> v0 i0]
     <b><font color=#fe6efe>my</font></b> AliasesKeysCheck <font color=#f1b479>$arguments</font> [<b><font color=#ffa500>list</font></b> va ia]
     <b><font color=#ffa500>set</font></b> paramsOrder [<b><font color=#ffa500>list</font></b> v0 i0 va ia mf fc td phases]
@@ -458,6 +487,9 @@
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator I.</td></tr>
 <tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
 <tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
+<tr><td><code><font color=#b9b96e>-ac</font></code></td><td>AC value, optional.</td></tr>
+<tr><td><code><font color=#b9b96e>-acphase</font></code></td><td>Phase of AC signal, optional, requires -ac.</td></tr>
+<tr><td><code><font color=#b9b96e>-dc</font></code></td><td>DC value, optional.</td></tr>
 <tr><td><code><font color=#b9b96e>-high</font></code></td><td>High value.</td></tr>
 <tr><td><code><font color=#b9b96e>-low</font></code></td><td>Low value.</td></tr>
 <tr><td><code><font color=#b9b96e>-np</font></code></td><td>Number of pulses, optional.</td></tr>
@@ -491,6 +523,9 @@
     <i><font color=#76a396>#  -pw - width of pulse</font></i>
     <i><font color=#76a396>#  -per - period time</font></i>
     <i><font color=#76a396>#  -np - number of pulses, optional</font></i>
+    <i><font color=#76a396>#  -dc - DC value, optional</font></i>
+    <i><font color=#76a396>#  -ac - AC value, optional</font></i>
+    <i><font color=#76a396>#  -acphase - phase of AC signal, optional, requires -ac</font></i>
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># IYYYYYYY n+ n- PULSE(V1 V2 TD TR TF PW PER NP)</font></i>
     <i><font color=#76a396># ```</font></i>
@@ -553,6 +588,9 @@
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator I.</td></tr>
 <tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
 <tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
+<tr><td><code><font color=#b9b96e>-ac</font></code></td><td>AC value, optional.</td></tr>
+<tr><td><code><font color=#b9b96e>-acphase</font></code></td><td>Phase of AC signal, optional, requires -ac.</td></tr>
+<tr><td><code><font color=#b9b96e>-dc</font></code></td><td>DC value, optional.</td></tr>
 <tr><td><code><font color=#b9b96e>-fc</font></code></td><td>Carrier frequency, alias -fcar.</td></tr>
 <tr><td><code><font color=#b9b96e>-fs</font></code></td><td>Signal frequency, alias -fsig.</td></tr>
 <tr><td><code><font color=#b9b96e>-i0</font></code></td><td>Initial value, aliases: -voff, -v0, -ioff.</td></tr>
@@ -584,6 +622,9 @@
     <i><font color=#76a396>#  -fs - signal frequency, alias -fsig</font></i>
     <i><font color=#76a396>#  -phasec - carrier phase, optional</font></i>
     <i><font color=#76a396>#  -phases - signal phase, optional, require -phasec</font></i>
+    <i><font color=#76a396>#  -dc - DC value, optional</font></i>
+    <i><font color=#76a396>#  -ac - AC value, optional</font></i>
+    <i><font color=#76a396>#  -acphase - phase of AC signal, optional, requires -ac</font></i>
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># IYYYYYYY n+ n- SFFM(VO VA FC MDI FS PHASEC PHASES)</font></i>
     <i><font color=#76a396># ```</font></i>
@@ -653,6 +694,9 @@
 <div id='SpiceGenTcl_Ngspice_Sources_pulse_constructor' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> constructor {name type npNode nmNode args} {
 
     <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> {
+        <font color=#b9b96e>-dc</font>=
+        <font color=#b9b96e>-ac</font>=
+        {<font color=#b9b96e>-acphase</font>= <font color=#b9b96e>-require</font> ac}
         {<font color=#b9b96e>-low</font>= <font color=#b9b96e>-forbid</font> {voff ioff}}
         {<font color=#b9b96e>-voff</font>= <font color=#b9b96e>-forbid</font> {low ioff}}
         {<font color=#b9b96e>-ioff</font>= <font color=#b9b96e>-forbid</font> {low voff}}
@@ -669,6 +713,32 @@
         {<font color=#b9b96e>-np</font>= <font color=#b9b96e>-forbid</font> ncycles}
         {<font color=#b9b96e>-ncycles</font>= <font color=#b9b96e>-forbid</font> np}
     }]
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> dc]} {
+        <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;dc -sw&quot;</font>
+        <b><font color=#ffa500>set</font></b> dcVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> dc]
+        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$dcVal</font>]&gt;1) && ([@ <font color=#f1b479>$dcVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
+            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;dcval <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>dcVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
+        } <b><font color=#ffa500>else</font></b> {
+            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;dcval <font color=#f1b479>$</font>dcVal -pos&quot;</font>
+        }
+    }
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> ac]} {
+        <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;ac -sw&quot;</font>
+        <b><font color=#ffa500>set</font></b> acVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ac]
+        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acVal</font>]&gt;1) && ([@ <font color=#f1b479>$acVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
+            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;acval <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>acVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
+        } <b><font color=#ffa500>else</font></b> {
+            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;acval <font color=#f1b479>$</font>acVal -pos&quot;</font>
+        }
+        <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> acphase]} {
+            <b><font color=#ffa500>set</font></b> acphaseVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> acphase]
+            <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acphaseVal</font>]&gt;1) && ([@ <font color=#f1b479>$acphaseVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
+                <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;acphase <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>acphaseVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
+            } <b><font color=#ffa500>else</font></b> {
+                <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;acphase <font color=#f1b479>$</font>acphaseVal -pos&quot;</font>
+            }
+        }
+    }
     <b><font color=#fe6efe>my</font></b> AliasesKeysCheck <font color=#f1b479>$arguments</font> [<b><font color=#ffa500>list</font></b> low voff ioff]
     <b><font color=#fe6efe>my</font></b> AliasesKeysCheck <font color=#f1b479>$arguments</font> [<b><font color=#ffa500>list</font></b> high von ion]
     <b><font color=#fe6efe>my</font></b> AliasesKeysCheck <font color=#f1b479>$arguments</font> [<b><font color=#ffa500>list</font></b> pw ton]
@@ -716,6 +786,9 @@
 <div id='SpiceGenTcl_Ngspice_Sources_sffm_constructor' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> constructor {name type npNode nmNode args} {
 
     <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> {
+        <font color=#b9b96e>-dc</font>=
+        <font color=#b9b96e>-ac</font>=
+        {<font color=#b9b96e>-acphase</font>= <font color=#b9b96e>-require</font> ac}
         {<font color=#b9b96e>-v0</font>= <font color=#b9b96e>-forbid</font> {i0 voff ioff}}
         {<font color=#b9b96e>-i0</font>= <font color=#b9b96e>-forbid</font> {v0 voff ioff}}
         {<font color=#b9b96e>-voff</font>= <font color=#b9b96e>-forbid</font> {v0 i0 ioff}}
@@ -732,6 +805,32 @@
         <font color=#b9b96e>-phasec</font>=
         {<font color=#b9b96e>-phases</font>= <font color=#b9b96e>-require</font> {phasec}}
     }]
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> dc]} {
+        <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;dc -sw&quot;</font>
+        <b><font color=#ffa500>set</font></b> dcVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> dc]
+        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$dcVal</font>]&gt;1) && ([@ <font color=#f1b479>$dcVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
+            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;dcval <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>dcVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
+        } <b><font color=#ffa500>else</font></b> {
+            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;dcval <font color=#f1b479>$</font>dcVal -pos&quot;</font>
+        }
+    }
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> ac]} {
+        <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;ac -sw&quot;</font>
+        <b><font color=#ffa500>set</font></b> acVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ac]
+        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acVal</font>]&gt;1) && ([@ <font color=#f1b479>$acVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
+            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;acval <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>acVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
+        } <b><font color=#ffa500>else</font></b> {
+            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;acval <font color=#f1b479>$</font>acVal -pos&quot;</font>
+        }
+        <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> acphase]} {
+            <b><font color=#ffa500>set</font></b> acphaseVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> acphase]
+            <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acphaseVal</font>]&gt;1) && ([@ <font color=#f1b479>$acphaseVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
+                <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;acphase <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>acphaseVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
+            } <b><font color=#ffa500>else</font></b> {
+                <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;acphase <font color=#f1b479>$</font>acphaseVal -pos&quot;</font>
+            }
+        }
+    }
     <b><font color=#fe6efe>my</font></b> AliasesKeysCheck <font color=#f1b479>$arguments</font> [<b><font color=#ffa500>list</font></b> v0 i0 voff ioff]
     <b><font color=#fe6efe>my</font></b> AliasesKeysCheck <font color=#f1b479>$arguments</font> [<b><font color=#ffa500>list</font></b> va ia vamp iamp]
     <b><font color=#fe6efe>my</font></b> AliasesKeysCheck <font color=#f1b479>$arguments</font> [<b><font color=#ffa500>list</font></b> fc fcar]
@@ -792,6 +891,9 @@
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator V.</td></tr>
 <tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
 <tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
+<tr><td><code><font color=#b9b96e>-ac</font></code></td><td>AC value, optional.</td></tr>
+<tr><td><code><font color=#b9b96e>-acphase</font></code></td><td>Phase of AC signal, optional, requires -ac.</td></tr>
+<tr><td><code><font color=#b9b96e>-dc</font></code></td><td>DC value, optional.</td></tr>
 <tr><td><code><font color=#b9b96e>-fc</font></code></td><td>Carrier frequency.</td></tr>
 <tr><td><code><font color=#b9b96e>-mf</font></code></td><td>Modulating frequency.</td></tr>
 <tr><td><code><font color=#b9b96e>-phases</font></code></td><td>Phase, optional, require -td.</td></tr>
@@ -821,6 +923,9 @@
     <i><font color=#76a396>#  -fc - carrier frequency</font></i>
     <i><font color=#76a396>#  -td - signal delay, optional</font></i>
     <i><font color=#76a396>#  -phases - phase, optional, require -td</font></i>
+    <i><font color=#76a396>#  -dc - DC value, optional</font></i>
+    <i><font color=#76a396>#  -ac - AC value, optional</font></i>
+    <i><font color=#76a396>#  -acphase - phase of AC signal, optional, requires -ac</font></i>
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># VYYYYYYY n+ n- AM(VA VO MF FC TD PHASES)</font></i>
     <i><font color=#76a396># ```</font></i>
@@ -1030,6 +1135,9 @@
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator V.</td></tr>
 <tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
 <tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
+<tr><td><code><font color=#b9b96e>-ac</font></code></td><td>AC value, optional.</td></tr>
+<tr><td><code><font color=#b9b96e>-acphase</font></code></td><td>Phase of AC signal, optional, requires -ac.</td></tr>
+<tr><td><code><font color=#b9b96e>-dc</font></code></td><td>DC value, optional.</td></tr>
 <tr><td><code><font color=#b9b96e>-high</font></code></td><td>High value, aliases: -von, ion.</td></tr>
 <tr><td><code><font color=#b9b96e>-low</font></code></td><td>Low value, aliases: -voff, -ioff.</td></tr>
 <tr><td><code><font color=#b9b96e>-np</font></code></td><td>Number of pulses, optional.</td></tr>
@@ -1063,6 +1171,9 @@
     <i><font color=#76a396>#  -pw - width of pulse, alias -ton</font></i>
     <i><font color=#76a396>#  -per - period time, alias -tper</font></i>
     <i><font color=#76a396>#  -np - number of pulses, optional</font></i>
+    <i><font color=#76a396>#  -dc - DC value, optional</font></i>
+    <i><font color=#76a396>#  -ac - AC value, optional</font></i>
+    <i><font color=#76a396>#  -acphase - phase of AC signal, optional, requires -ac</font></i>
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># VYYYYYYY n+ n- PULSE(V1 V2 TD TR TF PW PER NP)</font></i>
     <i><font color=#76a396># ```</font></i>
@@ -1125,6 +1236,9 @@
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator V.</td></tr>
 <tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
 <tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
+<tr><td><code><font color=#b9b96e>-ac</font></code></td><td>AC value, optional.</td></tr>
+<tr><td><code><font color=#b9b96e>-acphase</font></code></td><td>Phase of AC signal, optional, requires -ac.</td></tr>
+<tr><td><code><font color=#b9b96e>-dc</font></code></td><td>DC value, optional.</td></tr>
 <tr><td><code><font color=#b9b96e>-fc</font></code></td><td>Carrier frequency, alias -fcar.</td></tr>
 <tr><td><code><font color=#b9b96e>-fs</font></code></td><td>Signal frequency, alias -fsig.</td></tr>
 <tr><td><code><font color=#b9b96e>-mdi</font></code></td><td>Modulation index.</td></tr>
@@ -1156,6 +1270,9 @@
     <i><font color=#76a396>#  -fs - signal frequency, alias -fsig</font></i>
     <i><font color=#76a396>#  -phasec - carrier phase, optional</font></i>
     <i><font color=#76a396>#  -phases - signal phase, optional, require -phasec</font></i>
+    <i><font color=#76a396>#  -dc - DC value, optional</font></i>
+    <i><font color=#76a396>#  -ac - AC value, optional</font></i>
+    <i><font color=#76a396>#  -acphase - phase of AC signal, optional, requires -ac</font></i>
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># VYYYYYYY n+ n- SFFM(VO VA FC MDI FS PHASEC PHASES)</font></i>
     <i><font color=#76a396># ```</font></i>
