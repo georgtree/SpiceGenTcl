@@ -507,7 +507,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             if {[my CheckBraced $string]} {
                 return [@ [regexp -inline {^\{([^={}]+)\}$} $string] 1]
             } else {
-                return -code error "String '${string}' isn't of form {string}, stringmust not contain '{' and '}'\
+                return -code error "String '${string}' isn't of form {string}, string must not contain '{' and '}'\
                         symbols"
             }
         }
@@ -766,9 +766,6 @@ namespace eval ::SpiceGenTcl::Ngspice {
             }
             return
         }
-        method CreateIsource {line} {
-
-        }
         method CreateJFET {line} {
 
         }
@@ -835,37 +832,110 @@ namespace eval ::SpiceGenTcl::Ngspice {
             # remove `(` and `)` symbols from string
             set line [regsub -all {[[:space:]]+} [string trim [string map {"(" " " ")" " "} $line]] { }]
             set lineList [split $line]
-            lassign $lineList elemName pin1 pin2 form
+            lassign $lineList elemName pin1 pin2
+            set lineList [lrange $lineList 3 end]
             set type [string index $elemName 0]
             set elemName [string range $elemName 1 end]
-            set availFuncts {pulse sin exp pwl sffm am}
-            foreach func $availFuncts {
-                if {[lsearch -exact $lineList $func]!=-1} {
-                    set function $func
-                }
-            }
-            
-            if {[my CheckBraced $form] || [my CheckNumber $form] || ($form eq {dc})} {
-                
-                #puts $form
-                if {[lsearch -exact $lineList ac]!=-1} {
-                    if {[@ $lineList 4] eq {ac}} {
-                        set lineList [lremove $lineList 4]
-                        set posParamsList [my ParsePosParams [lrange $lineList 3 end] {dc ac acphase}]
-                    } elseif {([@ $lineList 5] eq {ac}) && ($form eq {dc})} {
-                        set lineList [lremove $lineList 4 5]
-                        set posParamsList [my ParsePosParams [lrange $lineList 3 end] {dc ac acphase}]
-                    } else {
-                        return -code error "Line '${line}' contains 'ac' word but located at the wrong position"
-                    }
-                    set lineList [lsearch -all -inline -not -exact $lineList dc]
-                    [my configure -Netlist] add [[string toupper ${type}]ac new $elemName $pin1 $pin2 {*}$posParamsList]
+
+            # check if the first value is DC value without DC selector
+            if {[my CheckBraced [@ $lineList 0]] || [my CheckNumber [@ $lineList 0]]} {
+                set dcVal [@ $lineList 0]
+                if {[my CheckBraced $dcVal]} {
+                    lappend paramsList -dc [list [my Unbrace $dcVal] -eq]
                 } else {
-                    set lineList [lsearch -all -inline -not -exact $lineList dc]
-                    puts $lineList
-                    [my configure -Netlist] add [[string toupper ${type}]dc new $elemName $pin1 $pin2 -dc [@ $lineList 3]]
+                    lappend paramsList -dc $dcVal
+                }
+                set lineList [lremove $lineList 0]
+            }
+            # fine possible DC selector
+            if {[set dcIndex [lsearch -exact $lineList dc]]!=-1} {
+                set dcValue [@ $lineList [= {$dcIndex+1}]]
+                if {[my CheckBraced $dcValue]} {
+                    lappend paramsList -dc [list [my Unbrace $dcValue] -eq]
+                } else {
+                    lappend paramsList -dc $dcValue
+                }
+                set lineList [lremove $lineList $dcIndex [= {$dcIndex+1}]]
+            }
+            # find possible AC selector
+            set acType false
+            if {[set acIndex [lsearch -exact $lineList ac]]!=-1} {
+                set acType true
+                set acValue [@ $lineList [= {$acIndex+1}]]
+                if {[my CheckBraced $acValue]} {
+                    set acValue [list [my Unbrace $acValue] -eq]
+                }
+                set possibleAcPhase [@ $lineList [= {$acIndex+2}]]
+                if {[my CheckNumber $possibleAcPhase] || [my CheckBraced $possibleAcPhase]} {
+                    set acPhase $possibleAcPhase
+                    if {[my CheckBraced $acPhase]} {
+                        set acPhase [list [my Unbrace $acPhase] -eq]
+                    }
+                    set lineList [lremove $lineList $acIndex [= {$acIndex+1}] [= {$acIndex+2}]]
+                    lappend paramsList -ac $acValue -acphase $acPhase
+                } else {
+                    set lineList [lremove $lineList $acIndex [= {$acIndex+1}]]
+                    lappend paramsList -ac $acValue
                 }
             }
+            set functsDict [dcreate pulse {low high td tr tf pw per np} sin {v0 va freq td theta phase}\
+                                    exp {v1 v2 td1 tau1 td2 tau2} pwl {seq} sffm {v0 va fc mdi fs phasec phases}\
+                                    am {v0 va mf fc td phases}]
+            switch [@ $lineList 0] {
+                pulse {
+                    lappend paramsList {*}[my ParsePosParams [lrange $lineList 1 end] [dget $functsDict pulse]]
+                    [my configure -Netlist] add [[string toupper ${type}]pulse new $elemName $pin1 $pin2 {*}$paramsList]
+                }
+                sin {
+                    lappend paramsList {*}[my ParsePosParams [lrange $lineList 1 end] [dget $functsDict sin]]
+                    [my configure -Netlist] add [[string toupper ${type}]sin new $elemName $pin1 $pin2 {*}$paramsList]
+                }
+                exp {
+                    lappend paramsList {*}[my ParsePosParams [lrange $lineList 1 end] [dget $functsDict exp]]
+                    [my configure -Netlist] add [[string toupper ${type}]exp new $elemName $pin1 $pin2 {*}$paramsList]
+                }
+                pwl {
+                    foreach value [lrange $lineList 1 end] {
+                        if {[my CheckBraced $value]} {
+                            set value [list [my Unbrace $value] -eq]
+                        } 
+                        lappend seqList $value
+                    }
+                    lappend paramsList -seq $seqList
+                    [my configure -Netlist] add [[string toupper ${type}]pwl new $elemName $pin1 $pin2 {*}$paramsList]
+                }
+                sffm {
+                    lappend paramsList {*}[my ParsePosParams [lrange $lineList 1 end] [dget $functsDict sffm]]
+                    [my configure -Netlist] add [[string toupper ${type}]sffm new $elemName $pin1 $pin2 {*}$paramsList]
+                }
+                am {
+                    lappend paramsList {*}[my ParsePosParams [lrange $lineList 1 end] [dget $functsDict am]]
+                    [my configure -Netlist] add [[string toupper ${type}]am new $elemName $pin1 $pin2 {*}$paramsList]
+                }
+                portnum {
+                    if {$type ne {v}} {
+                        return -code error "RF port could be only voltage type in line '${line}'"
+                    }
+                    set portnumVal [@ $lineList 1]
+                    if {[@ $lineList 2] eq {z0}} {
+                        set z0Val [@ $lineList 3]
+                        if {[my CheckBraced $z0Val]} {
+                            lappend paramsList -z0 [list [my Unbrace $z0Val] -eq]
+                        } else {
+                            lappend paramsList -z0 $z0Val
+                        }
+                    }
+                    [my configure -Netlist] add [Vport new $elemName $pin1 $pin2 -portnum $portnumVal {*}$paramsList]
+                }
+                default {
+                    if {$acType} {
+                        [my configure -Netlist] add [[string toupper ${type}]ac new $elemName $pin1 $pin2 {*}$paramsList]
+                    } else {
+                        [my configure -Netlist] add [[string toupper ${type}]dc new $elemName $pin1 $pin2 {*}$paramsList]
+                    }
+                }
+            }
+            return
         }
         method CreateISwitch {line} {
 

@@ -199,6 +199,10 @@ rs2 3 1 r={v(a)+v(b)/i(b)} tc2=1
 rc1 4 8 10k tc1=2 tc2={tcrt}
 rc2 5 8 10k
 rbias 7 8 20k
+vcm 1 0 dc 0 ac 1 sin 0 0.1 5meg
+vdm 1 11 dc 0 ac 1 sin 0 0.1 5meg
+vcc 8 0 12
+vee 9 0 -12
 .sens v(5,4)" -cleanup {
     unset parser
 }
@@ -734,16 +738,66 @@ test testParserClassIndsources-1 {test Parser class, independent sources parsing
     $parser buildNetlist
 } -body {
     return [[$parser configure -Netlist] genSPICEString]
-} -result "g1 2 0 5 0 0.1 m={m}
-g2 2 0 5 0 {value} m={m}
-e1 2 3 14 1 2.0
-e2 2 3 14 1 {value}
-f1 13 5 vsens 5
-f2 13 5 vsens {value}
-h1 5 17 vz 0.5k
-h2 5 17 vz {value}" -cleanup {
+} -result "v1 10 0 6
+i2 10 0 6
+v3 10 0 {dc} ac 1
+i4 10 0 6 ac 1 {acphase}
+v5 10 0 6 ac 1
+i6 10 0 6 ac 1 -45
+v7 net1 net2 pulse 0 1 1e-9 1e-9 1e-9 10e-6 20e-6 10
+i8 net1 net2 pulse 0 1 1e-9 1e-9 1e-9 10e-6 20e-6
+v9 net1 net2 pulse 0 1 {td} 1e-9 1e-9 10e-6 20e-6
+i10 net1 net2 pulse 0 1 {td} 1e-9 1e-9 10e-6 20e-6 {np}
+v11 net1 net2 dc {dc} ac 0 pulse 0 1 1e-9 1e-9 1e-9 10e-6 20e-6 10
+i12 net1 net2 ac 0 45 pulse 0 1 1e-9 1e-9 1e-9 10e-6 20e-6 10
+v14 net1 net2 sin 0 2 50 1e-6
+i15 net1 net2 sin 0 2 50 1e-6 {theta}
+v16 net1 net2 sin 0 2 {freq} 1e-6 {theta}
+i17 net1 net2 sin 0 2 50
+v18 net1 net2 sin 0 2 50 1e-6 {theta}
+i19 net1 net2 dc {ab} ac 0 sin 0 2 50 1e-6 {theta}
+v20 net1 net2 ac 0 45 sin 0 2 50 1e-6 {theta}
+i21 net1 net2 exp 0 1 1e-9 1e-9 1e-9 10e-6
+v22 net1 net2 exp 0 1 1e-9 1e-9 {td2} 10e-6
+i23 net1 net2 exp 0 1 1e-9 1e-9 1e-9 10e-6
+v24 net1 net2 dc 1 ac 0 exp 0 1 1e-9 1e-9 1e-9 10e-6
+i25 net1 net2 ac 0 45 exp 0 1 1e-9 1e-9 1e-9 10e-6
+v26 npnode nmnode pwl 0 0 {t1} 1 2 2 3 3 4 4
+i27 npnode nmnode dc 1 ac 0 pwl 0 0 {t1} 1 2 2 3 3 4 4
+v28 npnode nmnode ac 0 45 pwl 0 0 {t1} 1 2 2 3 3 4 4
+i29 net1 net2 sffm 0 1 1e6 0 1e3 45
+v30 net1 net2 sffm 0 1 1e6 0 1e3 {phase}
+i31 net1 net2 sffm 0 1 {freq} 0 1e3 {phase}
+v32 net1 net2 sffm 0 1 1e6 0 1e3
+i33 net1 net2 sffm 0 1 {freq} 0 1e3 {phase}
+v34 net1 net2 dc 1 ac 0 sffm 0 1 {freq} 0 1e3 {phase}
+i35 net1 net2 dc 1 ac 0 45 sffm 0 1 {freq} 0 1e3 {phase}
+v36 net1 net2 am 0 2 1e3 5e3 1e-6 45
+i37 net1 net2 am 0 2 1e3 5e3 1e-6 {phase}
+v38 net1 net2 am 0 2 1e3 {freq} 1e-6 {phase}
+i39 net1 net2 am 0 2 1e3 5e3 1e-6
+v40 net1 net2 am 0 2 1e3 5e3 1e-6 45
+i41 net1 net2 dc 1 ac 0 am 0 2 1e3 5e3 1e-6 45
+v42 net1 net2 ac 0 45 am 0 2 1e3 5e3 1e-6 45
+v43 netp netm dc 1 ac 1 portnum 1 z0 50
+v44 netp netm dc 1 ac 1 portnum 1
+v45 netp netm dc 1 ac 1 portnum 2 z0 {z0}" -cleanup {
     unset parser
 }
 
+test testParserClassIndsources-2 {test Parser class, independent sources parsing, edge case} -setup {
+    set file [open [file join $netlistsLoc temp1] w+]
+    puts $file ""
+    puts $file {v1 neta netp 0 1 2}
+    close $file
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
+    $parser readFile
+    catch {$parser buildNetlist} errorStr
+} -body {
+    return $errorStr
+} -result "-i conflicts with -v" -cleanup {
+    file delete [file join $netlistsLoc temp1]
+    unset parser errorStr
+}
 
 cleanupTests
