@@ -194,10 +194,14 @@ test testParserClass-8 {test Parser class} -setup {
     return [[$parser configure -Netlist] genSPICEString]
 } -result ".model qnl npn(level=1 bf=80 rb=100 tf=0.3n tr=6n cje=3p cjc=2p vaf=50)
 .model qnr npn(level=1 bf=80 rb=100 tf=0.3n tr=6n cje=3p cjc=2p vaf=50)
+q1 4 2 6 qnr
+q2 5 3 6 qnl
 rs1 11 2 {res}
 rs2 3 1 r={v(a)+v(b)/i(b)} tc2=1
 rc1 4 8 10k tc1=2 tc2={tcrt}
 rc2 5 8 10k
+q3 7 7 9 qnl
+q4 6 7 9 qnr
 rbias 7 8 20k
 vcm 1 0 dc 0 ac 1 sin 0 0.1 5meg
 vdm 1 11 dc 0 ac 1 sin 0 0.1 5meg
@@ -785,19 +789,40 @@ v45 netp netm dc 1 ac 1 portnum 2 z0 {z0}" -cleanup {
     unset parser
 }
 
-test testParserClassIndsources-2 {test Parser class, independent sources parsing, edge case} -setup {
-    set file [open [file join $netlistsLoc temp1] w+]
-    puts $file ""
-    puts $file {v1 neta netp 0 1 2}
-    close $file
-    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
+
+### Diodes parsing test
+
+test testParserClassDiodes-1 {test Parser class, diodes parsing} -setup {
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc diodes_test.cir]]
     $parser readFile
-    catch {$parser buildNetlist} errorStr
+    $parser buildNetlist
 } -body {
-    return $errorStr
-} -result "-i conflicts with -v" -cleanup {
-    file delete [file join $netlistsLoc temp1]
-    unset parser errorStr
+    return [[$parser configure -Netlist] genSPICEString]
+} -result "d1 netp netm diomod area=1e-3 lm=1e-6 temp=25
+d2 netp netm diomod off area=1e-3 lm=1e-6 temp=25
+d3 netp netm diomod off area={area} lm=1e-6 temp=25" -cleanup {
+    unset parser
 }
+
+### BJTs parsing test
+
+test testParserClassBJTs-1 {test Parser class, BJTs parsing} -setup {
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc bjts_test.cir]]
+    $parser readFile
+    $parser buildNetlist
+} -body {
+    return [[$parser configure -Netlist] genSPICEString]
+} -result "q1 netc netb nete bjtmod area=1e-3 temp=25
+q2 netc netb nete nets bjtmod off area=1e-3 temp=25
+q3 netc netb nete nets nettj bjtmod area=1e-3 temp=25
+q4 netc netb nete bjtmod
+q5 netc netb nete nets bjtmod off
+q6 netc netb nete nets nettj bjtmod
+q7 netc netb nete nets nettj bjtmod ic=1,2 area=1e-3 temp=25
+q8 netc netb nete nets nettj bjtmod ic={a},2 area=1e-3 temp=25
+q9 netc netb nete nets nettj bjtmod ic={a},{b} area=1e-3 temp=25" -cleanup {
+    unset parser
+}
+
 
 cleanupTests

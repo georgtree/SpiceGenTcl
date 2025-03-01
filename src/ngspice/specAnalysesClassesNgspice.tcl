@@ -64,11 +64,11 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
                 {-donoise}
             }]
             my NameProcess $arguments [self object]
-            lappend params "variation [dget $arguments variation] -posnocheck"
-            set paramsOrder [list n fstart fstop]
+            lappend params [list variation [dget $arguments variation] -posnocheck]
+            set paramsOrder {n fstart fstop}
             my ParamsProcess $paramsOrder $arguments params
             if {[dexist $arguments donoise]} {
-                lappend params "donoise 1 -pos" 
+                lappend params {donoise 1 -pos} 
             }
             next sp $params -name $name
         }
@@ -104,10 +104,10 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
                 {-fstop= -required}
             }]
             my NameProcess $arguments [self object]
-            lappend params "outvar [dget $arguments outvar] -posnocheck"
-            lappend params "ac -sw"
-            lappend params "variation [dget $arguments variation] -posnocheck"
-            set paramsOrder [list n fstart fstop]
+            lappend params [list outvar [dget $arguments outvar] -posnocheck]
+            lappend params {ac -sw}
+            lappend params [list variation [dget $arguments variation] -posnocheck]
+            set paramsOrder {n fstart fstop}
             my ParamsProcess $paramsOrder $arguments params
             next sens $params -name $name
         }
@@ -135,7 +135,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
                 {-outvar= -required}
             }]
             my NameProcess $arguments [self object]
-            lappend params "outvar [dget $arguments outvar] -posnocheck"
+            lappend params [list outvar [dget $arguments outvar] -posnocheck]
             next sens $params -name $name
         }
     }

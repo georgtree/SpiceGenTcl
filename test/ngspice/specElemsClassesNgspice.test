@@ -122,10 +122,10 @@ test testRClass-12 {test R alias for Resistor class with model switch} -setup {
 ####  Capacitor class tests 
     
 test testCapacitorClass-1 {test Capacitor class} -setup {
-    set cap [Capacitor new 1 netp netm -c 1e-6 -tc1 1 -temp 25]
+    set cap [Capacitor new 1 netp netm -c {cpar*cpar2 -eq} -tc1 1 -temp 25]
 } -body {
     set result [$cap genSPICEString]
-} -result "c1 netp netm 1e-6 tc1=1 temp=25" -cleanup {
+} -result "c1 netp netm {cpar*cpar2} tc1=1 temp=25" -cleanup {
     unset cap result
 }
 
@@ -269,7 +269,7 @@ test testInductorClass-6 {test Inductor class with beh switch with different arg
 }
 
 test testInductorClass-7 {test Inductor class with l as equation} -setup {
-    set ind [Inductor new 1 netp netm -l "l1*l2 -eq" -beh -tc1 1]
+    set ind [Inductor new 1 netp netm -l l1*l2 -beh -tc1 1]
 } -body {
     set result [$ind genSPICEString]
 } -result "l1 netp netm l={l1*l2} tc1=1" -cleanup {
@@ -277,7 +277,7 @@ test testInductorClass-7 {test Inductor class with l as equation} -setup {
 }
 
 test testInductorClass-8 {test Inductor class with l as equation} -setup {
-    set ind [Inductor new 1 netp netm -l "l1*l2 -eq" -tc1 1]
+    set ind [Inductor new 1 netp netm -l {l1*l2 -eq} -tc1 1]
 } -body {
     set result [$ind genSPICEString]
 } -result "l1 netp netm {l1*l2} tc1=1" -cleanup {

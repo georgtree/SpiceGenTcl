@@ -16,12 +16,12 @@
 
 namespace eval ::SpiceGenTcl {
     namespace eval Common::BasicDevices {
-        namespace export Resistor R Capacitor C Inductor L SubcircuitInstance X SubcircuitInstanceAuto XAuto \
-                VSwitch VSw CSwitch W
+        namespace export Resistor R Capacitor C Inductor L SubcircuitInstance X SubcircuitInstanceAuto XAuto VSwitch\
+                VSw CSwitch W
     }
     namespace eval Common::Sources {
-        namespace export Vdc Idc Vac Iac Vpulse Ipulse Vsin Isin Vexp Iexp Vpwl Ipwl Vsffm Isffm Vccs G \
-                Vcvs E Cccs F Ccvs H
+        namespace export Vdc Idc Vac Iac Vpulse Ipulse Vsin Isin Vexp Iexp Vpwl Ipwl Vsffm Isffm Vccs G Vcvs E Cccs F\
+                Ccvs H
     }
 }
 
@@ -63,17 +63,17 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 -tc2=
             }]
             set rVal [dget $arguments r]
-            if {([llength $rVal]>1) && ([@ $rVal 1] eq "-eq")} {
-                lappend params "r [@ $rVal 0] -poseq"
+            if {([llength $rVal]>1) && ([@ $rVal 1] eq {-eq})} {
+                lappend params [list r [@ $rVal 0] -poseq]
             } else {
-                lappend params "r $rVal -pos"
+                lappend params [list r $rVal -pos]
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {r}} {
-                    lappend params "$paramName $value"
+                    lappend params [list $paramName {*}$value]
                 }
             }
-            next r$name [list "np $npNode" "nm $nmNode"] $params
+            next r$name [list [list np $npNode] [list nm $nmNode]] $params
         }
     }
 ####  R class 
@@ -115,17 +115,17 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 -ic=
             }]
             set cVal [dget $arguments c]
-            if {([llength $cVal]>1) && ([@ $cVal 1] eq "-eq")} {
-                lappend params "c [@ $cVal 0] -poseq"
+            if {([llength $cVal]>1) && ([@ $cVal 1] eq {-eq})} {
+                lappend params [list c [@ $cVal 0] -poseq]
             } else {
-                lappend params "c $cVal -pos"
+                lappend params [list c $cVal -pos]
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {c}} {
-                    lappend params "$paramName $value"
+                    lappend params [list $paramName {*}$value]
                 }
             }
-            next c$name [list "np $npNode" "nm $nmNode"] $params
+            next c$name [list [list np $npNode] [list nm $nmNode]] $params
         }
     }
 ####  C class 
@@ -166,17 +166,17 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 -tc2=
             }]
             set lVal [dget $arguments l]
-            if {([llength $lVal]>1) && ([@ $lVal 1] eq "-eq")} {
-                lappend params "l [@ $lVal 0] -poseq"
+            if {([llength $lVal]>1) && ([@ $lVal 1] eq {-eq})} {
+                lappend params [list l [@ $lVal 0] -poseq]
             } else {
-                lappend params "l $lVal -pos"
+                lappend params [list l $lVal -pos]
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {l}} {
-                    lappend params "$paramName $value"
+                    lappend params [list $paramName {*}$value]
                 }
             }
-            next l$name [list "np $npNode" "nm $nmNode"] $params
+            next l$name [list [list np $npNode] [list nm $nmNode]] $params
         }
     }
     
@@ -204,7 +204,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             # ```
             # ::SpiceGenTcl::Common::BasicDevices::SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar -eq}}
             # ```
-            set params [linsert $params 0 "model $subName -posnocheck"]
+            set params [linsert $params 0 [list model $subName -posnocheck]]
             next x$name $pins $params
         }
     }
@@ -242,13 +242,13 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 {-on -forbid {off}}
                 {-off -forbid {on}}
             }]
-            lappend params "model [dget $arguments model] -posnocheck"
+            lappend params [list model [dget $arguments model] -posnocheck]
             if {[dexist $arguments on]} {
                 lappend params {on -sw}
             } elseif {[dexist $arguments off]} {
                 lappend params {off -sw}
             }
-            next s$name [list "np $npNode" "nm $nmNode" "ncp $ncpNode" "ncm $ncmNode"] $params
+            next s$name [list [list np $npNode] [list nm $nmNode] [list ncp $ncpNode] [list ncm $ncmNode]] $params
         }
     }
 
@@ -286,14 +286,14 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 {-on -forbid {off}}
                 {-off -forbid {on}}
             }]
-            lappend params "icntrl [dget $arguments icntrl] -posnocheck"
-            lappend params "model [dget $arguments model] -posnocheck"
+            lappend params [list icntrl [dget $arguments icntrl] -posnocheck]
+            lappend params [list model [dget $arguments model] -posnocheck]
             if {[dexist $arguments on]} {
                 lappend params {on -sw}
             } elseif {[dexist $arguments off]} {
                 lappend params {off -sw}
             }
-            next w$name [list "np $npNode" "nm $nmNode"] $params
+            next w$name [list [list np $npNode] [list nm $nmNode]] $params
         }
     }
 
@@ -337,20 +337,20 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                         '[llength $pinsNames]'"
             }
             set pinsList [lmap pinName $pinsNames node $nodes {join [list $pinName $node]}]
-            set paramDefList [lmap paramName [dict keys [$subcktObj getParams]] {subst "-${paramName}="}]
-            if {$paramDefList ne ""} {
+            set paramDefList [lmap paramName [dict keys [$subcktObj getParams]] {subst -${paramName}=}]
+            if {$paramDefList ne {}} {
                 # create definition for argparse module for passing parameters as optional arguments
                 set arguments [argparse -inline "
                     [join $paramDefList \n]
                 "]
                 # create list of parameters and values from which were supplied by args
                 dict for {paramName value} $arguments {
-                    lappend params "$paramName $value"
+                    lappend params [list $paramName {*}$value]
                 }
             } else {
-                set params ""
+                set params {}
             }
-            set params [linsert $params 0 "model $subName -posnocheck"]
+            set params [linsert $params 0 [list model $subName -posnocheck]]
             next x$name $pinsList $params
         }
     }
@@ -376,12 +376,12 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {-dc= -required}
             }]
             set dcVal [dget $arguments dc]
-            if {([llength $dcVal]>1) && ([@ $dcVal 1] eq "-eq")} {
-                lappend params "dc [@ $dcVal 0] -poseq"
+            if {([llength $dcVal]>1) && ([@ $dcVal 1] eq {-eq})} {
+                lappend params [list dc [@ $dcVal 0] -poseq]
             } else {
-                lappend params "dc $dcVal -pos"
+                lappend params [list dc $dcVal -pos]
             }
-            next $type$name [list "np $npNode" "nm $nmNode"] $params
+            next $type$name [list [list np $npNode] [list nm $nmNode]] $params
         }
     }
 
@@ -396,28 +396,28 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 -acphase=
             }]
             set dcVal [dget $arguments dc]
-            if {([llength $dcVal]>1) && ([@ $dcVal 1] eq "-eq")} {
-                lappend params "dc [@ $dcVal 0] -poseq"
+            if {([llength $dcVal]>1) && ([@ $dcVal 1] eq {-eq})} {
+                lappend params [list dc [@ $dcVal 0] -poseq]
             } else {
-                lappend params "dc $dcVal -pos"
+                lappend params [list dc $dcVal -pos]
             }
             set acVal [dget $arguments ac]
-            lappend params "ac -sw"
-            if {([llength $acVal]>1) && ([@ $acVal 1] eq "-eq")} {
-                lappend params "acval [@ $acVal 0] -poseq"
+            lappend params {ac -sw}
+            if {([llength $acVal]>1) && ([@ $acVal 1] eq {-eq})} {
+                lappend params [list acval [@ $acVal 0] -poseq]
             } else {
-                lappend params "acval $acVal -pos"
+                lappend params [list acval $acVal -pos]
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {ac dc}} {
-                    if {([llength $value]>1) && ([@ $value 1] eq "-eq")} {
-                        lappend params "$paramName [@ $value 0] -poseq"
+                    if {([llength $value]>1) && ([@ $value 1] eq {-eq})} {
+                        lappend params [list $paramName [@ $value 0] -poseq]
                     } else {
-                        lappend params "$paramName $value -pos"
+                        lappend params [list $paramName $value -pos]
                     }
                 }
             }
-            next $type$name [list "np $npNode" "nm $nmNode"] $params
+            next $type$name [list [list np $npNode] [list nm $nmNode]] $params
         }
     }   
     
@@ -446,39 +446,39 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {-tper= -forbid per}
             }]
             if {[dexist $arguments dc]} {
-                lappend params "dc -sw"
+                lappend params {dc -sw}
                 set dcVal [dget $arguments dc]
-                if {([llength $dcVal]>1) && ([@ $dcVal 1] eq "-eq")} {
-                    lappend params "dcval [@ $dcVal 0] -poseq"
+                if {([llength $dcVal]>1) && ([@ $dcVal 1] eq {-eq})} {
+                    lappend params [list dcval [@ $dcVal 0] -poseq]
                 } else {
-                    lappend params "dcval $dcVal -pos"
+                    lappend params [list dcval $dcVal -pos]
                 }
             }
             if {[dexist $arguments ac]} {
-                lappend params "ac -sw"
+                lappend params {ac -sw}
                 set acVal [dget $arguments ac]
-                if {([llength $acVal]>1) && ([@ $acVal 1] eq "-eq")} {
-                    lappend params "acval [@ $acVal 0] -poseq"
+                if {([llength $acVal]>1) && ([@ $acVal 1] eq {-eq})} {
+                    lappend params [list acval [@ $acVal 0] -poseq]
                 } else {
-                    lappend params "acval $acVal -pos"
+                    lappend params [list acval $acVal -pos]
                 }
                 if {[dexist $arguments acphase]} {
                     set acphaseVal [dget $arguments acphase]
-                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 1] eq "-eq")} {
-                        lappend params "acphase [@ $acphaseVal 0] -poseq"
+                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 1] eq {-eq})} {
+                        lappend params [list acphase [@ $acphaseVal 0] -poseq]
                     } else {
-                        lappend params "acphase $acphaseVal -pos"
+                        lappend params [list acphase $acphaseVal -pos]
                     }
                 }
             }
-            my AliasesKeysCheck $arguments [list low voff ioff]
-            my AliasesKeysCheck $arguments [list high von ion]
-            my AliasesKeysCheck $arguments [list pw ton]
-            my AliasesKeysCheck $arguments [list per tper]
-            set paramsOrder [list low voff ioff high von ion td tr tf pw ton per tper]
-            lappend params "model pulse -posnocheck"
+            my AliasesKeysCheck $arguments {low voff ioff}
+            my AliasesKeysCheck $arguments {high von ion}
+            my AliasesKeysCheck $arguments {pw ton}
+            my AliasesKeysCheck $arguments {per tper}
+            set paramsOrder {low voff ioff high von ion td tr tf pw ton per tper}
+            lappend params {model pulse -posnocheck}
             my ParamsProcess $paramsOrder $arguments params
-            next $type$name [list "np $npNode" "nm $nmNode"] $params
+            next $type$name [list [list np $npNode] [list nm $nmNode]] $params
         }
     } 
     
@@ -507,37 +507,37 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {-phi= -require {td theta} -forbid phase}
             }]
             if {[dexist $arguments dc]} {
-                lappend params "dc -sw"
+                lappend params {dc -sw}
                 set dcVal [dget $arguments dc]
-                if {([llength $dcVal]>1) && ([@ $dcVal 1] eq "-eq")} {
-                    lappend params "dcval [@ $dcVal 0] -poseq"
+                if {([llength $dcVal]>1) && ([@ $dcVal 1] eq {-eq})} {
+                    lappend params [list dcval [@ $dcVal 0] -poseq]
                 } else {
-                    lappend params "dcval $dcVal -pos"
+                    lappend params [list dcval $dcVal -pos]
                 }
             }
             if {[dexist $arguments ac]} {
-                lappend params "ac -sw"
+                lappend params {ac -sw}
                 set acVal [dget $arguments ac]
-                if {([llength $acVal]>1) && ([@ $acVal 1] eq "-eq")} {
-                    lappend params "acval [@ $acVal 0] -poseq"
+                if {([llength $acVal]>1) && ([@ $acVal 1] eq {-eq})} {
+                    lappend params [list acval [@ $acVal 0] -poseq]
                 } else {
-                    lappend params "acval $acVal -pos"
+                    lappend params [list acval $acVal -pos]
                 }
                 if {[dexist $arguments acphase]} {
                     set acphaseVal [dget $arguments acphase]
-                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 1] eq "-eq")} {
-                        lappend params "acphase [@ $acphaseVal 0] -poseq"
+                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 1] eq {-eq})} {
+                        lappend params [list acphase [@ $acphaseVal 0] -poseq]
                     } else {
-                        lappend params "acphase $acphaseVal -pos"
+                        lappend params [list acphase $acphaseVal -pos]
                     }
                 }
             }
-            my AliasesKeysCheck $arguments [list v0 i0 voffset ioffset]
-            my AliasesKeysCheck $arguments [list va ia vamp iamp]
-            set paramsOrder [list v0 i0 voffset ioffset va ia vamp iamp freq td theta phase phi]
-            lappend params "model sin -posnocheck"
+            my AliasesKeysCheck $arguments {v0 i0 voffset ioffset}
+            my AliasesKeysCheck $arguments {va ia vamp iamp}
+            set paramsOrder {v0 i0 voffset ioffset va ia vamp iamp freq td theta phase phi}
+            lappend params {model sin -posnocheck}
             my ParamsProcess $paramsOrder $arguments params
-            next $type$name [list "np $npNode" "nm $nmNode"] $params
+            next $type$name [list [list np $npNode] [list nm $nmNode]] $params
         }
     }  
     
@@ -561,37 +561,37 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {-tau2= -required}
             }]
             if {[dexist $arguments dc]} {
-                lappend params "dc -sw"
+                lappend params {dc -sw}
                 set dcVal [dget $arguments dc]
-                if {([llength $dcVal]>1) && ([@ $dcVal 1] eq "-eq")} {
-                    lappend params "dcval [@ $dcVal 0] -poseq"
+                if {([llength $dcVal]>1) && ([@ $dcVal 1] eq {-eq})} {
+                    lappend params [list dcval [@ $dcVal 0] -poseq]
                 } else {
-                    lappend params "dcval $dcVal -pos"
+                    lappend params [list dcval $dcVal -pos]
                 }
             }
             if {[dexist $arguments ac]} {
-                lappend params "ac -sw"
+                lappend params {ac -sw}
                 set acVal [dget $arguments ac]
-                if {([llength $acVal]>1) && ([@ $acVal 1] eq "-eq")} {
-                    lappend params "acval [@ $acVal 0] -poseq"
+                if {([llength $acVal]>1) && ([@ $acVal 1] eq {-eq})} {
+                    lappend params [list acval [@ $acVal 0] -poseq]
                 } else {
-                    lappend params "acval $acVal -pos"
+                    lappend params [list acval $acVal -pos]
                 }
                 if {[dexist $arguments acphase]} {
                     set acphaseVal [dget $arguments acphase]
-                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 1] eq "-eq")} {
-                        lappend params "acphase [@ $acphaseVal 0] -poseq"
+                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 1] eq {-eq})} {
+                        lappend params [list acphase [@ $acphaseVal 0] -poseq]
                     } else {
-                        lappend params "acphase $acphaseVal -pos"
+                        lappend params [list acphase $acphaseVal -pos]
                     }
                 }
             }
-            my AliasesKeysCheck $arguments [list v1 i1]
-            my AliasesKeysCheck $arguments [list v2 i2]
-            set paramsOrder [list v1 i1 v2 i2 td1 tau1 td2 tau2]
-            lappend params "model exp -posnocheck"
+            my AliasesKeysCheck $arguments {v1 i1}
+            my AliasesKeysCheck $arguments {v2 i2}
+            set paramsOrder {v1 i1 v2 i2 td1 tau1 td2 tau2}
+            lappend params {model exp -posnocheck}
             my ParamsProcess $paramsOrder $arguments params
-            next $type$name [list "np $npNode" "nm $nmNode"] $params
+            next $type$name [list [list np $npNode] [list nm $nmNode]] $params
         }
     }    
     
@@ -608,29 +608,29 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             }]
             set start 0
             if {[dexist $arguments dc]} {
-                lappend paramList "dc -sw"
+                lappend paramList {dc -sw}
                 set dcVal [dget $arguments dc]
-                if {([llength $dcVal]>1) && ([@ $dcVal 1] eq "-eq")} {
-                    lappend paramList "dcval [@ $dcVal 0] -poseq"
+                if {([llength $dcVal]>1) && ([@ $dcVal 1] eq {-eq})} {
+                    lappend paramList [list dcval [@ $dcVal 0] -poseq]
                 } else {
-                    lappend paramList "dcval $dcVal -pos"
+                    lappend paramList [list dcval $dcVal -pos]
                 }
                 incr start 2
             }
             if {[dexist $arguments ac]} {
-                lappend paramList "ac -sw"
+                lappend paramList {ac -sw}
                 set acVal [dget $arguments ac]
-                if {([llength $acVal]>1) && ([@ $acVal 1] eq "-eq")} {
-                    lappend paramList "acval [@ $acVal 0] -poseq"
+                if {([llength $acVal]>1) && ([@ $acVal 1] eq {-eq})} {
+                    lappend paramList [list acval [@ $acVal 0] -poseq]
                 } else {
-                    lappend paramList "acval $acVal -pos"
+                    lappend paramList [list acval $acVal -pos]
                 }
                 if {[dexist $arguments acphase]} {
                     set acphaseVal [dget $arguments acphase]
-                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 1] eq "-eq")} {
-                        lappend paramList "acphase [@ $acphaseVal 0] -poseq"
+                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 1] eq {-eq})} {
+                        lappend paramList [list acphase [@ $acphaseVal 0] -poseq]
                     } else {
-                        lappend paramList "acphase $acphaseVal -pos"
+                        lappend paramList [list acphase $acphaseVal -pos]
                     }
                     incr start 1
                 }
@@ -648,17 +648,17 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             for {set i 0} {$i<[llength $pwlSeqVal]/2} {incr i} {
                 set 2i [* 2 $i]
                 set 2ip1 [+ $2i 1]
-                lappend params "t$i [list [@ $pwlSeqVal $2i]]" "$type$i [list [@ $pwlSeqVal $2ip1]]"
+                lappend params [list t$i [@ $pwlSeqVal $2i]] [list $type$i [@ $pwlSeqVal $2ip1]]
             }
             foreach param $params {
-                if {([llength [@ $param 1]]>1) && ([@ [@ $param 1] 1] eq "-eq")} {
-                    lappend paramList "[@ $param 0] [@ [@ $param 1] 0] -poseq"
+                if {([llength [@ $param 1]]>1) && ([@ [@ $param 1] 1] eq {-eq})} {
+                    lappend paramList [list [@ $param 0] [@ [@ $param 1] 0] -poseq]
                 } else {
-                    lappend paramList "[@ $param 0] [@ $param 1] -pos"
+                    lappend paramList [list [@ $param 0] [@ $param 1] -pos]
                 }
             }
-            set paramList [linsert $paramList $start "model pwl -posnocheck"]
-            next $type$name [list "np $npNode" "nm $nmNode"] $paramList
+            set paramList [linsert $paramList $start {model pwl -posnocheck}]
+            next $type$name [list [list np $npNode] [list nm $nmNode]] $paramList
         }
     }
 
@@ -687,39 +687,39 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {-fsig= -forbid fs}
             }]
             if {[dexist $arguments dc]} {
-                lappend params "dc -sw"
+                lappend params {dc -sw}
                 set dcVal [dget $arguments dc]
-                if {([llength $dcVal]>1) && ([@ $dcVal 1] eq "-eq")} {
-                    lappend params "dcval [@ $dcVal 0] -poseq"
+                if {([llength $dcVal]>1) && ([@ $dcVal 1] eq {-eq})} {
+                    lappend params [list dcval [@ $dcVal 0] -poseq]
                 } else {
-                    lappend params "dcval $dcVal -pos"
+                    lappend params [list dcval $dcVal -pos]
                 }
             }
             if {[dexist $arguments ac]} {
-                lappend params "ac -sw"
+                lappend params {ac -sw}
                 set acVal [dget $arguments ac]
-                if {([llength $acVal]>1) && ([@ $acVal 1] eq "-eq")} {
-                    lappend params "acval [@ $acVal 0] -poseq"
+                if {([llength $acVal]>1) && ([@ $acVal 1] eq {-eq})} {
+                    lappend params [list acval [@ $acVal 0] -poseq]
                 } else {
-                    lappend params "acval $acVal -pos"
+                    lappend params [list acval $acVal -pos]
                 }
                 if {[dexist $arguments acphase]} {
                     set acphaseVal [dget $arguments acphase]
-                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 1] eq "-eq")} {
-                        lappend params "acphase [@ $acphaseVal 0] -poseq"
+                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 1] eq {-eq})} {
+                        lappend params [list acphase [@ $acphaseVal 0] -poseq]
                     } else {
-                        lappend params "acphase $acphaseVal -pos"
+                        lappend params [list acphase $acphaseVal -pos]
                     }
                 }
             }
-            my AliasesKeysCheck $arguments [list v0 i0 voff ioff]
-            my AliasesKeysCheck $arguments [list va ia vamp iamp]
-            my AliasesKeysCheck $arguments [list fc fcar]
-            my AliasesKeysCheck $arguments [list fs fsig]
-            set paramsOrder [list v0 i0 voff ioff va ia vamp iamp fc fcar mdi fs fsig]
-            lappend params "model sffm -posnocheck"
+            my AliasesKeysCheck $arguments {v0 i0 voff ioff}
+            my AliasesKeysCheck $arguments {va ia vamp iamp}
+            my AliasesKeysCheck $arguments {fc fcar}
+            my AliasesKeysCheck $arguments {fs fsig}
+            set paramsOrder {v0 i0 voff ioff va ia vamp iamp fc fcar mdi fs fsig}
+            lappend params {model sffm -posnocheck}
             my ParamsProcess $paramsOrder $arguments params
-            next $type$name [list "np $npNode" "nm $nmNode"] $params
+            next $type$name [list [list np $npNode] [list nm $nmNode]] $params
         }
     }      
     
@@ -1139,20 +1139,20 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 -m=
             }]
             set trcondVal [dget $arguments trcond]
-            if {([llength $trcondVal]>1) && ([@ $trcondVal 1] eq "-eq")} {
-                lappend params "trcond [@ $trcondVal 0] -poseq"
+            if {([llength $trcondVal]>1) && ([@ $trcondVal 1] eq {-eq})} {
+                lappend params [list trcond [@ $trcondVal 0] -poseq]
             } else {
-                lappend params "trcond $trcondVal -pos"
+                lappend params [list trcond $trcondVal -pos]
             }
             if {[dexist $arguments m]} {
                 set mVal [dget $arguments m]
-                if {([llength $mVal]>1) && ([@ $mVal 1] eq "-eq")} {
-                    lappend params "m [@ $mVal 0] -eq"
+                if {([llength $mVal]>1) && ([@ $mVal 1] eq {-eq})} {
+                    lappend params [list m [@ $mVal 0] -eq]
                 } else {
-                    lappend params "m $mVal"
+                    lappend params [list m $mVal]
                 }
             }
-            next g$name [list "np $npNode" "nm $nmNode" "ncp $ncpNode" "ncm $ncmNode"] $params
+            next g$name [list [list np $npNode] [list nm $nmNode] [list ncp $ncpNode] [list ncm $ncmNode]] $params
         }
     }
 
@@ -1187,12 +1187,12 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {-gain -required}
             }]
             set gainVal [dget $arguments gain]
-            if {([llength $gainVal]>1) && ([@ $gainVal 1] eq "-eq")} {
-                lappend params "vgain [@ $gainVal 0] -poseq"
+            if {([llength $gainVal]>1) && ([@ $gainVal 1] eq {-eq})} {
+                lappend params [list vgain [@ $gainVal 0] -poseq]
             } else {
-                lappend params "vgain $gainVal -pos"
+                lappend params [list vgain $gainVal -pos]
             }
-            next e$name [list "np $npNode" "nm $nmNode" "ncp $ncpNode" "ncm $ncmNode"] $params
+            next e$name [list [list np $npNode] [list nm $nmNode] [list ncp $ncpNode] [list ncm $ncmNode]] $params
         }
     }
 
@@ -1229,22 +1229,22 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 -m=
             }]
             set consrcVal [dget $arguments consrc]
-            lappend params "consrc $consrcVal -posnocheck"
+            lappend params [list consrc $consrcVal -posnocheck]
             set gainVal [dget $arguments gain]
-            if {([llength $gainVal]>1) && ([@ $gainVal 1] eq "-eq")} {
-                lappend params "igain [@ $gainVal 0] -poseq"
+            if {([llength $gainVal]>1) && ([@ $gainVal 1] eq {-eq})} {
+                lappend params [list igain [@ $gainVal 0] -poseq]
             } else {
-                lappend params "igain $gainVal -pos"
+                lappend params [list igain $gainVal -pos]
             }
             if {[dexist $arguments m]} {
                 set mVal [dget $arguments m]
-                if {([llength $mVal]>1) && ([@ $mVal 1] eq "-eq")} {
-                    lappend params "m [@ $mVal 0] -eq"
+                if {([llength $mVal]>1) && ([@ $mVal 1] eq {-eq})} {
+                    lappend params [list m [@ $mVal 0] -eq]
                 } else {
-                    lappend params "m $mVal"
+                    lappend params [list m $mVal]
                 }
             }
-            next f$name [list "np $npNode" "nm $nmNode"] $params
+            next f$name [list [list np $npNode] [list nm $nmNode]] $params
         } 
     }
 
@@ -1279,14 +1279,14 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {-transr -required}
             }]
             set consrcVal [dget $arguments consrc]
-            lappend params "consrc $consrcVal -posnocheck"
+            lappend params [list consrc $consrcVal -posnocheck]
             set transrVal [dget $arguments transr]
-            if {([llength $transrVal]>1) && ([@ $transrVal 1] eq "-eq")} {
-                lappend params "transr [@ $transrVal 0] -poseq"
+            if {([llength $transrVal]>1) && ([@ $transrVal 1] eq {-eq})} {
+                lappend params [list transr [@ $transrVal 0] -poseq]
             } else {
-                lappend params "transr $transrVal -pos"
+                lappend params [list transr $transrVal -pos]
             }
-            next h$name [list "np $npNode" "nm $nmNode"] $params
+            next h$name [list [list np $npNode] [list nm $nmNode]] $params
         }
     }
 

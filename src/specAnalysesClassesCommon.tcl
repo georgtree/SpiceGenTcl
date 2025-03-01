@@ -50,8 +50,8 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
                 {-incr= -required}
             }]
             my NameProcess $arguments [self object]
-            lappend params "src [dget $arguments src] -posnocheck"
-            set paramsOrder [list start stop incr]
+            lappend params [list src [dget $arguments src] -posnocheck]
+            set paramsOrder {start stop incr}
             my ParamsProcess $paramsOrder $arguments params
             next dc $params -name $name
         }
@@ -85,8 +85,8 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
                 {-fstop= -required}
             }]
             my NameProcess $arguments [self object]
-            lappend params "variation [dget $arguments variation] -posnocheck"
-            set paramsOrder [list n fstart fstop]
+            lappend params [list variation [dget $arguments variation] -posnocheck]
+            set paramsOrder {n fstart fstop}
             my ParamsProcess $paramsOrder $arguments params
             next ac $params -name $name
         }
@@ -122,10 +122,10 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
                 {-uic -boolean}
             }]
             my NameProcess $arguments [self object]
-            set paramsOrder [list tstep tstop tstart tmax]
+            set paramsOrder {tstep tstop tstart tmax}
             my ParamsProcess $paramsOrder $arguments params
             if {[dget $arguments uic]} {
-                lappend params "uic -sw"
+                lappend params {uic -sw}
             }
             next tran $params -name $name
         }

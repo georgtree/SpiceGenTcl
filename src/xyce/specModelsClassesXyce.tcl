@@ -32,7 +32,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ::SpiceGenTcl::Xyce::BasicDevices::RModel new resmod -tc1 1 -tc2 2
             # ```
             # Synopsis: name ?-option value ...?
-            next $name r [my argsPreprocess [list defw narrow r rsh tc1 tc2 tce tnom] {*}$args]
+            next $name r [my argsPreprocess {defw narrow r rsh tc1 tc2 tce tnom} {*}$args]
         }
     }
 
@@ -49,7 +49,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ::SpiceGenTcl::Xyce::BasicDevices::CModel new capmod -tc1 1 -tc2 2
             # ```
             # Synopsis: name ?-option value ...?
-            next $name c [my argsPreprocess [list c cj cjsw defw narrow tc1 tc2 tnom] {*}$args]
+            next $name c [my argsPreprocess {c cj cjsw defw narrow tc1 tc2 tnom} {*}$args]
         }
     }
 
@@ -66,7 +66,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ::SpiceGenTcl::Xyce::BasicDevices::LModel new indmod -tc1 1 -tc2 2
             # ```
             # Synopsis: name ?-option value ...?
-            next $name l [my argsPreprocess [list ic l tc1 tc2 tnom] {*}$args]
+            next $name l [my argsPreprocess {ic l tc1 tc2 tnom} {*}$args]
         }
     }    
     
@@ -83,7 +83,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ::SpiceGenTcl::Ngspice::BasicDevices::VSwitchModel new swmod -von 1 -voff 0.5 -ron 1 -roff 1e6
             # ```
             # Synopsis: name ?-option value ...?
-            next $name vswitch [my argsPreprocess [list off on roff ron voff von] {*}$args]
+            next $name vswitch [my argsPreprocess {off on roff ron voff von} {*}$args]
         }
     }
 
@@ -100,7 +100,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ::SpiceGenTcl::Ngspice::BasicDevices::CSwitchModel new cswmod -ion 1 -ioff 0.5 -ron 1 -roff 1e6
             # ```
             # Synopsis: name ?-option value ...?
-            next $name iswitch [my argsPreprocess [list ioff ion off on roff ron] {*}$args]
+            next $name iswitch [my argsPreprocess {ioff ion off on roff ron} {*}$args]
         }
     }
 }
@@ -122,9 +122,8 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             # ::SpiceGenTcl::Xyce::SemiconductorDevices::DiodeModel new diodemod -is 1e-14 -n 1.2 -rs 0.01 -cj0 1e-9
             # ```
             # Synopsis: name ?-option value ...?
-            set paramsNames [list level  af bv cj cj0 cjo cjp cjsw eg fc fcs ibv ibvl ikf is isr \
-                    js jsw kf m mjsw n nbv nbvl nr ns php rs tbv1 tbv2 tikf tnom trs trs1 trs2 \
-                    tt vb vj vjsw xti]
+            set paramsNames {level af bv cj cj0 cjo cjp cjsw eg fc fcs ibv ibvl ikf is isr js jsw kf m mjsw n nbv nbvl\
+                                     nr ns php rs tbv1 tbv2 tikf tnom trs trs1 trs2 tt vb vj vjsw xti}
             next $name d [my argsPreprocess $paramsNames {*}$args]
         }
     }    
@@ -143,12 +142,12 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             # ::SpiceGenTcl::Xyce::SemiconductorDevices::DiodeModel new bjtmod npn -is 1e-15 -bf 200 -vaf 100 -cje 1e-10
             # ```
             # Synopsis: name type ?-option value ...?
-            set paramsNames [list af bf bfm br brm bv c2 c4 ccs cdis cjc cje cjs csub eg esub fc ik ikf ikr \
+            set paramsNames {af bf bfm br brm bv c2 c4 ccs cdis cjc cje cjs csub eg esub fc ik ikf ikr \
                     iob irb is isc ise itf jbf jbr jlc jle jrb jtf kf mc me mjc mje mjs ms nc ne nf nk nkf \
                     nle nr pc pe ps psub pt ptf rb rbm rc re tb tcb tempmodel tf tnom tr va vaf var vb vbf \
-                    vjc vje vjs vrb vtf xcjc xtb xtf xti]
+                                     vjc vje vjs vrb vtf xcjc xtb xtf xti}
             set params [my argsPreprocess $paramsNames {*}$args]
-            next $name $type [linsert $params 0 [list level 1]]
+            next $name $type [linsert $params 0 {level 1}]
         }
     } 
         
@@ -166,8 +165,8 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             # ::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet1Model new jfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4 -cgd 1e-12
             # ```
             # Synopsis: name type ?-option value ...?
-            set paramsNames [list af b beta cgd cgs delta fc is kf lambda pb rd rs tempmodel theta tnom vto]
-            next $name $type [linsert [my argsPreprocess $paramsNames {*}$args] 0 [list level 1]]
+            set paramsNames {af b beta cgd cgs delta fc is kf lambda pb rd rs tempmodel theta tnom vto}
+            next $name $type [linsert [my argsPreprocess $paramsNames {*}$args] 0 {level 1}]
         }
     }
     
@@ -185,8 +184,8 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             # ::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4 -vbi 1.2
             # ```
             # Synopsis: name type ?-option value ...?
-            set paramsNames [list af b beta cgd cgs delta fc is kf lambda pb rd rs tempmodel theta tnom vto]
-            next $name $type [linsert [my argsPreprocess $paramsNames {*}$args] 0 [list level 2]]
+            set paramsNames {af b beta cgd cgs delta fc is kf lambda pb rd rs tempmodel theta tnom vto}
+            next $name $type [linsert [my argsPreprocess $paramsNames {*}$args] 0 {level 2}]
         }
     } 
     
@@ -204,8 +203,8 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             # ::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4 -vbi 1.2
             # ```
             # Synopsis: name type ?-option value ...?
-            set paramsNames [list af alpha b beta cgd cgs fc is kf lambda pb rd rs tempmodel tnom vto]
-            next $name $type [linsert [my argsPreprocess $paramsNames {*}$args] 0 [list level 1]]
+            set paramsNames {af alpha b beta cgd cgs fc is kf lambda pb rd rs tempmodel tnom vto}
+            next $name $type [linsert [my argsPreprocess $paramsNames {*}$args] 0 {level 1}]
         }
     } 
 }

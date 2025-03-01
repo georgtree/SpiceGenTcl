@@ -59,8 +59,8 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
                 {-param= -required}
             }]
             my NameProcess $arguments [self object]
-            lappend params "objfunc [dget $arguments objfunc] -eq"
-            lappend params "param [dget $arguments param] -nocheck"
+            lappend params [list objfunc [dget $arguments objfunc] -eq]
+            lappend params [list param [dget $arguments param] -nocheck]
             next sens $params -name $name
         }
     }

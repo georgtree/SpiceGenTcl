@@ -704,7 +704,17 @@ namespace eval ::SpiceGenTcl::Ngspice {
             return
         }
         method CreateDio {line} {
-
+            set lineList [split $line]
+            lassign $lineList elemName pin1 pin2 modelVal
+            set elemName [string range $elemName 1 end]
+            if {[set offIndex [lsearch -exact $lineList off]]!=-1} {
+                lappend paramsList -off
+                set lineList [lremove $lineList $offIndex]
+            }
+            if {[my CheckModelName $modelVal]} {
+                lappend paramsList {*}[my ParseParams [lrange $lineList 1 end] 3 {}]
+                [my configure -Netlist] add [D new $elemName $pin1 $pin2 -model $modelVal {*}$paramsList]
+            }
         }
         method CreateVCVS {line} {
             set lineList [split $line]
@@ -823,7 +833,49 @@ namespace eval ::SpiceGenTcl::Ngspice {
 
         }
         method CreateBJT {line} {
-
+            set line [string map {", " "," " ," "," " , " ","} $line]
+            set lineList [split $line]
+            lassign $lineList elemName pin1 pin2 pin3
+            set lineList [lremove $lineList 0 1 2 3]
+            set elemName [string range $elemName 1 end]
+            if {[set offIndex [lsearch -exact $lineList off]]!=-1} {
+                lappend paramsList -off
+                set lineList [lremove $lineList $offIndex]
+            }
+            set i 0
+            foreach word $lineList {
+                if {[regexp {ic=([^,]+),([^,]+)} $word match val1 val2]} {
+                    lappend paramsList -ic [list $val1 $val2]
+                    set lineList [lremove $lineList $i]
+                    break
+                }
+                incr i
+            }
+            
+            set i 0
+            foreach word $lineList {
+                if {[my CheckEqual $word] || [my CheckBracedWithEqual $word]} {
+                    set paramsStartIndex $i
+                    break
+                }
+                incr i
+            }
+            if {![info exists paramsStartIndex]} {
+                set paramsStartIndex [llength $lineList]
+            }
+            if {$paramsStartIndex==3} {
+                lappend paramsList -ns [@ $lineList 0] -tj [@ $lineList 1]
+                set modelVal [@ $lineList 2]
+            } elseif {$paramsStartIndex==2} {
+                lappend paramsList -ns [@ $lineList 0]
+                set modelVal [@ $lineList 1]
+            } elseif {$paramsStartIndex==1} {
+                set modelVal [@ $lineList 0]
+            }
+            if {[my CheckModelName $modelVal]} {
+                lappend paramsList {*}[my ParseParams $lineList $paramsStartIndex {}]
+                [my configure -Netlist] add [Q new $elemName $pin1 $pin2 $pin3 -model $modelVal {*}$paramsList]
+            }
         }
         method CreateVSwitch {line} {
 

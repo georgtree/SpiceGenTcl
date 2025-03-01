@@ -46,7 +46,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
             global tcl_platform
             if {[string match -nocase *linux* $tcl_platform(os)]} {
                 my configure -Command ngspice
-            } elseif {[string match -nocase "*windows nt*" $tcl_platform(os)]} {
+            } elseif {[string match -nocase {*windows nt*} $tcl_platform(os)]} {
                 my configure -Command ngspice_con
             }
             my configure -runlocation $runLocation
@@ -123,7 +123,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
             set cirFileName [file join $runLocation ${firstLine}.cir]
             set command [list [my configure -Command] -b $cirFileName -r $rawFileName]
             set chan [open "|$command 2>@1"]
-            set logData ""
+            set logData {}
             while {[gets $chan line] >= 0} {
                 puts $line
                 set logData [join [list $logData $line] \n]
