@@ -42,13 +42,14 @@ namespace eval ::SpiceGenTcl::Ngspice {
         variable Netlist
         variable ModelNames
         variable ModelTemplate
+        variable SubcircuitTemplate
 
         constructor {name filepath} {
             my configure -Name $name -filepath $filepath
             my configure -elemsMethods [dcreate b CreateBehSource c CreateCap d CreateDio e CreateVCVS f CreateCCCS\
                                                 g CreateVCCS h CreateCCVS i CreateVIsource j CreateJFET k CreateCoupInd\
                                                 l CreateInd m CreateMOSFET n CreateVeriloga q CreateBJT r CreateRes\
-                                                s CreateVSwitch v CreateVIsource w CreateISwitch x CreateSubcktInst\
+                                                s CreateVSwitch v CreateVIsource w CreateCSwitch x CreateSubcktInst\
                                                 z CreateMESFET]
             my configure -dotsMethods [dcreate ac CreateAc dc CreateDc func CreateFunc global CreateGlobal ic CreateIc\
                                                include CreateInclude model CreateModel nodeset CreateNodeset op CreateOp\
@@ -61,6 +62,14 @@ namespace eval ::SpiceGenTcl::Ngspice {
                 constructor {name args} {
                     set paramsNames [list @paramsList@]
                     next $name @type@ [my argsPreprocess $paramsNames {*}$args]
+                }
+            }}
+            set SubcircuitTemplate {oo::class create @classname@ {
+                superclass Subcircuit
+                constructor {} {
+                    set pins @pins@
+                    set params @params@
+                    next @subname@ $pins $params
                 }
             }}
         }
@@ -84,7 +93,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             # replace all sequences of white space characters with single space character
             foreach line $fileData {
                 set processedLine [regsub -all {[[:space:]]+} [string trim $line] { }]
-                if {$processedLine ne ""} {
+                if {$processedLine ne {}} {
                     lappend lines [string tolower $processedLine]
                 }
             }
@@ -114,7 +123,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             # to be `+` symbol)
             if {[info exists continLinesIndex]} {
                 dict map {lineIndex contLinesIndexes} $continLinesIndex {
-                    if {$contLinesIndexes eq ""} {
+                    if {$contLinesIndexes eq {}} {
                         lappend finalList [@ $fileData $lineIndex]
                     } else {
                         set locList [@ $fileData $lineIndex]
@@ -152,7 +161,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             return
         }
         method getSubcircuitLines {} {
-            # parse line by line and get start and the end of subcircuits, and find elements belongs to them
+            # Parses line by line and get start and the end of subcircuits
             if {![info exists FileData]} {
                 error "Parser object '[my configure -name]' doesn't have prepared data"
             }
@@ -184,48 +193,93 @@ namespace eval ::SpiceGenTcl::Ngspice {
                         }
                     }
                 }
-                # set indexes [::struct::list flatten -full [dict values $subckts]]
-                # for {set i 1} {$i<[llength $indexes]} {incr i} {
-                #     if {[@ $indexes [= {$i-1}]] > [@ $indexes $i]} {
-                #         error "Nested subcircuit definitions is not supported"
-                #     }
-                # }
             }
-            my configure -SubcktsBoundaries $subckts
+            if {[info exists subckts]} {
+                my configure -SubcktsBoundaries $subckts
+            }
             return
         }
-        method buildNetlist {} {
-            # Builds the rest of the circuit without subckt definitions lines.
-            set fileData [my configure -FileData]
-            set netlist [my configure -Netlist]
+        method buildTopNetlist {} {
+            # Builds top netlist corresponding to parsed netlist file
+            set allLines [my configure -FileData]
+            set topNetlist [my configure -Netlist]
+            my getSubcircuitLines
+            # parse found subcircuits definitions first
+            if {![catch {my configure -SubcktsBoundaries}]} {
+                set subcktsBoundaries [my configure -SubcktsBoundaries]
+                dict for {subcktName subcktBounds} $subcktsBoundaries {
+                    my buildSubcktFromDef $subcktName $subcktBounds
+                    lappend lines2remove {*}[lseq [@ $subcktBounds 0] [@ $subcktBounds 1]]
+                    
+                }
+                set allLines [lremove $allLines {*}$lines2remove]
+            }
+            
+            my buildNetlist $allLines $topNetlist
+            return
+        }
+        method buildSubcktFromDef {subcktName subcktBounds} {
+            # Builds subcircuit definition object from passed lines and add it to top circuit
+            #   subcktName - name of subcircuit
+            #   subcktBounds - boundaries of subcircuit
+            set allLines [my configure -FileData]
+            set topNetlist [my configure -Netlist]
+
+            # parse definition line of subcircuit
+            set defLine [@ $allLines [@ $subcktBounds 0]]
+            set defLine [string map {" :" ":"} $defLine]
+            set lineList [split $defLine]
+            lassign $lineList elemName
+            set elemName [string range $elemName 1 end]
+            if {[set paramsStatIndex [lsearch -exact $lineList params:]]!=-1} {
+                set lineList [lremove $lineList $paramsStatIndex]
+            }
+            set i 0
+            foreach word $lineList {
+                if {[my CheckEqual $word] || [my CheckBracedWithEqual $word]} {
+                    set paramsStartIndex $i
+                    break
+                }
+                incr i
+            }
+            if {![info exists paramsStartIndex]} {
+                set paramsStartIndex [llength $lineList]
+            }
+            set subName [@ $lineList 1]
+            set pinList [lrange $lineList 2 [= {$paramsStartIndex-1}]]
+            set params [my ParseParams $lineList $paramsStartIndex {} list]
+
+            # create instance of subcircuit
+            set subcktClassName [string totitle $subName]
+            eval [string map [list @classname@ $subcktClassName @pins@ [list $pinList] @params@ [list $params]\
+                                      @subname@ $subName] $SubcircuitTemplate]
+            set subcktInst [$subcktClassName new]
+            $topNetlist add $subcktInst
+            my buildNetlist [lrange $allLines [= {[@ $subcktBounds 0]+1}] [= {[@ $subcktBounds 1]-1}]] $subcktInst
+            return
+        }
+        method buildNetlist {lines netlistObj} {
+            # Builds netlist from passed lines and add it to passed object
+            #   lines - list of lines to parse
+            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` and its childrens
             set elems [dkeys [my configure -elemsMethods]]
             set dots [dkeys [my configure -dotsMethods]]
-            for {set i 0} {$i<[llength $fileData]} {incr i} {
-                # add model names first to use in further parsing of elements with variable number of pins
-                set line [@ $fileData $i]
-                set lineList [split $line]
-                set firstWord [@ $lineList 0]
-                if {$firstWord eq {.model}} {
-                    my AddModelName $firstWord
-                }
-            }
-            for {set i 0} {$i<[llength $fileData]} {incr i} {
-                set line [@ $fileData $i]
+            for {set i 0} {$i<[llength $lines]} {incr i} {
+                set line [@ $lines $i]
                 set lineList [split $line]
                 set firstWord [@ $lineList 0]
                 set firstChar [string index $firstWord 0]
                 set restChars [string range $firstWord 1 end]
                 if {$firstChar eq {.}} {
                     if {$restChars in $dots} {
-                        # puts [dict get [my configure -dotsMethods] $restChars]
-                        my [dict get [my configure -dotsMethods] $restChars] $line
+                        my [dict get [my configure -dotsMethods] $restChars] $line $netlistObj
                     } else {
                         puts "Line '$lineList' contains unsupported dot statement '$firstWord', skip that line"
                         continue
                     }
                 } elseif {[string match {[a-z]} $firstChar]} {
                     if {$firstChar in $elems} {
-                        my [dict get [my configure -elemsMethods] $firstChar] $line
+                        my [dict get [my configure -elemsMethods] $firstChar] $line $netlistObj
                     } else {
                         puts "Line '$lineList' contains unsupported element '$firstWord', skip that line"
                         continue
@@ -237,7 +291,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             }
             return
         }
-        method CreateModel {line} {
+        method CreateModel {line netlistObj} {
             # Creates model object from passed line and add it to netlist
             #   line - line to parse
             set line [regsub -all {[[:space:]]+} [string trim [string map {"(" " " ")" " "} $line]] { }]
@@ -253,26 +307,26 @@ namespace eval ::SpiceGenTcl::Ngspice {
                         created"
                 set paramString [string map {- {}} [join [dkeys $paramsList]]]
                 eval [string map [list @type@ $modelClassName @paramsList@ $paramString] $ModelTemplate]
-                [my configure -Netlist] add [$modelClassName new $name {*}$paramsList]
+                $netlistObj add [$modelClassName new $name {*}$paramsList]
             } else {
                 switch $type {
                     r {
-                        [my configure -Netlist] add [RModel new $name {*}$paramsList]
+                        $netlistObj add [RModel new $name {*}$paramsList]
                     }
                     c {
-                        [my configure -Netlist] add [CModel new $name {*}$paramsList]
+                        $netlistObj add [CModel new $name {*}$paramsList]
                     }
                     l {
-                        [my configure -Netlist] add [LModel new $name {*}$paramsList]
+                        $netlistObj add [LModel new $name {*}$paramsList]
                     }
                     sw {
-                        [my configure -Netlist] add [VSwitchModel new $name {*}$paramsList]
+                        $netlistObj add [VSwitchModel new $name {*}$paramsList]
                     }
                     csw {
-                        [my configure -Netlist] add [CSwitchModel new $name {*}$paramsList]
+                        $netlistObj add [CSwitchModel new $name {*}$paramsList]
                     }
                     d {
-                        [my configure -Netlist] add [DiodeModel new $name {*}$paramsList]
+                        $netlistObj add [DiodeModel new $name {*}$paramsList]
                     }
                     npn -
                     pnp {
@@ -280,19 +334,19 @@ namespace eval ::SpiceGenTcl::Ngspice {
                             set level [dget $paramsList -level]
                             if {$level==1} {
                                 set paramsList [dict remove $paramsList -level]
-                                [my configure -Netlist] add [BjtGPModel new $name $type {*}$paramsList]
+                                $netlistObj add [BjtGPModel new $name $type {*}$paramsList]
                             } elseif {$level in {4 8}} {
                                 puts "Level '${level}' of type '${type}' model '${name}' is not in the list of\
                                         SpiceGenTcl supported levels, custom level model was created"
                                 set paramString [string map {- {}} [join [dkeys $paramsList]]]
                                 set modelClassName [string totitle $type]Model
                                 eval [string map [list @type@ $modelClassName @paramsList@ $paramString] $ModelTemplate]
-                                [my configure -Netlist] add [$modelClassName new $name {*}$paramsList]
+                                $netlistObj add [$modelClassName new $name {*}$paramsList]
                             } else {
                                 puts "Level '${level}' of BJT model in line '${line}' is not supported, skip that line"
                             }
                         } else {
-                            [my configure -Netlist] add [BjtGPModel new $name $type {*}$paramsList]
+                            $netlistObj add [BjtGPModel new $name $type {*}$paramsList]
                         }
                     }
                     njf -
@@ -301,15 +355,15 @@ namespace eval ::SpiceGenTcl::Ngspice {
                             set level [dget $paramsList -level]
                             if {$level==1} {
                                 set paramsList [dict remove $paramsList -level]
-                                [my configure -Netlist] add [Jfet1Model new $name $type {*}$paramsList]
+                                $netlistObj add [Jfet1Model new $name $type {*}$paramsList]
                             } elseif {$level==2} {
                                 set paramsList [dict remove $paramsList -level]
-                                [my configure -Netlist] add [Jfet2Model new $name $type {*}$paramsList]
+                                $netlistObj add [Jfet2Model new $name $type {*}$paramsList]
                             } else {
                                 puts "Level '${level}' of JFET model in line '${line}' is not supported, skip that line"
                             }
                         } else {
-                            [my configure -Netlist] add [Jfet1Model new $name $type {*}$paramsList]
+                            $netlistObj add [Jfet1Model new $name $type {*}$paramsList]
                         }
                     }
                     nmf -
@@ -318,61 +372,61 @@ namespace eval ::SpiceGenTcl::Ngspice {
                             set level [dget $paramsList -level]
                             if {$level==1} {
                                 set paramsList [dict remove $paramsList -level]
-                                [my configure -Netlist] add [Mesfet1Model new $name $type {*}$paramsList]
+                                $netlistObj add [Mesfet1Model new $name $type {*}$paramsList]
                             } else {
                                 puts "Level '${level}' of MESFET in line '${line}' is not supported, skip that line"
                             }
                         } else {
-                            [my configure -Netlist] add [Mesfet1Model new $name $type {*}$paramsList]
+                            $netlistObj add [Mesfet1Model new $name $type {*}$paramsList]
                         }
                     }
                 }
             }
             return
         }
-        method CreateOp {line} {
-            [my configure -Netlist] add [Op new]
+        method CreateOp {line netlistObj} {
+            $netlistObj add [Op new]
             return
         }
-        method CreateAc {line} {
+        method CreateAc {line netlistObj} {
             set lineList [lrange [split $line] 1 end]
-            [my configure -Netlist] add [Ac new {*}[my ParsePosParams $lineList {variation n fstart fstop}]]
+            $netlistObj add [Ac new {*}[my ParsePosParams $lineList {variation n fstart fstop}]]
             return
         }
-        method CreateDc {line} {
+        method CreateDc {line netlistObj} {
             set lineList [lrange [split $line] 1 end]
             set paramsNames {src start stop incr}
             if {[llength $lineList]>[llength $paramsNames]} {
                 puts "DC analysis with multiple sources is not supported in SpiceGenTcl, skip the other sources in line\
                         '${line}'"
             }
-            [my configure -Netlist] add [Dc new {*}[my ParsePosParams $lineList $paramsNames]]
+            $netlistObj add [Dc new {*}[my ParsePosParams $lineList $paramsNames]]
             return
         }
-        method CreateTran {line} {
+        method CreateTran {line netlistObj} {
             set lineList [lrange [split $line] 1 end]
             set paramsNames {tstep tstop tstart tmax}
             if {[set index [lsearch -exact $lineList uic]]!=-1} {
                 set lineList [lremove $lineList $index]
                 set configParams [linsert [my ParsePosParams $lineList $paramsNames] end -uic]
-                [my configure -Netlist] add [Tran new {*}$configParams]
+                $netlistObj add [Tran new {*}$configParams]
             } else {
-                [my configure -Netlist] add [Tran new {*}[my ParsePosParams $lineList $paramsNames]]
+                $netlistObj add [Tran new {*}[my ParsePosParams $lineList $paramsNames]]
             }
             return
         }
-        method CreateSens {line} {
+        method CreateSens {line netlistObj} {
             if {[regexp {(v|i)\(([^{}()=]+)\)} $line]} {
                 set line [regsub -command {(v|i)\(([^{}()=]+)\)} $line {apply {{- a b} {
                     format %s(%s) $a [string map {" " ""} $b]
                 }}}]
                 set lineList [lrange [split $line] 1 end]
                 if {[@ $lineList 1] eq {}} {
-                    [my configure -Netlist] add [SensDc new -outvar [@ $lineList 0]]
+                    $netlistObj add [SensDc new -outvar [@ $lineList 0]]
                 } elseif {[@ $lineList 1] eq {ac}} {
                     set lineList [lremove $lineList 1]
                     set paramsNames {outvar variation n fstart fstop}
-                    [my configure -Netlist] add [SensAc new {*}[my ParsePosParams $lineList $paramsNames]]
+                    $netlistObj add [SensAc new {*}[my ParsePosParams $lineList $paramsNames]]
                 } else {
                     error "Sense analysis has usupported type '[@ $lineList 1]'"
                 }
@@ -381,42 +435,42 @@ namespace eval ::SpiceGenTcl::Ngspice {
             }
             return
         }
-        method CreateSp {line} {
+        method CreateSp {line netlistObj} {
             set lineList [lrange [split $line] 1 end]
             set paramsNames {variation n fstart fstop}
             if {[@ $lineList 4]==1} {
                 set lineList [lremove $lineList 4]
                 set configParams [linsert [my ParsePosParams $lineList $paramsNames] end -donoise]
-                [my configure -Netlist] add [Sp new {*}$configParams]
+                $netlistObj add [Sp new {*}$configParams]
             } else {
-                [my configure -Netlist] add [Sp new {*}[my ParsePosParams $lineList $paramsNames]]
+                $netlistObj add [Sp new {*}[my ParsePosParams $lineList $paramsNames]]
             }
             return
         }
-        method CreateFunc {line} {
+        method CreateFunc {line netlistObj} {
 
         }
-        method CreateGlobal {line} {
+        method CreateGlobal {line netlistObj} {
 
         }
-        method CreateIc {line} {
+        method CreateIc {line netlistObj} {
 
         }
-        method CreateInclude {line} {
+        method CreateInclude {line netlistObj} {
 
         }
-        method CreateNodeset {line} {
+        method CreateNodeset {line netlistObj} {
 
         }
-        method CreateOptions {line} {
+        method CreateOptions {line netlistObj} {
 
         }
-        method CreateParam {line} {
+        method CreateParam {line netlistObj} {
             set lineList [lrange [split $line] 1 end]
-            [my configure -Netlist] add [ParamStatement new [my ParseParams $lineList 0 {} list]]
+            $netlistObj add [ParamStatement new [my ParseParams $lineList 0 {} list]]
             return
         }
-        method CreateTemp {line} {
+        method CreateTemp {line netlistObj} {
 
         }
         method ParseParams {list start {exclude {}} {format arg}} {
@@ -577,7 +631,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
         method CheckModelName {string} {
             # Checks if string is a valid model name acceptable by SPICE syntax
             #   string - input string
-            if {$string eq ""} {
+            if {$string eq {}} {
                 return false
             } elseif {[regexp {[^A-Za-z0-9_]+} $string]} {
                 return false
@@ -585,7 +639,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
                 return true
             }
         }
-        method CreateRes {line} {
+        method CreateRes {line netlistObj} {
             # Creates resistor object from passed line and add it to netlist
             #   line - line to parse
             # Supports behavioural resistor only in canonical form `r={equation}` and only braced form `name={value}` of 
@@ -600,11 +654,11 @@ namespace eval ::SpiceGenTcl::Ngspice {
                 if {[my CheckBraced $rval]} {
                     # check if rval has form '{param}'
                     set rval [list [my Unbrace $rval] -eq]
-                    [my configure -Netlist] add [R new $elemName $pin1 $pin2 -r $rval -model $fourth\
+                    $netlistObj add [R new $elemName $pin1 $pin2 -r $rval -model $fourth\
                                                          {*}[my ParseParams $lineList 5 $excludePars]]
                 } elseif {[my CheckNumber $rval]} {
                     # check if rval is a valid float value
-                    [my configure -Netlist] add [R new $elemName $pin1 $pin2 -r $rval -model $fourth\
+                    $netlistObj add [R new $elemName $pin1 $pin2 -r $rval -model $fourth\
                                                          {*}[my ParseParams $lineList 5 $excludePars]]
                 } else {
                     return -code error "Creating resistor object from line '${line}' failed due to wrong or incompatible\
@@ -615,20 +669,20 @@ namespace eval ::SpiceGenTcl::Ngspice {
                     # check if rval has form `r={expression}`
                     regexp {^r=\{([^{}]*)\}$} $rval match value
                     set rval $value
-                    [my configure -Netlist] add [R new $elemName $pin1 $pin2 -r $rval -beh\
+                    $netlistObj add [R new $elemName $pin1 $pin2 -r $rval -beh\
                                                          {*}[my ParseParams $lineList 4 $excludePars]]
                 } elseif {[my CheckBraced $rval]} {
                     # check if rval has form `{param}`
                     set rval [list [my Unbrace $rval] -eq]
-                    [my configure -Netlist] add [R new $elemName $pin1 $pin2 -r $rval\
+                    $netlistObj add [R new $elemName $pin1 $pin2 -r $rval\
                                                          {*}[my ParseParams $lineList 4 $excludePars]]
                 } elseif {[my CheckNumber $rval]} {
                     # check if rval is a valid float value
-                    [my configure -Netlist] add [R new $elemName $pin1 $pin2 -r $rval\
+                    $netlistObj add [R new $elemName $pin1 $pin2 -r $rval\
                                                          {*}[my ParseParams $lineList 4 $excludePars]]
                 } elseif {[my CheckModelName $rval]} {
                     # check if rval contains valid model value
-                    [my configure -Netlist] add [R new $elemName $pin1 $pin2 -model $rval\
+                    $netlistObj add [R new $elemName $pin1 $pin2 -model $rval\
                                                          {*}[my ParseParams $lineList 4 $excludePars]]
                 } else {
                     return -code error "Creating resistor object from line '${line}' failed due to wrong or incompatible\
@@ -637,7 +691,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             }
             return
         }
-        method CreateCap {line} {
+        method CreateCap {line netlistObj} {
             # Creates capacitor object from passed line and add it to netlist
             #   line - line to parse
             # Supports behavioural capacitor only in canonical form `c={equation}` or `q={equation}` and only braced 
@@ -649,10 +703,10 @@ namespace eval ::SpiceGenTcl::Ngspice {
             if {[my CheckModelName $fourth]} {
                 if {[my CheckBraced $cval]} {
                     set cval [list [my Unbrace $cval] -eq]
-                    [my configure -Netlist] add [C new $elemName $pin1 $pin2 -c $cval -model $fourth\
+                    $netlistObj add [C new $elemName $pin1 $pin2 -c $cval -model $fourth\
                                                          {*}[my ParseParams $lineList 5 $excludePars]]
                 } elseif {[my CheckNumber $rval]} {
-                    [my configure -Netlist] add [C new $elemName $pin1 $pin2 -c $cval -model $fourth\
+                    $netlistObj add [C new $elemName $pin1 $pin2 -c $cval -model $fourth\
                                                          {*}[my ParseParams $lineList 5 $excludePars]]
                 } else {
                     return -code error "Creating capacitor object from line '${line}' failed due to wrong or\
@@ -662,22 +716,22 @@ namespace eval ::SpiceGenTcl::Ngspice {
                 if {[regexp {^c=\{([^{}]*)\}$} $cval]} {
                     regexp {^c=\{([^{}]*)\}$} $cval match value
                     set cval $value
-                    [my configure -Netlist] add [C new $elemName $pin1 $pin2 -c $cval -beh\
+                    $netlistObj add [C new $elemName $pin1 $pin2 -c $cval -beh\
                                                          {*}[my ParseParams $lineList 4 $excludePars]]
                 } elseif {[regexp {^q=\{([^{}]*)\}$} $cval]} {
                     regexp {^q=\{([^{}]*)\}$} $cval match value
                     set qval $value
-                    [my configure -Netlist] add [C new $elemName $pin1 $pin2 -q $qval -beh\
+                    $netlistObj add [C new $elemName $pin1 $pin2 -q $qval -beh\
                                                          {*}[my ParseParams $lineList 4 $excludePars]]
                 } elseif {[my CheckBraced $cval]} {
                     set cval [list [my Unbrace $cval] -eq]
-                    [my configure -Netlist] add [C new $elemName $pin1 $pin2 -c $cval\
+                    $netlistObj add [C new $elemName $pin1 $pin2 -c $cval\
                                                          {*}[my ParseParams $lineList 4 $excludePars]]
                 } elseif {[my CheckNumber $cval]} {
-                    [my configure -Netlist] add [C new $elemName $pin1 $pin2 -c $cval\
+                    $netlistObj add [C new $elemName $pin1 $pin2 -c $cval\
                                                          {*}[my ParseParams $lineList 4 $excludePars]]
                 } elseif {[my CheckModelName $cval]} {
-                    [my configure -Netlist] add [C new $elemName $pin1 $pin2 -model $cval\
+                    $netlistObj add [C new $elemName $pin1 $pin2 -model $cval\
                                                          {*}[my ParseParams $lineList 4 $excludePars]]
                 } else {
                     return -code error "Creating capacitor object from line '${line}' failed due to wrong or\
@@ -686,7 +740,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             }
             return
         }
-        method CreateBehSource {line} {
+        method CreateBehSource {line netlistObj} {
             # Creates behavioural source object from passed line and add it to netlist
             #   line - line to parse
             # Supports behavioural sources only in canonical form `v|i={equation}` and only braced form `name={value}` of 
@@ -696,14 +750,14 @@ namespace eval ::SpiceGenTcl::Ngspice {
             set elemName [string range $elemName 1 end]
             if {[regexp {^(i|v)=\{([^{}]*)\}$} $val]} {
                 regexp {^(i|v)=\{([^{}]*)\}$} $val match type value
-                [my configure -Netlist] add [B new $elemName $pin1 $pin2 -$type $value {*}[my ParseParams $lineList 4 {}]]
+                $netlistObj add [B new $elemName $pin1 $pin2 -$type $value {*}[my ParseParams $lineList 4 {}]]
             } else {
                 return -code error "Creating behavioural source object from line '${line}' failed due to wrong or\
                             incompatible syntax"
             }
             return
         }
-        method CreateDio {line} {
+        method CreateDio {line netlistObj} {
             set lineList [split $line]
             lassign $lineList elemName pin1 pin2 modelVal
             set elemName [string range $elemName 1 end]
@@ -713,76 +767,106 @@ namespace eval ::SpiceGenTcl::Ngspice {
             }
             if {[my CheckModelName $modelVal]} {
                 lappend paramsList {*}[my ParseParams [lrange $lineList 1 end] 3 {}]
-                [my configure -Netlist] add [D new $elemName $pin1 $pin2 -model $modelVal {*}$paramsList]
+                $netlistObj add [D new $elemName $pin1 $pin2 -model $modelVal {*}$paramsList]
             }
         }
-        method CreateVCVS {line} {
+        method CreateVCVS {line netlistObj} {
             set lineList [split $line]
             lassign $lineList elemName pin1 pin2 pin3 pin4 val
             set elemName [string range $elemName 1 end]
             if {[my CheckBraced $val]} {
                 set val [list [my Unbrace $val] -eq]
-                [my configure -Netlist] add [E new $elemName $pin1 $pin2 $pin3 $pin4 -gain $val]
+                $netlistObj add [E new $elemName $pin1 $pin2 $pin3 $pin4 -gain $val]
             } elseif {[my CheckNumber $val]} {
-                [my configure -Netlist] add [E new $elemName $pin1 $pin2 $pin3 $pin4 -gain $val]
+                $netlistObj add [E new $elemName $pin1 $pin2 $pin3 $pin4 -gain $val]
             } else {
                 return -code error "Creating VCVS object from line '${line}' failed due to wrong or incompatible syntax"
             }
             return
         }
-        method CreateCCCS {line} {
+        method CreateCCCS {line netlistObj} {
             set lineList [split $line]
             lassign $lineList elemName pin1 pin2 vnam val
             set elemName [string range $elemName 1 end]
             if {[my CheckBraced $val]} {
                 set val [list [my Unbrace $val] -eq]
-                [my configure -Netlist] add [F new $elemName $pin1 $pin2 -consrc $vnam -gain $val\
+                $netlistObj add [F new $elemName $pin1 $pin2 -consrc $vnam -gain $val\
                                                      {*}[my ParseParams $lineList 6]]
             } elseif {[my CheckNumber $val]} {
-                [my configure -Netlist] add [F new $elemName $pin1 $pin2 -consrc $vnam -gain $val\
+                $netlistObj add [F new $elemName $pin1 $pin2 -consrc $vnam -gain $val\
                                                      {*}[my ParseParams $lineList 6]]
             } else {
                 return -code error "Creating CCCS object from line '${line}' failed due to wrong or incompatible syntax"
             }
             return
         }
-        method CreateVCCS {line} {
+        method CreateVCCS {line netlistObj} {
             set lineList [split $line]
             lassign $lineList elemName pin1 pin2 pin3 pin4 val
             set elemName [string range $elemName 1 end]
             if {[my CheckBraced $val]} {
                 set val [list [my Unbrace $val] -eq]
-                [my configure -Netlist] add [G new $elemName $pin1 $pin2 $pin3 $pin4 -trcond $val\
+                $netlistObj add [G new $elemName $pin1 $pin2 $pin3 $pin4 -trcond $val\
                                                      {*}[my ParseParams $lineList 6]]
             } elseif {[my CheckNumber $val]} {
-                [my configure -Netlist] add [G new $elemName $pin1 $pin2 $pin3 $pin4 -trcond $val\
+                $netlistObj add [G new $elemName $pin1 $pin2 $pin3 $pin4 -trcond $val\
                                                      {*}[my ParseParams $lineList 6]]
             } else {
                 return -code error "Creating VCCS object from line '${line}' failed due to wrong or incompatible syntax"
             }
             return
         }
-        method CreateCCVS {line} {
+        method CreateCCVS {line netlistObj} {
             set lineList [split $line]
             lassign $lineList elemName pin1 pin2 vnam val
             set elemName [string range $elemName 1 end]
             if {[my CheckBraced $val]} {
                 set val [list [my Unbrace $val] -eq]
-                [my configure -Netlist] add [H new $elemName $pin1 $pin2 -consrc $vnam -transr $val]
+                $netlistObj add [H new $elemName $pin1 $pin2 -consrc $vnam -transr $val]
             } elseif {[my CheckNumber $val]} {
-                [my configure -Netlist] add [H new $elemName $pin1 $pin2 -consrc $vnam -transr $val]
+                $netlistObj add [H new $elemName $pin1 $pin2 -consrc $vnam -transr $val]
             } else {
                 return -code error "Creating CCVS object from line '${line}' failed due to wrong or incompatible syntax"
             }
             return
         }
-        method CreateJFET {line} {
+        method CreateJFET {line netlistObj} {
+            set line [string map {", " "," " ," "," " , " ","} $line]
+            set lineList [split $line]
+            lassign $lineList elemName pin1 pin2 pin3 modelVal
+            set lineList [lremove $lineList 0 1 2 3 4]
+            set elemName [string range $elemName 1 end]
+            if {[set offIndex [lsearch -exact $lineList off]]!=-1} {
+                lappend paramsList -off
+                set lineList [lremove $lineList $offIndex]
+            }
+            set i 0
+            foreach word $lineList {
+                if {[regexp {ic=([^,]+),([^,]+)} $word match val1 val2]} {
+                    lappend paramsList -ic [list $val1 $val2]
+                    set lineList [lremove $lineList $i]
+                    break
+                }
+                incr i
+            }
+            if {[my CheckBraced [@ $lineList 0]]} {
+                lappend paramsList -area [list [my Unbrace [@ $lineList 0]] -eq]
+                set lineList [lremove $lineList 0]
+            } elseif {[my CheckNumber [@ $lineList 0]]} {
+                lappend paramsList -area [@ $lineList 0]
+                set lineList [lremove $lineList 0]
+            }
+            if {[my CheckModelName $modelVal]} {
+                lappend paramsList {*}[my ParseParams $lineList 0 {}]
+                $netlistObj add [J new $elemName $pin1 $pin2 $pin3 -model $modelVal {*}$paramsList]
+            } else {
+                return -code error "Creating JFET object from line '${line}' failed due to wrong or incompatible syntax"
+            }
+        }
+        method CreateCoupInd {line netlistObj} {
 
         }
-        method CreateCoupInd {line} {
-
-        }
-        method CreateInd {line} {
+        method CreateInd {line netlistObj} {
             # Creates inductor object from passed line and add it to netlist
             #   line - line to parse
             # Supports behavioural inductor only in canonical form `l={equation}` and only braced form `name={value}`
@@ -794,10 +878,10 @@ namespace eval ::SpiceGenTcl::Ngspice {
             if {[my CheckModelName $fourth]} {
                 if {[my CheckBraced $lval]} {
                     set lval [list [my Unbrace $lval] -eq]
-                    [my configure -Netlist] add [L new $elemName $pin1 $pin2 -l $lval -model $fourth\
+                    $netlistObj add [L new $elemName $pin1 $pin2 -l $lval -model $fourth\
                                                          {*}[my ParseParams $lineList 5 $excludePars]]
                 } elseif {[my CheckNumber $lval]} {
-                    [my configure -Netlist] add [L new $elemName $pin1 $pin2 -l $lval -model $fourth\
+                    $netlistObj add [L new $elemName $pin1 $pin2 -l $lval -model $fourth\
                                                          {*}[my ParseParams $lineList 5 $excludePars]]
                 } else {
                     return -code error "Creating inductor object from line '${line}' failed due to wrong or\
@@ -807,17 +891,17 @@ namespace eval ::SpiceGenTcl::Ngspice {
                 if {[regexp {^l=\{([^{}]*)\}$} $lval]} {
                     regexp {^l=\{([^{}]*)\}$} $lval match value
                     set lval $value
-                    [my configure -Netlist] add [L new $elemName $pin1 $pin2 -l $lval -beh\
+                    $netlistObj add [L new $elemName $pin1 $pin2 -l $lval -beh\
                                                          {*}[my ParseParams $lineList 4 $excludePars]]
                 } elseif {[my CheckBraced $lval]} {
                     set lval [list [my Unbrace $lval] -eq]
-                    [my configure -Netlist] add [L new $elemName $pin1 $pin2 -l $lval\
+                    $netlistObj add [L new $elemName $pin1 $pin2 -l $lval\
                                                          {*}[my ParseParams $lineList 4 $excludePars]]
                 } elseif {[my CheckNumber $lval]} {
-                    [my configure -Netlist] add [L new $elemName $pin1 $pin2 -l $lval\
+                    $netlistObj add [L new $elemName $pin1 $pin2 -l $lval\
                                                          {*}[my ParseParams $lineList 4 $excludePars]]
                 } elseif {[my CheckModelName $lval]} {
-                    [my configure -Netlist] add [L new $elemName $pin1 $pin2 -model $lval\
+                    $netlistObj add [L new $elemName $pin1 $pin2 -model $lval\
                                                          {*}[my ParseParams $lineList 4 $excludePars]]
                 } else {
                     return -code error "Creating inductor object from line '${line}' failed due to wrong or\
@@ -826,13 +910,69 @@ namespace eval ::SpiceGenTcl::Ngspice {
             }
             return
         }
-        method CreateMOSFET {line} {
+        method CreateMOSFET {line netlistObj} {
+            set line [string map {", " "," " ," "," " , " ","} $line]
+            set lineList [split $line]
+            lassign $lineList elemName pin1 pin2 pin3
+            set lineList [lremove $lineList 0 1 2 3]
+            set elemName [string range $elemName 1 end]
+            if {[set offIndex [lsearch -exact $lineList off]]!=-1} {
+                lappend paramsList -off
+                set lineList [lremove $lineList $offIndex]
+            }
+            set i 0
+            foreach word $lineList {
+                if {[regexp {ic=([^,]+),([^,]+),([^,]+)} $word match val1 val2 val3]} {
+                    lappend paramsList -ic [list $val1 $val2 $val3]
+                    set lineList [lremove $lineList $i]
+                    break
+                }
+                incr i
+            }
+            set i 0
+            foreach word $lineList {
+                if {[my CheckEqual $word] || [my CheckBracedWithEqual $word]} {
+                    set paramsStartIndex $i
+                    break
+                }
+                incr i
+            }
+            if {![info exists paramsStartIndex]} {
+                set paramsStartIndex [llength $lineList]
+            }
+            switch $paramsStartIndex {
+                1 {
+                    set modelVal [@ $lineList 0]
+                }
+                2 {
+                    lappend paramsList -n4 [@ $lineList 0]
+                    set modelVal [@ $lineList 1]
+                }
+                3 {
+                    lappend paramsList -n4 [@ $lineList 0] -n5 [@ $lineList 1]
+                    set modelVal [@ $lineList 2]
+                }
+                4 {
+                    lappend paramsList -n4 [@ $lineList 0] -n5 [@ $lineList 1] -n6 [@ $lineList 2]
+                    set modelVal [@ $lineList 3] 
+                }
+                5 {
+                    lappend paramsList -n4 [@ $lineList 0] -n5 [@ $lineList 1] -n6 [@ $lineList 2] -n7 [@ $lineList 3]
+                    set modelVal [@ $lineList 4]
+                }
+            }
+            if {[my CheckModelName $modelVal]} {
+                lappend paramsList {*}[my ParseParams $lineList $paramsStartIndex {}]
+                $netlistObj add [M new $elemName $pin1 $pin2 $pin3 -model $modelVal {*}$paramsList]
+            } else {
+                return -code error "Creating MOSFET object from line '${line}' failed due to wrong or incompatible\
+                        syntax"
+            }
+        }
+        method CreateVeriloga {line netlistObj} {
 
         }
-        method CreateVeriloga {line} {
-
-        }
-        method CreateBJT {line} {
+        method CreateBJT {line netlistObj} {
             set line [string map {", " "," " ," "," " , " ","} $line]
             set lineList [split $line]
             lassign $lineList elemName pin1 pin2 pin3
@@ -851,7 +991,6 @@ namespace eval ::SpiceGenTcl::Ngspice {
                 }
                 incr i
             }
-            
             set i 0
             foreach word $lineList {
                 if {[my CheckEqual $word] || [my CheckBracedWithEqual $word]} {
@@ -863,24 +1002,38 @@ namespace eval ::SpiceGenTcl::Ngspice {
             if {![info exists paramsStartIndex]} {
                 set paramsStartIndex [llength $lineList]
             }
-            if {$paramsStartIndex==3} {
-                lappend paramsList -ns [@ $lineList 0] -tj [@ $lineList 1]
-                set modelVal [@ $lineList 2]
-            } elseif {$paramsStartIndex==2} {
-                lappend paramsList -ns [@ $lineList 0]
-                set modelVal [@ $lineList 1]
-            } elseif {$paramsStartIndex==1} {
-                set modelVal [@ $lineList 0]
+            switch $paramsStartIndex {
+                1 {
+                    set modelVal [@ $lineList 0]
+                }
+                2 {
+                    lappend paramsList -ns [@ $lineList 0]
+                    set modelVal [@ $lineList 1]
+                }
+                3 {
+                    lappend paramsList -ns [@ $lineList 0] -tj [@ $lineList 1]
+                    set modelVal [@ $lineList 2]
+                }
             }
             if {[my CheckModelName $modelVal]} {
                 lappend paramsList {*}[my ParseParams $lineList $paramsStartIndex {}]
-                [my configure -Netlist] add [Q new $elemName $pin1 $pin2 $pin3 -model $modelVal {*}$paramsList]
+                $netlistObj add [Q new $elemName $pin1 $pin2 $pin3 -model $modelVal {*}$paramsList]
+            } else {
+                return -code error "Creating BJT object from line '${line}' failed due to wrong or incompatible syntax"
             }
         }
-        method CreateVSwitch {line} {
-
+        method CreateVSwitch {line netlistObj} {
+            set lineList [split $line]
+            lassign $lineList elemName pin1 pin2 pin3 pin4 model state
+            set elemName [string range $elemName 1 end]
+            set paramsList {}
+            if {$state in {on off}} {
+                lappend paramsList -$state
+            }
+            $netlistObj add [S new $elemName $pin1 $pin2 $pin3 $pin4 -model $model {*}$paramsList]
+            return
         }
-        method CreateVIsource {line} {
+        method CreateVIsource {line netlistObj} {
             # remove `(` and `)` symbols from string
             set line [regsub -all {[[:space:]]+} [string trim [string map {"(" " " ")" " "} $line]] { }]
             set lineList [split $line]
@@ -936,15 +1089,15 @@ namespace eval ::SpiceGenTcl::Ngspice {
             switch [@ $lineList 0] {
                 pulse {
                     lappend paramsList {*}[my ParsePosParams [lrange $lineList 1 end] [dget $functsDict pulse]]
-                    [my configure -Netlist] add [[string toupper ${type}]pulse new $elemName $pin1 $pin2 {*}$paramsList]
+                    $netlistObj add [[string toupper ${type}]pulse new $elemName $pin1 $pin2 {*}$paramsList]
                 }
                 sin {
                     lappend paramsList {*}[my ParsePosParams [lrange $lineList 1 end] [dget $functsDict sin]]
-                    [my configure -Netlist] add [[string toupper ${type}]sin new $elemName $pin1 $pin2 {*}$paramsList]
+                    $netlistObj add [[string toupper ${type}]sin new $elemName $pin1 $pin2 {*}$paramsList]
                 }
                 exp {
                     lappend paramsList {*}[my ParsePosParams [lrange $lineList 1 end] [dget $functsDict exp]]
-                    [my configure -Netlist] add [[string toupper ${type}]exp new $elemName $pin1 $pin2 {*}$paramsList]
+                    $netlistObj add [[string toupper ${type}]exp new $elemName $pin1 $pin2 {*}$paramsList]
                 }
                 pwl {
                     foreach value [lrange $lineList 1 end] {
@@ -954,15 +1107,15 @@ namespace eval ::SpiceGenTcl::Ngspice {
                         lappend seqList $value
                     }
                     lappend paramsList -seq $seqList
-                    [my configure -Netlist] add [[string toupper ${type}]pwl new $elemName $pin1 $pin2 {*}$paramsList]
+                    $netlistObj add [[string toupper ${type}]pwl new $elemName $pin1 $pin2 {*}$paramsList]
                 }
                 sffm {
                     lappend paramsList {*}[my ParsePosParams [lrange $lineList 1 end] [dget $functsDict sffm]]
-                    [my configure -Netlist] add [[string toupper ${type}]sffm new $elemName $pin1 $pin2 {*}$paramsList]
+                    $netlistObj add [[string toupper ${type}]sffm new $elemName $pin1 $pin2 {*}$paramsList]
                 }
                 am {
                     lappend paramsList {*}[my ParsePosParams [lrange $lineList 1 end] [dget $functsDict am]]
-                    [my configure -Netlist] add [[string toupper ${type}]am new $elemName $pin1 $pin2 {*}$paramsList]
+                    $netlistObj add [[string toupper ${type}]am new $elemName $pin1 $pin2 {*}$paramsList]
                 }
                 portnum {
                     if {$type ne {v}} {
@@ -977,26 +1130,87 @@ namespace eval ::SpiceGenTcl::Ngspice {
                             lappend paramsList -z0 $z0Val
                         }
                     }
-                    [my configure -Netlist] add [Vport new $elemName $pin1 $pin2 -portnum $portnumVal {*}$paramsList]
+                    $netlistObj add [Vport new $elemName $pin1 $pin2 -portnum $portnumVal {*}$paramsList]
                 }
                 default {
                     if {$acType} {
-                        [my configure -Netlist] add [[string toupper ${type}]ac new $elemName $pin1 $pin2 {*}$paramsList]
+                        $netlistObj add [[string toupper ${type}]ac new $elemName $pin1 $pin2 {*}$paramsList]
                     } else {
-                        [my configure -Netlist] add [[string toupper ${type}]dc new $elemName $pin1 $pin2 {*}$paramsList]
+                        $netlistObj add [[string toupper ${type}]dc new $elemName $pin1 $pin2 {*}$paramsList]
                     }
                 }
             }
             return
         }
-        method CreateISwitch {line} {
-
+        method CreateCSwitch {line netlistObj} {
+            set lineList [split $line]
+            lassign $lineList elemName pin1 pin2 vnam model state
+            set elemName [string range $elemName 1 end]
+            set paramsList {}
+            if {$state in {on off}} {
+                lappend paramsList -$state
+            }
+            $netlistObj add [W new $elemName $pin1 $pin2 -icntrl $vnam -model $model {*}$paramsList]
+            return
         }
-        method CreateSubcktInst {line} {
-
+        method CreateSubcktInst {line netlistObj} {
+            set lineList [split $line]
+            lassign $lineList elemName
+            set elemName [string range $elemName 1 end]
+            set i 0
+            foreach word $lineList {
+                if {[my CheckEqual $word] || [my CheckBracedWithEqual $word]} {
+                    set paramsStartIndex $i
+                    break
+                }
+                incr i
+            }
+            if {![info exists paramsStartIndex]} {
+                set paramsStartIndex [llength $lineList]
+            }
+            set subName [@ $lineList [= {$paramsStartIndex-1}]]
+            set pinList [lrange $lineList 1 [= {$paramsStartIndex-2}]]
+            set i 0
+            foreach pin $pinList {
+                lappend pins [list p$i $pin]
+                incr i
+            }
+            $netlistObj add [X new $elemName $pins $subName [my ParseParams $lineList $paramsStartIndex {} list]]
+            return
         }
-        method CreateMESFET {line} {
-
+        method CreateMESFET {line netlistObj} {
+            set line [string map {", " "," " ," "," " , " ","} $line]
+            set lineList [split $line]
+            lassign $lineList elemName pin1 pin2 pin3 modelVal
+            set lineList [lremove $lineList 0 1 2 3 4]
+            set elemName [string range $elemName 1 end]
+            set paramsList {}
+            if {[set offIndex [lsearch -exact $lineList off]]!=-1} {
+                lappend paramsList -off
+                set lineList [lremove $lineList $offIndex]
+            }
+            set i 0
+            foreach word $lineList {
+                if {[regexp {ic=([^,]+),([^,]+)} $word match val1 val2]} {
+                    lappend paramsList -ic [list $val1 $val2]
+                    set lineList [lremove $lineList $i]
+                    break
+                }
+                incr i
+            }
+            if {[my CheckBraced [@ $lineList 0]]} {
+                lappend paramsList -area [list [my Unbrace [@ $lineList 0]] -eq]
+                set lineList [lremove $lineList 0]
+            } elseif {[my CheckNumber [@ $lineList 0]]} {
+                lappend paramsList -area [@ $lineList 0]
+                set lineList [lremove $lineList 0]
+            }
+            if {[my CheckModelName $modelVal]} {
+                $netlistObj add [Z new $elemName $pin1 $pin2 $pin3 -model $modelVal {*}$paramsList]
+            } else {
+                return -code error "Creating MESFET object from line '${line}' failed due to wrong or incompatible\
+                        syntax"
+            }
         }
     }
 

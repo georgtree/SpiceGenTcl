@@ -121,16 +121,16 @@ test testParserClass-2 {test Parser class} -setup {
 } -body {
     return [$parser configure -FileData]
 } -result "{.subckt nand in1 in2 out vdd} {m1 out in2 vdd vdd p1 w=7.5u l=0.35u pd=13.5u ad=22.5p ps=13.5u as=22.5p}\
-{m2 net.1 in2 0 0 n1 w=3u l=0.35u pd=9u ad=9p ps=9u as=9p} {m3 out in1 vdd vdd p1 w=7.5u l=0.35u pd=13.5u ad=22.5p\
-ps=13.5u as=22.5p} {m4 out in1 net.1 0 n1 w=3u l=0.35u pd=9u ad=9p ps=9u as=9p} {.ends nand} {.subckt onebit 1 2 3 4 5\
+{m2 net1 in2 0 0 n1 w=3u l=0.35u pd=9u ad=9p ps=9u as=9p} {m3 out in1 vdd vdd p1 w=7.5u l=0.35u pd=13.5u ad=22.5p\
+ps=13.5u as=22.5p} {m4 out in1 net1 0 n1 w=3u l=0.35u pd=9u ad=9p ps=9u as=9p} {.ends nand} {.subckt onebit 1 2 3 4 5\
 6} {x1 1 2 7 6 nand} {x2 1 7 8 6 nand} {x3 2 7 9 6 nand} {x4 8 9 10 6 nand} {x5 3 10 11 6 nand} {x6 3 11 12 6 nand} {x7\
 10 11 13 6 nand} {x8 12 13 4 6 nand} {x9 11 7 5 6 nand} {.ends onebit} {.subckt twobit 1 2 3 4 5 6 7 8 9} {x1 1 2 7 5\
 10 9 onebit} {x2 3 4 10 6 8 9 onebit} {.ends twobit} {.subckt fourbit 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15} {x1 1 2 3 4\
-9 10 13 16 15 twobit} {x2 5 6 7 8 11 12 16 14 15 twobit} {.ends fourbit} {vcc 99 0 dc 3.3v} {vin1a 1 0 dc 0 pulse(0 3\
-0 5ns 5ns 20ns 50ns)} {vin1b 2 0 dc 0 pulse(0 3 0 5ns 5ns 30ns 100ns)} {vin2a 3 0 dc 0 pulse(0 3 0 5ns 5ns 50ns 200ns)}\
-{vin2b 4 0 dc 0 pulse(0 3 0 5ns 5ns 90ns 400ns)} {vin3a 5 0 dc 0 pulse(0 3 0 5ns 5ns 170ns 800ns)} {vin3b 6 0 dc 0\
-pulse(0 3 0 5ns 5ns 330ns 1600ns)} {vin4a 7 0 dc 0 pulse(0 3 0 5ns 5ns 650ns 3200ns)} {vin4b 8 0 dc 0 pulse(0 3 0 5ns\
-5ns 1290ns 6400ns)} {x1 1 2 3 4 5 6 7 8 9 10 11 12 0 13 99 fourbit} {.option noinit acct} {.tran 500p 6400ns} {.save\
+9 10 13 16 15 twobit} {x2 5 6 7 8 11 12 16 14 15 twobit} {.ends fourbit} {vcc 99 0 dc 3.3} {vin1a 1 0 dc 0 pulse(0 3\
+0 5n 5n 20n 50n)} {vin1b 2 0 dc 0 pulse(0 3 0 5n 5n 30n 100n)} {vin2a 3 0 dc 0 pulse(0 3 0 5n 5n 50n 200n)}\
+{vin2b 4 0 dc 0 pulse(0 3 0 5n 5n 90n 400n)} {vin3a 5 0 dc 0 pulse(0 3 0 5n 5n 170n 800n)} {vin3b 6 0 dc 0\
+pulse(0 3 0 5n 5n 330n 1600n)} {vin4a 7 0 dc 0 pulse(0 3 0 5n 5n 650n 3200n)} {vin4b 8 0 dc 0 pulse(0 3 0 5n\
+5n 1290n 6400n)} {x1 1 2 3 4 5 6 7 8 9 10 11 12 0 13 99 fourbit} {.option noinit acct} {.tran 500p 6400n} {.save\
 v(1) v(2) v(3) v(4) v(5) v(6) v(7) v(8)} {.model n1 nmos level=49 version=3.3.0} {.model p1 pmos level=49 version=3.3.0}\
 .end" -cleanup {
     unset parser
@@ -189,7 +189,7 @@ test testParserClass-7 {test Parser class with nested subcircuit} -setup {
 test testParserClass-8 {test Parser class} -setup {
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc diffpair_cir_build.cir]]
     $parser readFile
-    $parser buildNetlist
+    $parser buildTopNetlist
 } -body {
     return [[$parser configure -Netlist] genSPICEString]
 } -result ".model qnl npn(level=1 bf=80 rb=100 tf=0.3n tr=6n cje=3p cjc=2p vaf=50)
@@ -214,7 +214,7 @@ vee 9 0 -12
 test testParserClass-9 {test Parser class} -setup {
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc diffpair_cir_build_res_err_syntax.cir]]
     $parser readFile
-    catch {$parser buildNetlist} errorStr
+    catch {$parser buildTopNetlist} errorStr
 } -body {
     return $errorStr
 } -result "Creating resistor object from line 'rs2 3 1 r={v(a)+v(b)/i(b)}}} tc2=1' failed due to wrong or incompatible\
@@ -222,12 +222,96 @@ syntax" -cleanup {
     unset parser
 }
 
+test testParserClass-10 {test Parser class} -setup {
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc adder_mos.cir]]
+    $parser readFile
+    $parser buildTopNetlist
+} -body {
+    return [[$parser configure -Netlist] genSPICEString]
+} -result ".subckt nand in1 in2 out vdd
+m1 out in2 vdd vdd p1 w=7.5u l=0.35u pd=13.5u ad=22.5p ps=13.5u as=22.5p
+m2 net1 in2 0 0 n1 w=3u l=0.35u pd=9u ad=9p ps=9u as=9p
+m3 out in1 vdd vdd p1 w=7.5u l=0.35u pd=13.5u ad=22.5p ps=13.5u as=22.5p
+m4 out in1 net1 0 n1 w=3u l=0.35u pd=9u ad=9p ps=9u as=9p
+.ends nand
+.subckt onebit 1 2 3 4 5 6
+x1 1 2 7 6 nand
+x2 1 7 8 6 nand
+x3 2 7 9 6 nand
+x4 8 9 10 6 nand
+x5 3 10 11 6 nand
+x6 3 11 12 6 nand
+x7 10 11 13 6 nand
+x8 12 13 4 6 nand
+x9 11 7 5 6 nand
+.ends onebit
+.subckt twobit 1 2 3 4 5 6 7 8 9
+x1 1 2 7 5 10 9 onebit
+x2 3 4 10 6 8 9 onebit
+.ends twobit
+.subckt fourbit 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+x1 1 2 3 4 9 10 13 16 15 twobit
+x2 5 6 7 8 11 12 16 14 15 twobit
+.ends fourbit
+vcc 99 0 3.3
+vin1a 1 0 dc 0 pulse 0 3 0 5n 5n 20n 50n
+vin1b 2 0 dc 0 pulse 0 3 0 5n 5n 30n 100n
+vin2a 3 0 dc 0 pulse 0 3 0 5n 5n 50n 200n
+vin2b 4 0 dc 0 pulse 0 3 0 5n 5n 90n 400n
+vin3a 5 0 dc 0 pulse 0 3 0 5n 5n 170n 800n
+vin3b 6 0 dc 0 pulse 0 3 0 5n 5n 330n 1600n
+vin4a 7 0 dc 0 pulse 0 3 0 5n 5n 650n 3200n
+vin4b 8 0 dc 0 pulse 0 3 0 5n 5n 1290n 6400n
+x1 1 2 3 4 5 6 7 8 9 10 11 12 0 13 99 fourbit
+.tran 500p 6400n" -cleanup {
+    unset parser
+}
+
+test testParserClass-11 {test Parser class} -setup {
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc ring51_40.sp]]
+    $parser readFile
+    $parser buildTopNetlist
+} -body {
+    return [[$parser configure -Netlist] genSPICEString]
+} -result ".subckt inv1 dd ss sub in out
+mn1 out in ss sub n1 w=4u l=0.15u as=6p ad=6p ps=7u pd=7u
+mp1 out in dd sub p1 w=10u l=0.15u as=15p ad=15p ps=13u pd=13u
+.ends inv1
+.subckt inv5 dd ss sub in out
+xinv1 dd ss sub in 1 inv1
+xinv2 dd ss sub 1 2 inv1
+xinv3 dd ss sub 2 3 inv1
+xinv4 dd ss sub 3 4 inv1
+xinv5 dd ss sub 4 out inv1
+.ends inv5
+.subckt inv25 dd ss sub in out
+xinv1 dd ss sub in 1 inv5
+xinv2 dd ss sub 1 2 inv5
+xinv3 dd ss sub 2 3 inv5
+xinv4 dd ss sub 3 4 inv5
+xinv5 dd ss sub 4 out inv5
+.ends inv25
+vin in out dc 2 pulse 2 0 0.1n 5n 1 1 1
+vdd dd 0 dc 0 pulse 0 1.5 0 1n 1 1 1
+vss ss 0 0
+ve sub 0 0
+vn n1 0 0
+xinv1 dd ss sub in out25 inv25
+xinv2 dd ss sub out25 out50 inv25
+xinv5 dd ss sub out50 out inv1
+xinv11 dd ss sub out buf inv1
+cout buf ss 1pf
+.tran 0.2n 16n" -cleanup {
+    unset parser
+}
+
+
 ### Resistors parsing test
 
 test testParserClassResistors-1 {test Parser class, resistors parsing} -setup {
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc resistors_test.cir]]
     $parser readFile
-    $parser buildNetlist
+    $parser buildTopNetlist
 } -body {
     return [[$parser configure -Netlist] genSPICEString]
 } -result "rs1 11 2 {res}
@@ -248,7 +332,7 @@ test testParserClassResistors-2 {test Parser class, resistors parsing, edge case
     close $file
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
     $parser readFile
-    $parser buildNetlist
+    $parser buildTopNetlist
 } -body {
     return [[$parser configure -Netlist] genSPICEString]
 } -result "rs2 3 1 3 tc2=1" -cleanup {
@@ -263,7 +347,7 @@ test testParserClassResistors-3 {test Parser class, resistors parsing, edge case
     close $file
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
     $parser readFile
-    catch {$parser buildNetlist} errorStr
+    catch {$parser buildTopNetlist} errorStr
 } -body {
     return $errorStr
 } -result "-tc2 conflicts with -model" -cleanup {
@@ -278,7 +362,7 @@ test testParserClassResistors-4 {test Parser class, resistors parsing, edge case
     close $file
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
     $parser readFile
-    catch {$parser buildNetlist} errorStr
+    catch {$parser buildTopNetlist} errorStr
 } -body {
     return $errorStr
 } -result "Creating resistor object from line 'rs2 3 1 beh={v(a)+v(b)/i(b)} tc2=1' failed due to wrong or incompatible\
@@ -294,7 +378,7 @@ test testParserClassResistors-5 {test Parser class, resistors parsing, edge case
     close $file
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
     $parser readFile
-    catch {$parser buildNetlist} errorStr
+    catch {$parser buildTopNetlist} errorStr
 } -body {
     return $errorStr
 } -result "Creating resistor object from line 'rs2 a b ! {v(a)+v(b)/i(b)} tc2=1' failed due to wrong or incompatible\
@@ -310,7 +394,7 @@ test testParserClassResistors-6 {test Parser class, resistors parsing, edge case
     close $file
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
     $parser readFile
-    catch {$parser buildNetlist} errorStr
+    catch {$parser buildTopNetlist} errorStr
 } -body {
     return $errorStr
 } -result "Parameter '{v(a)+v(b)/i(b)}' parsing failed" -cleanup {
@@ -323,7 +407,7 @@ test testParserClassResistors-6 {test Parser class, resistors parsing, edge case
 test testParserClassCapacitors-1 {test Parser class, capacitors parsing} -setup {
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc capacitors_test.cir]]
     $parser readFile
-    $parser buildNetlist
+    $parser buildTopNetlist
 } -body {
     return [[$parser configure -Netlist] genSPICEString]
 } -result "c2 netp netm 1e-6
@@ -341,7 +425,7 @@ test testParserClassCapacitors-2 {test Parser class, capacitors parsing, edge ca
     close $file
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
     $parser readFile
-    $parser buildNetlist
+    $parser buildTopNetlist
 } -body {
     return [[$parser configure -Netlist] genSPICEString]
 } -result "cs2 3 1 3 tc2=1" -cleanup {
@@ -356,7 +440,7 @@ test testParserClassCapacitors-3 {test Parser class, capacitors parsing, edge ca
     close $file
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
     $parser readFile
-    catch {$parser buildNetlist} errorStr
+    catch {$parser buildTopNetlist} errorStr
 } -body {
     return $errorStr
 } -result "-tc2 conflicts with -model" -cleanup {
@@ -371,7 +455,7 @@ test testParserClassCapacitors-4 {test Parser class, capacitors parsing, edge ca
     close $file
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
     $parser readFile
-    catch {$parser buildNetlist} errorStr
+    catch {$parser buildTopNetlist} errorStr
 } -body {
     return $errorStr
 } -result "Creating capacitor object from line 'cs2 3 1 beh={v(a)+v(b)/i(b)} tc2=1' failed due to wrong or incompatible\
@@ -387,7 +471,7 @@ test testParserClassCapacitors-5 {test Parser class, capacitors parsing, edge ca
     close $file
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
     $parser readFile
-    catch {$parser buildNetlist} errorStr
+    catch {$parser buildTopNetlist} errorStr
 } -body {
     return $errorStr
 } -result "Creating capacitor object from line 'cs2 a b ! {v(a)+v(b)/i(b)} tc2=1' failed due to wrong or incompatible\
@@ -403,7 +487,7 @@ test testParserClassCapacitors-6 {test Parser class, capacitors parsing, edge ca
     close $file
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
     $parser readFile
-    catch {$parser buildNetlist} errorStr
+    catch {$parser buildTopNetlist} errorStr
 } -body {
     return $errorStr
 } -result "Parameter '{v(a)+v(b)/i(b)}' parsing failed" -cleanup {
@@ -416,7 +500,7 @@ test testParserClassCapacitors-6 {test Parser class, capacitors parsing, edge ca
 test testParserClassInductors-1 {test Parser class, inductors parsing} -setup {
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc inductors_test.cir]]
     $parser readFile
-    $parser buildNetlist
+    $parser buildTopNetlist
 } -body {
     return [[$parser configure -Netlist] genSPICEString]
 } -result "l1 netp netm 1e-6 tc1=1 temp=25
@@ -435,7 +519,7 @@ test testParserClassInductors-2 {test Parser class, inductors parsing, edge case
     close $file
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
     $parser readFile
-    $parser buildNetlist
+    $parser buildTopNetlist
 } -body {
     return [[$parser configure -Netlist] genSPICEString]
 } -result "ls2 3 1 3 tc2=1" -cleanup {
@@ -450,7 +534,7 @@ test testParserClassInductors-3 {test Parser class, inductors parsing, edge case
     close $file
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
     $parser readFile
-    catch {$parser buildNetlist} errorStr
+    catch {$parser buildTopNetlist} errorStr
 } -body {
     return $errorStr
 } -result "Creating inductor object from line 'ls2 3 1 beh={v(a)+v(b)/i(b)} tc2=1' failed due to wrong or incompatible\
@@ -466,7 +550,7 @@ test testParserClassInductors-4 {test Parser class, inductors parsing, edge case
     close $file
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
     $parser readFile
-    catch {$parser buildNetlist} errorStr
+    catch {$parser buildTopNetlist} errorStr
 } -body {
     return $errorStr
 } -result "Creating inductor object from line 'ls2 a b ! {v(a)+v(b)/i(b)} tc2=1' failed due to wrong or incompatible\
@@ -482,7 +566,7 @@ test testParserClassInductors-5 {test Parser class, inductors parsing, edge case
     close $file
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
     $parser readFile
-    catch {$parser buildNetlist} errorStr
+    catch {$parser buildTopNetlist} errorStr
 } -body {
     return $errorStr
 } -result "Parameter '{v(a)+v(b)/i(b)}' parsing failed" -cleanup {
@@ -495,7 +579,7 @@ test testParserClassInductors-5 {test Parser class, inductors parsing, edge case
 test testParserClassModels-1 {test Parser class, models parsing} -setup {
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc models_test.cir]]
     $parser readFile
-    $parser buildNetlist
+    $parser buildTopNetlist
 } -body {
     return [[$parser configure -Netlist] genSPICEString]
 } -result ".model resmod r(tc1=1 tc2=2)
@@ -520,7 +604,7 @@ test testParserClassModels-2 {test Parser class, models parsing, edge case} -set
     close $file
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
     $parser readFile
-    catch {$parser buildNetlist} errorStr
+    catch {$parser buildTopNetlist} errorStr
 } -body {
     return $errorStr
 } -result "Parameter 'vt=vh=0.5' parsing failed" -cleanup {
@@ -536,7 +620,7 @@ test testParserClassModels-3 {test Parser class, models parsing, edge case} -set
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
     $parser readFile
     stdout2var output
-    $parser buildNetlist
+    $parser buildTopNetlist
     restorestdout
 } -body {
     return $output
@@ -554,7 +638,7 @@ test testParserClassModels-4 {test Parser class, models parsing, edge case} -set
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
     $parser readFile
     stdout2var output
-    $parser buildNetlist
+    $parser buildTopNetlist
     restorestdout
 } -body {
     return $output
@@ -569,7 +653,7 @@ test testParserClassModels-4 {test Parser class, models parsing, edge case} -set
 test testParserClassAnalyses-1 {test Parser class, analyses parsing} -setup {
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc analyses_test.cir]]
     $parser readFile
-    $parser buildNetlist
+    $parser buildTopNetlist
 } -body {
     return [[$parser configure -Netlist] genSPICEString]
 } -result ".dc v1 {time1} 5 0.1
@@ -596,7 +680,7 @@ test testParserClassAnalyses-2 {test Parser class, analyses parsing, edge case} 
     close $file
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
     $parser readFile
-    catch {$parser buildNetlist} errorStr
+    catch {$parser buildTopNetlist} errorStr
 } -body {
     return $errorStr
 } -result "Sense analysis has usupported type 'sp'" -cleanup {
@@ -611,7 +695,7 @@ test testParserClassAnalyses-3 {test Parser class, analyses parsing, edge case} 
     close $file
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
     $parser readFile
-    catch {$parser buildNetlist} errorStr
+    catch {$parser buildTopNetlist} errorStr
 } -body {
     return $errorStr
 } -result "Sense analysis in line '.sens v(1,out ac dec 10 {f1} 1e6' doesn't have output variable with proper\
@@ -628,7 +712,7 @@ test testParserClassAnalyses-4 {test Parser class, analyses parsing, edge case} 
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
     $parser readFile
     stdout2var output
-    $parser buildNetlist
+    $parser buildTopNetlist
     restorestdout
 } -body {
     return $output
@@ -645,7 +729,7 @@ test testParserClassAnalyses-5 {test Parser class, analyses parsing, edge case} 
     close $file
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
     $parser readFile
-    catch {$parser buildNetlist} errorStr
+    catch {$parser buildTopNetlist} errorStr
 } -body {
     return $errorStr
 } -result "Sense analysis in line '.sens a(1, out) ac dec 10 {f1} 1e6' doesn't have output variable with proper\
@@ -659,7 +743,7 @@ test testParserClassAnalyses-5 {test Parser class, analyses parsing, edge case} 
 test testParserClassParamStatement-1 {test Parser class, .param parsing} -setup {
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc  params_test.cir]]
     $parser readFile
-    $parser buildNetlist
+    $parser buildTopNetlist
 } -body {
     return [[$parser configure -Netlist] genSPICEString]
 } -result ".param u0t={rf+1} vth0=10
@@ -673,7 +757,7 @@ test testParserClassParamStatement-1 {test Parser class, .param parsing} -setup 
 test testParserClassBsource-1 {test Parser class, behavioural sources parsing} -setup {
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc  bsources_test.cir]]
     $parser readFile
-    $parser buildNetlist
+    $parser buildTopNetlist
 } -body {
     return [[$parser configure -Netlist] genSPICEString]
 } -result "b1 netp netm i={v(a)+v(b)+pow(v(c),2)} tc1=1
@@ -691,7 +775,7 @@ test testParserClassBsource-2 {test Parser class, behavioural sources parsing, e
     close $file
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
     $parser readFile
-    catch {$parser buildNetlist} errorStr
+    catch {$parser buildTopNetlist} errorStr
 } -body {
     return $errorStr
 } -result "Creating behavioural source object from line 'b1 netp netm g={v(a)+v(b)+pow(v(c),2)} tc1=1' failed due to\
@@ -707,7 +791,7 @@ test testParserClassBsource-3 {test Parser class, behavioural sources parsing, e
     close $file
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
     $parser readFile
-    catch {$parser buildNetlist} errorStr
+    catch {$parser buildTopNetlist} errorStr
 } -body {
     return $errorStr
 } -result "-i conflicts with -v" -cleanup {
@@ -720,7 +804,7 @@ test testParserClassBsource-3 {test Parser class, behavioural sources parsing, e
 test testParserClassLctrlsources-1 {test Parser class, linear controlled sources parsing} -setup {
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc lctrlsources_test.cir]]
     $parser readFile
-    $parser buildNetlist
+    $parser buildTopNetlist
 } -body {
     return [[$parser configure -Netlist] genSPICEString]
 } -result "g1 2 0 5 0 0.1 m={m}
@@ -739,7 +823,7 @@ h2 5 17 vz {value}" -cleanup {
 test testParserClassIndsources-1 {test Parser class, independent sources parsing} -setup {
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc indsources_test.cir]]
     $parser readFile
-    $parser buildNetlist
+    $parser buildTopNetlist
 } -body {
     return [[$parser configure -Netlist] genSPICEString]
 } -result "v1 10 0 6
@@ -795,7 +879,7 @@ v45 netp netm dc 1 ac 1 portnum 2 z0 {z0}" -cleanup {
 test testParserClassDiodes-1 {test Parser class, diodes parsing} -setup {
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc diodes_test.cir]]
     $parser readFile
-    $parser buildNetlist
+    $parser buildTopNetlist
 } -body {
     return [[$parser configure -Netlist] genSPICEString]
 } -result "d1 netp netm diomod area=1e-3 lm=1e-6 temp=25
@@ -809,20 +893,121 @@ d3 netp netm diomod off area={area} lm=1e-6 temp=25" -cleanup {
 test testParserClassBJTs-1 {test Parser class, BJTs parsing} -setup {
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc bjts_test.cir]]
     $parser readFile
-    $parser buildNetlist
+    $parser buildTopNetlist
 } -body {
     return [[$parser configure -Netlist] genSPICEString]
 } -result "q1 netc netb nete bjtmod area=1e-3 temp=25
-q2 netc netb nete nets bjtmod off area=1e-3 temp=25
+q2 netc netb nete nets bjtmod off area={area} temp=25
 q3 netc netb nete nets nettj bjtmod area=1e-3 temp=25
 q4 netc netb nete bjtmod
 q5 netc netb nete nets bjtmod off
 q6 netc netb nete nets nettj bjtmod
 q7 netc netb nete nets nettj bjtmod ic=1,2 area=1e-3 temp=25
-q8 netc netb nete nets nettj bjtmod ic={a},2 area=1e-3 temp=25
+q8 netc netb nete nets bjtmod ic={a},2 area=1e-3 temp=25
 q9 netc netb nete nets nettj bjtmod ic={a},{b} area=1e-3 temp=25" -cleanup {
     unset parser
 }
 
+### JFETs parsing test
+
+test testParserClassJFETs-1 {test Parser class, JFETs parsing} -setup {
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc jfets_test.cir]]
+    $parser readFile
+    $parser buildTopNetlist
+} -body {
+    return [[$parser configure -Netlist] genSPICEString]
+} -result "j1 netd netg nets jfetmod 1e-3 temp=25
+j2 netd netg nets jfetmod {area*area} ic={a},5 temp=25
+j3 netd netg nets jfetmod 1e-3 off temp=25
+j4 netd netg nets jfetmod ic=1,2 temp=25
+j5 netd netg nets jfetmod" -cleanup {
+    unset parser
+}
+
+### MESFETs parsing test
+
+test testParserClassJFETs-1 {test Parser class, MESFETs parsing} -setup {
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc mesfets_test.cir]]
+    $parser readFile
+    $parser buildTopNetlist
+} -body {
+    return [[$parser configure -Netlist] genSPICEString]
+} -result "z1 netd netg nets mesfetmod 1e-3
+z2 netd netg nets mesfetmod {area*area} ic={a},5
+z3 netd netg nets mesfetmod 1e-3 off
+z4 netd netg nets mesfetmod ic=1,2
+z5 netd netg nets mesfetmod" -cleanup {
+    unset parser
+}
+
+### MOSFETs parsing test
+
+test testParserClassMOSFETs-1 {test Parser class, MOSFETs parsing} -setup {
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc mosfets_test.cir]]
+    $parser readFile
+    $parser buildTopNetlist
+} -body {
+    return [[$parser configure -Netlist] genSPICEString]
+} -result "m1 netd netg nets mosfetmod l=1e-6 w=10e-3
+m2 netd netg nets netsub mosfetmod l=1e-6 w=10e-3
+m3 netd netg nets netsub net5 mosfetmod l=1e-6 w=10e-3
+m4 netd netg nets netsub net5 net6 mosfetmod l=1e-6 w=10e-3
+m5 netd netg nets netsub net5 net6 net7 mosfetmod l=1e-6 w=10e-3
+m6 netd netg nets netsub net5 net6 net7 mosfetmod ic=1,2,3 l=1e-6 w=10e-3
+m7 netd netg nets netsub net5 net6 net7 mosfetmod ic=1,{a},3 l=1e-6 w=10e-3
+m8 netd netg nets netsub net5 net6 net7 mosfetmod ic=1,2,{b} l=1e-6 w=10e-3
+m9 netd netg nets mosfetmod off l=1e-6 w=10e-3" -cleanup {
+    unset parser
+}
+
+### Switches parsing test
+
+test testParserClassSwitches-1 {test Parser class, switches parsing} -setup {
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc switches_test.cir]]
+    $parser readFile
+    $parser buildTopNetlist
+} -body {
+    return [[$parser configure -Netlist] genSPICEString]
+} -result "s1 net1 0 netc 0 sw1 on
+s2 net1 0 netc 0 sw1
+s3 net1 0 netc 0 sw1 on
+s4 net1 0 netc 0 sw1 off
+w1 net1 0 v1 sw1 on
+w2 net1 0 v1 sw1 off" -cleanup {
+    unset parser
+}
+
+### Subcircuits calls parsing test
+
+test testParserClassSwitches-1 {test Parser class, subcircuits calls parsing} -setup {
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc subckts_calls_test.cir]]
+    $parser readFile
+    $parser buildTopNetlist
+} -body {
+    return [[$parser configure -Netlist] genSPICEString]
+} -result "x1 net1 net2 rcnet r=1 c={cpar}
+x2 net1 net2 rcnet
+x3 a b c d e f g h subname k=1 n=2 i=8 o={oval}" -cleanup {
+    unset parser
+}
+
+### Subcircuits definitions parsing test
+
+test testParserClassSwitches-1 {test Parser class, subcircuits definitions parsing} -setup {
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc subckts_defs_test.cir]]
+    $parser readFile
+    $parser buildTopNetlist
+} -body {
+    return [[$parser configure -Netlist] genSPICEString]
+} -result ".subckt resarr in out rs=2 rt=3
+r1 in a r={rs}
+r2 a out r={rt}
+.ends resarr
+.subckt resarr1 in out rs=2 rt=3
+r1 in a r={rs}
+r2 a out r={rt}
+.ends resarr1" -cleanup {
+    unset parser
+}
 
 cleanupTests

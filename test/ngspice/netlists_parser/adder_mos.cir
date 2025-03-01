@@ -4,9 +4,9 @@
 .SUBCKT NAND in1 in2 out VDD
 *   NODES:  INPUT(2), OUTPUT, VCC
 M1 out in2 Vdd Vdd p1 W=7.5u L=0.35u pd=13.5u ad=22.5p ps=13.5u as=22.5p
-M2 net.1 in2 0 0 n1   W=3u   L=0.35u pd=9u    ad=9p    ps=9u    as=9p
+M2 net1 in2 0 0 n1   W=3u   L=0.35u pd=9u    ad=9p    ps=9u    as=9p
 M3 out in1 Vdd Vdd p1 W=7.5u L=0.35u pd=13.5u ad=22.5p ps=13.5u as=22.5p
-M4 out in1 net.1 0 n1 W=3u   L=0.35u pd=9u    ad=9p    ps=9u    as=9p
+M4 out in1 net1 0 n1 W=3u   L=0.35u pd=9u    ad=9p    ps=9u    as=9p
 .ENDS NAND
 
 .SUBCKT ONEBIT 1 2 3 4 5 6
@@ -37,23 +37,23 @@ X2   5  6  7  8 11 12 16 14 15   TWOBIT
 .ENDS FOURBIT
 
 *** POWER
-VCC   99  0   DC 3.3V
+VCC   99  0   DC 3.3
 
 *** ALL INPUTS
-VIN1A  1  0   DC 0 PULSE(0 3 0 5NS 5NS   20NS   50NS)
-VIN1B  2  0   DC 0 PULSE(0 3 0 5NS 5NS   30NS  100NS)
-VIN2A  3  0   DC 0 PULSE(0 3 0 5NS 5NS   50NS  200NS)
-VIN2B  4  0   DC 0 PULSE(0 3 0 5NS 5NS   90NS  400NS)
-VIN3A  5  0   DC 0 PULSE(0 3 0 5NS 5NS  170NS  800NS)
-VIN3B  6  0   DC 0 PULSE(0 3 0 5NS 5NS  330NS 1600NS)
-VIN4A  7  0   DC 0 PULSE(0 3 0 5NS 5NS  650NS 3200NS)
-VIN4B  8  0   DC 0 PULSE(0 3 0 5NS 5NS 1290NS 6400NS)
+VIN1A  1  0   DC 0 PULSE(0 3 0 5N 5N   20N   50N)
+VIN1B  2  0   DC 0 PULSE(0 3 0 5N 5N   30N  100N)
+VIN2A  3  0   DC 0 PULSE(0 3 0 5N 5N   50N  200N)
+VIN2B  4  0   DC 0 PULSE(0 3 0 5N 5N   90N  400N)
+VIN3A  5  0   DC 0 PULSE(0 3 0 5N 5N  170N  800N)
+VIN3B  6  0   DC 0 PULSE(0 3 0 5N 5N  330N 1600N)
+VIN4A  7  0   DC 0 PULSE(0 3 0 5N 5N  650N 3200N)
+VIN4B  8  0   DC 0 PULSE(0 3 0 5N 5N 1290N 6400N)
 
 *** DEFINE NOMINAL CIRCUIT
 X1     1  2  3  4  5  6  7  8  9 10 11 12  0 13 99 FOURBIT
 
 .option noinit acct
-.TRAN 500p 6400NS
+.TRAN 500p 6400N
 * save inputs
 .save V(1) V(2) V(3) V(4) V(5) V(6) V(7) V(8) 
 

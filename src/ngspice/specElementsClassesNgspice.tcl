@@ -17,7 +17,7 @@
 namespace eval ::SpiceGenTcl {
     namespace eval Ngspice::BasicDevices {
         namespace export Resistor R  Capacitor C Inductor L SubcircuitInstance X SubcircuitInstanceAuto XAuto\
-                VSwitch VSw CSwitch W 
+                VSwitch S CSwitch W 
     }
     namespace eval Ngspice::Sources {
         namespace export Vdc Idc Vac Iac Vpulse Ipulse Vsin Isin Vexp Iexp Vpwl Ipwl Vsffm Isffm Vam Iam Vccs G Vcvs E\
@@ -325,10 +325,10 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
         superclass ::SpiceGenTcl::Common::BasicDevices::VSwitch
     }
 
-####  VSw class 
+####  S class 
     
     # alias for VSwitch class
-    oo::class create VSw {
+    oo::class create S {
         superclass VSwitch
     }    
     
