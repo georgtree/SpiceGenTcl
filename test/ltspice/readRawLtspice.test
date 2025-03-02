@@ -54,7 +54,7 @@ proc readResultFile {path} {
 
 test testRawFileClass-1 {read binary ac data} -setup {
     set data [RawFile new "${rawDataLoc}/ac.raw" * ltspice]
-    set traceAxis [$data configure -Axis]
+    set traceAxis [$data configure -axis]
     set trace [$data getTrace v(2)]
     set refData [readResultFile "${rawDataLoc}/v(2).csv"]
     set axisData [$traceAxis getDataPoints]
@@ -75,7 +75,7 @@ test testRawFileClass-1 {read binary ac data} -setup {
 
 test testRawFileClass-2 {read ascii ac data} -setup {
     set data [RawFile new "${rawDataLoc}/ac_ascii.raw" * ltspice]
-    set traceAxis [$data configure -Axis]
+    set traceAxis [$data configure -axis]
     set trace [$data getTrace v(2)]
     set refData [readResultFile "${rawDataLoc}/v(2).csv"]
     set axisData [$traceAxis getDataPoints]
@@ -104,7 +104,7 @@ test testRawFileClass-3 {read ascii ac data} -setup {
 
 test testRawFileClass-4 {read binary dc data} -setup {
     set data [RawFile new "${rawDataLoc}/dc.raw" * ltspice]
-    set traceAxis [$data configure -Axis]
+    set traceAxis [$data configure -axis]
     set trace [$data getTrace i(d1)]
     set refData [readResultFile "${rawDataLoc}/i(d1).csv"]
     set axisData [$traceAxis getDataPoints]
@@ -123,7 +123,7 @@ test testRawFileClass-4 {read binary dc data} -setup {
 
 test testRawFileClass-5 {read ascii dc data} -setup {
     set data [RawFile new "${rawDataLoc}/dc_ascii.raw" * ltspice]
-    set traceAxis [$data configure -Axis]
+    set traceAxis [$data configure -axis]
     set trace [$data getTrace i(d1)]
     set refData [readResultFile "${rawDataLoc}/i(d1).csv"]
     set axisData [$traceAxis getDataPoints]

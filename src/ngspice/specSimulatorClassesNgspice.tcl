@@ -35,7 +35,6 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
         property runlocation
         variable runlocation
         # the name of last ran file
-        property LastRunFileName
         variable LastRunFileName
         constructor {name {runLocation .}} {
             # Creates batch ngspice simulator that can be attached to top-level Circuit.
@@ -43,11 +42,12 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
             #  runLocation - location at which input netlist is stored and all output files will be saved,
             #   default is current directory
             my configure -name $name
+            my variable Command
             global tcl_platform
             if {[string match -nocase *linux* $tcl_platform(os)]} {
-                my configure -Command ngspice
+                set Command ngspice
             } elseif {[string match -nocase {*windows nt*} $tcl_platform(os)]} {
-                my configure -Command ngspice_con
+                set Command ngspice_con
             }
             my configure -runlocation $runLocation
         }
@@ -59,6 +59,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
             set arguments [argparse {
                 -nodelete
             }]
+            my variable Command
             set firstLine [@ [split $circuitStr \n] 0]
             set runLocation [my configure -runlocation]
             set cirFile [open [file join $runLocation ${firstLine}.cir] w+]
@@ -67,8 +68,8 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
             set rawFileName [file join $runLocation ${firstLine}.raw]
             set logFileName [file join $runLocation ${firstLine}.log]
             set cirFileName [file join $runLocation ${firstLine}.cir]
-            exec {*}[list [my configure -Command] -b -r $rawFileName -o $logFileName $cirFileName]
-            my configure -LastRunFileName $firstLine
+            exec {*}[list $Command -b -r $rawFileName -o $logFileName $cirFileName]
+            set LastRunFileName $firstLine
             my readLog
             my readData
             if {![info exists nodelete]} {
@@ -79,7 +80,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
         }
         method readLog {} {
             # Reads log file of last simulation and save it's content to Log variable.
-            set logFile [open [file join [my configure -runlocation] [my configure -LastRunFileName].log] r+]
+            set logFile [open [file join [my configure -runlocation] ${LastRunFileName}.log] r+]
             set log [read $logFile]
             close $logFile
             return 
@@ -97,7 +98,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
             # Reads raw data file, create RawFile object and return it's reference name.
             my variable data
             set data [::SpiceGenTcl::RawFile new [file join [my configure -runlocation]\
-                                                          [my configure -LastRunFileName].raw] * ngspice]
+                                                          ${LastRunFileName}.raw] * ngspice]
             return
         }
     }
@@ -113,6 +114,8 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
             set arguments [argparse {
                 -nodelete
             }]
+            my variable Command
+            my variable LastRunFileName
             set firstLine [@ [split $circuitStr \n] 0]
             set runLocation [my configure -runlocation]
             set cirFile [open [file join $runLocation ${firstLine}.cir] w+]
@@ -121,7 +124,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
             set rawFileName [file join $runLocation ${firstLine}.raw]
             set logFileName [file join $runLocation ${firstLine}.log]
             set cirFileName [file join $runLocation ${firstLine}.cir]
-            set command [list [my configure -Command] -b $cirFileName -r $rawFileName]
+            set command [list $Command -b $cirFileName -r $rawFileName]
             set chan [open "|$command 2>@1"]
             set logData {}
             while {[gets $chan line] >= 0} {
@@ -132,7 +135,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
                 }
             }
             close $chan
-            my configure -LastRunFileName ${firstLine}
+            set LastRunFileName ${firstLine}
             my configure -log $logData
             my readData
             if {![info exists nodelete]} {

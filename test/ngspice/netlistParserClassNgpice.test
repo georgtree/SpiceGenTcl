@@ -103,48 +103,6 @@ proc restorestdout { } {
 
 ###  Parser class tests 
 
-test testParserClass-1 {test Parser class} -setup {
-    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc diffpair_continue.cir]]
-    $parser readFile
-} -body {
-    return [$parser configure -FileData]
-} -result "{.model qnl npn(level=1 bf=80 rb=100 tf=0.3n tr=6n cje=3p cjc=2p vaf=50)} {.model qnr npn(level=1 bf=80\
-rb=100 tf=0.3n tr=6n cje=3p cjc=2p vaf=50)} {.options noacct} {q1 4 2 6 qnr} {q2 5 3 6 qnl} {rs1 11 2 1k} {rs2 3 1 1k}\
-{rc1 4 8 10k} {rc2 5 8 10k} {q3 7 7 9 qnl} {q4 6 7 9 qnr} {rbias 7 8 20k} {vcm 1 0 dc 0 sin(0 0.1 5meg) ac 1} {vdm 1 11\
-dc 0 sin(0 0.1 5meg) ac 1} {vcc 8 0 12} {vee 9 0 -12} {.sens v(5,4)}" -cleanup {
-    unset parser
-}
-
-test testParserClass-2 {test Parser class} -setup {
-    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc adder_mos.cir]]
-    $parser readFile
-} -body {
-    return [$parser configure -FileData]
-} -result "{.subckt nand in1 in2 out vdd} {m1 out in2 vdd vdd p1 w=7.5u l=0.35u pd=13.5u ad=22.5p ps=13.5u as=22.5p}\
-{m2 net1 in2 0 0 n1 w=3u l=0.35u pd=9u ad=9p ps=9u as=9p} {m3 out in1 vdd vdd p1 w=7.5u l=0.35u pd=13.5u ad=22.5p\
-ps=13.5u as=22.5p} {m4 out in1 net1 0 n1 w=3u l=0.35u pd=9u ad=9p ps=9u as=9p} {.ends nand} {.subckt onebit 1 2 3 4 5\
-6} {x1 1 2 7 6 nand} {x2 1 7 8 6 nand} {x3 2 7 9 6 nand} {x4 8 9 10 6 nand} {x5 3 10 11 6 nand} {x6 3 11 12 6 nand} {x7\
-10 11 13 6 nand} {x8 12 13 4 6 nand} {x9 11 7 5 6 nand} {.ends onebit} {.subckt twobit 1 2 3 4 5 6 7 8 9} {x1 1 2 7 5\
-10 9 onebit} {x2 3 4 10 6 8 9 onebit} {.ends twobit} {.subckt fourbit 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15} {x1 1 2 3 4\
-9 10 13 16 15 twobit} {x2 5 6 7 8 11 12 16 14 15 twobit} {.ends fourbit} {vcc 99 0 dc 3.3} {vin1a 1 0 dc 0 pulse(0 3\
-0 5n 5n 20n 50n)} {vin1b 2 0 dc 0 pulse(0 3 0 5n 5n 30n 100n)} {vin2a 3 0 dc 0 pulse(0 3 0 5n 5n 50n 200n)}\
-{vin2b 4 0 dc 0 pulse(0 3 0 5n 5n 90n 400n)} {vin3a 5 0 dc 0 pulse(0 3 0 5n 5n 170n 800n)} {vin3b 6 0 dc 0\
-pulse(0 3 0 5n 5n 330n 1600n)} {vin4a 7 0 dc 0 pulse(0 3 0 5n 5n 650n 3200n)} {vin4b 8 0 dc 0 pulse(0 3 0 5n\
-5n 1290n 6400n)} {x1 1 2 3 4 5 6 7 8 9 10 11 12 0 13 99 fourbit} {.option noinit acct} {.tran 500p 6400n} {.save\
-v(1) v(2) v(3) v(4) v(5) v(6) v(7) v(8)} {.model n1 nmos level=49 version=3.3.0} {.model p1 pmos level=49 version=3.3.0}\
-.end" -cleanup {
-    unset parser
-}
-
-test testParserClass-3 {test Parser class} -setup {
-    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc adder_mos.cir]]
-    $parser readFile
-} -body {
-    $parser getSubcircuitLines
-    return [$parser configure -SubcktsBoundaries]
-} -result "nand {0 5} onebit {6 16} twobit {17 20} fourbit {21 24}" -cleanup {
-    unset parser
-}
 
 test testParserClass-4 {test Parser class} -setup {
     set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc adder_mos_unmatched_subckt.cir]]
@@ -191,7 +149,7 @@ test testParserClass-8 {test Parser class} -setup {
     $parser readFile
     $parser buildTopNetlist
 } -body {
-    return [[$parser configure -Netlist] genSPICEString]
+    return [[$parser configure -topnetlist] genSPICEString]
 } -result ".model qnl npn(level=1 bf=80 rb=100 tf=0.3n tr=6n cje=3p cjc=2p vaf=50)
 .model qnr npn(level=1 bf=80 rb=100 tf=0.3n tr=6n cje=3p cjc=2p vaf=50)
 q1 4 2 6 qnr
@@ -227,7 +185,7 @@ test testParserClass-10 {test Parser class} -setup {
     $parser readFile
     $parser buildTopNetlist
 } -body {
-    return [[$parser configure -Netlist] genSPICEString]
+    return [[$parser configure -topnetlist] genSPICEString]
 } -result ".subckt nand in1 in2 out vdd
 m1 out in2 vdd vdd p1 w=7.5u l=0.35u pd=13.5u ad=22.5p ps=13.5u as=22.5p
 m2 net1 in2 0 0 n1 w=3u l=0.35u pd=9u ad=9p ps=9u as=9p
@@ -272,7 +230,7 @@ test testParserClass-11 {test Parser class} -setup {
     $parser readFile
     $parser buildTopNetlist
 } -body {
-    return [[$parser configure -Netlist] genSPICEString]
+    return [[$parser configure -topnetlist] genSPICEString]
 } -result ".subckt inv1 dd ss sub in out
 mn1 out in ss sub n1 w=4u l=0.15u as=6p ad=6p ps=7u pd=7u
 mp1 out in dd sub p1 w=10u l=0.15u as=15p ad=15p ps=13u pd=13u
@@ -301,7 +259,9 @@ xinv2 dd ss sub out25 out50 inv25
 xinv5 dd ss sub out50 out inv1
 xinv11 dd ss sub out buf inv1
 cout buf ss 1pf
-.tran 0.2n 16n" -cleanup {
+.tran 0.2n 16n
+.include ./bsim4soi/nmos4p0.mod
+.include ./bsim4soi/pmos4p0.mod" -cleanup {
     unset parser
 }
 
@@ -313,7 +273,7 @@ test testParserClassResistors-1 {test Parser class, resistors parsing} -setup {
     $parser readFile
     $parser buildTopNetlist
 } -body {
-    return [[$parser configure -Netlist] genSPICEString]
+    return [[$parser configure -topnetlist] genSPICEString]
 } -result "rs1 11 2 {res}
 rs2 3 1 r={v(a)+v(b)/i(b)} tc2=1
 rc1 4 8 10k tc1=2 tc2={tcrt}
@@ -334,7 +294,7 @@ test testParserClassResistors-2 {test Parser class, resistors parsing, edge case
     $parser readFile
     $parser buildTopNetlist
 } -body {
-    return [[$parser configure -Netlist] genSPICEString]
+    return [[$parser configure -topnetlist] genSPICEString]
 } -result "rs2 3 1 3 tc2=1" -cleanup {
     file delete [file join $netlistsLoc temp1]
     unset parser
@@ -409,7 +369,7 @@ test testParserClassCapacitors-1 {test Parser class, capacitors parsing} -setup 
     $parser readFile
     $parser buildTopNetlist
 } -body {
-    return [[$parser configure -Netlist] genSPICEString]
+    return [[$parser configure -topnetlist] genSPICEString]
 } -result "c2 netp netm 1e-6
 c3 netp netm c={v(a)+v(b)+pow(v(c),2)} tc1=1
 c4 netp netm q={v(a)+v(b)+pow(v(c),2)} tc1=1
@@ -427,7 +387,7 @@ test testParserClassCapacitors-2 {test Parser class, capacitors parsing, edge ca
     $parser readFile
     $parser buildTopNetlist
 } -body {
-    return [[$parser configure -Netlist] genSPICEString]
+    return [[$parser configure -topnetlist] genSPICEString]
 } -result "cs2 3 1 3 tc2=1" -cleanup {
     file delete [file join $netlistsLoc temp1]
     unset parser
@@ -502,7 +462,7 @@ test testParserClassInductors-1 {test Parser class, inductors parsing} -setup {
     $parser readFile
     $parser buildTopNetlist
 } -body {
-    return [[$parser configure -Netlist] genSPICEString]
+    return [[$parser configure -topnetlist] genSPICEString]
 } -result "l1 netp netm 1e-6 tc1=1 temp=25
 l2 netp netm 1e-6
 l3 netp netm 1e-6 indm
@@ -521,7 +481,7 @@ test testParserClassInductors-2 {test Parser class, inductors parsing, edge case
     $parser readFile
     $parser buildTopNetlist
 } -body {
-    return [[$parser configure -Netlist] genSPICEString]
+    return [[$parser configure -topnetlist] genSPICEString]
 } -result "ls2 3 1 3 tc2=1" -cleanup {
     file delete [file join $netlistsLoc temp1]
     unset parser
@@ -581,7 +541,7 @@ test testParserClassModels-1 {test Parser class, models parsing} -setup {
     $parser readFile
     $parser buildTopNetlist
 } -body {
-    return [[$parser configure -Netlist] genSPICEString]
+    return [[$parser configure -topnetlist] genSPICEString]
 } -result ".model resmod r(tc1=1 tc2=2)
 .model capmod c(tc1=1 tc2=2)
 .model indmod l(tc1=1 tc2=2)
@@ -655,7 +615,7 @@ test testParserClassAnalyses-1 {test Parser class, analyses parsing} -setup {
     $parser readFile
     $parser buildTopNetlist
 } -body {
-    return [[$parser configure -Netlist] genSPICEString]
+    return [[$parser configure -topnetlist] genSPICEString]
 } -result ".dc v1 {time1} 5 0.1
 .dc v1 0 5 0.1
 .ac dec 10 {f1} 1e6
@@ -745,7 +705,7 @@ test testParserClassParamStatement-1 {test Parser class, .param parsing} -setup 
     $parser readFile
     $parser buildTopNetlist
 } -body {
-    return [[$parser configure -Netlist] genSPICEString]
+    return [[$parser configure -topnetlist] genSPICEString]
 } -result ".param u0t={rf+1} vth0=10
 .param k1=1e-4 vth0=10 u0t={rf+1}
 .param abv=1 tre=1k pre=1meg" -cleanup {
@@ -759,7 +719,7 @@ test testParserClassBsource-1 {test Parser class, behavioural sources parsing} -
     $parser readFile
     $parser buildTopNetlist
 } -body {
-    return [[$parser configure -Netlist] genSPICEString]
+    return [[$parser configure -topnetlist] genSPICEString]
 } -result "b1 netp netm i={v(a)+v(b)+pow(v(c),2)} tc1=1
 b2 netp netm v={v(a)+v(b)+pow(v(c),2)} tc1=1
 b3 0 1 v={ln(cos(log(v(1,2)^2)))-v(3)^4+v(2)^v(1)}
@@ -806,7 +766,7 @@ test testParserClassLctrlsources-1 {test Parser class, linear controlled sources
     $parser readFile
     $parser buildTopNetlist
 } -body {
-    return [[$parser configure -Netlist] genSPICEString]
+    return [[$parser configure -topnetlist] genSPICEString]
 } -result "g1 2 0 5 0 0.1 m={m}
 g2 2 0 5 0 {value} m={m}
 e1 2 3 14 1 2.0
@@ -825,7 +785,7 @@ test testParserClassIndsources-1 {test Parser class, independent sources parsing
     $parser readFile
     $parser buildTopNetlist
 } -body {
-    return [[$parser configure -Netlist] genSPICEString]
+    return [[$parser configure -topnetlist] genSPICEString]
 } -result "v1 10 0 6
 i2 10 0 6
 v3 10 0 {dc} ac 1
@@ -881,7 +841,7 @@ test testParserClassDiodes-1 {test Parser class, diodes parsing} -setup {
     $parser readFile
     $parser buildTopNetlist
 } -body {
-    return [[$parser configure -Netlist] genSPICEString]
+    return [[$parser configure -topnetlist] genSPICEString]
 } -result "d1 netp netm diomod area=1e-3 lm=1e-6 temp=25
 d2 netp netm diomod off area=1e-3 lm=1e-6 temp=25
 d3 netp netm diomod off area={area} lm=1e-6 temp=25" -cleanup {
@@ -895,7 +855,7 @@ test testParserClassBJTs-1 {test Parser class, BJTs parsing} -setup {
     $parser readFile
     $parser buildTopNetlist
 } -body {
-    return [[$parser configure -Netlist] genSPICEString]
+    return [[$parser configure -topnetlist] genSPICEString]
 } -result "q1 netc netb nete bjtmod area=1e-3 temp=25
 q2 netc netb nete nets bjtmod off area={area} temp=25
 q3 netc netb nete nets nettj bjtmod area=1e-3 temp=25
@@ -915,7 +875,7 @@ test testParserClassJFETs-1 {test Parser class, JFETs parsing} -setup {
     $parser readFile
     $parser buildTopNetlist
 } -body {
-    return [[$parser configure -Netlist] genSPICEString]
+    return [[$parser configure -topnetlist] genSPICEString]
 } -result "j1 netd netg nets jfetmod 1e-3 temp=25
 j2 netd netg nets jfetmod {area*area} ic={a},5 temp=25
 j3 netd netg nets jfetmod 1e-3 off temp=25
@@ -931,7 +891,7 @@ test testParserClassJFETs-1 {test Parser class, MESFETs parsing} -setup {
     $parser readFile
     $parser buildTopNetlist
 } -body {
-    return [[$parser configure -Netlist] genSPICEString]
+    return [[$parser configure -topnetlist] genSPICEString]
 } -result "z1 netd netg nets mesfetmod 1e-3
 z2 netd netg nets mesfetmod {area*area} ic={a},5
 z3 netd netg nets mesfetmod 1e-3 off
@@ -947,7 +907,7 @@ test testParserClassMOSFETs-1 {test Parser class, MOSFETs parsing} -setup {
     $parser readFile
     $parser buildTopNetlist
 } -body {
-    return [[$parser configure -Netlist] genSPICEString]
+    return [[$parser configure -topnetlist] genSPICEString]
 } -result "m1 netd netg nets mosfetmod l=1e-6 w=10e-3
 m2 netd netg nets netsub mosfetmod l=1e-6 w=10e-3
 m3 netd netg nets netsub net5 mosfetmod l=1e-6 w=10e-3
@@ -967,7 +927,7 @@ test testParserClassSwitches-1 {test Parser class, switches parsing} -setup {
     $parser readFile
     $parser buildTopNetlist
 } -body {
-    return [[$parser configure -Netlist] genSPICEString]
+    return [[$parser configure -topnetlist] genSPICEString]
 } -result "s1 net1 0 netc 0 sw1 on
 s2 net1 0 netc 0 sw1
 s3 net1 0 netc 0 sw1 on
@@ -984,7 +944,7 @@ test testParserClassSwitches-1 {test Parser class, subcircuits calls parsing} -s
     $parser readFile
     $parser buildTopNetlist
 } -body {
-    return [[$parser configure -Netlist] genSPICEString]
+    return [[$parser configure -topnetlist] genSPICEString]
 } -result "x1 net1 net2 rcnet r=1 c={cpar}
 x2 net1 net2 rcnet
 x3 a b c d e f g h subname k=1 n=2 i=8 o={oval}" -cleanup {
@@ -998,7 +958,7 @@ test testParserClassSwitches-1 {test Parser class, subcircuits definitions parsi
     $parser readFile
     $parser buildTopNetlist
 } -body {
-    return [[$parser configure -Netlist] genSPICEString]
+    return [[$parser configure -topnetlist] genSPICEString]
 } -result ".subckt resarr in out rs=2 rt=3
 r1 in a r={rs}
 r2 a out r={rt}
@@ -1007,6 +967,21 @@ r2 a out r={rt}
 r1 in a r={rs}
 r2 a out r={rt}
 .ends resarr1" -cleanup {
+    unset parser
+}
+
+### Includes and libraries parsing test
+
+test testParserClassIncsLibs-1 {test Parser class, includes and libraries parsing} -setup {
+    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc incs_libs_test.cir]]
+    $parser readFile
+    $parser buildTopNetlist
+} -body {
+    return [[$parser configure -topnetlist] genSPICEString]
+} -result ".include ./libs/mosfets/nmos1
+.include './libs/mosfets abv/nmos1'
+.lib ./libs/mosfets/nmos1 lib1
+.lib './libs/mosfets abv/nmos1' lib2" -cleanup {
     unset parser
 }
 

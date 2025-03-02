@@ -20,26 +20,6 @@ package require SpiceGenTcl
 namespace import ::SpiceGenTcl::*
 importNgspice
 
-###  DuplChecker class tests 
-    
-test testDuplCheckerClass-1.1 {test of duplListCheck procedure} -setup {
-    set checker [::SpiceGenTcl::DuplChecker new]
-    set testList [list a b f c d e f ]
-} -body {
-    set result [$checker duplListCheck $testList]
-} -result 1 -cleanup {
-    unset checker testList result 
-}
-
-test testDuplCheckerClass-2 {test of duplListCheck procedure} -setup {
-    set checker [::SpiceGenTcl::DuplChecker new]
-    set testList [list a b c d e f g]
-} -body {
-    set result [$checker duplListCheck $testList]
-} -result 0 -cleanup {
-    unset checker testList result 
-}
-
     
 ###  Pin class tests 
 
@@ -796,11 +776,11 @@ test testOptionsClass-3 {test creation of Options class instance and addParam in
 }
 
 test testOptionsClass-4 {test creation of Options class instance and addParam interface with adding switch parameter} -setup {
-    set elemInst [Options new {{abstol 1e-12} {vntol 1e-4} {gmin 1e-12}}]
+    set elemInst [Options new {{abstol 1e-12} {vntol 1e-4} {gmin gminval -eq}}]
     $elemInst addParam noopiter -sw
 } -body {
     set result [$elemInst getParams]
-} -result [dcreate abstol 1e-12 vntol 0.0001 gmin 1e-12 noopiter {}] -cleanup {
+} -result [dcreate abstol 1e-12 vntol 0.0001 gmin {gminval} noopiter {}] -cleanup {
     unset elemInst result
 }
 

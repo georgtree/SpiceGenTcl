@@ -132,7 +132,7 @@ test testRawFileClass-2 {test RawFile class object construction and reading asci
 
 test testRawFileClass-3 {test RawFile class object construction and reading binary dc data, together with interfaces getTrace and getAxis} -setup {
     set data [RawFile new "${rawDataLoc}/dc.raw"]
-    set traceAxis [$data configure -Axis]
+    set traceAxis [$data configure -axis]
     set trace [$data getTrace v(out)]
     set refData [readResultFile "${rawDataLoc}/vout.csv"]
     set axisData [$traceAxis getDataPoints]
@@ -151,7 +151,7 @@ test testRawFileClass-3 {test RawFile class object construction and reading bina
 
 test testRawFileClass-4 {test RawFile class object construction and reading ascii dc data, together with interfaces getTrace and getAxis} -setup {
     set data [RawFile new "${rawDataLoc}/dc_ascii.raw"]
-    set traceAxis [$data configure -Axis]
+    set traceAxis [$data configure -axis]
     set trace [$data getTrace v(out)]
     set refData [readResultFile "${rawDataLoc}/vout.csv"]
     set axisData [$traceAxis getDataPoints]
@@ -170,7 +170,7 @@ test testRawFileClass-4 {test RawFile class object construction and reading asci
 
 test testRawFileClass-5 {test RawFile class object construction and reading binary ac data, together with interfaces getTrace and getAxis} -setup {
     set data [RawFile new "${rawDataLoc}/ac.raw"]
-    set traceAxis [$data configure -Axis]
+    set traceAxis [$data configure -axis]
     set trace [$data getTrace i(vd)]
     set refData [readResultFile "${rawDataLoc}/ivd.csv"]
     set axisData [$traceAxis getDataPoints]
@@ -191,7 +191,7 @@ test testRawFileClass-5 {test RawFile class object construction and reading bina
 
 test testRawFileClass-6 {test RawFile class object construction and reading ascii ac data, together with interfaces getTrace and getAxis} -setup {
     set data [RawFile new "${rawDataLoc}/ac_ascii.raw"]
-    set traceAxis [$data configure -Axis]
+    set traceAxis [$data configure -axis]
     set trace [$data getTrace i(vd)]
     set refData [readResultFile "${rawDataLoc}/ivd.csv"]
     set axisData [$traceAxis getDataPoints]
@@ -237,7 +237,7 @@ test testRawFileClass-9 {test RawFile class object construction and reading asci
 test testRawFileClass-10 {test RawFile class object construction and reading ascii transient data, together with interface getRawProperties} -setup {
     set data [RawFile new "${rawDataLoc}/tran.raw"]
 } -body {    
-    set traceAxis [$data configure -RawParams]
+    set traceAxis [$data configure -rawparams]
 } -result [dcreate Filename $rawDataLoc/tran.raw Title switch_oscillator Date {Thu Nov 28 21} Plotname {Transient Analysis} Flags real {No. Variables} 22 {No. Points} 7497] -cleanup {
     unset data traceAxis
 }

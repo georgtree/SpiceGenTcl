@@ -35,7 +35,6 @@ namespace eval ::SpiceGenTcl::Ltspice::Simulators {
         property runlocation
         variable runlocation
         # the name of last ran file
-        property LastRunFileName
         variable LastRunFileName
         constructor {name {runLocation .}} {
             # Creates batch ngspice simulator that can be attached to top-level Circuit.
@@ -43,12 +42,13 @@ namespace eval ::SpiceGenTcl::Ltspice::Simulators {
             #  runLocation - location at which input netlist is stored and all output files will be saved,
             #   default is current directory
             my configure -name $name
+            my variable Command
             global tcl_platform
             global env
             if {[string match -nocase *linux* $tcl_platform(os)]} {
-                my configure -Command [list wine $env(LTSPICE_PREFIX)]
+                set Command [list wine $env(LTSPICE_PREFIX)]
             } elseif {[string match -nocase {*windows nt*} $tcl_platform(os)]} {
-                my configure -Command LTspice
+                set Command LTspice
             }
             my configure -runlocation $runLocation
         }
@@ -60,6 +60,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Simulators {
             set arguments [argparse {
                 -nodelete
             }]
+            my variable Command
             global tcl_platform
             set firstLine [@ [split $circuitStr \n] 0]
             set runLocation [my configure -runlocation]
@@ -70,7 +71,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Simulators {
             set logFileName [file join $runLocation ${firstLine}.log]
             set cirFileName [file join $runLocation ${firstLine}.cir]
             if {[string match -nocase *linux* $tcl_platform(os)]} {
-                catch {exec {*}[my configure -Command] -b $cirFileName} errorStr
+                catch {exec {*}$Command -b $cirFileName} errorStr
                 #puts $errorStr
                 set falseError {wine: Read access denied for device L"\\??\\Z:\\", FS volume label and serial are not\
                                         available.}
@@ -78,9 +79,9 @@ namespace eval ::SpiceGenTcl::Ltspice::Simulators {
                     error "LTspice failed with error '$errorStr'"
                 }
             } elseif {[string match -nocase {*windows nt*} $tcl_platform(os)]} {
-                exec {*}[list [my configure -Command] -b $cirFileName]
+                exec {*}[list $Command -b $cirFileName]
             }
-            my configure -LastRunFileName $firstLine
+            set LastRunFileName $firstLine
             my readLog
             my readData
             if {![info exists nodelete]} {
@@ -94,7 +95,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Simulators {
         }
         method readLog {} {
             # Reads log file of last simulation and save it's content to Log variable.
-            set logFile [open [file join [my configure -runlocation] [my configure -LastRunFileName].log] r+]
+            set logFile [open [file join [my configure -runlocation] ${LastRunFileName}.log] r+]
             set log [read $logFile]
             close $logFile
             return 
@@ -112,7 +113,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Simulators {
             # Reads raw data file, create RawFile object and return it's reference name.
             my variable data
             set data [::SpiceGenTcl::RawFile new [file join [my configure -runlocation]\
-                                                          [my configure -LastRunFileName].raw] * ltspice]
+                                                          ${LastRunFileName}.raw] * ltspice]
             return
         }
     }

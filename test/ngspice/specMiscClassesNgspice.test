@@ -1,0 +1,43 @@
+#  .|'''.|            ||                   ..|'''.|                   |''||''|         '||'
+#  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||  
+#   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||  
+# .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||  
+# |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||. 
+#            ||                                                                             
+#           ''''                                                                            
+# specMiscClassesNgspice.test
+# Tests Ngspice analyses classes
+#
+# Copyright (c) 2024 George Yashin, georgtree@gmail.com
+#
+# MIT License
+# See the file "LICENSE.txt" for information on usage and redistribution
+# of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+package require tcltest
+namespace import ::tcltest::*
+package require SpiceGenTcl
+namespace import ::SpiceGenTcl::*
+importNgspice
+
+
+###  OptionsNgspice class tests 
+    
+test testOptionsNgspiceClass-1 {test OptionsNgspice class} -setup {
+    set res [OptionsNgspice new -klu -abstol 1e-10 -maxord 6]
+} -body {
+    set result [$res genSPICEString]
+} -result ".options klu abstol=1e-10 maxord=6" -cleanup {
+    unset res result
+}
+
+test testOptionsNgspiceClass-2 {test OptionsNgspice class} -setup {
+    set res [OptionsNgspice new -klu -abstol 1e-10 -maxord {order -eq}]
+} -body {
+    set result [$res genSPICEString]
+} -result ".options klu abstol=1e-10 maxord={order}" -cleanup {
+    unset res result
+}
+
+
+forgetNgspice
+cleanupTests

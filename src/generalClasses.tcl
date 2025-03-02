@@ -86,76 +86,6 @@ namespace eval ::SpiceGenTcl {
             error "Not implemented"
         }
     }
-    
-###  DuplChecker class definition 
-   
-    oo::configurable create DuplChecker {
-        self mixin -append oo::abstract
-        method duplListCheck {list} {
-            # Checks if list contains duplicates.
-            #  list - list to check
-            # Returns: 0 if there are no duplicates and 1 if there are.
-            set flag 0
-            set new {}
-            foreach item $list {
-                if {[lsearch $new $item] < 0} {
-                    lappend new $item
-                } else {
-                    set flag 1
-                    break
-                }
-            }
-            return $flag
-        }
-        method duplListCheckRet {list} {
-            # Checks if list contains duplicates and return value of first duplicate.
-            #  list - list to check
-            # Returns: empty list if no duplicate or value of first duplicate.
-            set itemDup {}
-            set new {}
-            foreach item $list {
-                if {[lsearch $new $item] < 0} {
-                    lappend new $item
-                } else {
-                    set itemDup $item
-                    break
-                }
-            }
-            return $itemDup
-        }
-    }
-
-###  KeyArgsBuilder class definition 
-
-    oo::class create KeyArgsBuilder {
-        self mixin -append oo::abstract
-        method buildArgStr {paramsNames} {
-            # Builds argument list for argparse.
-            #  paramsNames - list of parameter names
-            # Returns: string in form *-paramName= ...*
-            foreach paramName $paramsNames {
-                    lappend paramDefList -${paramName}=
-            }
-            set paramDefStr [join $paramDefList \n]
-            return $paramDefStr
-        }
-        method argsPreprocess {paramsNames args} {
-            # Calls argparse and constructs list for passing to Device constructor.
-            #  paramsNames - list of parameter names, define alias for parameter name by
-            #  using two element list {paramName aliasName}
-            #  args - argument list with key names and it's values
-            # Returns: list of parameters formatted for Device/Model constructor
-            set paramDefList [my buildArgStr $paramsNames]
-            set arguments [argparse -inline "
-                $paramDefList
-            "]
-            set params {}
-            dict for {paramName value} $arguments {
-                lappend params [list $paramName {*}$value]
-            }
-            return $params
-        }
-    }
 
 ###  Utility class definition 
 
@@ -193,6 +123,74 @@ namespace eval ::SpiceGenTcl {
             }
             set formKeys [lmap key $keys {subst -$key}]
             return -code error "[join [lrange $formKeys 0 end-1] ", "] or [@ $formKeys end] must be presented"
+        }
+        method buildArgStr {paramsNames} {
+            # Builds argument list for argparse.
+            #  paramsNames - list of parameter names
+            # Returns: string in form *-paramName= ...*
+            foreach paramName $paramsNames {
+                lappend paramDefList -${paramName}=
+            }
+            set paramDefStr [join $paramDefList \n]
+            return $paramDefStr
+        }
+        method buildSwArgStr {paramsNames} {
+            # Builds argument list for argparse that doesn't need an argument value.
+            #  paramsNames - list of parameter names
+            # Returns: string in form *-paramName ...*
+            foreach paramName $paramsNames {
+                lappend paramDefList -${paramName}
+            }
+            set paramDefStr [join $paramDefList \n]
+            return $paramDefStr
+        }
+        method argsPreprocess {paramsNames args} {
+            # Calls argparse and constructs list for passing to Device constructor.
+            #  paramsNames - list of parameter names, define alias for parameter name by
+            #  using two element list {paramName aliasName}
+            #  args - argument list with key names and it's values
+            # Returns: list of parameters formatted for Device/Model constructor
+            set paramDefList [my buildArgStr $paramsNames]
+            set arguments [argparse -inline "
+                $paramDefList
+            "]
+            set params {}
+            dict for {paramName value} $arguments {
+                lappend params [list $paramName {*}$value]
+            }
+            return $params
+        }
+        method duplListCheck {list} {
+            # Checks if list contains duplicates.
+            #  list - list to check
+            # Returns: 0 if there are no duplicates and 1 if there are.
+            set flag 0
+            set new {}
+            foreach item $list {
+                if {[lsearch $new $item] < 0} {
+                    lappend new $item
+                } else {
+                    set flag 1
+                    break
+                }
+            }
+            return $flag
+        }
+        method duplListCheckRet {list} {
+            # Checks if list contains duplicates and return value of first duplicate.
+            #  list - list to check
+            # Returns: empty list if no duplicate or value of first duplicate.
+            set itemDup {}
+            set new {}
+            foreach item $list {
+                if {[lsearch $new $item] < 0} {
+                    lappend new $item
+                } else {
+                    set itemDup $item
+                    break
+                }
+            }
+            return $itemDup
         }
     }
     
@@ -513,7 +511,7 @@ namespace eval ::SpiceGenTcl {
 
     oo::configurable create Device {
         superclass SPICEElement
-        mixin DuplChecker KeyArgsBuilder
+        mixin Utility
         property name -set {
             if {[regexp {[^A-Za-z0-9_]+} $value]} {
                 return -code error "Reference name '$value' is not a valid name"
@@ -742,7 +740,7 @@ namespace eval ::SpiceGenTcl {
 
     oo::configurable create Model {
         superclass SPICEElement
-        mixin DuplChecker KeyArgsBuilder
+        mixin Utility
         property name -set {
             if {$value eq {}} {
                 return -code error "Model must have a name, empty string was provided"
@@ -939,7 +937,7 @@ namespace eval ::SpiceGenTcl {
     
     oo::configurable create Options {
         superclass SPICEElement
-        mixin DuplChecker
+        mixin Utility
         property name -set {
             set name [string tolower $value]
         }
@@ -963,14 +961,12 @@ namespace eval ::SpiceGenTcl {
             }
             foreach param $params {
                 if {[@ $param 2] eq {}} {
-                    if {[@ $param 1] eq {-sw}} {
-                        my addParam [@ $param 0] -sw  
-                    } else {
-                        my addParam [@ $param 0] [@ $param 1] 
-                    }
+                    my addParam [@ $param 0] [@ $param 1] 
+                } elseif {[@ $param 1] eq {-sw}} {
+                    my addParam [@ $param 0] -sw 
                 } else {
-                    return -code error "Wrong parameter definition in Options"
-                }   
+                    my addParam {*}$param
+                }  
             }
         }
         method getParams {} {
@@ -980,10 +976,13 @@ namespace eval ::SpiceGenTcl {
             return [dict map {paramName param} $Params\
                             {expr {[catch {$param configure -value}] ? {} : [$param configure -value]}}]
         }
-        method addParam {paramName value} {
+        method addParam {paramName value args} {
             # Creates new parameter object and add it to the list `Params`.
             #  paramName - name of parameter
-            #  value - value of parameter, with optional qualificator -eq
+            #  value - value of parameter, could be equal to -sw, or with optional qualificator -eq
+            argparse {
+                -eq
+            }
             set paramName [string tolower $paramName]
             if {[info exists Params]} {
                 set paramList [dict keys $Params]
@@ -994,6 +993,8 @@ namespace eval ::SpiceGenTcl {
             }
             if {$value eq {-sw}} {
                 dict append Params $paramName [::SpiceGenTcl::ParameterSwitch new $paramName]
+            } elseif {[info exists eq]} {
+                dict append Params $paramName [::SpiceGenTcl::ParameterEquation new $paramName $value]
             } else {
                 dict append Params $paramName [::SpiceGenTcl::ParameterNoCheck new $paramName $value]
             }
@@ -1012,7 +1013,7 @@ namespace eval ::SpiceGenTcl {
     
     oo::configurable create ParamStatement {
         superclass SPICEElement
-        mixin DuplChecker
+        mixin Utility
         property name -set {
             set name [string tolower $value]
         }
@@ -1144,7 +1145,7 @@ namespace eval ::SpiceGenTcl {
     
     oo::configurable create Netlist {
         superclass SPICEElement
-        mixin DuplChecker
+        mixin Utility
         property name -set {
             set name [string tolower $value]
         }
@@ -1438,7 +1439,7 @@ namespace eval ::SpiceGenTcl {
     
     oo::configurable create Analysis {
         superclass SPICEElement
-        mixin DuplChecker
+        mixin Utility
         property name -set {
             set name [string tolower $value]
         }
@@ -1506,7 +1507,6 @@ namespace eval ::SpiceGenTcl {
         self mixin -append oo::abstract
         property name
         variable name
-        property Command
         variable Command
         property log
         variable log
@@ -1587,22 +1587,22 @@ namespace eval ::SpiceGenTcl {
         }
         variable name
         # Type of dataset, could be voltage, vurrent, time or frequency
-        property Type -set {
-            set Type [string tolower $value]
+        property type -set {
+            set type [string tolower $value]
         }
-        variable Type
+        variable type
         # Numerical type of dataset, real, double or complex
-        property NumType -set {
+        property numtype -set {
             # method to set the numerical type of the dataset
             if {$value ni {real complex double}} {
                 error "Unknown numerical type '$value' of data"
             }
-            set NumType $value
+            set numtype $value
         }
-        variable NumType
+        variable numtype
         # Number of points (length of dataset)
-        property Len
-        variable Len
+        property len
+        variable len
         # values at points
         variable DataPoints
         constructor {name type len {numType real}} {
@@ -1611,7 +1611,7 @@ namespace eval ::SpiceGenTcl {
             #  type - type of dataset
             #  len - total number of points
             #  numType - numerical type of dataset
-            my configure -name $name -Type $type -Len $len -NumType $numType
+            my configure -name $name -type $type -len $len -numtype $numType
         }
         method setDataPoints {dataPoints} {
             # method to set the data points
@@ -1632,8 +1632,8 @@ namespace eval ::SpiceGenTcl {
             return 
         }
         method getStr {} {
-            return "Name: '[my configure -name]', Type: '[my configure -Type]', Length: '[my configure -Len]',\
-                    Numerical type: '[my configure -NumType]'"
+            return "Name: '[my configure -name]', Type: '[my configure -type]', Length: '[my configure -len]',\
+                    Numerical type: '[my configure -numtype]'"
         }
     }
     
@@ -1657,8 +1657,8 @@ namespace eval ::SpiceGenTcl {
     oo::configurable create Trace {
         # class that represents trace in raw file
         superclass Dataset
-        property Axis
-        variable Axis
+        property axis
+        variable axis
         constructor {name type len axis {numType real}} {
             # initialize trace
             #  name - name of the trace
@@ -1666,7 +1666,7 @@ namespace eval ::SpiceGenTcl {
             #  len - total number of points
             #  axis - name of axis that is linked to trace
             #  numType - numerical type of trace
-            my configure -Axis $axis
+            my configure -axis $axis
             next $name $type $len $numType
         }
     }
@@ -1699,31 +1699,30 @@ namespace eval ::SpiceGenTcl {
         # Class represents raw file
         mixin BinaryReader
         # path to raw file including it's file name
-        property Path
-        variable Path
+        property path
+        variable path
         # parameters of raw file readed from it's header
-        property RawParams
-        variable RawParams 
+        property rawparams
+        variable rawparams 
         # number of points in raw file
-        property NPoints
-        variable NPoints 
+        property npoints
+        variable npoints 
         # number of variables in raw file
-        property NVariables
-        variable NVariables
+        property nvariables
+        variable nvariables
         # object reference of axis in raw file
-        property Axis -get {
-            if {[info exists Axis]} {
-                return $Axis
+        property axis -get {
+            if {[info exists axis]} {
+                return $axis
             } else {
-                return -code error "Raw file '[my configure -Path]' doesn't have an axis"
+                return -code error "Raw file '[my configure -path]' doesn't have an axis"
             }
         }
-        variable Axis 
+        variable axis 
         # objects references of traces in raw file
-        property Traces
-        variable Traces
+        property traces
+        variable traces
         # binary block size in bytes that contains all variables at axis point value
-        property BlockSize
         variable BlockSize
         constructor {path {traces2read *} {simulator ngspice}} {
             # Creates RawFile object.
@@ -1731,7 +1730,7 @@ namespace eval ::SpiceGenTcl {
             #  traces2read - list of traces that will be readed, default value is \*, 
             #   that means reading all traces
             #  simulator - simulator that produced this raw file, default is ngspice
-            my configure -Path $path
+            my configure -path $path
             set fileSize [file size $path]
             set file [open $path r]
             fconfigure $file -translation binary
@@ -1750,7 +1749,7 @@ namespace eval ::SpiceGenTcl {
             } else {
                 error {Unknown encoding}
             }
-            my configure -RawParams [dcreate Filename $path]
+            my configure -rawparams [dcreate Filename $path]
             set header {}
             set binaryStart 6            
             while true {
@@ -1778,17 +1777,17 @@ namespace eval ::SpiceGenTcl {
                 if {[@ $lineList 0] eq {Variables}} {
                     break
                 }
-                dict append RawParams [@ $lineList 0] [string trim [@ $lineList 1]]
+                dict append rawparams [@ $lineList 0] [string trim [@ $lineList 1]]
             }
-            my configure -NPoints [dget [my configure -RawParams] {No. Points}] -NVariables\
-                    [dget [my configure -RawParams] {No. Variables}]
-            if {[dget [my configure -RawParams] Plotname] in {{Operating Point} {Transfet Function}}} {
+            my configure -npoints [dget [my configure -rawparams] {No. Points}] -nvariables\
+                    [dget [my configure -rawparams] {No. Variables}]
+            if {[dget [my configure -rawparams] Plotname] in {{Operating Point} {Transfet Function}}} {
                 set hasAxis 0
             } else {
                 set hasAxis 1
             }
-            set flags [split [dget [my configure -RawParams] Flags]]
-            if {({complex} in $flags) || ([dget [my configure -RawParams] Plotname] eq {AC Analysis})} {
+            set flags [split [dget [my configure -rawparams] Flags]]
+            if {({complex} in $flags) || ([dget [my configure -rawparams] Plotname] eq {AC Analysis})} {
                 set numType complex
             } else {
                 if {({double} in $flags) || ($simulator eq {ngspice}) || ($simulator eq {xyce})} {
@@ -1815,19 +1814,19 @@ namespace eval ::SpiceGenTcl {
                     } else {
                         set axisNumType $numType
                     }
-                    my configure -Axis [::SpiceGenTcl::Axis new $name $varType $NPoints $axisNumType]
-                    set trace $Axis
+                    my configure -axis [::SpiceGenTcl::Axis new $name $varType $npoints $axisNumType]
+                    set trace [my configure -axis]
                 } elseif {($traces2read eq {*}) || ($name in $traces2read)} {
                     if {$hasAxis} {
-                        set trace [::SpiceGenTcl::Trace new $name $varType $NPoints\
-                                           [[my configure -Axis] configure -name] $numType]
+                        set trace [::SpiceGenTcl::Trace new $name $varType $npoints\
+                                           [[my configure -axis] configure -name] $numType]
                     } else {
-                        set trace [::SpiceGenTcl::Trace new $name $varType $NPoints {} $numType]
+                        set trace [::SpiceGenTcl::Trace new $name $varType $npoints {} $numType]
                     }
                 } else {
-                    set trace [::SpiceGenTcl::EmptyTrace new $name $varType $NPoints $numType]
+                    set trace [::SpiceGenTcl::EmptyTrace new $name $varType $npoints $numType]
                 }
-                lappend Traces $trace
+                lappend traces $trace
                 incr ivar
             }
             if {($traces2read eq {}) || ![llength $traces2read]} {
@@ -1837,25 +1836,25 @@ namespace eval ::SpiceGenTcl {
             
 ####  read data 
             if {$rawType eq {Binary:}} {
-                my configure -BlockSize [= {($fileSize - $binaryStart)/$NPoints}]
+                set BlockSize [= {($fileSize - $binaryStart)/$npoints}]
                 set scanFunctions {}
                 set calcBlockSize 0
-                foreach trace [my configure -Traces] {
-                    if {[$trace configure -NumType] eq {double}} {
+                foreach trace [my configure -traces] {
+                    if {[$trace configure -numtype] eq {double}} {
                         incr calcBlockSize 8
                         if {[info object class $trace ::SpiceGenTcl::EmptyTrace]} {
                             set fun skip8bytes 
                         } else {
                             set fun readFloat64
                         }
-                    } elseif {[$trace configure -NumType] eq {complex}} {
+                    } elseif {[$trace configure -numtype] eq {complex}} {
                         incr calcBlockSize 16
                         if {[info object class $trace ::SpiceGenTcl::EmptyTrace]} {
                             set fun skip16bytes 
                         } else {
                             set fun readComplex 
                         }
-                    } elseif {[$trace configure -NumType] eq {real}} {
+                    } elseif {[$trace configure -numtype] eq {real}} {
                         incr calcBlockSize 4
                         if {[info object class $trace ::SpiceGenTcl::EmptyTrace]} {
                             set fun skip4bytes 
@@ -1863,18 +1862,18 @@ namespace eval ::SpiceGenTcl {
                             set fun readFloat32 
                         }
                     } else {
-                        error "Invalid data type '[$trace configure -NumType]' for trace '[$trace configure -name]'"
+                        error "Invalid data type '[$trace configure -numtype]' for trace '[$trace configure -name]'"
                     }
                     lappend scanFunctions $fun
                 }
-                if {$calcBlockSize!=[my configure -BlockSize]} {
-                    error "Error in calculating the block size. Expected '[my configure -BlockSize]' bytes, but found\
+                if {$calcBlockSize!=$BlockSize} {
+                    error "Error in calculating the block size. Expected '${BlockSize}' bytes, but found\
                             '$calcBlockSize' bytes"
                 }
-                 for {set i 0} {$i<$NPoints} {incr i} {
-                    for {set j 0} {$j<[llength [my configure -Traces]]} {incr j} {
+                 for {set i 0} {$i<$npoints} {incr i} {
+                    for {set j 0} {$j<[llength [my configure -traces]]} {incr j} {
                         set value [eval "my [@ $scanFunctions $j]" $file] 
-                        set trace [@ [my configure -Traces] $j]
+                        set trace [@ [my configure -traces] $j]
                         if {$j==0} {
                             # workaround for bug with negative values in time axis
                             if {[info exists axisIsTime]} {
@@ -1887,9 +1886,9 @@ namespace eval ::SpiceGenTcl {
                     }
                 }                 
             } elseif {$rawType eq {Values:}} {
-                for {set i 0} {$i<$NPoints} {incr i} {
+                for {set i 0} {$i<$npoints} {incr i} {
                     set firstVar true
-                    for {set j 0} {$j<[llength [my configure -Traces]]} {incr j} {
+                    for {set j 0} {$j<[llength [my configure -traces]]} {incr j} {
                         set line [gets $file]
                         if {$line eq {}} {
                             continue
@@ -1913,7 +1912,7 @@ namespace eval ::SpiceGenTcl {
                                 set value [@ $lineList 1]
                             }
                         }
-                        set trace [@ [my configure -Traces] $j]
+                        set trace [@ [my configure -traces] $j]
                         $trace appendDataPoints $value 
                     }
                 }
@@ -1923,7 +1922,7 @@ namespace eval ::SpiceGenTcl {
         method getTrace {traceName} {
             # Returns trace object reference by it's name
             set traceFoundFlag false
-            foreach trace [my configure -Traces] {
+            foreach trace [my configure -traces] {
                 if {[$trace configure -name] eq $traceName} {
                     set traceFound $trace
                     set traceFoundFlag true
@@ -1931,36 +1930,36 @@ namespace eval ::SpiceGenTcl {
                 }
             }
             if {$traceFoundFlag==false} {
-                return -code error "Trace with name '$traceName' was not found in raw file '[my configure -Path]' list\
+                return -code error "Trace with name '$traceName' was not found in raw file '[my configure -path]' list\
                         of traces"
             }
             return $traceFound
         }
         method getVariablesNames {} {
             # Returns list that contains names of all variables
-            return [lmap trace [my configure -Traces] {$trace configure -name}]
+            return [lmap trace [my configure -traces] {$trace configure -name}]
         }
         method getVoltagesNames {} {
             # Returns list that contains names of all voltage variables
-            return [lmap trace [my configure -Traces]\
-                            {expr {[string match -nocase {*voltage*} [$trace configure -Type]] ?\
+            return [lmap trace [my configure -traces]\
+                            {expr {[string match -nocase {*voltage*} [$trace configure -type]] ?\
                                            [$trace configure -name] : [continue]}}]
         }
         method getCurrentsNames {} {
             # Returns list that contains names of all current variables
-            return [lmap trace [my configure -Traces]\
-                            {expr {[string match -nocase {*current*} [$trace configure -Type]] ?\
+            return [lmap trace [my configure -traces]\
+                            {expr {[string match -nocase {*current*} [$trace configure -type]] ?\
                                            [$trace configure -name] : [continue]}}]
         }
         method getTracesStr {} {
             # Returns information about all Traces in raw file in form of string
-            return [lmap trace [my configure -Traces]\
-                            {join [list [$trace configure -name] [$trace configure -Type] [$trace configure -NumType]]}]
+            return [lmap trace [my configure -traces]\
+                            {join [list [$trace configure -name] [$trace configure -type] [$trace configure -numtype]]}]
         }
         method getTracesData {} {
             # Returns dictionary that contains all data in value and name as a key
             set dict {}
-            foreach trace [my configure -Traces] {
+            foreach trace [my configure -traces] {
                 dict append dict [$trace configure -name] [$trace getDataPoints]
             }
             return $dict
@@ -1979,7 +1978,7 @@ namespace eval ::SpiceGenTcl {
             if {[dexist $arguments all]} {
                 set tracesDict [my getTracesData]
                 set tracesList [list [dict keys $tracesDict]]
-                for {set i 0} {$i<[my configure -NPoints]} {incr i} {
+                for {set i 0} {$i<[my configure -npoints]} {incr i} {
                     lappend tracesList [lmap traceValues [dict values $tracesDict] {@ $traceValues $i}]
                 }
             } elseif {[dget $arguments traces] ne {}} {
@@ -1988,7 +1987,7 @@ namespace eval ::SpiceGenTcl {
                     dict append tracesDict [$traceObj configure -name] [$traceObj getDataPoints]
                 }
                 set tracesList [list [dict keys $tracesDict]]
-                for {set i 0} {$i<[my configure -NPoints]} {incr i} {
+                for {set i 0} {$i<[my configure -npoints]} {incr i} {
                     lappend tracesList [lmap traceValues [dict values $tracesDict] {@ $traceValues $i}]
                 }
             } else {
