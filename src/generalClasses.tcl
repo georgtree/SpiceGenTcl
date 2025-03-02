@@ -19,7 +19,7 @@ namespace eval ::SpiceGenTcl {
     namespace export Pin ParameterSwitch Parameter ParameterNoCheck ParameterPositional ParameterPositionalNoCheck\
             ParameterDefault ParameterEquation ParameterPositionalEquation Device Model RawString Comment Include\
             Options ParamStatement Temp Netlist Circuit Library Subcircuit Analysis Simulator Dataset Axis Trace\
-            EmptyTrace RawFile
+            EmptyTrace RawFile Ic
     namespace export importNgspice importXyce importCommon importLtspice forgetNgspice forgetXyce forgetCommon\
             forgetLtspice
     
@@ -200,7 +200,7 @@ namespace eval ::SpiceGenTcl {
         superclass SPICEElement
         # name of the node connected to pin
         property nodename -set {
-            if {[regexp {[^A-Za-z0-9_]+} $value]} {
+            if {![regexp {^(?![0-9]+[a-zA-Z])[^= %\(\),\[\]<>~]*$} $value]} {
                 return -code error "Node name '${value}' is not a valid name"
             }
             set nodename [string tolower $value]
@@ -208,7 +208,7 @@ namespace eval ::SpiceGenTcl {
         property name -set {
             if {$value eq {}} {
                 return -code error "Pin must have a name, empty string was provided"
-            } elseif {[regexp {[^A-Za-z0-9_]+} $value]} {
+            } elseif {![regexp {^(?![0-9]+[a-zA-Z])[^= %\(\),\[\]<>~]*$} $value]} {
                 return -code error "Pin name '$value' is not a valid name"
             }
             set name [string tolower $value]
@@ -310,27 +310,10 @@ namespace eval ::SpiceGenTcl {
     oo::define Parameter {
         variable value
         method <WriteProp-value> val {
-            if {[string is double -strict $val]} {
-                set value $val
+            if {[regexp {^([+-]?\d+(\.\d*)?([eE][+-]?\d+)?)(f|p|n|u|m|k|g|t|meg)?([a-zA-Z]*)$} $val]} {
+                set value [string tolower $val]
             } else {
-                if {[string tolower [string range $val end-2 end]] eq {meg}} {
-                    if {[string is double -strict [string range $val 0 end-3]]} {
-                        set value [string tolower $val]
-                    } else {
-                        return -code error "Value '$val' is not a valid value"
-                    } 
-                } else {
-                    set suffix [string tolower [string index $val end]]
-                    if {$suffix in {f p n u m k g t}} {
-                        if {[string is double -strict [string range $val 0 end-1]]} {
-                            set value [string tolower $val]
-                        } else {
-                            return -code error "Value '$val' is not a valid value"
-                        } 
-                    } else {
-                        return -code error "Value '$val' is not a valid value"
-                    }
-                }
+                return -code error "Value '$val' is not a valid value"
             }
         }
     }
@@ -1077,7 +1060,75 @@ namespace eval ::SpiceGenTcl {
             return ".param [join [join [lmap param [dict values $Params] {$param genSPICEString}]]]"
         }
     }
+###  Ic class definition 
     
+    oo::configurable create Ic {
+        superclass SPICEElement
+        mixin Utility
+        property name -set {
+            set name [string tolower $value]
+        }
+        variable name
+        variable Params
+        constructor {params args} {
+            # Creates object of class `Ic`.
+            #  params - list of instance parameters in form `{{name value} {name value} {name equation -eq} ...}`
+            #  -name - name of the library that could be used to retrieve element from [::SpiceGenTcl::Netlist] object
+            #    and its descendants, optional
+            # Class represent .param statement.
+            # Synopsis: params ?-name value?
+            argparse {
+                -name=
+            }
+            if {[info exists name]} {
+                my configure -name $name
+            } else {
+                my configure -name [self object]
+            }
+            foreach param $params {
+                if {[@ $param 2] eq {}} {
+                    my addParam [@ $param 0] [@ $param 1]    
+                } elseif {[@ $param 2] eq {-eq}} {
+                    my addParam [@ $param 0] [@ $param 1] -eq  
+                } else { 
+                    error "Wrong parameter definition in Ic"
+                }   
+            }
+        }
+        method getParams {*}[info class definition ::SpiceGenTcl::Device getParams]
+        method addParam {paramName value args} {
+            # Adds new Parameter object to the list Params.
+            #  paramName - name of parameter
+            #  value - value of parameter
+            #  -eq - optional parameter qualificator
+            # Synopsis: paramName value ?-eq?
+            argparse {
+                -eq
+            }
+            set paramName [string tolower $paramName]
+            if {[info exists Params]} {
+                set paramList [dict keys $Params]
+            }
+            lappend paramList $paramName
+            if {[my duplListCheck $paramList]} {
+                return -code error "Parameters list '$paramList' has already contains parameter with name '$paramName'"
+            }
+            if {[info exists eq]} {
+                dict append Params $paramName [::SpiceGenTcl::ParameterEquation new $paramName $value]
+            } else {
+                dict append Params $paramName [::SpiceGenTcl::Parameter new $paramName $value]
+            }
+            return
+        }
+        method deleteParam {*}[info class definition ::SpiceGenTcl::Device deleteParam]
+        method setParamValue {*}[info class definition ::SpiceGenTcl::Device setParamValue]
+        method genSPICEString {} {
+            # Creates parameter statement string for SPICE netlist.
+            # Returns: SPICE netlist's string
+            return ".ic [join [join [lmap param [dict values $Params] {$param genSPICEString}]]]"
+        }
+    }
+
 ###  Temp class definition 
     
     oo::configurable create Temp {

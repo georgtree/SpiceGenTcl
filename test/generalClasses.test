@@ -72,27 +72,6 @@ test testPinClass-6 {test creation of Pin class instance and check how genSPICES
     unset pinInst errorStr
 }
 
-test testPinClass-7 {test creation of Pin class instance and handling wrong symbols in the name} -body {
-    catch {set pinInst [Pin new dr-ain netd]} errorStr
-    return $errorStr
-} -result "Pin name 'dr-ain' is not a valid name" -cleanup {
-    unset errorStr
-}
-
-test testPinClass-8 {test creation of Pin class instance and handling wrong symbols in the name} -body {
-    catch {set pinInst [Pin new drain. netd]} errorStr
-    return $errorStr
-} -result "Pin name 'drain.' is not a valid name" -cleanup {
-    unset errorStr
-}
-
-test testPinClass-9 {test creation of Pin class instance and handling wrong symbols in the name} -body {
-    catch {set pinInst [Pin new !drain netd]} errorStr
-    return $errorStr
-} -result "Pin name '!drain' is not a valid name" -cleanup {
-    unset errorStr
-}
-
 test testPinClass-10 {test creation of Pin class instance and handling empty string in the name} -body {
     catch {set pinInst [Pin new "" netd]} errorStr
     return $errorStr
@@ -112,9 +91,9 @@ test testPinClass-11 {test creation of Pin class instance and setNodeName interf
 test testPinClass-12 {test creation of Pin class instance and setNodeName interface with wrong node name} -setup {
     set pinInst [Pin new drain netd]
 } -body {
-    catch {$pinInst configure -nodename n-et1} errorStr
+    catch {$pinInst configure -nodename 123net} errorStr
     return $errorStr
-} -result "Node name 'n-et1' is not a valid name" -cleanup {
+} -result "Node name '123net' is not a valid name" -cleanup {
     unset pinInst errorStr
 }
     
@@ -241,20 +220,6 @@ test testParameterClass-13 {test creation of Parameter class instance} -setup {
 }
 
 test testParameterClass-14 {test creation of Parameter class instance and handling wrong form of the value}  -body {
-    catch {set parInst [Parameter new VTH 700uV]} errorStr
-    return $errorStr
-} -result "Value '700uV' is not a valid value" -cleanup {
-    unset errorStr
-}
-
-test testParameterClass-15 {test creation of Parameter class instance and handling wrong form of the value}  -body {
-    catch {set parInst [Parameter new VTH 700vu]} errorStr
-    return $errorStr
-} -result "Value '700vu' is not a valid value" -cleanup {
-    unset errorStr
-}
-
-test testParameterClass-16 {test creation of Parameter class instance and handling wrong form of the value}  -body {
     catch {set parInst [Parameter new VTH 70!0meg]} errorStr
     return $errorStr
 } -result "Value '70!0meg' is not a valid value" -cleanup {
@@ -851,6 +816,16 @@ test testParamStatementClass-6 {test creation of ParamStatement class instance a
 } -result [dcreate u0t 2 vth0 10] -cleanup {
     unset elemInst result
 }
+
+###  Ic class tests 
+    
+# test testIcClass-1 {test creation of Ic class instance and getParams interface} -setup {
+#     set elemInst [Ic new {{v(a) {v1} -eq} {v(b) 10}}]
+# } -body {
+#     set result [$elemInst getParams]
+# } -result [dcreate u0t {rf+1} vth0 10] -cleanup {
+#     unset elemInst result
+# }
 
 ###  Netlist class tests 
     

@@ -44,7 +44,8 @@ namespace eval ::SpiceGenTcl::Ngspice {
             set DotsMethods [dcreate ac CreateAc dc CreateDc func CreateFunc global CreateGlobal ic CreateIc\
                                      include CreateInclude model CreateModel nodeset CreateNodeset op CreateOp\
                                      options CreateOptions param CreateParam sens CreateSens sp CreateSp\
-                                     temp CreateTemp tran CreateTran params CreateParam lib CreateLib]
+                                     temp CreateTemp tran CreateTran params CreateParam lib CreateLib\
+                                     option CreateOptions]
             set SupModelsTypes {r c l sw csw d npn pnp njf pjf nmos pmos nmf pmf}
             my configure -topnetlist [::SpiceGenTcl::Netlist new [file tail $filepath]]
             set ModelTemplate {oo::class create @type@ {
@@ -281,15 +282,14 @@ namespace eval ::SpiceGenTcl::Ngspice {
                 if {[my CheckEqual $elem]} {
                     lassign [my ParseWithEqual $elem] name value
                     if {$format eq {arg}} {
-                        set name -$name
+                        set nameValue [list -$name $value]
                     } elseif {$format eq {list}} {
                         set nameValue [list $name $value]
                     }
                 } elseif {[my CheckBracedWithEqual $elem]} {
                     lassign [my ParseBracedWithEqual $elem] name value
                     if {$format eq {arg}} {
-                        set name -$name
-                        set value [list $value -eq]
+                        set nameValue [list -$name [list $value -eq]]
                     } elseif {$format eq {list}} {
                         set nameValue [list $name $value -eq]
                     }
@@ -297,15 +297,70 @@ namespace eval ::SpiceGenTcl::Ngspice {
                     return -code error "Parameter '${elem}' parsing failed"
                 }
                 if {$format eq {arg}} {
-                    if {$name ni [lmap nameExc $exclude {subst "-$nameExc"}]} {
+                    if {$name ni [lmap nameExc $exclude {subst "$nameExc"}]} {
                         if {$value eq {}} {
                             return -code error "Parameter '${elem}' parsing failed: value is empty"
                         }
-                        lappend results $name $value
+                        lappend results {*}$nameValue
                     }
                 } elseif {$format eq {list}} {
                     if {$name ni [lmap nameExc $exclude {subst "$nameExc"}]} {
                         if {$value eq {}} {
+                            return -code error "Parameter '${elem}' parsing failed: value is empty"
+                        }
+                        lappend results $nameValue
+                    }
+                }
+            }
+            return $results
+        }
+        method ParseMixedParams {list start {exclude {}} {format arg}} {
+            # Parses parameters from the list starts from `start` that is in form `name=value`, `name={value}` or `name`.
+            #   list - input list
+            #   start - start index
+            #   exclude - list of parameters names that should be omitted from output
+            #   format - select format of output list, arg: `{-name1 value1 -name2 value2 ...}`, list:
+            #    `{{name1 value1 ?qual?} {name2 value2 ?qual?} ...}`
+            # Returns: formatted list of parameters
+            set results {}
+            foreach elem [lrange $list $start end] {
+                set switch false
+                if {[my CheckEqual $elem]} {
+                    lassign [my ParseWithEqual $elem] name value
+                    if {$format eq {arg}} {
+                        set nameValue [list -$name $value]
+                    } elseif {$format eq {list}} {
+                        set nameValue [list $name $value]
+                    }
+                } elseif {[my CheckBracedWithEqual $elem]} {
+                    lassign [my ParseBracedWithEqual $elem] name value
+                    if {$format eq {arg}} {
+                        set nameValue [list -$name [list $value -eq]]
+                    } elseif {$format eq {list}} {
+                        set nameValue [list $name $value -eq]
+                    }
+                } elseif {[regexp {^[a-zA-Z0-9]+$} $elem]} {
+                    set name $elem
+                    set value {}
+                    if {$format eq {arg}} {
+                        set nameValue -$name
+                    } elseif {$format eq {list}} {
+                        set nameValue [list $name -sw]
+                    }
+                    set switch true
+                } else {
+                    return -code error "Parameter '${elem}' parsing failed"
+                }
+                if {$format eq {arg}} {
+                    if {$name ni [lmap nameExc $exclude {subst "-$nameExc"}]} {
+                        if {$value eq {} && !$switch} {
+                            return -code error "Parameter '${elem}' parsing failed: value is empty"
+                        }
+                        lappend results {*}$nameValue
+                    }
+                } elseif {$format eq {list}} {
+                    if {$name ni [lmap nameExc $exclude {subst "$nameExc"}]} {
+                        if {$value eq {} && !$switch} {
                             return -code error "Parameter '${elem}' parsing failed: value is empty"
                         }
                         lappend results $nameValue
@@ -401,27 +456,10 @@ namespace eval ::SpiceGenTcl::Ngspice {
             # Checks if string is a valid float string, acceptable by SPICE syntax
             #   string - input string
             # Returns: boolean value
-            if {[string is double -strict $string]} {
+            if {[regexp {^([+-]?\d+(\.\d*)?([eE][+-]?\d+)?)(f|p|n|u|m|k|g|t|meg)?([a-zA-Z]*)$} $string]} {
                 return true
             } else {
-                if {[string tolower [string range $string end-2 end]] eq {meg}} {
-                    if {[string is double -strict [string range $string 0 end-3]]} {
-                        return true
-                    } else {
-                        return false
-                    }
-                } else {
-                    set suffix [string tolower [string index $string end]]
-                    if {$suffix in {f p n u m k g t}} {
-                        if {[string is double -strict [string range $string 0 end-1]]} {
-                            return true
-                        } else {
-                            return false
-                        }
-                    } else {
-                        return false
-                    }
-                }
+                return false
             }
         }
         method CheckModelName {string} {
@@ -646,7 +684,10 @@ namespace eval ::SpiceGenTcl::Ngspice {
 
         }
         method CreateOptions {line netlistObj} {
-            
+            set lineList [lrange [split $line] 1 end]
+            $netlistObj add [::SpiceGenTcl::Ngspice::Misc::OptionsNgspice new\
+                                     {*}[my ParseMixedParams $lineList 0 {} arg]]
+            return
         }
         method CreateParam {line netlistObj} {
             #   line - line to parse
@@ -657,7 +698,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             return
         }
         method CreateTemp {line netlistObj} {
-
+            
         }
         method CreateRes {line netlistObj} {
             # Creates resistor object from passed line and add it to netlist

@@ -39,12 +39,12 @@ namespace eval ::SpiceGenTcl::Ngspice::Misc {
             # ::SpiceGenTcl::Ngspice::Misc::OptionsNgspice new -klu -abstol 1e-10 -maxord 6
             # ```
             # Synopsis: ?-key value ...? ?-key ...?
-            set swParams {sparse klu acct noacct list nomod nopage node norefvalue opts seedinfo savecurrents\
+            set swParams {sparse klu acct noacct noinit list nomod nopage node norefvalue opts seedinfo savecurrents\
                                   keepopinfo noopiter noopac autostop interp badmos3 trytocompact}
             set keyValParams {seed temp tnom warn maxwarns abstol gmin gminsteps itl1 itl2 pivrel pivtol reltol rshunt\
-                                  vntol rseries cshunt chgtol convstep convabsstep itl3 itl4 itl5 itl6 maxevtiter\
-                                  maxopalter maxord method noopalter ramptime srcsteps trtol xmu defad defas defl defw\
-                                  scale}
+                                      vntol rseries cshunt chgtol convstep convabsstep itl3 itl4 itl5 itl6 maxevtiter\
+                                      maxopalter maxord method noopalter ramptime srcsteps trtol xmu defad defas defl\
+                                      defw scale}
             set arguments [argparse -inline "
                 [my buildArgStr $keyValParams]
                 [my buildSwArgStr $swParams]
