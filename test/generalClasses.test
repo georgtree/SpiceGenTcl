@@ -68,14 +68,14 @@ test testPinClass-6 {test creation of Pin class instance and check how genSPICES
 } -body {
     catch {$pinInst genSPICEString} errorStr
     return $errorStr
-} -result "Pin 'drain' is not connected to the node so can't be netlisted" -cleanup {
+} -result {Pin 'drain' is not connected to the node so can't be netlisted} -cleanup {
     unset pinInst errorStr
 }
 
 test testPinClass-10 {test creation of Pin class instance and handling empty string in the name} -body {
     catch {set pinInst [Pin new "" netd]} errorStr
     return $errorStr
-} -result "Pin must have a name, empty string was provided" -cleanup {
+} -result {Pin must have a name, empty string was provided} -cleanup {
     unset errorStr
 }
 
@@ -93,7 +93,7 @@ test testPinClass-12 {test creation of Pin class instance and setNodeName interf
 } -body {
     catch {$pinInst configure -nodename 123net} errorStr
     return $errorStr
-} -result "Node name '123net' is not a valid name" -cleanup {
+} -result {Node name '123net' is not a valid name} -cleanup {
     unset pinInst errorStr
 }
     
@@ -143,21 +143,21 @@ test testParameterClass-3 {test creation of Parameter class instance and getValu
 test testParameterClass-4 {test creation of Parameter class instance and handling wrong symbols in the name}  -body {
     catch {set parInst [Parameter new VT.H 0.7]} errorStr
     return $errorStr
-} -result "Parameter name 'VT.H' is not a valid name" -cleanup {
+} -result {Parameter name 'VT.H' is not a valid name} -cleanup {
     unset errorStr
 }
 
 test testParameterClass-5 {test creation of Parameter class instance and handling empty string in the name}  -body {
     catch {set parInst [Parameter new "" 0.7]} errorStr
     return $errorStr
-} -result "Parameter must have a name, empty string was provided" -cleanup {
+} -result {Parameter must have a name, empty string was provided} -cleanup {
     unset errorStr
 }
 
 test testParameterClass-6 {test creation of Parameter class instance and handling wrong form of the value}  -body {
     catch {set parInst [Parameter new VTH 0.7e-]} errorStr
     return $errorStr
-} -result "Value '0.7e-' is not a valid value" -cleanup {
+} -result {Value '0.7e-' is not a valid value} -cleanup {
     unset errorStr
 }
 
@@ -175,7 +175,7 @@ test testParameterClass-8 {test creation of Parameter class instance and setValu
 } -body {
     catch {$parInst configure -value 1..0} errorStr
     return $errorStr
-} -result "Value '1..0' is not a valid value" -cleanup {
+} -result {Value '1..0' is not a valid value} -cleanup {
     unset parInst errorStr
 }
 
@@ -222,8 +222,28 @@ test testParameterClass-13 {test creation of Parameter class instance} -setup {
 test testParameterClass-14 {test creation of Parameter class instance and handling wrong form of the value}  -body {
     catch {set parInst [Parameter new VTH 70!0meg]} errorStr
     return $errorStr
-} -result "Value '70!0meg' is not a valid value" -cleanup {
+} -result {Value '70!0meg' is not a valid value} -cleanup {
     unset errorStr
+}
+
+###  ParameterNode class tests 
+
+test testParameterNodeClass-1 {test creation of ParameterNode class instance and getName interface} -setup {
+    set parInst [ParameterNode new v(1) 0.7]
+} -body {
+    set result [$parInst genSPICEString]
+} -result {v(1)=0.7} -cleanup {
+    unset parInst result
+}
+
+###  ParameterNodeEquation class tests 
+
+test testParameterNodeEquationClass-2 {test creation of ParameterNodeEquation class instance and getName interface} -setup {
+    set parInst [ParameterNodeEquation new v(1) volt]
+} -body {
+    set result [$parInst genSPICEString]
+} -result {v(1)={volt}} -cleanup {
+    unset parInst result
 }
 
 ###  ParameterNoCheck class tests 
@@ -233,7 +253,7 @@ test testParameterNoCheckClass-1 {test creation of ParameterNoCheck class instan
 } -body {
     $parInst configure -value 1..0
     return [$parInst configure -value]
-} -result "1..0" -cleanup {
+} -result 1..0 -cleanup {
     unset parInst
 }    
     
@@ -330,7 +350,7 @@ test testParameterPositionalNoCheckClass-2 {test creation of ParameterPositional
 test testParameterPositionalNoCheckClass-3 {test creation of ParameterPositionalNoCheck class instance} -body {
     catch {ParameterPositionalNoCheck new U0 ""} errorStr
     return $errorStr
-} -result "Value '' is not a valid value" -cleanup {
+} -result {Value '' is not a valid value} -cleanup {
     unset errorStr
 } 
 
@@ -340,7 +360,7 @@ test testParameterEquationClass-1 {test creation of ParameterEquation class inst
     set parInst [ParameterEquation new U0T {temp*2.1+U0}]
 } -body {
     set result [$parInst configure -value]
-} -result "temp*2.1+U0" -cleanup {
+} -result temp*2.1+U0 -cleanup {
     unset parInst result
 }
     
@@ -348,14 +368,14 @@ test testParameterEquationClass-2 {test creation of ParameterEquation class inst
     set parInst [ParameterEquation new U0T {temp*2.1+U0}]
 } -body {
     set result [$parInst genSPICEString]
-} -result "u0t=\{temp*2.1+U0\}" -cleanup {
+} -result {u0t={temp*2.1+U0}} -cleanup {
     unset parInst result
 }
     
 test testParameterEquationClass-3 {test creation of ParameterEquation class instance with empty value} -body {
     catch {ParameterEquation new U0T {}} errorStr
     return $errorStr
-} -result "Parameter 'u0t' equation can't be empty" -cleanup {
+} -result {Parameter 'u0t' equation can't be empty} -cleanup {
     unset errorStr
 }
 
@@ -365,7 +385,7 @@ test testParameterPositionalEquationClass-1 {test creation of ParameterPositiona
     set parInst [ParameterPositionalEquation new U0T {temp*2.1+U0}]
 } -body {
     set result [$parInst genSPICEString]
-} -result "\{temp*2.1+U0\}" -cleanup {
+} -result {{temp*2.1+U0}} -cleanup {
     unset parInst result
 }
     
@@ -383,14 +403,14 @@ test testDeviceClass-2 {test creation of Device class instance and getPins inter
     set elemInst [Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
 } -body {
     set result [$elemInst getPins]
-} -result [dcreate d netd g netg s nets] -cleanup {
+} -result {d netd g netg s nets} -cleanup {
     unset elemInst result
 }
 
 test testDeviceClass-3 {test creation of Device class instance and handling duplicated pins names} -body {
     catch {set elemInst [Device new M1 {{d netg} {g netg} {s nets} {s netg}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]} errorStr
     return $errorStr
-} -result "Pins list 'd g s s' has already contains pin with name 's'" -cleanup {
+} -result {Pins list 'd g s s' has already contains pin with name 's'} -cleanup {
     unset errorStr
 }
 
@@ -398,28 +418,28 @@ test testDeviceClass-4 {test creation of Device class instance and getParams int
     set elemInst [Device new M1 {{d netg} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
 } -body {
     set result [$elemInst getParams]
-} -result [dcreate vth0 0.7 u0 100 k1 1.5e-3] -cleanup {
+} -result {vth0 0.7 u0 100 k1 1.5e-3} -cleanup {
     unset elemInst result
 }
 
 test testDeviceClass-5 {test creation of Device class instance and handling duplicated parameters names} -body {
     catch {set elemInst [Device new M1 {{d netg} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3} {VTH0 0.2}}]} errorStr
     return $errorStr
-} -result "Parameters list 'vth0 u0 k1 vth0' has already contains parameter with name 'vth0'" -cleanup {
+} -result {Parameters list 'vth0 u0 k1 vth0' has already contains parameter with name 'vth0'} -cleanup {
     unset errorStr
 }
 
 test testDeviceClass-6 {test creation of Device class instance and handling wrong reference name} -body {
     catch {set elemInst [Device new 11 {{d netg} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]} errorStr
     return $errorStr
-} -result "Reference name '11' is not a valid name" -cleanup {
+} -result {Reference name '11' is not a valid name} -cleanup {
     unset errorStr
 }
 
 test testDeviceClass-7 {test creation of Device class instance and handling wrong reference name} -body {
     catch {set elemInst [Device new M1. {{d netg} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 5e-3}}]} errorStr
     return $errorStr
-} -result "Reference name 'M1.' is not a valid name" -cleanup {
+} -result {Reference name 'M1.' is not a valid name} -cleanup {
     unset errorStr
 }
 
@@ -428,7 +448,7 @@ test testDeviceClass-8 {test creation of Device class instance and addParam inte
 } -body {
     $elemInst addParam K2 -1.2e-4
     set result [$elemInst getParams]
-} -result [dcreate vth0 0.7 u0 100 k1 1.5e-3 k2 -1.2e-4] -cleanup {
+} -result {vth0 0.7 u0 100 k1 1.5e-3 k2 -1.2e-4} -cleanup {
     unset elemInst result
 }
 
@@ -437,7 +457,7 @@ test testDeviceClass-9 {test creation of Device class instance and deleteParam i
 } -body {
     $elemInst deleteParam vth0
     set result [$elemInst getParams]
-} -result [dcreate u0 100 k1 1.5e-3] -cleanup {
+} -result {u0 100 k1 1.5e-3} -cleanup {
     unset elemInst result
 }
 
@@ -445,7 +465,7 @@ test testDeviceClass-10 {test creation of Device class instance and test string 
     set elemInst [Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
 } -body {
     set result [$elemInst genSPICEString]
-} -result "m1 netd netg nets vth0=0.7 u0=100 k1=1.5e-3" -cleanup {
+} -result {m1 netd netg nets vth0=0.7 u0=100 k1=1.5e-3} -cleanup {
     unset elemInst result
 }
 
@@ -454,7 +474,7 @@ test testDeviceClass-11 {test creation of Device class instance and test setPinN
     $elemInst setPinNodeName g n123
 } -body {
     set result [$elemInst getPins]
-} -result [dcreate d netd g n123 s nets] -cleanup {
+} -result {d netd g n123 s nets} -cleanup {
     unset elemInst result
 }
 
@@ -463,7 +483,7 @@ test testDeviceClass-12 {test creation of Device class instance and test setPinN
 } -body {
     catch {$elemInst setPinNodeName p n123} errorStr
     return $errorStr
-} -result "Pin with name 'p' was not found in device's 'm1' list of pins 'd g s'" -cleanup {
+} -result {Pin with name 'p' was not found in device's 'm1' list of pins 'd g s'} -cleanup {
     unset elemInst errorStr
 }
 
@@ -472,7 +492,7 @@ test testDeviceClass-13 {test creation of Device class instance and test setPara
     $elemInst setParamValue vth0 1.0
 } -body {
     set result [$elemInst getParams]
-} -result [dcreate vth0 1.0 u0 100 k1 1.5e-3] -cleanup {
+} -result {vth0 1.0 u0 100 k1 1.5e-3} -cleanup {
     unset elemInst result
 }
 
@@ -481,7 +501,7 @@ test testDeviceClass-14 {test creation of Device class instance and test setPara
 } -body {
     catch {$elemInst setParamValue VTH01 1.0} errorStr
     return $errorStr
-} -result "Parameter with name 'vth01' was not found in element's 'm1' list of parameters 'vth0 u0 k1'" -cleanup {
+} -result {Parameter with name 'vth01' was not found in element's 'm1' list of parameters 'vth0 u0 k1'} -cleanup {
     unset elemInst errorStr
 }
 
@@ -490,7 +510,7 @@ test testDeviceClass-15 {test creation of Device class instance and test deleteP
 } -body {
     catch {$elemInst deleteParam VTH01} errorStr
     return $errorStr
-} -result "Parameter with name 'vth01' was not found in device's 'm1' list of parameters 'vth0 u0 k1'" -cleanup {
+} -result {Parameter with name 'vth01' was not found in device's 'm1' list of parameters 'vth0 u0 k1'} -cleanup {
     unset elemInst errorStr
 }
 
@@ -498,7 +518,7 @@ test testDeviceClass-16 {test creation of Device class instance and test string 
     set elemInst [Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 100 -pos} {K1 1.5e-3}}]
 } -body {
     set result [$elemInst genSPICEString]
-} -result "m1 netd netg nets vth0=0.7 100 k1=1.5e-3" -cleanup {
+} -result {m1 netd netg nets vth0=0.7 100 k1=1.5e-3} -cleanup {
     unset elemInst result
 }
 
@@ -506,7 +526,7 @@ test testDeviceClass-17 {test creation of Device class instance and test string 
     set elemInst [Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 {u1+u2} -poseq} {K1 1.5e-3}}]
 } -body {
     set result [$elemInst genSPICEString]
-} -result "m1 netd netg nets vth0=0.7 {u1+u2} k1=1.5e-3" -cleanup {
+} -result {m1 netd netg nets vth0=0.7 {u1+u2} k1=1.5e-3} -cleanup {
     unset elemInst result
 }
 
@@ -514,7 +534,7 @@ test testDeviceClass-18 {test creation of Device class instance and test string 
     set elemInst [Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 {u1+u2} -eq} {K1 1.5e-3}}]
 } -body {
     set result [$elemInst genSPICEString]
-} -result "m1 netd netg nets vth0=0.7 u0={u1+u2} k1=1.5e-3" -cleanup {
+} -result {m1 netd netg nets vth0=0.7 u0={u1+u2} k1=1.5e-3} -cleanup {
     unset elemInst result
 }
 
@@ -523,7 +543,7 @@ test testDeviceClass-19 {test creation of Device class instance and test string 
 } -body {
     catch {$elemInst genSPICEString} errorStr
     return $errorStr
-} -result "Device 'm1' can't be netlisted because 's' pin is floating" -cleanup {
+} -result {Device 'm1' can't be netlisted because 's' pin is floating} -cleanup {
     unset errorStr
 }
 
@@ -531,7 +551,7 @@ test testDeviceClass-20 {test creation of Device class instance and checkFloatin
     set elemInst [Device new M1 {{d netd} {g {}} {s nets} {p {}}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
 } -body {
     set result [$elemInst checkFloatingPins]
-} -result [list g p] -cleanup {
+} -result {g p} -cleanup {
     unset elemInst result
 }
 
@@ -540,7 +560,7 @@ test testDeviceClass-21 {test creation of Device class instance and test setPara
 } -body {
     $elemInst setParamValue VTH0 1.0 U0 50
     $elemInst genSPICEString
-} -result "m1 netd netg nets vth0=1.0 u0=50 k1=1.5e-3" -cleanup {
+} -result {m1 netd netg nets vth0=1.0 u0=50 k1=1.5e-3} -cleanup {
     unset elemInst
 }
 
@@ -549,7 +569,7 @@ test testDeviceClass-22 {test creation of Device class instance and test setPara
 } -body {
     catch {$elemInst setParamValue VTH0 1.0 U0 50 K1} errorStr
     return $errorStr
-} -result "Number of arguments to method 'setParamValue' must be even" -cleanup {
+} -result {Number of arguments to method 'setParamValue' must be even} -cleanup {
     unset elemInst errorStr
 }
 
@@ -567,7 +587,7 @@ test testModelClass-2 {test creation of Model class instance and getParams inter
     set modelInst [Model new MOD1 NMOS {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
 } -body {
     set result [$modelInst getParams]
-} -result [dcreate vth0 0.7 u0 100 k1 1.5e-3] -cleanup {
+} -result {vth0 0.7 u0 100 k1 1.5e-3} -cleanup {
     unset modelInst result
 }
 
@@ -575,7 +595,7 @@ test testModelClass-3 {test creation of Model class instance and genSPICEString 
     set modelInst [Model new MOD1 NMOS {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
 } -body {
     set result [$modelInst genSPICEString]
-} -result ".model mod1 nmos(vth0=0.7 u0=100 k1=1.5e-3)" -cleanup {
+} -result {.model mod1 nmos(vth0=0.7 u0=100 k1=1.5e-3)} -cleanup {
     unset modelInst result
 }
 
@@ -583,7 +603,7 @@ test testModelClass-4 {test creation of Model class instance and genSPICEString 
     set modelInst [Model new MOD1 NMOS {{VTH0 0.7} {U0 v2*vb/2 -eq} {K1 1.5e-3}}]
 } -body {
     set result [$modelInst genSPICEString]
-} -result ".model mod1 nmos(vth0=0.7 u0=\{v2*vb/2\} k1=1.5e-3)" -cleanup {
+} -result {.model mod1 nmos(vth0=0.7 u0={v2*vb/2} k1=1.5e-3)} -cleanup {
     unset modelInst result
 }
 
@@ -593,7 +613,7 @@ test testRawStringClass-1 {test creation of RawString class instance and genSPIC
     set raw [RawString new {arbitary string}]
 } -body {
     set result [$raw genSPICEString]
-} -result "arbitary string" -cleanup {
+} -result {arbitary string} -cleanup {
     unset raw result
 }
 
@@ -601,7 +621,7 @@ test testRawStringClass-2 {test creation of RawString class instance with -name 
     set raw [RawString new {arbitary string} -name raw1]
 } -body {
     set result [$raw configure -name]
-} -result "raw1" -cleanup {
+} -result raw1 -cleanup {
     unset raw result
 }
 
@@ -617,7 +637,7 @@ test testCommentClass-1 {test creation of Comment class instance and genSPICEStr
     set raw [Comment new {comment string}]
 } -body {
     set result [$raw genSPICEString]
-} -result "*comment string" -cleanup {
+} -result {*comment string} -cleanup {
     unset raw result
 }
 
@@ -639,7 +659,7 @@ test testTempClass-1 {test creation of Temp class instance and genSPICEString in
     set temp [Temp new 10]
 } -body {
     set result [$temp genSPICEString]
-} -result ".temp 10" -cleanup {
+} -result {.temp 10} -cleanup {
     unset temp result
 }
     
@@ -647,7 +667,7 @@ test testTempClass-2 {test creation of Temp class instance and genSPICEString in
     set temp [Temp new temp -eq]
 } -body {
     set result [$temp genSPICEString]
-} -result ".temp \{temp\}" -cleanup {
+} -result {.temp {temp}} -cleanup {
     unset temp result
 }
     
@@ -655,7 +675,7 @@ test testTempClass-3 {test creation of Temp class instance and getValue interfac
     set temp [Temp new temp -eq]
 } -body {
     set result [$temp configure -value]
-} -result "temp" -cleanup {
+} -result temp -cleanup {
     unset temp result
 }
     
@@ -664,7 +684,7 @@ test testTempClass-4 {test creation of Temp class instance and setValue interfac
 } -body {
     $temp configure -value [list temp1 -eq]
     set result [$temp configure -value]
-} -result "temp1" -cleanup {
+} -result temp1 -cleanup {
     unset temp result
 }
     
@@ -673,7 +693,7 @@ test testTempClass-5 {test creation of Temp class instance and setValue interfac
 } -body {
     $temp configure -value [list temp1 -eq]
     set result [$temp configure -value]
-} -result "temp1" -cleanup {
+} -result temp1 -cleanup {
     unset temp result
 }
 
@@ -681,7 +701,7 @@ test testTempClass-6 {test creation of Temp class instance and genSPICEString in
     set temp [Temp new 10]
     catch {$temp configure -value [list temp1 -e2q]} errorStr
     return $errorStr
-} -result "Wrong value '-e2q' of qualifier" -cleanup {
+} -result {Wrong value '-e2q' of qualifier} -cleanup {
     unset errorStr temp
 }
     
@@ -719,7 +739,7 @@ test testOptionsClass-1 {test creation of Options class instance and getParams i
     set elemInst [Options new {{abstol 1e-12} {noopiter -sw} {gmin 1e-12}}]
 } -body {
     set result [$elemInst getParams]
-} -result [dcreate abstol 1e-12 noopiter {} gmin 1e-12] -cleanup {
+} -result {abstol 1e-12 noopiter {} gmin 1e-12} -cleanup {
     unset elemInst result
 }
 
@@ -727,7 +747,7 @@ test testOptionsClass-2 {test creation of Options class instance and genSPICEStr
     set elemInst [Options new {{abstol 1e-12} {noopiter -sw} {gmin 1e-12}}]
 } -body {
     set result [$elemInst genSPICEString]
-} -result ".options abstol=1e-12 noopiter gmin=1e-12" -cleanup {
+} -result {.options abstol=1e-12 noopiter gmin=1e-12} -cleanup {
     unset elemInst result
 }
 
@@ -735,8 +755,8 @@ test testOptionsClass-3 {test creation of Options class instance and addParam in
     set elemInst [Options new {{abstol 1e-12} {noopiter -sw} {gmin 1e-12}}]
     $elemInst addParam vntol 1e-4
 } -body {
-    set result [$elemInst getParams]
-} -result [dcreate abstol 1e-12 noopiter {} gmin 1e-12 vntol 0.0001] -cleanup {
+    set result [$elemInst genSPICEString]
+} -result {.options abstol=1e-12 noopiter gmin=1e-12 vntol=1e-4} -cleanup {
     unset elemInst result
 }
 
@@ -744,8 +764,8 @@ test testOptionsClass-4 {test creation of Options class instance and addParam in
     set elemInst [Options new {{abstol 1e-12} {vntol 1e-4} {gmin gminval -eq}}]
     $elemInst addParam noopiter -sw
 } -body {
-    set result [$elemInst getParams]
-} -result [dcreate abstol 1e-12 vntol 0.0001 gmin {gminval} noopiter {}] -cleanup {
+    set result [$elemInst genSPICEString]
+} -result {.options abstol=1e-12 vntol=1e-4 gmin={gminval} noopiter} -cleanup {
     unset elemInst result
 }
 
@@ -753,42 +773,42 @@ test testOptionsClass-5 {test creation of Options class instance and deleteParam
     set elemInst [Options new {{abstol 1e-12} {noopiter -sw} {gmin 1e-12}}]
     $elemInst deleteParam gmin
 } -body {
-    set result [$elemInst getParams]
-} -result [dcreate abstol 1e-12 noopiter {}] -cleanup {
+    set result [$elemInst genSPICEString]
+} -result {.options abstol=1e-12 noopiter} -cleanup {
     unset elemInst result
 }
 
 test testOptionsClass-6 {test creation of Options class instance with switch parameter without -sw qualificator} -body {
     catch {Options new {{abstol 1e-12} {noopiter} {gmin 1e-12}}} errorStr
     return $errorStr
-} -result "Value '' is not a valid value" -cleanup {
+} -result {Value '' is not a valid value} -cleanup {
     unset errorStr
 }
 
 ###  ParamStatement class tests 
     
-test testParamStatementClass-1 {test creation of ParamStatement class instance and getParams interface} -setup {
-    set elemInst [ParamStatement new {{U0T {rf+1} -eq} {vth0 10}}]
+test testParamStatementClass-1 {test creation of ParamStatement class instance and genSPICEString interface} -setup {
+    set elemInst [ParamStatement new {{U0T rf+1 -eq} {vth0 10}}]
 } -body {
-    set result [$elemInst getParams]
-} -result [dcreate u0t {rf+1} vth0 10] -cleanup {
+    set result [$elemInst genSPICEString]
+} -result {.param u0t={rf+1} vth0=10} -cleanup {
     unset elemInst result
 }
 
 test testParamStatementClass-2 {test creation of ParamStatement class instance and genSPICEString interface} -setup {
-    set elemInst [ParamStatement new {{U0T {rf+1} -eq} {vth0 10}}]
+    set elemInst [ParamStatement new {{U0T rf+1 -eq} {vth0 10}}]
 } -body {
     set result [$elemInst genSPICEString]
-} -result ".param u0t=\{rf+1\} vth0=10" -cleanup {
+} -result {.param u0t={rf+1} vth0=10} -cleanup {
     unset elemInst result
 }
 
 test testParamStatementClass-3 {test creation of ParamStatement class instance and addParam interface} -setup {
-    set elemInst [ParamStatement new {{U0T {rf+1} -eq} {vth0 10}}]
+    set elemInst [ParamStatement new {{U0T rf+1 -eq} {vth0 10}}]
     $elemInst addParam k1 1e-4
 } -body {
-    set result [$elemInst getParams]
-} -result [dcreate u0t {rf+1} vth0 10 k1 1e-4] -cleanup {
+    set result [$elemInst genSPICEString]
+} -result {.param u0t={rf+1} vth0=10 k1=1e-4} -cleanup {
     unset elemInst result
 }
 
@@ -797,35 +817,61 @@ test testParamStatementClass-4 {test creation of ParamStatement class instance a
     $elemInst addParam U0T {rf+1} -eq
 } -body {
     set result [$elemInst getParams]
-} -result [dcreate k1 1e-4 vth0 10 u0t {rf+1}] -cleanup {
+} -result {k1 1e-4 vth0 10 u0t rf+1} -cleanup {
     unset elemInst result
 }
 
 test testParamStatementClass-5 {test creation of ParamStatement class instance with equation parameter without -eq qualificator} -body {
-    catch {ParamStatement new {{U0T {rf+1}} {vth0 10}}} errorStr
+    catch {ParamStatement new {{U0T rf+1} {vth0 10}}} errorStr
     return $errorStr
-} -result "Value 'rf+1' is not a valid value" -cleanup {
+} -result {Value 'rf+1' is not a valid value} -cleanup {
     unset errorStr
 }
 
 test testParamStatementClass-6 {test creation of ParamStatement class instance and setParamValue interface} -setup {
-    set elemInst [ParamStatement new {{U0T {rf+1} -eq} {vth0 10}}]
+    set elemInst [ParamStatement new {{U0T rf+1 -eq} {vth0 10}}]
 } -body {
     $elemInst setParamValue u0t 2
     set result [$elemInst getParams]
-} -result [dcreate u0t 2 vth0 10] -cleanup {
+} -result {u0t 2 vth0 10} -cleanup {
     unset elemInst result
 }
 
 ###  Ic class tests 
     
-# test testIcClass-1 {test creation of Ic class instance and getParams interface} -setup {
-#     set elemInst [Ic new {{v(a) {v1} -eq} {v(b) 10}}]
-# } -body {
-#     set result [$elemInst getParams]
-# } -result [dcreate u0t {rf+1} vth0 10] -cleanup {
-#     unset elemInst result
-# }
+test testIcClass-1 {test creation of Ic class instance and getParams interface} -setup {
+    set elemInst [Ic new {{v(a) v1 -eq} {v(b) 10}}]
+} -body {
+    set result [$elemInst genSPICEString]
+} -result {.ic v(a)={v1} v(b)=10} -cleanup {
+    unset elemInst result
+}
+
+test testIcClass-2 {test creation of Ic class instance and getParams interface} -setup {
+    set elemInst [Ic new {{a v1 -eq} {b 10}}]
+} -body {
+    set result [$elemInst genSPICEString]
+} -result {.ic a={v1} b=10} -cleanup {
+    unset elemInst result
+}
+
+###  Nodeset class tests 
+    
+test testNodesetClass-1 {test creation of Nodeset class instance and getParams interface} -setup {
+    set elemInst [Nodeset new {{v(a) v1 -eq} {v(b) 10}}]
+} -body {
+    set result [$elemInst genSPICEString]
+} -result {.nodeset v(a)={v1} v(b)=10} -cleanup {
+    unset elemInst result
+}
+
+test testNodesetClass-2 {test creation of Nodeset class instance and getParams interface} -setup {
+    set elemInst [Nodeset new {{a v1 -eq} {b 10}}]
+} -body {
+    set result [$elemInst genSPICEString]
+} -result {.nodeset a={v1} b=10} -cleanup {
+    unset elemInst result
+}
 
 ###  Netlist class tests 
     
@@ -1096,7 +1142,7 @@ test testSubcircuitClass-3 {test creation of Subcircuit class instance with getP
     set subcircuit [RCnet new]
 } -body {
     set result [$subcircuit getParams]
-} -result [dcreate r 100 c 1e-6] -cleanup {
+} -result {r 100 c 1e-6} -cleanup {
     rename RCnet ""
     unset subcircuit result
 }
@@ -1238,7 +1284,7 @@ test testAnalysisClass-1 {test creation of Analysis class instance and getParams
     set anInst [Analysis new dc {{srcnam v1 -posnocheck} {vstart 0 -pos} {vstop 5 -pos} {vincr 0.1 -pos}}]
 } -body {
     set result [$anInst getParams]
-} -result [dcreate srcnam v1 vstart 0 vstop 5 vincr 0.1] -cleanup {
+} -result {srcnam v1 vstart 0 vstop 5 vincr 0.1} -cleanup {
     unset anInst result
 }
 
@@ -1246,14 +1292,14 @@ test testAnalysisClass-2 {test creation of Analysis class instance and genSPICES
     set anInst [Analysis new dc {{srcnam v1 -posnocheck} {vstart 0 -pos} {vstop 5 -pos} {vincr 0.1 -pos}}]
 } -body {
     set result [$anInst genSPICEString]
-} -result ".dc v1 0 5 0.1" -cleanup {
+} -result {.dc v1 0 5 0.1} -cleanup {
     unset anInst result
 }
 
 test testAnalysisClass-3 {test creation of Analysis class instance and genSPICEString interface} -body {
     catch {set anInst [Analysis new dc1 {{srcnam v1 -posnocheck} {vstart 0 -pos} {vstop 5 -pos} {vincr 0.1 -pos}}]} errorStr
     return $errorStr
-} -result "Type 'dc1' is not in supported list of analysis, should be one of 'ac dc tran op disto noise pz sens sp tf'" -cleanup {
+} -result {Type 'dc1' is not in supported list of analysis, should be one of 'ac dc tran op disto noise pz sens sp tf'} -cleanup {
     unset errorStr
 }
 
@@ -1262,7 +1308,7 @@ test testAnalysisClass-4 {test creation of Analysis class instance and setParamV
     $anInst setParamValue vstop 10
 } -body {
     return [$anInst genSPICEString]   
-} -result ".dc v1 0 10 0.1" -cleanup {
+} -result {.dc v1 0 10 0.1} -cleanup {
     unset anInst
 }
 
@@ -1270,7 +1316,7 @@ test testAnalysisClass-5 {test creation of Analysis class instance and genSPICES
     set anInst [Analysis new dc {{srcnam v1 -posnocheck} {vstart 0 -pos} {vstop x**2+1 -poseq} {vincr 0.1 -pos}}]
 } -body {
     set result [$anInst genSPICEString]
-} -result ".dc v1 0 {x**2+1} 0.1" -cleanup {
+} -result {.dc v1 0 {x**2+1} 0.1} -cleanup {
     unset anInst result
 }
 
@@ -1278,7 +1324,7 @@ test testAnalysisClass-6 {test creation of Analysis class instance and genSPICES
     set anInst [Analysis new tran {{tstep 1e-6 -pos} {tstop 10e-3 -pos} {uic -sw}}]
 } -body {
     set result [$anInst genSPICEString]
-} -result ".tran 1e-6 10e-3 uic" -cleanup {
+} -result {.tran 1e-6 10e-3 uic} -cleanup {
     unset anInst result
 }
 
@@ -1297,14 +1343,14 @@ test testRawFileClass-1 {test creation of RawFile class instance and getDataCsv 
 } -body {
     set data [$dataObj getTracesCsv -all]
     return $data
-} -result "v(v-sweep),v(in),v(out),i(v1)
+} -result {v(v-sweep),v(in),v(out),i(v1)
 0.0,0.0,0.0,0.0
 1.0,1.0,0.6666666666666666,-0.0003333333333333334
 2.0,2.0,1.3333333333333333,-0.0006666666666666668
 3.0,3.0,2.0,-0.001
 4.0,4.0,2.6666666666666665,-0.0013333333333333335
 5.0,5.0,3.333333333333333,-0.001666666666666667
-" -cleanup {
+} -cleanup {
     unset circuit data simulator dataObj
 }
 
@@ -1321,14 +1367,14 @@ test testRawFileClass-2 {test creation of RawFile class instance and getDataCsv 
 } -body {
     set data [$dataObj getTracesCsv -all -sep ,,]
     return $data
-} -result "v(v-sweep),,v(in),,v(out),,i(v1)
+} -result {v(v-sweep),,v(in),,v(out),,i(v1)
 0.0,,0.0,,0.0,,0.0
 1.0,,1.0,,0.6666666666666666,,-0.0003333333333333334
 2.0,,2.0,,1.3333333333333333,,-0.0006666666666666668
 3.0,,3.0,,2.0,,-0.001
 4.0,,4.0,,2.6666666666666665,,-0.0013333333333333335
 5.0,,5.0,,3.333333333333333,,-0.001666666666666667
-" -cleanup {
+} -cleanup {
     unset circuit data simulator dataObj
 }
 
@@ -1345,14 +1391,14 @@ test testRawFileClass-3 {test creation of RawFile class instance and getDataCsv 
 } -body {
     set data [$dataObj getTracesCsv -traces v(in) v(out)]
     return $data
-} -result "v(in),v(out)
+} -result {v(in),v(out)
 0.0,0.0
 1.0,0.6666666666666666
 2.0,1.3333333333333333
 3.0,2.0
 4.0,2.6666666666666665
 5.0,3.333333333333333
-" -cleanup {
+} -cleanup {
     unset circuit data simulator dataObj
 }
 
@@ -1369,7 +1415,7 @@ test testRawFileClass-4 {test creation of RawFile class instance and getDataCsv 
 } -body {
     catch {$dataObj getTracesCsv -traces v(in1) v(out)} errorStr
     return $errorStr
-} -result "Trace with name 'v(in1)' was not found in raw file './voltage divider netlist.raw' list of traces" -cleanup {
+} -result {Trace with name 'v(in1)' was not found in raw file './voltage divider netlist.raw' list of traces} -cleanup {
     unset circuit errorStr simulator dataObj
 }
 
@@ -1386,7 +1432,7 @@ test testRawFileClass-5 {test creation of RawFile class instance and getTracesCs
 } -body {
     catch {$dataObj getTracesCsv} errorStr
     return $errorStr
-} -result "Arguments '-all' or '-traces traceName1 traceName2 ...' must be provided to 'getTracesCsv' method" -cleanup {
+} -result {Arguments '-all' or '-traces traceName1 traceName2 ...' must be provided to 'getTracesCsv' method} -cleanup {
     unset circuit errorStr simulator dataObj
 }
 
@@ -1403,7 +1449,7 @@ test testRawFileClass-6 {test creation of RawFile class instance and getDataCsv 
 } -body {
     set data [$dataObj getVoltagesNames]
     return $data
-} -result "v(v-sweep) v(in) v(out)" -cleanup {
+} -result {v(v-sweep) v(in) v(out)} -cleanup {
     unset circuit data simulator dataObj
 }
 
@@ -1420,7 +1466,7 @@ test testRawFileClass-6 {test creation of RawFile class instance and getDataCsv 
 } -body {
     set data [$dataObj getCurrentsNames]
     return $data
-} -result "i(v1)" -cleanup {
+} -result i(v1) -cleanup {
     unset circuit data simulator dataObj
 }
 
@@ -1437,14 +1483,14 @@ test testCircuitClass-1 {test creation of Circuit class instance and getDataCsv 
 } -body {
     set data [$circuit getDataCsv -traces v(in) v(out)]
     return $data
-} -result "v(in),v(out)
+} -result {v(in),v(out)
 0.0,0.0
 1.0,0.6666666666666666
 2.0,1.3333333333333333
 3.0,2.0
 4.0,2.6666666666666665
 5.0,3.333333333333333
-" -cleanup {
+} -cleanup {
     unset circuit data simulator
 }
 
@@ -1457,7 +1503,7 @@ test testCircuitClass-2 {test creation of Circuit class instance} -setup {
 } -body {
     catch {$circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1]} errorStr
     return $errorStr
-} -result "Netlist 'voltage divider netlist' already contains Analysis element" -cleanup {
+} -result {Netlist 'voltage divider netlist' already contains Analysis element} -cleanup {
     unset circuit errorStr
 }
 
@@ -1468,7 +1514,7 @@ test testCircuitClass-3 {test creation of Circuit class instance} -setup {
 } -body {
     catch {$circuit add [R new 1 out 0 -r 2e3]} errorStr
     return $errorStr
-} -result "Netlist 'voltage divider netlist' already contains element with name r1" -cleanup {
+} -result {Netlist 'voltage divider netlist' already contains element with name r1} -cleanup {
     unset circuit errorStr
 }
 
@@ -1480,7 +1526,7 @@ test testCircuitClass-4 {test creation of Circuit class instance} -setup {
 } -body {
     catch {$circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1] [Dc new -src v1 -start 0 -stop 5 -incr 1]} errorStr
     return $errorStr
-} -result "Netlist 'voltage divider netlist' already contains Analysis element" -cleanup {
+} -result {Netlist 'voltage divider netlist' already contains Analysis element} -cleanup {
     unset circuit errorStr
 }
 
@@ -1492,9 +1538,9 @@ test testCircuitClass-5 {test creation of Circuit class instance} -setup {
 } -body {
     $circuit del R2 r1
     return [$circuit genSPICEString]
-} -result "voltage divider netlist
+} -result {voltage divider netlist
 v1 in 0 1
-.dc v1 0 5 1" -cleanup {
+.dc v1 0 5 1} -cleanup {
     unset circuit
 }
 
@@ -1508,11 +1554,11 @@ test testCircuitClass-4 {test creation of Circuit class instance, add Anslysis, 
 } -body {
     $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1 -name dc1]
     return [$circuit genSPICEString]
-} -result "voltage divider netlist
+} -result {voltage divider netlist
 v1 in 0 1
 r1 in out 1e3
 r2 out 0 2e3
-.dc v1 0 5 1" -cleanup {
+.dc v1 0 5 1} -cleanup {
     unset circuit
 }
 

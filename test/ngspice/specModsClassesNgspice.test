@@ -25,7 +25,7 @@ test testRModelClass-1 {test RModel class} -setup {
     set mod [RModel new resmod -tc1 1 -tc2 2]
 } -body {
     set result [$mod genSPICEString]
-} -result ".model resmod r(tc1=1 tc2=2)" -cleanup {
+} -result {.model resmod r(tc1=1 tc2=2)} -cleanup {
     unset mod result
 }
 
@@ -35,7 +35,7 @@ test testCModelClass-1 {test CModel class} -setup {
     set mod [CModel new capmod -tc1 1 -tc2 2]
 } -body {
     set result [$mod genSPICEString]
-} -result ".model capmod c(tc1=1 tc2=2)" -cleanup {
+} -result {.model capmod c(tc1=1 tc2=2)} -cleanup {
     unset mod result
 }
 
@@ -45,7 +45,7 @@ test testLModelClass-1 {test LModel class} -setup {
     set mod [LModel new indmod -tc1 1 -tc2 2]
 } -body {
     set result [$mod genSPICEString]
-} -result ".model indmod l(tc1=1 tc2=2)" -cleanup {
+} -result {.model indmod l(tc1=1 tc2=2)} -cleanup {
     unset mod result
 }
 ### ________________________ VSwitchModel class tests _________________________ ###
@@ -54,7 +54,7 @@ test testVSwitchModelClass-1 {test VSwitchModel class} -setup {
     set mod [VSwitchModel new swmod -vt 1 -vh 0.5 -ron 1 -roff 1e6]
 } -body {
     set result [$mod genSPICEString]
-} -result ".model swmod sw(vt=1 vh=0.5 ron=1 roff=1e6)" -cleanup {
+} -result {.model swmod sw(vt=1 vh=0.5 ron=1 roff=1e6)} -cleanup {
     unset mod result
 }
 
@@ -64,7 +64,7 @@ test testCSwitchModelClass-1 {test CSwitchModel class} -setup {
     set mod [CSwitchModel new cswmod -it 1 -ih 0.5 -ron 1 -roff 1e6]
 } -body {
     set result [$mod genSPICEString]
-} -result ".model cswmod csw(it=1 ih=0.5 ron=1 roff=1e6)" -cleanup {
+} -result {.model cswmod csw(it=1 ih=0.5 ron=1 roff=1e6)} -cleanup {
     unset mod result
 }
 
@@ -74,7 +74,7 @@ test testDiodeModelClass-1 {test DiodeModel class} -setup {
     set mod [DiodeModel new diodemod -is 1e-14 -n 1.2 -rs 0.01 -cjo 1e-9]
 } -body {
     set result [$mod genSPICEString]
-} -result ".model diodemod d(is=1e-14 n=1.2 rs=0.01 cjo=1e-9)" -cleanup {
+} -result {.model diodemod d(is=1e-14 n=1.2 rs=0.01 cjo=1e-9)} -cleanup {
     unset mod result
 }
 
@@ -84,7 +84,7 @@ test testBjtGPModelClass-1 {test BjtGPModel class} -setup {
     set mod [BjtGPModel new bjtmod npn -is 1e-15 -bf 200 -vaf 100 -cje 1e-10]
 } -body {
     set result [$mod genSPICEString]
-} -result ".model bjtmod npn(level=1 is=1e-15 bf=200 vaf=100 cje=1e-10)" -cleanup {
+} -result {.model bjtmod npn(level=1 is=1e-15 bf=200 vaf=100 cje=1e-10)} -cleanup {
     unset mod result
 }
 
@@ -94,7 +94,7 @@ test testJfet1ModelClass-1 {test Jfet1Model class} -setup {
     set mod [Jfet1Model new jfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4 -cgd 1e-12]
 } -body {
     set result [$mod genSPICEString]
-} -result ".model jfetmod njf(level=1 vto=2 beta=1e-3 lambda=1e-4 cgd=1e-12)" -cleanup {
+} -result {.model jfetmod njf(level=1 vto=2 beta=1e-3 lambda=1e-4 cgd=1e-12)} -cleanup {
     unset mod result
 }
 
@@ -104,7 +104,7 @@ test testJfet2ModelClass-1 {test Jfet2Model class} -setup {
     set mod [Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4 -vbi 1.2]
 } -body {
     set result [$mod genSPICEString]
-} -result ".model jfetmod njf(level=2 vto=-2 beta=10e-4 rs=1e-4 vbi=1.2)" -cleanup {
+} -result {.model jfetmod njf(level=2 vto=-2 beta=10e-4 rs=1e-4 vbi=1.2)} -cleanup {
     unset mod result
 }
     
@@ -114,7 +114,7 @@ test testMesfet1ModelClass-1 {test Mesfet1Model class} -setup {
     set mod [Mesfet1Model new mesfetmod nmf -vto 2 -beta 1e-3 -lambda 1e-4 -cgd 1e-12]
 } -body {
     set result [$mod genSPICEString]
-} -result ".model mesfetmod nmf(level=1 vto=2 beta=1e-3 lambda=1e-4 cgd=1e-12)" -cleanup {
+} -result {.model mesfetmod nmf(level=1 vto=2 beta=1e-3 lambda=1e-4 cgd=1e-12)} -cleanup {
     unset mod result
 }
 

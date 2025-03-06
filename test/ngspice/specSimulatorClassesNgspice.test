@@ -54,7 +54,7 @@ test testSimulations-1 {test creation of circuit, run it with NgspiceBatch and r
 } -body {
     lappend result [lmap voutVal [dget $data v(out)] {format "%.3e" $voutVal}]
     return $result
-} -result "{0.000e+00 6.667e-01 1.333e+00 2.000e+00 2.667e+00 3.333e+00}" -cleanup {
+} -result {{0.000e+00 6.667e-01 1.333e+00 2.000e+00 2.667e+00 3.333e+00}} -cleanup {
     file delete {./voltage divider netlist.cir}
     file delete {./voltage divider netlist.raw}
     file delete {./voltage divider netlist.log}
@@ -91,7 +91,7 @@ test testSimulations-2 {test diode IV simulation} -setup {
     }
 } -body {
     return $dataList
-} -result "{{0.000 -0.000} {0.100 0.000} {0.200 0.000} {0.300 0.000} {0.400 0.000} {0.500 0.000} {0.600 0.000}\
+} -result {{{0.000 -0.000} {0.100 0.000} {0.200 0.000} {0.300 0.000} {0.400 0.000} {0.500 0.000} {0.600 0.000}\
 {0.700 0.000} {0.800 0.001} {0.900 0.079} {1.000 2.490} {1.100 9.972} {1.200 19.251} {1.300 29.126} {1.400 39.270}\
 {1.500 49.598} {1.600 60.028} {1.700 70.526} {1.800 81.077} {1.900 91.669} {2.000 102.293}} {{0.000 -0.000}\
 {0.100 0.000} {0.200 0.000} {0.300 0.000} {0.400 0.000} {0.500 0.000} {0.600 0.000} {0.700 0.006} {0.800 0.136}\
@@ -104,7 +104,7 @@ test testSimulations-2 {test diode IV simulation} -setup {
 {1.500 55.372} {1.600 63.941} {1.700 72.574} {1.800 81.257} {1.900 89.983} {2.000 98.742}} {{0.000 -0.000}\
 {0.100 0.000} {0.200 0.000} {0.300 0.000} {0.400 0.004} {0.500 0.034} {0.600 0.280} {0.700 1.704} {0.800 5.606}\
 {0.900 11.428} {1.000 18.259} {1.100 25.606} {1.200 33.251} {1.300 41.111} {1.400 49.108} {1.500 57.204} {1.600 65.376}\
-{1.700 73.608} {1.800 81.889} {1.900 90.209} {2.000 98.563}}" -cleanup {
+{1.700 73.608} {1.800 81.889} {1.900 90.209} {2.000 98.563}}} -cleanup {
     file delete {./diode IV.cir}
     file delete {./diode IV.raw}
     file delete {./diode IV.log}
@@ -143,11 +143,11 @@ test testSimulations-3 {test diode CV simulation} -setup {
     }
 } -body {
     return $xydata
-} -result "{0.000e+00 1.00e+00} {1.000e+00 7.07e-01} {2.000e+00 5.77e-01} {3.000e+00 5.00e-01} {4.000e+00 4.47e-01}\
+} -result {{0.000e+00 1.00e+00} {1.000e+00 7.07e-01} {2.000e+00 5.77e-01} {3.000e+00 5.00e-01} {4.000e+00 4.47e-01}\
 {5.000e+00 4.08e-01} {6.000e+00 3.78e-01} {7.000e+00 3.54e-01} {8.000e+00 3.33e-01} {9.000e+00 3.16e-01}\
 {1.000e+01 3.02e-01} {1.100e+01 2.89e-01} {1.200e+01 2.77e-01} {1.300e+01 2.67e-01} {1.400e+01 2.58e-01}\
 {1.500e+01 2.50e-01} {1.600e+01 2.43e-01} {1.700e+01 2.36e-01} {1.800e+01 2.29e-01} {1.900e+01 2.24e-01}\
-{2.000e+01 2.18e-01}" -cleanup {
+{2.000e+01 2.18e-01}} -cleanup {
     file delete {./diode CV.cir}
     file delete {./diode CV.raw}
     file delete {./diode CV.log}
@@ -228,9 +228,9 @@ test testSimulations-5 {test filter simulation} -setup {
     lappend result [lmap s11MagVal $s11Mag {format "%.3e" $s11MagVal}]
     lappend result [lmap s21MagVal $s21Mag {format "%.3e" $s21MagVal}]
     return $result
-} -result "{1.000e+07 3.111e+07 5.222e+07 7.333e+07 9.444e+07 1.156e+08 1.367e+08 1.578e+08 1.789e+08 2.000e+08}\
+} -result {{1.000e+07 3.111e+07 5.222e+07 7.333e+07 9.444e+07 1.156e+08 1.367e+08 1.578e+08 1.789e+08 2.000e+08}\
 {1.000e+00 1.000e+00 9.999e-01 9.984e-01 7.393e-01 9.085e-01 1.000e+00 9.997e-01 1.000e+00 1.000e+00}\
-{5.704e-07 1.902e-03 1.192e-02 5.649e-02 6.734e-01 4.180e-01 5.601e-03 2.238e-02 6.791e-03 2.550e-03}" -cleanup {
+{5.704e-07 1.902e-03 1.192e-02 5.649e-02 6.734e-01 4.180e-01 5.601e-03 2.238e-02 6.791e-03 2.550e-03}} -cleanup {
     file delete {./filter s-parameters.cir}
     file delete {./filter s-parameters.raw}
     file delete {./filter s-parameters.log}

@@ -19,7 +19,7 @@ namespace eval ::SpiceGenTcl {
     namespace export Pin ParameterSwitch Parameter ParameterNoCheck ParameterPositional ParameterPositionalNoCheck\
             ParameterDefault ParameterEquation ParameterPositionalEquation Device Model RawString Comment Include\
             Options ParamStatement Temp Netlist Circuit Library Subcircuit Analysis Simulator Dataset Axis Trace\
-            EmptyTrace RawFile Ic
+            EmptyTrace RawFile Ic Nodeset ParameterNode ParameterNodeEquation
     namespace export importNgspice importXyce importCommon importLtspice forgetNgspice forgetXyce forgetCommon\
             forgetLtspice
     
@@ -314,6 +314,62 @@ namespace eval ::SpiceGenTcl {
                 set value [string tolower $val]
             } else {
                 return -code error "Value '$val' is not a valid value"
+            }
+        }
+    }
+
+###  ParameterNode class definition 
+
+    oo::configurable create ParameterNode {
+        superclass Parameter 
+        property name -set {
+            if {$value eq {}} {
+                return -code error "ParameterNode must have a name, empty string was provided"
+            } elseif {[regexp {[^A-Za-z0-9_()]+} $value]} {
+                return -code error "Parameter name '$value' is not a valid name"
+            } elseif {[regexp {^[A-Za-z][A-Za-z0-9_()]*} $value]} {
+                set name [string tolower $value]
+            } else {
+                return -code error "Parameter name '$value' is not a valid name"
+            }
+        }
+        variable name
+        constructor {name value} {
+            # Creates object of class `ParameterNode` with parameter name and value.
+            #  name - name of the parameter
+            #  value - value of the parameter
+            my configure -name $name -value $value
+        }
+        method genSPICEString {} {
+            # Creates string for SPICE netlist.
+            # Returns: SPICE netlist's string
+            return [my configure -name]=[my configure -value]
+        }
+    }
+
+###  ParameterNodeEquation class definition 
+
+    oo::configurable create ParameterNodeEquation {
+        superclass ParameterNode
+        constructor {name value} {
+            # Creates object of class `ParameterNodeEquation` with parameter name and value.
+            #  name - name of the parameter
+            #  value - value of the parameter
+            my configure -name $name -value $value
+        }
+        method genSPICEString {} {
+            # Creates string for SPICE netlist.
+            # Returns: SPICE netlist's string
+            return "[my configure -name]=\{[my configure -value]\}"
+        }
+    }
+    oo::define ParameterNodeEquation {
+        variable value
+        method <WriteProp-value> val {
+            if {$val ne {}} {
+                set value $val
+            } else {
+                return -code error "Parameter '[my configure -name]' equation can't be empty"
             }
         }
     }
@@ -1060,6 +1116,7 @@ namespace eval ::SpiceGenTcl {
             return ".param [join [join [lmap param [dict values $Params] {$param genSPICEString}]]]"
         }
     }
+
 ###  Ic class definition 
     
     oo::configurable create Ic {
@@ -1075,7 +1132,7 @@ namespace eval ::SpiceGenTcl {
             #  params - list of instance parameters in form `{{name value} {name value} {name equation -eq} ...}`
             #  -name - name of the library that could be used to retrieve element from [::SpiceGenTcl::Netlist] object
             #    and its descendants, optional
-            # Class represent .param statement.
+            # Class represent .ic statement.
             # Synopsis: params ?-name value?
             argparse {
                 -name=
@@ -1114,18 +1171,31 @@ namespace eval ::SpiceGenTcl {
                 return -code error "Parameters list '$paramList' has already contains parameter with name '$paramName'"
             }
             if {[info exists eq]} {
-                dict append Params $paramName [::SpiceGenTcl::ParameterEquation new $paramName $value]
+                dict append Params $paramName [::SpiceGenTcl::ParameterNodeEquation new $paramName $value]
             } else {
-                dict append Params $paramName [::SpiceGenTcl::Parameter new $paramName $value]
+                dict append Params $paramName [::SpiceGenTcl::ParameterNode new $paramName $value]
             }
             return
         }
         method deleteParam {*}[info class definition ::SpiceGenTcl::Device deleteParam]
         method setParamValue {*}[info class definition ::SpiceGenTcl::Device setParamValue]
         method genSPICEString {} {
-            # Creates parameter statement string for SPICE netlist.
+            # Creates ic statement string for SPICE netlist.
             # Returns: SPICE netlist's string
             return ".ic [join [join [lmap param [dict values $Params] {$param genSPICEString}]]]"
+        }
+    }
+
+###  Nodeset class definition 
+    
+    oo::configurable create Nodeset {
+        superclass Ic
+        mixin Utility
+        variable Params
+        method genSPICEString {} {
+            # Creates nodeset statement string for SPICE netlist.
+            # Returns: SPICE netlist's string
+            return ".nodeset [join [join [lmap param [dict values $Params] {$param genSPICEString}]]]"
         }
     }
 
