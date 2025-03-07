@@ -43,10 +43,10 @@ testTemplate testResistorClass-9 {} {Resistor new 1 netp netm -tc1 1 -r V(a)+V(b
 
 ####  R class tests 
 
-testTemplate testResistorClass-1 {} {R new 1 netp netm -r 1e3 -tc1 1 -temp 25} {r1 netp netm 1e3 tc1=1 temp=25}
-testTemplate testResistorClass-2 {} {R new 1 netp netm -r V(a)+V(b)+pow(V(c),2) -beh -tc1 1}\
+testTemplate testRClass-1 {} {R new 1 netp netm -r 1e3 -tc1 1 -temp 25} {r1 netp netm 1e3 tc1=1 temp=25}
+testTemplate testRClass-2 {} {R new 1 netp netm -r V(a)+V(b)+pow(V(c),2) -beh -tc1 1}\
         {r1 netp netm r={V(a)+V(b)+pow(V(c),2)} tc1=1}
-testTemplate testResistorClass-3 {} {R new 1 netp netm -model resmod -l 1e-6 -temp 25}\
+testTemplate testRClass-3 {} {R new 1 netp netm -model resmod -l 1e-6 -temp 25}\
         {r1 netp netm resmod l=1e-6 temp=25}
 
 ####  Capacitor class tests 
@@ -67,13 +67,13 @@ testTemplate testCapacitorClass-8 {} {Capacitor new 1 netp netm -beh} {Capacitor
 
 ####  C class tests 
 
-testTemplate testCapacitorClass-1 {} {C new 1 netp netm -c V(a)+V(b)+pow(V(c),2) -beh -tc1 1}\
+testTemplate testCClass-1 {} {C new 1 netp netm -c V(a)+V(b)+pow(V(c),2) -beh -tc1 1}\
         {c1 netp netm c={V(a)+V(b)+pow(V(c),2)} tc1=1}
-testTemplate testCapacitorClass-2 {} {C new 1 netp netm -q V(a)+V(b)+pow(V(c),2) -beh -tc1 1}\
+testTemplate testCClass-2 {} {C new 1 netp netm -q V(a)+V(b)+pow(V(c),2) -beh -tc1 1}\
         {c1 netp netm q={V(a)+V(b)+pow(V(c),2)} tc1=1}
-testTemplate testCapacitorClass-3 {} {C new 1 netp netm -model capmod -l 1e-6 -w 10e-6 -temp 25}\
+testTemplate testCClass-3 {} {C new 1 netp netm -model capmod -l 1e-6 -w 10e-6 -temp 25}\
         {c1 netp netm capmod l=1e-6 w=10e-6 temp=25}
-testTemplate testCapacitorClass-4 {} {C new 1 netp netm -c 1e-6 -tc1 1 -temp 25}\
+testTemplate testCClass-4 {} {C new 1 netp netm -c 1e-6 -tc1 1 -temp 25}\
         {c1 netp netm 1e-6 tc1=1 temp=25}
 
 ####  Inductor class tests 
@@ -85,7 +85,7 @@ testTemplate testInductorClass-4 {} {Inductor new 1 netp netm -l {l1*l2 -eq} -tc
 
 ####  L class tests 
 
-testTemplate testInductorClass-1 {} {L new 1 netp netm -l 1e-6 -tc1 1 -temp 25} {l1 netp netm 1e-6 tc1=1 temp=25}
+testTemplate testLClass-1 {} {L new 1 netp netm -l 1e-6 -tc1 1 -temp 25} {l1 netp netm 1e-6 tc1=1 temp=25}
 
 ####  VSwitch class tests 
 
@@ -111,7 +111,7 @@ testTemplate testGenSwitchClass-3 {} {GenSwitch new 1 net1 0 -model sw1 -off -co
 
 ####  GenS class tests 
 
-testTemplate testGenSwitchClass-1 {} {GenS new 1 net1 0 -model sw1 -control {I(VMON)}} {s1 net1 0 sw1 control={I(VMON)}}
+testTemplate testGenSClass-1 {} {GenS new 1 net1 0 -model sw1 -control {I(VMON)}} {s1 net1 0 sw1 control={I(VMON)}}
 
 ###  Sources classes tests 
 
@@ -293,7 +293,7 @@ testTemplate testVccsClass-3 {} {Vccs new 1 net1 0 netc 0 -trcond {trcond -eq}} 
 
 ####  G class tests 
 
-testTemplate testVccsClass-1 {} {G new 1 net1 0 netc 0 -trcond 10 -m 1} {g1 net1 0 netc 0 10 m=1}
+testTemplate testGClass-1 {} {G new 1 net1 0 netc 0 -trcond 10 -m 1} {g1 net1 0 netc 0 10 m=1}
 
 ####  Vcvs class tests 
 
@@ -303,7 +303,7 @@ testTemplate testVcvsClass-3 {} {Vcvs new 1 net1 0 netc 0 -gain {vgain -eq}} {e1
 
 ####  E class tests 
 
-testTemplate testVcvsClass-1 {} {E new 1 net1 0 netc 0 -gain 10} {e1 net1 0 netc 0 10}
+testTemplate testEClass-1 {} {E new 1 net1 0 netc 0 -gain 10} {e1 net1 0 netc 0 10}
 
 ####  Cccs class tests 
 
@@ -313,7 +313,7 @@ testTemplate testCccsClass-3 {} {Cccs new 1 net1 0 -consrc vc -gain {gain -eq}} 
 
 ####  F class tests 
 
-testTemplate testCccsClass-1 {} {F new 1 net1 0 -consrc vc -gain 10 -m 1} {f1 net1 0 vc 10 m=1}
+testTemplate testFClass-1 {} {F new 1 net1 0 -consrc vc -gain 10 -m 1} {f1 net1 0 vc 10 m=1}
 
 ####  Ccvs class tests 
 
@@ -323,7 +323,7 @@ testTemplate testCcvsClass-3 {} {Ccvs new 1 net1 0 -consrc vc -transr {tres -eq}
 
 ####  H class tests 
 
-testTemplate testCcvsClass-1 {} {H new 1 net1 0 -consrc vc -transr 10} {h1 net1 0 vc 10}
+testTemplate testHClass-1 {} {H new 1 net1 0 -consrc vc -transr 10} {h1 net1 0 vc 10}
 
 ####  BehaviouralSource class tests 
 
@@ -339,7 +339,7 @@ testTemplate testBehaviouralSourceClass-4 {} {BehaviouralSource new 1 netp netm}
 
 ####  B class tests 
 
-testTemplate testBehaviouralSourceClass-1 {} {B new 1 netp netm -v V(a)+V(b)+pow(V(c),2) -smoothbsrc -rcconst 1e-9}\
+testTemplate testBClass-1 {} {B new 1 netp netm -v V(a)+V(b)+pow(V(c),2) -smoothbsrc -rcconst 1e-9}\
         {b1 netp netm v={V(a)+V(b)+pow(V(c),2)} smoothbsrc=1 rcconst=1e-9}
 
 ###  Semiconductor devices classes tests 
@@ -361,7 +361,7 @@ testTemplate testDiodeClass-6 {} {Diode new 1 netp netm -model diomod -temp 25 -
 
 ####  D class tests 
 
-testTemplate testDiodeClass-1 {} {D new 1 netp netm -model diomod -area 1e-3 -temp 25} {d1 netp netm diomod 1e-3 temp=25}
+testTemplate testDClass-1 {} {D new 1 netp netm -model diomod -area 1e-3 -temp 25} {d1 netp netm diomod 1e-3 temp=25}
 
 ####  Bjt class tests 
 
@@ -379,7 +379,7 @@ testTemplate testBjtClass-6 {} {Bjt new 1 netc netb nete -model bjtmod} {q1 netc
 
 ####  Q class tests 
 
-testTemplate testBjtClass-1 {} {Q new 1 netc netb nete -model bjtmod -area 1e-3 -temp 25}\
+testTemplate testQClass-1 {} {Q new 1 netc netb nete -model bjtmod -area 1e-3 -temp 25}\
         {q1 netc netb nete bjtmod 1e-3 temp=25}
 
 ####  Jfet class tests 
@@ -449,18 +449,18 @@ testTemplate testMosfetClass-11 {}\
 
 ####  M class tests 
 
-testTemplate testMosfetClass-1 {} {M new 1 netd netg nets -model mosfetmod -l 1e-6 -w {w/nf -eq}}\
+testTemplate testMClass-1 {} {M new 1 netd netg nets -model mosfetmod -l 1e-6 -w {w/nf -eq}}\
         {m1 netd netg nets mosfetmod l=1e-6 w={w/nf}}
 
 ###  Subcircuits classes tests    
 ####  SubcircuitInstance class tests 
 
-testTemplate testMosfetClass-1 {} {SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar -eq}}}\
+testTemplate testSubcircuitInstanceClass-1 {} {SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar -eq}}}\
         {x1 net1 net2 rcnet PARAMS: r=1 c={cpar}}
 
 ####  X class tests 
 
-testTemplate testMosfetClass-1 {} {X new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar -eq}}}\
+testTemplate testXClass-1 {} {X new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar -eq}}}\
         {x1 net1 net2 rcnet PARAMS: r=1 c={cpar}}
 
 ####  SubcircuitInstanceAuto class tests 

@@ -17,77 +17,44 @@ package require tcltest
 namespace import ::tcltest::*
 package require SpiceGenTcl
 namespace import ::SpiceGenTcl::*
+set currentDir [file normalize [file dirname [info script]]]
+source [file join $currentDir .. testUtilities.tcl]
 importLtspice
     
 ### ________________________ VSwitchModel class tests _________________________ ###
-    
-test testVSwitchModelClass-1 {test VSwitchModel class} -setup {
-    set mod [VSwitchModel new swmod -vt 1 -vh 0.5 -ron 1 -roff 1e6]
-} -body {
-    set result [$mod genSPICEString]
-} -result ".model swmod sw(vt=1 vh=0.5 ron=1 roff=1e6)" -cleanup {
-    unset mod result
-}
+
+testTemplate testVSwitchModelClass-1 {} {VSwitchModel new swmod -vt 1 -vh 0.5 -ron 1 -roff 1e6}\
+        {.model swmod sw(vt=1 vh=0.5 ron=1 roff=1e6)}
 
 ### ________________________ CSwitchModel class tests _________________________ ###
-    
-test testCSwitchModelClass-1 {test CSwitchModel class} -setup {
-    set mod [CSwitchModel new cswmod -it 1 -ih 0.5 -ron 1 -roff 1e6]
-} -body {
-    set result [$mod genSPICEString]
-} -result ".model cswmod csw(it=1 ih=0.5 ron=1 roff=1e6)" -cleanup {
-    unset mod result
-}
+
+testTemplate testCSwitchModelClass-1 {} {CSwitchModel new cswmod -it 1 -ih 0.5 -ron 1 -roff 1e6}\
+        {.model cswmod csw(it=1 ih=0.5 ron=1 roff=1e6)}
 
 ### ________________________ DiodeModel class tests _________________________ ###
-    
-test testDiodeModelClass-1 {test DiodeModel class} -setup {
-    set mod [DiodeModel new diodemod -is 1e-14 -n 1.2 -rs 0.01 -cjo 1e-9]
-} -body {
-    set result [$mod genSPICEString]
-} -result ".model diodemod d(is=1e-14 n=1.2 rs=0.01 cjo=1e-9)" -cleanup {
-    unset mod result
-}
+
+testTemplate testDiodeModelClass-1 {} {DiodeModel new diodemod -is 1e-14 -n 1.2 -rs 0.01 -cjo 1e-9}\
+        {.model diodemod d(is=1e-14 n=1.2 rs=0.01 cjo=1e-9)}
 
 ### ________________________ DiodeIdealModel class tests _________________________ ###
-    
-test testDiodeIdealModelClass-1 {test DiodeIdealModel class} -setup {
-    set mod [DiodeIdealModel new diodemod -ron 1 -roff 1e9]
-} -body {
-    set result [$mod genSPICEString]
-} -result ".model diodemod d(ron=1 roff=1e9)" -cleanup {
-    unset mod result
-}
+
+testTemplate testDiodeIdealModelClass-1 {} {DiodeIdealModel new diodemod -ron 1 -roff 1e9}\
+        {.model diodemod d(ron=1 roff=1e9)}
 
 ### ________________________ BjtGPModel class tests _________________________ ###
-    
-test testBjtGPModelClass-1 {test BjtGPModel class} -setup {
-    set mod [BjtGPModel new bjtmod npn -is 1e-15 -bf 200 -vaf 100 -cje 1e-10]
-} -body {
-    set result [$mod genSPICEString]
-} -result ".model bjtmod npn(is=1e-15 bf=200 vaf=100 cje=1e-10)" -cleanup {
-    unset mod result
-}
+
+testTemplate testBjtGPModelClass-1 {} {BjtGPModel new bjtmod npn -is 1e-15 -bf 200 -vaf 100 -cje 1e-10}\
+        {.model bjtmod npn(is=1e-15 bf=200 vaf=100 cje=1e-10)}
 
 ###  JfetModel class tests 
-    
-test testJfetModelClass-1 {test JfetModel class} -setup {
-    set mod [JfetModel new jfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4 -cgd 1e-12]
-} -body {
-    set result [$mod genSPICEString]
-} -result ".model jfetmod njf(vto=2 beta=1e-3 lambda=1e-4 cgd=1e-12)" -cleanup {
-    unset mod result
-}
+
+testTemplate testJfetModelClass-1 {} {JfetModel new jfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4 -cgd 1e-12}\
+        {.model jfetmod njf(vto=2 beta=1e-3 lambda=1e-4 cgd=1e-12)}
     
 ###  MesfetModel class tests 
-    
-test testMesfetModelClass-1 {test MesfetModel class} -setup {
-    set mod [MesfetModel new mesfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4 -cgd 1e-12]
-} -body {
-    set result [$mod genSPICEString]
-} -result ".model mesfetmod njf(vto=2 beta=1e-3 lambda=1e-4 cgd=1e-12)" -cleanup {
-    unset mod result
-}
+
+testTemplate testMesfetModelClass-1 {} {MesfetModel new mesfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4 -cgd 1e-12}\
+        {.model mesfetmod njf(vto=2 beta=1e-3 lambda=1e-4 cgd=1e-12)}
 
 forgetLtspice
 
