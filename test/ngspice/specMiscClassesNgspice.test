@@ -17,26 +17,17 @@ package require tcltest
 namespace import ::tcltest::*
 package require SpiceGenTcl
 namespace import ::SpiceGenTcl::*
+set currentDir [file normalize [file dirname [info script]]]
+source [file join $currentDir .. testUtilities.tcl]
 importNgspice
 
 
 ###  OptionsNgspice class tests 
-    
-test testOptionsNgspiceClass-1 {test OptionsNgspice class} -setup {
-    set res [OptionsNgspice new -klu -abstol 1e-10 -maxord 6]
-} -body {
-    set result [$res genSPICEString]
-} -result ".options klu abstol=1e-10 maxord=6" -cleanup {
-    unset res result
-}
 
-test testOptionsNgspiceClass-2 {test OptionsNgspice class} -setup {
-    set res [OptionsNgspice new -klu -abstol 1e-10 -maxord {order -eq}]
-} -body {
-    set result [$res genSPICEString]
-} -result ".options klu abstol=1e-10 maxord={order}" -cleanup {
-    unset res result
-}
+testTemplate testOptionsNgspiceClass-1 {} {OptionsNgspice new -klu -abstol 1e-10 -maxord 6}\
+        {.options klu abstol=1e-10 maxord=6}
+testTemplate testOptionsNgspiceClass-2 {} {OptionsNgspice new -klu -abstol 1e-10 -maxord {order -eq}}\
+        {.options klu abstol=1e-10 maxord={order}}
 
 
 forgetNgspice

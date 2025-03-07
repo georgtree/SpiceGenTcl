@@ -17,22 +17,14 @@ package require tcltest
 namespace import ::tcltest::*
 package require SpiceGenTcl
 namespace import ::SpiceGenTcl::*
+set currentDir [file normalize [file dirname [info script]]]
+source [file join $currentDir .. testUtilities.tcl]
 importNgspice
-
-proc testTemplate {testName descr createStr refStr} {
-    test $testName $descr -body {
-        if {[catch {set inst [{*}$createStr]} errorStr]} {
-            return $errorStr
-        }
-        return [$inst genSPICEString]
-    } -result $refStr
-}
 
 
 ###  Basic devices tests 
 
 ####  Resistor class tests 
-    
 
 testTemplate testResistorClass-1 {} {Resistor new 1 netp netm -r 1e3 -tc1 1 -ac 1e6 -temp 25}\
         {r1 netp netm 1e3 tc1=1 ac=1e6 temp=25}
@@ -137,7 +129,7 @@ testTemplate testVacClass-2 {} {Vac new 1 netp netm -dc 1 -ac 10 -acphase 45} {v
 testTemplate testVacClass-3 {} {Vac new 1 netp netm -ac 10 -acphase {phase -eq}} {v1 netp netm 0 ac 10 {phase}}
 testTemplate testVacClass-4 {} {Vac new 1 netp netm -ac {acmag -eq} -acphase 45} {v1 netp netm 0 ac {acmag} 45}
 
-####  Vport class test 
+####  Vport class test
 
 testTemplate testVportClass-1 {} {Vport new 1 netp netm -dc 1 -ac 1 -portnum 1 -z0 50}\
         {v1 netp netm dc 1 ac 1 portnum 1 z0 50}
@@ -146,7 +138,7 @@ testTemplate testVportClass-2 {} {Vport new 1 netp netm -dc 1 -ac 1 -portnum 1}\
 testTemplate testVportClass-3 {} {Vport new 1 netp netm -dc 1 -ac 1 -portnum 2 -z0 {z0 -eq}}\
         {v1 netp netm dc 1 ac 1 portnum 2 z0 {z0}}
 
-####  Vpulse class test 
+####  Vpulse class test
 
 testTemplate testVpulseClass-1 {}\
         {Vpulse new 1 net1 net2 -low 0 -high 1 -td 1e-9 -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6 -np 10}\
@@ -220,301 +212,301 @@ testTemplate testVpwlClass-5 {} {Vpwl new 1 npNode nmNode -ac 0 -acphase 45 -seq
 
 ####  Vsffm class test 
 
-testTemplate testVsffmClass- {} {Vsffm new 1 net1 net2 -v0 0 -va 1 -fc 1e6 -mdi 0 -fs 1e3 -phasec 45}\
+testTemplate testVsffmClass-1 {} {Vsffm new 1 net1 net2 -v0 0 -va 1 -fc 1e6 -mdi 0 -fs 1e3 -phasec 45}\
         {v1 net1 net2 sffm 0 1 1e6 0 1e3 45}
-testTemplate testVsffmClass- {} {Vsffm new 1 net1 net2 -v0 0 -va 1 -fc 1e6 -mdi 0 -fs 1e3 -phasec {phase -eq}}\
+testTemplate testVsffmClass-2 {} {Vsffm new 1 net1 net2 -v0 0 -va 1 -fc 1e6 -mdi 0 -fs 1e3 -phasec {phase -eq}}\
         {v1 net1 net2 sffm 0 1 1e6 0 1e3 {phase}}
-testTemplate testVsffmClass- {} {Vsffm new 1 net1 net2 -voff 0 -va 1 -fc {freq -eq} -mdi 0 -fs 1e3 -phasec {phase -eq}}\
+testTemplate testVsffmClass-3 {} {Vsffm new 1 net1 net2 -voff 0 -va 1 -fc {freq -eq} -mdi 0 -fs 1e3 -phasec {phase -eq}}\
         {v1 net1 net2 sffm 0 1 {freq} 0 1e3 {phase}}
-testTemplate testVsffmClass- {} {Vsffm new 1 net1 net2 -v0 0 -va 1 -fc 1e6 -mdi 0 -fs 1e3}\
+testTemplate testVsffmClass-4 {} {Vsffm new 1 net1 net2 -v0 0 -va 1 -fc 1e6 -mdi 0 -fs 1e3}\
         {v1 net1 net2 sffm 0 1 1e6 0 1e3}
-testTemplate testVsffmClass- {} {Vsffm new 1 net1 net2 -v0 0 -fs 1e3 -phasec {phase -eq} -va 1 -fc {freq -eq} -mdi 0}\
+testTemplate testVsffmClass-5 {} {Vsffm new 1 net1 net2 -v0 0 -fs 1e3 -phasec {phase -eq} -va 1 -fc {freq -eq} -mdi 0}\
         {v1 net1 net2 sffm 0 1 {freq} 0 1e3 {phase}}
-testTemplate testVsffmClass- {}\
+testTemplate testVsffmClass-6 {}\
         {Vsffm new 1 net1 net2 -dc 1 -ac 0 -v0 0 -fs 1e3 -phasec {phase -eq} -va 1 -fc {freq -eq} -mdi 0}\
         {v1 net1 net2 dc 1 ac 0 sffm 0 1 {freq} 0 1e3 {phase}}
-testTemplate testVsffmClass- {}\
+testTemplate testVsffmClass-7 {}\
         {Vsffm new 1 net1 net2 -ac 0 -acphase 45 -dc 1 -ac 0 -v0 0 -fs 1e3 -phasec {phase -eq} -va 1 -fc {freq -eq}\
                  -mdi 0} {v1 net1 net2 dc 1 ac 0 45 sffm 0 1 {freq} 0 1e3 {phase}}
 
 ####  Vam class test 
 
-testTemplate testVamClass- {} {Vam new 1 net1 net2 -v0 0 -va 2 -mf 1e3 -fc 5e3 -td 1e-6 -phases 45}\
+testTemplate testVamClass-1 {} {Vam new 1 net1 net2 -v0 0 -va 2 -mf 1e3 -fc 5e3 -td 1e-6 -phases 45}\
         {v1 net1 net2 am 0 2 1e3 5e3 1e-6 45}
-testTemplate testVamClass- {} {Vam new 1 net1 net2 -v0 0 -va 2 -mf 1e3 -fc 5e3 -td 1e-6 -phases {phase -eq}}\
+testTemplate testVamClass-2 {} {Vam new 1 net1 net2 -v0 0 -va 2 -mf 1e3 -fc 5e3 -td 1e-6 -phases {phase -eq}}\
         {v1 net1 net2 am 0 2 1e3 5e3 1e-6 {phase}}
-testTemplate testVamClass- {} {Vam new 1 net1 net2 -v0 0 -va 2 -mf 1e3 -fc {freq -eq} -td 1e-6 -phases {phase -eq}}\
+testTemplate testVamClass-3 {} {Vam new 1 net1 net2 -v0 0 -va 2 -mf 1e3 -fc {freq -eq} -td 1e-6 -phases {phase -eq}}\
         {v1 net1 net2 am 0 2 1e3 {freq} 1e-6 {phase}}
-testTemplate testVamClass- {} {Vam new 1 net1 net2 -v0 0 -va 2 -mf 1e3 -fc 5e3 -td 1e-6}\
+testTemplate testVamClass-4 {} {Vam new 1 net1 net2 -v0 0 -va 2 -mf 1e3 -fc 5e3 -td 1e-6}\
         {v1 net1 net2 am 0 2 1e3 5e3 1e-6}
-testTemplate testVamClass- {} {Vam new 1 net1 net2 -v0 0 -phases 45 -va 2 -mf 1e3 -td 1e-6 -fc 5e3}\
+testTemplate testVamClass-5 {} {Vam new 1 net1 net2 -v0 0 -phases 45 -va 2 -mf 1e3 -td 1e-6 -fc 5e3}\
         {v1 net1 net2 am 0 2 1e3 5e3 1e-6 45}
-testTemplate testVamClass- {} {Vam new 1 net1 net2 -dc 1 -ac 0 -v0 0 -phases 45 -va 2 -mf 1e3 -td 1e-6 -fc 5e3}\
+testTemplate testVamClass-6 {} {Vam new 1 net1 net2 -dc 1 -ac 0 -v0 0 -phases 45 -va 2 -mf 1e3 -td 1e-6 -fc 5e3}\
         {v1 net1 net2 dc 1 ac 0 am 0 2 1e3 5e3 1e-6 45}
-testTemplate testVamClass- {} {Vam new 1 net1 net2 -ac 0 -acphase 45 -v0 0 -phases 45 -va 2 -mf 1e3 -td 1e-6 -fc 5e3}\
+testTemplate testVamClass-7 {} {Vam new 1 net1 net2 -ac 0 -acphase 45 -v0 0 -phases 45 -va 2 -mf 1e3 -td 1e-6 -fc 5e3}\
         {v1 net1 net2 ac 0 45 am 0 2 1e3 5e3 1e-6 45}
     
 ####  Idc class test 
 
-testTemplate testIdcClass- {} {Idc new 1 netp netm -dc 10} {i1 netp netm 10}
-testTemplate testIdcClass- {} {Idc new 1 netp netm -dc {inom -eq}} {i1 netp netm {inom}}
+testTemplate testIdcClass-1 {} {Idc new 1 netp netm -dc 10} {i1 netp netm 10}
+testTemplate testIdcClass-2 {} {Idc new 1 netp netm -dc {inom -eq}} {i1 netp netm {inom}}
     
 ####  Iac class test 
 
-testTemplate testIacClass- {} {Iac new 1 netp netm -ac 10} {i1 netp netm 0 ac 10}
-testTemplate testIacClass- {} {Iac new 1 netp netm -ac 10 -acphase 45} {i1 netp netm 0 ac 10 45}
-testTemplate testIacClass- {} {Iac new 1 netp netm -ac 10 -acphase {phase -eq}} {i1 netp netm 0 ac 10 {phase}}
-testTemplate testIacClass- {} {Iac new 1 netp netm -ac {acmag -eq} -acphase 45} {i1 netp netm 0 ac {acmag} 45}
+testTemplate testIacClass-1 {} {Iac new 1 netp netm -ac 10} {i1 netp netm 0 ac 10}
+testTemplate testIacClass-2 {} {Iac new 1 netp netm -ac 10 -acphase 45} {i1 netp netm 0 ac 10 45}
+testTemplate testIacClass-3 {} {Iac new 1 netp netm -ac 10 -acphase {phase -eq}} {i1 netp netm 0 ac 10 {phase}}
+testTemplate testIacClass-4 {} {Iac new 1 netp netm -ac {acmag -eq} -acphase 45} {i1 netp netm 0 ac {acmag} 45}
 
 ####  Ipulse class test 
 
-testTemplate testIpulseClass- {}\
+testTemplate testIpulseClass-1 {}\
         {Ipulse new 1 net1 net2 -low 0 -high 1 -td 1e-9 -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6 -np 10}\
         {i1 net1 net2 pulse 0 1 1e-9 1e-9 1e-9 10e-6 20e-6 10}
-testTemplate testIpulseClass- {} {Ipulse new 1 net1 net2 -low 0 -high 1 -td 1e-9 -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6}\
+testTemplate testIpulseClass-2 {} {Ipulse new 1 net1 net2 -low 0 -high 1 -td 1e-9 -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6}\
         {i1 net1 net2 pulse 0 1 1e-9 1e-9 1e-9 10e-6 20e-6}
-testTemplate testIpulseClass- {}\
+testTemplate testIpulseClass-3 {}\
         {Ipulse new 1 net1 net2 -low 0 -high 1 -td {td -eq} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6}\
         {i1 net1 net2 pulse 0 1 {td} 1e-9 1e-9 10e-6 20e-6}
-testTemplate testIpulseClass- {}\
+testTemplate testIpulseClass-4 {}\
         {Ipulse new 1 net1 net2 -low 0 -high 1 -td {td -eq} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6 -np {np -eq}}\
         {i1 net1 net2 pulse 0 1 {td} 1e-9 1e-9 10e-6 20e-6 {np}}
-testTemplate testIpulseClass- {}\
+testTemplate testIpulseClass-5 {}\
         {Ipulse new 1 net1 net2 -tf 1e-9 -pw 10e-6 -per 20e-6 -np 10 -low 0 -high 1 -td 1e-9 -tr 1e-9}\
         {i1 net1 net2 pulse 0 1 1e-9 1e-9 1e-9 10e-6 20e-6 10}
 
 ####  Isin class test 
 
-testTemplate testIsinClass- {} {Isin new 1 net1 net2 -i0 0 -ia 2 -freq 50 -td 1e-6} {i1 net1 net2 sin 0 2 50 1e-6}
-testTemplate testIsinClass- {} {Isin new 1 net1 net2 -i0 0 -ia 2 -freq 50 -td 1e-6 -theta {theta -eq}}\
+testTemplate testIsinClass-1 {} {Isin new 1 net1 net2 -i0 0 -ia 2 -freq 50 -td 1e-6} {i1 net1 net2 sin 0 2 50 1e-6}
+testTemplate testIsinClass-2 {} {Isin new 1 net1 net2 -i0 0 -ia 2 -freq 50 -td 1e-6 -theta {theta -eq}}\
         {i1 net1 net2 sin 0 2 50 1e-6 {theta}}
-testTemplate testIsinClass- {} {Isin new 1 net1 net2 -i0 0 -ia 2 -freq {freq -eq} -td 1e-6 -theta {theta -eq}}\
+testTemplate testIsinClass-3 {} {Isin new 1 net1 net2 -i0 0 -ia 2 -freq {freq -eq} -td 1e-6 -theta {theta -eq}}\
         {i1 net1 net2 sin 0 2 {freq} 1e-6 {theta}}
-testTemplate testIsinClass- {} {Isin new 1 net1 net2 -i0 0 -ia 2 -freq 50} {i1 net1 net2 sin 0 2 50}
-testTemplate testIsinClass- {} {Isin new 1 net1 net2 -i0 0 -theta {theta -eq} -ia 2 -freq 50 -td 1e-6}\
+testTemplate testIsinClass-4 {} {Isin new 1 net1 net2 -i0 0 -ia 2 -freq 50} {i1 net1 net2 sin 0 2 50}
+testTemplate testIsinClass-5 {} {Isin new 1 net1 net2 -i0 0 -theta {theta -eq} -ia 2 -freq 50 -td 1e-6}\
         {i1 net1 net2 sin 0 2 50 1e-6 {theta}}
 
 ####  Iexp class test 
 
-testTemplate testIexpClass- {} {Iexp new 1 net1 net2 -i1 0 -i2 1 -td1 1e-9 -tau1 1e-9 -td2 1e-9 -tau2 10e-6}\
+testTemplate testIexpClass-1 {} {Iexp new 1 net1 net2 -i1 0 -i2 1 -td1 1e-9 -tau1 1e-9 -td2 1e-9 -tau2 10e-6}\
         {i1 net1 net2 exp 0 1 1e-9 1e-9 1e-9 10e-6}
-testTemplate testIexpClass- {} {Iexp new 1 net1 net2 -i1 0 -i2 1 -td1 1e-9 -tau1 1e-9 -td2 {td2 -eq} -tau2 10e-6}\
+testTemplate testIexpClass-2 {} {Iexp new 1 net1 net2 -i1 0 -i2 1 -td1 1e-9 -tau1 1e-9 -td2 {td2 -eq} -tau2 10e-6}\
         {i1 net1 net2 exp 0 1 1e-9 1e-9 {td2} 10e-6}
-testTemplate testIexpClass- {} {Iexp new 1 net1 net2 -i1 0 -tau1 1e-9 -i2 1 -td2 1e-9 -td1 1e-9 -tau2 10e-6}\
+testTemplate testIexpClass-3 {} {Iexp new 1 net1 net2 -i1 0 -tau1 1e-9 -i2 1 -td2 1e-9 -td1 1e-9 -tau2 10e-6}\
         {i1 net1 net2 exp 0 1 1e-9 1e-9 1e-9 10e-6}
     
 ####  Ipwl class test 
 
-testTemplate testIpwlClass- {} {Ipwl new 1 npNode nmNode -seq {0 0 {t1 -eq} 1 2 2 3 3 4 4}}\
+testTemplate testIpwlClass-1 {} {Ipwl new 1 npNode nmNode -seq {0 0 {t1 -eq} 1 2 2 3 3 4 4}}\
         {i1 npnode nmnode pwl 0 0 {t1} 1 2 2 3 3 4 4}
-testTemplate testIpwlClass- {} {Ipwl new 1 npNode nmNode -seq {0 0 {t1 -eq} 1 2 2 3 3 4}}\
+testTemplate testIpwlClass-2 {} {Ipwl new 1 npNode nmNode -seq {0 0 {t1 -eq} 1 2 2 3 3 4}}\
         {Number of elements '9' in pwl sequence is odd in element 'i1', must be even}
-testTemplate testIpwlClass- {} {Ipwl new 1 npNode nmNode -seq {0 0}}\
+testTemplate testIpwlClass-3 {} {Ipwl new 1 npNode nmNode -seq {0 0}}\
         {Number of elements '2' in pwl sequence in element 'i1' must be >=4}
 
 ####  Isffm class test 
 
-testTemplate testIsffmClass- {} {Isffm new 1 net1 net2 -i0 0 -ia 1 -fc 1e6 -mdi 0 -fs 1e3 -phasec 45}\
+testTemplate testIsffmClass-1 {} {Isffm new 1 net1 net2 -i0 0 -ia 1 -fc 1e6 -mdi 0 -fs 1e3 -phasec 45}\
         {i1 net1 net2 sffm 0 1 1e6 0 1e3 45}
-testTemplate testIsffmClass- {} {Isffm new 1 net1 net2 -i0 0 -ia 1 -fc 1e6 -mdi 0 -fs 1e3 -phasec {phase -eq}}\
+testTemplate testIsffmClass-2 {} {Isffm new 1 net1 net2 -i0 0 -ia 1 -fc 1e6 -mdi 0 -fs 1e3 -phasec {phase -eq}}\
         {i1 net1 net2 sffm 0 1 1e6 0 1e3 {phase}}
-testTemplate testIsffmClass- {} {Isffm new 1 net1 net2 -i0 0 -ia 1 -fc {freq -eq} -mdi 0 -fs 1e3 -phasec {phase -eq}}\
+testTemplate testIsffmClass-3 {} {Isffm new 1 net1 net2 -i0 0 -ia 1 -fc {freq -eq} -mdi 0 -fs 1e3 -phasec {phase -eq}}\
         {i1 net1 net2 sffm 0 1 {freq} 0 1e3 {phase}}
-testTemplate testIsffmClass- {} {Isffm new 1 net1 net2 -i0 0 -ia 1 -fc 1e6 -mdi 0 -fs 1e3}\
+testTemplate testIsffmClass-4 {} {Isffm new 1 net1 net2 -i0 0 -ia 1 -fc 1e6 -mdi 0 -fs 1e3}\
         {i1 net1 net2 sffm 0 1 1e6 0 1e3}
-testTemplate testIsffmClass- {} {Isffm new 1 net1 net2 -i0 0 -fs 1e3 -phasec {phase -eq} -ia 1 -fc {freq -eq} -mdi 0}\
+testTemplate testIsffmClass-5 {} {Isffm new 1 net1 net2 -i0 0 -fs 1e3 -phasec {phase -eq} -ia 1 -fc {freq -eq} -mdi 0}\
         {i1 net1 net2 sffm 0 1 {freq} 0 1e3 {phase}}
 
 ####  Iam class test 
 
-testTemplate testIamClass- {} {Iam new 1 net1 net2 -i0 0 -ia 2 -mf 1e3 -fc 5e3 -td 1e-6 -phases 45}\
+testTemplate testIamClass-1 {} {Iam new 1 net1 net2 -i0 0 -ia 2 -mf 1e3 -fc 5e3 -td 1e-6 -phases 45}\
         {i1 net1 net2 am 0 2 1e3 5e3 1e-6 45}
-testTemplate testIamClass- {} {Iam new 1 net1 net2 -i0 0 -ia 2 -mf 1e3 -fc 5e3 -td 1e-6 -phases {phase -eq}}\
+testTemplate testIamClass-2 {} {Iam new 1 net1 net2 -i0 0 -ia 2 -mf 1e3 -fc 5e3 -td 1e-6 -phases {phase -eq}}\
         {i1 net1 net2 am 0 2 1e3 5e3 1e-6 {phase}}
-testTemplate testIamClass- {} {Iam new 1 net1 net2 -i0 0 -ia 2 -mf 1e3 -fc {freq -eq} -td 1e-6 -phases {phase -eq}}\
+testTemplate testIamClass-3 {} {Iam new 1 net1 net2 -i0 0 -ia 2 -mf 1e3 -fc {freq -eq} -td 1e-6 -phases {phase -eq}}\
         {i1 net1 net2 am 0 2 1e3 {freq} 1e-6 {phase}}
-testTemplate testIamClass- {} {Iam new 1 net1 net2 -i0 0 -ia 2 -mf 1e3 -fc 5e3 -td 1e-6}\
+testTemplate testIamClass-4 {} {Iam new 1 net1 net2 -i0 0 -ia 2 -mf 1e3 -fc 5e3 -td 1e-6}\
         {i1 net1 net2 am 0 2 1e3 5e3 1e-6}
-testTemplate testIamClass- {} {Iam new 1 net1 net2 -i0 0 -phases 45 -ia 2 -mf 1e3 -td 1e-6 -fc 5e3}\
+testTemplate testIamClass-5 {} {Iam new 1 net1 net2 -i0 0 -phases 45 -ia 2 -mf 1e3 -td 1e-6 -fc 5e3}\
         {i1 net1 net2 am 0 2 1e3 5e3 1e-6 45}
     
 ####  Vccs class tests 
 
-testTemplate testVccsClass- {} {Vccs new 1 net1 0 netc 0 -trcond 10 -m 1} {g1 net1 0 netc 0 10 m=1}
-testTemplate testVccsClass- {} {Vccs new 1 net1 0 netc 0 -trcond 10} {g1 net1 0 netc 0 10}
-testTemplate testVccsClass- {} {Vccs new 1 net1 0 netc 0 -trcond {trcond -eq}} {g1 net1 0 netc 0 {trcond}}
-testTemplate testVccsClass- {} {Vccs new 1 net1 0 netc 0 -trcond 10 -m {m -eq}} {g1 net1 0 netc 0 10 m={m}}
+testTemplate testVccsClass-1 {} {Vccs new 1 net1 0 netc 0 -trcond 10 -m 1} {g1 net1 0 netc 0 10 m=1}
+testTemplate testVccsClass-2 {} {Vccs new 1 net1 0 netc 0 -trcond 10} {g1 net1 0 netc 0 10}
+testTemplate testVccsClass-3 {} {Vccs new 1 net1 0 netc 0 -trcond {trcond -eq}} {g1 net1 0 netc 0 {trcond}}
+testTemplate testVccsClass-4 {} {Vccs new 1 net1 0 netc 0 -trcond 10 -m {m -eq}} {g1 net1 0 netc 0 10 m={m}}
 
 ####  G class tests 
 
-testTemplate testGClass- {} {G new 1 net1 0 netc 0 -trcond 10 -m 1} {g1 net1 0 netc 0 10 m=1}
+testTemplate testGClass-1 {} {G new 1 net1 0 netc 0 -trcond 10 -m 1} {g1 net1 0 netc 0 10 m=1}
     
 ####  Vcvs class tests 
 
-testTemplate testVcvsClass- {} {Vcvs new 1 net1 0 netc 0 -gain 10} {e1 net1 0 netc 0 10}
-testTemplate testVcvsClass- {} {Vcvs new 1 net1 0 netc 0 -gain 10} {e1 net1 0 netc 0 10}
-testTemplate testVcvsClass- {} {Vcvs new 1 net1 0 netc 0 -gain {vgain -eq}} {e1 net1 0 netc 0 {vgain}}
+testTemplate testVcvsClass-1 {} {Vcvs new 1 net1 0 netc 0 -gain 10} {e1 net1 0 netc 0 10}
+testTemplate testVcvsClass-2 {} {Vcvs new 1 net1 0 netc 0 -gain 10} {e1 net1 0 netc 0 10}
+testTemplate testVcvsClass-3 {} {Vcvs new 1 net1 0 netc 0 -gain {vgain -eq}} {e1 net1 0 netc 0 {vgain}}
 
 ####  E class tests 
 
-testTemplate testEClass- {} {E new 1 net1 0 netc 0 -gain 10} {e1 net1 0 netc 0 10}
+testTemplate testEClass-1 {} {E new 1 net1 0 netc 0 -gain 10} {e1 net1 0 netc 0 10}
     
 ####  Cccs class tests 
 
-testTemplate testCccsClass- {} {Cccs new 1 net1 0 -consrc vc -gain 10 -m 1} {f1 net1 0 vc 10 m=1}
-testTemplate testCccsClass- {} {Cccs new 1 net1 0 -consrc vc -gain 10} {f1 net1 0 vc 10}
-testTemplate testCccsClass- {} {Cccs new 1 net1 0 -consrc vc -gain {gain -eq}} {f1 net1 0 vc {gain}}
-testTemplate testCccsClass- {} {Cccs new 1 net1 0 -consrc vc -gain 10 -m {m -eq}} {f1 net1 0 vc 10 m={m}}
+testTemplate testCccsClass-1 {} {Cccs new 1 net1 0 -consrc vc -gain 10 -m 1} {f1 net1 0 vc 10 m=1}
+testTemplate testCccsClass-2 {} {Cccs new 1 net1 0 -consrc vc -gain 10} {f1 net1 0 vc 10}
+testTemplate testCccsClass-3 {} {Cccs new 1 net1 0 -consrc vc -gain {gain -eq}} {f1 net1 0 vc {gain}}
+testTemplate testCccsClass-4 {} {Cccs new 1 net1 0 -consrc vc -gain 10 -m {m -eq}} {f1 net1 0 vc 10 m={m}}
 
 ####  F class tests 
 
-testTemplate testFClass- {} {F new 1 net1 0 -consrc vc -gain 10 -m 1} {f1 net1 0 vc 10 m=1}
+testTemplate testFClass-1 {} {F new 1 net1 0 -consrc vc -gain 10 -m 1} {f1 net1 0 vc 10 m=1}
     
 ####  Ccvs class tests 
 
-testTemplate testCcvsClass- {} {Ccvs new 1 net1 0 -consrc vc -transr 10} {h1 net1 0 vc 10}
-testTemplate testCcvsClass- {} {Ccvs new 1 net1 0 -consrc vc -transr 10} {h1 net1 0 vc 10}
-testTemplate testCcvsClass- {} {Ccvs new 1 net1 0 -consrc vc -transr {tres -eq}} {h1 net1 0 vc {tres}}
+testTemplate testCcvsClass-1 {} {Ccvs new 1 net1 0 -consrc vc -transr 10} {h1 net1 0 vc 10}
+testTemplate testCcvsClass-2 {} {Ccvs new 1 net1 0 -consrc vc -transr 10} {h1 net1 0 vc 10}
+testTemplate testCcvsClass-3 {} {Ccvs new 1 net1 0 -consrc vc -transr {tres -eq}} {h1 net1 0 vc {tres}}
 
 ####  H class tests 
 
-testTemplate testHClass- {} {H new 1 net1 0 -consrc vc -transr 10} {h1 net1 0 vc 10}
+testTemplate testHClass-1 {} {H new 1 net1 0 -consrc vc -transr 10} {h1 net1 0 vc 10}
 
 ####  BehaviouralSource class tests 
 
-testTemplate testBehaviouralSourceClass- {} {BehaviouralSource new 1 netp netm -i {V(a)+V(b)+pow(V(c),2)} -tc1 1}\
+testTemplate testBehaviouralSourceClass-1 {} {BehaviouralSource new 1 netp netm -i {V(a)+V(b)+pow(V(c),2)} -tc1 1}\
         {b1 netp netm i={V(a)+V(b)+pow(V(c),2)} tc1=1}
-testTemplate testBehaviouralSourceClass- {} {BehaviouralSource new 1 netp netm -v {V(a)+V(b)+pow(V(c),2)} -tc1 1}\
+testTemplate testBehaviouralSourceClass-2 {} {BehaviouralSource new 1 netp netm -v {V(a)+V(b)+pow(V(c),2)} -tc1 1}\
         {b1 netp netm v={V(a)+V(b)+pow(V(c),2)} tc1=1}
-testTemplate testBehaviouralSourceClass- {} {BehaviouralSource new 1 netp netm -tc1 1 -v V(a)+V(b)+pow(V(c),2)}\
+testTemplate testBehaviouralSourceClass-3 {} {BehaviouralSource new 1 netp netm -tc1 1 -v V(a)+V(b)+pow(V(c),2)}\
         {b1 netp netm v={V(a)+V(b)+pow(V(c),2)} tc1=1}
-testTemplate testBehaviouralSourceClass- {} {BehaviouralSource new 1 netp netm -tc1 {tc1 -eq} -v V(a)+V(b)+pow(V(c),2)}\
+testTemplate testBehaviouralSourceClass-4 {} {BehaviouralSource new 1 netp netm -tc1 {tc1 -eq} -v V(a)+V(b)+pow(V(c),2)}\
         {b1 netp netm v={V(a)+V(b)+pow(V(c),2)} tc1={tc1}}
-testTemplate testBehaviouralSourceClass- {} {BehaviouralSource new 1 netp netm -tc1 {tc1 -eq}}\
+testTemplate testBehaviouralSourceClass-5 {} {BehaviouralSource new 1 netp netm -tc1 {tc1 -eq}}\
         {Equation must be specified as argument to -i or -v}
 
 ####  B class tests 
 
-testTemplate testBClass- {} {B new 1 netp netm -i V(a)+V(b)+pow(V(c),2) -tc1 1}\
+testTemplate testBClass-1 {} {B new 1 netp netm -i V(a)+V(b)+pow(V(c),2) -tc1 1}\
         {b1 netp netm i={V(a)+V(b)+pow(V(c),2)} tc1=1}
 
 ###  Semiconductor devices classes tests 
 
 ####  Diode class tests 
 
-testTemplate testDiodeClass- {} {Diode new 1 netp netm -model diomod -area 1e-3 -lm 1e-6 -temp 25}\
+testTemplate testDiodeClass-1 {} {Diode new 1 netp netm -model diomod -area 1e-3 -lm 1e-6 -temp 25}\
         {d1 netp netm diomod area=1e-3 lm=1e-6 temp=25}
 
 ####  D class tests 
 
-testTemplate testDClass- {} {D new 1 netp netm -model diomod -area 1e-3 -lm 1e-6 -temp 25}\
+testTemplate testDClass-1 {} {D new 1 netp netm -model diomod -area 1e-3 -lm 1e-6 -temp 25}\
         {d1 netp netm diomod area=1e-3 lm=1e-6 temp=25}
     
 ####  Bjt class tests 
 
-testTemplate testBjtClass- {} {Bjt new 1 netc netb nete -model bjtmod -area 1e-3 -temp 25}\
+testTemplate testBjtClass-1 {} {Bjt new 1 netc netb nete -model bjtmod -area 1e-3 -temp 25}\
         {q1 netc netb nete bjtmod area=1e-3 temp=25}
-testTemplate testBjtClass- {} {Bjt new 1 netc netb nete -model bjtmod -ns nets -area 1e-3 -temp 25}\
+testTemplate testBjtClass-2 {} {Bjt new 1 netc netb nete -model bjtmod -ns nets -area 1e-3 -temp 25}\
         {q1 netc netb nete nets bjtmod area=1e-3 temp=25}
-testTemplate testBjtClass- {} {Bjt new 1 netc netb nete -model bjtmod -ns nets -tj nettj -area 1e-3 -temp 25}\
+testTemplate testBjtClass-3 {} {Bjt new 1 netc netb nete -model bjtmod -ns nets -tj nettj -area 1e-3 -temp 25}\
         {q1 netc netb nete nets nettj bjtmod area=1e-3 temp=25}
-testTemplate testBjtClass- {} {Bjt new 1 netc netb nete -model bjtmod -ns nets -tj nettj -area 1e-3 -temp 25 -ic {1 2}}\
+testTemplate testBjtClass-4 {} {Bjt new 1 netc netb nete -model bjtmod -ns nets -tj nettj -area 1e-3 -temp 25 -ic {1 2}}\
         {q1 netc netb nete nets nettj bjtmod ic=1,2 area=1e-3 temp=25}
-testTemplate testBjtClass- {}\
+testTemplate testBjtClass-5 {}\
         {Bjt new 1 netc netb nete -model bjtmod -ns nets -tj nettj -area 1e-3 -temp 25 -ic {1 2 3}}\
         {-ic value "1 2 3" fails validation: [llength $arg]==2}
 
 ####  Q class tests 
 
-testTemplate testQClass- {} {Q new 1 netc netb nete -model bjtmod -area 1e-3 -temp 25}\
+testTemplate testQClass-1 {} {Q new 1 netc netb nete -model bjtmod -area 1e-3 -temp 25}\
         {q1 netc netb nete bjtmod area=1e-3 temp=25}
 
 ####  Jfet class tests 
 
-testTemplate testJfetClass- {} {Jfet new 1 netd netg nets -model jfetmod -area 1e-3 -temp 25}\
+testTemplate testJfetClass-1 {} {Jfet new 1 netd netg nets -model jfetmod -area 1e-3 -temp 25}\
         {j1 netd netg nets jfetmod 1e-3 temp=25}
-testTemplate testJfetClass- {} {Jfet new 1 netd netg nets -model jfetmod -area {area*area -eq} -temp 25}\
+testTemplate testJfetClass-2 {} {Jfet new 1 netd netg nets -model jfetmod -area {area*area -eq} -temp 25}\
         {j1 netd netg nets jfetmod {area*area} temp=25}
-testTemplate testJfetClass- {} {Jfet new 1 netd netg nets -model jfetmod -area 1e-3 -temp 25 -off}\
+testTemplate testJfetClass-3 {} {Jfet new 1 netd netg nets -model jfetmod -area 1e-3 -temp 25 -off}\
         {j1 netd netg nets jfetmod 1e-3 off temp=25}
-testTemplate testJfetClass- {} {Jfet new 1 netd netg nets -model jfetmod -temp 25}\
+testTemplate testJfetClass-4 {} {Jfet new 1 netd netg nets -model jfetmod -temp 25}\
         {j1 netd netg nets jfetmod temp=25}
 
 ####  J class tests 
 
-testTemplate testJClass- {} {J new 1 netd netg nets -model jfetmod -area {area*2 -eq} -temp 25}\
+testTemplate testJClass-1 {} {J new 1 netd netg nets -model jfetmod -area {area*2 -eq} -temp 25}\
         {j1 netd netg nets jfetmod {area*2} temp=25}
-testTemplate testJClass- {} {J new 1 netd netg nets -model jfetmod -area {area*2 -eq} -temp 25 -ic {1 2}}\
+testTemplate testJClass-2 {} {J new 1 netd netg nets -model jfetmod -area {area*2 -eq} -temp 25 -ic {1 2}}\
         {j1 netd netg nets jfetmod {area*2} ic=1,2 temp=25}
-testTemplate testJClass- {} {J new 1 netd netg nets -model jfetmod -off -area {area*2 -eq} -temp 25 -ic {1 2}}\
+testTemplate testJClass-3 {} {J new 1 netd netg nets -model jfetmod -off -area {area*2 -eq} -temp 25 -ic {1 2}}\
         {j1 netd netg nets jfetmod {area*2} off ic=1,2 temp=25}
     
 ####  Mesfet class tests 
 
-testTemplate testMesfetClass- {} {Mesfet new 1 netd netg nets -model mesfetmod -area 1e-3}\
+testTemplate testMesfetClass-1 {} {Mesfet new 1 netd netg nets -model mesfetmod -area 1e-3}\
         {z1 netd netg nets mesfetmod 1e-3}
-testTemplate testMesfetClass- {} {Mesfet new 1 netd netg nets -model mesfetmod -area {area -eq} -off -ic {1 2}}\
+testTemplate testMesfetClass-2 {} {Mesfet new 1 netd netg nets -model mesfetmod -area {area -eq} -off -ic {1 2}}\
         {z1 netd netg nets mesfetmod {area} off ic=1,2}
-testTemplate testMesfetClass- {} {Mesfet new 1 netd netg nets -model mesfetmod -area 1e-3 -off}\
+testTemplate testMesfetClass-3 {} {Mesfet new 1 netd netg nets -model mesfetmod -area 1e-3 -off}\
         {z1 netd netg nets mesfetmod 1e-3 off}
-testTemplate testMesfetClass- {} {Mesfet new 1 netd netg nets -model mesfetmod} {z1 netd netg nets mesfetmod}
+testTemplate testMesfetClass-4 {} {Mesfet new 1 netd netg nets -model mesfetmod} {z1 netd netg nets mesfetmod}
 
 ####  Z class tests 
 
-testTemplate testZClass- {} {Z new 1 netd netg nets -model mesfetmod -area {area*2 -eq}}\
+testTemplate testZClass-1 {} {Z new 1 netd netg nets -model mesfetmod -area {area*2 -eq}}\
         {z1 netd netg nets mesfetmod {area*2}}
 
 ####  Mosfet class tests 
 
-testTemplate testMosfetClass- {} {Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3}\
+testTemplate testMosfetClass-1 {} {Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3}\
         {m1 netd netg nets mosfetmod l=1e-6 w=10e-3}
-testTemplate testMosfetClass- {} {Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub}\
+testTemplate testMosfetClass-2 {} {Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub}\
         {m1 netd netg nets netsub mosfetmod l=1e-6 w=10e-3}
-testTemplate testMosfetClass- {} {Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5}\
+testTemplate testMosfetClass-3 {} {Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5}\
         {m1 netd netg nets netsub net5 mosfetmod l=1e-6 w=10e-3}
-testTemplate testMosfetClass- {}\
+testTemplate testMosfetClass-4 {}\
         {Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5 -n6 net6}\
         {m1 netd netg nets netsub net5 net6 mosfetmod l=1e-6 w=10e-3}
-testTemplate testMosfetClass- {}\
+testTemplate testMosfetClass-5 {}\
         {Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5 -n6 net6 -n7 net7}\
         {m1 netd netg nets netsub net5 net6 net7 mosfetmod l=1e-6 w=10e-3}
-testTemplate testMosfetClass- {}\
+testTemplate testMosfetClass-6 {}\
         {Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n6 net6 -n7 net7} {-n6 requires -n5}
-testTemplate testMosfetClass- {}\
+testTemplate testMosfetClass-7 {}\
         {Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n5 net5 -n6 net6 -n7 net7} {-n5 requires -n4}
-testTemplate testMosfetClass- {}\
+testTemplate testMosfetClass-8 {}\
         {Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5 -n6 net6 -n7 net7 -ic {1 2 3}}\
         {m1 netd netg nets netsub net5 net6 net7 mosfetmod ic=1,2,3 l=1e-6 w=10e-3}
-testTemplate testMosfetClass- {}\
+testTemplate testMosfetClass-9 {}\
         {Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5 -n6 net6 -n7 net7 -ic {1 2 3}\
                  -custparams a 1 b 2 c 3} {m1 netd netg nets netsub net5 net6 net7 mosfetmod ic=1,2,3 l=1e-6 w=10e-3\
                                                    a=1 b=2 c=3}
-testTemplate testMosfetClass- {}\
+testTemplate testMosfetClass-10 {}\
         {Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5 -n6 net6 -n7 net7 -ic {1 2 3}\
                  -custparams a 1 b {beq -eq} c 3} {m1 netd netg nets netsub net5 net6 net7 mosfetmod ic=1,2,3 l=1e-6\
                                                            w=10e-3 a=1 b={beq} c=3}
-testTemplate testMosfetClass- {}\
+testTemplate testMosfetClass-11 {}\
         {Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5 -n6 net6 -n7 net7 -ic {1 2 3}\
                  -custparams a 1 b {beq -eq} c 3 k} {Custom parameters list must be even length}
-testTemplate testMosfetClass- {} {Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -off}\
+testTemplate testMosfetClass-12 {} {Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -off}\
         {m1 netd netg nets mosfetmod off l=1e-6 w=10e-3}
 
 ####  M class tests 
 
-testTemplate testMClass- {} {M new 1 netd netg nets -model mosfetmod -l 1e-6 -w {w/nf -eq}}\
+testTemplate testMClass-1 {} {M new 1 netd netg nets -model mosfetmod -l 1e-6 -w {w/nf -eq}}\
         {m1 netd netg nets mosfetmod l=1e-6 w={w/nf}}
 
 ###  Subcircuits classes tests
 
 ####  SubcircuitInstance class tests 
 
-testTemplate testSubcircuitInstanceClass- {}\
+testTemplate testSubcircuitInstanceClass-1 {}\
         {SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar -eq}}}\
         {x1 net1 net2 rcnet r=1 c={cpar}}
 
 ####  X class tests 
 
-testTemplate testXClass- {} {X new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar -eq}}}\
+testTemplate testXClass-1 {} {X new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar -eq}}}\
         {x1 net1 net2 rcnet r=1 c={cpar}}
 
 ####  SubcircuitInstanceAuto class tests 
