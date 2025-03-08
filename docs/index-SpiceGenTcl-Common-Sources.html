@@ -22,13 +22,14 @@
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::ac::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
+<tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheckRet" title="::SpiceGenTcl::DuplChecker.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheckRet</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheck" title="::SpiceGenTcl::Utility.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheck</a></td></tr>
+<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheckRet" title="::SpiceGenTcl::Utility.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheckRet</a></td></tr>
 <tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
@@ -58,28 +59,28 @@
         <font color=#b9b96e>-acphase</font>=
     }]
     <b><font color=#ffa500>set</font></b> dcVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> dc]
-    <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$dcVal</font>]&gt;1) && ([@ <font color=#f1b479>$dcVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
-        <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;dc <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>dcVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
+    <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$dcVal</font>]&gt;1) && ([@ <font color=#f1b479>$dcVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
+        <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> dc [@ <font color=#f1b479>$dcVal</font> 0] <font color=#b9b96e>-poseq</font>]
     } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;dc <font color=#f1b479>$</font>dcVal -pos&quot;</font>
+        <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> dc <font color=#f1b479>$dcVal</font> <font color=#b9b96e>-pos</font>]
     }
     <b><font color=#ffa500>set</font></b> acVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ac]
-    <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;ac -sw&quot;</font>
-    <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acVal</font>]&gt;1) && ([@ <font color=#f1b479>$acVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
-        <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;acval <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>acVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
+    <b><font color=#ffa500>lappend</font></b> params {ac <font color=#b9b96e>-sw</font>}
+    <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acVal</font>]&gt;1) && ([@ <font color=#f1b479>$acVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
+        <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> acval [@ <font color=#f1b479>$acVal</font> 0] <font color=#b9b96e>-poseq</font>]
     } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;acval <font color=#f1b479>$</font>acVal -pos&quot;</font>
+        <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> acval <font color=#f1b479>$acVal</font> <font color=#b9b96e>-pos</font>]
     }
     <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$arguments</font> {
         <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {ac dc}} {
-            <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$value</font>]&gt;1) && ([@ <font color=#f1b479>$value</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
-                <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;<font color=#f1b479>$</font>paramName <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>value 0<font color=#f1b479>]</font> -poseq&quot;</font>
+            <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$value</font>]&gt;1) && ([@ <font color=#f1b479>$value</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
+                <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$paramName</font> [@ <font color=#f1b479>$value</font> 0] <font color=#b9b96e>-poseq</font>]
             } <b><font color=#ffa500>else</font></b> {
-                <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;<font color=#f1b479>$</font>paramName <font color=#f1b479>$</font>value -pos&quot;</font>
+                <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font> <font color=#b9b96e>-pos</font>]
             }
         }
     }
-    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$type$name</font> [<b><font color=#ffa500>list</font></b> <font color=#90ee90>&quot;np <font color=#f1b479>$</font>npNode&quot;</font> <font color=#90ee90>&quot;nm <font color=#f1b479>$</font>nmNode&quot;</font>] <font color=#f1b479>$params</font>
+    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$type$name</font> [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np <font color=#f1b479>$npNode</font>] [<b><font color=#ffa500>list</font></b> nm <font color=#f1b479>$nmNode</font>]] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Common::Sources::Cccs'>Cccs</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources" title="::SpiceGenTcl::Common::Sources" class='ruff_cmd'>::SpiceGenTcl::Common::Sources</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -87,13 +88,14 @@
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Cccs::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
+<tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheckRet" title="::SpiceGenTcl::DuplChecker.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheckRet</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheck" title="::SpiceGenTcl::Utility.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheck</a></td></tr>
+<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheckRet" title="::SpiceGenTcl::Utility.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheckRet</a></td></tr>
 <tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
@@ -150,22 +152,22 @@
         <font color=#b9b96e>-m</font>=
     }]
     <b><font color=#ffa500>set</font></b> consrcVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> consrc]
-    <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;consrc <font color=#f1b479>$</font>consrcVal -posnocheck&quot;</font>
+    <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> consrc <font color=#f1b479>$consrcVal</font> <font color=#b9b96e>-posnocheck</font>]
     <b><font color=#ffa500>set</font></b> gainVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> gain]
-    <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$gainVal</font>]&gt;1) && ([@ <font color=#f1b479>$gainVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
-        <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;igain <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>gainVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
+    <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$gainVal</font>]&gt;1) && ([@ <font color=#f1b479>$gainVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
+        <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> igain [@ <font color=#f1b479>$gainVal</font> 0] <font color=#b9b96e>-poseq</font>]
     } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;igain <font color=#f1b479>$</font>gainVal -pos&quot;</font>
+        <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> igain <font color=#f1b479>$gainVal</font> <font color=#b9b96e>-pos</font>]
     }
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> m]} {
         <b><font color=#ffa500>set</font></b> mVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> m]
-        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$mVal</font>]&gt;1) && ([@ <font color=#f1b479>$mVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;m <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>mVal 0<font color=#f1b479>]</font> -eq&quot;</font>
+        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$mVal</font>]&gt;1) && ([@ <font color=#f1b479>$mVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
+            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> m [@ <font color=#f1b479>$mVal</font> 0] <font color=#b9b96e>-eq</font>]
         } <b><font color=#ffa500>else</font></b> {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;m <font color=#f1b479>$</font>mVal&quot;</font>
+            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> m <font color=#f1b479>$mVal</font>]
         }
     }
-    <b><font color=#ffa500>next</font></b> f<font color=#f1b479>$name</font> [<b><font color=#ffa500>list</font></b> <font color=#90ee90>&quot;np <font color=#f1b479>$</font>npNode&quot;</font> <font color=#90ee90>&quot;nm <font color=#f1b479>$</font>nmNode&quot;</font>] <font color=#f1b479>$params</font>
+    <b><font color=#ffa500>next</font></b> f<font color=#f1b479>$name</font> [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np <font color=#f1b479>$npNode</font>] [<b><font color=#ffa500>list</font></b> nm <font color=#f1b479>$nmNode</font>]] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Common::Sources::Ccvs'>Ccvs</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources" title="::SpiceGenTcl::Common::Sources" class='ruff_cmd'>::SpiceGenTcl::Common::Sources</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -173,13 +175,14 @@
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Ccvs::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
+<tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheckRet" title="::SpiceGenTcl::DuplChecker.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheckRet</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheck" title="::SpiceGenTcl::Utility.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheck</a></td></tr>
+<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheckRet" title="::SpiceGenTcl::Utility.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheckRet</a></td></tr>
 <tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
@@ -233,14 +236,14 @@
         {<font color=#b9b96e>-transr</font> <font color=#b9b96e>-required</font>}
     }]
     <b><font color=#ffa500>set</font></b> consrcVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> consrc]
-    <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;consrc <font color=#f1b479>$</font>consrcVal -posnocheck&quot;</font>
+    <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> consrc <font color=#f1b479>$consrcVal</font> <font color=#b9b96e>-posnocheck</font>]
     <b><font color=#ffa500>set</font></b> transrVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> transr]
-    <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$transrVal</font>]&gt;1) && ([@ <font color=#f1b479>$transrVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
-        <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;transr <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>transrVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
+    <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$transrVal</font>]&gt;1) && ([@ <font color=#f1b479>$transrVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
+        <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> transr [@ <font color=#f1b479>$transrVal</font> 0] <font color=#b9b96e>-poseq</font>]
     } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;transr <font color=#f1b479>$</font>transrVal -pos&quot;</font>
+        <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> transr <font color=#f1b479>$transrVal</font> <font color=#b9b96e>-pos</font>]
     }
-    <b><font color=#ffa500>next</font></b> h<font color=#f1b479>$name</font> [<b><font color=#ffa500>list</font></b> <font color=#90ee90>&quot;np <font color=#f1b479>$</font>npNode&quot;</font> <font color=#90ee90>&quot;nm <font color=#f1b479>$</font>nmNode&quot;</font>] <font color=#f1b479>$params</font>
+    <b><font color=#ffa500>next</font></b> h<font color=#f1b479>$name</font> [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np <font color=#f1b479>$npNode</font>] [<b><font color=#ffa500>list</font></b> nm <font color=#f1b479>$nmNode</font>]] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Common::Sources::dc'>dc</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources" title="::SpiceGenTcl::Common::Sources" class='ruff_cmd'>::SpiceGenTcl::Common::Sources</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -248,13 +251,14 @@
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::dc::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
+<tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheckRet" title="::SpiceGenTcl::DuplChecker.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheckRet</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheck" title="::SpiceGenTcl::Utility.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheck</a></td></tr>
+<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheckRet" title="::SpiceGenTcl::Utility.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheckRet</a></td></tr>
 <tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
@@ -282,25 +286,26 @@
         {<font color=#b9b96e>-dc</font>= <font color=#b9b96e>-required</font>}
     }]
     <b><font color=#ffa500>set</font></b> dcVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> dc]
-    <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$dcVal</font>]&gt;1) && ([@ <font color=#f1b479>$dcVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
-        <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;dc <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>dcVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
+    <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$dcVal</font>]&gt;1) && ([@ <font color=#f1b479>$dcVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
+        <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> dc [@ <font color=#f1b479>$dcVal</font> 0] <font color=#b9b96e>-poseq</font>]
     } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;dc <font color=#f1b479>$</font>dcVal -pos&quot;</font>
+        <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> dc <font color=#f1b479>$dcVal</font> <font color=#b9b96e>-pos</font>]
     }
-    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$type$name</font> [<b><font color=#ffa500>list</font></b> <font color=#90ee90>&quot;np <font color=#f1b479>$</font>npNode&quot;</font> <font color=#90ee90>&quot;nm <font color=#f1b479>$</font>nmNode&quot;</font>] <font color=#f1b479>$params</font>
+    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$type$name</font> [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np <font color=#f1b479>$npNode</font>] [<b><font color=#ffa500>list</font></b> nm <font color=#f1b479>$nmNode</font>]] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Common::Sources::E'>E</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources" title="::SpiceGenTcl::Common::Sources" class='ruff_cmd'>::SpiceGenTcl::Common::Sources</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
+<tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheckRet" title="::SpiceGenTcl::DuplChecker.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheckRet</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheck" title="::SpiceGenTcl::Utility.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheck</a></td></tr>
+<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheckRet" title="::SpiceGenTcl::Utility.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheckRet</a></td></tr>
 <tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
@@ -315,13 +320,14 @@
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::exp::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
+<tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheckRet" title="::SpiceGenTcl::DuplChecker.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheckRet</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheck" title="::SpiceGenTcl::Utility.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheck</a></td></tr>
+<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheckRet" title="::SpiceGenTcl::Utility.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheckRet</a></td></tr>
 <tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
@@ -360,50 +366,51 @@
         {<font color=#b9b96e>-tau2</font>= <font color=#b9b96e>-required</font>}
     }]
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> dc]} {
-        <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;dc -sw&quot;</font>
+        <b><font color=#ffa500>lappend</font></b> params {dc <font color=#b9b96e>-sw</font>}
         <b><font color=#ffa500>set</font></b> dcVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> dc]
-        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$dcVal</font>]&gt;1) && ([@ <font color=#f1b479>$dcVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;dcval <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>dcVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
+        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$dcVal</font>]&gt;1) && ([@ <font color=#f1b479>$dcVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
+            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> dcval [@ <font color=#f1b479>$dcVal</font> 0] <font color=#b9b96e>-poseq</font>]
         } <b><font color=#ffa500>else</font></b> {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;dcval <font color=#f1b479>$</font>dcVal -pos&quot;</font>
+            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> dcval <font color=#f1b479>$dcVal</font> <font color=#b9b96e>-pos</font>]
         }
     }
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> ac]} {
-        <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;ac -sw&quot;</font>
+        <b><font color=#ffa500>lappend</font></b> params {ac <font color=#b9b96e>-sw</font>}
         <b><font color=#ffa500>set</font></b> acVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ac]
-        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acVal</font>]&gt;1) && ([@ <font color=#f1b479>$acVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;acval <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>acVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
+        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acVal</font>]&gt;1) && ([@ <font color=#f1b479>$acVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
+            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> acval [@ <font color=#f1b479>$acVal</font> 0] <font color=#b9b96e>-poseq</font>]
         } <b><font color=#ffa500>else</font></b> {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;acval <font color=#f1b479>$</font>acVal -pos&quot;</font>
+            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> acval <font color=#f1b479>$acVal</font> <font color=#b9b96e>-pos</font>]
         }
         <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> acphase]} {
             <b><font color=#ffa500>set</font></b> acphaseVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> acphase]
-            <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acphaseVal</font>]&gt;1) && ([@ <font color=#f1b479>$acphaseVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
-                <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;acphase <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>acphaseVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
+            <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acphaseVal</font>]&gt;1) && ([@ <font color=#f1b479>$acphaseVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
+                <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> acphase [@ <font color=#f1b479>$acphaseVal</font> 0] <font color=#b9b96e>-poseq</font>]
             } <b><font color=#ffa500>else</font></b> {
-                <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;acphase <font color=#f1b479>$</font>acphaseVal -pos&quot;</font>
+                <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> acphase <font color=#f1b479>$acphaseVal</font> <font color=#b9b96e>-pos</font>]
             }
         }
     }
-    <b><font color=#fe6efe>my</font></b> AliasesKeysCheck <font color=#f1b479>$arguments</font> [<b><font color=#ffa500>list</font></b> v1 i1]
-    <b><font color=#fe6efe>my</font></b> AliasesKeysCheck <font color=#f1b479>$arguments</font> [<b><font color=#ffa500>list</font></b> v2 i2]
-    <b><font color=#ffa500>set</font></b> paramsOrder [<b><font color=#ffa500>list</font></b> v1 i1 v2 i2 td1 tau1 td2 tau2]
-    <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;model exp -posnocheck&quot;</font>
+    <b><font color=#fe6efe>my</font></b> AliasesKeysCheck <font color=#f1b479>$arguments</font> {v1 i1}
+    <b><font color=#fe6efe>my</font></b> AliasesKeysCheck <font color=#f1b479>$arguments</font> {v2 i2}
+    <b><font color=#ffa500>set</font></b> paramsOrder {v1 i1 v2 i2 td1 tau1 td2 tau2}
+    <b><font color=#ffa500>lappend</font></b> params {model exp <font color=#b9b96e>-posnocheck</font>}
     <b><font color=#fe6efe>my</font></b> ParamsProcess <font color=#f1b479>$paramsOrder</font> <font color=#f1b479>$arguments</font> params
-    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$type$name</font> [<b><font color=#ffa500>list</font></b> <font color=#90ee90>&quot;np <font color=#f1b479>$</font>npNode&quot;</font> <font color=#90ee90>&quot;nm <font color=#f1b479>$</font>nmNode&quot;</font>] <font color=#f1b479>$params</font>
+    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$type$name</font> [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np <font color=#f1b479>$npNode</font>] [<b><font color=#ffa500>list</font></b> nm <font color=#f1b479>$nmNode</font>]] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Common::Sources::F'>F</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources" title="::SpiceGenTcl::Common::Sources" class='ruff_cmd'>::SpiceGenTcl::Common::Sources</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
+<tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheckRet" title="::SpiceGenTcl::DuplChecker.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheckRet</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheck" title="::SpiceGenTcl::Utility.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheck</a></td></tr>
+<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheckRet" title="::SpiceGenTcl::Utility.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheckRet</a></td></tr>
 <tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
@@ -417,13 +424,14 @@
 <div style='clear:both;'></div>
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
+<tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheckRet" title="::SpiceGenTcl::DuplChecker.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheckRet</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheck" title="::SpiceGenTcl::Utility.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheck</a></td></tr>
+<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheckRet" title="::SpiceGenTcl::Utility.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheckRet</a></td></tr>
 <tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
@@ -437,13 +445,14 @@
 <div style='clear:both;'></div>
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
+<tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheckRet" title="::SpiceGenTcl::DuplChecker.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheckRet</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheck" title="::SpiceGenTcl::Utility.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheck</a></td></tr>
+<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheckRet" title="::SpiceGenTcl::Utility.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheckRet</a></td></tr>
 <tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
@@ -458,13 +467,14 @@
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Iac::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
+<tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheckRet" title="::SpiceGenTcl::DuplChecker.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheckRet</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheck" title="::SpiceGenTcl::Utility.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheck</a></td></tr>
+<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheckRet" title="::SpiceGenTcl::Utility.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheckRet</a></td></tr>
 <tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
@@ -521,13 +531,14 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Idc::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
+<tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheckRet" title="::SpiceGenTcl::DuplChecker.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheckRet</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheck" title="::SpiceGenTcl::Utility.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheck</a></td></tr>
+<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheckRet" title="::SpiceGenTcl::Utility.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheckRet</a></td></tr>
 <tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
@@ -582,13 +593,14 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Iexp::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
+<tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheckRet" title="::SpiceGenTcl::DuplChecker.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheckRet</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheck" title="::SpiceGenTcl::Utility.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheck</a></td></tr>
+<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheckRet" title="::SpiceGenTcl::Utility.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheckRet</a></td></tr>
 <tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
@@ -660,13 +672,14 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Ipulse::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
+<tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheckRet" title="::SpiceGenTcl::DuplChecker.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheckRet</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheck" title="::SpiceGenTcl::Utility.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheck</a></td></tr>
+<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheckRet" title="::SpiceGenTcl::Utility.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheckRet</a></td></tr>
 <tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
@@ -740,13 +753,14 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Ipwl::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
+<tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheckRet" title="::SpiceGenTcl::DuplChecker.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheckRet</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheck" title="::SpiceGenTcl::Utility.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheck</a></td></tr>
+<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheckRet" title="::SpiceGenTcl::Utility.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheckRet</a></td></tr>
 <tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
@@ -807,13 +821,14 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Isffm::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
+<tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheckRet" title="::SpiceGenTcl::DuplChecker.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheckRet</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheck" title="::SpiceGenTcl::Utility.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheck</a></td></tr>
+<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheckRet" title="::SpiceGenTcl::Utility.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheckRet</a></td></tr>
 <tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
@@ -883,13 +898,14 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Isin::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
+<tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheckRet" title="::SpiceGenTcl::DuplChecker.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheckRet</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheck" title="::SpiceGenTcl::Utility.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheck</a></td></tr>
+<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheckRet" title="::SpiceGenTcl::Utility.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheckRet</a></td></tr>
 <tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
@@ -961,13 +977,14 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::pulse::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
+<tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheckRet" title="::SpiceGenTcl::DuplChecker.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheckRet</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheck" title="::SpiceGenTcl::Utility.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheck</a></td></tr>
+<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheckRet" title="::SpiceGenTcl::Utility.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheckRet</a></td></tr>
 <tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
@@ -1011,39 +1028,39 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
         {<font color=#b9b96e>-tper</font>= <font color=#b9b96e>-forbid</font> per}
     }]
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> dc]} {
-        <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;dc -sw&quot;</font>
+        <b><font color=#ffa500>lappend</font></b> params {dc <font color=#b9b96e>-sw</font>}
         <b><font color=#ffa500>set</font></b> dcVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> dc]
-        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$dcVal</font>]&gt;1) && ([@ <font color=#f1b479>$dcVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;dcval <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>dcVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
+        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$dcVal</font>]&gt;1) && ([@ <font color=#f1b479>$dcVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
+            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> dcval [@ <font color=#f1b479>$dcVal</font> 0] <font color=#b9b96e>-poseq</font>]
         } <b><font color=#ffa500>else</font></b> {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;dcval <font color=#f1b479>$</font>dcVal -pos&quot;</font>
+            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> dcval <font color=#f1b479>$dcVal</font> <font color=#b9b96e>-pos</font>]
         }
     }
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> ac]} {
-        <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;ac -sw&quot;</font>
+        <b><font color=#ffa500>lappend</font></b> params {ac <font color=#b9b96e>-sw</font>}
         <b><font color=#ffa500>set</font></b> acVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ac]
-        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acVal</font>]&gt;1) && ([@ <font color=#f1b479>$acVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;acval <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>acVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
+        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acVal</font>]&gt;1) && ([@ <font color=#f1b479>$acVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
+            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> acval [@ <font color=#f1b479>$acVal</font> 0] <font color=#b9b96e>-poseq</font>]
         } <b><font color=#ffa500>else</font></b> {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;acval <font color=#f1b479>$</font>acVal -pos&quot;</font>
+            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> acval <font color=#f1b479>$acVal</font> <font color=#b9b96e>-pos</font>]
         }
         <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> acphase]} {
             <b><font color=#ffa500>set</font></b> acphaseVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> acphase]
-            <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acphaseVal</font>]&gt;1) && ([@ <font color=#f1b479>$acphaseVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
-                <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;acphase <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>acphaseVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
+            <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acphaseVal</font>]&gt;1) && ([@ <font color=#f1b479>$acphaseVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
+                <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> acphase [@ <font color=#f1b479>$acphaseVal</font> 0] <font color=#b9b96e>-poseq</font>]
             } <b><font color=#ffa500>else</font></b> {
-                <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;acphase <font color=#f1b479>$</font>acphaseVal -pos&quot;</font>
+                <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> acphase <font color=#f1b479>$acphaseVal</font> <font color=#b9b96e>-pos</font>]
             }
         }
     }
-    <b><font color=#fe6efe>my</font></b> AliasesKeysCheck <font color=#f1b479>$arguments</font> [<b><font color=#ffa500>list</font></b> low voff ioff]
-    <b><font color=#fe6efe>my</font></b> AliasesKeysCheck <font color=#f1b479>$arguments</font> [<b><font color=#ffa500>list</font></b> high von ion]
-    <b><font color=#fe6efe>my</font></b> AliasesKeysCheck <font color=#f1b479>$arguments</font> [<b><font color=#ffa500>list</font></b> pw ton]
-    <b><font color=#fe6efe>my</font></b> AliasesKeysCheck <font color=#f1b479>$arguments</font> [<b><font color=#ffa500>list</font></b> per tper]
-    <b><font color=#ffa500>set</font></b> paramsOrder [<b><font color=#ffa500>list</font></b> low voff ioff high von ion td tr tf pw ton per tper]
-    <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;model pulse -posnocheck&quot;</font>
+    <b><font color=#fe6efe>my</font></b> AliasesKeysCheck <font color=#f1b479>$arguments</font> {low voff ioff}
+    <b><font color=#fe6efe>my</font></b> AliasesKeysCheck <font color=#f1b479>$arguments</font> {high von ion}
+    <b><font color=#fe6efe>my</font></b> AliasesKeysCheck <font color=#f1b479>$arguments</font> {pw ton}
+    <b><font color=#fe6efe>my</font></b> AliasesKeysCheck <font color=#f1b479>$arguments</font> {per tper}
+    <b><font color=#ffa500>set</font></b> paramsOrder {low voff ioff high von ion td tr tf pw ton per tper}
+    <b><font color=#ffa500>lappend</font></b> params {model pulse <font color=#b9b96e>-posnocheck</font>}
     <b><font color=#fe6efe>my</font></b> ParamsProcess <font color=#f1b479>$paramsOrder</font> <font color=#f1b479>$arguments</font> params
-    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$type$name</font> [<b><font color=#ffa500>list</font></b> <font color=#90ee90>&quot;np <font color=#f1b479>$</font>npNode&quot;</font> <font color=#90ee90>&quot;nm <font color=#f1b479>$</font>nmNode&quot;</font>] <font color=#f1b479>$params</font>
+    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$type$name</font> [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np <font color=#f1b479>$npNode</font>] [<b><font color=#ffa500>list</font></b> nm <font color=#f1b479>$nmNode</font>]] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Common::Sources::pwl'>pwl</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources" title="::SpiceGenTcl::Common::Sources" class='ruff_cmd'>::SpiceGenTcl::Common::Sources</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -1051,13 +1068,14 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::pwl::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
+<tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheckRet" title="::SpiceGenTcl::DuplChecker.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheckRet</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheck" title="::SpiceGenTcl::Utility.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheck</a></td></tr>
+<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheckRet" title="::SpiceGenTcl::Utility.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheckRet</a></td></tr>
 <tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
@@ -1089,29 +1107,29 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
     }]
     <b><font color=#ffa500>set</font></b> start 0
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> dc]} {
-        <b><font color=#ffa500>lappend</font></b> paramList <font color=#90ee90>&quot;dc -sw&quot;</font>
+        <b><font color=#ffa500>lappend</font></b> paramList {dc <font color=#b9b96e>-sw</font>}
         <b><font color=#ffa500>set</font></b> dcVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> dc]
-        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$dcVal</font>]&gt;1) && ([@ <font color=#f1b479>$dcVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
-            <b><font color=#ffa500>lappend</font></b> paramList <font color=#90ee90>&quot;dcval <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>dcVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
+        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$dcVal</font>]&gt;1) && ([@ <font color=#f1b479>$dcVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
+            <b><font color=#ffa500>lappend</font></b> paramList [<b><font color=#ffa500>list</font></b> dcval [@ <font color=#f1b479>$dcVal</font> 0] <font color=#b9b96e>-poseq</font>]
         } <b><font color=#ffa500>else</font></b> {
-            <b><font color=#ffa500>lappend</font></b> paramList <font color=#90ee90>&quot;dcval <font color=#f1b479>$</font>dcVal -pos&quot;</font>
+            <b><font color=#ffa500>lappend</font></b> paramList [<b><font color=#ffa500>list</font></b> dcval <font color=#f1b479>$dcVal</font> <font color=#b9b96e>-pos</font>]
         }
         <b><font color=#ffa500>incr</font></b> start 2
     }
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> ac]} {
-        <b><font color=#ffa500>lappend</font></b> paramList <font color=#90ee90>&quot;ac -sw&quot;</font>
+        <b><font color=#ffa500>lappend</font></b> paramList {ac <font color=#b9b96e>-sw</font>}
         <b><font color=#ffa500>set</font></b> acVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ac]
-        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acVal</font>]&gt;1) && ([@ <font color=#f1b479>$acVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
-            <b><font color=#ffa500>lappend</font></b> paramList <font color=#90ee90>&quot;acval <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>acVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
+        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acVal</font>]&gt;1) && ([@ <font color=#f1b479>$acVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
+            <b><font color=#ffa500>lappend</font></b> paramList [<b><font color=#ffa500>list</font></b> acval [@ <font color=#f1b479>$acVal</font> 0] <font color=#b9b96e>-poseq</font>]
         } <b><font color=#ffa500>else</font></b> {
-            <b><font color=#ffa500>lappend</font></b> paramList <font color=#90ee90>&quot;acval <font color=#f1b479>$</font>acVal -pos&quot;</font>
+            <b><font color=#ffa500>lappend</font></b> paramList [<b><font color=#ffa500>list</font></b> acval <font color=#f1b479>$acVal</font> <font color=#b9b96e>-pos</font>]
         }
         <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> acphase]} {
             <b><font color=#ffa500>set</font></b> acphaseVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> acphase]
-            <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acphaseVal</font>]&gt;1) && ([@ <font color=#f1b479>$acphaseVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
-                <b><font color=#ffa500>lappend</font></b> paramList <font color=#90ee90>&quot;acphase <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>acphaseVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
+            <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acphaseVal</font>]&gt;1) && ([@ <font color=#f1b479>$acphaseVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
+                <b><font color=#ffa500>lappend</font></b> paramList [<b><font color=#ffa500>list</font></b> acphase [@ <font color=#f1b479>$acphaseVal</font> 0] <font color=#b9b96e>-poseq</font>]
             } <b><font color=#ffa500>else</font></b> {
-                <b><font color=#ffa500>lappend</font></b> paramList <font color=#90ee90>&quot;acphase <font color=#f1b479>$</font>acphaseVal -pos&quot;</font>
+                <b><font color=#ffa500>lappend</font></b> paramList [<b><font color=#ffa500>list</font></b> acphase <font color=#f1b479>$acphaseVal</font> <font color=#b9b96e>-pos</font>]
             }
             <b><font color=#ffa500>incr</font></b> start 1
         }
@@ -1128,17 +1146,17 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
     <b><font color=#ffa500>for</font></b> {<b><font color=#ffa500>set</font></b> i 0} {<font color=#f1b479>$i</font>&lt;[<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$pwlSeqVal</font>]/2} {<b><font color=#ffa500>incr</font></b> i} {
         <b><font color=#ffa500>set</font></b> 2i [<b><font color=#ffa500>*</font></b> 2 <font color=#f1b479>$i</font>]
         <b><font color=#ffa500>set</font></b> 2ip1 [+ <font color=#f1b479>$2i</font> 1]
-        <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;t<font color=#f1b479>$</font>i <font color=#f1b479>[</font>list <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>pwlSeqVal <font color=#f1b479>$</font>2i<font color=#f1b479>]]</font>&quot;</font> <font color=#90ee90>&quot;<font color=#f1b479>$</font>type<font color=#f1b479>$</font>i <font color=#f1b479>[</font>list <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>pwlSeqVal <font color=#f1b479>$</font>2ip1<font color=#f1b479>]]</font>&quot;</font>
+        <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> t<font color=#f1b479>$i</font> [@ <font color=#f1b479>$pwlSeqVal</font> <font color=#f1b479>$2i</font>]] [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$type$i</font> [@ <font color=#f1b479>$pwlSeqVal</font> <font color=#f1b479>$2ip1</font>]]
     }
     <b><font color=#ffa500>foreach</font></b> param <font color=#f1b479>$params</font> {
-        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> [@ <font color=#f1b479>$param</font> 1]]&gt;1) && ([@ [@ <font color=#f1b479>$param</font> 1] 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
-            <b><font color=#ffa500>lappend</font></b> paramList <font color=#90ee90>&quot;<font color=#f1b479>[</font>@ <font color=#f1b479>$</font>param 0<font color=#f1b479>]</font> <font color=#f1b479>[</font>@ <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>param 1<font color=#f1b479>]</font> 0<font color=#f1b479>]</font> -poseq&quot;</font>
+        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> [@ <font color=#f1b479>$param</font> 1]]&gt;1) && ([@ [@ <font color=#f1b479>$param</font> 1] 1] eq {<font color=#b9b96e>-eq</font>})} {
+            <b><font color=#ffa500>lappend</font></b> paramList [<b><font color=#ffa500>list</font></b> [@ <font color=#f1b479>$param</font> 0] [@ [@ <font color=#f1b479>$param</font> 1] 0] <font color=#b9b96e>-poseq</font>]
         } <b><font color=#ffa500>else</font></b> {
-            <b><font color=#ffa500>lappend</font></b> paramList <font color=#90ee90>&quot;<font color=#f1b479>[</font>@ <font color=#f1b479>$</font>param 0<font color=#f1b479>]</font> <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>param 1<font color=#f1b479>]</font> -pos&quot;</font>
+            <b><font color=#ffa500>lappend</font></b> paramList [<b><font color=#ffa500>list</font></b> [@ <font color=#f1b479>$param</font> 0] [@ <font color=#f1b479>$param</font> 1] <font color=#b9b96e>-pos</font>]
         }
     }
-    <b><font color=#ffa500>set</font></b> paramList [<b><font color=#ffa500>linsert</font></b> <font color=#f1b479>$paramList</font> <font color=#f1b479>$start</font> <font color=#90ee90>&quot;model pwl -posnocheck&quot;</font>]
-    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$type$name</font> [<b><font color=#ffa500>list</font></b> <font color=#90ee90>&quot;np <font color=#f1b479>$</font>npNode&quot;</font> <font color=#90ee90>&quot;nm <font color=#f1b479>$</font>nmNode&quot;</font>] <font color=#f1b479>$paramList</font>
+    <b><font color=#ffa500>set</font></b> paramList [<b><font color=#ffa500>linsert</font></b> <font color=#f1b479>$paramList</font> <font color=#f1b479>$start</font> {model pwl <font color=#b9b96e>-posnocheck</font>}]
+    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$type$name</font> [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np <font color=#f1b479>$npNode</font>] [<b><font color=#ffa500>list</font></b> nm <font color=#f1b479>$nmNode</font>]] <font color=#f1b479>$paramList</font>
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Common::Sources::sffm'>sffm</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources" title="::SpiceGenTcl::Common::Sources" class='ruff_cmd'>::SpiceGenTcl::Common::Sources</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -1146,13 +1164,14 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::sffm::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
+<tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheckRet" title="::SpiceGenTcl::DuplChecker.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheckRet</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheck" title="::SpiceGenTcl::Utility.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheck</a></td></tr>
+<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheckRet" title="::SpiceGenTcl::Utility.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheckRet</a></td></tr>
 <tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
@@ -1196,39 +1215,39 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
         {<font color=#b9b96e>-fsig</font>= <font color=#b9b96e>-forbid</font> fs}
     }]
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> dc]} {
-        <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;dc -sw&quot;</font>
+        <b><font color=#ffa500>lappend</font></b> params {dc <font color=#b9b96e>-sw</font>}
         <b><font color=#ffa500>set</font></b> dcVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> dc]
-        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$dcVal</font>]&gt;1) && ([@ <font color=#f1b479>$dcVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;dcval <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>dcVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
+        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$dcVal</font>]&gt;1) && ([@ <font color=#f1b479>$dcVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
+            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> dcval [@ <font color=#f1b479>$dcVal</font> 0] <font color=#b9b96e>-poseq</font>]
         } <b><font color=#ffa500>else</font></b> {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;dcval <font color=#f1b479>$</font>dcVal -pos&quot;</font>
+            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> dcval <font color=#f1b479>$dcVal</font> <font color=#b9b96e>-pos</font>]
         }
     }
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> ac]} {
-        <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;ac -sw&quot;</font>
+        <b><font color=#ffa500>lappend</font></b> params {ac <font color=#b9b96e>-sw</font>}
         <b><font color=#ffa500>set</font></b> acVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ac]
-        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acVal</font>]&gt;1) && ([@ <font color=#f1b479>$acVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;acval <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>acVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
+        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acVal</font>]&gt;1) && ([@ <font color=#f1b479>$acVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
+            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> acval [@ <font color=#f1b479>$acVal</font> 0] <font color=#b9b96e>-poseq</font>]
         } <b><font color=#ffa500>else</font></b> {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;acval <font color=#f1b479>$</font>acVal -pos&quot;</font>
+            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> acval <font color=#f1b479>$acVal</font> <font color=#b9b96e>-pos</font>]
         }
         <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> acphase]} {
             <b><font color=#ffa500>set</font></b> acphaseVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> acphase]
-            <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acphaseVal</font>]&gt;1) && ([@ <font color=#f1b479>$acphaseVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
-                <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;acphase <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>acphaseVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
+            <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acphaseVal</font>]&gt;1) && ([@ <font color=#f1b479>$acphaseVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
+                <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> acphase [@ <font color=#f1b479>$acphaseVal</font> 0] <font color=#b9b96e>-poseq</font>]
             } <b><font color=#ffa500>else</font></b> {
-                <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;acphase <font color=#f1b479>$</font>acphaseVal -pos&quot;</font>
+                <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> acphase <font color=#f1b479>$acphaseVal</font> <font color=#b9b96e>-pos</font>]
             }
         }
     }
-    <b><font color=#fe6efe>my</font></b> AliasesKeysCheck <font color=#f1b479>$arguments</font> [<b><font color=#ffa500>list</font></b> v0 i0 voff ioff]
-    <b><font color=#fe6efe>my</font></b> AliasesKeysCheck <font color=#f1b479>$arguments</font> [<b><font color=#ffa500>list</font></b> va ia vamp iamp]
-    <b><font color=#fe6efe>my</font></b> AliasesKeysCheck <font color=#f1b479>$arguments</font> [<b><font color=#ffa500>list</font></b> fc fcar]
-    <b><font color=#fe6efe>my</font></b> AliasesKeysCheck <font color=#f1b479>$arguments</font> [<b><font color=#ffa500>list</font></b> fs fsig]
-    <b><font color=#ffa500>set</font></b> paramsOrder [<b><font color=#ffa500>list</font></b> v0 i0 voff ioff va ia vamp iamp fc fcar mdi fs fsig]
-    <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;model sffm -posnocheck&quot;</font>
+    <b><font color=#fe6efe>my</font></b> AliasesKeysCheck <font color=#f1b479>$arguments</font> {v0 i0 voff ioff}
+    <b><font color=#fe6efe>my</font></b> AliasesKeysCheck <font color=#f1b479>$arguments</font> {va ia vamp iamp}
+    <b><font color=#fe6efe>my</font></b> AliasesKeysCheck <font color=#f1b479>$arguments</font> {fc fcar}
+    <b><font color=#fe6efe>my</font></b> AliasesKeysCheck <font color=#f1b479>$arguments</font> {fs fsig}
+    <b><font color=#ffa500>set</font></b> paramsOrder {v0 i0 voff ioff va ia vamp iamp fc fcar mdi fs fsig}
+    <b><font color=#ffa500>lappend</font></b> params {model sffm <font color=#b9b96e>-posnocheck</font>}
     <b><font color=#fe6efe>my</font></b> ParamsProcess <font color=#f1b479>$paramsOrder</font> <font color=#f1b479>$arguments</font> params
-    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$type$name</font> [<b><font color=#ffa500>list</font></b> <font color=#90ee90>&quot;np <font color=#f1b479>$</font>npNode&quot;</font> <font color=#90ee90>&quot;nm <font color=#f1b479>$</font>nmNode&quot;</font>] <font color=#f1b479>$params</font>
+    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$type$name</font> [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np <font color=#f1b479>$npNode</font>] [<b><font color=#ffa500>list</font></b> nm <font color=#f1b479>$nmNode</font>]] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Common::Sources::sin'>sin</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources" title="::SpiceGenTcl::Common::Sources" class='ruff_cmd'>::SpiceGenTcl::Common::Sources</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -1236,13 +1255,14 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::sin::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
+<tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheckRet" title="::SpiceGenTcl::DuplChecker.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheckRet</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheck" title="::SpiceGenTcl::Utility.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheck</a></td></tr>
+<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheckRet" title="::SpiceGenTcl::Utility.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheckRet</a></td></tr>
 <tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
@@ -1286,37 +1306,37 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
         {<font color=#b9b96e>-phi</font>= <font color=#b9b96e>-require</font> {td theta} <font color=#b9b96e>-forbid</font> phase}
     }]
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> dc]} {
-        <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;dc -sw&quot;</font>
+        <b><font color=#ffa500>lappend</font></b> params {dc <font color=#b9b96e>-sw</font>}
         <b><font color=#ffa500>set</font></b> dcVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> dc]
-        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$dcVal</font>]&gt;1) && ([@ <font color=#f1b479>$dcVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;dcval <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>dcVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
+        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$dcVal</font>]&gt;1) && ([@ <font color=#f1b479>$dcVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
+            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> dcval [@ <font color=#f1b479>$dcVal</font> 0] <font color=#b9b96e>-poseq</font>]
         } <b><font color=#ffa500>else</font></b> {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;dcval <font color=#f1b479>$</font>dcVal -pos&quot;</font>
+            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> dcval <font color=#f1b479>$dcVal</font> <font color=#b9b96e>-pos</font>]
         }
     }
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> ac]} {
-        <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;ac -sw&quot;</font>
+        <b><font color=#ffa500>lappend</font></b> params {ac <font color=#b9b96e>-sw</font>}
         <b><font color=#ffa500>set</font></b> acVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ac]
-        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acVal</font>]&gt;1) && ([@ <font color=#f1b479>$acVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;acval <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>acVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
+        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acVal</font>]&gt;1) && ([@ <font color=#f1b479>$acVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
+            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> acval [@ <font color=#f1b479>$acVal</font> 0] <font color=#b9b96e>-poseq</font>]
         } <b><font color=#ffa500>else</font></b> {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;acval <font color=#f1b479>$</font>acVal -pos&quot;</font>
+            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> acval <font color=#f1b479>$acVal</font> <font color=#b9b96e>-pos</font>]
         }
         <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> acphase]} {
             <b><font color=#ffa500>set</font></b> acphaseVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> acphase]
-            <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acphaseVal</font>]&gt;1) && ([@ <font color=#f1b479>$acphaseVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
-                <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;acphase <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>acphaseVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
+            <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acphaseVal</font>]&gt;1) && ([@ <font color=#f1b479>$acphaseVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
+                <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> acphase [@ <font color=#f1b479>$acphaseVal</font> 0] <font color=#b9b96e>-poseq</font>]
             } <b><font color=#ffa500>else</font></b> {
-                <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;acphase <font color=#f1b479>$</font>acphaseVal -pos&quot;</font>
+                <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> acphase <font color=#f1b479>$acphaseVal</font> <font color=#b9b96e>-pos</font>]
             }
         }
     }
-    <b><font color=#fe6efe>my</font></b> AliasesKeysCheck <font color=#f1b479>$arguments</font> [<b><font color=#ffa500>list</font></b> v0 i0 voffset ioffset]
-    <b><font color=#fe6efe>my</font></b> AliasesKeysCheck <font color=#f1b479>$arguments</font> [<b><font color=#ffa500>list</font></b> va ia vamp iamp]
-    <b><font color=#ffa500>set</font></b> paramsOrder [<b><font color=#ffa500>list</font></b> v0 i0 voffset ioffset va ia vamp iamp freq td theta phase phi]
-    <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;model sin -posnocheck&quot;</font>
+    <b><font color=#fe6efe>my</font></b> AliasesKeysCheck <font color=#f1b479>$arguments</font> {v0 i0 voffset ioffset}
+    <b><font color=#fe6efe>my</font></b> AliasesKeysCheck <font color=#f1b479>$arguments</font> {va ia vamp iamp}
+    <b><font color=#ffa500>set</font></b> paramsOrder {v0 i0 voffset ioffset va ia vamp iamp freq td theta phase phi}
+    <b><font color=#ffa500>lappend</font></b> params {model sin <font color=#b9b96e>-posnocheck</font>}
     <b><font color=#fe6efe>my</font></b> ParamsProcess <font color=#f1b479>$paramsOrder</font> <font color=#f1b479>$arguments</font> params
-    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$type$name</font> [<b><font color=#ffa500>list</font></b> <font color=#90ee90>&quot;np <font color=#f1b479>$</font>npNode&quot;</font> <font color=#90ee90>&quot;nm <font color=#f1b479>$</font>nmNode&quot;</font>] <font color=#f1b479>$params</font>
+    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$type$name</font> [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np <font color=#f1b479>$npNode</font>] [<b><font color=#ffa500>list</font></b> nm <font color=#f1b479>$nmNode</font>]] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Common::Sources::Vac'>Vac</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources" title="::SpiceGenTcl::Common::Sources" class='ruff_cmd'>::SpiceGenTcl::Common::Sources</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -1324,13 +1344,14 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vac::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
+<tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheckRet" title="::SpiceGenTcl::DuplChecker.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheckRet</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheck" title="::SpiceGenTcl::Utility.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheck</a></td></tr>
+<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheckRet" title="::SpiceGenTcl::Utility.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheckRet</a></td></tr>
 <tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
@@ -1387,13 +1408,14 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vccs::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
+<tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheckRet" title="::SpiceGenTcl::DuplChecker.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheckRet</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheck" title="::SpiceGenTcl::Utility.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheck</a></td></tr>
+<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheckRet" title="::SpiceGenTcl::Utility.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheckRet</a></td></tr>
 <tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
@@ -1451,20 +1473,20 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
         <font color=#b9b96e>-m</font>=
     }]
     <b><font color=#ffa500>set</font></b> trcondVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> trcond]
-    <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$trcondVal</font>]&gt;1) && ([@ <font color=#f1b479>$trcondVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
-        <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;trcond <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>trcondVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
+    <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$trcondVal</font>]&gt;1) && ([@ <font color=#f1b479>$trcondVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
+        <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> trcond [@ <font color=#f1b479>$trcondVal</font> 0] <font color=#b9b96e>-poseq</font>]
     } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;trcond <font color=#f1b479>$</font>trcondVal -pos&quot;</font>
+        <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> trcond <font color=#f1b479>$trcondVal</font> <font color=#b9b96e>-pos</font>]
     }
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> m]} {
         <b><font color=#ffa500>set</font></b> mVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> m]
-        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$mVal</font>]&gt;1) && ([@ <font color=#f1b479>$mVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;m <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>mVal 0<font color=#f1b479>]</font> -eq&quot;</font>
+        <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$mVal</font>]&gt;1) && ([@ <font color=#f1b479>$mVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
+            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> m [@ <font color=#f1b479>$mVal</font> 0] <font color=#b9b96e>-eq</font>]
         } <b><font color=#ffa500>else</font></b> {
-            <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;m <font color=#f1b479>$</font>mVal&quot;</font>
+            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> m <font color=#f1b479>$mVal</font>]
         }
     }
-    <b><font color=#ffa500>next</font></b> g<font color=#f1b479>$name</font> [<b><font color=#ffa500>list</font></b> <font color=#90ee90>&quot;np <font color=#f1b479>$</font>npNode&quot;</font> <font color=#90ee90>&quot;nm <font color=#f1b479>$</font>nmNode&quot;</font> <font color=#90ee90>&quot;ncp <font color=#f1b479>$</font>ncpNode&quot;</font> <font color=#90ee90>&quot;ncm <font color=#f1b479>$</font>ncmNode&quot;</font>] <font color=#f1b479>$params</font>
+    <b><font color=#ffa500>next</font></b> g<font color=#f1b479>$name</font> [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np <font color=#f1b479>$npNode</font>] [<b><font color=#ffa500>list</font></b> nm <font color=#f1b479>$nmNode</font>] [<b><font color=#ffa500>list</font></b> ncp <font color=#f1b479>$ncpNode</font>] [<b><font color=#ffa500>list</font></b> ncm <font color=#f1b479>$ncmNode</font>]] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Common::Sources::Vcvs'>Vcvs</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources" title="::SpiceGenTcl::Common::Sources" class='ruff_cmd'>::SpiceGenTcl::Common::Sources</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -1472,13 +1494,14 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vcvs::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
+<tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheckRet" title="::SpiceGenTcl::DuplChecker.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheckRet</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheck" title="::SpiceGenTcl::Utility.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheck</a></td></tr>
+<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheckRet" title="::SpiceGenTcl::Utility.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheckRet</a></td></tr>
 <tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
@@ -1533,12 +1556,12 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
         {<font color=#b9b96e>-gain</font> <font color=#b9b96e>-required</font>}
     }]
     <b><font color=#ffa500>set</font></b> gainVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> gain]
-    <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$gainVal</font>]&gt;1) && ([@ <font color=#f1b479>$gainVal</font> 1] eq <font color=#90ee90>&quot;-eq&quot;</font>)} {
-        <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;vgain <font color=#f1b479>[</font>@ <font color=#f1b479>$</font>gainVal 0<font color=#f1b479>]</font> -poseq&quot;</font>
+    <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$gainVal</font>]&gt;1) && ([@ <font color=#f1b479>$gainVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
+        <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> vgain [@ <font color=#f1b479>$gainVal</font> 0] <font color=#b9b96e>-poseq</font>]
     } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>lappend</font></b> params <font color=#90ee90>&quot;vgain <font color=#f1b479>$</font>gainVal -pos&quot;</font>
+        <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> vgain <font color=#f1b479>$gainVal</font> <font color=#b9b96e>-pos</font>]
     }
-    <b><font color=#ffa500>next</font></b> e<font color=#f1b479>$name</font> [<b><font color=#ffa500>list</font></b> <font color=#90ee90>&quot;np <font color=#f1b479>$</font>npNode&quot;</font> <font color=#90ee90>&quot;nm <font color=#f1b479>$</font>nmNode&quot;</font> <font color=#90ee90>&quot;ncp <font color=#f1b479>$</font>ncpNode&quot;</font> <font color=#90ee90>&quot;ncm <font color=#f1b479>$</font>ncmNode&quot;</font>] <font color=#f1b479>$params</font>
+    <b><font color=#ffa500>next</font></b> e<font color=#f1b479>$name</font> [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np <font color=#f1b479>$npNode</font>] [<b><font color=#ffa500>list</font></b> nm <font color=#f1b479>$nmNode</font>] [<b><font color=#ffa500>list</font></b> ncp <font color=#f1b479>$ncpNode</font>] [<b><font color=#ffa500>list</font></b> ncm <font color=#f1b479>$ncmNode</font>]] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Common::Sources::Vdc'>Vdc</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources" title="::SpiceGenTcl::Common::Sources" class='ruff_cmd'>::SpiceGenTcl::Common::Sources</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -1546,13 +1569,14 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vdc::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
+<tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheckRet" title="::SpiceGenTcl::DuplChecker.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheckRet</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheck" title="::SpiceGenTcl::Utility.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheck</a></td></tr>
+<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheckRet" title="::SpiceGenTcl::Utility.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheckRet</a></td></tr>
 <tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
@@ -1607,13 +1631,14 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vexp::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
+<tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheckRet" title="::SpiceGenTcl::DuplChecker.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheckRet</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheck" title="::SpiceGenTcl::Utility.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheck</a></td></tr>
+<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheckRet" title="::SpiceGenTcl::Utility.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheckRet</a></td></tr>
 <tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
@@ -1685,13 +1710,14 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vpulse::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
+<tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheckRet" title="::SpiceGenTcl::DuplChecker.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheckRet</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheck" title="::SpiceGenTcl::Utility.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheck</a></td></tr>
+<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheckRet" title="::SpiceGenTcl::Utility.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheckRet</a></td></tr>
 <tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
@@ -1765,13 +1791,14 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vpwl::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
+<tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheckRet" title="::SpiceGenTcl::DuplChecker.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheckRet</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheck" title="::SpiceGenTcl::Utility.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheck</a></td></tr>
+<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheckRet" title="::SpiceGenTcl::Utility.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheckRet</a></td></tr>
 <tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
@@ -1832,13 +1859,14 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vsffm::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
+<tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheckRet" title="::SpiceGenTcl::DuplChecker.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheckRet</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheck" title="::SpiceGenTcl::Utility.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheck</a></td></tr>
+<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheckRet" title="::SpiceGenTcl::Utility.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheckRet</a></td></tr>
 <tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>
@@ -1908,13 +1936,14 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vsin::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.argsPreprocess</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::buildArgStr" title="::SpiceGenTcl::KeyArgsBuilder.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder.buildArgStr</a></td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
+<tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
 <tr><td><code>checkFloatingPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::checkFloatingPins" title="::SpiceGenTcl::Device.checkFloatingPins" class='ruff_cmd'>::SpiceGenTcl::Device.checkFloatingPins</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::deleteParam" title="::SpiceGenTcl::Device.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Device.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheck" title="::SpiceGenTcl::DuplChecker.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheck</a></td></tr>
-<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::DuplChecker::duplListCheckRet" title="::SpiceGenTcl::DuplChecker.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::DuplChecker.duplListCheckRet</a></td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheck" title="::SpiceGenTcl::Utility.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheck</a></td></tr>
+<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheckRet" title="::SpiceGenTcl::Utility.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheckRet</a></td></tr>
 <tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::genSPICEString" title="::SpiceGenTcl::Device.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Device.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device.getParams" class='ruff_cmd'>::SpiceGenTcl::Device.getParams</a></td></tr>
 <tr><td><code>getPins</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device.getPins" class='ruff_cmd'>::SpiceGenTcl::Device.getPins</a></td></tr>

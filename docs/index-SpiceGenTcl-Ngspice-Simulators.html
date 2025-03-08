@@ -29,8 +29,8 @@
 <tr><td><code>run</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Simulator::run" title="::SpiceGenTcl::Simulator.run" class='ruff_cmd'>::SpiceGenTcl::Simulator.run</a></td></tr>
 <tr><td><a href="index-SpiceGenTcl-Ngspice-Simulators.html#::SpiceGenTcl::Ngspice::Simulators::Batch::runAndRead" title="runAndRead" class='ruff_cmd'>runAndRead</a></td><td>Runs netlist circuit file.</td></tr>
 </table>
-<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#b9b96e>-Command</font></code>, <code><font color=#b9b96e>-LastRunFileName</font></code>, <code><font color=#b9b96e>-data</font></code>, <code><font color=#b9b96e>-log</font></code>, <code><font color=#b9b96e>-name</font></code>, <code><font color=#b9b96e>-runlocation</font></code></p>
-<p class='ruff'>Writable: <code><font color=#b9b96e>-Command</font></code>, <code><font color=#b9b96e>-LastRunFileName</font></code>, <code><font color=#b9b96e>-data</font></code>, <code><font color=#b9b96e>-log</font></code>, <code><font color=#b9b96e>-name</font></code>, <code><font color=#b9b96e>-runlocation</font></code></p>
+<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#b9b96e>-data</font></code>, <code><font color=#b9b96e>-log</font></code>, <code><font color=#b9b96e>-name</font></code>, <code><font color=#b9b96e>-runlocation</font></code></p>
+<p class='ruff'>Writable: <code><font color=#b9b96e>-data</font></code>, <code><font color=#b9b96e>-log</font></code>, <code><font color=#b9b96e>-name</font></code>, <code><font color=#b9b96e>-runlocation</font></code></p>
 <h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Simulator" title="::SpiceGenTcl::Simulator" class='ruff_cmd'>::SpiceGenTcl::Simulator</a></p>
 <h5 class='ruff'>Subclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Ngspice-Simulators.html#::SpiceGenTcl::Ngspice::Simulators::BatchLiveLog" title="BatchLiveLog" class='ruff_cmd'>BatchLiveLog</a></p>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::Simulators::Batch::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-Simulators.html#::SpiceGenTcl::Ngspice::Simulators::Batch" title="::SpiceGenTcl::Ngspice::Simulators::Batch" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Simulators::Batch</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice-Simulators.html#::SpiceGenTcl::Ngspice::Simulators::Batch'>Batch</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
@@ -50,11 +50,12 @@
     <i><font color=#76a396>#  runLocation - location at which input netlist is stored and all output files will be saved,</font></i>
     <i><font color=#76a396>#   default is current directory</font></i>
     <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-name</font> <font color=#f1b479>$name</font>
+    <b><font color=#fe6efe>my</font></b> variable Command
     <b><font color=#ffa500>global</font></b> tcl_platform
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>string</font></b> match <font color=#b9b96e>-nocase</font> *linux* <font color=#f1b479>$tcl_platform(os)</font>]} {
-        <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-Command</font> ngspice
-    } <b><font color=#ffa500>elseif</font></b> {[<b><font color=#ffa500>string</font></b> match <font color=#b9b96e>-nocase</font> <font color=#90ee90>&quot;*windows nt*&quot;</font> <font color=#f1b479>$tcl_platform(os)</font>]} {
-        <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-Command</font> ngspice_con
+        <b><font color=#ffa500>set</font></b> Command ngspice
+    } <b><font color=#ffa500>elseif</font></b> {[<b><font color=#ffa500>string</font></b> match <font color=#b9b96e>-nocase</font> {*windows nt*} <font color=#f1b479>$tcl_platform(os)</font>]} {
+        <b><font color=#ffa500>set</font></b> Command ngspice_con
     }
     <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-runlocation</font> <font color=#f1b479>$runLocation</font>
 }</pre></div>
@@ -86,7 +87,7 @@
 
     <i><font color=#76a396># Reads raw data file, create RawFile object and return it's reference name.</font></i>
     <b><font color=#fe6efe>my</font></b> variable data
-    <b><font color=#ffa500>set</font></b> data [::SpiceGenTcl::RawFile new [<b><font color=#ffa500>file</font></b> join [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-runlocation</font>] [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-LastRunFileName</font>].raw] * ngspice]
+    <b><font color=#ffa500>set</font></b> data [::SpiceGenTcl::RawFile new [<b><font color=#ffa500>file</font></b> join [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-runlocation</font>] <font color=#f1b479>${LastRunFileName}</font>.raw] * ngspice]
     <b><font color=#fe6efe>return</font></b>
 }</pre></div>
 </div></details>
@@ -99,7 +100,7 @@
 <div id='SpiceGenTcl_Ngspice_Simulators_Batch_readLog' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> readLog {} {
 
     <i><font color=#76a396># Reads log file of last simulation and save it's content to Log variable.</font></i>
-    <b><font color=#ffa500>set</font></b> logFile [<b><font color=#ffa500>open</font></b> [<b><font color=#ffa500>file</font></b> join [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-runlocation</font>] [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-LastRunFileName</font>].log] r+]
+    <b><font color=#ffa500>set</font></b> logFile [<b><font color=#ffa500>open</font></b> [<b><font color=#ffa500>file</font></b> join [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-runlocation</font>] <font color=#f1b479>${LastRunFileName}</font>.log] r+]
     <b><font color=#ffa500>set</font></b> log [<b><font color=#ffa500>read</font></b> <font color=#f1b479>$logFile</font>]
     <b><font color=#ffa500>close</font></b> <font color=#f1b479>$logFile</font>
     <b><font color=#fe6efe>return</font></b>
@@ -124,6 +125,7 @@
     <b><font color=#ffa500>set</font></b> arguments [argparse {
         <font color=#b9b96e>-nodelete</font>
     }]
+    <b><font color=#fe6efe>my</font></b> variable Command
     <b><font color=#ffa500>set</font></b> firstLine [@ [<b><font color=#ffa500>split</font></b> <font color=#f1b479>$circuitStr</font> \n] 0]
     <b><font color=#ffa500>set</font></b> runLocation [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-runlocation</font>]
     <b><font color=#ffa500>set</font></b> cirFile [<b><font color=#ffa500>open</font></b> [<b><font color=#ffa500>file</font></b> join <font color=#f1b479>$runLocation</font> <font color=#f1b479>${firstLine}</font>.cir] w+]
@@ -132,8 +134,8 @@
     <b><font color=#ffa500>set</font></b> rawFileName [<b><font color=#ffa500>file</font></b> join <font color=#f1b479>$runLocation</font> <font color=#f1b479>${firstLine}</font>.raw]
     <b><font color=#ffa500>set</font></b> logFileName [<b><font color=#ffa500>file</font></b> join <font color=#f1b479>$runLocation</font> <font color=#f1b479>${firstLine}</font>.log]
     <b><font color=#ffa500>set</font></b> cirFileName [<b><font color=#ffa500>file</font></b> join <font color=#f1b479>$runLocation</font> <font color=#f1b479>${firstLine}</font>.cir]
-    <b><font color=#ffa500>exec</font></b> {<b><font color=#ffa500>*</font></b>}[<b><font color=#ffa500>list</font></b> [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-Command</font>] <font color=#b9b96e>-b</font> <font color=#b9b96e>-r</font> <font color=#f1b479>$rawFileName</font> <font color=#b9b96e>-o</font> <font color=#f1b479>$logFileName</font> <font color=#f1b479>$cirFileName</font>]
-    <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-LastRunFileName</font> <font color=#f1b479>$firstLine</font>
+    <b><font color=#ffa500>exec</font></b> {<b><font color=#ffa500>*</font></b>}[<b><font color=#ffa500>list</font></b> <font color=#f1b479>$Command</font> <font color=#b9b96e>-b</font> <font color=#b9b96e>-r</font> <font color=#f1b479>$rawFileName</font> <font color=#b9b96e>-o</font> <font color=#f1b479>$logFileName</font> <font color=#f1b479>$cirFileName</font>]
+    <b><font color=#ffa500>set</font></b> LastRunFileName <font color=#f1b479>$firstLine</font>
     <b><font color=#fe6efe>my</font></b> readLog
     <b><font color=#fe6efe>my</font></b> readData
     <b><font color=#ffa500>if</font></b> {![<b><font color=#ffa500>info</font></b> exists nodelete]} {
@@ -154,8 +156,8 @@
 <tr><td><code>run</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Simulator::run" title="::SpiceGenTcl::Simulator.run" class='ruff_cmd'>::SpiceGenTcl::Simulator.run</a></td></tr>
 <tr><td><a href="index-SpiceGenTcl-Ngspice-Simulators.html#::SpiceGenTcl::Ngspice::Simulators::BatchLiveLog::runAndRead" title="runAndRead" class='ruff_cmd'>runAndRead</a></td><td>Runs netlist circuit file.</td></tr>
 </table>
-<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#b9b96e>-Command</font></code>, <code><font color=#b9b96e>-LastRunFileName</font></code>, <code><font color=#b9b96e>-data</font></code>, <code><font color=#b9b96e>-log</font></code>, <code><font color=#b9b96e>-name</font></code>, <code><font color=#b9b96e>-runlocation</font></code></p>
-<p class='ruff'>Writable: <code><font color=#b9b96e>-Command</font></code>, <code><font color=#b9b96e>-LastRunFileName</font></code>, <code><font color=#b9b96e>-data</font></code>, <code><font color=#b9b96e>-log</font></code>, <code><font color=#b9b96e>-name</font></code>, <code><font color=#b9b96e>-runlocation</font></code></p>
+<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#b9b96e>-data</font></code>, <code><font color=#b9b96e>-log</font></code>, <code><font color=#b9b96e>-name</font></code>, <code><font color=#b9b96e>-runlocation</font></code></p>
+<p class='ruff'>Writable: <code><font color=#b9b96e>-data</font></code>, <code><font color=#b9b96e>-log</font></code>, <code><font color=#b9b96e>-name</font></code>, <code><font color=#b9b96e>-runlocation</font></code></p>
 <h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Ngspice-Simulators.html#::SpiceGenTcl::Ngspice::Simulators::Batch" title="Batch" class='ruff_cmd'>Batch</a></p>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::Simulators::BatchLiveLog::runAndRead'>runAndRead</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-Simulators.html#::SpiceGenTcl::Ngspice::Simulators::BatchLiveLog" title="::SpiceGenTcl::Ngspice::Simulators::BatchLiveLog" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Simulators::BatchLiveLog</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice-Simulators.html#::SpiceGenTcl::Ngspice::Simulators::BatchLiveLog'>BatchLiveLog</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
@@ -176,6 +178,8 @@
     <b><font color=#ffa500>set</font></b> arguments [argparse {
         <font color=#b9b96e>-nodelete</font>
     }]
+    <b><font color=#fe6efe>my</font></b> variable Command
+    <b><font color=#fe6efe>my</font></b> variable LastRunFileName
     <b><font color=#ffa500>set</font></b> firstLine [@ [<b><font color=#ffa500>split</font></b> <font color=#f1b479>$circuitStr</font> \n] 0]
     <b><font color=#ffa500>set</font></b> runLocation [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-runlocation</font>]
     <b><font color=#ffa500>set</font></b> cirFile [<b><font color=#ffa500>open</font></b> [<b><font color=#ffa500>file</font></b> join <font color=#f1b479>$runLocation</font> <font color=#f1b479>${firstLine}</font>.cir] w+]
@@ -184,9 +188,9 @@
     <b><font color=#ffa500>set</font></b> rawFileName [<b><font color=#ffa500>file</font></b> join <font color=#f1b479>$runLocation</font> <font color=#f1b479>${firstLine}</font>.raw]
     <b><font color=#ffa500>set</font></b> logFileName [<b><font color=#ffa500>file</font></b> join <font color=#f1b479>$runLocation</font> <font color=#f1b479>${firstLine}</font>.log]
     <b><font color=#ffa500>set</font></b> cirFileName [<b><font color=#ffa500>file</font></b> join <font color=#f1b479>$runLocation</font> <font color=#f1b479>${firstLine}</font>.cir]
-    <b><font color=#ffa500>set</font></b> command [<b><font color=#ffa500>list</font></b> [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-Command</font>] <font color=#b9b96e>-b</font> <font color=#f1b479>$cirFileName</font> <font color=#b9b96e>-r</font> <font color=#f1b479>$rawFileName</font>]
+    <b><font color=#ffa500>set</font></b> command [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$Command</font> <font color=#b9b96e>-b</font> <font color=#f1b479>$cirFileName</font> <font color=#b9b96e>-r</font> <font color=#f1b479>$rawFileName</font>]
     <b><font color=#ffa500>set</font></b> chan [<b><font color=#ffa500>open</font></b> <font color=#90ee90>&quot;|<font color=#f1b479>$</font>command 2&gt;@1&quot;</font>]
-    <b><font color=#ffa500>set</font></b> logData <font color=#90ee90>&quot;&quot;</font>
+    <b><font color=#ffa500>set</font></b> logData {}
     <b><font color=#ffa500>while</font></b> {[<b><font color=#ffa500>gets</font></b> <font color=#f1b479>$chan</font> line] &gt;= 0} {
         <b><font color=#ffa500>puts</font></b> <font color=#f1b479>$line</font>
         <b><font color=#ffa500>set</font></b> logData [<b><font color=#ffa500>join</font></b> [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$logData</font> <font color=#f1b479>$line</font>] \n]
@@ -195,7 +199,7 @@
         }
     }
     <b><font color=#ffa500>close</font></b> <font color=#f1b479>$chan</font>
-    <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-LastRunFileName</font> <font color=#f1b479>${firstLine}</font>
+    <b><font color=#ffa500>set</font></b> LastRunFileName <font color=#f1b479>${firstLine}</font>
     <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-log</font> <font color=#f1b479>$logData</font>
     <b><font color=#fe6efe>my</font></b> readData
     <b><font color=#ffa500>if</font></b> {![<b><font color=#ffa500>info</font></b> exists nodelete]} {

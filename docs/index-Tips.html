@@ -179,14 +179,14 @@ endmodule
 }
 </pre>
 
-</figure><p class='ruff'>Here we use as superclass <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model" title="::SpiceGenTcl::Model" class='ruff_cmd'>::SpiceGenTcl::Model</a> for new element. Next we define constructor for model, first argument is name of model and <code>args</code> that accepts model value all instance parameters of device. To process optional arguments, we use special method <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder::argsPreprocess</a>, that process optional <code>args</code> arguments and produces string for <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model" title="::SpiceGenTcl::Model" class='ruff_cmd'>::SpiceGenTcl::Model</a> constructor.</p>
+</figure><p class='ruff'>Here we use as superclass <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model" title="::SpiceGenTcl::Model" class='ruff_cmd'>::SpiceGenTcl::Model</a> for new element. Next we define constructor for model, first argument is name of model and <code>args</code> that accepts model value all instance parameters of device. To process optional arguments, we use special method [::SpiceGenTcl::KeyArgsBuilder::argsPreprocess], that process optional <code>args</code> arguments and produces string for <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model" title="::SpiceGenTcl::Model" class='ruff_cmd'>::SpiceGenTcl::Model</a> constructor.</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>set</font></b> paramsNames [<b><font color=#ffa500>list</font></b> ms a k alpha c]
 <b><font color=#ffa500>next</font></b> <font color=#f1b479>$name</font> coreja [<b><font color=#fe6efe>my</font></b> argsPreprocess <font color=#f1b479>$paramsNames</font> {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$args</font>]
 </pre>
 
 </figure><p class='ruff'>We set model parameters in list <code>paramsNames</code>, and after that we pass arguments to superclass's constructor. The name <code>coreja</code> corresponds to name of Verilog-A module.</p>
-<p class='ruff'>We use <a href="index-SpiceGenTcl.html#::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" title="::SpiceGenTcl::KeyArgsBuilder::argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::KeyArgsBuilder::argsPreprocess</a> procedure here, but we can go the same way we do with <code>Core</code> class, and add, for example, default values, or use some complex logic of elements initialization:</p>
+<p class='ruff'>We use [::SpiceGenTcl::KeyArgsBuilder::argsPreprocess] procedure here, but we can go the same way we do with <code>Core</code> class, and add, for example, default values, or use some complex logic of elements initialization:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#fe6efe>oo::class</font></b> create CoreModel {
     superclass Model

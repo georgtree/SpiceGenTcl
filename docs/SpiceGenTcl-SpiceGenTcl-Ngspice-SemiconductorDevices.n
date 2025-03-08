@@ -5,11 +5,11 @@
 .SH NAME
 SpiceGenTcl::Ngspice::SemiconductorDevices - Commands in namespace SpiceGenTcl::Ngspice::SemiconductorDevices
 .SH SYNOPSIS
-\fBOBJECT constructor\fP \fIname ncNode nbNode neNode -model value ?-ns value ?-tj value?? ?-area value? ?-areac value? ?-areab value? ?-m value? ?-ic {value value}? ?-temp value|-dtemp value?\fP
+\fBOBJECT constructor\fP \fIname ncNode nbNode neNode -model value ?-ns value ?-tj value?? ?-area value? ?-areac value? ?-areab value? ?-m value? ?-ic {value value}? ?-temp value|-dtemp value? ?-off?\fP
 .br
 \fBOBJECT constructor\fP \fIname type ?-option value \&.\&.\&.?\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -model value ?-area value? ?-pj value? ?-ic value? ?-m value? ?-temp value|-dtemp value? ?-lm value? ?-wm value? ?-lp value? ?-wp value?\fP
+\fBOBJECT constructor\fP \fIname npNode nmNode -model value ?-area value? ?-pj value? ?-ic value? ?-m value? ?-temp value|-dtemp value? ?-lm value? ?-wm value? ?-lp value? ?-wp value? ?-off?\fP
 .br
 \fBOBJECT constructor\fP \fIname ?-option value \&.\&.\&.?\fP
 .br
@@ -42,10 +42,13 @@ addParam
 See \fI::SpiceGenTcl::Device\&.addParam\fP
 .TP
 argsPreprocess
-See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+See \fI::SpiceGenTcl::Utility\&.argsPreprocess\fP
 .TP
 buildArgStr
-See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+See \fI::SpiceGenTcl::Utility\&.buildArgStr\fP
+.TP
+buildSwArgStr
+See \fI::SpiceGenTcl::Utility\&.buildSwArgStr\fP
 .TP
 checkFloatingPins
 See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
@@ -57,10 +60,10 @@ deleteParam
 See \fI::SpiceGenTcl::Device\&.deleteParam\fP
 .TP
 duplListCheck
-See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+See \fI::SpiceGenTcl::Utility\&.duplListCheck\fP
 .TP
 duplListCheckRet
-See \fI::SpiceGenTcl::DuplChecker\&.duplListCheckRet\fP
+See \fI::SpiceGenTcl::Utility\&.duplListCheckRet\fP
 .TP
 genSPICEString
 See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
@@ -97,7 +100,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Bjt that describes semiconductor bipolar junction transistor device\&.
-.RS 4n\fBOBJECT constructor\fP \fIname ncNode nbNode neNode -model value ?-ns value ?-tj value?? ?-area value? ?-areac value? ?-areab value? ?-m value? ?-ic {value value}? ?-temp value|-dtemp value?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname ncNode nbNode neNode -model value ?-ns value ?-tj value?? ?-area value? ?-areac value? ?-areab value? ?-m value? ?-ic {value value}? ?-temp value|-dtemp value? ?-off?\fP
 .br
 .RE
 .PP
@@ -140,6 +143,9 @@ Name of the model\&.
 -ns
 Name of node connected to substrate pin, optional\&.
 .TP
+-off
+Initial state, optional\&.
+.TP
 -temp
 Device temperature, optional\&.
 .TP
@@ -179,10 +185,13 @@ addParam
 See \fI::SpiceGenTcl::Model\&.addParam\fP
 .TP
 argsPreprocess
-See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+See \fI::SpiceGenTcl::Utility\&.argsPreprocess\fP
 .TP
 buildArgStr
-See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+See \fI::SpiceGenTcl::Utility\&.buildArgStr\fP
+.TP
+buildSwArgStr
+See \fI::SpiceGenTcl::Utility\&.buildSwArgStr\fP
 .TP
 configure
 Configure properties\&.
@@ -191,10 +200,10 @@ deleteParam
 See \fI::SpiceGenTcl::Model\&.deleteParam\fP
 .TP
 duplListCheck
-See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+See \fI::SpiceGenTcl::Utility\&.duplListCheck\fP
 .TP
 duplListCheckRet
-See \fI::SpiceGenTcl::DuplChecker\&.duplListCheckRet\fP
+See \fI::SpiceGenTcl::Utility\&.duplListCheckRet\fP
 .TP
 genSPICEString
 See \fI::SpiceGenTcl::Model\&.genSPICEString\fP
@@ -259,10 +268,13 @@ addParam
 See \fI::SpiceGenTcl::Device\&.addParam\fP
 .TP
 argsPreprocess
-See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+See \fI::SpiceGenTcl::Utility\&.argsPreprocess\fP
 .TP
 buildArgStr
-See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+See \fI::SpiceGenTcl::Utility\&.buildArgStr\fP
+.TP
+buildSwArgStr
+See \fI::SpiceGenTcl::Utility\&.buildSwArgStr\fP
 .TP
 checkFloatingPins
 See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
@@ -274,10 +286,10 @@ deleteParam
 See \fI::SpiceGenTcl::Device\&.deleteParam\fP
 .TP
 duplListCheck
-See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+See \fI::SpiceGenTcl::Utility\&.duplListCheck\fP
 .TP
 duplListCheckRet
-See \fI::SpiceGenTcl::DuplChecker\&.duplListCheckRet\fP
+See \fI::SpiceGenTcl::Utility\&.duplListCheckRet\fP
 .TP
 genSPICEString
 See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
@@ -319,10 +331,13 @@ addParam
 See \fI::SpiceGenTcl::Device\&.addParam\fP
 .TP
 argsPreprocess
-See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+See \fI::SpiceGenTcl::Utility\&.argsPreprocess\fP
 .TP
 buildArgStr
-See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+See \fI::SpiceGenTcl::Utility\&.buildArgStr\fP
+.TP
+buildSwArgStr
+See \fI::SpiceGenTcl::Utility\&.buildSwArgStr\fP
 .TP
 checkFloatingPins
 See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
@@ -334,10 +349,10 @@ deleteParam
 See \fI::SpiceGenTcl::Device\&.deleteParam\fP
 .TP
 duplListCheck
-See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+See \fI::SpiceGenTcl::Utility\&.duplListCheck\fP
 .TP
 duplListCheckRet
-See \fI::SpiceGenTcl::DuplChecker\&.duplListCheckRet\fP
+See \fI::SpiceGenTcl::Utility\&.duplListCheckRet\fP
 .TP
 genSPICEString
 See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
@@ -374,7 +389,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Diode that describes semiconductor diode device\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -model value ?-area value? ?-pj value? ?-ic value? ?-m value? ?-temp value|-dtemp value? ?-lm value? ?-wm value? ?-lp value? ?-wp value?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -model value ?-area value? ?-pj value? ?-ic value? ?-m value? ?-temp value|-dtemp value? ?-lm value? ?-wm value? ?-lp value? ?-wp value? ?-off?\fP
 .br
 .RE
 .PP
@@ -410,6 +425,9 @@ Multiplier of area and perimeter, optional\&.
 .TP
 -model
 Name of the model\&.
+.TP
+-off
+Initial state, optional\&.
 .TP
 -pj
 Perimeter scale factor, optional\&.
@@ -456,10 +474,13 @@ addParam
 See \fI::SpiceGenTcl::Model\&.addParam\fP
 .TP
 argsPreprocess
-See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+See \fI::SpiceGenTcl::Utility\&.argsPreprocess\fP
 .TP
 buildArgStr
-See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+See \fI::SpiceGenTcl::Utility\&.buildArgStr\fP
+.TP
+buildSwArgStr
+See \fI::SpiceGenTcl::Utility\&.buildSwArgStr\fP
 .TP
 configure
 Configure properties\&.
@@ -468,10 +489,10 @@ deleteParam
 See \fI::SpiceGenTcl::Model\&.deleteParam\fP
 .TP
 duplListCheck
-See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+See \fI::SpiceGenTcl::Utility\&.duplListCheck\fP
 .TP
 duplListCheckRet
-See \fI::SpiceGenTcl::DuplChecker\&.duplListCheckRet\fP
+See \fI::SpiceGenTcl::Utility\&.duplListCheckRet\fP
 .TP
 genSPICEString
 See \fI::SpiceGenTcl::Model\&.genSPICEString\fP
@@ -533,10 +554,13 @@ addParam
 See \fI::SpiceGenTcl::Device\&.addParam\fP
 .TP
 argsPreprocess
-See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+See \fI::SpiceGenTcl::Utility\&.argsPreprocess\fP
 .TP
 buildArgStr
-See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+See \fI::SpiceGenTcl::Utility\&.buildArgStr\fP
+.TP
+buildSwArgStr
+See \fI::SpiceGenTcl::Utility\&.buildSwArgStr\fP
 .TP
 checkFloatingPins
 See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
@@ -548,10 +572,10 @@ deleteParam
 See \fI::SpiceGenTcl::Device\&.deleteParam\fP
 .TP
 duplListCheck
-See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+See \fI::SpiceGenTcl::Utility\&.duplListCheck\fP
 .TP
 duplListCheckRet
-See \fI::SpiceGenTcl::DuplChecker\&.duplListCheckRet\fP
+See \fI::SpiceGenTcl::Utility\&.duplListCheckRet\fP
 .TP
 genSPICEString
 See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
@@ -593,10 +617,13 @@ addParam
 See \fI::SpiceGenTcl::Device\&.addParam\fP
 .TP
 argsPreprocess
-See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+See \fI::SpiceGenTcl::Utility\&.argsPreprocess\fP
 .TP
 buildArgStr
-See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+See \fI::SpiceGenTcl::Utility\&.buildArgStr\fP
+.TP
+buildSwArgStr
+See \fI::SpiceGenTcl::Utility\&.buildSwArgStr\fP
 .TP
 checkFloatingPins
 See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
@@ -608,10 +635,10 @@ deleteParam
 See \fI::SpiceGenTcl::Device\&.deleteParam\fP
 .TP
 duplListCheck
-See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+See \fI::SpiceGenTcl::Utility\&.duplListCheck\fP
 .TP
 duplListCheckRet
-See \fI::SpiceGenTcl::DuplChecker\&.duplListCheckRet\fP
+See \fI::SpiceGenTcl::Utility\&.duplListCheckRet\fP
 .TP
 genSPICEString
 See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
@@ -713,10 +740,13 @@ addParam
 See \fI::SpiceGenTcl::Model\&.addParam\fP
 .TP
 argsPreprocess
-See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+See \fI::SpiceGenTcl::Utility\&.argsPreprocess\fP
 .TP
 buildArgStr
-See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+See \fI::SpiceGenTcl::Utility\&.buildArgStr\fP
+.TP
+buildSwArgStr
+See \fI::SpiceGenTcl::Utility\&.buildSwArgStr\fP
 .TP
 configure
 Configure properties\&.
@@ -725,10 +755,10 @@ deleteParam
 See \fI::SpiceGenTcl::Model\&.deleteParam\fP
 .TP
 duplListCheck
-See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+See \fI::SpiceGenTcl::Utility\&.duplListCheck\fP
 .TP
 duplListCheckRet
-See \fI::SpiceGenTcl::DuplChecker\&.duplListCheckRet\fP
+See \fI::SpiceGenTcl::Utility\&.duplListCheckRet\fP
 .TP
 genSPICEString
 See \fI::SpiceGenTcl::Model\&.genSPICEString\fP
@@ -796,10 +826,13 @@ addParam
 See \fI::SpiceGenTcl::Model\&.addParam\fP
 .TP
 argsPreprocess
-See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+See \fI::SpiceGenTcl::Utility\&.argsPreprocess\fP
 .TP
 buildArgStr
-See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+See \fI::SpiceGenTcl::Utility\&.buildArgStr\fP
+.TP
+buildSwArgStr
+See \fI::SpiceGenTcl::Utility\&.buildSwArgStr\fP
 .TP
 configure
 Configure properties\&.
@@ -808,10 +841,10 @@ deleteParam
 See \fI::SpiceGenTcl::Model\&.deleteParam\fP
 .TP
 duplListCheck
-See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+See \fI::SpiceGenTcl::Utility\&.duplListCheck\fP
 .TP
 duplListCheckRet
-See \fI::SpiceGenTcl::DuplChecker\&.duplListCheckRet\fP
+See \fI::SpiceGenTcl::Utility\&.duplListCheckRet\fP
 .TP
 genSPICEString
 See \fI::SpiceGenTcl::Model\&.genSPICEString\fP
@@ -876,10 +909,13 @@ addParam
 See \fI::SpiceGenTcl::Device\&.addParam\fP
 .TP
 argsPreprocess
-See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+See \fI::SpiceGenTcl::Utility\&.argsPreprocess\fP
 .TP
 buildArgStr
-See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+See \fI::SpiceGenTcl::Utility\&.buildArgStr\fP
+.TP
+buildSwArgStr
+See \fI::SpiceGenTcl::Utility\&.buildSwArgStr\fP
 .TP
 checkFloatingPins
 See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
@@ -891,10 +927,10 @@ deleteParam
 See \fI::SpiceGenTcl::Device\&.deleteParam\fP
 .TP
 duplListCheck
-See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+See \fI::SpiceGenTcl::Utility\&.duplListCheck\fP
 .TP
 duplListCheckRet
-See \fI::SpiceGenTcl::DuplChecker\&.duplListCheckRet\fP
+See \fI::SpiceGenTcl::Utility\&.duplListCheckRet\fP
 .TP
 genSPICEString
 See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
@@ -936,10 +972,13 @@ addParam
 See \fI::SpiceGenTcl::Device\&.addParam\fP
 .TP
 argsPreprocess
-See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+See \fI::SpiceGenTcl::Utility\&.argsPreprocess\fP
 .TP
 buildArgStr
-See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+See \fI::SpiceGenTcl::Utility\&.buildArgStr\fP
+.TP
+buildSwArgStr
+See \fI::SpiceGenTcl::Utility\&.buildSwArgStr\fP
 .TP
 checkFloatingPins
 See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
@@ -951,10 +990,10 @@ deleteParam
 See \fI::SpiceGenTcl::Device\&.deleteParam\fP
 .TP
 duplListCheck
-See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+See \fI::SpiceGenTcl::Utility\&.duplListCheck\fP
 .TP
 duplListCheckRet
-See \fI::SpiceGenTcl::DuplChecker\&.duplListCheckRet\fP
+See \fI::SpiceGenTcl::Utility\&.duplListCheckRet\fP
 .TP
 genSPICEString
 See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
@@ -1053,10 +1092,13 @@ addParam
 See \fI::SpiceGenTcl::Model\&.addParam\fP
 .TP
 argsPreprocess
-See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+See \fI::SpiceGenTcl::Utility\&.argsPreprocess\fP
 .TP
 buildArgStr
-See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+See \fI::SpiceGenTcl::Utility\&.buildArgStr\fP
+.TP
+buildSwArgStr
+See \fI::SpiceGenTcl::Utility\&.buildSwArgStr\fP
 .TP
 configure
 Configure properties\&.
@@ -1065,10 +1107,10 @@ deleteParam
 See \fI::SpiceGenTcl::Model\&.deleteParam\fP
 .TP
 duplListCheck
-See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+See \fI::SpiceGenTcl::Utility\&.duplListCheck\fP
 .TP
 duplListCheckRet
-See \fI::SpiceGenTcl::DuplChecker\&.duplListCheckRet\fP
+See \fI::SpiceGenTcl::Utility\&.duplListCheckRet\fP
 .TP
 genSPICEString
 See \fI::SpiceGenTcl::Model\&.genSPICEString\fP
@@ -1136,10 +1178,13 @@ addParam
 See \fI::SpiceGenTcl::Device\&.addParam\fP
 .TP
 argsPreprocess
-See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+See \fI::SpiceGenTcl::Utility\&.argsPreprocess\fP
 .TP
 buildArgStr
-See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+See \fI::SpiceGenTcl::Utility\&.buildArgStr\fP
+.TP
+buildSwArgStr
+See \fI::SpiceGenTcl::Utility\&.buildSwArgStr\fP
 .TP
 checkFloatingPins
 See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
@@ -1151,10 +1196,10 @@ deleteParam
 See \fI::SpiceGenTcl::Device\&.deleteParam\fP
 .TP
 duplListCheck
-See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+See \fI::SpiceGenTcl::Utility\&.duplListCheck\fP
 .TP
 duplListCheckRet
-See \fI::SpiceGenTcl::DuplChecker\&.duplListCheckRet\fP
+See \fI::SpiceGenTcl::Utility\&.duplListCheckRet\fP
 .TP
 genSPICEString
 See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
@@ -1294,10 +1339,13 @@ addParam
 See \fI::SpiceGenTcl::Device\&.addParam\fP
 .TP
 argsPreprocess
-See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+See \fI::SpiceGenTcl::Utility\&.argsPreprocess\fP
 .TP
 buildArgStr
-See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+See \fI::SpiceGenTcl::Utility\&.buildArgStr\fP
+.TP
+buildSwArgStr
+See \fI::SpiceGenTcl::Utility\&.buildSwArgStr\fP
 .TP
 checkFloatingPins
 See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
@@ -1309,10 +1357,10 @@ deleteParam
 See \fI::SpiceGenTcl::Device\&.deleteParam\fP
 .TP
 duplListCheck
-See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+See \fI::SpiceGenTcl::Utility\&.duplListCheck\fP
 .TP
 duplListCheckRet
-See \fI::SpiceGenTcl::DuplChecker\&.duplListCheckRet\fP
+See \fI::SpiceGenTcl::Utility\&.duplListCheckRet\fP
 .TP
 genSPICEString
 See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
@@ -1351,10 +1399,13 @@ addParam
 See \fI::SpiceGenTcl::Device\&.addParam\fP
 .TP
 argsPreprocess
-See \fI::SpiceGenTcl::KeyArgsBuilder\&.argsPreprocess\fP
+See \fI::SpiceGenTcl::Utility\&.argsPreprocess\fP
 .TP
 buildArgStr
-See \fI::SpiceGenTcl::KeyArgsBuilder\&.buildArgStr\fP
+See \fI::SpiceGenTcl::Utility\&.buildArgStr\fP
+.TP
+buildSwArgStr
+See \fI::SpiceGenTcl::Utility\&.buildSwArgStr\fP
 .TP
 checkFloatingPins
 See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
@@ -1366,10 +1417,10 @@ deleteParam
 See \fI::SpiceGenTcl::Device\&.deleteParam\fP
 .TP
 duplListCheck
-See \fI::SpiceGenTcl::DuplChecker\&.duplListCheck\fP
+See \fI::SpiceGenTcl::Utility\&.duplListCheck\fP
 .TP
 duplListCheckRet
-See \fI::SpiceGenTcl::DuplChecker\&.duplListCheckRet\fP
+See \fI::SpiceGenTcl::Utility\&.duplListCheckRet\fP
 .TP
 genSPICEString
 See \fI::SpiceGenTcl::Device\&.genSPICEString\fP

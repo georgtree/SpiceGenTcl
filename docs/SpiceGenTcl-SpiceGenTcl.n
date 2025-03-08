@@ -105,23 +105,27 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT setPinNodeName\fP \fIpinName nodeName\fP
 .br
-\fBOBJECT duplListCheck\fP \fIlist\fP
-.br
-\fBOBJECT duplListCheckRet\fP \fIlist\fP
-.br
 \fBEmptyTrace create OBJNAME\fP \fIname type len ?numType?\fP
 .br
 \fBEmptyTrace new\fP \fIname type len ?numType?\fP
 .br
 \fBOBJECT getDataPoints\fP
 .br
-\fBOBJECT constructor\fP \fIvalue ?-name value?\fP
+\fBOBJECT constructor\fP \fIparams ?-name value?\fP
+.br
+\fBOBJECT addParam\fP \fIparamName value ?-eq?\fP
+.br
+\fBOBJECT deleteParam\fP \fIparamName\fP
 .br
 \fBOBJECT genSPICEString\fP
 .br
-\fBOBJECT argsPreprocess\fP \fIparamsNames ?args?\fP
+\fBOBJECT getParams\fP
 .br
-\fBOBJECT buildArgStr\fP \fIparamsNames\fP
+\fBOBJECT setParamValue\fP \fIname value ?name value \&.\&.\&.?\fP
+.br
+\fBOBJECT constructor\fP \fIvalue ?-name value?\fP
+.br
+\fBOBJECT genSPICEString\fP
 .br
 \fBOBJECT constructor\fP \fIvalue libValue ?-name value?\fP
 .br
@@ -155,9 +159,11 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT getElement\fP \fIelemName\fP
 .br
+\fBOBJECT genSPICEString\fP
+.br
 \fBOBJECT constructor\fP \fIparams ?-name value?\fP
 .br
-\fBOBJECT addParam\fP \fIparamName value\fP
+\fBOBJECT addParam\fP \fIparamName value ?args?\fP
 .br
 \fBOBJECT deleteParam\fP \fIparamName\fP
 .br
@@ -188,6 +194,18 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 \fBParameterNoCheck create OBJNAME\fP \fIname value\fP
 .br
 \fBParameterNoCheck new\fP \fIname value\fP
+.br
+\fBParameterNode create OBJNAME\fP \fIname value\fP
+.br
+\fBParameterNode new\fP \fIname value\fP
+.br
+\fBOBJECT genSPICEString\fP
+.br
+\fBParameterNodeEquation create OBJNAME\fP \fIname value\fP
+.br
+\fBParameterNodeEquation new\fP \fIname value\fP
+.br
+\fBOBJECT genSPICEString\fP
 .br
 \fBParameterPositional create OBJNAME\fP \fIname value\fP
 .br
@@ -293,6 +311,16 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBTrace new\fP \fIname type len axis ?numType?\fP
 .br
+\fBOBJECT argsPreprocess\fP \fIparamsNames ?args?\fP
+.br
+\fBOBJECT buildArgStr\fP \fIparamsNames\fP
+.br
+\fBOBJECT buildSwArgStr\fP \fIparamsNames\fP
+.br
+\fBOBJECT duplListCheck\fP \fIlist\fP
+.br
+\fBOBJECT duplListCheckRet\fP \fIlist\fP
+.br
 .SH ::SPICEGENTCL
 .SH COMMANDS
 .PP
@@ -382,6 +410,15 @@ Constructor for the class\&.
 addParam
 Adds new parameter to device, and throws error on dublicated names\&.
 .TP
+argsPreprocess
+See \fIUtility\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fIUtility\&.buildArgStr\fP
+.TP
+buildSwArgStr
+See \fIUtility\&.buildSwArgStr\fP
+.TP
 configure
 Configure properties\&.
 .TP
@@ -389,10 +426,10 @@ deleteParam
 Deletes existing Parameter object from list Params\&.
 .TP
 duplListCheck
-See \fIDuplChecker\&.duplListCheck\fP
+See \fIUtility\&.duplListCheck\fP
 .TP
 duplListCheckRet
-See \fIDuplChecker\&.duplListCheckRet\fP
+See \fIUtility\&.duplListCheckRet\fP
 .TP
 genSPICEString
 Creates analysis for SPICE netlist\&.
@@ -416,7 +453,7 @@ Writable: -name, -type
 .PP
 \fBMixins\fR
 .PP
-\fIDuplChecker\fP
+\fIUtility\fP
 .PP
 \fBSubclasses\fR
 .PP
@@ -572,9 +609,9 @@ See \fIDataset\&.setDataPoints\fP
 .PP
 \fBProperties\fR
 .PP
-Readable: -Len, -NumType, -Type, -name
+Readable: -len, -name, -numtype, -type
 .PP
-Writable: -Len, -NumType, -Type, -name
+Writable: -len, -name, -numtype, -type
 .PP
 \fBSuperclasses\fR
 .PP
@@ -761,6 +798,15 @@ Constructor for the class\&.
 add
 Adds elements object to Circuit Elements dictionary\&.
 .TP
+argsPreprocess
+See \fIUtility\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fIUtility\&.buildArgStr\fP
+.TP
+buildSwArgStr
+See \fIUtility\&.buildSwArgStr\fP
+.TP
 configure
 Configure properties\&.
 .TP
@@ -771,10 +817,10 @@ detachSimulator
 Removes Simulator object reference from Circuit\&.
 .TP
 duplListCheck
-See \fIDuplChecker\&.duplListCheck\fP
+See \fIUtility\&.duplListCheck\fP
 .TP
 duplListCheckRet
-See \fIDuplChecker\&.duplListCheckRet\fP
+See \fIUtility\&.duplListCheckRet\fP
 .TP
 genSPICEString
 Creates circuit string for SPICE netlist\&.
@@ -1044,9 +1090,9 @@ Method to set the data points\&.
 .PP
 \fBProperties\fR
 .PP
-Readable: -Len, -NumType, -Type, -name
+Readable: -len, -name, -numtype, -type
 .PP
-Writable: -Len, -NumType, -Type, -name
+Writable: -len, -name, -numtype, -type
 .PP
 \fBSubclasses\fR
 .PP
@@ -1139,10 +1185,13 @@ addParam
 Adds new parameter to device, and throws error on dublicated names\&.
 .TP
 argsPreprocess
-See \fIKeyArgsBuilder\&.argsPreprocess\fP
+See \fIUtility\&.argsPreprocess\fP
 .TP
 buildArgStr
-See \fIKeyArgsBuilder\&.buildArgStr\fP
+See \fIUtility\&.buildArgStr\fP
+.TP
+buildSwArgStr
+See \fIUtility\&.buildSwArgStr\fP
 .TP
 checkFloatingPins
 Check if some pin device doesn't have connected nodes and return list of them\&.
@@ -1154,10 +1203,10 @@ deleteParam
 Deletes existing Parameter object from list Params\&.
 .TP
 duplListCheck
-See \fIDuplChecker\&.duplListCheck\fP
+See \fIUtility\&.duplListCheck\fP
 .TP
 duplListCheckRet
-See \fIDuplChecker\&.duplListCheckRet\fP
+See \fIUtility\&.duplListCheckRet\fP
 .TP
 genSPICEString
 Creates device string for SPICE netlist\&.
@@ -1187,7 +1236,7 @@ Writable: -name
 .PP
 \fBMixins\fR
 .PP
-\fIDuplChecker\fP, \fIKeyArgsBuilder\fP
+\fIUtility\fP
 .PP
 \fBSubclasses\fR
 .PP
@@ -1392,67 +1441,6 @@ Name of the node that we want connect to pin\&.
 .RE
 .PP
 .RS -4n
-\fBDuplChecker\fR (::SpiceGenTcl)
-.RE
-.PP
-\fBMethod summary\fR
-.RS 4n
-.TP
-configure
-Configure properties\&.
-.TP
-duplListCheck
-Checks if list contains duplicates\&.
-.TP
-duplListCheckRet
-Checks if list contains duplicates and return value of first duplicate\&.
-.RE
-.PP
-\fBSubclasses\fR
-.PP
-\fIDevice\fP, \fIModel\fP, \fIOptions\fP, \fIParamStatement\fP, \fINetlist\fP, \fIAnalysis\fP
-.PP
-.RS -4n
-\fBduplListCheck\fR (::SpiceGenTcl::DuplChecker)
-.RE
-.PP
-Checks if list contains duplicates\&.
-.RS 4n\fBOBJECT duplListCheck\fP \fIlist\fP
-.br
-.RE
-.PP
-\fBParameters\fR
-.RS 4n
-.TP
-list
-List to check\&.
-.RE
-.PP
-\fBReturn value\fR
-.PP
-0 if there are no duplicates and 1 if there are\&.
-.PP
-.RS -4n
-\fBduplListCheckRet\fR (::SpiceGenTcl::DuplChecker)
-.RE
-.PP
-Checks if list contains duplicates and return value of first duplicate\&.
-.RS 4n\fBOBJECT duplListCheckRet\fP \fIlist\fP
-.br
-.RE
-.PP
-\fBParameters\fR
-.RS 4n
-.TP
-list
-List to check\&.
-.RE
-.PP
-\fBReturn value\fR
-.PP
-empty list if no duplicate or value of first duplicate\&.
-.PP
-.RS -4n
 \fBEmptyTrace\fR (::SpiceGenTcl)
 .RE
 .PP
@@ -1480,9 +1468,9 @@ See \fIDataset\&.setDataPoints\fP
 .PP
 \fBProperties\fR
 .PP
-Readable: -Len, -NumType, -Type, -name
+Readable: -len, -name, -numtype, -type
 .PP
-Writable: -Len, -NumType, -Type, -name
+Writable: -len, -name, -numtype, -type
 .PP
 \fBSuperclasses\fR
 .PP
@@ -1523,6 +1511,175 @@ Name of axis that is linked to dummy trace\&.
 .RE
 .RS 4n\fBOBJECT getDataPoints\fP
 .br
+.RE
+.PP
+.RS -4n
+\fBIc\fR (::SpiceGenTcl)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+Adds new Parameter object to the list Params\&.
+.TP
+argsPreprocess
+See \fIUtility\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fIUtility\&.buildArgStr\fP
+.TP
+buildSwArgStr
+See \fIUtility\&.buildSwArgStr\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+Deletes existing Parameter object from list Params\&.
+.TP
+duplListCheck
+See \fIUtility\&.duplListCheck\fP
+.TP
+duplListCheckRet
+See \fIUtility\&.duplListCheckRet\fP
+.TP
+genSPICEString
+Creates ic statement string for SPICE netlist\&.
+.TP
+getParams
+Gets the dictionary that contains parameter name as keys and parameter values as the values\&.
+.TP
+setParamValue
+Sets (or change) value of particular parameters\&.
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -name
+.PP
+Writable: -name
+.PP
+\fBSuperclasses\fR
+.PP
+\fISPICEElement\fP
+.PP
+\fBMixins\fR
+.PP
+\fIUtility\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fINodeset\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Ic)
+.RE
+.PP
+Creates object of class Ic\&.
+.RS 4n\fBOBJECT constructor\fP \fIparams ?-name value?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+params
+List of instance parameters in form {{name value} {name value} {name equation -eq} \&.\&.\&.}
+.TP
+-name
+Name of the library that could be used to retrieve element from \fI::SpiceGenTcl::Netlist\fP object and its descendants, optional\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+Class represent \&.ic statement\&.
+.PP
+.RS -4n
+\fBaddParam\fR (::SpiceGenTcl::Ic)
+.RE
+.PP
+Adds new Parameter object to the list Params\&.
+.RS 4n\fBOBJECT addParam\fP \fIparamName value ?-eq?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+paramName
+Name of parameter\&.
+.TP
+value
+Value of parameter\&.
+.TP
+-eq
+Optional parameter qualificator\&.
+.RE
+.PP
+.RS -4n
+\fBdeleteParam\fR (::SpiceGenTcl::Ic)
+.RE
+.PP
+Deletes existing Parameter object from list Params\&.
+.RS 4n\fBOBJECT deleteParam\fP \fIparamName\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+paramName
+Name of parameter that will be deleted\&.
+.RE
+.PP
+.RS -4n
+\fBgenSPICEString\fR (::SpiceGenTcl::Ic)
+.RE
+.PP
+Creates ic statement string for SPICE netlist\&.
+.RS 4n\fBOBJECT genSPICEString\fP
+.br
+.RE
+.PP
+\fBReturn value\fR
+.PP
+SPICE netlist's string
+.PP
+.RS -4n
+\fBgetParams\fR (::SpiceGenTcl::Ic)
+.RE
+.PP
+Gets the dictionary that contains parameter name as keys and
+parameter values as the values\&.
+.RS 4n\fBOBJECT getParams\fP
+.br
+.RE
+.PP
+\fBReturn value\fR
+.PP
+parameters dictionary
+.PP
+.RS -4n
+\fBsetParamValue\fR (::SpiceGenTcl::Ic)
+.RE
+.PP
+Sets (or change) value of particular parameters\&.
+.RS 4n\fBOBJECT setParamValue\fP \fIname value ?name value \&.\&.\&.?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the parameter\&.
+.TP
+value
+Value of the parameter\&.
 .RE
 .PP
 .RS -4n
@@ -1587,67 +1744,6 @@ Creates include string for SPICE netlist\&.
 \fBReturn value\fR
 .PP
 SPICE netlist's string
-.PP
-.RS -4n
-\fBKeyArgsBuilder\fR (::SpiceGenTcl)
-.RE
-.PP
-\fBMethod summary\fR
-.RS 4n
-.TP
-argsPreprocess
-Calls argparse and constructs list for passing to Device constructor\&.
-.TP
-buildArgStr
-Builds argument list for argparse\&.
-.RE
-.PP
-\fBSubclasses\fR
-.PP
-\fIDevice\fP, \fIModel\fP
-.PP
-.RS -4n
-\fBargsPreprocess\fR (::SpiceGenTcl::KeyArgsBuilder)
-.RE
-.PP
-Calls argparse and constructs list for passing to Device constructor\&.
-.RS 4n\fBOBJECT argsPreprocess\fP \fIparamsNames ?args?\fP
-.br
-.RE
-.PP
-\fBParameters\fR
-.RS 4n
-.TP
-paramsNames
-List of parameter names, define alias for parameter name by using two element list {paramName aliasName}
-.TP
-args
-Argument list with key names and it's values\&.
-.RE
-.PP
-\fBReturn value\fR
-.PP
-list of parameters formatted for Device/Model constructor
-.PP
-.RS -4n
-\fBbuildArgStr\fR (::SpiceGenTcl::KeyArgsBuilder)
-.RE
-.PP
-Builds argument list for argparse\&.
-.RS 4n\fBOBJECT buildArgStr\fP \fIparamsNames\fP
-.br
-.RE
-.PP
-\fBParameters\fR
-.RS 4n
-.TP
-paramsNames
-List of parameter names\&.
-.RE
-.PP
-\fBReturn value\fR
-.PP
-string in form \fI-paramName= \&.\&.\&.\fP
 .PP
 .RS -4n
 \fBLibrary\fR (::SpiceGenTcl)
@@ -1729,10 +1825,13 @@ addParam
 Adds new parameter to device, and throws error on dublicated names\&.
 .TP
 argsPreprocess
-See \fIKeyArgsBuilder\&.argsPreprocess\fP
+See \fIUtility\&.argsPreprocess\fP
 .TP
 buildArgStr
-See \fIKeyArgsBuilder\&.buildArgStr\fP
+See \fIUtility\&.buildArgStr\fP
+.TP
+buildSwArgStr
+See \fIUtility\&.buildSwArgStr\fP
 .TP
 configure
 Configure properties\&.
@@ -1741,10 +1840,10 @@ deleteParam
 Deletes existing Parameter object from list Params\&.
 .TP
 duplListCheck
-See \fIDuplChecker\&.duplListCheck\fP
+See \fIUtility\&.duplListCheck\fP
 .TP
 duplListCheckRet
-See \fIDuplChecker\&.duplListCheckRet\fP
+See \fIUtility\&.duplListCheckRet\fP
 .TP
 genSPICEString
 Creates model string for SPICE netlist\&.
@@ -1768,7 +1867,7 @@ Writable: -name, -type
 .PP
 \fBMixins\fR
 .PP
-\fIDuplChecker\fP, \fIKeyArgsBuilder\fP
+\fIUtility\fP
 .PP
 \fBSubclasses\fR
 .PP
@@ -1914,6 +2013,15 @@ Constructor for the class\&.
 add
 Adds elements objects to Elements dictionary\&.
 .TP
+argsPreprocess
+See \fIUtility\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fIUtility\&.buildArgStr\fP
+.TP
+buildSwArgStr
+See \fIUtility\&.buildSwArgStr\fP
+.TP
 configure
 Configure properties\&.
 .TP
@@ -1921,10 +2029,10 @@ del
 Deletes elements from the netlist by its name\&.
 .TP
 duplListCheck
-See \fIDuplChecker\&.duplListCheck\fP
+See \fIUtility\&.duplListCheck\fP
 .TP
 duplListCheckRet
-See \fIDuplChecker\&.duplListCheckRet\fP
+See \fIUtility\&.duplListCheckRet\fP
 .TP
 genSPICEString
 Creates netlist string for SPICE netlist\&.
@@ -1948,7 +2056,7 @@ Writable: -name
 .PP
 \fBMixins\fR
 .PP
-\fIDuplChecker\fP
+\fIUtility\fP
 .PP
 \fBSubclasses\fR
 .PP
@@ -2052,6 +2160,74 @@ Name of element\&.
 .RE
 .PP
 .RS -4n
+\fBNodeset\fR (::SpiceGenTcl)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fIIc\&.addParam\fP
+.TP
+argsPreprocess
+See \fIUtility\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fIUtility\&.buildArgStr\fP
+.TP
+buildSwArgStr
+See \fIUtility\&.buildSwArgStr\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fIIc\&.deleteParam\fP
+.TP
+duplListCheck
+See \fIUtility\&.duplListCheck\fP
+.TP
+duplListCheckRet
+See \fIUtility\&.duplListCheckRet\fP
+.TP
+genSPICEString
+Creates nodeset statement string for SPICE netlist\&.
+.TP
+getParams
+See \fIIc\&.getParams\fP
+.TP
+setParamValue
+See \fIIc\&.setParamValue\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -name
+.PP
+Writable: -name
+.PP
+\fBSuperclasses\fR
+.PP
+\fIIc\fP
+.PP
+\fBMixins\fR
+.PP
+\fIUtility\fP
+.PP
+.RS -4n
+\fBgenSPICEString\fR (::SpiceGenTcl::Nodeset)
+.RE
+.PP
+Creates nodeset statement string for SPICE netlist\&.
+.RS 4n\fBOBJECT genSPICEString\fP
+.br
+.RE
+.PP
+\fBReturn value\fR
+.PP
+SPICE netlist's string
+.PP
+.RS -4n
 \fBOptions\fR (::SpiceGenTcl)
 .RE
 .PP
@@ -2064,6 +2240,15 @@ Constructor for the class\&.
 addParam
 Creates new parameter object and add it to the list Params\&.
 .TP
+argsPreprocess
+See \fIUtility\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fIUtility\&.buildArgStr\fP
+.TP
+buildSwArgStr
+See \fIUtility\&.buildSwArgStr\fP
+.TP
 configure
 Configure properties\&.
 .TP
@@ -2071,10 +2256,10 @@ deleteParam
 Deletes existing Parameter object from list Params\&.
 .TP
 duplListCheck
-See \fIDuplChecker\&.duplListCheck\fP
+See \fIUtility\&.duplListCheck\fP
 .TP
 duplListCheckRet
-See \fIDuplChecker\&.duplListCheckRet\fP
+See \fIUtility\&.duplListCheckRet\fP
 .TP
 genSPICEString
 Creates options string for SPICE netlist\&.
@@ -2098,7 +2283,11 @@ Writable: -name
 .PP
 \fBMixins\fR
 .PP
-\fIDuplChecker\fP
+\fIUtility\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fI::SpiceGenTcl::Ngspice::Misc::OptionsNgspice\fP
 .PP
 .RS -4n
 \fBconstructor\fR (::SpiceGenTcl::Options)
@@ -2128,7 +2317,7 @@ This class represent \&.options statement\&.
 .RE
 .PP
 Creates new parameter object and add it to the list Params\&.
-.RS 4n\fBOBJECT addParam\fP \fIparamName value\fP
+.RS 4n\fBOBJECT addParam\fP \fIparamName value ?args?\fP
 .br
 .RE
 .PP
@@ -2139,7 +2328,7 @@ paramName
 Name of parameter\&.
 .TP
 value
-Value of parameter, with optional qualificator -eq\&.
+Value of parameter, could be equal to -sw, or with optional qualificator -eq\&.
 .RE
 .PP
 .RS -4n
@@ -2233,7 +2422,7 @@ Writable: -name, -value
 .PP
 \fBSubclasses\fR
 .PP
-\fIParameterNoCheck\fP, \fIParameterPositional\fP, \fIParameterDefault\fP, \fIParameterEquation\fP
+\fIParameterNode\fP, \fIParameterNoCheck\fP, \fIParameterPositional\fP, \fIParameterDefault\fP, \fIParameterEquation\fP
 .PP
 .RS -4n
 \fBconstructor\fR (::SpiceGenTcl::Parameter)
@@ -2465,6 +2654,132 @@ Value of the parameter\&.
 \fBDescription\fR
 .PP
 Class models parameter the same as described by Parameter but without check for value form\&.
+.PP
+.RS -4n
+\fBParameterNode\fR (::SpiceGenTcl)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+configure
+Configure properties\&.
+.TP
+genSPICEString
+Creates string for SPICE netlist\&.
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -name, -value
+.PP
+Writable: -name, -value
+.PP
+\fBSuperclasses\fR
+.PP
+\fIParameter\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fIParameterNodeEquation\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::ParameterNode)
+.RE
+.PP
+Creates object of class ParameterNode with parameter name and value\&.
+.RS 4n\fBParameterNode create OBJNAME\fP \fIname value\fP
+.br
+\fBParameterNode new\fP \fIname value\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the parameter\&.
+.TP
+value
+Value of the parameter\&.
+.RE
+.PP
+.RS -4n
+\fBgenSPICEString\fR (::SpiceGenTcl::ParameterNode)
+.RE
+.PP
+Creates string for SPICE netlist\&.
+.RS 4n\fBOBJECT genSPICEString\fP
+.br
+.RE
+.PP
+\fBReturn value\fR
+.PP
+SPICE netlist's string
+.PP
+.RS -4n
+\fBParameterNodeEquation\fR (::SpiceGenTcl)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+configure
+Configure properties\&.
+.TP
+genSPICEString
+Creates string for SPICE netlist\&.
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -name, -value
+.PP
+Writable: -name, -value
+.PP
+\fBSuperclasses\fR
+.PP
+\fIParameterNode\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::ParameterNodeEquation)
+.RE
+.PP
+Creates object of class ParameterNodeEquation with parameter name and value\&.
+.RS 4n\fBParameterNodeEquation create OBJNAME\fP \fIname value\fP
+.br
+\fBParameterNodeEquation new\fP \fIname value\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the parameter\&.
+.TP
+value
+Value of the parameter\&.
+.RE
+.PP
+.RS -4n
+\fBgenSPICEString\fR (::SpiceGenTcl::ParameterNodeEquation)
+.RE
+.PP
+Creates string for SPICE netlist\&.
+.RS 4n\fBOBJECT genSPICEString\fP
+.br
+.RE
+.PP
+\fBReturn value\fR
+.PP
+SPICE netlist's string
 .PP
 .RS -4n
 \fBParameterPositional\fR (::SpiceGenTcl)
@@ -2751,6 +3066,15 @@ Constructor for the class\&.
 addParam
 Adds new Parameter object to the list Params\&.
 .TP
+argsPreprocess
+See \fIUtility\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fIUtility\&.buildArgStr\fP
+.TP
+buildSwArgStr
+See \fIUtility\&.buildSwArgStr\fP
+.TP
 configure
 Configure properties\&.
 .TP
@@ -2758,10 +3082,10 @@ deleteParam
 Deletes existing Parameter object from list Params\&.
 .TP
 duplListCheck
-See \fIDuplChecker\&.duplListCheck\fP
+See \fIUtility\&.duplListCheck\fP
 .TP
 duplListCheckRet
-See \fIDuplChecker\&.duplListCheckRet\fP
+See \fIUtility\&.duplListCheckRet\fP
 .TP
 genSPICEString
 Creates parameter statement string for SPICE netlist\&.
@@ -2785,7 +3109,7 @@ Writable: -name
 .PP
 \fBMixins\fR
 .PP
-\fIDuplChecker\fP
+\fIUtility\fP
 .PP
 .RS -4n
 \fBconstructor\fR (::SpiceGenTcl::ParamStatement)
@@ -3050,9 +3374,9 @@ See \fIBinaryReader\&.skip16bytes\fP
 .PP
 \fBProperties\fR
 .PP
-Readable: -Axis, -BlockSize, -NPoints, -NVariables, -Path, -RawParams, -Traces
+Readable: -axis, -npoints, -nvariables, -path, -rawparams, -traces
 .PP
-Writable: -Axis, -BlockSize, -NPoints, -NVariables, -Path, -RawParams, -Traces
+Writable: -axis, -npoints, -nvariables, -path, -rawparams, -traces
 .PP
 \fBMixins\fR
 .PP
@@ -3287,9 +3611,9 @@ Runs simulation\&.
 .PP
 \fBProperties\fR
 .PP
-Readable: -Command, -data, -log, -name
+Readable: -data, -log, -name
 .PP
-Writable: -Command, -data, -log, -name
+Writable: -data, -log, -name
 .PP
 \fBSubclasses\fR
 .PP
@@ -3351,7 +3675,7 @@ Declaration of method common for all SPICE elements that generates representatio
 .PP
 \fBSubclasses\fR
 .PP
-\fIPin\fP, \fIParameterSwitch\fP, \fIDevice\fP, \fIModel\fP, \fIRawString\fP, \fIOptions\fP, \fIParamStatement\fP, \fITemp\fP, \fINetlist\fP, \fIAnalysis\fP
+\fIPin\fP, \fIParameterSwitch\fP, \fIDevice\fP, \fIModel\fP, \fIRawString\fP, \fIOptions\fP, \fIParamStatement\fP, \fIIc\fP, \fITemp\fP, \fINetlist\fP, \fIAnalysis\fP
 .PP
 .RS -4n
 \fBgenSPICEString\fR (::SpiceGenTcl::SPICEElement)
@@ -3380,6 +3704,15 @@ Add element object reference to Netlist, it extends add method to add check of e
 addParam
 Adds new parameter to subcircuit, and throws error on dublicated names\&.
 .TP
+argsPreprocess
+See \fIUtility\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fIUtility\&.buildArgStr\fP
+.TP
+buildSwArgStr
+See \fIUtility\&.buildSwArgStr\fP
+.TP
 configure
 Configure properties\&.
 .TP
@@ -3390,10 +3723,10 @@ deleteParam
 Deletes existing Parameter object from list Params\&.
 .TP
 duplListCheck
-See \fIDuplChecker\&.duplListCheck\fP
+See \fIUtility\&.duplListCheck\fP
 .TP
 duplListCheckRet
-See \fIDuplChecker\&.duplListCheckRet\fP
+See \fIUtility\&.duplListCheckRet\fP
 .TP
 genSPICEString
 Creates subcircuit string for SPICE subcircuit\&.
@@ -3658,9 +3991,9 @@ See \fIDataset\&.setDataPoints\fP
 .PP
 \fBProperties\fR
 .PP
-Readable: -Axis, -Len, -NumType, -Type, -name
+Readable: -axis, -len, -name, -numtype, -type
 .PP
-Writable: -Axis, -Len, -NumType, -Type, -name
+Writable: -axis, -len, -name, -numtype, -type
 .PP
 \fBSuperclasses\fR
 .PP
@@ -3702,9 +4035,127 @@ Numerical type of trace\&. Optional, default real\&.
 .PP
 \fBMethod summary\fR
 .RS 4n
+.TP
+argsPreprocess
+Calls argparse and constructs list for passing to Device constructor\&.
+.TP
+buildArgStr
+Builds argument list for argparse\&.
+.TP
+buildSwArgStr
+Builds argument list for argparse that doesn't need an argument value\&.
+.TP
+duplListCheck
+Checks if list contains duplicates\&.
+.TP
+duplListCheckRet
+Checks if list contains duplicates and return value of first duplicate\&.
 .RE
 .PP
 \fBSubclasses\fR
 .PP
-\fI::SpiceGenTcl::Common::Sources::pulse\fP, \fI::SpiceGenTcl::Common::Sources::sin\fP, \fI::SpiceGenTcl::Common::Sources::exp\fP, \fI::SpiceGenTcl::Common::Sources::sffm\fP, \fI::SpiceGenTcl::Common::Analyses::Dc\fP, \fI::SpiceGenTcl::Common::Analyses::Ac\fP, \fI::SpiceGenTcl::Common::Analyses::Tran\fP, \fI::SpiceGenTcl::Common::Analyses::Op\fP, \fI::SpiceGenTcl::Ngspice::Sources::pulse\fP, \fI::SpiceGenTcl::Ngspice::Sources::sffm\fP, \fI::SpiceGenTcl::Ngspice::Sources::am\fP, \fI::SpiceGenTcl::Ngspice::Analyses::Sp\fP, \fI::SpiceGenTcl::Ngspice::Analyses::SensAc\fP, \fI::SpiceGenTcl::Ngspice::Analyses::SensDc\fP, \fI::SpiceGenTcl::Xyce::Analyses::Sens\fP, \fI::SpiceGenTcl::Ltspice::Sources::pulse\fP, \fI::SpiceGenTcl::Ltspice::Sources::sin\fP, \fI::SpiceGenTcl::Ltspice::Sources::exp\fP, \fI::SpiceGenTcl::Ltspice::Sources::sffm\fP
+\fIDevice\fP, \fIModel\fP, \fIOptions\fP, \fIParamStatement\fP, \fIIc\fP, \fINodeset\fP, \fINetlist\fP, \fIAnalysis\fP, \fI::SpiceGenTcl::Common::Sources::pulse\fP, \fI::SpiceGenTcl::Common::Sources::sin\fP, \fI::SpiceGenTcl::Common::Sources::exp\fP, \fI::SpiceGenTcl::Common::Sources::sffm\fP, \fI::SpiceGenTcl::Common::Analyses::Dc\fP, \fI::SpiceGenTcl::Common::Analyses::Ac\fP, \fI::SpiceGenTcl::Common::Analyses::Tran\fP, \fI::SpiceGenTcl::Common::Analyses::Op\fP, \fI::SpiceGenTcl::Ngspice::Sources::pulse\fP, \fI::SpiceGenTcl::Ngspice::Sources::sffm\fP, \fI::SpiceGenTcl::Ngspice::Sources::am\fP, \fI::SpiceGenTcl::Ngspice::Analyses::Sp\fP, \fI::SpiceGenTcl::Ngspice::Analyses::SensAc\fP, \fI::SpiceGenTcl::Ngspice::Analyses::SensDc\fP, \fI::SpiceGenTcl::Ngspice::Misc::OptionsNgspice\fP, \fI::SpiceGenTcl::Xyce::Analyses::Sens\fP, \fI::SpiceGenTcl::Ltspice::Sources::pulse\fP, \fI::SpiceGenTcl::Ltspice::Sources::sin\fP, \fI::SpiceGenTcl::Ltspice::Sources::exp\fP, \fI::SpiceGenTcl::Ltspice::Sources::sffm\fP
+.PP
+.RS -4n
+\fBargsPreprocess\fR (::SpiceGenTcl::Utility)
+.RE
+.PP
+Calls argparse and constructs list for passing to Device constructor\&.
+.RS 4n\fBOBJECT argsPreprocess\fP \fIparamsNames ?args?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+paramsNames
+List of parameter names, define alias for parameter name by using two element list {paramName aliasName}
+.TP
+args
+Argument list with key names and it's values\&.
+.RE
+.PP
+\fBReturn value\fR
+.PP
+list of parameters formatted for Device/Model constructor
+.PP
+.RS -4n
+\fBbuildArgStr\fR (::SpiceGenTcl::Utility)
+.RE
+.PP
+Builds argument list for argparse\&.
+.RS 4n\fBOBJECT buildArgStr\fP \fIparamsNames\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+paramsNames
+List of parameter names\&.
+.RE
+.PP
+\fBReturn value\fR
+.PP
+string in form \fI-paramName= \&.\&.\&.\fP
+.PP
+.RS -4n
+\fBbuildSwArgStr\fR (::SpiceGenTcl::Utility)
+.RE
+.PP
+Builds argument list for argparse that doesn't need an argument value\&.
+.RS 4n\fBOBJECT buildSwArgStr\fP \fIparamsNames\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+paramsNames
+List of parameter names\&.
+.RE
+.PP
+\fBReturn value\fR
+.PP
+string in form \fI-paramName \&.\&.\&.\fP
+.PP
+.RS -4n
+\fBduplListCheck\fR (::SpiceGenTcl::Utility)
+.RE
+.PP
+Checks if list contains duplicates\&.
+.RS 4n\fBOBJECT duplListCheck\fP \fIlist\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+list
+List to check\&.
+.RE
+.PP
+\fBReturn value\fR
+.PP
+0 if there are no duplicates and 1 if there are\&.
+.PP
+.RS -4n
+\fBduplListCheckRet\fR (::SpiceGenTcl::Utility)
+.RE
+.PP
+Checks if list contains duplicates and return value of first duplicate\&.
+.RS 4n\fBOBJECT duplListCheckRet\fP \fIlist\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+list
+List to check\&.
+.RE
+.PP
+\fBReturn value\fR
+.PP
+empty list if no duplicate or value of first duplicate\&.
 
