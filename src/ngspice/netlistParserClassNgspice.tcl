@@ -419,7 +419,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             # Checks if string has form `name={value}`, value must not contain `{`, `}` and `=` symbols and be empty,
             # names can containonly alphanumeric characters and `_` symbol
             #   string - input string
-            return [regexp {^([a-zA-Z_][a-zA-Z0-9_]*)=\{([^={}]+)\}$} $string]
+            return [regexp {^([a-zA-Z_][a-zA-Z0-9_()]*)=\{([^={}]+)\}$} $string]
         }
         method ParseBracedWithEqual {string} {
             # Parse input string in form `name={value}` to list {name value}, value must not contain `{`, `}` and `=`
@@ -427,7 +427,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             #   string - input string
             # Returns: list in form {name value}
             if {[my CheckBracedWithEqual $string]} {
-                regexp {^([a-zA-Z_][a-zA-Z0-9_]*)=\{([^={}]+)\}$} $string match name value
+                regexp {^([a-zA-Z_][a-zA-Z0-9_()]*)=\{([^={}]+)\}$} $string match name value
                 return [list $name $value]
             } else {
                 return -code error "String '${string}' isn't of form 'name={value}', value must not contain '{' or '}'\ 
@@ -438,14 +438,14 @@ namespace eval ::SpiceGenTcl::Ngspice {
             # Checks if string has form `name=value`, value must not contain `{`, `}` and `=` symbols and be empty,
             # names can contain only alphanumeric characters and `_` symbol
             #   string - input string
-            return [regexp {^([a-zA-Z_][a-zA-Z0-9_]*)=([^={}]+)$} $string]
+            return [regexp {^([a-zA-Z_][a-zA-Z0-9_()]*)=([^={}]+)$} $string]
         }
         method ParseWithEqual {string} {
             # Parse input string in form `name=value` to list `{name value}`.
             #   string - input string
             # Returns: list in form {name value}
             if {[my CheckEqual $string]} {
-                regexp {^([a-zA-Z_][a-zA-Z0-9_]*)=([^={}]+)$} $string match name value
+                regexp {^([a-zA-Z_][a-zA-Z0-9_()]*)=([^={}]+)$} $string match name value
                 return [list $name $value]
             } else {
                 return -code error "String '${string}' isn't of form 'name=value', value must not contain '{' or '}'\ 
@@ -666,7 +666,9 @@ namespace eval ::SpiceGenTcl::Ngspice {
 
         }
         method CreateIc {line netlistObj} {
-
+            set lineList [lrange [split $line] 1 end]
+            $netlistObj add [::SpiceGenTcl::Ic new [my ParseParams $lineList 0 {} list]]
+            return 
         }
         method CreateInclude {line netlistObj} {
             set value [join [lrange [split $line] 1 end]]
@@ -681,7 +683,9 @@ namespace eval ::SpiceGenTcl::Ngspice {
             return
         }
         method CreateNodeset {line netlistObj} {
-
+            set lineList [lrange [split $line] 1 end]
+            $netlistObj add [::SpiceGenTcl::Nodeset new [my ParseParams $lineList 0 {} list]]
+            return 
         }
         method CreateOptions {line netlistObj} {
             set lineList [lrange [split $line] 1 end]
