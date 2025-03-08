@@ -120,6 +120,18 @@ namespace eval ::SpiceGenTcl::Ngspice {
             }
             # remove all comments that start with `*` symbol
             set finalList [lsearch -all -inline -not -glob $finalList {\**}]
+            # remove all end of line comments that starts with symbols \;, \$ and //
+            foreach line $finalList {
+                if {[set index [string first {;} $line]]!=-1} {
+                    set line [string trim [string range $line 0 [= {$index-1}]]]
+                } elseif {[set index [string first {$} $line]]!=-1} {
+                    set line [string trim [string range $line 0 [= {$index-1}]]]
+                } elseif {[set index [string first {//} $line]]!=-1} {
+                    set line [string trim [string range $line 0 [= {$index-1}]]]
+                }
+                lappend tempList $line
+            }
+            set finalList $tempList
             # remove control section that starts with .control and ends with .endc
             for {set i 0} {$i<[llength $finalList]} {incr i} {
                 set line [@ $finalList $i]
