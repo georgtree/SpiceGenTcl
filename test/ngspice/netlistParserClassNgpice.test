@@ -504,14 +504,19 @@ testTemplateParse testParserClassNodesetsIcs-1 {} $netlistsLoc ic_nodeset_test.c
 {.ic v(1)=5 v(a)={b} h=1
 .nodeset v(1)=5 v(a)={b} h=1}
 
-### Temp
+### Temp parsing test
 
-testTemplateParse1 testParserClassTemps-2 {} {.temp 25} $netlistsLoc {.temp 25}
+testTemplateParse1 testParserClassTemps-1 {} {.temp 25} $netlistsLoc {.temp 25}
 testTemplateParse1 testParserClassTemps-2 {} {.temp {tempPar}} $netlistsLoc {.temp {temppar}}
 
-### Global
+### Global parsing test
 
 testTemplateParse1 testParserClassGlobals-1 {} {.global gnd1 gnd2 3} $netlistsLoc {.global gnd1 gnd2 3}
+
+### Coupling parsing test
+
+testTemplateParse1 testParserClassCoupling-1 {} {k1 la lb 0.5} $netlistsLoc {k1 la lb 0.5}
+testTemplateParse1 testParserClassCoupling-2 {} {k1 la lb {kpar}} $netlistsLoc {k1 la lb {kpar}}
 
 forgetNgspice
 

@@ -586,7 +586,6 @@ namespace eval ::SpiceGenTcl {
             #     tc2 - keyword parameter with equation
             # This class accept definition that contains elements listed above, and generates classes: Pin, Parameter, 
             # PositionalParameter with compositional relationship (has a).
-            
             my configure -name $name
             # create Pins objects
             foreach pin $pins {

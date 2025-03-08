@@ -37,7 +37,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             set Name $name 
             my configure -filepath $filepath
             set ElemsMethods [dcreate b CreateBehSource c CreateCap d CreateDio e CreateVCVS f CreateCCCS\
-                                      g CreateVCCS h CreateCCVS i CreateVIsource j CreateJFET k CreateCoupInd\
+                                      g CreateVCCS h CreateCCVS i CreateVIsource j CreateJFET k CreateCoupling\
                                       l CreateInd m CreateMOSFET n CreateVeriloga q CreateBJT r CreateRes\
                                       s CreateVSwitch v CreateVIsource w CreateCSwitch x CreateSubcktInst\
                                       z CreateMESFET]
@@ -965,8 +965,19 @@ namespace eval ::SpiceGenTcl::Ngspice {
                 return -code error "Creating JFET object from line '${line}' failed due to wrong or incompatible syntax"
             }
         }
-        method CreateCoupInd {line netlistObj} {
-
+        method CreateCoupling {line netlistObj} {
+            #   line - line to parse
+            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
+            #   element should be attached.
+            set lineList [split $line]
+            lassign $lineList elemName l1 l2 kval
+            set elemName [string range $elemName 1 end]
+            set nmspPath ${NamespacePath}::BasicDevices::K
+            if {[my CheckBraced $kval]} {
+                set kval [list [my Unbrace $kval] -eq]
+            }
+            $netlistObj add [$nmspPath new $elemName -l1 $l1 -l2 $l2 -k $kval]
+            return
         }
         method CreateInd {line netlistObj} {
             # Creates inductor object from passed line and add it to netlist
