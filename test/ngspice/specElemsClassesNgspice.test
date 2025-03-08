@@ -511,7 +511,7 @@ testTemplate testXClass-1 {} {X new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c
 
 ####  SubcircuitInstanceAuto class tests 
     
-test testSubcircuitInstanceAutoClass-1 {test creation of SubcircuitInstanceAuto class instance with genSPICEString interface} -setup {
+test testSubcircuitInstanceAutoClass-1 {} -setup {
     oo::class create RCnet {
         superclass Subcircuit
         constructor {} {
@@ -531,11 +531,11 @@ test testSubcircuitInstanceAutoClass-1 {test creation of SubcircuitInstanceAuto 
     set subInst1 [SubcircuitInstanceAuto new $subcircuit 2 {net1 net2} -r 1 -c {cpar -eq}]
     set result [$subInst1 genSPICEString]   
 } -result {x2 net1 net2 rcnet r=1 c={cpar}} -cleanup {
-    rename RCnet ""
+    rename RCnet {}
     unset subcircuit subInst1 result
 }
 
-test testSubcircuitInstanceAutoClass-2 {test creation of SubcircuitInstanceAuto class instance with wrong number of nodes} -setup {
+test testSubcircuitInstanceAutoClass-2 {} -setup {
     oo::class create RCnet {
         superclass Subcircuit
         constructor {} {
@@ -555,11 +555,11 @@ test testSubcircuitInstanceAutoClass-2 {test creation of SubcircuitInstanceAuto 
     catch {SubcircuitInstanceAuto new $subcircuit 2 {net1 net2 net3} -r 1 -c {cpar -eq}} errorStr
     return $errorStr  
 } -result {Wrong number of nodes '3' in definition, should be '2'} -cleanup {
-    rename RCnet ""
+    rename RCnet {}
     unset subcircuit errorStr
 }
 
-test testSubcircuitInstanceAutoClass-3 {test creation of SubcircuitInstanceAuto class instance with wrong class of input object} -setup {
+test testSubcircuitInstanceAutoClass-3 {} -setup {
     oo::class create RCnet {
         superclass Subcircuit
         constructor {} {
@@ -579,12 +579,13 @@ test testSubcircuitInstanceAutoClass-3 {test creation of SubcircuitInstanceAuto 
 } -body {
     catch {SubcircuitInstanceAuto new $res 2 {net1 net2 net3} -r 1 -c {cpar -eq}} errorStr
     return $errorStr  
-} -result {Wrong object class '::SpiceGenTcl::Ngspice::BasicDevices::R' is passed as subcktObj, should be '::SpiceGenTcl::Subcircuit'} -cleanup {
-    rename RCnet ""
+} -result {Wrong object class '::SpiceGenTcl::Ngspice::BasicDevices::R' is passed as subcktObj, should be\
+                   '::SpiceGenTcl::Subcircuit'} -cleanup {
+    rename RCnet {}
     unset subcircuit res errorStr
 }
 
-test testSubcircuitInstanceAutoClass-4 {test creation of SubcircuitInstanceAuto class instance with genSPICEString interface without parameters} -setup {
+test testSubcircuitInstanceAutoClass-4 {} -setup {
     oo::class create RCnet {
         superclass Subcircuit
         constructor {} {
@@ -594,7 +595,7 @@ test testSubcircuitInstanceAutoClass-4 {test creation of SubcircuitInstanceAuto 
             my add [R new 1 net1 net2 -r {r -eq}]
             my add [C new 1 net2 net3 -c {c -eq}]
             # pass name, list of pins and list of parameters to Subcircuit constructor
-            next rcnet $pins ""
+            next rcnet $pins {}
         }
     }
     set subcircuit [RCnet new]
@@ -602,7 +603,7 @@ test testSubcircuitInstanceAutoClass-4 {test creation of SubcircuitInstanceAuto 
     set subInst1 [SubcircuitInstanceAuto new $subcircuit 2 {net1 net2}]
     set result [$subInst1 genSPICEString]   
 } -result {x2 net1 net2 rcnet} -cleanup {
-    rename RCnet ""
+    rename RCnet {}
     unset subcircuit subInst1 result
 }
 
