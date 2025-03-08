@@ -873,6 +873,62 @@ test testNodesetClass-2 {test creation of Nodeset class instance and getParams i
     unset elemInst result
 }
 
+###  Global class tests 
+
+test testGlobalClass-1 {test creation of Global class instance} -setup {
+    set elemInst [Global new {gnd1 gnd2 g}]
+} -body {
+    set result [$elemInst genSPICEString]
+} -result {.global gnd1 gnd2 g} -cleanup {
+    unset elemInst result
+}
+
+test testGlobalClass-2 {test creation of Global class instance} -setup {
+    set elemInst [Global new {gnd1 gnd2 g}]
+} -body {
+    $elemInst addNets {gnd5 gnd6}
+    set result [$elemInst genSPICEString]
+} -result {.global gnd1 gnd2 g gnd5 gnd6} -cleanup {
+    unset elemInst result
+}
+
+test testGlobalClass-3 {test creation of Global class instance} -setup {
+    set elemInst [Global new {gnd1 gnd2 g}]
+} -body {
+    $elemInst deleteNet {gnd2}
+    set result [$elemInst genSPICEString]
+} -result {.global gnd1 g} -cleanup {
+    unset elemInst result
+}
+
+test testGlobalClass-4 {test creation of Global class instance} -setup {
+    set elemInst [Global new {gnd1 gnd2 g}]
+} -body {
+    catch {$elemInst addNets {gnd3 gnd2}} errorStr
+    return $errorStr
+} -result {Net with name 'gnd2' is already attached to the object '::oo::obj885'} -cleanup {
+    unset elemInst errorStr
+}
+
+test testGlobalClass-5 {test creation of Global class instance} -setup {
+    set elemInst [Global new {gnd1 gnd2 g}]
+} -body {
+    catch {$elemInst addNets {gnd3 {}}} errorStr
+    return $errorStr
+} -result {Net name couldn't be empty} -cleanup {
+    unset elemInst errorStr
+}
+
+test testGlobalClass-6 {test creation of Global class instance} -setup {
+    set elemInst [Global new {gnd1}]
+} -body {
+    $elemInst deleteNet gnd1
+    catch {$elemInst deleteNet gnd2} errorStr
+    return $errorStr
+} -result {Global statement '::oo::obj887' doesn't have attached net with name 'gnd2'} -cleanup {
+    unset elemInst errorStr
+}
+
 ###  Netlist class tests 
     
 test testNetlistClass-1 {test creation of Netlist class instance with add interface and genSPICEString interface} -setup {

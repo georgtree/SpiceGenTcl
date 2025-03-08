@@ -668,7 +668,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
         method CreateIc {line netlistObj} {
             set lineList [lrange [split $line] 1 end]
             $netlistObj add [::SpiceGenTcl::Ic new [my ParseParams $lineList 0 {} list]]
-            return 
+            return
         }
         method CreateInclude {line netlistObj} {
             set value [join [lrange [split $line] 1 end]]
@@ -702,7 +702,13 @@ namespace eval ::SpiceGenTcl::Ngspice {
             return
         }
         method CreateTemp {line netlistObj} {
-            
+            set lineList [lrange [split $line] 1 end]
+            lassign $lineList value
+            if {[my CheckBraced $value]} {
+                set value [list [my Unbrace $value] -eq]
+            }
+            $netlistObj add [::SpiceGenTcl::Temp new {*}$value]
+            return
         }
         method CreateRes {line netlistObj} {
             # Creates resistor object from passed line and add it to netlist

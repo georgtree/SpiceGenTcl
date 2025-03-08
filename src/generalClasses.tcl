@@ -19,7 +19,7 @@ namespace eval ::SpiceGenTcl {
     namespace export Pin ParameterSwitch Parameter ParameterNoCheck ParameterPositional ParameterPositionalNoCheck\
             ParameterDefault ParameterEquation ParameterPositionalEquation Device Model RawString Comment Include\
             Options ParamStatement Temp Netlist Circuit Library Subcircuit Analysis Simulator Dataset Axis Trace\
-            EmptyTrace RawFile Ic Nodeset ParameterNode ParameterNodeEquation
+            EmptyTrace RawFile Ic Nodeset ParameterNode ParameterNodeEquation Global
     namespace export importNgspice importXyce importCommon importLtspice forgetNgspice forgetXyce forgetCommon\
             forgetLtspice
     
@@ -1148,8 +1148,8 @@ namespace eval ::SpiceGenTcl {
                 } elseif {[@ $param 2] eq {-eq}} {
                     my addParam [@ $param 0] [@ $param 1] -eq  
                 } else { 
-                    error "Wrong parameter definition in Ic"
-                }   
+                    error {Wrong parameter definition in Ic}
+                }
             }
         }
         method getParams {*}[info class definition ::SpiceGenTcl::Device getParams]
@@ -1196,6 +1196,67 @@ namespace eval ::SpiceGenTcl {
             # Creates nodeset statement string for SPICE netlist.
             # Returns: SPICE netlist's string
             return ".nodeset [join [join [lmap param [dict values $Params] {$param genSPICEString}]]]"
+        }
+    }
+
+###  Global class definition 
+    
+    oo::configurable create Global {
+        superclass SPICEElement
+        mixin Utility
+        property name -set {
+            set name [string tolower $value]
+        }
+        variable name
+        variable Nets
+        constructor {nets args} {
+            # Creates object of class `Global`.
+            #  params - list of nets in form `{net0 net1 ...}`
+            #  -name - name of the library that could be used to retrieve element from [::SpiceGenTcl::Netlist] object
+            #    and its descendants, optional
+            # Class represent .global statement.
+            # Synopsis: nets ?-name value?
+            argparse {
+                -name=
+            }
+            if {[info exists name]} {
+                my configure -name $name
+            } else {
+                my configure -name [self object]
+            }
+            my addNets $nets
+        }
+        method addNets {nets} {
+            if {[info exists Nets]} {
+                set netsList $Nets
+            }
+            foreach net $nets {
+                if {$net ne {}} {
+                    lappend netsList $net
+                    if {[my duplListCheck $netsList]} {
+                        error "Net with name '${net}' is already attached to the object '[my configure -name]'"
+                    }
+                } else {
+                    error {Net name couldn't be empty}
+                }
+            }
+            set Nets $netsList
+            return
+        }
+        method deleteNet {net} {
+            set netsList $Nets
+            if {[set index [lsearch -exact $netsList $net]] !=-1} {
+                set netsList [lremove $netsList $index]
+            } else {
+                error "Global statement '${name}' doesn't have attached net with name '${net}'"
+            }
+            set Nets $netsList
+            return
+        }
+        method genSPICEString {} {
+            # Creates global statement string for SPICE netlist.
+            # Returns: SPICE netlist's string
+            return ".global [join $Nets]"
         }
     }
 
