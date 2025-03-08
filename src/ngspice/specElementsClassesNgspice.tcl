@@ -16,7 +16,7 @@
 
 namespace eval ::SpiceGenTcl {
     namespace eval Ngspice::BasicDevices {
-        namespace export Resistor R  Capacitor C Inductor L SubcircuitInstance X SubcircuitInstanceAuto XAuto\
+        namespace export Resistor R  Capacitor C Inductor L Coupling K SubcircuitInstance X SubcircuitInstanceAuto XAuto\
                 VSwitch S CSwitch W 
     }
     namespace eval Ngspice::Sources {
@@ -308,10 +308,48 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
                 }
             }
             next l$name [list [list np $npNode] [list nm $nmNode]] $params
-            
         }
     }
-    
+
+####  Coupling class 
+
+    oo::class create Coupling {
+        superclass ::SpiceGenTcl::Device
+        constructor {name args} {
+            # Creates object of class `Coupling` that describes inductance coupling between inductors. 
+            #  name - name of the device without first-letter designator L
+            #  -l1 - first inductor name
+            #  -l2 - second inductor name
+            #  -k - coupling coefficient
+            # ```
+            # KXXXXXXX LYYYYYYY LZZZZZZZ value
+            # ```
+            # Example of class initialization as a simple inductor:
+            # ```
+            # ::SpiceGenTcl::Ngspice::BasicDevices::Coupling new 1 -l1 la -l2 lb -k 0.5
+            # ```
+            # Synopsis: name -l1 value -l2 value -k value 
+            argparse {
+                {-l1= -required}
+                {-l2= -required}
+                {-k= -required}
+            }
+            if {([llength $k]>1) && ([@ $k 1] eq {-eq})} {
+                set k [list k [@ $k 0] -poseq]
+            } else {
+                set k [list k $k -pos]
+            }
+            next k$name {} [list [list l1 $l1 -posnocheck] [list l2 $l2 -posnocheck] $k]
+        }
+    }
+
+####  K class 
+
+    # alias for Coupling class
+    oo::class create K {
+        superclass Coupling
+    }
+
 ####  L class 
     
     # alias for Inductor class

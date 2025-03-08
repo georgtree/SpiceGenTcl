@@ -97,7 +97,12 @@ testTemplate testInductorClass-9 {} {Inductor new 1 netp netm -tc1 1} {Inductor 
 testTemplate testLClass-1 {} {L new 1 netp netm -l 1e-6 -tc1 1 -temp 25} {l1 netp netm 1e-6 tc1=1 temp=25}
 testTemplate testLClass-2 {} {L new 1 netp netm -l V(a)+V(b)+pow(V(c),2) -beh -tc1 1}\
         {l1 netp netm l={V(a)+V(b)+pow(V(c),2)} tc1=1}
-    
+
+####  Coupling class tests 
+
+testTemplate testCouplingClass-1 {} {Coupling new 1 -l1 la -l2 lb -k 0.5} {k1 la lb 0.5}
+testTemplate testCouplingClass-2 {} {Coupling new 1 -l1 la -l2 lb -k {k1 -eq}} {k1 la lb {k1}}
+
 ####  VSwitch class tests 
 
 testTemplate testVSwitchClass-1 {} {VSwitch new 1 net1 0 netc 0 -model sw1 -on} {s1 net1 0 netc 0 sw1 on}

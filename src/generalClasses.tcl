@@ -757,20 +757,29 @@ namespace eval ::SpiceGenTcl {
         method genSPICEString {} {
             # Creates device string for SPICE netlist.
             # Returns: SPICE netlist's string
-            dict for {pinName pin} $Pins {
-                if {![catch {$pin genSPICEString}]} {
-                    lappend nodes [$pin genSPICEString]
-                } else {
-                    return -code error "Device '[my configure -name]' can't be netlisted because '$pinName' pin is\
-                            floating"
+            if {[info exists Pins]} {
+                dict for {pinName pin} $Pins {
+                    if {![catch {$pin genSPICEString}]} {
+                        lappend nodes [$pin genSPICEString]
+                    } else {
+                        return -code error "Device '[my configure -name]' can't be netlisted because '$pinName' pin is\
+                                floating"
+                    }
                 }
             }
-            if {($Params eq {}) || ![info exists Params]} {
-                lappend params {}
-                return "[my configure -name] [join $nodes]"
-            } else {
+            if {[info exists Params]} {
                 set params [lmap param [dict values $Params] {$param genSPICEString}]
-                return "[my configure -name] [join $nodes] [join $params]"
+                if {[info exists Pins]} {
+                    return "[my configure -name] [join $nodes] [join $params]"
+                } else {
+                    return "[my configure -name] [join $params]"
+                }
+            } else {
+                if {[info exists Pins]} {
+                    return "[my configure -name] [join $nodes]"
+                } else {
+                    return [my configure -name]
+                }
             }
         }
     }

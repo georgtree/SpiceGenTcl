@@ -15,6 +15,8 @@ SpiceGenTcl::Ngspice::BasicDevices - Commands in namespace SpiceGenTcl::Ngspice:
 .br
 \fBOBJECT constructor\fP \fIname ?-option value \&.\&.\&.?\fP
 .br
+\fBOBJECT constructor\fP \fIname -l1 value -l2 value -k value\fP
+.br
 \fBOBJECT constructor\fP \fIname ?-option value \&.\&.\&.?\fP
 .br
 \fBOBJECT constructor\fP \fIname npNode nmNode -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value|-dtemp value? ?-scale value? ?-ic value?\fP
@@ -357,6 +359,114 @@ Example of class initialization:
 .RE
 .PP
 .RS -4n
+\fBCoupling\fR (::SpiceGenTcl::Ngspice::BasicDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+argsPreprocess
+See \fI::SpiceGenTcl::Utility\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fI::SpiceGenTcl::Utility\&.buildArgStr\fP
+.TP
+buildSwArgStr
+See \fI::SpiceGenTcl::Utility\&.buildSwArgStr\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::Utility\&.duplListCheck\fP
+.TP
+duplListCheckRet
+See \fI::SpiceGenTcl::Utility\&.duplListCheckRet\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -name
+.PP
+Writable: -name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Device\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fIK\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Ngspice::BasicDevices::Coupling)
+.RE
+.PP
+Creates object of class Coupling that describes inductance coupling between inductors\&.
+.RS 4n\fBOBJECT constructor\fP \fIname -l1 value -l2 value -k value\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the device without first-letter designator L\&.
+.TP
+-k
+Coupling coefficient\&.
+.TP
+-l1
+First inductor name\&.
+.TP
+-l2
+Second inductor name\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+.RS 4n
+.nf
+KXXXXXXX LYYYYYYY LZZZZZZZ value
+.fi
+.RE
+.PP
+Example of class initialization as a simple inductor:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Ngspice::BasicDevices::Coupling new 1 -l1 la -l2 lb -k 0\&.5
+.fi
+.RE
+.PP
+.RS -4n
 \fBCSwitch\fR (::SpiceGenTcl::Ngspice::BasicDevices)
 .RE
 .PP
@@ -655,6 +765,66 @@ Example of class initialization:
 ::SpiceGenTcl::Ngspice::BasicDevices::Inductor new 1 netp netm -l 1e-6 -model indm
 .fi
 .RE
+.PP
+.RS -4n
+\fBK\fR (::SpiceGenTcl::Ngspice::BasicDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+argsPreprocess
+See \fI::SpiceGenTcl::Utility\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fI::SpiceGenTcl::Utility\&.buildArgStr\fP
+.TP
+buildSwArgStr
+See \fI::SpiceGenTcl::Utility\&.buildSwArgStr\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::Utility\&.duplListCheck\fP
+.TP
+duplListCheckRet
+See \fI::SpiceGenTcl::Utility\&.duplListCheckRet\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -name
+.PP
+Writable: -name
+.PP
+\fBSuperclasses\fR
+.PP
+\fICoupling\fP
 .PP
 .RS -4n
 \fBL\fR (::SpiceGenTcl::Ngspice::BasicDevices)

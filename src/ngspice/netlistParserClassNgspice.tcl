@@ -1161,7 +1161,6 @@ namespace eval ::SpiceGenTcl::Ngspice {
             set lineList [lrange $lineList 3 end]
             set type [string index $elemName 0]
             set elemName [string range $elemName 1 end]
-
             # check if the first value is DC value without DC selector
             if {[my CheckBraced [@ $lineList 0]] || [my CheckNumber [@ $lineList 0]]} {
                 set dcVal [@ $lineList 0]
@@ -1348,5 +1347,4 @@ namespace eval ::SpiceGenTcl::Ngspice {
             }
         }
     }
-
 }

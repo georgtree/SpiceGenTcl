@@ -902,11 +902,11 @@ test testGlobalClass-3 {test creation of Global class instance} -setup {
 }
 
 test testGlobalClass-4 {test creation of Global class instance} -setup {
-    set elemInst [Global new {gnd1 gnd2 g}]
+    set elemInst [Global new {gnd1 gnd2 g} -name glob1]
 } -body {
     catch {$elemInst addNets {gnd3 gnd2}} errorStr
     return $errorStr
-} -result {Net with name 'gnd2' is already attached to the object '::oo::obj885'} -cleanup {
+} -result {Net with name 'gnd2' is already attached to the object 'glob1'} -cleanup {
     unset elemInst errorStr
 }
 
@@ -920,12 +920,12 @@ test testGlobalClass-5 {test creation of Global class instance} -setup {
 }
 
 test testGlobalClass-6 {test creation of Global class instance} -setup {
-    set elemInst [Global new {gnd1}]
+    set elemInst [Global new {gnd1} -name glob1]
 } -body {
     $elemInst deleteNet gnd1
     catch {$elemInst deleteNet gnd2} errorStr
     return $errorStr
-} -result {Global statement '::oo::obj887' doesn't have attached net with name 'gnd2'} -cleanup {
+} -result {Global statement 'glob1' doesn't have attached net with name 'gnd2'} -cleanup {
     unset elemInst errorStr
 }
 

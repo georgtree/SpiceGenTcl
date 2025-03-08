@@ -111,6 +111,14 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT getDataPoints\fP
 .br
+\fBOBJECT constructor\fP \fInets ?-name value?\fP
+.br
+\fBOBJECT addNets\fP \fInets\fP
+.br
+\fBOBJECT deleteNet\fP \fInet\fP
+.br
+\fBOBJECT genSPICEString\fP
+.br
 \fBOBJECT constructor\fP \fIparams ?-name value?\fP
 .br
 \fBOBJECT addParam\fP \fIparamName value ?-eq?\fP
@@ -1240,7 +1248,7 @@ Writable: -name
 .PP
 \fBSubclasses\fR
 .PP
-\fI::SpiceGenTcl::Common::BasicDevices::Resistor\fP, \fI::SpiceGenTcl::Common::BasicDevices::Capacitor\fP, \fI::SpiceGenTcl::Common::BasicDevices::Inductor\fP, \fI::SpiceGenTcl::Common::BasicDevices::SubcircuitInstance\fP, \fI::SpiceGenTcl::Common::BasicDevices::VSwitch\fP, \fI::SpiceGenTcl::Common::BasicDevices::CSwitch\fP, \fI::SpiceGenTcl::Common::BasicDevices::SubcircuitInstanceAuto\fP, \fI::SpiceGenTcl::Common::Sources::dc\fP, \fI::SpiceGenTcl::Common::Sources::ac\fP, \fI::SpiceGenTcl::Common::Sources::pulse\fP, \fI::SpiceGenTcl::Common::Sources::sin\fP, \fI::SpiceGenTcl::Common::Sources::exp\fP, \fI::SpiceGenTcl::Common::Sources::pwl\fP, \fI::SpiceGenTcl::Common::Sources::sffm\fP, \fI::SpiceGenTcl::Common::Sources::Vccs\fP, \fI::SpiceGenTcl::Common::Sources::Vcvs\fP, \fI::SpiceGenTcl::Common::Sources::Cccs\fP, \fI::SpiceGenTcl::Common::Sources::Ccvs\fP, \fI::SpiceGenTcl::Ngspice::BasicDevices::Resistor\fP, \fI::SpiceGenTcl::Ngspice::BasicDevices::Capacitor\fP, \fI::SpiceGenTcl::Ngspice::BasicDevices::Inductor\fP, \fI::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstance\fP, \fI::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstanceAuto\fP, \fI::SpiceGenTcl::Ngspice::Sources::pulse\fP, \fI::SpiceGenTcl::Ngspice::Sources::sffm\fP, \fI::SpiceGenTcl::Ngspice::Sources::am\fP, \fI::SpiceGenTcl::Ngspice::Sources::Vport\fP, \fI::SpiceGenTcl::Ngspice::Sources::BehaviouralSource\fP, \fI::SpiceGenTcl::Ngspice::SemiconductorDevices::Diode\fP, \fI::SpiceGenTcl::Ngspice::SemiconductorDevices::Bjt\fP, \fI::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet\fP, \fI::SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet\fP, \fI::SpiceGenTcl::Ngspice::SemiconductorDevices::Mosfet\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::Resistor\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::Capacitor\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::Inductor\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::GenSwitch\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstance\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstanceAuto\fP, \fI::SpiceGenTcl::Xyce::Sources::BehaviouralSource\fP, \fI::SpiceGenTcl::Xyce::SemiconductorDevices::Diode\fP, \fI::SpiceGenTcl::Xyce::SemiconductorDevices::Bjt\fP, \fI::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet\fP, \fI::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet\fP, \fI::SpiceGenTcl::Xyce::SemiconductorDevices::Mosfet\fP, \fI::SpiceGenTcl::Ltspice::BasicDevices::Capacitor\fP, \fI::SpiceGenTcl::Ltspice::BasicDevices::Inductor\fP, \fI::SpiceGenTcl::Ltspice::BasicDevices::SubcircuitInstance\fP, \fI::SpiceGenTcl::Ltspice::BasicDevices::SubcircuitInstanceAuto\fP, \fI::SpiceGenTcl::Ltspice::Sources::dc\fP, \fI::SpiceGenTcl::Ltspice::Sources::ac\fP, \fI::SpiceGenTcl::Ltspice::Sources::pulse\fP, \fI::SpiceGenTcl::Ltspice::Sources::sin\fP, \fI::SpiceGenTcl::Ltspice::Sources::exp\fP, \fI::SpiceGenTcl::Ltspice::Sources::pwl\fP, \fI::SpiceGenTcl::Ltspice::Sources::sffm\fP, \fI::SpiceGenTcl::Ltspice::Sources::BehaviouralSource\fP, \fI::SpiceGenTcl::Ltspice::SemiconductorDevices::Diode\fP, \fI::SpiceGenTcl::Ltspice::SemiconductorDevices::Bjt\fP, \fI::SpiceGenTcl::Ltspice::SemiconductorDevices::Jfet\fP, \fI::SpiceGenTcl::Ltspice::SemiconductorDevices::Mesfet\fP, \fI::SpiceGenTcl::Ltspice::SemiconductorDevices::Mosfet\fP
+\fI::SpiceGenTcl::Common::BasicDevices::Resistor\fP, \fI::SpiceGenTcl::Common::BasicDevices::Capacitor\fP, \fI::SpiceGenTcl::Common::BasicDevices::Inductor\fP, \fI::SpiceGenTcl::Common::BasicDevices::SubcircuitInstance\fP, \fI::SpiceGenTcl::Common::BasicDevices::VSwitch\fP, \fI::SpiceGenTcl::Common::BasicDevices::CSwitch\fP, \fI::SpiceGenTcl::Common::BasicDevices::SubcircuitInstanceAuto\fP, \fI::SpiceGenTcl::Common::Sources::dc\fP, \fI::SpiceGenTcl::Common::Sources::ac\fP, \fI::SpiceGenTcl::Common::Sources::pulse\fP, \fI::SpiceGenTcl::Common::Sources::sin\fP, \fI::SpiceGenTcl::Common::Sources::exp\fP, \fI::SpiceGenTcl::Common::Sources::pwl\fP, \fI::SpiceGenTcl::Common::Sources::sffm\fP, \fI::SpiceGenTcl::Common::Sources::Vccs\fP, \fI::SpiceGenTcl::Common::Sources::Vcvs\fP, \fI::SpiceGenTcl::Common::Sources::Cccs\fP, \fI::SpiceGenTcl::Common::Sources::Ccvs\fP, \fI::SpiceGenTcl::Ngspice::BasicDevices::Resistor\fP, \fI::SpiceGenTcl::Ngspice::BasicDevices::Capacitor\fP, \fI::SpiceGenTcl::Ngspice::BasicDevices::Inductor\fP, \fI::SpiceGenTcl::Ngspice::BasicDevices::Coupling\fP, \fI::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstance\fP, \fI::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstanceAuto\fP, \fI::SpiceGenTcl::Ngspice::Sources::pulse\fP, \fI::SpiceGenTcl::Ngspice::Sources::sffm\fP, \fI::SpiceGenTcl::Ngspice::Sources::am\fP, \fI::SpiceGenTcl::Ngspice::Sources::Vport\fP, \fI::SpiceGenTcl::Ngspice::Sources::BehaviouralSource\fP, \fI::SpiceGenTcl::Ngspice::SemiconductorDevices::Diode\fP, \fI::SpiceGenTcl::Ngspice::SemiconductorDevices::Bjt\fP, \fI::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet\fP, \fI::SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet\fP, \fI::SpiceGenTcl::Ngspice::SemiconductorDevices::Mosfet\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::Resistor\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::Capacitor\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::Inductor\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::GenSwitch\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstance\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstanceAuto\fP, \fI::SpiceGenTcl::Xyce::Sources::BehaviouralSource\fP, \fI::SpiceGenTcl::Xyce::SemiconductorDevices::Diode\fP, \fI::SpiceGenTcl::Xyce::SemiconductorDevices::Bjt\fP, \fI::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet\fP, \fI::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet\fP, \fI::SpiceGenTcl::Xyce::SemiconductorDevices::Mosfet\fP, \fI::SpiceGenTcl::Ltspice::BasicDevices::Capacitor\fP, \fI::SpiceGenTcl::Ltspice::BasicDevices::Inductor\fP, \fI::SpiceGenTcl::Ltspice::BasicDevices::SubcircuitInstance\fP, \fI::SpiceGenTcl::Ltspice::BasicDevices::SubcircuitInstanceAuto\fP, \fI::SpiceGenTcl::Ltspice::Sources::dc\fP, \fI::SpiceGenTcl::Ltspice::Sources::ac\fP, \fI::SpiceGenTcl::Ltspice::Sources::pulse\fP, \fI::SpiceGenTcl::Ltspice::Sources::sin\fP, \fI::SpiceGenTcl::Ltspice::Sources::exp\fP, \fI::SpiceGenTcl::Ltspice::Sources::pwl\fP, \fI::SpiceGenTcl::Ltspice::Sources::sffm\fP, \fI::SpiceGenTcl::Ltspice::Sources::BehaviouralSource\fP, \fI::SpiceGenTcl::Ltspice::SemiconductorDevices::Diode\fP, \fI::SpiceGenTcl::Ltspice::SemiconductorDevices::Bjt\fP, \fI::SpiceGenTcl::Ltspice::SemiconductorDevices::Jfet\fP, \fI::SpiceGenTcl::Ltspice::SemiconductorDevices::Mesfet\fP, \fI::SpiceGenTcl::Ltspice::SemiconductorDevices::Mosfet\fP
 .PP
 .RS -4n
 \fBconstructor\fR (::SpiceGenTcl::Device)
@@ -1512,6 +1520,125 @@ Name of axis that is linked to dummy trace\&.
 .RS 4n\fBOBJECT getDataPoints\fP
 .br
 .RE
+.PP
+.RS -4n
+\fBGlobal\fR (::SpiceGenTcl)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addNets
+Not documented\&.
+.TP
+argsPreprocess
+See \fIUtility\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fIUtility\&.buildArgStr\fP
+.TP
+buildSwArgStr
+See \fIUtility\&.buildSwArgStr\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteNet
+Not documented\&.
+.TP
+duplListCheck
+See \fIUtility\&.duplListCheck\fP
+.TP
+duplListCheckRet
+See \fIUtility\&.duplListCheckRet\fP
+.TP
+genSPICEString
+Creates global statement string for SPICE netlist\&.
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -name
+.PP
+Writable: -name
+.PP
+\fBSuperclasses\fR
+.PP
+\fISPICEElement\fP
+.PP
+\fBMixins\fR
+.PP
+\fIUtility\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Global)
+.RE
+.PP
+Creates object of class Global\&.
+.RS 4n\fBOBJECT constructor\fP \fInets ?-name value?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+nets
+Not documented\&.
+.TP
+-name
+Name of the library that could be used to retrieve element from \fI::SpiceGenTcl::Netlist\fP object and its descendants, optional\&.
+.TP
+params
+List of nets in form {net0 net1 \&.\&.\&.}
+.RE
+.PP
+\fBDescription\fR
+.PP
+Class represent \&.global statement\&.
+.PP
+.RS -4n
+\fBaddNets\fR (::SpiceGenTcl::Global)
+.RE
+.RS 4n\fBOBJECT addNets\fP \fInets\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+nets
+Not documented\&.
+.RE
+.PP
+.RS -4n
+\fBdeleteNet\fR (::SpiceGenTcl::Global)
+.RE
+.RS 4n\fBOBJECT deleteNet\fP \fInet\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+net
+Not documented\&.
+.RE
+.PP
+.RS -4n
+\fBgenSPICEString\fR (::SpiceGenTcl::Global)
+.RE
+.PP
+Creates global statement string for SPICE netlist\&.
+.RS 4n\fBOBJECT genSPICEString\fP
+.br
+.RE
+.PP
+\fBReturn value\fR
+.PP
+SPICE netlist's string
 .PP
 .RS -4n
 \fBIc\fR (::SpiceGenTcl)
@@ -3675,7 +3802,7 @@ Declaration of method common for all SPICE elements that generates representatio
 .PP
 \fBSubclasses\fR
 .PP
-\fIPin\fP, \fIParameterSwitch\fP, \fIDevice\fP, \fIModel\fP, \fIRawString\fP, \fIOptions\fP, \fIParamStatement\fP, \fIIc\fP, \fITemp\fP, \fINetlist\fP, \fIAnalysis\fP
+\fIPin\fP, \fIParameterSwitch\fP, \fIDevice\fP, \fIModel\fP, \fIRawString\fP, \fIOptions\fP, \fIParamStatement\fP, \fIIc\fP, \fIGlobal\fP, \fITemp\fP, \fINetlist\fP, \fIAnalysis\fP
 .PP
 .RS -4n
 \fBgenSPICEString\fR (::SpiceGenTcl::SPICEElement)
@@ -4054,7 +4181,7 @@ Checks if list contains duplicates and return value of first duplicate\&.
 .PP
 \fBSubclasses\fR
 .PP
-\fIDevice\fP, \fIModel\fP, \fIOptions\fP, \fIParamStatement\fP, \fIIc\fP, \fINodeset\fP, \fINetlist\fP, \fIAnalysis\fP, \fI::SpiceGenTcl::Common::Sources::pulse\fP, \fI::SpiceGenTcl::Common::Sources::sin\fP, \fI::SpiceGenTcl::Common::Sources::exp\fP, \fI::SpiceGenTcl::Common::Sources::sffm\fP, \fI::SpiceGenTcl::Common::Analyses::Dc\fP, \fI::SpiceGenTcl::Common::Analyses::Ac\fP, \fI::SpiceGenTcl::Common::Analyses::Tran\fP, \fI::SpiceGenTcl::Common::Analyses::Op\fP, \fI::SpiceGenTcl::Ngspice::Sources::pulse\fP, \fI::SpiceGenTcl::Ngspice::Sources::sffm\fP, \fI::SpiceGenTcl::Ngspice::Sources::am\fP, \fI::SpiceGenTcl::Ngspice::Analyses::Sp\fP, \fI::SpiceGenTcl::Ngspice::Analyses::SensAc\fP, \fI::SpiceGenTcl::Ngspice::Analyses::SensDc\fP, \fI::SpiceGenTcl::Ngspice::Misc::OptionsNgspice\fP, \fI::SpiceGenTcl::Xyce::Analyses::Sens\fP, \fI::SpiceGenTcl::Ltspice::Sources::pulse\fP, \fI::SpiceGenTcl::Ltspice::Sources::sin\fP, \fI::SpiceGenTcl::Ltspice::Sources::exp\fP, \fI::SpiceGenTcl::Ltspice::Sources::sffm\fP
+\fIDevice\fP, \fIModel\fP, \fIOptions\fP, \fIParamStatement\fP, \fIIc\fP, \fINodeset\fP, \fIGlobal\fP, \fINetlist\fP, \fIAnalysis\fP, \fI::SpiceGenTcl::Common::Sources::pulse\fP, \fI::SpiceGenTcl::Common::Sources::sin\fP, \fI::SpiceGenTcl::Common::Sources::exp\fP, \fI::SpiceGenTcl::Common::Sources::sffm\fP, \fI::SpiceGenTcl::Common::Analyses::Dc\fP, \fI::SpiceGenTcl::Common::Analyses::Ac\fP, \fI::SpiceGenTcl::Common::Analyses::Tran\fP, \fI::SpiceGenTcl::Common::Analyses::Op\fP, \fI::SpiceGenTcl::Ngspice::Sources::pulse\fP, \fI::SpiceGenTcl::Ngspice::Sources::sffm\fP, \fI::SpiceGenTcl::Ngspice::Sources::am\fP, \fI::SpiceGenTcl::Ngspice::Analyses::Sp\fP, \fI::SpiceGenTcl::Ngspice::Analyses::SensAc\fP, \fI::SpiceGenTcl::Ngspice::Analyses::SensDc\fP, \fI::SpiceGenTcl::Ngspice::Misc::OptionsNgspice\fP, \fI::SpiceGenTcl::Xyce::Analyses::Sens\fP, \fI::SpiceGenTcl::Ltspice::Sources::pulse\fP, \fI::SpiceGenTcl::Ltspice::Sources::sin\fP, \fI::SpiceGenTcl::Ltspice::Sources::exp\fP, \fI::SpiceGenTcl::Ltspice::Sources::sffm\fP
 .PP
 .RS -4n
 \fBargsPreprocess\fR (::SpiceGenTcl::Utility)
