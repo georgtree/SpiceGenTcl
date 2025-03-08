@@ -663,7 +663,9 @@ namespace eval ::SpiceGenTcl::Ngspice {
 
         }
         method CreateGlobal {line netlistObj} {
-
+            set lineList [lrange [split $line] 1 end]
+            $netlistObj add [::SpiceGenTcl::Global new $lineList]
+            return
         }
         method CreateIc {line netlistObj} {
             set lineList [lrange [split $line] 1 end]
