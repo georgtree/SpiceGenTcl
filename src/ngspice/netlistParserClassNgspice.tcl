@@ -427,6 +427,23 @@ namespace eval ::SpiceGenTcl::Ngspice {
                         symbols"
             }
         }
+        method CheckQuoted {string} {
+            # Checks if string is single quoted, string inside braces must not contain `'`, `'` and `=` symbols and be empty
+            #   string - input string
+            return [regexp {^\'([^='']+)\'$} $string]
+        }
+        method Unquote {string} {
+            # Unquotes input string, `'value'` to `value`, value inside braces must not contain `'`, `'` and `=` symbols,
+            # and be empty
+            #   string - input braced string
+            # Returns: string without braces, 
+            if {[my CheckQuoted $string]} {
+                return [@ [regexp -inline {^\'([^='']+)\'$} $string] 1]
+            } else {
+                return -code error "String '${string}' isn't of form 'string', string must not contain ''' and '''\
+                        symbols"
+            }
+        }
         method CheckBracedWithEqual {string} {
             # Checks if string has form `name={value}`, value must not contain `{`, `}` and `=` symbols and be empty,
             # names can containonly alphanumeric characters and `_` symbol
@@ -729,14 +746,26 @@ namespace eval ::SpiceGenTcl::Ngspice {
             #   line - line to parse
             #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
             #   element should be attached.
-            # Supports behavioural resistor only in canonical form `r={equation}` and only braced form `name={value}` of 
-            # parameters.
+            # Supports behavioural resistor in form `r={equation}`, `r=equation` or `r='equation'` and only braced form
+            # `name={value}` of parameters.
+            set origLine $line
             set lineList [split $line]
             lassign $lineList elemName pin1 pin2 rval fourth
             set elemName [string range $elemName 1 end]
             set excludePars {r model beh}
             set nmspPath ${NamespacePath}::BasicDevices::R
-            if {[my CheckModelName $fourth]} {
+            set pattern {(r=([^\r\n=]+(?:\s*[\+\-\*\/]\s*[^\r\n=]+)*))\s*(?:\s+\S+\s*=\s*\S+)*?\s*$}
+            set line [join [lrange $lineList 3 end]]
+            if {[regexp $pattern $line match expr value]} {
+                if {[my CheckBraced $value]} {
+                    set value [my Unbrace $value]
+                } elseif {[my CheckQuoted $value]} {
+                    set value [my Unquote $value]
+                }
+                set line [string trim [string map [list $expr {}] $line]]
+                $netlistObj add [$nmspPath new $elemName $pin1 $pin2 -r $value -beh\
+                                         {*}[my ParseParams [split $line] 0 {}]]
+            } elseif {[my CheckModelName $fourth]} {
                 # check if fourth element in line is a valid model name. It process the case when resistor with model
                 # also specified with resistance value
                 if {[my CheckBraced $rval]} {
@@ -749,17 +778,11 @@ namespace eval ::SpiceGenTcl::Ngspice {
                     $netlistObj add [$nmspPath new $elemName $pin1 $pin2 -r $rval -model $fourth\
                                              {*}[my ParseParams $lineList 5 $excludePars]]
                 } else {
-                    return -code error "Creating resistor object from line '${line}' failed due to wrong or incompatible\
-                            syntax"
+                    return -code error "Creating resistor object from line '${origLine}' failed due to wrong or\
+                            incompatible syntax"
                 }
             } else {
-                if {[regexp {^r=\{([^{}]*)\}$} $rval]} {
-                    # check if rval has form `r={expression}`
-                    regexp {^r=\{([^{}]*)\}$} $rval match value
-                    set rval $value
-                    $netlistObj add [$nmspPath new $elemName $pin1 $pin2 -r $rval -beh\
-                                             {*}[my ParseParams $lineList 4 $excludePars]]
-                } elseif {[my CheckBraced $rval]} {
+                if {[my CheckBraced $rval]} {
                     # check if rval has form `{param}`
                     set rval [list [my Unbrace $rval] -eq]
                     $netlistObj add [$nmspPath new $elemName $pin1 $pin2 -r $rval\
@@ -773,8 +796,8 @@ namespace eval ::SpiceGenTcl::Ngspice {
                     $netlistObj add [$nmspPath new $elemName $pin1 $pin2 -model $rval\
                                              {*}[my ParseParams $lineList 4 $excludePars]]
                 } else {
-                    return -code error "Creating resistor object from line '${line}' failed due to wrong or incompatible\
-                            syntax"
+                    return -code error "Creating resistor object from line '${origLine}' failed due to wrong or\
+                            incompatible syntax"
                 }
             }
             return
@@ -784,14 +807,26 @@ namespace eval ::SpiceGenTcl::Ngspice {
             #   line - line to parse
             #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
             #   element should be attached.
-            # Supports behavioural capacitor only in canonical form `c={equation}` or `q={equation}` and only braced 
+            # Supports behavioural capacitor in form `q|c={equation}`, `q|c=equation` or `q|c='equation'` and only braced 
             # form `name={value}` of parameters.
+            set origLine $line
             set lineList [split $line]
             lassign $lineList elemName pin1 pin2 cval fourth
             set elemName [string range $elemName 1 end]
             set excludePars {c q model beh}
             set nmspPath ${NamespacePath}::BasicDevices::C
-            if {[my CheckModelName $fourth]} {
+            set pattern {((q|c)=([^\r\n=]+(?:\s*[\+\-\*\/]\s*[^\r\n=]+)*))\s*(?:\s+\S+\s*=\s*\S+)*?\s*$}
+            set line [join [lrange $lineList 3 end]]
+            if {[regexp $pattern $line match expr type value]} {
+                if {[my CheckBraced $value]} {
+                    set value [my Unbrace $value]
+                } elseif {[my CheckQuoted $value]} {
+                    set value [my Unquote $value]
+                }
+                set line [string trim [string map [list $expr {}] $line]]
+                $netlistObj add [$nmspPath new $elemName $pin1 $pin2 -$type $value -beh\
+                                         {*}[my ParseParams [split $line] 0 {}]]
+            } elseif {[my CheckModelName $fourth]} {
                 if {[my CheckBraced $cval]} {
                     set cval [list [my Unbrace $cval] -eq]
                     $netlistObj add [$nmspPath new $elemName $pin1 $pin2 -c $cval -model\
@@ -800,21 +835,11 @@ namespace eval ::SpiceGenTcl::Ngspice {
                     $netlistObj add [$nmspPath new $elemName $pin1 $pin2 -c $cval -model\
                                              $fourth {*}[my ParseParams $lineList 5 $excludePars]]
                 } else {
-                    return -code error "Creating capacitor object from line '${line}' failed due to wrong or\
+                    return -code error "Creating capacitor object from line '${origLine}' failed due to wrong or\
                             incompatible syntax"
                 }
             } else {
-                if {[regexp {^c=\{([^{}]*)\}$} $cval]} {
-                    regexp {^c=\{([^{}]*)\}$} $cval match value
-                    set cval $value
-                    $netlistObj add [$nmspPath new $elemName $pin1 $pin2 -c $cval -beh\
-                                             {*}[my ParseParams $lineList 4 $excludePars]]
-                } elseif {[regexp {^q=\{([^{}]*)\}$} $cval]} {
-                    regexp {^q=\{([^{}]*)\}$} $cval match value
-                    set qval $value
-                    $netlistObj add [$nmspPath new $elemName $pin1 $pin2 -q $qval -beh\
-                                             {*}[my ParseParams $lineList 4 $excludePars]]
-                } elseif {[my CheckBraced $cval]} {
+                if {[my CheckBraced $cval]} {
                     set cval [list [my Unbrace $cval] -eq]
                     $netlistObj add [$nmspPath new $elemName $pin1 $pin2 -c $cval\
                                              {*}[my ParseParams $lineList 4 $excludePars]]
@@ -825,7 +850,75 @@ namespace eval ::SpiceGenTcl::Ngspice {
                     $netlistObj add [$nmspPath new $elemName $pin1 $pin2 -model $cval\
                                              {*}[my ParseParams $lineList 4 $excludePars]]
                 } else {
-                    return -code error "Creating capacitor object from line '${line}' failed due to wrong or\
+                    return -code error "Creating capacitor object from line '${origLine}' failed due to wrong or\
+                            incompatible syntax"
+                }
+            }
+            return
+        }
+        method CreateCoupling {line netlistObj} {
+            #   line - line to parse
+            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
+            #   element should be attached.
+            set lineList [split $line]
+            lassign $lineList elemName l1 l2 kval
+            set elemName [string range $elemName 1 end]
+            set nmspPath ${NamespacePath}::BasicDevices::K
+            if {[my CheckBraced $kval]} {
+                set kval [list [my Unbrace $kval] -eq]
+            }
+            $netlistObj add [$nmspPath new $elemName -l1 $l1 -l2 $l2 -k $kval]
+            return
+        }
+        method CreateInd {line netlistObj} {
+            # Creates inductor object from passed line and add it to netlist
+            #   line - line to parse
+            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
+            #   element should be attached.
+            # Supports behavioural inductor only in form `l={equation}`, `l=equation` or `l='equation'` and only braced 
+            # form `name={value}` of parameters.
+            set origLine $line
+            set lineList [split $line]
+            lassign $lineList elemName pin1 pin2 lval fourth
+            set elemName [string range $elemName 1 end]
+            set excludePars {l model beh}
+            set nmspPath ${NamespacePath}::BasicDevices::L
+            set pattern {(l=([^\r\n=]+(?:\s*[\+\-\*\/]\s*[^\r\n=]+)*))\s*(?:\s+\S+\s*=\s*\S+)*?\s*$}
+            set line [join [lrange $lineList 3 end]]
+            if {[regexp $pattern $line match expr value]} {
+                if {[my CheckBraced $value]} {
+                    set value [my Unbrace $value]
+                } elseif {[my CheckQuoted $value]} {
+                    set value [my Unquote $value]
+                }
+                set line [string trim [string map [list $expr {}] $line]]
+                $netlistObj add [$nmspPath new $elemName $pin1 $pin2 -l $value -beh\
+                                         {*}[my ParseParams [split $line] 0 {}]]
+            } elseif {[my CheckModelName $fourth]} {
+                if {[my CheckBraced $lval]} {
+                    set lval [list [my Unbrace $lval] -eq]
+                    $netlistObj add [$nmspPath new $elemName $pin1 $pin2 -l $lval -model\
+                                             $fourth {*}[my ParseParams $lineList 5 $excludePars]]
+                } elseif {[my CheckNumber $lval]} {
+                    $netlistObj add [$nmspPath new $elemName $pin1 $pin2 -l $lval -model\
+                                             $fourth {*}[my ParseParams $lineList 5 $excludePars]]
+                } else {
+                    return -code error "Creating inductor object from line '${origLine}' failed due to wrong or\
+                            incompatible syntax"
+                }
+            } else {
+                if {[my CheckBraced $lval]} {
+                    set lval [list [my Unbrace $lval] -eq]
+                    $netlistObj add [$nmspPath new $elemName $pin1 $pin2 -l $lval\
+                                             {*}[my ParseParams $lineList 4 $excludePars]]
+                } elseif {[my CheckNumber $lval]} {
+                    $netlistObj add [$nmspPath new $elemName $pin1 $pin2 -l $lval\
+                                             {*}[my ParseParams $lineList 4 $excludePars]]
+                } elseif {[my CheckModelName $lval]} {
+                    $netlistObj add [$nmspPath new $elemName $pin1 $pin2 -model $lval\
+                                             {*}[my ParseParams $lineList 4 $excludePars]]
+                } else {
+                    return -code error "Creating inductor object from line '${origLine}' failed due to wrong or\
                             incompatible syntax"
                 }
             }
@@ -836,17 +929,25 @@ namespace eval ::SpiceGenTcl::Ngspice {
             #   line - line to parse
             #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
             #   element should be attached.
-            # Supports behavioural sources only in canonical form `v|i={equation}` and only braced form `name={value}` of 
-            # parameters.
+            # Supports behavioural sources in forms `v|i={equation}`, `v|i=equation` or `v|i='equation'` and only braced
+            # form `name={value}` of parameters.
+            set origLine $line
+            set pattern {((i|v)=([^\r\n=]+(?:\s*[\+\-\*\/]\s*[^\r\n=]+)*))\s*(?:\s+\S+\s*=\s*\S+)*?\s*$}
             set lineList [split $line]
-            lassign $lineList elemName pin1 pin2 val
+            lassign $lineList elemName pin1 pin2
             set elemName [string range $elemName 1 end]
-            if {[regexp {^(i|v)=\{([^{}]*)\}$} $val]} {
-                regexp {^(i|v)=\{([^{}]*)\}$} $val match type value
+            set line [join [lrange $lineList 3 end]]
+            if {[regexp $pattern $line match expr type value]} {
+                if {[my CheckBraced $value]} {
+                    set value [my Unbrace $value]
+                } elseif {[my CheckQuoted $value]} {
+                    set value [my Unquote $value]
+                }
+                set line [string trim [string map [list $expr {}] $line]]
                 $netlistObj add [${NamespacePath}::Sources::B new $elemName $pin1 $pin2 -$type $value\
-                                         {*}[my ParseParams $lineList 4 {}]]
+                                         {*}[my ParseParams [split $line] 0 {}]]
             } else {
-                return -code error "Creating behavioural source object from line '${line}' failed due to wrong or\
+                return -code error "Creating behavioural source object from line '${origLine}' failed due to wrong or\
                             incompatible syntax"
             }
             return
@@ -977,67 +1078,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
                 return -code error "Creating JFET object from line '${line}' failed due to wrong or incompatible syntax"
             }
         }
-        method CreateCoupling {line netlistObj} {
-            #   line - line to parse
-            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
-            #   element should be attached.
-            set lineList [split $line]
-            lassign $lineList elemName l1 l2 kval
-            set elemName [string range $elemName 1 end]
-            set nmspPath ${NamespacePath}::BasicDevices::K
-            if {[my CheckBraced $kval]} {
-                set kval [list [my Unbrace $kval] -eq]
-            }
-            $netlistObj add [$nmspPath new $elemName -l1 $l1 -l2 $l2 -k $kval]
-            return
-        }
-        method CreateInd {line netlistObj} {
-            # Creates inductor object from passed line and add it to netlist
-            #   line - line to parse
-            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
-            #   element should be attached.
-            # Supports behavioural inductor only in canonical form `l={equation}` and only braced form `name={value}`
-            # of parameters.
-            set lineList [split $line]
-            lassign $lineList elemName pin1 pin2 lval fourth
-            set elemName [string range $elemName 1 end]
-            set excludePars {l model beh}
-            set nmspPath ${NamespacePath}::BasicDevices::L
-            if {[my CheckModelName $fourth]} {
-                if {[my CheckBraced $lval]} {
-                    set lval [list [my Unbrace $lval] -eq]
-                    $netlistObj add [$nmspPath new $elemName $pin1 $pin2 -l $lval -model\
-                                             $fourth {*}[my ParseParams $lineList 5 $excludePars]]
-                } elseif {[my CheckNumber $lval]} {
-                    $netlistObj add [$nmspPath new $elemName $pin1 $pin2 -l $lval -model\
-                                             $fourth {*}[my ParseParams $lineList 5 $excludePars]]
-                } else {
-                    return -code error "Creating inductor object from line '${line}' failed due to wrong or\
-                            incompatible syntax"
-                }
-            } else {
-                if {[regexp {^l=\{([^{}]*)\}$} $lval]} {
-                    regexp {^l=\{([^{}]*)\}$} $lval match value
-                    set lval $value
-                    $netlistObj add [$nmspPath new $elemName $pin1 $pin2 -l $lval -beh\
-                                             {*}[my ParseParams $lineList 4 $excludePars]]
-                } elseif {[my CheckBraced $lval]} {
-                    set lval [list [my Unbrace $lval] -eq]
-                    $netlistObj add [$nmspPath new $elemName $pin1 $pin2 -l $lval\
-                                             {*}[my ParseParams $lineList 4 $excludePars]]
-                } elseif {[my CheckNumber $lval]} {
-                    $netlistObj add [$nmspPath new $elemName $pin1 $pin2 -l $lval\
-                                             {*}[my ParseParams $lineList 4 $excludePars]]
-                } elseif {[my CheckModelName $lval]} {
-                    $netlistObj add [$nmspPath new $elemName $pin1 $pin2 -model $lval\
-                                             {*}[my ParseParams $lineList 4 $excludePars]]
-                } else {
-                    return -code error "Creating inductor object from line '${line}' failed due to wrong or\
-                            incompatible syntax"
-                }
-            }
-            return
-        }
+       
         method CreateMOSFET {line netlistObj} {
             #   line - line to parse
             #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 

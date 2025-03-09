@@ -87,7 +87,23 @@ vee 9 0 -12
 .sens v(5,4)}
 
 testTemplateParse testParserClass-9 {} $netlistsLoc diffpair_cir_build_res_err_syntax.cir\
-"Creating resistor object from line 'rs2 3 1 r={v(a)+v(b)/i(b)}}} tc2=1' failed due to wrong or incompatible syntax"
+".model qnl npn(level=1 bf=80 rb=100 tf=0.3n tr=6n cje=3p cjc=2p vaf=50)
+.model qnr npn(level=1 bf=80 rb=100 tf=0.3n tr=6n cje=3p cjc=2p vaf=50)
+.options noacct
+q1 4 2 6 qnr
+q2 5 3 6 qnl
+rs1 11 2 {res}
+rs2 3 1 r={{v(a)+v(b)/i(b)}}}} tc2=1
+rc1 4 8 10k tc1=2 tc2={tcrt}
+rc2 5 8 10k
+q3 7 7 9 qnl
+q4 6 7 9 qnr
+rbias 7 8 20k
+vcm 1 0 dc 0 ac 1 sin 0 0.1 5meg
+vdm 1 11 dc 0 ac 1 sin 0 0.1 5meg
+vcc 8 0 12
+vee 9 0 -12
+.sens v(5,4)"
 
 testTemplateParse testParserClass-10 {} $netlistsLoc adder_mos.cir\
 {.subckt nand in1 in2 out vdd
@@ -166,17 +182,21 @@ cout buf ss 1pf
 
 testTemplateParse testParserClassResistors-1 {} $netlistsLoc resistors_test.cir\
 {rs1 11 2 {res}
-rs2 3 1 r={v(a)+v(b)/i(b)} tc2=1
+rs2 3 1 r={v(a) +v(b)/ i(b )} tc2=1
 rc1 4 8 10k tc1=2 tc2={tcrt}
 rc2 5 8 10k
 rc3 9 2 10k res1
 rc4 4 5 res1 l={l1} w=2u
 rc5 4 5 {rpar} res1 l={l1} w=2u
-rb1 netp netm resmod l=1e-6 temp=25}
+rb1 netp netm resmod l=1e-6 temp=25
+r1 3 1 r={v(a) +v(b)/ i(b)} tc2=1
+r2 3 1 r={v(a) +v(b)/ i(b)} tc2=1
+r3 rr 0 r={v(rr) < {vt} ? {r0} : {2*r0}} tc1=2e-03 tc2=3.3e-06}
 
-testTemplateParse1 testParserClassResistors-2 {} {rs2 3 1 3 r={v(a)+v(b)/i(b)} tc2=1} $netlistsLoc {rs2 3 1 3 tc2=1}
+testTemplateParse1 testParserClassResistors-2 {} {rs2 3 1 3 r={v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
+        {Parameter '3' parsing failed}
 testTemplateParse1 testParserClassResistors-3 {} {rs2 3 1 n r={v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
-        {-tc2 conflicts with -model}
+        {Parameter 'n' parsing failed}
 testTemplateParse1 testParserClassResistors-4 {} {rs2 3 1 beh={v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
         {Creating resistor object from line 'rs2 3 1 beh={v(a)+v(b)/i(b)} tc2=1' failed due to wrong or incompatible\
                  syntax}
@@ -190,12 +210,16 @@ testTemplateParse1 testParserClassResistors-6 {} {rs2 a b {v} {v(a)+v(b)/i(b)} t
 
 testTemplateParse testParserClassCapacitors-1 {} $netlistsLoc capacitors_test.cir\
 {c2 netp netm 1e-6
-c3 netp netm c={v(a)+v(b)+pow(v(c),2)} tc1=1
-c4 netp netm q={v(a)+v(b)+pow(v(c),2)} tc1=1
+c3 netp netm c={v(a)+v(b)+pow(v(c), 2)} tc1=1
+c4 netp netm q={v(a)+v(b) + pow(v(c),2)} tc1=1
 c5 netp netm capmod l=1e-6 w=10e-6 temp=25
-c1 netp netm 1e-6 tc1=1 temp=25}
-testTemplateParse1 testParserClassCapacitors-2 {} {cs2 3 1 3 c={v(a)+v(b)/i(b)} tc2=1} $netlistsLoc {cs2 3 1 3 tc2=1}
-testTemplateParse1 testParserClassCapacitors-3 {} {cs2 3 1 n c={v(a)+v(b)/i(b)} tc2=1} $netlistsLoc {-tc2 conflicts with -model}
+c1 netp netm 1e-6 tc1=1 temp=25
+c6 netp netm q={v(a)+v(b) + pow(v(c),2)} tc1=1 tc2=3
+c7 netp netm c={v(a)+v(b) + pow(v(c),2)} tc1=1 tc2=3}
+testTemplateParse1 testParserClassCapacitors-2 {} {cs2 3 1 3 c={v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
+        {Parameter '3' parsing failed}
+testTemplateParse1 testParserClassCapacitors-3 {} {cs2 3 1 n c={v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
+        {Parameter 'n' parsing failed}
 testTemplateParse1 testParserClassCapacitors-4 {}\
         {cs2 3 1 beh={v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
         {Creating capacitor object from line 'cs2 3 1 beh={v(a)+v(b)/i(b)} tc2=1' failed due to wrong or incompatible\
@@ -214,10 +238,14 @@ testTemplateParse testParserClassInductors-1 {} $netlistsLoc inductors_test.cir\
 l2 netp netm 1e-6
 l3 netp netm 1e-6 indm
 l4 netp netm indm
-l5 netp netm l={v(a)+v(b)+pow(v(c),2)} tc1=1
-l6 netp netm {l1*l2} tc1=1}
+l5 netp netm l={v(a)+v(b)+ pow(v(c), 2)} tc1=1
+l6 netp netm {l1*l2} tc1=1
+l7 netp netm l={v(a)+v(b)+ pow(v(c), 2)} tc1=1
+l8 netp netm l={v(a)+v(b)+ pow(v(c), 2)} tc1=1
+l9 l2 lll l={i(vm) < {it} ? {ll} : {lh}} tc1=-4e-03 tc2=6e-05}
 
-testTemplateParse1 testParserClassInductors-2 {} {ls2 3 1 3 l={v(a)+v(b)/i(b)} tc2=1} $netlistsLoc {ls2 3 1 3 tc2=1}
+testTemplateParse1 testParserClassInductors-2 {} {ls2 3 1 3 l={v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
+        {Parameter '3' parsing failed}
 testTemplateParse1 testParserClassInductors-3 {} {ls2 3 1 beh={v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
         {Creating inductor object from line 'ls2 3 1 beh={v(a)+v(b)/i(b)} tc2=1' failed due to wrong or incompatible\
                  syntax}
@@ -338,10 +366,15 @@ testTemplateParse testParserClassParamStatement-1 {} $netlistsLoc params_test.ci
 
 testTemplateParse testParserClassBsource-1 {} $netlistsLoc bsources_test.cir\
 {b1 netp netm i={v(a)+v(b)+pow(v(c),2)} tc1=1
-b2 netp netm v={v(a)+v(b)+pow(v(c),2)} tc1=1
-b3 0 1 v={ln(cos(log(v(1,2)^2)))-v(3)^4+v(2)^v(1)}
+b2 netp netm v={v(a)+v(b)+ pow(v(c),2)} tc1=1 tc2=2
+b3 0 1 v={ln (cos(log(v(1,2)^2)))-v(3)^4+v(2)^v(1)}
 b4 3 4 v={exp(pi^i(vdd))}
-b35 3 4 i={17}}
+b5 3 4 i={17}
+b6 4 7 v={a + b/c}
+b7 4 7 v={a^2 + b/c} tc1=2
+b8 0 8 i={a^2+1}
+b9 4 7 v={a^2 + b/c} tc1=2
+b10 2 0 v={v(1) < vlow ? vlow : v(1) > {vhigh} ? {vhigh} : v(1)}}
 
 testTemplateParse1 testParserClassBsource-2 {} {b1 netp netm g={v(a)+v(b)+pow(v(c),2)} tc1=1} $netlistsLoc\
         {Creating behavioural source object from line 'b1 netp netm g={v(a)+v(b)+pow(v(c),2)} tc1=1' failed due to\

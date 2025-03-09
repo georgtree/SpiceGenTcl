@@ -1,6 +1,12 @@
 
 b1 netp netm i={V(a)+V(b)+pow(V(c),2)} tc1=1
-b2 netp netm v={V(a)+V(b)+pow(V(c),2)} tc1=1
-B3 0 1 V={ln(cos(log(v(1,2)^2)))-v(3)^4+v(2)^v(1)}
-B4 3 4 V={exp(pi^i(vdd))}
-B35 3 4 I={17}
+b2 netp netm v={V(a)+V(b)+ pow(V(c),2)} tc1=1 tc2=2
+B3 0 1 v={ln (cos(log(v(1,2)^2)))-v(3)^4+v(2)^v(1)}
+B4 3 4 v={exp(pi^i(vdd))}
+B5 3 4 i=17
+b6 4 7 v=a + b/c
+b7 4 7 v=a^2 + b/c tc1=2
+b8 0 8 i={a^2+1}
+b9 4 7 v='a^2 + b/c' tc1=2
+B10 2 0 V = V(1) < {Vlow} ? {Vlow} :
++ V(1) > {Vhigh} ? {Vhigh} : V(1)
