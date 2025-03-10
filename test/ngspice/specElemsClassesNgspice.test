@@ -612,6 +612,18 @@ test testSubcircuitInstanceAutoClass-4 {} -setup {
     unset subcircuit subInst1 result
 }
 
+####  VerilogA class tests 
+
+testTemplate testVerilogAClass-1 {}\
+        {VerilogA new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar -eq}}}\
+        {n1 net1 net2 rcnet r=1 c={cpar}}
+
+####  N class tests 
+
+testTemplate testNClass-1 {} {N new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar -eq}}}\
+        {n1 net1 net2 rcnet r=1 c={cpar}}
+
+
 forgetNgspice
 
 cleanupTests

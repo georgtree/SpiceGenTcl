@@ -41,14 +41,14 @@ namespace eval ::SpiceGenTcl::Ngspice {
             my configure -filepath $filepath
             set ElemsMethods [dcreate b CreateBehSource c CreateCap d CreateDio e CreateVCVS f CreateCCCS\
                                       g CreateVCCS h CreateCCVS i CreateVIsource j CreateJFET k CreateCoupling\
-                                      l CreateInd m CreateMOSFET n CreateVeriloga q CreateBJT r CreateRes\
+                                      l CreateInd m CreateMOSFET n CreateVerilogA q CreateBJT r CreateRes\
                                       s CreateVSwitch v CreateVIsource w CreateCSwitch x CreateSubcktInst\
                                       z CreateMESFET]
             set DotsMethods [dcreate ac CreateAc dc CreateDc func CreateFunc global CreateGlobal ic CreateIc\
                                      include CreateInclude model CreateModel nodeset CreateNodeset op CreateOp\
-                                     options CreateOptions param CreateParam sens CreateSens sp CreateSp\
+                                     options CreateOptions option CreateOptions opt CreateOptions param CreateParam\
                                      temp CreateTemp tran CreateTran params CreateParam lib CreateLib\
-                                     option CreateOptions]
+                                     sens CreateSens sp CreateSp]
             set SupModelsTypes {r c l sw csw d npn pnp njf pjf nmos pmos nmf pmf}
             my configure -topnetlist [::SpiceGenTcl::Netlist new [file tail $filepath]]
             set ModelTemplate {oo::class create @type@ {
@@ -1261,8 +1261,35 @@ namespace eval ::SpiceGenTcl::Ngspice {
                         syntax"
             }
         }
-        method CreateVeriloga {line netlistObj} {
-
+        method CreateVerilogA {line netlistObj} {
+            # Creates [::SpiceGenTcl::Ngspice::BasicDevices::N] object from passed line and add it to `netlistObj`
+            #   line - line to parse
+            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (or its children) to which the 
+            #   element should be attached.
+            set lineList [split $line]
+            lassign $lineList elemName
+            set elemName [string range $elemName 1 end]
+            set i 0
+            foreach word $lineList {
+                if {[my CheckEqual $word] || [my CheckBracedWithEqual $word]} {
+                    set paramsStartIndex $i
+                    break
+                }
+                incr i
+            }
+            if {![info exists paramsStartIndex]} {
+                set paramsStartIndex [llength $lineList]
+            }
+            set subName [@ $lineList [= {$paramsStartIndex-1}]]
+            set pinList [lrange $lineList 1 [= {$paramsStartIndex-2}]]
+            set i 0
+            foreach pin $pinList {
+                lappend pins [list p$i $pin]
+                incr i
+            }
+            $netlistObj add [${NamespacePath}::BasicDevices::N new $elemName $pins $subName\
+                                     [my ParseParams $lineList $paramsStartIndex {} list]]
+            return
         }
         method CreateBJT {line netlistObj} {
             # Creates [::SpiceGenTcl::Ngspice::SemiconductorDevices::Q] object from passed line and add it to netlist

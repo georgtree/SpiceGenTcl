@@ -17,7 +17,7 @@
 namespace eval ::SpiceGenTcl {
     namespace eval Ngspice::BasicDevices {
         namespace export Resistor R  Capacitor C Inductor L Coupling K SubcircuitInstance X SubcircuitInstanceAuto XAuto\
-                VSwitch S CSwitch W 
+                VSwitch S CSwitch W VerilogA N
     }
     namespace eval Ngspice::Sources {
         namespace export Vdc Idc Vac Iac Vpulse Ipulse Vsin Isin Vexp Iexp Vpwl Ipwl Vsffm Isffm Vam Iam Vccs G Vcvs E\
@@ -479,7 +479,39 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
     oo::class create XAuto {
         superclass SubcircuitInstanceAuto
     }
+
+####  VerilogA class 
+
+    oo::class create VerilogA {
+        superclass ::SpiceGenTcl::Device
+        constructor {name pins modName params} {
+            # Creates object of class `VerilogA` that describes Verilog-A instance.
+            #  name - name of the device without first-letter designator N
+            #  pins - list of pins {{pinName nodeName} {pinName nodeName} ...}
+            #  modName - name of Verilog-A model
+            #  params - {{paramName paramValue ?-eq?} {paramName paramValue ?-eq?}}
+            # ```
+            # NYYYYYYY N1 <N2 N3 ...> MODNAME 
+            # ```
+            # Example of class initialization:
+            # ```
+            # ::SpiceGenTcl::Ngspice::BasicDevices::VerilogA new 1 {{plus net1} {minus net2}} vmod {{r 1} {c cpar -eq}}
+            # ```
+            set params [linsert $params 0 [list model $modName -posnocheck]]
+            next n$name $pins $params
+        }
+    }
+
+####  N class 
+    
+    # alias for VerilogA class
+    oo::class create N {
+        superclass VerilogA
+    }
+
 }
+
+
 
 ###  Sources devices 
 

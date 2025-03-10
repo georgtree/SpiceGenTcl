@@ -310,7 +310,7 @@ namespace eval ::SpiceGenTcl {
     oo::define Parameter {
         variable value
         method <WriteProp-value> val {
-            if {[regexp {^([+-]?\d+(\.\d*)?([eE][+-]?\d+)?)(f|p|n|u|m|k|g|t|meg)?([a-zA-Z]*)$} $val]} {
+            if {[regexp {^([+-]?\d*(\.\d+)?([eE][+-]?\d+)?)(f|p|n|u|m|k|g|t|meg)?([a-zA-Z]*)$} $val]} {
                 set value [string tolower $val]
             } else {
                 return -code error "Value '$val' is not a valid value"
@@ -554,7 +554,7 @@ namespace eval ::SpiceGenTcl {
         property name -set {
             if {[regexp {[^A-Za-z0-9_]+} $value]} {
                 return -code error "Reference name '$value' is not a valid name"
-            } elseif {[regexp {^[A-Za-z][A-Za-z0-9]+} $value]} {
+            } elseif {[regexp {^[A-Za-z][A-Za-z0-9]*} $value]} {
                 set name [string tolower $value]
             } else {
                 return -code error "Reference name '$value' is not a valid name"
