@@ -1,0 +1,98 @@
+'\"
+'\" '\" Copyright (c) George Yashin
+'\"
+.TH "SpiceGenTcl::Ngspice" 3tcl 0\&.65 "SpiceGenTcl" "Tcl SpiceGenTcl package"
+.SH NAME
+SpiceGenTcl::Ngspice - Commands in namespace SpiceGenTcl::Ngspice
+.SH SYNOPSIS
+\fBParser create OBJNAME\fP \fIname filepath\fP
+.br
+\fBParser new\fP \fIname filepath\fP
+.br
+\fBOBJECT buildTopNetlist\fP
+.br
+\fBOBJECT readAndParse\fP
+.br
+\fBOBJECT readFile\fP
+.br
+.SH ::SPICEGENTCL::NGSPICE
+.SH CLASSES
+.PP
+.RS -4n
+\fBParser\fR (::SpiceGenTcl::Ngspice)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+buildTopNetlist
+Builds top netlist corresponding to parsed netlist file\&.
+.TP
+configure
+Configure properties\&.
+.TP
+readAndParse
+Calls methods readFile and buildTopNetlist in a sequence\&.
+.TP
+readFile
+Reads netlist file and prepare for parsing: remove redundant white space characters, collapse continuation lines and remove comments lines\&.
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -filepath, -topnetlist
+.PP
+Writable: -filepath, -topnetlist
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Ngspice::Parser)
+.RE
+.PP
+Creates object of class Parser that do parsing of valid Ngspice netlist\&.
+.RS 4n\fBParser create OBJNAME\fP \fIname filepath\fP
+.br
+\fBParser new\fP \fIname filepath\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the object\&.
+.TP
+filepath
+Path to file that should be parsed\&.
+.RE
+.PP
+.RS -4n
+\fBbuildTopNetlist\fR (::SpiceGenTcl::Ngspice::Parser)
+.RE
+.PP
+Builds top netlist corresponding to parsed netlist file
+.RS 4n\fBOBJECT buildTopNetlist\fP
+.br
+.RE
+.PP
+.RS -4n
+\fBreadAndParse\fR (::SpiceGenTcl::Ngspice::Parser)
+.RE
+.PP
+Calls methods readFile and buildTopNetlist in a sequence
+.RS 4n\fBOBJECT readAndParse\fP
+.br
+.RE
+.PP
+.RS -4n
+\fBreadFile\fR (::SpiceGenTcl::Ngspice::Parser)
+.RE
+.PP
+Reads netlist file and prepare for parsing: remove redundant white space characters, collapse continuation
+lines and remove comments lines
+.RS 4n\fBOBJECT readFile\fP
+.br
+.RE
+

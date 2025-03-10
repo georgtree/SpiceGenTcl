@@ -6,27 +6,238 @@
 <body>
 <div class='ruff-layout'>
 <header class='ruff-layout-header ruff-hd'>
-<a style='text-decoration:none;' href='index.html'>Tcl SpiceGenTcl package (v0.1)</a>
+<a style='text-decoration:none;' href='index.html'>Tcl SpiceGenTcl package (v0.65)</a>
 
 
             <div id="ruffButtonBar">
             <button id="ruffNavMove" onclick="ruffMoveNavPane()"></button>
             <button id="ruffToggleTheme" onclick="ruffNextTheme()"></button>
             </div>
-        </header><main class='ruff-layout-main ruff-bd'><h1 class='ruff'><a name='SpiceGenTcl::Ngspice'></a>SpiceGenTcl::Ngspice<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h1>
+        </header><main class='ruff-layout-main ruff-bd'><h1 class='ruff'><a name='::SpiceGenTcl::Ngspice'></a>::SpiceGenTcl::Ngspice<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h1>
 <div style='clear:both;'></div>
+<h2 class='ruff'><a name='::SpiceGenTcl::Ngspice-Classes'></a>Classes<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
+<div style='clear:both;'></div>
+<h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::Parser'>Parser</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice.html#::SpiceGenTcl::Ngspice" title="::SpiceGenTcl::Ngspice" class='ruff_cmd'>::SpiceGenTcl::Ngspice</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
+<div style='clear:both;'></div>
+<h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
+<tr><td><a href="index-SpiceGenTcl-Ngspice.html#::SpiceGenTcl::Ngspice::Parser::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
+<tr><td><a href="index-SpiceGenTcl-Ngspice.html#::SpiceGenTcl::Ngspice::Parser::buildTopNetlist" title="buildTopNetlist" class='ruff_cmd'>buildTopNetlist</a></td><td>Builds top netlist corresponding to parsed netlist file.</td></tr>
+<tr><td><code>configure</code></td><td>Configure properties.</td></tr>
+<tr><td><a href="index-SpiceGenTcl-Ngspice.html#::SpiceGenTcl::Ngspice::Parser::readAndParse" title="readAndParse" class='ruff_cmd'>readAndParse</a></td><td>Calls methods <code>readFile</code> and <code>buildTopNetlist</code> in a sequence.</td></tr>
+<tr><td><a href="index-SpiceGenTcl-Ngspice.html#::SpiceGenTcl::Ngspice::Parser::readFile" title="readFile" class='ruff_cmd'>readFile</a></td><td>Reads netlist file and prepare for parsing: remove redundant white space characters, collapse continuation lines and remove comments lines.</td></tr>
+</table>
+<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#b9b96e>-filepath</font></code>, <code><font color=#b9b96e>-topnetlist</font></code></p>
+<p class='ruff'>Writable: <code><font color=#b9b96e>-filepath</font></code>, <code><font color=#b9b96e>-topnetlist</font></code></p>
+<h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::Parser::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice.html#::SpiceGenTcl::Ngspice::Parser" title="::SpiceGenTcl::Ngspice::Parser" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Parser</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice.html#::SpiceGenTcl::Ngspice::Parser'>Parser</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
+<div style='clear:both;'></div>
+<p class='ruff'>Creates object of class <code>Parser</code> that do parsing of valid Ngspice netlist.</p>
+<div class='ruff_synopsis'><span class='ruff_cmd'>Parser create OBJNAME</span> <span class='ruff_arg'>name filepath</span><br><span class='ruff_cmd'>Parser new</span> <span class='ruff_arg'>name filepath</span></div>
+<details><summary class='ruff-expand'><span>Details</span></summary>
+<h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
+<tr><td><code>name</code></td><td>Name of the object.</td></tr>
+<tr><td><code>filepath</code></td><td>Path to file that should be parsed.</td></tr>
+</table>
+<div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Ngspice_Parser_constructor' href="javascript:toggleSource('SpiceGenTcl_Ngspice_Parser_constructor')">Show source</a></p>
+<div id='SpiceGenTcl_Ngspice_Parser_constructor' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> constructor {name filepath} {
+
+    <i><font color=#76a396># Creates object of class `Parser` that do parsing of valid Ngspice netlist.</font></i>
+    <i><font color=#76a396>#   name - name of the object</font></i>
+    <i><font color=#76a396>#   filepath - path to file that should be parsed</font></i>
+    <b><font color=#ffa500>set</font></b> Name <font color=#f1b479>$name</font>
+    <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-filepath</font> <font color=#f1b479>$filepath</font>
+    <b><font color=#ffa500>set</font></b> ElemsMethods [<b><font color=#ffa500>dcreate</font></b> b CreateBehSource c CreateCap d CreateDio e CreateVCVS f CreateCCCS g CreateVCCS h CreateCCVS i CreateVIsource j CreateJFET k CreateCoupling l CreateInd m CreateMOSFET n CreateVeriloga q CreateBJT r CreateRes s CreateVSwitch v CreateVIsource w CreateCSwitch x CreateSubcktInst z CreateMESFET]
+    <b><font color=#ffa500>set</font></b> DotsMethods [<b><font color=#ffa500>dcreate</font></b> ac CreateAc dc CreateDc func CreateFunc global CreateGlobal ic CreateIc include CreateInclude model CreateModel nodeset CreateNodeset op CreateOp options CreateOptions param CreateParam sens CreateSens sp CreateSp temp CreateTemp tran CreateTran params CreateParam lib CreateLib option CreateOptions]
+    <b><font color=#ffa500>set</font></b> SupModelsTypes {r c l sw csw d npn pnp njf pjf nmos pmos nmf pmf}
+    <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-topnetlist</font> [::SpiceGenTcl::Netlist new [<b><font color=#ffa500>file</font></b> tail <font color=#f1b479>$filepath</font>]]
+    <b><font color=#ffa500>set</font></b> ModelTemplate {<b><font color=#fe6efe>oo::class</font></b> create @type@ {
+        superclass ::SpiceGenTcl::Model
+        <b><font color=#fe6efe>constructor</font></b> {name args} {
+            <b><font color=#ffa500>set</font></b> paramsNames [<b><font color=#ffa500>list</font></b> @paramsList@]
+            <b><font color=#ffa500>next</font></b> <font color=#f1b479>$name</font> @type@ [<b><font color=#fe6efe>my</font></b> argsPreprocess <font color=#f1b479>$paramsNames</font> {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$args</font>]
+        }
+    }}
+    <b><font color=#ffa500>set</font></b> SubcircuitTemplate {<b><font color=#fe6efe>oo::class</font></b> create @classname@ {
+        superclass ::SpiceGenTcl::Subcircuit
+        <b><font color=#fe6efe>constructor</font></b> {} {
+            <b><font color=#ffa500>set</font></b> pins @pins@
+            <b><font color=#ffa500>set</font></b> params @params@
+            <b><font color=#ffa500>next</font></b> @subname@ <font color=#f1b479>$pins</font> <font color=#f1b479>$params</font>
+        }
+    }}
+    <b><font color=#ffa500>set</font></b> NamespacePath ::SpiceGenTcl::Ngspice
+}</pre></div>
+</div></details>
+<h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::Parser::buildTopNetlist'>buildTopNetlist</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice.html#::SpiceGenTcl::Ngspice::Parser" title="::SpiceGenTcl::Ngspice::Parser" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Parser</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice.html#::SpiceGenTcl::Ngspice::Parser'>Parser</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
+<div style='clear:both;'></div>
+<p class='ruff'>Builds top netlist corresponding to parsed netlist file</p>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT buildTopNetlist</span> </div>
+<details><summary class='ruff-expand'><span>Details</span></summary>
+<div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Ngspice_Parser_buildTopNetlist' href="javascript:toggleSource('SpiceGenTcl_Ngspice_Parser_buildTopNetlist')">Show source</a></p>
+<div id='SpiceGenTcl_Ngspice_Parser_buildTopNetlist' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> buildTopNetlist {} {
+
+    <i><font color=#76a396># Builds top netlist corresponding to parsed netlist file</font></i>
+    <b><font color=#ffa500>if</font></b> {![<b><font color=#ffa500>info</font></b> exists FileData]} {
+        <b><font color=#ffa500>error</font></b> <font color=#90ee90>&quot;Parser object '<font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font>' doesn't have prepared data&quot;</font>
+    }
+    <b><font color=#ffa500>set</font></b> allLines <font color=#f1b479>$FileData</font>
+    <b><font color=#ffa500>set</font></b> topNetlist [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-topnetlist</font>]
+    <b><font color=#fe6efe>my</font></b> GetSubcircuitLines
+    <i><font color=#76a396># parse found subcircuits definitions first</font></i>
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> exists SubcktsBoundaries]} {
+        <b><font color=#ffa500>set</font></b> subcktsBoundaries <font color=#f1b479>$SubcktsBoundaries</font>
+        <b><font color=#ffa500>dict</font></b> for {subcktName subcktBounds} <font color=#f1b479>$subcktsBoundaries</font> {
+            <b><font color=#fe6efe>my</font></b> BuildSubcktFromDef <font color=#f1b479>$subcktName</font> <font color=#f1b479>$subcktBounds</font>
+            <b><font color=#ffa500>lappend</font></b> lines2remove {<b><font color=#ffa500>*</font></b>}[lseq [@ <font color=#f1b479>$subcktBounds</font> 0] [@ <font color=#f1b479>$subcktBounds</font> 1]]
+        }
+        <b><font color=#ffa500>set</font></b> allLines [lremove <font color=#f1b479>$allLines</font> {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$lines2remove</font>]
+    }
+    <b><font color=#fe6efe>my</font></b> BuildNetlist <font color=#f1b479>$allLines</font> <font color=#f1b479>$topNetlist</font>
+    <b><font color=#fe6efe>return</font></b>
+}</pre></div>
+</div></details>
+<h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::Parser::readAndParse'>readAndParse</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice.html#::SpiceGenTcl::Ngspice::Parser" title="::SpiceGenTcl::Ngspice::Parser" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Parser</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice.html#::SpiceGenTcl::Ngspice::Parser'>Parser</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
+<div style='clear:both;'></div>
+<p class='ruff'>Calls methods <code>readFile</code> and <code>buildTopNetlist</code> in a sequence</p>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT readAndParse</span> </div>
+<details><summary class='ruff-expand'><span>Details</span></summary>
+<div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Ngspice_Parser_readAndParse' href="javascript:toggleSource('SpiceGenTcl_Ngspice_Parser_readAndParse')">Show source</a></p>
+<div id='SpiceGenTcl_Ngspice_Parser_readAndParse' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> readAndParse {} {
+
+    <i><font color=#76a396># Calls methods `readFile` and `buildTopNetlist` in a sequence</font></i>
+    <b><font color=#fe6efe>my</font></b> readFile
+    <b><font color=#fe6efe>my</font></b> buildTopNetlist
+    <b><font color=#fe6efe>return</font></b>
+}</pre></div>
+</div></details>
+<h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::Parser::readFile'>readFile</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice.html#::SpiceGenTcl::Ngspice::Parser" title="::SpiceGenTcl::Ngspice::Parser" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Parser</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice.html#::SpiceGenTcl::Ngspice::Parser'>Parser</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
+<div style='clear:both;'></div>
+<p class='ruff'>Reads netlist file and prepare for parsing: remove redundant white space characters, collapse continuation lines and remove comments lines</p>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT readFile</span> </div>
+<details><summary class='ruff-expand'><span>Details</span></summary>
+<div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Ngspice_Parser_readFile' href="javascript:toggleSource('SpiceGenTcl_Ngspice_Parser_readFile')">Show source</a></p>
+<div id='SpiceGenTcl_Ngspice_Parser_readFile' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> readFile {} {
+
+    <i><font color=#76a396># Reads netlist file and prepare for parsing: remove redundant white space characters, collapse continuation</font></i>
+    <i><font color=#76a396># lines and remove comments lines</font></i>
+    <b><font color=#ffa500>set</font></b> file [<b><font color=#ffa500>open</font></b> [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-filepath</font>] r]
+    <b><font color=#ffa500>set</font></b> fileData [<b><font color=#ffa500>split</font></b> [<b><font color=#ffa500>read</font></b> <font color=#f1b479>$file</font>] <font color=#90ee90>&quot;\n&quot;</font>]
+    <b><font color=#ffa500>close</font></b> <font color=#f1b479>$file</font>
+    <b><font color=#ffa500>set</font></b> fileData [<b><font color=#ffa500>lrange</font></b> <font color=#f1b479>$fileData</font> 1 end]
+    <i><font color=#76a396># replace all sequences of white space characters with single space character</font></i>
+    <b><font color=#ffa500>foreach</font></b> line <font color=#f1b479>$fileData</font> {
+        <b><font color=#ffa500>set</font></b> processedLine [<b><font color=#ffa500>regsub</font></b> <font color=#b9b96e>-all</font> {[[:space:]]+} [<b><font color=#ffa500>string</font></b> trim <font color=#f1b479>$line</font>] { }]
+        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$processedLine</font> ne {}} {
+            <b><font color=#ffa500>lappend</font></b> lines [<b><font color=#ffa500>string</font></b> tolower <font color=#f1b479>$processedLine</font>]
+        }
+    }
+    <i><font color=#76a396># find continuations and move them to line that is the start of continuation</font></i>
+    <b><font color=#ffa500>set</font></b> fileData <font color=#f1b479>$lines</font>
+    <b><font color=#ffa500>set</font></b> contFlag false
+    <i><font color=#76a396># create a dictionary like `2 {3 4 5} 6 {7} 8 {} 9 {} 10 {} {11 12} 13 {}...` where keys are start lines,</font></i>
+    <i><font color=#76a396># indexes and values are the lists of lines indexes that are the continuation of the line with key index</font></i>
+    <i><font color=#76a396># also, skip the first line of the netlist</font></i>
+    <b><font color=#ffa500>for</font></b> {<b><font color=#ffa500>set</font></b> i 0} {<font color=#f1b479>$i</font>&lt;[<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$fileData</font>]} {<b><font color=#ffa500>incr</font></b> i} {
+        <b><font color=#ffa500>set</font></b> line [@ <font color=#f1b479>$fileData</font> <font color=#f1b479>$i</font>]
+        <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>string</font></b> index <font color=#f1b479>$line</font> 0] eq <font color=#90ee90>&quot;+&quot;</font>} {
+            <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$contFlag</font>} {
+                <b><font color=#ffa500>dict</font></b> lappend continLinesIndex <font color=#f1b479>$startIndex</font> <font color=#f1b479>$i</font>
+                <b><font color=#fe6efe>continue</font></b>
+            }
+            <b><font color=#ffa500>dict</font></b> append continLinesIndex [= {<font color=#f1b479>$i</font>-1}]
+            <b><font color=#ffa500>set</font></b> startIndex [= {<font color=#f1b479>$i</font>-1}]
+            <b><font color=#ffa500>dict</font></b> lappend continLinesIndex <font color=#f1b479>$startIndex</font> <font color=#f1b479>$i</font>
+            <b><font color=#ffa500>set</font></b> contFlag true
+        } <b><font color=#ffa500>else</font></b> {
+            <b><font color=#ffa500>set</font></b> contFlag false
+            <b><font color=#ffa500>dict</font></b> append continLinesIndex <font color=#f1b479>$i</font>
+        }
+    }
+    <i><font color=#76a396># append continuation lines to start line of each continuation list with first symbol removal (it is assumed</font></i>
+    <i><font color=#76a396># to be `+` symbol)</font></i>
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> exists continLinesIndex]} {
+        <b><font color=#ffa500>dict</font></b> map {lineIndex contLinesIndexes} <font color=#f1b479>$continLinesIndex</font> {
+            <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$contLinesIndexes</font> eq {}} {
+                <b><font color=#ffa500>lappend</font></b> finalList [@ <font color=#f1b479>$fileData</font> <font color=#f1b479>$lineIndex</font>]
+            } <b><font color=#ffa500>else</font></b> {
+                <b><font color=#ffa500>set</font></b> locList [@ <font color=#f1b479>$fileData</font> <font color=#f1b479>$lineIndex</font>]
+                <b><font color=#ffa500>foreach</font></b> contLineIndex <font color=#f1b479>$contLinesIndexes</font> {
+                    <b><font color=#ffa500>lappend</font></b> locList [<b><font color=#ffa500>string</font></b> trim [<b><font color=#ffa500>string</font></b> range [@ <font color=#f1b479>$fileData</font> <font color=#f1b479>$contLineIndex</font>] 1 end]]
+                }
+                <b><font color=#ffa500>lappend</font></b> finalList [<b><font color=#ffa500>join</font></b> <font color=#f1b479>$locList</font>]
+            }
+        }
+    } <b><font color=#ffa500>else</font></b> {
+        <b><font color=#ffa500>set</font></b> finalList <font color=#f1b479>$fileData</font>
+    }
+    <i><font color=#76a396># remove all comments that start with `*` symbol</font></i>
+    <b><font color=#ffa500>set</font></b> finalList [<b><font color=#ffa500>lsearch</font></b> <font color=#b9b96e>-all</font> <font color=#b9b96e>-inline</font> <font color=#b9b96e>-not</font> <font color=#b9b96e>-glob</font> <font color=#f1b479>$finalList</font> {\**}]
+    <i><font color=#76a396># remove all end of line comments that starts with symbols \;, \$ and //</font></i>
+    <b><font color=#ffa500>foreach</font></b> line <font color=#f1b479>$finalList</font> {
+        <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>set</font></b> index [<b><font color=#ffa500>string</font></b> first {;} <font color=#f1b479>$line</font>]]!=-1} {
+            <b><font color=#ffa500>set</font></b> line [<b><font color=#ffa500>string</font></b> trim [<b><font color=#ffa500>string</font></b> range <font color=#f1b479>$line</font> 0 [= {<font color=#f1b479>$index</font>-1}]]]
+        } <b><font color=#ffa500>elseif</font></b> {[<b><font color=#ffa500>set</font></b> index [<b><font color=#ffa500>string</font></b> first {$} <font color=#f1b479>$line</font>]]!=-1} {
+            <b><font color=#ffa500>set</font></b> line [<b><font color=#ffa500>string</font></b> trim [<b><font color=#ffa500>string</font></b> range <font color=#f1b479>$line</font> 0 [= {<font color=#f1b479>$index</font>-1}]]]
+        } <b><font color=#ffa500>elseif</font></b> {[<b><font color=#ffa500>set</font></b> index [<b><font color=#ffa500>string</font></b> first {//} <font color=#f1b479>$line</font>]]!=-1} {
+            <b><font color=#ffa500>set</font></b> line [<b><font color=#ffa500>string</font></b> trim [<b><font color=#ffa500>string</font></b> range <font color=#f1b479>$line</font> 0 [= {<font color=#f1b479>$index</font>-1}]]]
+        }
+        <b><font color=#ffa500>lappend</font></b> tempList <font color=#f1b479>$line</font>
+    }
+    <b><font color=#ffa500>set</font></b> finalList <font color=#f1b479>$tempList</font>
+    <i><font color=#76a396># remove control section that starts with .control and ends with .endc</font></i>
+    <b><font color=#ffa500>for</font></b> {<b><font color=#ffa500>set</font></b> i 0} {<font color=#f1b479>$i</font>&lt;[<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$finalList</font>]} {<b><font color=#ffa500>incr</font></b> i} {
+        <b><font color=#ffa500>set</font></b> line [@ <font color=#f1b479>$finalList</font> <font color=#f1b479>$i</font>]
+        <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>regexp</font></b> {^\.control\s?} <font color=#f1b479>$line</font>]} {
+            <b><font color=#ffa500>set</font></b> controlStart <font color=#f1b479>$i</font>
+        } <b><font color=#ffa500>elseif</font></b> {[<b><font color=#ffa500>regexp</font></b> {^\.endc\s?} <font color=#f1b479>$line</font>]} {
+            <b><font color=#ffa500>set</font></b> controlEnd <font color=#f1b479>$i</font>
+        }
+        <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> exists controlStart] && [<b><font color=#ffa500>info</font></b> exists controlEnd]} {
+            <b><font color=#fe6efe>break</font></b>
+        }
+    }
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> exists controlStart] && [<b><font color=#ffa500>info</font></b> exists controlEnd]} {
+        <b><font color=#ffa500>set</font></b> finalList [<b><font color=#ffa500>lreplace</font></b> <font color=#f1b479>$finalList</font> <font color=#f1b479>$controlStart</font> <font color=#f1b479>$controlEnd</font>]
+    }
+    <i><font color=#76a396># remove spaces after `{` and before `}`, replace `= `, ` = ` and ` =` with single `=`</font></i>
+    <b><font color=#ffa500>foreach</font></b> line <font color=#f1b479>$finalList</font> {
+        <b><font color=#ffa500>lappend</font></b> finalList1 [<b><font color=#ffa500>string</font></b> map [<b><font color=#ffa500>list</font></b> <font color=#90ee90>&quot;\{ &quot;</font> <font color=#90ee90>&quot;\{&quot;</font> <font color=#90ee90>&quot; \}&quot;</font> <font color=#90ee90>&quot;\}&quot;</font> <font color=#90ee90>&quot; = &quot;</font> <font color=#90ee90>&quot;=&quot;</font> <font color=#90ee90>&quot; =&quot;</font> <font color=#90ee90>&quot;=&quot;</font> <font color=#90ee90>&quot;= &quot;</font> <font color=#90ee90>&quot;=&quot;</font>] <font color=#f1b479>$line</font>]
+    }
+    <b><font color=#ffa500>set</font></b> FileData <font color=#f1b479>$finalList1</font>
+    <b><font color=#fe6efe>return</font></b>
+}</pre></div>
+</div></details>
 </main><nav class='ruff-nav'><ul ><li class='ruff-toc1'><a style='padding-top:2px;' href='index.html'>Start page</a></li>
 <li class='ruff-toc1'><a href='index-docindex.html' accesskey='i'>Index</a></li>
 <hr>
+<li class='ruff-toc1'><a href='index-List-of-devices.html'>List of devices</a></li>
 <li class='ruff-toc1'><a href='index-FAQ.html'>FAQ</a></li>
 <li class='ruff-toc1'><a href='index-Tutorials.html'>Tutorials</a></li>
 <li class='ruff-toc1'><a href='index-Tips.html'>Tips</a></li>
+<li class='ruff-toc1'><a href='index-Advanced.html'>Advanced</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl.html'>SpiceGenTcl</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Common-BasicDevices.html'>SpiceGenTcl::Common::BasicDevices</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Common-Analyses.html'>SpiceGenTcl::Common::Analyses</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Common-Sources.html'>SpiceGenTcl::Common::Sources</a></li>
 <li class='ruff-toc1'><a class='ruff-highlight' href='index-SpiceGenTcl-Ngspice.html'>SpiceGenTcl::Ngspice</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html'>SpiceGenTcl::Ngspice::BasicDevices</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-Sources.html'>SpiceGenTcl::Ngspice::Sources</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-SemiconductorDevices.html'>SpiceGenTcl::Ngspice::SemiconductorDevices</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-Analyses.html'>SpiceGenTcl::Ngspice::Analyses</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-Simulators.html'>SpiceGenTcl::Ngspice::Simulators</a></li>
-<hr></ul></nav><footer class='ruff-layout-footer ruff-ft'><div style='float: right;'>Document generated by <a href='https://ruff.magicsplat.com'>Ruff!</a></div><div>&copy; George Yashin</div></footer>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html'>SpiceGenTcl::Xyce::BasicDevices</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-Sources.html'>SpiceGenTcl::Xyce::Sources</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html'>SpiceGenTcl::Xyce::SemiconductorDevices</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-Analyses.html'>SpiceGenTcl::Xyce::Analyses</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-Simulators.html'>SpiceGenTcl::Xyce::Simulators</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Ltspice-BasicDevices.html'>SpiceGenTcl::Ltspice::BasicDevices</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Ltspice-Sources.html'>SpiceGenTcl::Ltspice::Sources</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Ltspice-SemiconductorDevices.html'>SpiceGenTcl::Ltspice::SemiconductorDevices</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Ltspice-Analyses.html'>SpiceGenTcl::Ltspice::Analyses</a></li>
+<li class='ruff-toc1'><a href='index-SpiceGenTcl-Ltspice-Simulators.html'>SpiceGenTcl::Ltspice::Simulators</a></li>
+<hr><li class='ruff-toc2'><a href='#::SpiceGenTcl::Ngspice-Classes'>Classes</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice.html#::SpiceGenTcl::Ngspice::Parser'>Parser</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice.html#::SpiceGenTcl::Ngspice::Parser::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;Parser create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name filepath&lt;/span&gt;
+&lt;span class='ruff_cmd'&gt;Parser new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name filepath&lt;/span&gt;</pre>Creates object of class <code>Parser</code> that do parsing of valid Ngspice netlist.
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice.html#::SpiceGenTcl::Ngspice::Parser::buildTopNetlist'>buildTopNetlist</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT buildTopNetlist&lt;/span&gt; </pre>Builds top netlist corresponding to parsed netlist file
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice.html#::SpiceGenTcl::Ngspice::Parser::readAndParse'>readAndParse</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT readAndParse&lt;/span&gt; </pre>Calls methods <code>readFile</code> and <code>buildTopNetlist</code> in a sequence
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice.html#::SpiceGenTcl::Ngspice::Parser::readFile'>readFile</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT readFile&lt;/span&gt; </pre>Reads netlist file and prepare for parsing: remove redundant white space characters, collapse continuation lines and remove comments lines
+</span></li></ul></nav><footer class='ruff-layout-footer ruff-ft'><div style='float: right;'>Document generated by <a href='https://ruff.magicsplat.com'>Ruff!</a></div><div>&copy; George Yashin</div></footer>
 </div></body></html>

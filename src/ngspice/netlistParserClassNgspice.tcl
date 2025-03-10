@@ -34,6 +34,9 @@ namespace eval ::SpiceGenTcl::Ngspice {
         variable NamespacePath
 
         constructor {name filepath} {
+            # Creates object of class `Parser` that do parsing of valid Ngspice netlist.
+            #   name - name of the object
+            #   filepath - path to file that should be parsed
             set Name $name 
             my configure -filepath $filepath
             set ElemsMethods [dcreate b CreateBehSource c CreateCap d CreateDio e CreateVCVS f CreateCCCS\
@@ -64,6 +67,12 @@ namespace eval ::SpiceGenTcl::Ngspice {
                 }
             }}
             set NamespacePath ::SpiceGenTcl::Ngspice
+        }
+        method readAndParse {} {
+            # Calls methods `readFile` and `buildTopNetlist` in a sequence
+            my readFile
+            my buildTopNetlist
+            return
         }
         method readFile {} {
             # Reads netlist file and prepare for parsing: remove redundant white space characters, collapse continuation
@@ -154,7 +163,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             set FileData $finalList1
             return
         }
-        method getSubcircuitLines {} {
+        method GetSubcircuitLines {} {
             # Parses line by line and get start and the end of subcircuits
             if {![info exists FileData]} {
                 error "Parser object '[my configure -name]' doesn't have prepared data"
@@ -195,25 +204,31 @@ namespace eval ::SpiceGenTcl::Ngspice {
         }
         method buildTopNetlist {} {
             # Builds top netlist corresponding to parsed netlist file
+            if {![info exists FileData]} {
+                error "Parser object '[my configure -name]' doesn't have prepared data"
+            }
             set allLines $FileData
             set topNetlist [my configure -topnetlist]
-            my getSubcircuitLines
+            my GetSubcircuitLines
             # parse found subcircuits definitions first
             if {[info exists SubcktsBoundaries]} {
                 set subcktsBoundaries $SubcktsBoundaries
                 dict for {subcktName subcktBounds} $subcktsBoundaries {
-                    my buildSubcktFromDef $subcktName $subcktBounds
+                    my BuildSubcktFromDef $subcktName $subcktBounds
                     lappend lines2remove {*}[lseq [@ $subcktBounds 0] [@ $subcktBounds 1]]
                 }
                 set allLines [lremove $allLines {*}$lines2remove]
             }
-            my buildNetlist $allLines $topNetlist
+            my BuildNetlist $allLines $topNetlist
             return
         }
-        method buildSubcktFromDef {subcktName subcktBounds} {
+        method BuildSubcktFromDef {subcktName subcktBounds} {
             # Builds subcircuit definition object from passed lines and add it to top circuit
             #   subcktName - name of subcircuit
             #   subcktBounds - boundaries of subcircuit
+            if {![info exists FileData]} {
+                error "Parser object '[my configure -name]' doesn't have prepared data"
+            }
             set allLines $FileData
             set topNetlist [my configure -topnetlist]
             # parse definition line of subcircuit
@@ -245,10 +260,10 @@ namespace eval ::SpiceGenTcl::Ngspice {
                                       @subname@ $subName] $SubcircuitTemplate]
             set subcktInst [$subcktClassName new]
             $topNetlist add $subcktInst
-            my buildNetlist [lrange $allLines [= {[@ $subcktBounds 0]+1}] [= {[@ $subcktBounds 1]-1}]] $subcktInst
+            my BuildNetlist [lrange $allLines [= {[@ $subcktBounds 0]+1}] [= {[@ $subcktBounds 1]-1}]] $subcktInst
             return
         }
-        method buildNetlist {lines netlistObj} {
+        method BuildNetlist {lines netlistObj} {
             # Builds netlist from passed lines and add it to passed object
             #   lines - list of lines to parse
             #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` and its childrens
@@ -503,7 +518,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             }
         }
         method CreateModel {line netlistObj} {
-            # Creates model object from passed line and add it to netlist
+            # Creates [::SpiceGenTcl::Model] object from passed line and add it to `netlistObj`
             #   line - line to parse
             #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
             #     element should be attached.
@@ -605,16 +620,17 @@ namespace eval ::SpiceGenTcl::Ngspice {
             return
         }
         method CreateOp {line netlistObj} {
-            # Creates `::SpiceGenTcl::Ngspice::` object from passed line and add it to netlist
+            # Creates [::SpiceGenTcl::Ngspice::Analyses::Op] object from passed line and add it to `netlistObj`
             #   line - line to parse
-            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
+            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (or its children) to which the 
             #   element should be attached.
             $netlistObj add [${NamespacePath}::Analyses::Op new]
             return
         }
         method CreateAc {line netlistObj} {
+            # Creates [::SpiceGenTcl::Ngspice::Analyses::Ac] object from passed line and add it to `netlistObj`
             #   line - line to parse
-            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
+            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (or its children) to which the 
             #   element should be attached.
             set lineList [lrange [split $line] 1 end]
             $netlistObj add [${NamespacePath}::Analyses::Ac new\
@@ -622,8 +638,9 @@ namespace eval ::SpiceGenTcl::Ngspice {
             return
         }
         method CreateDc {line netlistObj} {
+            # Creates [::SpiceGenTcl::Ngspice::Analyses::Dc] object from passed line and add it to `netlistObj`
             #   line - line to parse
-            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
+            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (or its children) to which the 
             #   element should be attached.
             set lineList [lrange [split $line] 1 end]
             set paramsNames {src start stop incr}
@@ -635,8 +652,9 @@ namespace eval ::SpiceGenTcl::Ngspice {
             return
         }
         method CreateTran {line netlistObj} {
+            # Creates [::SpiceGenTcl::Ngspice::Analyses::Tran] object from passed line and add it to `netlistObj`
             #   line - line to parse
-            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
+            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (or its children) to which the 
             #   element should be attached.
             set lineList [lrange [split $line] 1 end]
             set paramsNames {tstep tstop tstart tmax}
@@ -650,8 +668,9 @@ namespace eval ::SpiceGenTcl::Ngspice {
             return
         }
         method CreateSens {line netlistObj} {
+            # Creates [::SpiceGenTcl::Ngspice::Analyses::Sens] object from passed line and add it to `netlistObj`
             #   line - line to parse
-            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
+            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (or its children) to which the 
             #   element should be attached.
             if {[regexp {(v|i)\(([^{}()=]+)\)} $line]} {
                 set line [regsub -command {(v|i)\(([^{}()=]+)\)} $line {apply {{- a b} {
@@ -674,8 +693,9 @@ namespace eval ::SpiceGenTcl::Ngspice {
             return
         }
         method CreateSp {line netlistObj} {
+            # Creates [::SpiceGenTcl::Ngspice::Analyses::Sp] object from passed line and add it to `netlistObj`
             #   line - line to parse
-            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
+            #   netlistObj - reference to the object of class [::SpiceGenTcl::Netlist] (or its children) to which the 
             #   element should be attached.
             set lineList [lrange [split $line] 1 end]
             set paramsNames {variation n fstart fstop}
@@ -692,21 +712,37 @@ namespace eval ::SpiceGenTcl::Ngspice {
 
         }
         method CreateGlobal {line netlistObj} {
+            # Creates [::SpiceGenTcl::Global] object from passed line and add it to `netlistObj`
+            #   line - line to parse
+            #   netlistObj - reference to the object of class [::SpiceGenTcl::Netlist] (or its children) to which the 
+            #   element should be attached.
             set lineList [lrange [split $line] 1 end]
             $netlistObj add [::SpiceGenTcl::Global new $lineList]
             return
         }
         method CreateIc {line netlistObj} {
+            # Creates [::SpiceGenTcl::Ic] object from passed line and add it to `netlistObj`
+            #   line - line to parse
+            #   netlistObj - reference to the object of class [::SpiceGenTcl::Netlist] (or its children) to which the 
+            #   element should be attached.
             set lineList [lrange [split $line] 1 end]
             $netlistObj add [::SpiceGenTcl::Ic new [my ParseParams $lineList 0 {} list]]
             return
         }
         method CreateInclude {line netlistObj} {
+            # Creates [::SpiceGenTcl::Include] object from passed line and add it to `netlistObj`
+            #   line - line to parse
+            #   netlistObj - reference to the object of class [::SpiceGenTcl::Netlist] (or its children) to which the 
+            #   element should be attached.
             set value [join [lrange [split $line] 1 end]]
             $netlistObj add [::SpiceGenTcl::Include new $value]
             return
         }
         method CreateLib {line netlistObj} {
+            # Creates [::SpiceGenTcl::Library] object from passed line and add it to `netlistObj`
+            #   line - line to parse
+            #   netlistObj - reference to the object of class [::SpiceGenTcl::Netlist] (or its children) to which the 
+            #   element should be attached.
             set lineList [split $line]
             set value [lrange $lineList 1 end-1]
             set libValue [@ $lineList end]
@@ -714,25 +750,38 @@ namespace eval ::SpiceGenTcl::Ngspice {
             return
         }
         method CreateNodeset {line netlistObj} {
+            # Creates [::SpiceGenTcl::Nodeset] object from passed line and add it to `netlistObj`
+            #   line - line to parse
+            #   netlistObj - reference to the object of class [::SpiceGenTcl::Netlist] (or its children) to which the 
+            #   element should be attached.
             set lineList [lrange [split $line] 1 end]
             $netlistObj add [::SpiceGenTcl::Nodeset new [my ParseParams $lineList 0 {} list]]
             return 
         }
         method CreateOptions {line netlistObj} {
+            # Creates [::SpiceGenTcl::Options] object from passed line and add it to `netlistObj`
+            #   line - line to parse
+            #   netlistObj - reference to the object of class [::SpiceGenTcl::Netlist] (or its children) to which the 
+            #   element should be attached.
             set lineList [lrange [split $line] 1 end]
             $netlistObj add [::SpiceGenTcl::Ngspice::Misc::OptionsNgspice new\
                                      {*}[my ParseMixedParams $lineList 0 {} arg]]
             return
         }
         method CreateParam {line netlistObj} {
+            # Creates [::SpiceGenTcl::ParamStatement] object from passed line and add it to `netlistObj`
             #   line - line to parse
-            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
+            #   netlistObj - reference to the object of class [::SpiceGenTcl::Netlist] (or its children) to which the 
             #   element should be attached.
             set lineList [lrange [split $line] 1 end]
             $netlistObj add [::SpiceGenTcl::ParamStatement new [my ParseParams $lineList 0 {} list]]
             return
         }
         method CreateTemp {line netlistObj} {
+            # Creates [::SpiceGenTcl::Temp] object from passed line and add it to `netlistObj`
+            #   line - line to parse
+            #   netlistObj - reference to the object of class [::SpiceGenTcl::Netlist] (or its children) to which the 
+            #   element should be attached.
             set lineList [lrange [split $line] 1 end]
             lassign $lineList value
             if {[my CheckBraced $value]} {
@@ -741,10 +790,40 @@ namespace eval ::SpiceGenTcl::Ngspice {
             $netlistObj add [::SpiceGenTcl::Temp new {*}$value]
             return
         }
-        method CreateRes {line netlistObj} {
-            # Creates resistor object from passed line and add it to netlist
+        method CreateSubcktInst {line netlistObj} {
+            # Creates [::SpiceGenTcl::Ngspice::BasicDevices::X] object from passed line and add it to `netlistObj`
             #   line - line to parse
-            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
+            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (or its children) to which the 
+            #   element should be attached.
+            set lineList [split $line]
+            lassign $lineList elemName
+            set elemName [string range $elemName 1 end]
+            set i 0
+            foreach word $lineList {
+                if {[my CheckEqual $word] || [my CheckBracedWithEqual $word]} {
+                    set paramsStartIndex $i
+                    break
+                }
+                incr i
+            }
+            if {![info exists paramsStartIndex]} {
+                set paramsStartIndex [llength $lineList]
+            }
+            set subName [@ $lineList [= {$paramsStartIndex-1}]]
+            set pinList [lrange $lineList 1 [= {$paramsStartIndex-2}]]
+            set i 0
+            foreach pin $pinList {
+                lappend pins [list p$i $pin]
+                incr i
+            }
+            $netlistObj add [${NamespacePath}::BasicDevices::X new $elemName $pins $subName\
+                                     [my ParseParams $lineList $paramsStartIndex {} list]]
+            return
+        }
+        method CreateRes {line netlistObj} {
+            # Creates [::SpiceGenTcl::Ngspice::BasicDevices::R] object from passed line and add it to netlist
+            #   line - line to parse
+            #   netlistObj - reference to the object of class [::SpiceGenTcl::Netlist] (or its children) to which the 
             #   element should be attached.
             # Supports behavioural resistor in form `r={equation}`, `r=equation` or `r='equation'` and only braced form
             # `name={value}` of parameters.
@@ -803,9 +882,9 @@ namespace eval ::SpiceGenTcl::Ngspice {
             return
         }
         method CreateCap {line netlistObj} {
-            # Creates capacitor object from passed line and add it to netlist
+            # Creates [::SpiceGenTcl::Ngspice::BasicDevices::C] object from passed line and add it to netlist
             #   line - line to parse
-            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
+            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (or its children) to which the 
             #   element should be attached.
             # Supports behavioural capacitor in form `q|c={equation}`, `q|c=equation` or `q|c='equation'` and only braced 
             # form `name={value}` of parameters.
@@ -857,8 +936,9 @@ namespace eval ::SpiceGenTcl::Ngspice {
             return
         }
         method CreateCoupling {line netlistObj} {
+            # Creates [::SpiceGenTcl::Ngspice::BasicDevices::K] object from passed line and add it to netlist
             #   line - line to parse
-            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
+            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (or its children) to which the 
             #   element should be attached.
             set lineList [split $line]
             lassign $lineList elemName l1 l2 kval
@@ -871,9 +951,9 @@ namespace eval ::SpiceGenTcl::Ngspice {
             return
         }
         method CreateInd {line netlistObj} {
-            # Creates inductor object from passed line and add it to netlist
+            # Creates [::SpiceGenTcl::Ngspice::BasicDevices::L] object from passed line and add it to netlist
             #   line - line to parse
-            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
+            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (or its children) to which the 
             #   element should be attached.
             # Supports behavioural inductor only in form `l={equation}`, `l=equation` or `l='equation'` and only braced 
             # form `name={value}` of parameters.
@@ -924,10 +1004,42 @@ namespace eval ::SpiceGenTcl::Ngspice {
             }
             return
         }
-        method CreateBehSource {line netlistObj} {
-            # Creates behavioural source object from passed line and add it to netlist
+        method CreateVSwitch {line netlistObj} {
+            # Creates [::SpiceGenTcl::Ngspice::BasicDevices::S] object from passed line and add it to netlist
             #   line - line to parse
-            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
+            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (or its children) to which the 
+            #   element should be attached.
+            set lineList [split $line]
+            lassign $lineList elemName pin1 pin2 pin3 pin4 model state
+            set elemName [string range $elemName 1 end]
+            set paramsList {}
+            if {$state in {on off}} {
+                lappend paramsList -$state
+            }
+            $netlistObj add [${NamespacePath}::BasicDevices::S new $elemName $pin1 $pin2 $pin3 $pin4 -model $model\
+                                     {*}$paramsList]
+            return
+        }
+        method CreateCSwitch {line netlistObj} {
+            # Creates [::SpiceGenTcl::Ngspice::BasicDevices::W] object from passed line and add it to netlist
+            #   line - line to parse
+            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (or its children) to which the 
+            #   element should be attached.
+            set lineList [split $line]
+            lassign $lineList elemName pin1 pin2 vnam model state
+            set elemName [string range $elemName 1 end]
+            set paramsList {}
+            if {$state in {on off}} {
+                lappend paramsList -$state
+            }
+            $netlistObj add [${NamespacePath}::BasicDevices::W new $elemName $pin1 $pin2 -icntrl $vnam -model $model\
+                                     {*}$paramsList]
+            return
+        }
+        method CreateBehSource {line netlistObj} {
+            # Creates [::SpiceGenTcl::Ngspice::Sources::B] object from passed line and add it to netlist
+            #   line - line to parse
+            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (or its children) to which the 
             #   element should be attached.
             # Supports behavioural sources in forms `v|i={equation}`, `v|i=equation` or `v|i='equation'` and only braced
             # form `name={value}` of parameters.
@@ -952,26 +1064,10 @@ namespace eval ::SpiceGenTcl::Ngspice {
             }
             return
         }
-        method CreateDio {line netlistObj} {
-            #   line - line to parse
-            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
-            #   element should be attached.
-            set lineList [split $line]
-            lassign $lineList elemName pin1 pin2 modelVal
-            set elemName [string range $elemName 1 end]
-            if {[set offIndex [lsearch -exact $lineList off]]!=-1} {
-                lappend paramsList -off
-                set lineList [lremove $lineList $offIndex]
-            }
-            if {[my CheckModelName $modelVal]} {
-                lappend paramsList {*}[my ParseParams [lrange $lineList 1 end] 3 {}]
-                $netlistObj add [${NamespacePath}::SemiconductorDevices::D new $elemName $pin1 $pin2 -model $modelVal\
-                                         {*}$paramsList]
-            }
-        }
         method CreateVCVS {line netlistObj} {
+            # Creates [::SpiceGenTcl::Ngspice::Sources::E] object from passed line and add it to netlist
             #   line - line to parse
-            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
+            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (or its children) to which the 
             #   element should be attached.
             set lineList [split $line]
             lassign $lineList elemName pin1 pin2 pin3 pin4 val
@@ -987,8 +1083,9 @@ namespace eval ::SpiceGenTcl::Ngspice {
             return
         }
         method CreateCCCS {line netlistObj} {
+            # Creates [::SpiceGenTcl::Ngspice::Sources::F] object from passed line and add it to netlist
             #   line - line to parse
-            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
+            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (or its children) to which the 
             #   element should be attached.
             set lineList [split $line]
             lassign $lineList elemName pin1 pin2 vnam val
@@ -1006,8 +1103,9 @@ namespace eval ::SpiceGenTcl::Ngspice {
             return
         }
         method CreateVCCS {line netlistObj} {
+            # Creates [::SpiceGenTcl::Ngspice::Sources::G] object from passed line and add it to netlist
             #   line - line to parse
-            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
+            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (or its children) to which the 
             #   element should be attached.
             set lineList [split $line]
             lassign $lineList elemName pin1 pin2 pin3 pin4 val
@@ -1025,8 +1123,9 @@ namespace eval ::SpiceGenTcl::Ngspice {
             return
         }
         method CreateCCVS {line netlistObj} {
+            # Creates [::SpiceGenTcl::Ngspice::Sources::H] object from passed line and add it to netlist
             #   line - line to parse
-            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
+            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (or its children) to which the 
             #   element should be attached.
             set lineList [split $line]
             lassign $lineList elemName pin1 pin2 vnam val
@@ -1041,9 +1140,28 @@ namespace eval ::SpiceGenTcl::Ngspice {
             }
             return
         }
-        method CreateJFET {line netlistObj} {
+        method CreateDio {line netlistObj} {
+            # Creates [::SpiceGenTcl::Ngspice::SemiconductorDevices::D] object from passed line and add it to netlist
             #   line - line to parse
-            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
+            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (or its children) to which the 
+            #   element should be attached.
+            set lineList [split $line]
+            lassign $lineList elemName pin1 pin2 modelVal
+            set elemName [string range $elemName 1 end]
+            if {[set offIndex [lsearch -exact $lineList off]]!=-1} {
+                lappend paramsList -off
+                set lineList [lremove $lineList $offIndex]
+            }
+            if {[my CheckModelName $modelVal]} {
+                lappend paramsList {*}[my ParseParams [lrange $lineList 1 end] 3 {}]
+                $netlistObj add [${NamespacePath}::SemiconductorDevices::D new $elemName $pin1 $pin2 -model $modelVal\
+                                         {*}$paramsList]
+            }
+        }
+        method CreateJFET {line netlistObj} {
+            # Creates [::SpiceGenTcl::Ngspice::SemiconductorDevices::J] object from passed line and add it to netlist
+            #   line - line to parse
+            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (or its children) to which the 
             #   element should be attached.
             set line [string map {", " "," " ," "," " , " ","} $line]
             set lineList [split $line]
@@ -1080,8 +1198,9 @@ namespace eval ::SpiceGenTcl::Ngspice {
         }
        
         method CreateMOSFET {line netlistObj} {
+            # Creates [::SpiceGenTcl::Ngspice::SemiconductorDevices::M] object from passed line and add it to netlist
             #   line - line to parse
-            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
+            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (or its children) to which the 
             #   element should be attached.
             set line [string map {", " "," " ," "," " , " ","} $line]
             set lineList [split $line]
@@ -1146,8 +1265,9 @@ namespace eval ::SpiceGenTcl::Ngspice {
 
         }
         method CreateBJT {line netlistObj} {
+            # Creates [::SpiceGenTcl::Ngspice::SemiconductorDevices::Q] object from passed line and add it to netlist
             #   line - line to parse
-            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
+            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (or its children) to which the 
             #   element should be attached.
             set line [string map {", " "," " ," "," " , " ","} $line]
             set lineList [split $line]
@@ -1199,24 +1319,10 @@ namespace eval ::SpiceGenTcl::Ngspice {
                 return -code error "Creating BJT object from line '${line}' failed due to wrong or incompatible syntax"
             }
         }
-        method CreateVSwitch {line netlistObj} {
-            #   line - line to parse
-            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
-            #   element should be attached.
-            set lineList [split $line]
-            lassign $lineList elemName pin1 pin2 pin3 pin4 model state
-            set elemName [string range $elemName 1 end]
-            set paramsList {}
-            if {$state in {on off}} {
-                lappend paramsList -$state
-            }
-            $netlistObj add [${NamespacePath}::BasicDevices::S new $elemName $pin1 $pin2 $pin3 $pin4 -model $model\
-                                     {*}$paramsList]
-            return
-        }
         method CreateVIsource {line netlistObj} {
+            # Creates children object of [::SpiceGenTcl::Ngspice::Sources] class from passed line and add it to netlist
             #   line - line to parse
-            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
+            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (or its children) to which the 
             #   element should be attached.
             # remove `(` and `)` symbols from string
             set line [regsub -all {[[:space:]]+} [string trim [string map {"(" " " ")" " "} $line]] { }]
@@ -1328,53 +1434,10 @@ namespace eval ::SpiceGenTcl::Ngspice {
             }
             return
         }
-        method CreateCSwitch {line netlistObj} {
-            #   line - line to parse
-            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
-            #   element should be attached.
-            set lineList [split $line]
-            lassign $lineList elemName pin1 pin2 vnam model state
-            set elemName [string range $elemName 1 end]
-            set paramsList {}
-            if {$state in {on off}} {
-                lappend paramsList -$state
-            }
-            $netlistObj add [${NamespacePath}::BasicDevices::W new $elemName $pin1 $pin2 -icntrl $vnam -model $model\
-                                     {*}$paramsList]
-            return
-        }
-        method CreateSubcktInst {line netlistObj} {
-            #   line - line to parse
-            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
-            #   element should be attached.
-            set lineList [split $line]
-            lassign $lineList elemName
-            set elemName [string range $elemName 1 end]
-            set i 0
-            foreach word $lineList {
-                if {[my CheckEqual $word] || [my CheckBracedWithEqual $word]} {
-                    set paramsStartIndex $i
-                    break
-                }
-                incr i
-            }
-            if {![info exists paramsStartIndex]} {
-                set paramsStartIndex [llength $lineList]
-            }
-            set subName [@ $lineList [= {$paramsStartIndex-1}]]
-            set pinList [lrange $lineList 1 [= {$paramsStartIndex-2}]]
-            set i 0
-            foreach pin $pinList {
-                lappend pins [list p$i $pin]
-                incr i
-            }
-            $netlistObj add [${NamespacePath}::BasicDevices::X new $elemName $pins $subName\
-                                     [my ParseParams $lineList $paramsStartIndex {} list]]
-            return
-        }
         method CreateMESFET {line netlistObj} {
+            # Creates [::SpiceGenTcl::Ngspice::SemiconductorDevices::Z] object from passed line and add it to netlist
             #   line - line to parse
-            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (and its children) to which the 
+            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (or its children) to which the 
             #   element should be attached.
             set line [string map {", " "," " ," "," " , " ","} $line]
             set lineList [split $line]
