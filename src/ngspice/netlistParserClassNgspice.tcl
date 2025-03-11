@@ -67,7 +67,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             foreach line $fileData {
                 set processedLine [regsub -all {[[:space:]]+} [string trim $line] { }]
                 if {$processedLine ne {}} {
-                    lappend lines [string tolower $processedLine]
+                    lappend lines $processedLine
                 }
             }
             # find continuations and move them to line that is the start of continuation
@@ -109,6 +109,17 @@ namespace eval ::SpiceGenTcl::Ngspice {
             } else {
                 set finalList $fileData
             }
+            # convert each line to lower case except lines that contains paths in .lib or .include statements
+            foreach line $finalList {
+                set tempLine [string tolower $line]
+                if {[regexp {^\.(include|lib).*} $tempLine]} {
+                    lappend tempList $line
+                } else {
+                    lappend tempList $tempLine
+                }
+            }
+            set finalList $tempList
+            unset tempList
             # remove all comments that start with `*` symbol
             set finalList [lsearch -all -inline -not -glob $finalList {\**}]
             # remove all end of line comments that starts with symbols \;, \$ and //

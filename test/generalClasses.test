@@ -714,6 +714,14 @@ test testIncludeClass-1 {test creation of Include class instance and genSPICEStr
 } -result {.include ./libs/mosfets/nmos1} -cleanup {
     unset raw result
 }
+
+test testIncludeClass-2 {test creation of Include class instance and genSPICEString interface} -setup {
+    set raw [Include new {./Libs/mosfets/nmos1}]
+} -body {
+    set result [$raw genSPICEString]
+} -result {.include ./Libs/mosfets/nmos1} -cleanup {
+    unset raw result
+}
     
 ###  Library class definition 
 

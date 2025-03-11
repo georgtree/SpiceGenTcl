@@ -873,7 +873,7 @@ namespace eval ::SpiceGenTcl {
     oo::configurable create RawString {
         superclass SPICEElement
         property name -set {
-            set name [string tolower $value]
+            set name $value
         }
         property value
         variable name
@@ -2294,6 +2294,7 @@ namespace eval ::SpiceGenTcl {
                 set firstChar [string index $firstWord 0]
                 set restChars [string range $firstWord 1 end]
                 if {$firstChar eq {.}} {
+                    set restChars [string tolower $restChars]
                     if {$restChars in $dots} {
                         my [dict get $DotsMethods $restChars] $line $netlistObj
                     } else {
