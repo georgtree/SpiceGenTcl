@@ -127,9 +127,16 @@ namespace eval ::SpiceGenTcl {
         method buildArgStr {paramsNames} {
             # Builds argument list for argparse.
             #  paramsNames - list of parameter names
-            # Returns: string in form *-paramName= ...*
+            # Returns: string in form `-paramName= ...`, or `{-paramName= -forbid {alias0 alias1 ...}}`
             foreach paramName $paramsNames {
-                lappend paramDefList -${paramName}=
+                if {[llength $paramName]>1} {
+                    for {set i 0} {$i<[llength $paramName]} {incr i} {
+                        set paramNameAlias [@ $paramName $i]
+                        lappend paramDefList "\{-${paramNameAlias}= -forbid \{[lremove $paramName $i]\}\}"
+                    }
+                } else {
+                    lappend paramDefList -${paramName}=
+                }
             }
             set paramDefStr [join $paramDefList \n]
             return $paramDefStr
@@ -150,9 +157,19 @@ namespace eval ::SpiceGenTcl {
             #  using two element list {paramName aliasName}
             #  args - argument list with key names and it's values
             # Returns: list of parameters formatted for Device/Model constructor
-            set paramDefList [my buildArgStr $paramsNames]
+            foreach paramName $paramsNames {
+                if {[llength $paramName]>1} {
+                    for {set i 0} {$i<[llength $paramName]} {incr i} {
+                        set paramNameAlias [@ $paramName $i]
+                        lappend paramDefList "\{-${paramNameAlias}= -forbid \{[lremove $paramName $i]\}\}"
+                    }
+                } else {
+                    lappend paramDefList -${paramName}=
+                }
+            }
+            set paramDefStr [join $paramDefList \n]
             set arguments [argparse -inline "
-                $paramDefList
+                $paramDefStr
             "]
             set params {}
             dict for {paramName value} $arguments {
