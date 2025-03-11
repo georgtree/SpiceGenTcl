@@ -81,35 +81,4 @@ proc testTemplate {testName descr createStr refStr} {
     } -result $refStr
 }
 
-proc testTemplateParse {testName descr location fileName refStr} {
-    test $testName $descr -setup {
-        set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $location $fileName]]
-        $parser readFile
-    } -body {
-        if {[catch {$parser buildTopNetlist} errorStr]} {
-            return $errorStr
-        }
-        return [[$parser configure -topnetlist] genSPICEString]
-    } -result $refStr
-}
-
-proc testTemplateParse1 {testName descr testStr location refStr} {
-    test $testName $descr -setup {
-        set file [open [file join $location temp1] w+]
-        puts $file {}
-        puts $file $testStr
-        close $file
-        set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $location temp1]]
-        $parser readFile
-    } -body {
-        if {[catch {$parser buildTopNetlist} errorStr]} {
-            return $errorStr
-        }
-        return [[$parser configure -topnetlist] genSPICEString]
-    } -result $refStr -cleanup {
-        file delete [file join $location temp1]
-        unset parser
-    }
-}
-
 

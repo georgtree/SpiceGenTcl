@@ -19,7 +19,7 @@ namespace eval ::SpiceGenTcl {
     namespace export Pin ParameterSwitch Parameter ParameterNoCheck ParameterPositional ParameterPositionalNoCheck\
             ParameterDefault ParameterEquation ParameterPositionalEquation Device Model RawString Comment Include\
             Options ParamStatement Temp Netlist Circuit Library Subcircuit Analysis Simulator Dataset Axis Trace\
-            EmptyTrace RawFile Ic Nodeset ParameterNode ParameterNodeEquation Global
+            EmptyTrace RawFile Ic Nodeset ParameterNode ParameterNodeEquation Global Parser
     namespace export importNgspice importXyce importCommon importLtspice forgetNgspice forgetXyce forgetCommon\
             forgetLtspice
     
@@ -1954,6 +1954,7 @@ namespace eval ::SpiceGenTcl {
                 set encode utf-16le
                 set line Tit
             } else {
+                close $file
                 error {Unknown encoding}
             }
             my configure -rawparams [dcreate Filename $path]
@@ -2069,11 +2070,13 @@ namespace eval ::SpiceGenTcl {
                             set fun readFloat32 
                         }
                     } else {
+                        close $file
                         error "Invalid data type '[$trace configure -numtype]' for trace '[$trace configure -name]'"
                     }
                     lappend scanFunctions $fun
                 }
                 if {$calcBlockSize!=$BlockSize} {
+                    close $file
                     error "Error in calculating the block size. Expected '${BlockSize}' bytes, but found\
                             '$calcBlockSize' bytes"
                 }
@@ -2105,6 +2108,7 @@ namespace eval ::SpiceGenTcl {
                             set firstVar false
                             set sPoint [@ $lineList 0]
                             if {$i!=int($sPoint)} {
+                                close $file
                                 error {Error reading file}
                             }
                             if {$numType eq {complex}} {
@@ -2202,6 +2206,313 @@ namespace eval ::SpiceGenTcl {
                         'getTracesCsv' method"
             }
             return [::csv::joinlist $tracesList [dget $arguments sep]]
+        }
+    }
+
+###  Parser class definition 
+
+    oo::configurable create Parser {
+        variable Name
+        property filepath
+        variable filepath
+        variable FileData
+        variable SubcktsBoundaries
+        variable ElemsMethods
+        variable DotsMethods
+        variable SupModelsTypes
+        property topnetlist
+        variable topnetlist
+        variable ModelTemplate
+        variable SubcircuitTemplate
+        variable NamespacePath
+
+        constructor {name filepath} {
+            # Creates object of class `Parser` that do parsing of valid simulator netlist.
+            #   name - name of the object
+            #   filepath - path to file that should be parsed
+            set Name $name 
+            my configure -filepath $filepath
+            my configure -topnetlist [::SpiceGenTcl::Netlist new [file tail $filepath]]
+            set ModelTemplate {oo::class create @type@ {
+                superclass ::SpiceGenTcl::Model
+                constructor {name args} {
+                    set paramsNames [list @paramsList@]
+                    next $name @type@ [my argsPreprocess $paramsNames {*}$args]
+                }
+            }}
+            set SubcircuitTemplate {oo::class create @classname@ {
+                superclass ::SpiceGenTcl::Subcircuit
+                constructor {} {
+                    set pins @pins@
+                    set params @params@
+                    next @subname@ $pins $params
+                }
+            }}
+        }
+        method readFile {} {
+            error "Not implemented"
+        }
+        method readAndParse {} {
+            error "Not implemented"
+        }
+        method GetSubcircuitLines {} {
+            error "Not implemented"
+        }
+        method BuildSubcktFromDef {} {
+            error "Not implemented"
+        }
+        method buildTopNetlist {} {
+            # Builds top netlist corresponding to parsed netlist file
+            if {![info exists FileData]} {
+                error "Parser object '[my configure -name]' doesn't have prepared data"
+            }
+            set allLines $FileData
+            set topNetlist [my configure -topnetlist]
+            my GetSubcircuitLines
+            # parse found subcircuits definitions first
+            if {[info exists SubcktsBoundaries]} {
+                set subcktsBoundaries $SubcktsBoundaries
+                dict for {subcktName subcktBounds} $subcktsBoundaries {
+                    my BuildSubcktFromDef $subcktName $subcktBounds
+                    lappend lines2remove {*}[lseq [@ $subcktBounds 0] [@ $subcktBounds 1]]
+                }
+                set allLines [lremove $allLines {*}$lines2remove]
+            }
+            my BuildNetlist $allLines $topNetlist
+            return
+        }
+        method BuildNetlist {lines netlistObj} {
+            # Builds netlist from passed lines and add it to passed object
+            #   lines - list of lines to parse
+            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` and its childrens
+            set elems [dkeys $ElemsMethods]
+            set dots [dkeys $DotsMethods]
+            for {set i 0} {$i<[llength $lines]} {incr i} {
+                set line [@ $lines $i]
+                set lineList [split $line]
+                set firstWord [@ $lineList 0]
+                set firstChar [string index $firstWord 0]
+                set restChars [string range $firstWord 1 end]
+                if {$firstChar eq {.}} {
+                    if {$restChars in $dots} {
+                        my [dict get $DotsMethods $restChars] $line $netlistObj
+                    } else {
+                        puts "Line '$lineList' contains unsupported dot statement '$firstWord', skip that line"
+                        continue
+                    }
+                } elseif {[string match {[a-z]} $firstChar]} {
+                    if {$firstChar in $elems} {
+                        my [dict get $ElemsMethods $firstChar] $line $netlistObj
+                    } else {
+                        puts "Line '$lineList' contains unsupported element '$firstWord', skip that line"
+                        continue
+                    }
+                } else {
+                    puts "Line '$lineList' starts with illegal character '$firstChar', skip that line"
+                    continue
+                }
+            }
+            return
+        }
+        method ParseParams {list start {exclude {}} {format arg}} {
+            # Parses parameters from the list starts from `start` that is in form `name=value`, or `name={value}`.
+            #   list - input list
+            #   start - start index
+            #   exclude - list of parameters names that should be omitted from output
+            #   format - select format of output list, arg: `{-name1 value1 -name2 value2 ...}`, list:
+            #    `{{name1 value1 ?qual?} {name2 value2 ?qual?} ...}`
+            # Returns: formatted list of parameters
+            set results {}
+            foreach elem [lrange $list $start end] {
+                if {[my CheckEqual $elem]} {
+                    lassign [my ParseWithEqual $elem] name value
+                    if {$format eq {arg}} {
+                        set nameValue [list -$name $value]
+                    } elseif {$format eq {list}} {
+                        set nameValue [list $name $value]
+                    }
+                } elseif {[my CheckBracedWithEqual $elem]} {
+                    lassign [my ParseBracedWithEqual $elem] name value
+                    if {$format eq {arg}} {
+                        set nameValue [list -$name [list $value -eq]]
+                    } elseif {$format eq {list}} {
+                        set nameValue [list $name $value -eq]
+                    }
+                } else {
+                    return -code error "Parameter '${elem}' parsing failed"
+                }
+                if {$format eq {arg}} {
+                    if {$name ni [lmap nameExc $exclude {subst "$nameExc"}]} {
+                        if {$value eq {}} {
+                            return -code error "Parameter '${elem}' parsing failed: value is empty"
+                        }
+                        lappend results {*}$nameValue
+                    }
+                } elseif {$format eq {list}} {
+                    if {$name ni [lmap nameExc $exclude {subst "$nameExc"}]} {
+                        if {$value eq {}} {
+                            return -code error "Parameter '${elem}' parsing failed: value is empty"
+                        }
+                        lappend results $nameValue
+                    }
+                }
+            }
+            return $results
+        }
+        method ParseMixedParams {list start {exclude {}} {format arg}} {
+            # Parses parameters from the list starts from `start` that is in form `name=value`, `name={value}` or `name`.
+            #   list - input list
+            #   start - start index
+            #   exclude - list of parameters names that should be omitted from output
+            #   format - select format of output list, arg: `{-name1 value1 -name2 value2 ...}`, list:
+            #    `{{name1 value1 ?qual?} {name2 value2 ?qual?} ...}`
+            # Returns: formatted list of parameters
+            set results {}
+            foreach elem [lrange $list $start end] {
+                set switch false
+                if {[my CheckEqual $elem]} {
+                    lassign [my ParseWithEqual $elem] name value
+                    if {$format eq {arg}} {
+                        set nameValue [list -$name $value]
+                    } elseif {$format eq {list}} {
+                        set nameValue [list $name $value]
+                    }
+                } elseif {[my CheckBracedWithEqual $elem]} {
+                    lassign [my ParseBracedWithEqual $elem] name value
+                    if {$format eq {arg}} {
+                        set nameValue [list -$name [list $value -eq]]
+                    } elseif {$format eq {list}} {
+                        set nameValue [list $name $value -eq]
+                    }
+                } elseif {[regexp {^[a-zA-Z0-9]+$} $elem]} {
+                    set name $elem
+                    set value {}
+                    if {$format eq {arg}} {
+                        set nameValue -$name
+                    } elseif {$format eq {list}} {
+                        set nameValue [list $name -sw]
+                    }
+                    set switch true
+                } else {
+                    return -code error "Parameter '${elem}' parsing failed"
+                }
+                if {$format eq {arg}} {
+                    if {$name ni [lmap nameExc $exclude {subst "-$nameExc"}]} {
+                        if {$value eq {} && !$switch} {
+                            return -code error "Parameter '${elem}' parsing failed: value is empty"
+                        }
+                        lappend results {*}$nameValue
+                    }
+                } elseif {$format eq {list}} {
+                    if {$name ni [lmap nameExc $exclude {subst "$nameExc"}]} {
+                        if {$value eq {} && !$switch} {
+                            return -code error "Parameter '${elem}' parsing failed: value is empty"
+                        }
+                        lappend results $nameValue
+                    }
+                }
+            }
+            return $results
+        }
+        method ParsePosParams {list names} {
+            # Parses parameters from the list starts from `start` that is in form `value` or `{value}`.
+            #   list - input list of parameters in order of elements in `names` list
+            #   names - names of parameters
+            # Returns: list of the form `{-name1 value1 -name2 value2 ...}`
+            set results {}
+            if {[llength $list]!=[llength $names]} {
+                if {[llength $list]>[llength $names]} {
+                    set upperBound [llength $names]
+                } else {
+                    set upperBound [llength $list]
+                }
+            } else {
+                set upperBound [llength $list]
+            }
+            for {set i 0} {$i<$upperBound} {incr i} {
+                set elem [@ $list $i]
+                set name [@ $names $i]
+                if {[my CheckBraced $elem]} {
+                    set value [list [my Unbrace $elem] -eq]
+                    set name -$name
+                } else {
+                    set name -$name
+                    set value $elem
+                }
+                lappend results $name $value
+            }
+            return $results
+        }
+        method CheckBraced {string} {
+            # Checks if string is braced, string inside braces must not contain `{`, `}` and `=` symbols and be empty
+            #   string - input string
+            return [regexp {^\{([^={}]+)\}$} $string]
+        }
+        method Unbrace {string} {
+            # Unbraces input string, `{value}` to `value`, value inside braces must not contain `{`, `}` and `=` symbols,
+            # and be empty
+            #   string - input braced string
+            # Returns: string without braces
+            if {[my CheckBraced $string]} {
+                return [@ [regexp -inline {^\{([^={}]+)\}$} $string] 1]
+            } else {
+                return -code error "String '${string}' isn't of form {string}, string must not contain '{' and '}'\
+                        symbols"
+            }
+        }
+        method CheckQuoted {string} {
+            # Checks if string is single quoted, string inside braces must not contain `'`, `'` and `=` symbols and be empty
+            #   string - input string
+            return [regexp {^\'([^='']+)\'$} $string]
+        }
+        method Unquote {string} {
+            # Unquotes input string, `'value'` to `value`, value inside braces must not contain `'`, `'` and `=` symbols,
+            # and be empty
+            #   string - input braced string
+            # Returns: string without braces, 
+            if {[my CheckQuoted $string]} {
+                return [@ [regexp -inline {^\'([^='']+)\'$} $string] 1]
+            } else {
+                return -code error "String '${string}' isn't of form 'string', string must not contain ''' and '''\
+                        symbols"
+            }
+        }
+        method CheckBracedWithEqual {string} {
+            # Checks if string has form `name={value}`, value must not contain `{`, `}` and `=` symbols and be empty,
+            # names can containonly alphanumeric characters and `_` symbol
+            #   string - input string
+            return [regexp {^([a-zA-Z_][a-zA-Z0-9_()]*)=\{([^={}]+)\}$} $string]
+        }
+        method ParseBracedWithEqual {string} {
+            # Parse input string in form `name={value}` to list {name value}, value must not contain `{`, `}` and `=`
+            # symbols and be empty, names can contain only alphanumeric characters and `_` symbol
+            #   string - input string
+            # Returns: list in form {name value}
+            if {[my CheckBracedWithEqual $string]} {
+                regexp {^([a-zA-Z_][a-zA-Z0-9_()]*)=\{([^={}]+)\}$} $string match name value
+                return [list $name $value]
+            } else {
+                return -code error "String '${string}' isn't of form 'name={value}', value must not contain '{' or '}'\ 
+                        symbols, name must contain only alphanumeric characters and '_' symbol"
+            }
+        }
+        method CheckEqual {string} {
+            # Checks if string has form `name=value`, value must not contain `{`, `}` and `=` symbols and be empty,
+            # names can contain only alphanumeric characters and `_` symbol
+            #   string - input string
+            return [regexp {^([a-zA-Z_][a-zA-Z0-9_()]*)=([^={}]+)$} $string]
+        }
+        method ParseWithEqual {string} {
+            # Parse input string in form `name=value` to list `{name value}`.
+            #   string - input string
+            # Returns: list in form {name value}
+            if {[my CheckEqual $string]} {
+                regexp {^([a-zA-Z_][a-zA-Z0-9_()]*)=([^={}]+)$} $string match name value
+                return [list $name $value]
+            } else {
+                return -code error "String '${string}' isn't of form 'name=value', value must not contain '{' or '}'\ 
+                        symbols, name must contain only alphanumeric characters and '_' symbol"
+            }
         }
     }
 }

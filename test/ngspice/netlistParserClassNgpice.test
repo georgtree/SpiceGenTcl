@@ -21,14 +21,46 @@ set currentDir [file normalize [file dirname [info script]]]
 source [file join $currentDir .. testUtilities.tcl]
 importNgspice
 
+proc testTemplateParse {testName descr location fileName refStr} {
+    test $testName $descr -setup {
+        set parser [::SpiceGenTcl::Ngspice::NgspiceParser new parser1 [file join $location $fileName]]
+        $parser readFile
+    } -body {
+        if {[catch {$parser buildTopNetlist} errorStr]} {
+            return $errorStr
+        }
+        return [[$parser configure -topnetlist] genSPICEString]
+    } -result $refStr
+}
+
+proc testTemplateParse1 {testName descr testStr location refStr} {
+    test $testName $descr -setup {
+        set file [open [file join $location temp1] w+]
+        puts $file {}
+        puts $file $testStr
+        close $file
+        set parser [::SpiceGenTcl::Ngspice::NgspiceParser new parser1 [file join $location temp1]]
+        $parser readFile
+    } -body {
+        if {[catch {$parser buildTopNetlist} errorStr]} {
+            return $errorStr
+        }
+        return [[$parser configure -topnetlist] genSPICEString]
+    } -result $refStr -cleanup {
+        file delete [file join $location temp1]
+        unset parser
+    }
+}
+
+
 set epsilon 1e-8
 set testDir [file dirname [info script]]
 set netlistsLoc [file join $testDir netlists_parser]
 
-###  Parser class tests 
+###  NgspiceParser class tests 
 
-test testParserClass-4 {test Parser class} -setup {
-    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc adder_mos_unmatched_subckt.cir]]
+test testNgspiceParserClass-4 {test NgspiceParser class} -setup {
+    set parser [::SpiceGenTcl::Ngspice::NgspiceParser new parser1 [file join $netlistsLoc adder_mos_unmatched_subckt.cir]]
     $parser readFile
 } -body {
     catch {[info object namespace $parser]::my GetSubcircuitLines} errorStr
@@ -37,8 +69,8 @@ test testParserClass-4 {test Parser class} -setup {
     unset parser
 }
 
-test testParserClass-5 {test Parser class} -setup {
-    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc adder_mos_unmatched_subckt_1.cir]]
+test testNgspiceParserClass-5 {test NgspiceParser class} -setup {
+    set parser [::SpiceGenTcl::Ngspice::NgspiceParser new parser1 [file join $netlistsLoc adder_mos_unmatched_subckt_1.cir]]
     $parser readFile
 } -body {
     catch {[info object namespace $parser]::my GetSubcircuitLines} errorStr
@@ -47,8 +79,8 @@ test testParserClass-5 {test Parser class} -setup {
     unset parser
 }
 
-test testParserClass-6 {test Parser class} -setup {
-    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc adder_mos_unmatched_subckt_2.cir]]
+test testNgspiceParserClass-6 {test NgspiceParser class} -setup {
+    set parser [::SpiceGenTcl::Ngspice::NgspiceParser new parser1 [file join $netlistsLoc adder_mos_unmatched_subckt_2.cir]]
     $parser readFile
 } -body {
     catch {[info object namespace $parser]::my GetSubcircuitLines} errorStr
@@ -57,8 +89,8 @@ test testParserClass-6 {test Parser class} -setup {
     unset parser
 }
 
-test testParserClass-7 {test Parser class with nested subcircuit} -setup {
-    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc adder_mos_nested_subckt.cir]]
+test testNgspiceParserClass-7 {test NgspiceParser class with nested subcircuit} -setup {
+    set parser [::SpiceGenTcl::Ngspice::NgspiceParser new parser1 [file join $netlistsLoc adder_mos_nested_subckt.cir]]
     $parser readFile
 } -body {
     catch {[info object namespace $parser]::my GetSubcircuitLines} errorStr
@@ -67,7 +99,7 @@ test testParserClass-7 {test Parser class with nested subcircuit} -setup {
     unset parser
 }
 
-testTemplateParse testParserClass-8 {} $netlistsLoc diffpair_cir_build.cir\
+testTemplateParse testNgspiceParserClass-8 {} $netlistsLoc diffpair_cir_build.cir\
 {.model qnl npn(level=1 bf=80 rb=100 tf=0.3n tr=6n cje=3p cjc=2p vaf=50)
 .model qnr npn(level=1 bf=80 rb=100 tf=0.3n tr=6n cje=3p cjc=2p vaf=50)
 .options noacct
@@ -86,7 +118,7 @@ vcc 8 0 12
 vee 9 0 -12
 .sens v(5,4)}
 
-testTemplateParse testParserClass-9 {} $netlistsLoc diffpair_cir_build_res_err_syntax.cir\
+testTemplateParse testNgspiceParserClass-9 {} $netlistsLoc diffpair_cir_build_res_err_syntax.cir\
 ".model qnl npn(level=1 bf=80 rb=100 tf=0.3n tr=6n cje=3p cjc=2p vaf=50)
 .model qnr npn(level=1 bf=80 rb=100 tf=0.3n tr=6n cje=3p cjc=2p vaf=50)
 .options noacct
@@ -105,7 +137,7 @@ vcc 8 0 12
 vee 9 0 -12
 .sens v(5,4)"
 
-testTemplateParse testParserClass-10 {} $netlistsLoc adder_mos.cir\
+testTemplateParse testNgspiceParserClass-10 {} $netlistsLoc adder_mos.cir\
 {.subckt nand in1 in2 out vdd
 m1 out in2 vdd vdd p1 w=7.5u l=0.35u pd=13.5u ad=22.5p ps=13.5u as=22.5p
 m2 net1 in2 0 0 n1 w=3u l=0.35u pd=9u ad=9p ps=9u as=9p
@@ -144,7 +176,7 @@ x1 1 2 3 4 5 6 7 8 9 10 11 12 0 13 99 fourbit
 .options noinit acct
 .tran 500p 6400n}
 
-testTemplateParse testParserClass-10 {} $netlistsLoc ring51_40.sp\
+testTemplateParse testNgspiceParserClass-10 {} $netlistsLoc ring51_40.sp\
 {.subckt inv1 dd ss sub in out
 mn1 out in ss sub n1 w=4u l=0.15u as=6p ad=6p ps=7u pd=7u
 mp1 out in dd sub p1 w=10u l=0.15u as=15p ad=15p ps=13u pd=13u
@@ -178,8 +210,8 @@ cout buf ss 1pf
 .include ./bsim4soi/nmos4p0.mod
 .include ./bsim4soi/pmos4p0.mod}
 
-test testParserClass-11 {} -setup {
-    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc ring51_40.sp]]
+test testNgspiceParserClass-11 {} -setup {
+    set parser [::SpiceGenTcl::Ngspice::NgspiceParser new parser1 [file join $netlistsLoc ring51_40.sp]]
     $parser readAndParse
 } -body {
     return [[$parser configure -topnetlist] genSPICEString]
@@ -216,8 +248,8 @@ cout buf ss 1pf
 .include ./bsim4soi/nmos4p0.mod
 .include ./bsim4soi/pmos4p0.mod}
 
-test testParserClass-12 {} -setup {
-    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc 555-timer-2.cir]]
+test testNgspiceParserClass-12 {} -setup {
+    set parser [::SpiceGenTcl::Ngspice::NgspiceParser new parser1 [file join $netlistsLoc 555-timer-2.cir]]
     $parser readAndParse
 } -body {
     return [[$parser configure -topnetlist] genSPICEString]
@@ -285,7 +317,7 @@ x1 16 15 16 res 13 17 2 0 tlc555}
 
 ### Resistors parsing test
 
-testTemplateParse testParserClassResistors-1 {} $netlistsLoc resistors_test.cir\
+testTemplateParse testNgspiceParserClassResistors-1 {} $netlistsLoc resistors_test.cir\
 {rs1 11 2 {res}
 rs2 3 1 r={v(a) +v(b)/ i(b )} tc2=1
 rc1 4 8 10k tc1=2 tc2={tcrt}
@@ -298,22 +330,22 @@ r1 3 1 r={v(a) +v(b)/ i(b)} tc2=1
 r2 3 1 r={v(a) +v(b)/ i(b)} tc2=1
 r3 rr 0 r={v(rr) < {vt} ? {r0} : {2*r0}} tc1=2e-03 tc2=3.3e-06}
 
-testTemplateParse1 testParserClassResistors-2 {} {rs2 3 1 3 r={v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
+testTemplateParse1 testNgspiceParserClassResistors-2 {} {rs2 3 1 3 r={v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
         {Parameter '3' parsing failed}
-testTemplateParse1 testParserClassResistors-3 {} {rs2 3 1 n r={v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
+testTemplateParse1 testNgspiceParserClassResistors-3 {} {rs2 3 1 n r={v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
         {Parameter 'n' parsing failed}
-testTemplateParse1 testParserClassResistors-4 {} {rs2 3 1 beh={v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
+testTemplateParse1 testNgspiceParserClassResistors-4 {} {rs2 3 1 beh={v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
         {Creating resistor object from line 'rs2 3 1 beh={v(a)+v(b)/i(b)} tc2=1' failed due to wrong or incompatible\
                  syntax}
-testTemplateParse1 testParserClassResistors-5 {} {rs2 a b ! {v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
+testTemplateParse1 testNgspiceParserClassResistors-5 {} {rs2 a b ! {v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
         {Creating resistor object from line 'rs2 a b ! {v(a)+v(b)/i(b)} tc2=1' failed due to wrong or incompatible\
                  syntax}
-testTemplateParse1 testParserClassResistors-6 {} {rs2 a b {v} {v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
+testTemplateParse1 testNgspiceParserClassResistors-6 {} {rs2 a b {v} {v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
         {Parameter '{v(a)+v(b)/i(b)}' parsing failed}
 
 ### Capacitors parsing test
 
-testTemplateParse testParserClassCapacitors-1 {} $netlistsLoc capacitors_test.cir\
+testTemplateParse testNgspiceParserClassCapacitors-1 {} $netlistsLoc capacitors_test.cir\
 {c2 netp netm 1e-6
 c3 netp netm c={v(a)+v(b)+pow(v(c), 2)} tc1=1
 c4 netp netm q={v(a)+v(b) + pow(v(c),2)} tc1=1
@@ -321,24 +353,24 @@ c5 netp netm capmod l=1e-6 w=10e-6 temp=25
 c1 netp netm 1e-6 tc1=1 temp=25
 c6 netp netm q={v(a)+v(b) + pow(v(c),2)} tc1=1 tc2=3
 c7 netp netm c={v(a)+v(b) + pow(v(c),2)} tc1=1 tc2=3}
-testTemplateParse1 testParserClassCapacitors-2 {} {cs2 3 1 3 c={v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
+testTemplateParse1 testNgspiceParserClassCapacitors-2 {} {cs2 3 1 3 c={v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
         {Parameter '3' parsing failed}
-testTemplateParse1 testParserClassCapacitors-3 {} {cs2 3 1 n c={v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
+testTemplateParse1 testNgspiceParserClassCapacitors-3 {} {cs2 3 1 n c={v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
         {Parameter 'n' parsing failed}
-testTemplateParse1 testParserClassCapacitors-4 {}\
+testTemplateParse1 testNgspiceParserClassCapacitors-4 {}\
         {cs2 3 1 beh={v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
         {Creating capacitor object from line 'cs2 3 1 beh={v(a)+v(b)/i(b)} tc2=1' failed due to wrong or incompatible\
                  syntax}
-testTemplateParse1 testParserClassCapacitors-5 {}\
+testTemplateParse1 testNgspiceParserClassCapacitors-5 {}\
         {cs2 a b ! {v(a)+v(b)/i(b)} tc2=1} $netlistsLoc {Creating capacitor object from line 'cs2 a b !\
                                                                  {v(a)+v(b)/i(b)} tc2=1' failed due to wrong or\
                                                                  incompatible syntax}
-testTemplateParse1 testParserClassCapacitors-6 {} {cs2 a b {v} {v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
+testTemplateParse1 testNgspiceParserClassCapacitors-6 {} {cs2 a b {v} {v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
         {Parameter '{v(a)+v(b)/i(b)}' parsing failed}
 
 ### Inductors parsing test
 
-testTemplateParse testParserClassInductors-1 {} $netlistsLoc inductors_test.cir\
+testTemplateParse testNgspiceParserClassInductors-1 {} $netlistsLoc inductors_test.cir\
 {l1 netp netm 1e-6 tc1=1 temp=25
 l2 netp netm 1e-6
 l3 netp netm 1e-6 indm
@@ -349,20 +381,20 @@ l7 netp netm l={v(a)+v(b)+ pow(v(c), 2)} tc1=1
 l8 netp netm l={v(a)+v(b)+ pow(v(c), 2)} tc1=1
 l9 l2 lll l={i(vm) < {it} ? {ll} : {lh}} tc1=-4e-03 tc2=6e-05}
 
-testTemplateParse1 testParserClassInductors-2 {} {ls2 3 1 3 l={v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
+testTemplateParse1 testNgspiceParserClassInductors-2 {} {ls2 3 1 3 l={v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
         {Parameter '3' parsing failed}
-testTemplateParse1 testParserClassInductors-3 {} {ls2 3 1 beh={v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
+testTemplateParse1 testNgspiceParserClassInductors-3 {} {ls2 3 1 beh={v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
         {Creating inductor object from line 'ls2 3 1 beh={v(a)+v(b)/i(b)} tc2=1' failed due to wrong or incompatible\
                  syntax}
-testTemplateParse1 testParserClassInductors-4 {} {ls2 a b ! {v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
+testTemplateParse1 testNgspiceParserClassInductors-4 {} {ls2 a b ! {v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
         {Creating inductor object from line 'ls2 a b ! {v(a)+v(b)/i(b)} tc2=1' failed due to wrong or incompatible\
                  syntax}
-testTemplateParse1 testParserClassInductors-5 {} {ls2 a b {v} {v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
+testTemplateParse1 testNgspiceParserClassInductors-5 {} {ls2 a b {v} {v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
         {Parameter '{v(a)+v(b)/i(b)}' parsing failed}
 
 ### Models parsing test
 
-testTemplateParse testParserClassModels-1 {} $netlistsLoc models_test.cir\
+testTemplateParse testNgspiceParserClassModels-1 {} $netlistsLoc models_test.cir\
 {.model resmod r(tc1=1 tc2=2)
 .model capmod c(tc1=1 tc2=2)
 .model indmod l(tc1=1 tc2=2)
@@ -376,15 +408,15 @@ testTemplateParse testParserClassModels-1 {} $netlistsLoc models_test.cir\
 .model mesfetmod2 pmf(level=1 vto=-2 beta=1e-3 lambda=1e-4 cgd=1e-12)
 .model res3mod r3model(tc1=1 tc2=2)}
 
-testTemplateParse1 testParserClassModels-2 {} {.model swmod sw(vt= vh=0.5 ron=1 roff=1e6)} $netlistsLoc\
+testTemplateParse1 testNgspiceParserClassModels-2 {} {.model swmod sw(vt= vh=0.5 ron=1 roff=1e6)} $netlistsLoc\
         {Parameter 'vt=vh=0.5' parsing failed}
 
-test testParserClassModels-3 {test Parser class, models parsing, edge case} -setup {
+test testNgspiceParserClassModels-3 {test NgspiceParser class, models parsing, edge case} -setup {
     set file [open [file join $netlistsLoc temp1] w+]
     puts $file ""
     puts $file {.model mesfetmod3 nmf(level=4 vto=2 beta=1e-3 lambda=1e-4 cgd=1e-12)}
     close $file
-    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
+    set parser [::SpiceGenTcl::Ngspice::NgspiceParser new parser1 [file join $netlistsLoc temp1]]
     $parser readFile
     stdout2var output
     $parser buildTopNetlist
@@ -397,12 +429,12 @@ test testParserClassModels-3 {test Parser class, models parsing, edge case} -set
     unset parser output
 }
 
-test testParserClassModels-4 {test Parser class, models parsing, edge case} -setup {
+test testNgspiceParserClassModels-4 {test NgspiceParser class, models parsing, edge case} -setup {
     set file [open [file join $netlistsLoc temp1] w+]
     puts $file ""
     puts $file {.model res3mod r3(tc1=1 tc2=2)}
     close $file
-    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
+    set parser [::SpiceGenTcl::Ngspice::NgspiceParser new parser1 [file join $netlistsLoc temp1]]
     $parser readFile
     stdout2var output
     $parser buildTopNetlist
@@ -417,7 +449,7 @@ test testParserClassModels-4 {test Parser class, models parsing, edge case} -set
 
 ### Analyses parsing test
 
-testTemplateParse testParserClassAnalyses-1 {} $netlistsLoc analyses_test.cir\
+testTemplateParse testNgspiceParserClassAnalyses-1 {} $netlistsLoc analyses_test.cir\
 {.dc v1 {time1} 5 0.1
 .dc v1 0 5 0.1
 .ac dec 10 {f1} 1e6
@@ -433,17 +465,17 @@ testTemplateParse testParserClassAnalyses-1 {} $netlistsLoc analyses_test.cir\
 .tran 1e-6 {tend} uic
 .op}
 
-testTemplateParse1 testParserClassAnalyses-2 {} {.sens v(1, out) sp dec 10 {f1} 1e6} $netlistsLoc\
+testTemplateParse1 testNgspiceParserClassAnalyses-2 {} {.sens v(1, out) sp dec 10 {f1} 1e6} $netlistsLoc\
         {Sense analysis has usupported type 'sp'}
-testTemplateParse1 testParserClassAnalyses-3 {} {.sens v(1,out ac dec 10 {f1} 1e6} $netlistsLoc\
+testTemplateParse1 testNgspiceParserClassAnalyses-3 {} {.sens v(1,out ac dec 10 {f1} 1e6} $netlistsLoc\
         {Sense analysis in line '.sens v(1,out ac dec 10 {f1} 1e6' doesn't have output variable with proper syntax}
 
-test testParserClassAnalyses-4 {test Parser class, analyses parsing, edge case} -setup {
+test testNgspiceParserClassAnalyses-4 {test NgspiceParser class, analyses parsing, edge case} -setup {
     set file [open [file join $netlistsLoc temp1] w+]
     puts $file ""
     puts $file {.dc v1 1 0 100 v2 2 50 200}
     close $file
-    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc temp1]]
+    set parser [::SpiceGenTcl::Ngspice::NgspiceParser new parser1 [file join $netlistsLoc temp1]]
     $parser readFile
     stdout2var output
     $parser buildTopNetlist
@@ -456,20 +488,20 @@ test testParserClassAnalyses-4 {test Parser class, analyses parsing, edge case} 
     unset parser output
 }
 
-testTemplateParse1 testParserClassAnalyses-5 {} {.sens a(1, out) ac dec 10 {f1} 1e6} $netlistsLoc\
+testTemplateParse1 testNgspiceParserClassAnalyses-5 {} {.sens a(1, out) ac dec 10 {f1} 1e6} $netlistsLoc\
         {Sense analysis in line '.sens a(1, out) ac dec 10 {f1} 1e6' doesn't have output variable with proper\
                  syntax}
 
 ### ParamStatement parsing test
 
-testTemplateParse testParserClassParamStatement-1 {} $netlistsLoc params_test.cir\
+testTemplateParse testNgspiceParserClassParamStatement-1 {} $netlistsLoc params_test.cir\
 {.param u0t={rf+1} vth0=10
 .param k1=1e-4 vth0=10 u0t={rf+1}
 .param abv=1 tre=1k pre=1meg}
 
 ### Behavioural source parsing test
 
-testTemplateParse testParserClassBsource-1 {} $netlistsLoc bsources_test.cir\
+testTemplateParse testNgspiceParserClassBsource-1 {} $netlistsLoc bsources_test.cir\
 {b1 netp netm i={v(a)+v(b)+pow(v(c),2)} tc1=1
 b2 netp netm v={v(a)+v(b)+ pow(v(c),2)} tc1=1 tc2=2
 b3 0 1 v={ln (cos(log(v(1,2)^2)))-v(3)^4+v(2)^v(1)}
@@ -481,15 +513,15 @@ b8 0 8 i={a^2+1}
 b9 4 7 v={a^2 + b/c} tc1=2
 b10 2 0 v={v(1) < vlow ? vlow : v(1) > {vhigh} ? {vhigh} : v(1)}}
 
-testTemplateParse1 testParserClassBsource-2 {} {b1 netp netm g={v(a)+v(b)+pow(v(c),2)} tc1=1} $netlistsLoc\
+testTemplateParse1 testNgspiceParserClassBsource-2 {} {b1 netp netm g={v(a)+v(b)+pow(v(c),2)} tc1=1} $netlistsLoc\
         {Creating behavioural source object from line 'b1 netp netm g={v(a)+v(b)+pow(v(c),2)} tc1=1' failed due to\
                  wrong or incompatible syntax}
-testTemplateParse1 testParserClassBsource-3 {} {b1 netp netm v={v(a)+v(b)+pow(v(c),2)} i={15} tc1=1} $netlistsLoc\
+testTemplateParse1 testNgspiceParserClassBsource-3 {} {b1 netp netm v={v(a)+v(b)+pow(v(c),2)} i={15} tc1=1} $netlistsLoc\
         {-i conflicts with -v}
 
 ### Linear controlled sources parsing test
 
-testTemplateParse testParserClassLctrlsources-1 {} $netlistsLoc lctrlsources_test.cir\
+testTemplateParse testNgspiceParserClassLctrlsources-1 {} $netlistsLoc lctrlsources_test.cir\
 {g1 2 0 5 0 0.1 m={m}
 g2 2 0 5 0 {value} m={m}
 e1 2 3 14 1 2.0
@@ -501,7 +533,7 @@ h2 5 17 vz {value}}
 
 ### Independent sources parsing test
 
-testTemplateParse testParserClassIndsources-1 {} $netlistsLoc indsources_test.cir\
+testTemplateParse testNgspiceParserClassIndsources-1 {} $netlistsLoc indsources_test.cir\
 {v1 10 0 6
 i2 10 0 6
 v3 10 0 {dc} ac 1
@@ -549,14 +581,14 @@ v45 netp netm dc 1 ac 1 portnum 2 z0 {z0}}
 
 ### Diodes parsing test
 
-testTemplateParse testParserClassDiodes-1 {} $netlistsLoc diodes_test.cir\
+testTemplateParse testNgspiceParserClassDiodes-1 {} $netlistsLoc diodes_test.cir\
 {d1 netp netm diomod area=1e-3 lm=1e-6 temp=25
 d2 netp netm diomod off area=1e-3 lm=1e-6 temp=25
 d3 netp netm diomod off area={area} lm=1e-6 temp=25}
 
 ### BJTs parsing test
 
-testTemplateParse testParserClassBJTs-1 {} $netlistsLoc bjts_test.cir\
+testTemplateParse testNgspiceParserClassBJTs-1 {} $netlistsLoc bjts_test.cir\
 {q1 netc netb nete bjtmod area=1e-3 temp=25
 q2 netc netb nete nets bjtmod off area={area} temp=25
 q3 netc netb nete nets nettj bjtmod area=1e-3 temp=25
@@ -569,7 +601,7 @@ q9 netc netb nete nets nettj bjtmod ic={a},{b} area=1e-3 temp=25}
 
 ### JFETs parsing test
 
-testTemplateParse testParserClassJFETs-1 {} $netlistsLoc jfets_test.cir\
+testTemplateParse testNgspiceParserClassJFETs-1 {} $netlistsLoc jfets_test.cir\
 {j1 netd netg nets jfetmod 1e-3 temp=25
 j2 netd netg nets jfetmod {area*area} ic={a},5 temp=25
 j3 netd netg nets jfetmod 1e-3 off temp=25
@@ -578,7 +610,7 @@ j5 netd netg nets jfetmod}
 
 ### MESFETs parsing test
 
-testTemplateParse testParserClassMESFETs-1 {} $netlistsLoc mesfets_test.cir\
+testTemplateParse testNgspiceParserClassMESFETs-1 {} $netlistsLoc mesfets_test.cir\
 {z1 netd netg nets mesfetmod 1e-3
 z2 netd netg nets mesfetmod {area*area} ic={a},5
 z3 netd netg nets mesfetmod 1e-3 off
@@ -587,7 +619,7 @@ z5 netd netg nets mesfetmod}
 
 ### MOSFETs parsing test
 
-testTemplateParse testParserClassMOSFETs-1 {} $netlistsLoc mosfets_test.cir\
+testTemplateParse testNgspiceParserClassMOSFETs-1 {} $netlistsLoc mosfets_test.cir\
 {m1 netd netg nets mosfetmod l=1e-6 w=10e-3
 m2 netd netg nets netsub mosfetmod l=1e-6 w=10e-3
 m3 netd netg nets netsub net5 mosfetmod l=1e-6 w=10e-3
@@ -600,7 +632,7 @@ m9 netd netg nets mosfetmod off l=1e-6 w=10e-3}
 
 ### Switches parsing test
 
-testTemplateParse testParserClassSwitches-1 {} $netlistsLoc switches_test.cir\
+testTemplateParse testNgspiceParserClassSwitches-1 {} $netlistsLoc switches_test.cir\
 {s1 net1 0 netc 0 sw1 on
 s2 net1 0 netc 0 sw1
 s3 net1 0 netc 0 sw1 on
@@ -610,14 +642,14 @@ w2 net1 0 v1 sw1 off}
 
 ### Subcircuits calls parsing test
 
-testTemplateParse testParserClassSubcircuits-1 {} $netlistsLoc subckts_calls_test.cir\
+testTemplateParse testNgspiceParserClassSubcircuits-1 {} $netlistsLoc subckts_calls_test.cir\
 {x1 net1 net2 rcnet r=1 c={cpar}
 x2 net1 net2 rcnet
 x3 a b c d e f g h subname k=1 n=2 i=8 o={oval}}
 
 ### Subcircuits definitions parsing test
 
-testTemplateParse testParserClassSubcircuitsDefinition-1 {} $netlistsLoc subckts_defs_test.cir\
+testTemplateParse testNgspiceParserClassSubcircuitsDefinition-1 {} $netlistsLoc subckts_defs_test.cir\
 {.subckt resarr in out rs=2 rt=3
 r1 in a r={rs}
 r2 a out r={rt}
@@ -629,7 +661,7 @@ r2 a out r={rt}
 
 ### Includes and libraries parsing test
 
-testTemplateParse testParserClassIncsLibs-1 {} $netlistsLoc incs_libs_test.cir\
+testTemplateParse testNgspiceParserClassIncsLibs-1 {} $netlistsLoc incs_libs_test.cir\
 {.include ./libs/mosfets/nmos1
 .include './libs/mosfets abv/nmos1'
 .lib ./libs/mosfets/nmos1 lib1
@@ -637,27 +669,27 @@ testTemplateParse testParserClassIncsLibs-1 {} $netlistsLoc incs_libs_test.cir\
 
 ### Nodesets and ics parsing test
 
-testTemplateParse testParserClassNodesetsIcs-1 {} $netlistsLoc ic_nodeset_test.cir\
+testTemplateParse testNgspiceParserClassNodesetsIcs-1 {} $netlistsLoc ic_nodeset_test.cir\
 {.ic v(1)=5 v(a)={b} h=1
 .nodeset v(1)=5 v(a)={b} h=1}
 
 ### Temp parsing test
 
-testTemplateParse1 testParserClassTemps-1 {} {.temp 25} $netlistsLoc {.temp 25}
-testTemplateParse1 testParserClassTemps-2 {} {.temp {tempPar}} $netlistsLoc {.temp {temppar}}
+testTemplateParse1 testNgspiceParserClassTemps-1 {} {.temp 25} $netlistsLoc {.temp 25}
+testTemplateParse1 testNgspiceParserClassTemps-2 {} {.temp {tempPar}} $netlistsLoc {.temp {temppar}}
 
 ### Global parsing test
 
-testTemplateParse1 testParserClassGlobals-1 {} {.global gnd1 gnd2 3} $netlistsLoc {.global gnd1 gnd2 3}
+testTemplateParse1 testNgspiceParserClassGlobals-1 {} {.global gnd1 gnd2 3} $netlistsLoc {.global gnd1 gnd2 3}
 
 ### Coupling parsing test
 
-testTemplateParse1 testParserClassCoupling-1 {} {k1 la lb 0.5} $netlistsLoc {k1 la lb 0.5}
-testTemplateParse1 testParserClassCoupling-2 {} {k1 la lb {kpar}} $netlistsLoc {k1 la lb {kpar}}
+testTemplateParse1 testNgspiceParserClassCoupling-1 {} {k1 la lb 0.5} $netlistsLoc {k1 la lb 0.5}
+testTemplateParse1 testNgspiceParserClassCoupling-2 {} {k1 la lb {kpar}} $netlistsLoc {k1 la lb {kpar}}
 
 ### VerilogA parsing test
 
-testTemplateParse testParserClassVerilogA-1 {} $netlistsLoc veriloga_instances_tests.cir\
+testTemplateParse testNgspiceParserClassVerilogA-1 {} $netlistsLoc veriloga_instances_tests.cir\
 {n1 net1 net2 rcnet r=1 c={cpar}
 n2 net1 net2 rcnet
 n3 a b c d e f g h subname k=1 n=2 i=8 o={oval}}

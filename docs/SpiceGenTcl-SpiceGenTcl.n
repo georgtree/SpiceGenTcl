@@ -1,7 +1,7 @@
 '\"
 '\" '\" Copyright (c) George Yashin
 '\"
-.TH "SpiceGenTcl" 3tcl 0\&.65 "SpiceGenTcl" "Tcl SpiceGenTcl package"
+.TH "SpiceGenTcl" 3tcl 0\&.66 "SpiceGenTcl" "Tcl SpiceGenTcl package"
 .SH NAME
 SpiceGenTcl - Commands in namespace SpiceGenTcl
 .SH SYNOPSIS
@@ -250,6 +250,16 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 \fBOBJECT getParams\fP
 .br
 \fBOBJECT setParamValue\fP \fIname value ?name value \&.\&.\&.?\fP
+.br
+\fBParser create OBJNAME\fP \fIname filepath\fP
+.br
+\fBParser new\fP \fIname filepath\fP
+.br
+\fBOBJECT buildTopNetlist\fP
+.br
+\fBOBJECT readAndParse\fP
+.br
+\fBOBJECT readFile\fP
 .br
 \fBPin create OBJNAME\fP \fIname nodeName\fP
 .br
@@ -1248,7 +1258,7 @@ Writable: -name
 .PP
 \fBSubclasses\fR
 .PP
-\fI::SpiceGenTcl::Common::BasicDevices::Resistor\fP, \fI::SpiceGenTcl::Common::BasicDevices::Capacitor\fP, \fI::SpiceGenTcl::Common::BasicDevices::Inductor\fP, \fI::SpiceGenTcl::Common::BasicDevices::SubcircuitInstance\fP, \fI::SpiceGenTcl::Common::BasicDevices::VSwitch\fP, \fI::SpiceGenTcl::Common::BasicDevices::CSwitch\fP, \fI::SpiceGenTcl::Common::BasicDevices::SubcircuitInstanceAuto\fP, \fI::SpiceGenTcl::Common::Sources::dc\fP, \fI::SpiceGenTcl::Common::Sources::ac\fP, \fI::SpiceGenTcl::Common::Sources::pulse\fP, \fI::SpiceGenTcl::Common::Sources::sin\fP, \fI::SpiceGenTcl::Common::Sources::exp\fP, \fI::SpiceGenTcl::Common::Sources::pwl\fP, \fI::SpiceGenTcl::Common::Sources::sffm\fP, \fI::SpiceGenTcl::Common::Sources::Vccs\fP, \fI::SpiceGenTcl::Common::Sources::Vcvs\fP, \fI::SpiceGenTcl::Common::Sources::Cccs\fP, \fI::SpiceGenTcl::Common::Sources::Ccvs\fP, \fI::SpiceGenTcl::Ngspice::BasicDevices::Resistor\fP, \fI::SpiceGenTcl::Ngspice::BasicDevices::Capacitor\fP, \fI::SpiceGenTcl::Ngspice::BasicDevices::Inductor\fP, \fI::SpiceGenTcl::Ngspice::BasicDevices::Coupling\fP, \fI::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstance\fP, \fI::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstanceAuto\fP, \fI::SpiceGenTcl::Ngspice::Sources::pulse\fP, \fI::SpiceGenTcl::Ngspice::Sources::sffm\fP, \fI::SpiceGenTcl::Ngspice::Sources::am\fP, \fI::SpiceGenTcl::Ngspice::Sources::Vport\fP, \fI::SpiceGenTcl::Ngspice::Sources::BehaviouralSource\fP, \fI::SpiceGenTcl::Ngspice::SemiconductorDevices::Diode\fP, \fI::SpiceGenTcl::Ngspice::SemiconductorDevices::Bjt\fP, \fI::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet\fP, \fI::SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet\fP, \fI::SpiceGenTcl::Ngspice::SemiconductorDevices::Mosfet\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::Resistor\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::Capacitor\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::Inductor\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::GenSwitch\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstance\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstanceAuto\fP, \fI::SpiceGenTcl::Xyce::Sources::BehaviouralSource\fP, \fI::SpiceGenTcl::Xyce::SemiconductorDevices::Diode\fP, \fI::SpiceGenTcl::Xyce::SemiconductorDevices::Bjt\fP, \fI::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet\fP, \fI::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet\fP, \fI::SpiceGenTcl::Xyce::SemiconductorDevices::Mosfet\fP, \fI::SpiceGenTcl::Ltspice::BasicDevices::Capacitor\fP, \fI::SpiceGenTcl::Ltspice::BasicDevices::Inductor\fP, \fI::SpiceGenTcl::Ltspice::BasicDevices::SubcircuitInstance\fP, \fI::SpiceGenTcl::Ltspice::BasicDevices::SubcircuitInstanceAuto\fP, \fI::SpiceGenTcl::Ltspice::Sources::dc\fP, \fI::SpiceGenTcl::Ltspice::Sources::ac\fP, \fI::SpiceGenTcl::Ltspice::Sources::pulse\fP, \fI::SpiceGenTcl::Ltspice::Sources::sin\fP, \fI::SpiceGenTcl::Ltspice::Sources::exp\fP, \fI::SpiceGenTcl::Ltspice::Sources::pwl\fP, \fI::SpiceGenTcl::Ltspice::Sources::sffm\fP, \fI::SpiceGenTcl::Ltspice::Sources::BehaviouralSource\fP, \fI::SpiceGenTcl::Ltspice::SemiconductorDevices::Diode\fP, \fI::SpiceGenTcl::Ltspice::SemiconductorDevices::Bjt\fP, \fI::SpiceGenTcl::Ltspice::SemiconductorDevices::Jfet\fP, \fI::SpiceGenTcl::Ltspice::SemiconductorDevices::Mesfet\fP, \fI::SpiceGenTcl::Ltspice::SemiconductorDevices::Mosfet\fP
+\fI::SpiceGenTcl::Common::BasicDevices::Resistor\fP, \fI::SpiceGenTcl::Common::BasicDevices::Capacitor\fP, \fI::SpiceGenTcl::Common::BasicDevices::Inductor\fP, \fI::SpiceGenTcl::Common::BasicDevices::SubcircuitInstance\fP, \fI::SpiceGenTcl::Common::BasicDevices::VSwitch\fP, \fI::SpiceGenTcl::Common::BasicDevices::CSwitch\fP, \fI::SpiceGenTcl::Common::BasicDevices::SubcircuitInstanceAuto\fP, \fI::SpiceGenTcl::Common::Sources::dc\fP, \fI::SpiceGenTcl::Common::Sources::ac\fP, \fI::SpiceGenTcl::Common::Sources::pulse\fP, \fI::SpiceGenTcl::Common::Sources::sin\fP, \fI::SpiceGenTcl::Common::Sources::exp\fP, \fI::SpiceGenTcl::Common::Sources::pwl\fP, \fI::SpiceGenTcl::Common::Sources::sffm\fP, \fI::SpiceGenTcl::Common::Sources::Vccs\fP, \fI::SpiceGenTcl::Common::Sources::Vcvs\fP, \fI::SpiceGenTcl::Common::Sources::Cccs\fP, \fI::SpiceGenTcl::Common::Sources::Ccvs\fP, \fI::SpiceGenTcl::Ngspice::BasicDevices::Resistor\fP, \fI::SpiceGenTcl::Ngspice::BasicDevices::Capacitor\fP, \fI::SpiceGenTcl::Ngspice::BasicDevices::Inductor\fP, \fI::SpiceGenTcl::Ngspice::BasicDevices::Coupling\fP, \fI::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstance\fP, \fI::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstanceAuto\fP, \fI::SpiceGenTcl::Ngspice::BasicDevices::VerilogA\fP, \fI::SpiceGenTcl::Ngspice::Sources::pulse\fP, \fI::SpiceGenTcl::Ngspice::Sources::sffm\fP, \fI::SpiceGenTcl::Ngspice::Sources::am\fP, \fI::SpiceGenTcl::Ngspice::Sources::Vport\fP, \fI::SpiceGenTcl::Ngspice::Sources::BehaviouralSource\fP, \fI::SpiceGenTcl::Ngspice::SemiconductorDevices::Diode\fP, \fI::SpiceGenTcl::Ngspice::SemiconductorDevices::Bjt\fP, \fI::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet\fP, \fI::SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet\fP, \fI::SpiceGenTcl::Ngspice::SemiconductorDevices::Mosfet\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::Resistor\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::Capacitor\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::Inductor\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::GenSwitch\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstance\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstanceAuto\fP, \fI::SpiceGenTcl::Xyce::Sources::BehaviouralSource\fP, \fI::SpiceGenTcl::Xyce::SemiconductorDevices::Diode\fP, \fI::SpiceGenTcl::Xyce::SemiconductorDevices::Bjt\fP, \fI::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet\fP, \fI::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet\fP, \fI::SpiceGenTcl::Xyce::SemiconductorDevices::Mosfet\fP, \fI::SpiceGenTcl::Ltspice::BasicDevices::Capacitor\fP, \fI::SpiceGenTcl::Ltspice::BasicDevices::Inductor\fP, \fI::SpiceGenTcl::Ltspice::BasicDevices::SubcircuitInstance\fP, \fI::SpiceGenTcl::Ltspice::BasicDevices::SubcircuitInstanceAuto\fP, \fI::SpiceGenTcl::Ltspice::Sources::dc\fP, \fI::SpiceGenTcl::Ltspice::Sources::ac\fP, \fI::SpiceGenTcl::Ltspice::Sources::pulse\fP, \fI::SpiceGenTcl::Ltspice::Sources::sin\fP, \fI::SpiceGenTcl::Ltspice::Sources::exp\fP, \fI::SpiceGenTcl::Ltspice::Sources::pwl\fP, \fI::SpiceGenTcl::Ltspice::Sources::sffm\fP, \fI::SpiceGenTcl::Ltspice::Sources::BehaviouralSource\fP, \fI::SpiceGenTcl::Ltspice::SemiconductorDevices::Diode\fP, \fI::SpiceGenTcl::Ltspice::SemiconductorDevices::Bjt\fP, \fI::SpiceGenTcl::Ltspice::SemiconductorDevices::Jfet\fP, \fI::SpiceGenTcl::Ltspice::SemiconductorDevices::Mesfet\fP, \fI::SpiceGenTcl::Ltspice::SemiconductorDevices::Mosfet\fP
 .PP
 .RS -4n
 \fBconstructor\fR (::SpiceGenTcl::Device)
@@ -3346,6 +3356,83 @@ Value of the parameter\&.
 .RE
 .PP
 .RS -4n
+\fBParser\fR (::SpiceGenTcl)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+buildTopNetlist
+Builds top netlist corresponding to parsed netlist file\&.
+.TP
+configure
+Configure properties\&.
+.TP
+readAndParse
+Not documented\&.
+.TP
+readFile
+Not documented\&.
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -filepath, -topnetlist
+.PP
+Writable: -filepath, -topnetlist
+.PP
+\fBSubclasses\fR
+.PP
+\fI::SpiceGenTcl::Ngspice::NgspiceParser\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Parser)
+.RE
+.PP
+Creates object of class Parser that do parsing of valid simulator netlist\&.
+.RS 4n\fBParser create OBJNAME\fP \fIname filepath\fP
+.br
+\fBParser new\fP \fIname filepath\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the object\&.
+.TP
+filepath
+Path to file that should be parsed\&.
+.RE
+.PP
+.RS -4n
+\fBbuildTopNetlist\fR (::SpiceGenTcl::Parser)
+.RE
+.PP
+Builds top netlist corresponding to parsed netlist file
+.RS 4n\fBOBJECT buildTopNetlist\fP
+.br
+.RE
+.PP
+.RS -4n
+\fBreadAndParse\fR (::SpiceGenTcl::Parser)
+.RE
+.RS 4n\fBOBJECT readAndParse\fP
+.br
+.RE
+.PP
+.RS -4n
+\fBreadFile\fR (::SpiceGenTcl::Parser)
+.RE
+.RS 4n\fBOBJECT readFile\fP
+.br
+.RE
+.PP
+.RS -4n
 \fBPin\fR (::SpiceGenTcl)
 .RE
 .PP
@@ -4224,7 +4311,7 @@ List of parameter names\&.
 .PP
 \fBReturn value\fR
 .PP
-string in form \fI-paramName= \&.\&.\&.\fP
+string in form -paramName= \&.\&.\&., or {-paramName= -forbid {alias0 alias1 \&.\&.\&.}}
 .PP
 .RS -4n
 \fBbuildSwArgStr\fR (::SpiceGenTcl::Utility)

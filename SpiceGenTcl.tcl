@@ -20,7 +20,7 @@ package require struct::list
 package require csv
 namespace import ::tcl::mathop::*
 
-package provide SpiceGenTcl 0.65
+package provide SpiceGenTcl 0.66
 
 interp alias {} dget {} dict get
 

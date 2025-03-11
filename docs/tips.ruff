@@ -187,7 +187,7 @@ namespace eval Tips {
         
         Here we use as superclass [::SpiceGenTcl::Model] for new element. Next we define constructor for model,
         first argument is name of model and `args` that accepts model value all instance parameters of device.
-        To process optional arguments, we use special method [::SpiceGenTcl::KeyArgsBuilder::argsPreprocess], that 
+        To process optional arguments, we use special method [::SpiceGenTcl::Utility::argsPreprocess], that 
         process optional `args` arguments and produces string for [::SpiceGenTcl::Model] constructor.
         ```tcl
         set paramsNames [list ms a k alpha c]
@@ -196,7 +196,7 @@ namespace eval Tips {
         We set model parameters in list `paramsNames`, and after that we pass arguments to superclass's constructor.
         The name `coreja` corresponds to name of Verilog-A module.
 
-        We use [::SpiceGenTcl::KeyArgsBuilder::argsPreprocess] procedure here, but we can go the same way we do with
+        We use [::SpiceGenTcl::Utility::argsPreprocess] procedure here, but we can go the same way we do with
         `Core` class, and add, for example, default values, or use some complex logic of elements initialization:
         ```tcl
         oo::class create CoreModel {

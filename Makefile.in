@@ -179,25 +179,13 @@ dist: dist-clean
 	cp -r $(srcdir)/src $(DIST_DIR)
 	cp -r $(srcdir)/lib $(DIST_DIR)
 	mkdir -p $(DIST_DIR)/test
+	cp -r $(srcdir)/test/ltspice $(DIST_DIR)/test/
+	cp -r $(srcdir)/test/ngspice $(DIST_DIR)/test/
+	cp -r $(srcdir)/test/xyce $(DIST_DIR)/test/
 	cp -p $(srcdir)/test/all.tcl $(DIST_DIR)/test/
+	cp -p $(srcdir)/test/testUtilities.tcl $(DIST_DIR)/test/
 	cp -p $(srcdir)/test/generalClasses.test $(DIST_DIR)/test/
-	cp -p $(srcdir)/test/readRawNgspice.test $(DIST_DIR)/test/
-	cp -p $(srcdir)/test/specAnalysesClassesNgspice.test $(DIST_DIR)/test/
-	cp -p $(srcdir)/test/specAnalysesClassesXyce.test $(DIST_DIR)/test/
-	cp -p $(srcdir)/test/specAnalysesClassesLtspice.test $(DIST_DIR)/test/
 	cp -p $(srcdir)/test/specElemsClassesCommon.test $(DIST_DIR)/test/
-	cp -p $(srcdir)/test/specElemsClassesNgspice.test $(DIST_DIR)/test/
-	cp -p $(srcdir)/test/specElemsClassesXyce.test $(DIST_DIR)/test/
-	cp -p $(srcdir)/test/specElemsClassesLtspice.test $(DIST_DIR)/test/
-	cp -p $(srcdir)/test/specModsClassesNgspice.test $(DIST_DIR)/test/
-	cp -p $(srcdir)/test/specModsClassesXyce.test $(DIST_DIR)/test/
-	cp -p $(srcdir)/test/specModsClassesLtspice.test $(DIST_DIR)/test/
-	cp -p $(srcdir)/test/specSimulatorClassesNgspice.test $(DIST_DIR)/test/
-	cp -p $(srcdir)/test/specSimulatorClassesXyce.test $(DIST_DIR)/test/
-	cp -p $(srcdir)/test/specSimulatorClassesLtspice.test $(DIST_DIR)/test/
-	cp -p $(srcdir)/test/specMiscClassesNgspice.test $(DIST_DIR)/test/
-	cp -r $(srcdir)/test/raw_data_ngspice $(DIST_DIR)/test/
-	cp -r $(srcdir)/test/raw_data_ltspice $(DIST_DIR)/test/
 	cp -r $(srcdir)/examples $(DIST_DIR)
 	(cd $(DIST_ROOT); $(COMPRESS); $(COMPRESS_ZIP))
 

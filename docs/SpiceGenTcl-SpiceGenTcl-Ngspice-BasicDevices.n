@@ -1,7 +1,7 @@
 '\"
 '\" '\" Copyright (c) George Yashin
 '\"
-.TH "SpiceGenTcl::Ngspice::BasicDevices" 3tcl 0\&.65 "SpiceGenTcl" "Tcl SpiceGenTcl package"
+.TH "SpiceGenTcl::Ngspice::BasicDevices" 3tcl 0\&.66 "SpiceGenTcl" "Tcl SpiceGenTcl package"
 .SH NAME
 SpiceGenTcl::Ngspice::BasicDevices - Commands in namespace SpiceGenTcl::Ngspice::BasicDevices
 .SH SYNOPSIS
@@ -40,6 +40,10 @@ SpiceGenTcl::Ngspice::BasicDevices - Commands in namespace SpiceGenTcl::Ngspice:
 \fBSubcircuitInstance new\fP \fIname pins subName params\fP
 .br
 \fBOBJECT constructor\fP \fIsubcktObj name nodes ?-paramName paramValue ?-eq? \&.\&.\&.?\fP
+.br
+\fBVerilogA create OBJNAME\fP \fIname pins modName params\fP
+.br
+\fBVerilogA new\fP \fIname pins modName params\fP
 .br
 \fBOBJECT constructor\fP \fIname ?-option value \&.\&.\&.?\fP
 .br
@@ -970,6 +974,66 @@ Example of class initialization:
 .RE
 .PP
 .RS -4n
+\fBN\fR (::SpiceGenTcl::Ngspice::BasicDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+argsPreprocess
+See \fI::SpiceGenTcl::Utility\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fI::SpiceGenTcl::Utility\&.buildArgStr\fP
+.TP
+buildSwArgStr
+See \fI::SpiceGenTcl::Utility\&.buildSwArgStr\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::Utility\&.duplListCheck\fP
+.TP
+duplListCheckRet
+See \fI::SpiceGenTcl::Utility\&.duplListCheckRet\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -name
+.PP
+Writable: -name
+.PP
+\fBSuperclasses\fR
+.PP
+\fIVerilogA\fP
+.PP
+.RS -4n
 \fBR\fR (::SpiceGenTcl::Ngspice::BasicDevices)
 .RE
 .PP
@@ -1541,6 +1605,116 @@ Example of class initialization:
 .RS 4n
 .nf
 ::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstanceAuto new $subcktObj 1 {net1 net2} -r 1 -c {cpar -eq}
+.fi
+.RE
+.PP
+.RS -4n
+\fBVerilogA\fR (::SpiceGenTcl::Ngspice::BasicDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addParam
+See \fI::SpiceGenTcl::Device\&.addParam\fP
+.TP
+argsPreprocess
+See \fI::SpiceGenTcl::Utility\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fI::SpiceGenTcl::Utility\&.buildArgStr\fP
+.TP
+buildSwArgStr
+See \fI::SpiceGenTcl::Utility\&.buildSwArgStr\fP
+.TP
+checkFloatingPins
+See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteParam
+See \fI::SpiceGenTcl::Device\&.deleteParam\fP
+.TP
+duplListCheck
+See \fI::SpiceGenTcl::Utility\&.duplListCheck\fP
+.TP
+duplListCheckRet
+See \fI::SpiceGenTcl::Utility\&.duplListCheckRet\fP
+.TP
+genSPICEString
+See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
+.TP
+getParams
+See \fI::SpiceGenTcl::Device\&.getParams\fP
+.TP
+getPins
+See \fI::SpiceGenTcl::Device\&.getPins\fP
+.TP
+setParamValue
+See \fI::SpiceGenTcl::Device\&.setParamValue\fP
+.TP
+setPinNodeName
+See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -name
+.PP
+Writable: -name
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Device\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fIN\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Ngspice::BasicDevices::VerilogA)
+.RE
+.PP
+Creates object of class VerilogA that describes Verilog-A instance\&.
+.RS 4n\fBVerilogA create OBJNAME\fP \fIname pins modName params\fP
+.br
+\fBVerilogA new\fP \fIname pins modName params\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+name
+Name of the device without first-letter designator N\&.
+.TP
+pins
+List of pins {{pinName nodeName} {pinName nodeName} \&.\&.\&.}
+.TP
+modName
+Name of Verilog-A model\&.
+.TP
+params
+{{paramName paramValue ?-eq?} {paramName paramValue ?-eq?}}
+.RE
+.PP
+\fBDescription\fR
+.PP
+.RS 4n
+.nf
+NYYYYYYY N1 <N2 N3 \&.\&.\&.> MODNAME
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+::SpiceGenTcl::Ngspice::BasicDevices::VerilogA new 1 {{plus net1} {minus net2}} vmod {{r 1} {c cpar -eq}}
 .fi
 .RE
 .PP

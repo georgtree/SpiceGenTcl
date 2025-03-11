@@ -1,15 +1,13 @@
 '\"
 '\" '\" Copyright (c) George Yashin
 '\"
-.TH "SpiceGenTcl::Ngspice" 3tcl 0\&.65 "SpiceGenTcl" "Tcl SpiceGenTcl package"
+.TH "SpiceGenTcl::Ngspice" 3tcl 0\&.66 "SpiceGenTcl" "Tcl SpiceGenTcl package"
 .SH NAME
 SpiceGenTcl::Ngspice - Commands in namespace SpiceGenTcl::Ngspice
 .SH SYNOPSIS
-\fBParser create OBJNAME\fP \fIname filepath\fP
+\fBNgspiceParser create OBJNAME\fP \fIname filepath\fP
 .br
-\fBParser new\fP \fIname filepath\fP
-.br
-\fBOBJECT buildTopNetlist\fP
+\fBNgspiceParser new\fP \fIname filepath\fP
 .br
 \fBOBJECT readAndParse\fP
 .br
@@ -19,7 +17,7 @@ SpiceGenTcl::Ngspice - Commands in namespace SpiceGenTcl::Ngspice
 .SH CLASSES
 .PP
 .RS -4n
-\fBParser\fR (::SpiceGenTcl::Ngspice)
+\fBNgspiceParser\fR (::SpiceGenTcl::Ngspice)
 .RE
 .PP
 \fBMethod summary\fR
@@ -29,7 +27,7 @@ constructor
 Constructor for the class\&.
 .TP
 buildTopNetlist
-Builds top netlist corresponding to parsed netlist file\&.
+See \fI::SpiceGenTcl::Parser\&.buildTopNetlist\fP
 .TP
 configure
 Configure properties\&.
@@ -47,14 +45,18 @@ Readable: -filepath, -topnetlist
 .PP
 Writable: -filepath, -topnetlist
 .PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Parser\fP
+.PP
 .RS -4n
-\fBconstructor\fR (::SpiceGenTcl::Ngspice::Parser)
+\fBconstructor\fR (::SpiceGenTcl::Ngspice::NgspiceParser)
 .RE
 .PP
 Creates object of class Parser that do parsing of valid Ngspice netlist\&.
-.RS 4n\fBParser create OBJNAME\fP \fIname filepath\fP
+.RS 4n\fBNgspiceParser create OBJNAME\fP \fIname filepath\fP
 .br
-\fBParser new\fP \fIname filepath\fP
+\fBNgspiceParser new\fP \fIname filepath\fP
 .br
 .RE
 .PP
@@ -69,16 +71,7 @@ Path to file that should be parsed\&.
 .RE
 .PP
 .RS -4n
-\fBbuildTopNetlist\fR (::SpiceGenTcl::Ngspice::Parser)
-.RE
-.PP
-Builds top netlist corresponding to parsed netlist file
-.RS 4n\fBOBJECT buildTopNetlist\fP
-.br
-.RE
-.PP
-.RS -4n
-\fBreadAndParse\fR (::SpiceGenTcl::Ngspice::Parser)
+\fBreadAndParse\fR (::SpiceGenTcl::Ngspice::NgspiceParser)
 .RE
 .PP
 Calls methods readFile and buildTopNetlist in a sequence
@@ -87,7 +80,7 @@ Calls methods readFile and buildTopNetlist in a sequence
 .RE
 .PP
 .RS -4n
-\fBreadFile\fR (::SpiceGenTcl::Ngspice::Parser)
+\fBreadFile\fR (::SpiceGenTcl::Ngspice::NgspiceParser)
 .RE
 .PP
 Reads netlist file and prepare for parsing: remove redundant white space characters, collapse continuation

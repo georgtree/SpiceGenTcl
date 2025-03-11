@@ -24,26 +24,26 @@ set common [list -title $title -sortnamespaces false -preamble $startPage -pages
                     -copyright "George Yashin" {*}$::argv]
 set commonNroff [list -title $title -sortnamespaces false -preamble $startPage -pagesplit namespace -recurse false\
                          -pagesplit namespace -autopunctuate true -compact false -includeprivate false\
-                         -product SpiceGenTcl -diagrammer "ditaa --border-width 1" -version $packageVersion \
+                         -product SpiceGenTcl -diagrammer "ditaa --border-width 1" -version $packageVersion\
                          -copyright "George Yashin" {*}$::argv]
-set namespaces [list "::List of devices" ::FAQ ::Tutorials ::Tips ::Advanced ::SpiceGenTcl \
-                ::SpiceGenTcl::Common::BasicDevices ::SpiceGenTcl::Common::Analyses \
-                ::SpiceGenTcl::Common::Sources ::SpiceGenTcl::Ngspice ::SpiceGenTcl::Ngspice::BasicDevices \
-                ::SpiceGenTcl::Ngspice::Sources ::SpiceGenTcl::Ngspice::SemiconductorDevices \
-                ::SpiceGenTcl::Ngspice::Analyses ::SpiceGenTcl::Ngspice::Simulators\
-                ::SpiceGenTcl::Xyce::BasicDevices ::SpiceGenTcl::Xyce::Sources \
-                ::SpiceGenTcl::Xyce::SemiconductorDevices ::SpiceGenTcl::Xyce::Analyses \
-                ::SpiceGenTcl::Xyce::Simulators ::SpiceGenTcl::Ltspice::BasicDevices ::SpiceGenTcl::Ltspice::Sources \
-                ::SpiceGenTcl::Ltspice::SemiconductorDevices ::SpiceGenTcl::Ltspice::Analyses \
+set namespaces [list "::List of devices" ::FAQ ::Tutorials ::Tips ::Advanced ::SpiceGenTcl\
+                ::SpiceGenTcl::Common::BasicDevices ::SpiceGenTcl::Common::Analyses\
+                ::SpiceGenTcl::Common::Sources ::SpiceGenTcl::Ngspice ::SpiceGenTcl::Ngspice::BasicDevices\
+                ::SpiceGenTcl::Ngspice::Sources ::SpiceGenTcl::Ngspice::SemiconductorDevices\
+                ::SpiceGenTcl::Ngspice::Analyses ::SpiceGenTcl::Ngspice::Simulators ::SpiceGenTcl::Ngspice::Misc\
+                ::SpiceGenTcl::Xyce::BasicDevices ::SpiceGenTcl::Xyce::Sources\
+                ::SpiceGenTcl::Xyce::SemiconductorDevices ::SpiceGenTcl::Xyce::Analyses\
+                ::SpiceGenTcl::Xyce::Simulators ::SpiceGenTcl::Ltspice::BasicDevices ::SpiceGenTcl::Ltspice::Sources\
+                ::SpiceGenTcl::Ltspice::SemiconductorDevices ::SpiceGenTcl::Ltspice::Analyses\
                 ::SpiceGenTcl::Ltspice::Simulators]
-set namespacesNroff [list "::List of devices" ::SpiceGenTcl ::SpiceGenTcl::Common::BasicDevices \
-                ::SpiceGenTcl::Common::Analyses ::SpiceGenTcl::Common::Sources ::SpiceGenTcl::Ngspice::BasicDevices \
-                ::SpiceGenTcl::Ngspice::Sources ::SpiceGenTcl::Ngspice ::SpiceGenTcl::Ngspice::SemiconductorDevices \
-                ::SpiceGenTcl::Ngspice::Analyses ::SpiceGenTcl::Ngspice::Simulators\
-                ::SpiceGenTcl::Xyce::BasicDevices ::SpiceGenTcl::Xyce::Sources \
-                ::SpiceGenTcl::Xyce::SemiconductorDevices ::SpiceGenTcl::Xyce::Analyses \
-                ::SpiceGenTcl::Xyce::Simulators ::SpiceGenTcl::Ltspice::BasicDevices ::SpiceGenTcl::Ltspice::Sources \
-                ::SpiceGenTcl::Ltspice::SemiconductorDevices ::SpiceGenTcl::Ltspice::Analyses \
+set namespacesNroff [list "::List of devices" ::SpiceGenTcl ::SpiceGenTcl::Common::BasicDevices\
+                ::SpiceGenTcl::Common::Analyses ::SpiceGenTcl::Common::Sources ::SpiceGenTcl::Ngspice::BasicDevices\
+                ::SpiceGenTcl::Ngspice::Sources ::SpiceGenTcl::Ngspice ::SpiceGenTcl::Ngspice::SemiconductorDevices\
+                ::SpiceGenTcl::Ngspice::Analyses ::SpiceGenTcl::Ngspice::Simulators ::SpiceGenTcl::Ngspice::Misc\
+                ::SpiceGenTcl::Xyce::BasicDevices ::SpiceGenTcl::Xyce::Sources\
+                ::SpiceGenTcl::Xyce::SemiconductorDevices ::SpiceGenTcl::Xyce::Analyses\
+                ::SpiceGenTcl::Xyce::Simulators ::SpiceGenTcl::Ltspice::BasicDevices ::SpiceGenTcl::Ltspice::Sources\
+                ::SpiceGenTcl::Ltspice::SemiconductorDevices ::SpiceGenTcl::Ltspice::Analyses\
                 ::SpiceGenTcl::Ltspice::Simulators]                
 
 if {[llength $argv] == 0 || "html" in $argv} {
