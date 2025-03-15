@@ -29,13 +29,14 @@ if {[string match -nocase *linux* $tcl_platform(os)]} {
 }
 
 set currentDir [file dirname [file normalize [info script]]]
-set srcList [list generalClasses.tcl specElementsClassesCommon.tcl [list ngspice specAnalysesClassesNgspice.tcl]\
-                     [list ngspice specElementsClassesNgspice.tcl] [list ngspice specModelsClassesNgspice.tcl]\
-                     [list ngspice specSimulatorClassesNgspice.tcl] [list xyce specAnalysesClassesXyce.tcl]\
-                     [list xyce specElementsClassesXyce.tcl] [list xyce specModelsClassesXyce.tcl]\
-                     [list xyce specSimulatorClassesXyce.tcl] [list ltspice specAnalysesClassesLtspice.tcl]\
-                     [list ltspice specElementsClassesLtspice.tcl] [list ltspice specModelsClassesLtspice.tcl]\
-                     [list ltspice specSimulatorClassesLtspice.tcl]]
+set srcList {generalClasses.tcl specElementsClassesCommon.tcl specAnalysesClassesCommon.tcl\
+                     {ngspice specAnalysesClassesNgspice.tcl} {ngspice specElementsClassesNgspice.tcl}\
+                     {ngspice specModelsClassesNgspice.tcl} {ngspice specSimulatorClassesNgspice.tcl}\
+                     {ngspice netlistParserClassNgspice.tcl}\
+                     {xyce specAnalysesClassesXyce.tcl} {xyce specElementsClassesXyce.tcl}\
+                     {xyce specModelsClassesXyce.tcl} {xyce specSimulatorClassesXyce.tcl}\
+                     {ltspice specAnalysesClassesLtspice.tcl} {ltspice specElementsClassesLtspice.tcl}\
+                     {ltspice specModelsClassesLtspice.tcl} {ltspice specSimulatorClassesLtspice.tcl}}
 # instrument all files in src folder
 foreach file $srcList {
     exec tclsh $nagelfarPath -instrument [file join $currentDir .. src {*}$file]
@@ -68,8 +69,15 @@ foreach file $srcList {
     }
 }
 # create markup files
+set coveredSum 0
+set totalSum 0
 foreach file $srcList {
-    lappend results [exec tclsh $nagelfarPath -markup [file join $currentDir .. src {*}$file]]
+    set result [exec tclsh $nagelfarPath -markup [file join $currentDir .. src {*}$file]]
+    lappend results $result
+    if {[regexp {(\d+)/(\d+)\s+(\d+(\.\d+)?)%} $result match num1 num2 num3]} {
+        set coveredSum [= {$num1+$coveredSum}]
+        set totalSum [= {$num2+$totalSum}]
+    }
 }
 # view results
 foreach file $srcList {
@@ -82,6 +90,7 @@ foreach file $srcList {
     }
 }
 puts [join $results "\n"]
+puts "Covered $coveredSum of $totalSum branches, percentage is [= {double($coveredSum)/double($totalSum)*100}]%"
 # remove tests files
 foreach file $srcList {
     if {[llength $file]>1} {

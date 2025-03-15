@@ -53,6 +53,7 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
             lappend params [list src [dget $arguments src] -posnocheck]
             set paramsOrder {start stop incr}
             my ParamsProcess $paramsOrder $arguments params
+            ##nagelfar variable name
             next dc $params -name $name
         }
     }
@@ -88,6 +89,7 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
             lappend params [list variation [dget $arguments variation] -posnocheck]
             set paramsOrder {n fstart fstop}
             my ParamsProcess $paramsOrder $arguments params
+            ##nagelfar variable name
             next ac $params -name $name
         }
     }
@@ -127,6 +129,7 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
             if {[dget $arguments uic]} {
                 lappend params {uic -sw}
             }
+            ##nagelfar variable name
             next tran $params -name $name
         }
     }
@@ -151,6 +154,7 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
                 -name=
             }]
             my NameProcess $arguments [self object]
+            ##nagelfar variable name
             next op "" -name $name
         }
     }

@@ -80,6 +80,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
                 set line [@ $fileData $i]
                 if {[string index $line 0] eq "+"} {
                     if {$contFlag} {
+                        ##nagelfar variable startIndex
                         dict lappend continLinesIndex $startIndex $i
                         continue
                     }
@@ -172,6 +173,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
                     }
                 } elseif {[string match -nocase {.ends} [@ $lineList 0]]} {
                     try {
+                        ##nagelfar variable subckts
                         dict lappend subckts [@ [dkeys $subckts] end] $i
                     } on error {} {
                         error ".ends statement appears on line $i (pre-processed netlist) before definition of\
@@ -413,6 +415,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` (or its children) to which the 
             #   element should be attached.
             if {[regexp {(v|i)\(([^{}()=]+)\)} $line]} {
+                ##nagelfar ignore Wrong number of arguments
                 set line [regsub -command {(v|i)\(([^{}()=]+)\)} $line {apply {{- a b} {
                     format %s(%s) $a [string map {" " ""} $b]
                 }}}]
@@ -650,7 +653,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
                     set cval [list [my Unbrace $cval] -eq]
                     $netlistObj add [$nmspPath new $elemName $pin1 $pin2 -c $cval -model\
                                              $fourth {*}[my ParseParams $lineList 5 $excludePars]]
-                } elseif {[my CheckNumber $rval]} {
+                } elseif {[my CheckNumber $cval]} {
                     $netlistObj add [$nmspPath new $elemName $pin1 $pin2 -c $cval -model\
                                              $fourth {*}[my ParseParams $lineList 5 $excludePars]]
                 } else {

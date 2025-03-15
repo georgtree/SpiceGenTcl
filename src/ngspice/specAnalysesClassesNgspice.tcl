@@ -70,6 +70,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             if {[dexist $arguments donoise]} {
                 lappend params {donoise 1 -pos} 
             }
+            ##nagelfar variable name
             next sp $params -name $name
         }
     }
@@ -108,6 +109,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             lappend params {ac -sw}
             lappend params [list variation [dget $arguments variation] -posnocheck]
             set paramsOrder {n fstart fstop}
+            ##nagelfar variable name
             my ParamsProcess $paramsOrder $arguments params
             next sens $params -name $name
         }
@@ -134,6 +136,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
                 -name=
                 {-outvar= -required}
             }]
+            ##nagelfar variable name
             my NameProcess $arguments [self object]
             lappend params [list outvar [dget $arguments outvar] -posnocheck]
             next sens $params -name $name

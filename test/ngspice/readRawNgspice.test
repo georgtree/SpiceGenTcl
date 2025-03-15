@@ -309,6 +309,45 @@ test testRawFileClass-15 {test RawFile class object construction and reading (wi
     unset data trace refData vOscOut traceMatch result
 }
 
+test testRawFileClass-16 {test RawFile class object construction and reading ascii transient data, together with interface getVariablesNames} -setup {
+    set data [RawFile new "${rawDataLoc}/tran.raw" {time v(vdd)}]
+} -body {
+    return [info object class [$data getTrace v(vdd2)]]
+} -result ::SpiceGenTcl::EmptyTrace -cleanup {
+    unset data
+}
+
+test testRawFileClass-17 {test RawFile class object construction and reading binary ac data, together with interfaces getTrace and getAxis} -setup {
+    set data [RawFile new "${rawDataLoc}/ac.raw" {i(vd)}]
+} -body {
+    return [info object class [$data getTrace i(vg)]]
+} -result ::SpiceGenTcl::EmptyTrace -cleanup {
+    unset data
+}
+
+test testRawFileClass-18 {test RawFile class object construction and reading binary ac data, together with interfaces getTrace and getAxis} -setup {
+    set data [RawFile new "${rawDataLoc}/ac.raw" {i(vd)}]
+} -body {
+    return [[$data getTrace i(vg)] getDataPoints]
+} -result {} -cleanup {
+    unset data
+}
+
+test testRawFileClass-19 {} -body {
+    catch {RawFile new "${rawDataLoc}/dc_wrong.raw"} errorStr
+    return $errorStr
+} -result {Unknown encoding} -cleanup {
+    unset errorStr
+}
+
+test testRawFileClass-20 {test RawFile class object construction and reading ascii transient data, together with interface getVariablesNames} -setup {
+    set data [RawFile new "${rawDataLoc}/tran.raw" {}]
+} -body {
+    return [info object class [$data getTrace v(vdd2)]]
+} -result ::SpiceGenTcl::EmptyTrace -cleanup {
+    unset data
+}
+
 forgetNgspice
 
 cleanupTests

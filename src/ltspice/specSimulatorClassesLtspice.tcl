@@ -47,7 +47,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Simulators {
             global env
             if {[string match -nocase *linux* $tcl_platform(os)]} {
                 set Command [list wine $env(LTSPICE_PREFIX)]
-            } elseif {[string match -nocase {*windows nt*} $tcl_platform(os)]} {
+            } elseif {[string match -nocase {*windows nt*} $tcl_platform(os)]} { ##nagelfar nocover
                 set Command LTspice
             }
             my configure -runlocation $runLocation
@@ -78,7 +78,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Simulators {
                 if {$errorStr ni [list "$falseError\n$falseError\n$falseError" {}]} {
                     error "LTspice failed with error '$errorStr'"
                 }
-            } elseif {[string match -nocase {*windows nt*} $tcl_platform(os)]} {
+            } elseif {[string match -nocase {*windows nt*} $tcl_platform(os)]} { ##nagelfar nocover
                 exec {*}[list $Command -b $cirFileName]
             }
             set LastRunFileName $firstLine
@@ -99,15 +99,6 @@ namespace eval ::SpiceGenTcl::Ltspice::Simulators {
             set log [read $logFile]
             close $logFile
             return 
-        }
-        method clearLog {} {
-            # Clear saved log by unsetting Log variable.
-            if {[info exists Log]} {
-                unset log
-                return
-            } else {
-                return -code error "Log does not exists for simulator '[my configure -name]'" 
-            }
         }
         method readData {} {
             # Reads raw data file, create RawFile object and return it's reference name.

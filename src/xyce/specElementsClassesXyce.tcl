@@ -426,9 +426,11 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
                 lappend pinsList [list $pinName $node]
             }
             # get parameters names of subcircuit
-            set paramsNames [dict keys [$subcktObj getParams]]
-            foreach paramName $paramsNames {
-                lappend paramDefList -${paramName}=
+            if {![catch {$subcktObj getParams}]} {
+                set paramsNames [dict keys [$subcktObj getParams]]
+                foreach paramName $paramsNames {
+                    lappend paramDefList -${paramName}=
+                }
             }
             if {[info exists paramDefList]} {
                 # create definition for argparse module for passing parameters as optional arguments

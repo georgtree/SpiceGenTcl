@@ -80,15 +80,6 @@ namespace eval ::SpiceGenTcl::Xyce::Simulators {
             close $logFile
             return 
         }
-        method clearLog {} {
-            # Clear saved log by unsetting log variable.
-            if {[info exists log]} {
-                unset log
-                return
-            } else {
-                return -code error "Log does not exists for simulator '[my configure -name]'" 
-            }
-        }
         method readData {} {
             # Reads raw data file, create RawFile object and return it's reference name.
             my variable data

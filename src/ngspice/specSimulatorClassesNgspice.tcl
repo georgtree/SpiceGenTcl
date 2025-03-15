@@ -17,7 +17,7 @@
 namespace eval ::SpiceGenTcl::Ngspice::Simulators {
     
     namespace export Batch BatchLiveLog
-    
+    ##nagelfar subcmd+ _obj,Batch configure
     oo::configurable create Batch {
         # this class represent batch simulation of ngspice
         superclass ::SpiceGenTcl::Simulator
@@ -44,10 +44,10 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
             my configure -name $name
             my variable Command
             global tcl_platform
-            if {[string match -nocase *linux* $tcl_platform(os)]} {
-                set Command ngspice
-            } elseif {[string match -nocase {*windows nt*} $tcl_platform(os)]} {
+            if {[string match -nocase {*windows nt*} $tcl_platform(os)]} { ##nagelfar nocover
                 set Command ngspice_con
+            } else {
+                set Command ngspice
             }
             my configure -runlocation $runLocation
         }
@@ -84,15 +84,6 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
             set log [read $logFile]
             close $logFile
             return 
-        }
-        method clearLog {} {
-            # Clear saved log by unsetting Log variable.
-            if {[info exists Log]} {
-                unset log
-                return
-            } else {
-                return -code error "Log does not exists for simulator '[my configure -name]'" 
-            }
         }
         method readData {} {
             # Reads raw data file, create RawFile object and return it's reference name.

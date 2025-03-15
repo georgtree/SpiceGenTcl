@@ -61,6 +61,7 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
             my NameProcess $arguments [self object]
             lappend params [list objfunc [dget $arguments objfunc] -eq]
             lappend params [list param [dget $arguments param] -nocheck]
+            ##nagelfar variable name
             next sens $params -name $name
         }
     }

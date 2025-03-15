@@ -334,11 +334,17 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
                 {-l2= -required}
                 {-k= -required}
             }
+            ##nagelfar variable k
             if {([llength $k]>1) && ([@ $k 1] eq {-eq})} {
+                ##nagelfar ignore
                 set k [list k [@ $k 0] -poseq]
             } else {
+                ##nagelfar ignore
                 set k [list k $k -pos]
             }
+            ##nagelfar variable l1
+            ##nagelfar variable l2
+            ##nagelfar ignore
             next k$name {} [list [list l1 $l1 -posnocheck] [list l2 $l2 -posnocheck] $k]
         }
     }
@@ -452,9 +458,11 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
                 lappend pinsList [list $pinName $node]
             }
             # get parameters names of subcircuit
-            set paramsNames [dict keys [$subcktObj getParams]]
-            foreach paramName $paramsNames {
-                lappend paramDefList -${paramName}=
+            if {![catch {$subcktObj getParams}]} {
+                set paramsNames [dict keys [$subcktObj getParams]]
+                foreach paramName $paramsNames {
+                    lappend paramDefList -${paramName}=
+                }
             }
             if {[info exists paramDefList]} {
                 # create definition for argparse module for passing parameters as optional arguments

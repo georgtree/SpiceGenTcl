@@ -20,7 +20,22 @@ package require SpiceGenTcl
 namespace import ::SpiceGenTcl::*
 importNgspice
 
-    
+
+###  SPICEElement class tests 
+
+test testPinClass-1 {test creation of Pin class instance and getName interface} -setup {
+    oo::configurable create DummyClass {
+        superclass ::SpiceGenTcl::SPICEElement
+    }
+    set inst [DummyClass new]
+} -body {
+    catch {$inst genSPICEString} errorStr
+    return $errorStr
+} -result {Not implemented} -cleanup {
+    unset inst errorStr
+    DummyClass destroy
+}
+
 ###  Pin class tests 
 
 test testPinClass-1 {test creation of Pin class instance and getName interface} -setup {
@@ -238,12 +253,19 @@ test testParameterNodeClass-1 {test creation of ParameterNode class instance and
 
 ###  ParameterNodeEquation class tests 
 
-test testParameterNodeEquationClass-2 {test creation of ParameterNodeEquation class instance and getName interface} -setup {
+test testParameterNodeEquationClass-1 {} -setup {
     set parInst [ParameterNodeEquation new v(1) volt]
 } -body {
     set result [$parInst genSPICEString]
 } -result {v(1)={volt}} -cleanup {
     unset parInst result
+}
+
+test testParameterNodeEquationClass-2 {} -body {
+    catch {ParameterNodeEquation new v(1) {}} errorStr
+    return $errorStr
+} -result {Parameter 'v(1)' equation can't be empty} -cleanup {
+    unset errorStr
 }
 
 ###  ParameterNoCheck class tests 
@@ -255,7 +277,14 @@ test testParameterNoCheckClass-1 {test creation of ParameterNoCheck class instan
     return [$parInst configure -value]
 } -result 1..0 -cleanup {
     unset parInst
-}    
+}
+
+test testParameterNoCheckClass-2 {test creation of ParameterNoCheck class instance} -body {
+    catch {ParameterNoCheck new VTH {}} errorStr
+    return $errorStr
+} -result {Value '' is not a valid value} -cleanup {
+    unset errorStr
+}
     
 ###  ParameterDefault class tests 
 
@@ -573,6 +602,30 @@ test testDeviceClass-22 {test creation of Device class instance and test setPara
     unset elemInst errorStr
 }
 
+test testDeviceClass-23 {test creation of Device class instance and getName interface} -setup {
+    set elemInst [Device new M1 {{d netg} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 -sw}}]
+} -body {
+    set result [$elemInst genSPICEString]
+} -result {m1 netg netg nets vth0=0.7 u0=100 k1} -cleanup {
+    unset elemInst result
+}
+
+test testDeviceClass-24 {test creation of Device class instance and getName interface} -setup {
+    set elemInst [Device new M1 {{d netd} {g netg} {s nets}} {}]
+} -body {
+    set result [$elemInst genSPICEString]
+} -result {m1 netd netg nets} -cleanup {
+    unset elemInst result
+}
+
+test testDeviceClass-25 {test creation of Device class instance and getName interface} -setup {
+    set elemInst [Device new M1 {} {}]
+} -body {
+    set result [$elemInst genSPICEString]
+} -result m1 -cleanup {
+    unset elemInst result
+}
+
 ###  Model class tests 
     
 test testModelClass-1 {test creation of Model class instance and getType interface} -setup {
@@ -604,6 +657,14 @@ test testModelClass-4 {test creation of Model class instance and genSPICEString 
 } -body {
     set result [$modelInst genSPICEString]
 } -result {.model mod1 nmos(vth0=0.7 u0={v2*vb/2} k1=1.5e-3)} -cleanup {
+    unset modelInst result
+}
+
+test testModelClass-5 {test creation of Model class instance and genSPICEString interface} -setup {
+    set modelInst [Model new MOD1 NMOS {}]
+} -body {
+    set result [$modelInst genSPICEString]
+} -result {.model mod1 nmos} -cleanup {
     unset modelInst result
 }
 
@@ -789,7 +850,14 @@ test testOptionsClass-5 {test creation of Options class instance and deleteParam
 test testOptionsClass-6 {test creation of Options class instance with switch parameter without -sw qualificator} -body {
     catch {Options new {{abstol 1e-12} {noopiter} {gmin 1e-12}}} errorStr
     return $errorStr
-} -result {Value '' is not a valid value} -cleanup {
+} -result {Value 'noopiter' is not a valid value} -cleanup {
+    unset errorStr
+}
+
+test testOptionsClass-7 {} -body {
+    catch {Options new {{abstol 1e-12} {gmin 1e-12} {gmin 1e-12}}} errorStr
+    return $errorStr
+} -result {Parameters list 'abstol gmin gmin' has already contains parameter with name 'gmin'} -cleanup {
     unset errorStr
 }
 
@@ -845,10 +913,24 @@ test testParamStatementClass-6 {test creation of ParamStatement class instance a
     unset elemInst result
 }
 
+test testParamStatementClass-7 {test creation of ParamStatement class instance with equation parameter without -eq qualificator} -body {
+    catch {ParamStatement new {{U0T rf+1 -eq} {U0T 10}}} errorStr
+    return $errorStr
+} -result {Parameters list 'u0t u0t' has already contains parameter with name 'u0t'} -cleanup {
+    unset errorStr
+}
+
+test testParamStatementClass-8 {test creation of ParamStatement class instance with equation parameter without -eq qualificator} -body {
+    catch {ParamStatement new {{U0T rf+1 -eq} {U0T}}} errorStr
+    return $errorStr
+} -result {Value 'U0T' is not a valid value} -cleanup {
+    unset errorStr
+}
+
 ###  Ic class tests 
     
 test testIcClass-1 {test creation of Ic class instance and getParams interface} -setup {
-    set elemInst [Ic new {{v(a) v1 -eq} {v(b) 10}}]
+    set elemInst [Ic new {{v(a) v1 -eq} {v(b) 10}} -name ic1]
 } -body {
     set result [$elemInst genSPICEString]
 } -result {.ic v(a)={v1} v(b)=10} -cleanup {
@@ -861,6 +943,20 @@ test testIcClass-2 {test creation of Ic class instance and getParams interface} 
     set result [$elemInst genSPICEString]
 } -result {.ic a={v1} b=10} -cleanup {
     unset elemInst result
+}
+
+test testIcClass-3 {test creation of Ic class instance and getParams interface} -body {
+    catch {Ic new {{a v1 -eq} {a 10}}} errorStr
+    return $errorStr
+} -result {Parameters list 'a a' has already contains parameter with name 'a'} -cleanup {
+    unset errorStr 
+}
+
+test testIcClass-4 {test creation of Ic class instance and getParams interface} -body {
+    catch {Ic new {{a v1 -eq} {a}}} errorStr
+    return $errorStr
+} -result {Value 'a' is not a valid value} -cleanup {
+    unset errorStr 
 }
 
 ###  Nodeset class tests 
@@ -1136,6 +1232,25 @@ test testNetlistClass-10 {test creation of Netlist class instance with del inter
 } -result {Netlist 'newnetlist' doesn't have attached elements} -cleanup {
     unset netlistInst errorStr
 }
+
+test testNetlistClass-11 {test creation of Netlist class instance with del interface and genSPICEString interface} -setup {
+    set netlistInst [Netlist new newNetlist]
+    $netlistInst add [R new 1 net1 net2 -r 10] [R new 2 net1 net2 -r {{r1+5/10} -eq}]\
+            [R new 5 net1 net2 -model res_sem -l 10e-6 -w 100e-6]
+    $netlistInst add [RModel new rsem1mod -tc1 0.1 -tc2 0.4]
+    $netlistInst add [C new 1 net2 net3 -c 1e-6]
+    $netlistInst add [ParamStatement new {{r1 1} {r2 2}} -name ps1]
+    $netlistInst add [Comment new {some random comment} -name com1]
+    $netlistInst add [Include new {/fold1/fold2/file.lib} -name inc1]
+    $netlistInst add [Library new {/fold1/fold2/file.lib} fast -name lib1]
+    $netlistInst add [RawString new {*comment in form of raw string} -name raw1]
+    $netlistInst add [Vdc new 1 net1 net3 -dc 5]
+} -body {
+    catch {$netlistInst getElement v5} errorStr
+    return $errorStr
+} -result {Element with name 'v5' was not found in netlist's 'newnetlist' list of elements} -cleanup {
+    unset netlistInst errorStr
+}
     
 ###  Subcircuit class tests 
 
@@ -1281,7 +1396,6 @@ test testSubcircuitClass-6 {test creation of Subcircuit class instance with genS
     set subcircuit [RCnet new]
 } -body {
     set result [$subcircuit genSPICEString]
-    
 } -result {.subckt rcnet plus minus r=100 c=1e-6
 r1 net1 net2 {r}
 c1 net2 net3 {c}
@@ -1342,6 +1456,48 @@ x2 net1 net2 rcnetnest r=1 c={cpar}
     unset subcircuit result
 }
 
+test testSubcircuitClass-8 {test creation of Subcircuit class instance with genSPICEString interface} -body {
+    oo::class create RCnet {
+        superclass Subcircuit
+        constructor {} {
+            # define external pins of subcircuit
+            set pins {plus minus}
+            # define input parameters of subcircuit
+            set params {{r 100} {r 1e-6}}
+            # add elements to subcircuit definition
+            my add [R new 1 net1 net2 -r {r -eq}] [C new 1 net2 net3 -c {c -eq}]
+            # pass name, list of pins and list of parameters to Subcircuit constructor
+            next rcnet $pins $params
+        }
+    }
+    catch {RCnet new} errorStr
+    return $errorStr
+} -result {Parameters list 'r r' has already contains parameter with name 'r'} -cleanup {
+    rename RCnet ""
+    unset errorStr
+}
+
+test testSubcircuitClass-9 {test creation of Subcircuit class instance with genSPICEString interface} -body {
+    oo::class create RCnet {
+        superclass Subcircuit
+        constructor {} {
+            # define external pins of subcircuit
+            set pins {plus minus}
+            # define input parameters of subcircuit
+            set params {{r 100} {c 1e-6 -eq}}
+            # add elements to subcircuit definition
+            my add [R new 1 net1 net2 -r {r -eq}] [C new 1 net2 net3 -c {c -eq}]
+            # pass name, list of pins and list of parameters to Subcircuit constructor
+            next rcnet $pins $params
+        }
+    }
+    catch {RCnet new} errorStr
+    return $errorStr
+} -result {Wrong parameter 'c' definition in subcircuit rcnet} -cleanup {
+    rename RCnet ""
+    unset errorStr
+}
+
 ###  Analysis class tests 
     
 test testAnalysisClass-1 {test creation of Analysis class instance and getParams interface} -setup {
@@ -1391,6 +1547,14 @@ test testAnalysisClass-6 {test creation of Analysis class instance and genSPICES
 } -result {.tran 1e-6 10e-3 uic} -cleanup {
     unset anInst result
 }
+
+test testAnalysisClass-7 {test creation of Analysis class instance and genSPICEString interface} -body {
+    catch {set anInst [Analysis new dc {{srcnam v1 -posnocheck} {vstart} {vstop 5 -pos} {vincr 0.1 -pos}}]} errorStr
+    return $errorStr
+} -result {Value 'vstart' is not a valid value} -cleanup {
+    unset errorStr
+}
+
 
 ###  RawFile class tests 
 
@@ -1608,7 +1772,7 @@ v1 in 0 1
     unset circuit
 }
 
-test testCircuitClass-4 {test creation of Circuit class instance, add Anslysis, remove it and then add again} -setup {
+test testCircuitClass-6 {test creation of Circuit class instance, add Anslysis, remove it and then add again} -setup {
     set circuit [Circuit new {voltage divider netlist}]
     $circuit add [Vdc new 1 in 0 -dc 1]
     $circuit add [R new 1 in out -r 1e3]
@@ -1624,6 +1788,197 @@ r1 in out 1e3
 r2 out 0 2e3
 .dc v1 0 5 1} -cleanup {
     unset circuit
+}
+
+test testCircuitClass-7 {test creation of Circuit class instance} -setup {
+    set circuit [Circuit new {voltage divider netlist}]
+} -body {
+    catch {$circuit del v1} errorStr
+    return $errorStr
+} -result {Netlist 'voltage divider netlist' doesn't have attached elements} -cleanup {
+    unset circuit errorStr
+}
+
+test testCircuitClass-8 {test creation of Circuit class instance} -setup {
+    set circuit [Circuit new {voltage divider netlist}]
+    $circuit add [Vdc new 1 in 0 -dc 1]
+} -body {
+    catch {$circuit del v5} errorStr
+    return $errorStr
+} -result {Element with name 'v5' was not found in circuit's 'voltage divider netlist' list of elements} -cleanup {
+    unset circuit errorStr
+}
+
+test testCircuitClass-9 {test creation of Circuit class instance} -setup {
+    set circuit [Circuit new {voltage divider netlist}]
+    $circuit add [Vdc new 1 in 0 -dc 1]
+} -body {
+    catch {$circuit getElement v5} errorStr
+    return $errorStr
+} -result {Element with name 'v5' was not found in netlist's 'voltage divider netlist' list of elements} -cleanup {
+    unset circuit errorStr
+}
+
+test testCircuitClass-10 {test creation of Circuit class instance and getDataCsv interface} -setup {
+    set circuit [Circuit new {voltage divider netlist}]
+    $circuit add [Vdc new 1 in 0 -dc 1]
+    $circuit add [R new 1 in out -r 1e3] [R new 2 out 0 -r 2e3] 
+    $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1]
+    set simulator [Batch new {batch1}]
+    $circuit configure -simulator $simulator
+} -body {
+    $circuit detachSimulator
+    catch {$circuit configure -simulator} errorStr
+    return $errorStr
+} -result {can't read "simulator": no such variable} -cleanup {
+    unset circuit simulator errorStr
+}
+
+test testCircuitClass-11 {test creation of Circuit class instance and getDataCsv interface} -setup {
+    set circuit [Circuit new {voltage divider netlist}]
+    $circuit add [Vdc new 1 in 0 -dc 1]
+    $circuit add [R new 1 in out -r 1e3] [R new 2 out 0 -r 2e3] 
+    $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1]
+} -body {
+    catch {$circuit runAndRead} errorStr
+    return $errorStr
+} -result {Simulator is not attached to 'voltage divider netlist' circuit} -cleanup {
+    unset circuit errorStr
+}
+
+test testCircuitClass-12 {test creation of Circuit class instance and getDataCsv interface} -setup {
+    set circuit [Circuit new {voltage divider netlist}]
+    $circuit add [Vdc new 1 in 0 -dc 1]
+    $circuit add [R new 1 in out -r 1e3] [R new 2 out 0 -r 2e3] 
+    $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1]
+    set simulator [Batch new {batch1}]
+    $circuit configure -simulator $simulator
+    $circuit runAndRead -nodelete
+} -body {
+    set data [$circuit getDataCsv -traces v(in) v(out)]
+    return $data
+} -result {v(in),v(out)
+0.0,0.0
+1.0,0.6666666666666666
+2.0,1.3333333333333333
+3.0,2.0
+4.0,2.6666666666666665
+5.0,3.333333333333333
+} -cleanup {
+    unset circuit data simulator
+    file delete {voltage divider netlist.cir}
+    file delete {voltage divider netlist.log}
+    file delete {voltage divider netlist.raw}
+}
+
+###  Parser class tests 
+
+test testParserClass-1 {test creation of Parser class instance} -setup {
+    set parser [Parser new {voltage divider netlist} path]
+} -body {
+    catch {$parser readFile} errorStr
+    return $errorStr
+} -result {Not implemented} -cleanup {
+    unset parser errorStr
+}
+
+test testParserClass-2 {test creation of Parser class instance} -setup {
+    set parser [Parser new {voltage divider netlist} path]
+} -body {
+    catch {$parser readAndParse} errorStr
+    return $errorStr
+} -result {Not implemented} -cleanup {
+    unset parser errorStr
+}
+
+test testParserClass-3 {test creation of Parser class instance} -setup {
+    set parser [Parser new {voltage divider netlist} path]
+} -body {
+    catch {[info object namespace $parser]::my GetSubcircuitLines} errorStr
+    return $errorStr
+} -result {Not implemented} -cleanup {
+    unset parser errorStr
+}
+
+test testParserClass-4 {test creation of Parser class instance} -setup {
+    set parser [Parser new {voltage divider netlist} path]
+} -body {
+    catch {[info object namespace $parser]::my GetSubcircuitLines} errorStr
+    return $errorStr
+} -result {Not implemented} -cleanup {
+    unset parser errorStr
+}
+
+test testParserClass-5 {test creation of Parser class instance} -setup {
+    set parser [Parser new {voltage divider netlist} path]
+} -body {
+    catch {$parser buildTopNetlist} errorStr
+    return $errorStr
+} -result {Parser object 'voltage divider netlist' doesn't have prepared data} -cleanup {
+    unset parser errorStr
+}
+
+test testParserClass-6 {test creation of Parser class instance} -setup {
+    set parser [Parser new {voltage divider netlist} path]
+} -body {
+    catch {[info object namespace $parser]::my BuildSubcktFromDef subcktName subcktBounds} errorStr
+    return $errorStr
+} -result {Not implemented} -cleanup {
+    unset parser errorStr
+}
+
+###  Simulator class tests
+
+test testSimulatorClass-1 {} -setup {
+    oo::configurable create DummyClass {
+        superclass ::SpiceGenTcl::Simulator
+    }
+    set inst [DummyClass new]
+} -body {
+    catch {$inst run} errorStr
+    return $errorStr
+} -result {Not implemented} -cleanup {
+    unset inst errorStr
+    DummyClass destroy
+}
+
+test testSimulatorClass-2 {} -setup {
+    oo::configurable create DummyClass {
+        superclass ::SpiceGenTcl::Simulator
+    }
+    set inst [DummyClass new]
+} -body {
+    catch {$inst readLog} errorStr
+    return $errorStr
+} -result {Not implemented} -cleanup {
+    unset inst errorStr
+    DummyClass destroy
+}
+
+test testSimulatorClass-3 {} -setup {
+    oo::configurable create DummyClass {
+        superclass ::SpiceGenTcl::Simulator
+    }
+    set inst [DummyClass new]
+} -body {
+    catch {$inst getLog} errorStr
+    return $errorStr
+} -result {Not implemented} -cleanup {
+    unset inst errorStr
+    DummyClass destroy
+}
+
+test testSimulatorClass-4 {} -setup {
+    oo::configurable create DummyClass {
+        superclass ::SpiceGenTcl::Simulator
+    }
+    set inst [DummyClass new]
+} -body {
+    catch {$inst readData} errorStr
+    return $errorStr
+} -result {Not implemented} -cleanup {
+    unset inst errorStr
+    DummyClass destroy
 }
 
 forgetNgspice

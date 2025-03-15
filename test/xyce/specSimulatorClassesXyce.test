@@ -49,7 +49,7 @@ test testSimulations-1 {test creation of circuit, run it with XyceBatch and read
     $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1]
     set simulator [Batch new batch1 .]
     $circuit configure -simulator $simulator
-    $circuit runAndRead
+    $circuit runAndRead -nodelete
     set data [[$circuit configure -data] getTracesData]
 } -body {
     lappend result [lmap voutVal [dget $data out] {format "%.3e" $voutVal}]

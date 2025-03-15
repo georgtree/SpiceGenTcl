@@ -337,8 +337,10 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                         '[llength $pinsNames]'"
             }
             set pinsList [lmap pinName $pinsNames node $nodes {join [list $pinName $node]}]
-            set paramDefList [lmap paramName [dict keys [$subcktObj getParams]] {subst -${paramName}=}]
-            if {$paramDefList ne {}} {
+            if {![catch {$subcktObj getParams}]} {
+                set paramDefList [lmap paramName [dict keys [$subcktObj getParams]] {subst -${paramName}=}]
+            }
+            if {[info exists paramDefList]} {
                 # create definition for argparse module for passing parameters as optional arguments
                 set arguments [argparse -inline "
                     [join $paramDefList \n]

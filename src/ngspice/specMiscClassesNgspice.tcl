@@ -61,6 +61,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Misc {
                     lappend params [list $paramName -sw]
                 }
             }
+            ##nagelfar variable name
             next $params -name $name
         }
     }
