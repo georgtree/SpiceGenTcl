@@ -20,7 +20,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
 
     oo::configurable create NgspiceParser {
         superclass ::SpiceGenTcl::Parser
-        variable Name
+        variable parsername
         variable filepath
         variable FileData
         variable SubcktsBoundaries
@@ -95,20 +95,16 @@ namespace eval ::SpiceGenTcl::Ngspice {
             }
             # append continuation lines to start line of each continuation list with first symbol removal (it is assumed
             # to be `+` symbol)
-            if {[info exists continLinesIndex]} {
-                dict map {lineIndex contLinesIndexes} $continLinesIndex {
-                    if {$contLinesIndexes eq {}} {
-                        lappend finalList [@ $fileData $lineIndex]
-                    } else {
-                        set locList [@ $fileData $lineIndex]
-                        foreach contLineIndex $contLinesIndexes {
-                            lappend locList [string trim [string range [@ $fileData $contLineIndex] 1 end]]
-                        }
-                        lappend finalList [join $locList]
+            dict map {lineIndex contLinesIndexes} $continLinesIndex {
+                if {$contLinesIndexes eq {}} {
+                    lappend finalList [@ $fileData $lineIndex]
+                } else {
+                    set locList [@ $fileData $lineIndex]
+                    foreach contLineIndex $contLinesIndexes {
+                        lappend locList [string trim [string range [@ $fileData $contLineIndex] 1 end]]
                     }
+                    lappend finalList [join $locList]
                 }
-            } else {
-                set finalList $fileData
             }
             # convert each line to lower case except lines that contains paths in .lib or .include statements
             foreach line $finalList {
@@ -160,7 +156,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
         method GetSubcircuitLines {} {
             # Parses line by line and get start and the end of subcircuits
             if {![info exists FileData]} {
-                error "Parser object '[my configure -name]' doesn't have prepared data"
+                error "Parser object '[my configure -parsername]' doesn't have prepared data"
             }
             set fileData $FileData
             for {set i 0} {$i<[llength $fileData]} {incr i} {
@@ -202,7 +198,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             #   subcktName - name of subcircuit
             #   subcktBounds - boundaries of subcircuit
             if {![info exists FileData]} {
-                error "Parser object '[my configure -name]' doesn't have prepared data"
+                error "Parser object '[my configure -parsername]' doesn't have prepared data"
             }
             set allLines $FileData
             set topNetlist [my configure -topnetlist]
@@ -899,6 +895,8 @@ namespace eval ::SpiceGenTcl::Ngspice {
                 lappend paramsList {*}[my ParseParams [lrange $lineList 1 end] 3 {}]
                 $netlistObj add [${NamespacePath}::SemiconductorDevices::D new $elemName $pin1 $pin2 -model $modelVal\
                                          {*}$paramsList]
+            } else {
+                return -code error "Creating diode object from line '${line}' failed due to wrong or incompatible syntax"
             }
         }
         method CreateJFET {line netlistObj} {

@@ -2178,7 +2178,8 @@ namespace eval ::SpiceGenTcl {
     ##nagelfar subcmd+ _obj,Parser configure CheckEqual Unbrace ParseWithEqual CheckBraced CheckBracedWithEqual\
             ParseBracedWithEqual BuildNetlist
     oo::configurable create Parser {
-        variable Name
+        property parsername
+        variable parsername
         property filepath
         variable filepath
         variable FileData
@@ -2196,7 +2197,7 @@ namespace eval ::SpiceGenTcl {
             # Creates object of class `Parser` that do parsing of valid simulator netlist.
             #   name - name of the object
             #   filepath - path to file that should be parsed
-            set Name $name 
+            my configure -parsername $name
             my configure -filepath $filepath
             my configure -topnetlist [::SpiceGenTcl::Netlist new [file tail $filepath]]
             set ModelTemplate {oo::class create @type@ {
@@ -2230,7 +2231,7 @@ namespace eval ::SpiceGenTcl {
         method buildTopNetlist {} {
             # Builds top netlist corresponding to parsed netlist file
             if {![info exists FileData]} {
-                error "Parser object '${Name}' doesn't have prepared data"
+                error "Parser object '[my configure -parsername]' doesn't have prepared data"
             }
             set allLines $FileData
             set topNetlist [my configure -topnetlist]

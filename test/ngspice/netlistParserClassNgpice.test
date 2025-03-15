@@ -99,6 +99,41 @@ test testNgspiceParserClass-7 {test NgspiceParser class with nested subcircuit} 
     unset parser
 }
 
+test testNgspiceParserClass-8 {test NgspiceParser class with nested subcircuit} -setup {
+    set parser [::SpiceGenTcl::Ngspice::NgspiceParser new parser1 [file join $netlistsLoc adder_mos_nested_subckt.cir]]
+} -body {
+    catch {[info object namespace $parser]::my GetSubcircuitLines} errorStr
+    return $errorStr
+} -result {Parser object 'parser1' doesn't have prepared data} -cleanup {
+    unset parser
+}
+
+test testNgspiceParserClass-9 {} -setup {
+    set file [open [file join $netlistsLoc temp1] w+]
+    puts $file {}
+    puts $file {.subckt}
+    close $file
+    set parser [::SpiceGenTcl::Ngspice::NgspiceParser new parser1 [file join $netlistsLoc temp1]]
+    $parser readFile
+} -body {
+    if {[catch {[info object namespace $parser]::my GetSubcircuitLines} errorStr]} {
+        return $errorStr
+    }
+    return [[$parser configure -topnetlist] genSPICEString]
+} -result {Subcircuit couldn't be defined without a name} -cleanup {
+    file delete [file join $netlistsLoc temp1]
+    unset parser
+}
+
+test testNgspiceParserClass-10 {test NgspiceParser class with nested subcircuit} -setup {
+    set parser [::SpiceGenTcl::Ngspice::NgspiceParser new parser1 [file join $netlistsLoc adder_mos_nested_subckt.cir]]
+} -body {
+    catch {[info object namespace $parser]::my BuildSubcktFromDef subcktName subcktBounds} errorStr
+    return $errorStr
+} -result {Parser object 'parser1' doesn't have prepared data} -cleanup {
+    unset parser
+}
+
 testTemplateParse testNgspiceParserClass-8 {} $netlistsLoc diffpair_cir_build.cir\
 {.model qnl npn(level=1 bf=80 rb=100 tf=0.3n tr=6n cje=3p cjc=2p vaf=50)
 .model qnr npn(level=1 bf=80 rb=100 tf=0.3n tr=6n cje=3p cjc=2p vaf=50)
@@ -342,6 +377,9 @@ testTemplateParse1 testNgspiceParserClassResistors-5 {} {rs2 a b ! {v(a)+v(b)/i(
                  syntax}
 testTemplateParse1 testNgspiceParserClassResistors-6 {} {rs2 a b {v} {v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
         {Parameter '{v(a)+v(b)/i(b)}' parsing failed}
+testTemplateParse1 testNgspiceParserClassResistors-7 {} {rb1 netp netm 1e!6 resmod temp=25} $netlistsLoc\
+        {Creating resistor object from line 'rb1 netp netm 1e!6 resmod temp=25' failed due to wrong or incompatible\
+                 syntax}
 
 ### Capacitors parsing test
 
@@ -350,6 +388,8 @@ testTemplateParse testNgspiceParserClassCapacitors-1 {} $netlistsLoc capacitors_
 c3 netp netm c={v(a)+v(b)+pow(v(c), 2)} tc1=1
 c4 netp netm q={v(a)+v(b) + pow(v(c),2)} tc1=1
 c5 netp netm capmod l=1e-6 w=10e-6 temp=25
+c9 netp netm 1e-6 capmod w=10e-6 temp=25
+c10 netp netm {cap} capmod w=10e-6 temp=25
 c1 netp netm 1e-6 tc1=1 temp=25
 c6 netp netm q={v(a)+v(b) + pow(v(c),2)} tc1=1 tc2=3
 c7 netp netm c={v(a)+v(b) + pow(v(c),2)} tc1=1 tc2=3}
@@ -367,6 +407,9 @@ testTemplateParse1 testNgspiceParserClassCapacitors-5 {}\
                                                                  incompatible syntax}
 testTemplateParse1 testNgspiceParserClassCapacitors-6 {} {cs2 a b {v} {v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
         {Parameter '{v(a)+v(b)/i(b)}' parsing failed}
+testTemplateParse1 testNgspiceParserClassCapacitors-7 {} {c9 netp netm 1e-!6 capmod w=10e-6 temp=25} $netlistsLoc\
+        {Creating capacitor object from line 'c9 netp netm 1e-!6 capmod w=10e-6 temp=25' failed due to wrong or\
+                 incompatible syntax}
 
 ### Inductors parsing test
 
@@ -374,6 +417,7 @@ testTemplateParse testNgspiceParserClassInductors-1 {} $netlistsLoc inductors_te
 {l1 netp netm 1e-6 tc1=1 temp=25
 l2 netp netm 1e-6
 l3 netp netm 1e-6 indm
+l10 netp netm {lind} indm
 l4 netp netm indm
 l5 netp netm l={v(a)+v(b)+ pow(v(c), 2)} tc1=1
 l6 netp netm {l1*l2} tc1=1
@@ -391,6 +435,8 @@ testTemplateParse1 testNgspiceParserClassInductors-4 {} {ls2 a b ! {v(a)+v(b)/i(
                  syntax}
 testTemplateParse1 testNgspiceParserClassInductors-5 {} {ls2 a b {v} {v(a)+v(b)/i(b)} tc2=1} $netlistsLoc\
         {Parameter '{v(a)+v(b)/i(b)}' parsing failed}
+testTemplateParse1 testNgspiceParserClassInductors-6 {} {l3 netp netm 1e-!6 indm} $netlistsLoc\
+        {Creating inductor object from line 'l3 netp netm 1e-!6 indm' failed due to wrong or incompatible syntax}
 
 ### Models parsing test
 
@@ -402,8 +448,10 @@ testTemplateParse testNgspiceParserClassModels-1 {} $netlistsLoc models_test.cir
 .model cswmod csw(it=1 ih=0.5 ron=1 roff=1e6)
 .model diodemod d(is=1e-14 n=1.2 rs=0.01 cjo=1e-9)
 .model bjtmod npn(level=1 is=1e-15 bf=200 vaf=100 cje=1e-10)
+.model bjtmod1 npnmodel(level=4 is=1e-15 bf=200 vaf=100 cje=1e-10)
 .model jfetmod1 njf(level=1 vto=2 beta=1e-3 lambda=1e-4 cgd=1e-12)
-.model jfetmod2 njf(level=2 vto=-2 beta=10e-4 rs=1e-4 vbi=1.2)
+.model jfetmod2 njf(level=1 vto=2 beta=1e-3 lambda=1e-4 cgd=1e-12)
+.model jfetmod3 njf(level=2 vto=-2 beta=10e-4 rs=1e-4 vbi=1.2)
 .model mesfetmod1 nmf(level=1 vto=2 beta=1e-3 lambda=1e-4 cgd=1e-12)
 .model mesfetmod2 pmf(level=1 vto=-2 beta=1e-3 lambda=1e-4 cgd=1e-12)
 .model res3mod r3model(tc1=1 tc2=2)}
@@ -446,6 +494,42 @@ test testNgspiceParserClassModels-4 {test NgspiceParser class, models parsing, e
     unset parser output
 }
 
+testTemplateParse1 testNgspiceParserClassModels-5 {} {.model sw@mod sw(vt= vh=0.5 ron=1 roff=1e6)} $netlistsLoc\
+        {Model name 'sw@mod' contains illegal characters}
+
+test testNgspiceParserClassModels-6 {} -setup {
+    set file [open [file join $netlistsLoc temp1] w+]
+    puts $file ""
+    puts $file {.model bjtmod npn(level=10)}
+    close $file
+    set parser [::SpiceGenTcl::Ngspice::NgspiceParser new parser1 [file join $netlistsLoc temp1]]
+    $parser readFile
+    stdout2var output
+    $parser buildTopNetlist
+    restorestdout
+} -body {
+    return $output
+} -result {Level '10' of BJT model in line '.model bjtmod npn level=10' is not supported, skip that line} -cleanup {
+    file delete [file join $netlistsLoc temp1]
+    unset parser output
+}
+
+test testNgspiceParserClassModels-7 {} -setup {
+    set file [open [file join $netlistsLoc temp1] w+]
+    puts $file ""
+    puts $file {.model jfetmod njf(level=10)}
+    close $file
+    set parser [::SpiceGenTcl::Ngspice::NgspiceParser new parser1 [file join $netlistsLoc temp1]]
+    $parser readFile
+    stdout2var output
+    $parser buildTopNetlist
+    restorestdout
+} -body {
+    return $output
+} -result {Level '10' of JFET model in line '.model jfetmod njf level=10' is not supported, skip that line} -cleanup {
+    file delete [file join $netlistsLoc temp1]
+    unset parser output
+}
 
 ### Analyses parsing test
 
@@ -531,6 +615,15 @@ f2 13 5 vsens {value}
 h1 5 17 vz 0.5k
 h2 5 17 vz {value}}
 
+testTemplateParse1 testNgspiceParserClassLctrlsources-2 {} {E1 2 3 14 1 2.!0} $netlistsLoc\
+        {Creating VCVS object from line 'e1 2 3 14 1 2.!0' failed due to wrong or incompatible syntax}
+testTemplateParse1 testNgspiceParserClassLctrlsources-3 {} {F1 13 5 VSENS !5 m=2} $netlistsLoc\
+        {Creating CCCS object from line 'f1 13 5 vsens !5 m=2' failed due to wrong or incompatible syntax}
+testTemplateParse1 testNgspiceParserClassLctrlsources-4 {} {G1 2 0 5 0 0!.1 m={m}} $netlistsLoc\
+        {Creating VCCS object from line 'g1 2 0 5 0 0!.1 m={m}' failed due to wrong or incompatible syntax}
+testTemplateParse1 testNgspiceParserClassLctrlsources-5 {} {H1 5 17 VZ 0.!5K} $netlistsLoc\
+        {Creating CCVS object from line 'h1 5 17 vz 0.!5k' failed due to wrong or incompatible syntax}
+
 ### Independent sources parsing test
 
 testTemplateParse testNgspiceParserClassIndsources-1 {} $netlistsLoc indsources_test.cir\
@@ -539,6 +632,7 @@ i2 10 0 6
 v3 10 0 {dc} ac 1
 i4 10 0 6 ac 1 {acphase}
 v5 10 0 6 ac 1
+v50 10 0 6 ac {acval}
 i6 10 0 6 ac 1 -45
 v7 net1 net2 pulse 0 1 1e-9 1e-9 1e-9 10e-6 20e-6 10
 i8 net1 net2 pulse 0 1 1e-9 1e-9 1e-9 10e-6 20e-6
@@ -579,12 +673,18 @@ v43 netp netm dc 1 ac 1 portnum 1 z0 50
 v44 netp netm dc 1 ac 1 portnum 1
 v45 netp netm dc 1 ac 1 portnum 2 z0 {z0}}
 
+testTemplateParse1 testNgspiceParserClassIndsources-2 {} {i43 netp netm dc 1 ac 1 portnum 1 z0 50} $netlistsLoc\
+        {RF port could be only voltage type in line 'i43 netp netm dc 1 ac 1 portnum 1 z0 50'}
+
 ### Diodes parsing test
 
 testTemplateParse testNgspiceParserClassDiodes-1 {} $netlistsLoc diodes_test.cir\
 {d1 netp netm diomod area=1e-3 lm=1e-6 temp=25
 d2 netp netm diomod off area=1e-3 lm=1e-6 temp=25
 d3 netp netm diomod off area={area} lm=1e-6 temp=25}
+
+testTemplateParse1 testNgspiceParserClassDiodes-2 {} {d1 netp netm diom!od} $netlistsLoc\
+        {Creating diode object from line 'd1 netp netm diom!od' failed due to wrong or incompatible syntax}
 
 ### BJTs parsing test
 
@@ -599,6 +699,9 @@ q7 netc netb nete nets nettj bjtmod ic=1,2 area=1e-3 temp=25
 q8 netc netb nete nets bjtmod ic={a},2 area=1e-3 temp=25
 q9 netc netb nete nets nettj bjtmod ic={a},{b} area=1e-3 temp=25}
 
+testTemplateParse1 testNgspiceParserClassBJTs-2 {} {q4 netc netb nete bjt!mod} $netlistsLoc\
+        {Creating BJT object from line 'q4 netc netb nete bjt!mod' failed due to wrong or incompatible syntax}
+
 ### JFETs parsing test
 
 testTemplateParse testNgspiceParserClassJFETs-1 {} $netlistsLoc jfets_test.cir\
@@ -608,6 +711,9 @@ j3 netd netg nets jfetmod 1e-3 off temp=25
 j4 netd netg nets jfetmod ic=1,2 temp=25
 j5 netd netg nets jfetmod}
 
+testTemplateParse1 testNgspiceParserClassJFETs-2 {} {j5 netd netg nets jf!etmod} $netlistsLoc\
+        {Creating JFET object from line 'j5 netd netg nets jf!etmod' failed due to wrong or incompatible syntax}
+
 ### MESFETs parsing test
 
 testTemplateParse testNgspiceParserClassMESFETs-1 {} $netlistsLoc mesfets_test.cir\
@@ -616,6 +722,9 @@ z2 netd netg nets mesfetmod {area*area} ic={a},5
 z3 netd netg nets mesfetmod 1e-3 off
 z4 netd netg nets mesfetmod ic=1,2
 z5 netd netg nets mesfetmod}
+
+testTemplateParse1 testNgspiceParserClassMESFETs-2 {} {z1 netd netg nets mesf!etmod 1e-3} $netlistsLoc\
+        {Creating MESFET object from line 'z1 netd netg nets mesf!etmod 1e-3' failed due to wrong or incompatible syntax}
 
 ### MOSFETs parsing test
 
@@ -628,7 +737,12 @@ m5 netd netg nets netsub net5 net6 net7 mosfetmod l=1e-6 w=10e-3
 m6 netd netg nets netsub net5 net6 net7 mosfetmod ic=1,2,3 l=1e-6 w=10e-3
 m7 netd netg nets netsub net5 net6 net7 mosfetmod ic=1,{a},3 l=1e-6 w=10e-3
 m8 netd netg nets netsub net5 net6 net7 mosfetmod ic=1,2,{b} l=1e-6 w=10e-3
-m9 netd netg nets mosfetmod off l=1e-6 w=10e-3}
+m9 netd netg nets mosfetmod off l=1e-6 w=10e-3
+m10 netd netg nets mosfetmod}
+
+testTemplateParse1 testNgspiceParserClassMOSFETs-2 {} {m1 netd netg nets mosfe!tmod l=1e-6 w=10e-3} $netlistsLoc\
+        {Creating MOSFET object from line 'm1 netd netg nets mosfe!tmod l=1e-6 w=10e-3' failed due to wrong or\
+                 incompatible syntax}
 
 ### Switches parsing test
 
@@ -638,7 +752,8 @@ s2 net1 0 netc 0 sw1
 s3 net1 0 netc 0 sw1 on
 s4 net1 0 netc 0 sw1 off
 w1 net1 0 v1 sw1 on
-w2 net1 0 v1 sw1 off}
+w2 net1 0 v1 sw1 off
+w3 net1 0 v1 sw1}
 
 ### Subcircuits calls parsing test
 
