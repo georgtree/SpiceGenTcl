@@ -2,7 +2,7 @@
 
 lappend ::dbInfo {Tcl 9.0.0 unix}
 set ::dbTclVersion 9.0
-set ::knownGlobals {argc argv argv0 auto_index auto_path configurableOOSyntax currentDir dir env errorCode errorInfo libDir nagelfarPath sourceDir tcl_interactive tcl_library tcl_nonwordchars tcl_patchLevel tcl_pkgPath tcl_platform tcl_rcFileName tcl_version tcl_wordchars}
+set ::knownGlobals {additionalCommand argc argv argv0 auto_index auto_path configurableOOSyntax currentDir dir env errorCode errorInfo libDir nagelfarPath sourceDir tcl_interactive tcl_library tcl_nonwordchars tcl_patchLevel tcl_pkgPath tcl_platform tcl_rcFileName tcl_version tcl_wordchars}
 set ::knownCommands {
 !
 !=
@@ -349,6 +349,10 @@ auto_mkindex_parser::init
 auto_mkindex_parser::mkindex
 auto_qualify
 auto_reset
+base32::critcl_decode
+base32::critcl_encode
+base32::hex::critcl_decode
+base32::hex::critcl_encode
 binary
 break
 catch
@@ -375,6 +379,49 @@ continue
 coroinject
 coroprobe
 coroutine
+crc::Crc32_c
+crc::SumBsd_c
+crc::SumSysV_c
+critcl::Ignore
+critcl::api
+critcl::at
+critcl::cache
+critcl::ccode
+critcl::ccommand
+critcl::cdata
+critcl::cdefines
+critcl::cflags
+critcl::cheaders
+critcl::check
+critcl::cinit
+critcl::clibraries
+critcl::compiled
+critcl::compiling
+critcl::config
+critcl::cproc
+critcl::csources
+critcl::debug
+critcl::done
+critcl::failed
+critcl::framework
+critcl::include
+critcl::ldflags
+critcl::license
+critcl::load
+critcl::make
+critcl::meta
+critcl::platform
+critcl::preload
+critcl::runtime::Fetch
+critcl::runtime::MapPlatform
+critcl::runtime::loadlib
+critcl::runtime::preFetch
+critcl::runtime::precopy
+critcl::source
+critcl::tcl
+critcl::tk
+critcl::tsources
+critcl::userconfig
 csv::Split
 csv::Split2matrix
 csv::iscomplete
@@ -426,7 +473,11 @@ in
 incr
 info
 interp
+ip::isOverlapNativec
+ip::prefixToNativec
 join
+json::json2dict_critcl
+json::many_json2dict_critcl
 lappend
 lassign
 le
@@ -448,6 +499,69 @@ lseq
 lset
 lsort
 lt
+map::slippy::DOOM
+map::slippy::critcl_geo_2point
+map::slippy::critcl_geo_2point_args
+map::slippy::critcl_geo_2point_list
+map::slippy::critcl_geo_bbox
+map::slippy::critcl_geo_bbox_list
+map::slippy::critcl_geo_box_2point
+map::slippy::critcl_geo_box_center
+map::slippy::critcl_geo_box_corners
+map::slippy::critcl_geo_box_diameter
+map::slippy::critcl_geo_box_dimensions
+map::slippy::critcl_geo_box_fit
+map::slippy::critcl_geo_box_inside
+map::slippy::critcl_geo_box_limit
+map::slippy::critcl_geo_box_opposites
+map::slippy::critcl_geo_box_perimeter
+map::slippy::critcl_geo_box_valid
+map::slippy::critcl_geo_box_valid_list
+map::slippy::critcl_geo_center
+map::slippy::critcl_geo_center_list
+map::slippy::critcl_geo_diameter
+map::slippy::critcl_geo_diameter_list
+map::slippy::critcl_geo_distance
+map::slippy::critcl_geo_distance_args
+map::slippy::critcl_geo_distance_list
+map::slippy::critcl_geo_limit
+map::slippy::critcl_geo_valid
+map::slippy::critcl_geo_valid_list
+map::slippy::critcl_length
+map::slippy::critcl_limit2
+map::slippy::critcl_limit3
+map::slippy::critcl_limit6
+map::slippy::critcl_point_2geo
+map::slippy::critcl_point_2geo_args
+map::slippy::critcl_point_2geo_list
+map::slippy::critcl_point_bbox
+map::slippy::critcl_point_bbox_list
+map::slippy::critcl_point_box_2geo
+map::slippy::critcl_point_box_center
+map::slippy::critcl_point_box_corners
+map::slippy::critcl_point_box_diameter
+map::slippy::critcl_point_box_dimensions
+map::slippy::critcl_point_box_inside
+map::slippy::critcl_point_box_opposites
+map::slippy::critcl_point_box_perimeter
+map::slippy::critcl_point_center
+map::slippy::critcl_point_center_list
+map::slippy::critcl_point_diameter
+map::slippy::critcl_point_diameter_list
+map::slippy::critcl_point_distance
+map::slippy::critcl_point_distance_args
+map::slippy::critcl_point_distance_list
+map::slippy::critcl_point_simplify_radial
+map::slippy::critcl_point_simplify_rdp
+map::slippy::critcl_tile_size
+map::slippy::critcl_tile_valid
+map::slippy::critcl_tiles
+map::slippy::critcl_valid_latitude
+map::slippy::critcl_valid_longitude
+md4::md4c
+md5::md5c
+md5crypt::md5crypt_c
+md5crypt::to64_c
 msgcat::DefaultUnknown
 msgcat::Invoke
 msgcat::ListComplement
@@ -505,10 +619,15 @@ parray
 pid
 pkg::create
 pkg_mkIndex
+platform::generic
 proc
+property
+pt::parse::peg_critcl
+pt::rde_critcl
 puts
 pwd
-property
+rc4::rc4c
+rc4::rc4c_init
 read
 readFile
 regexp
@@ -552,10 +671,15 @@ scan
 seek
 self
 set
+sha1::sha1c
+sha2::sha256c_init224
+sha2::sha256c_init256
+sha2::sha256c_update
 socket
 source
 split
 string
+struct::graph_critcl
 struct::list
 struct::list::Cartesian
 struct::list::Dekey
@@ -606,6 +730,16 @@ struct::list::MapToTable
 struct::list::PFTest
 struct::list::SingleRightCartesian
 struct::list::list
+struct::queue_critcl
+struct::set_critcl
+struct::stack_critcl
+struct::tree
+struct::tree::Implementations
+struct::tree::KnownImplementations
+struct::tree::LoadAccelerator
+struct::tree::Names
+struct::tree::SwitchTo
+struct::tree::prune
 subst
 switch
 tailcall
@@ -1028,10 +1162,14 @@ unset
 update
 uplevel
 upvar
+uuencode::CDecode
+uuencode::CEncode
 variable
 vwait
 while
 writeFile
+yencode::CDecode
+yencode::CEncode
 yield
 yieldto
 zipfs
@@ -1149,6 +1287,46 @@ set ::syntax(continue) 0
 set ::syntax(coroinject) {x x x*}
 set ::syntax(coroprobe) {x x x*}
 set ::syntax(coroutine) {x x x*}
+set ::syntax(critcl::Ignore) {r 0}
+set ::syntax(critcl::api) {r 0}
+set ::syntax(critcl::at) {r 0}
+set ::syntax(critcl::cache) {r 0}
+set ::syntax(critcl::ccode) {r 0}
+set ::syntax(critcl::ccommand) {r 0}
+set ::syntax(critcl::cdata) {r 0}
+set ::syntax(critcl::cdefines) {r 0}
+set ::syntax(critcl::cflags) {r 0}
+set ::syntax(critcl::cheaders) {r 0}
+set ::syntax(critcl::check) {r 0}
+set ::syntax(critcl::cinit) {r 0}
+set ::syntax(critcl::clibraries) {r 0}
+set ::syntax(critcl::compiled) {r 0}
+set ::syntax(critcl::compiling) {r 0}
+set ::syntax(critcl::config) {r 0}
+set ::syntax(critcl::cproc) {r 0}
+set ::syntax(critcl::csources) {r 0}
+set ::syntax(critcl::debug) {r 0}
+set ::syntax(critcl::done) {r 0}
+set ::syntax(critcl::failed) {r 0}
+set ::syntax(critcl::framework) {r 0}
+set ::syntax(critcl::include) {r 0}
+set ::syntax(critcl::ldflags) {r 0}
+set ::syntax(critcl::license) {r 0}
+set ::syntax(critcl::load) {r 0}
+set ::syntax(critcl::make) {r 0}
+set ::syntax(critcl::meta) {r 0}
+set ::syntax(critcl::platform) {r 0}
+set ::syntax(critcl::preload) {r 0}
+set ::syntax(critcl::runtime::Fetch) 2
+set ::syntax(critcl::runtime::MapPlatform) {r 0 1}
+set ::syntax(critcl::runtime::loadlib) {r 7}
+set ::syntax(critcl::runtime::preFetch) 3
+set ::syntax(critcl::runtime::precopy) 1
+set ::syntax(critcl::source) {r 0}
+set ::syntax(critcl::tcl) {r 0}
+set ::syntax(critcl::tk) {r 0}
+set ::syntax(critcl::tsources) {r 0}
+set ::syntax(critcl::userconfig) {r 0}
 set ::syntax(csv::Split) {r 3 4}
 set ::syntax(csv::Split2matrix) 5
 set ::syntax(csv::iscomplete) 1
@@ -1309,7 +1487,6 @@ set ::syntax(msgcat::mcutil::getpreferences) 1
 set ::syntax(msgcat::mcutil::getsystemlocale) 0
 set ::syntax(my) {s x*}
 set {::syntax(my variable)} n*
-set ::subCmd(my) {configure}
 set ::syntax(namespace) {s x*}
 set {::syntax(namespace code)} c
 set {::syntax(namespace import)} {o* x*}
@@ -1402,6 +1579,7 @@ set {::syntax(package require)} {o* x x*}
 set ::syntax(parray) {v x?}
 set ::syntax(pid) {r 0 1}
 set ::syntax(pkg_mkIndex) {r 0}
+set ::syntax(platform::generic) 0
 set ::syntax(proc) dp
 set ::syntax(puts) {1: x : o? x x?}
 set ::syntax(pwd) 0
@@ -1522,6 +1700,11 @@ set ::syntax(struct::list::MapToTable) 2
 set ::syntax(struct::list::PFTest) 3
 set ::syntax(struct::list::SingleRightCartesian) 3
 set ::syntax(struct::list::list) {r 1}
+set ::syntax(struct::tree::Implementations) 0
+set ::syntax(struct::tree::KnownImplementations) 0
+set ::syntax(struct::tree::LoadAccelerator) 1
+set ::syntax(struct::tree::Names) 0
+set ::syntax(struct::tree::SwitchTo) 1
 set ::syntax(subst) {o* x}
 set ::syntax(switch) x*
 set ::syntax(tcl::CopyDirectory) 3
@@ -1923,6 +2106,7 @@ set {::option(zlib stream decompress)} -dictionary
 set {::option(zlib stream deflate)} {-dictionary -level}
 set {::option(zlib stream gzip)} {-header -level}
 set {::option(zlib stream inflate)} -dictionary
+
 set ::syntax(oo::configurable) {s x*}
 set {::syntax(oo::configurable create)} {do=_stdclass_oo cn?}
 set {::syntax(oo::configurable create::configurable)} x

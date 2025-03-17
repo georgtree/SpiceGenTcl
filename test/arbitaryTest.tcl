@@ -5,27 +5,39 @@ package require math::constants
 namespace import ::tcltest::*
 ::math::constants::constants radtodeg degtorad pi
 variable pi
-
+set testDir [file dirname [info script]]
+set netlistsLoc [file join $testDir ngspice netlists_parser]
 set epsilon 1e-8
-
+proc testTemplateParse {testName descr location fileName refStr} {
+    test $testName $descr -setup {
+        set parser [::SpiceGenTcl::Ngspice::NgspiceParser new parser1 [file join $location $fileName]]
+        $parser readFile
+    } -body {
+        if {[catch {$parser buildTopNetlist} errorStr]} {
+            return $errorStr
+        }
+        return [[$parser configure -topnetlist] genSPICEString]
+    } -result $refStr
+}
 namespace import ::SpiceGenTcl::*
 set testDir [file dirname [info script]]
 set netlistsLoc [file join $testDir ngspice netlists_parser]
 importNgspice
 
-test testParserClassIndsources-1 {test Parser class, independent sources parsing} -setup {
-    set parser [::SpiceGenTcl::Ngspice::Parser new parser1 [file join $netlistsLoc indsources_test.cir]]
+test testNgspiceParserClass-5 {} -setup {
+    set file [open [file join $netlistsLoc temp1] w+]
+    puts $file {}
+    puts $file {.subckt }
+    close $file
+    set parser [::SpiceGenTcl::Ngspice::NgspiceParser new parser1 [file join $netlistsLoc temp1]]
     $parser readFile
-    $parser buildNetlist
 } -body {
-    return [[$parser configure -Netlist] genSPICEString]
-} -result "g1 2 0 5 0 0.1 m={m}
-g2 2 0 5 0 {value} m={m}
-e1 2 3 14 1 2.0
-e2 2 3 14 1 {value}
-f1 13 5 vsens 5
-f2 13 5 vsens {value}
-h1 5 17 vz 0.5k
-h2 5 17 vz {value}" -cleanup {
+    if {[catch {[info object namespace $parser]::my GetSubcircuitLines} errorStr]} {
+        return $errorStr
+    }
+    return [[$parser configure -topnetlist] genSPICEString]
+} -result {Subcircuit couldn't be defined without a name} -cleanup {
+    file delete [file join $netlistsLoc temp1]
     unset parser
 }
+

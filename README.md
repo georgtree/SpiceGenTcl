@@ -15,7 +15,7 @@ SPICE-like simulators written in Python.
 
 ![Static Badge](https://img.shields.io/badge/Windows_11-pass-green)
 
-![Static Badge](https://img.shields.io/badge/coverage-96.82%25-green)
+![Static Badge](https://img.shields.io/badge/coverage-96.3%25-green)
 
 ## General concept
 The general concept of the package is to build a netlist using Tcl scripts. It is based on the TclOO

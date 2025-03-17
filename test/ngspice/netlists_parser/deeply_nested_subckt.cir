@@ -1,0 +1,25 @@
+
+.subckt top in out
+r1 in a r=10
+.subckt middle1 in out
+r2 in b r=20
+.subckt inner1 in out
+r3 in c r=30
+.subckt innerInner1 in out
+r4 in c r=30
+.ends innerInner1
+.ends inner1
+r5 b out r=40
+.ends middle1
+.subckt middle2 in out
+r6 in d r=50
+.subckt inner2 in out
+r7 in e r=60
+.ends inner2
+.subckt inner1 in out
+r8 in e r=60
+.ends inner1
+r9 d out r=70
+.ends middle2
+r10 a out r=80
+.ends top

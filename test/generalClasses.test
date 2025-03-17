@@ -1456,6 +1456,58 @@ x2 net1 net2 rcnetnest r=1 c={cpar}
     unset subcircuit result
 }
 
+test testSubcircuitClass-7.1 {test creation of Subcircuit class instance with nested subcircuit} -setup {
+    oo::class create RCnet {
+        superclass Subcircuit
+        constructor {} {
+            # define external pins of subcircuit
+            set pins {plus minus}
+            # define input parameters of subcircuit
+            set params {{r 100} {c 1e-6}}
+            # add elements to subcircuit definition
+            my add [R new 1 net1 plus -r {r -eq}]
+            my add [C new 1 net2 net3 -c {c -eq}]
+            my add [R new 5 minus net2 -model res_sem -l 10e-6 -w 100e-6]
+            my add [RModel new rsem1mod -tc1 0.1 -tc2 0.4]
+            # pass name, list of pins and list of parameters to Subcircuit constructor
+            next rcnet $pins $params
+        }
+    }
+    set subcircuit [RCnet new]
+    namespace eval [info object namespace $subcircuit] {           
+        oo::class create RCnetNest {
+            superclass Subcircuit
+            constructor {} {
+                set pins {plus minus}
+                set params {{r 100} {c 1e-6}}
+                my add [R new 1 net1 plus -r {r -eq}]
+                my add [C new 1 net2 net3 -c {c -eq}]
+                next rcnetnest $pins $params
+            }
+        }
+        set subcircuitNest [RCnetNest new]
+        my add $subcircuitNest
+        my add [SubcircuitInstanceAuto new $subcircuitNest 2 {net1 net2} -r 1 -c {cpar -eq}]
+    }
+
+} -body {
+    set result [$subcircuit genSPICEString]
+    
+} -result {.subckt rcnet plus minus r=100 c=1e-6
+r1 net1 plus {r}
+c1 net2 net3 {c}
+r5 minus net2 res_sem l=10e-6 w=100e-6
+.model rsem1mod r(tc1=0.1 tc2=0.4)
+.subckt rcnetnest plus minus r=100 c=1e-6
+r1 net1 plus {r}
+c1 net2 net3 {c}
+.ends rcnetnest
+x2 net1 net2 rcnetnest r=1 c={cpar}
+.ends rcnet} -cleanup {
+    rename RCnet ""
+    unset subcircuit result
+}
+
 test testSubcircuitClass-8 {test creation of Subcircuit class instance with genSPICEString interface} -body {
     oo::class create RCnet {
         superclass Subcircuit
@@ -1921,7 +1973,7 @@ test testParserClass-5 {test creation of Parser class instance} -setup {
 test testParserClass-6 {test creation of Parser class instance} -setup {
     set parser [Parser new {voltage divider netlist} path]
 } -body {
-    catch {[info object namespace $parser]::my BuildSubcktFromDef subcktName subcktBounds} errorStr
+    catch {[info object namespace $parser]::my BuildSubcktFromDef subcktName} errorStr
     return $errorStr
 } -result {Not implemented} -cleanup {
     unset parser errorStr

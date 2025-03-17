@@ -16,6 +16,7 @@
 
 package require Tcl 9.0-
 package require textutil::split
+package require struct::tree
 package require struct::list
 package require csv
 namespace import ::tcl::mathop::*

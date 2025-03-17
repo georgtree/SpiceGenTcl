@@ -18,6 +18,10 @@ set {::syntax(oo::configurable create::unexport)} {x x*}
 set {::syntax(oo::configurable create::variable)} {o? div*}
 }
 
+const additionalCommand {set ::knownCommands {
+next
+property}}
+
 set currentDir [file dirname [file normalize [info script]]]
 global env
 if {[string match -nocase *linux* $tcl_platform(os)]} {

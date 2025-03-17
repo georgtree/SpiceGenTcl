@@ -712,7 +712,7 @@ namespace eval ::SpiceGenTcl {
             if {$value eq {-sw}} {
                 dict append Params $paramName [::SpiceGenTcl::ParameterSwitch new $paramName]
             } else {
-		##nagelfar variable paramQual
+                ##nagelfar variable paramQual
                 switch $paramQual {
                     pos {
                         dict append Params $paramName [::SpiceGenTcl::ParameterPositional new $paramName $value]
@@ -1399,11 +1399,17 @@ namespace eval ::SpiceGenTcl {
         method getAllElemNames {} {
             # Gets names of all elements in netlist.
             # Returns: list of elements names
+            if {![info exists Elements]} {
+                return -code error "Netlist '[my configure -name]' doesn't have attached elements"
+            }
             return [dict keys $Elements]
         }
         method genSPICEString {} {
             # Creates netlist string for SPICE netlist.
             # Returns: SPICE netlist's string
+            if {![info exists Elements]} {
+                return -code error "Netlist '[my configure -name]' doesn't have attached elements"
+            }
             return [join [lmap element [dict values $Elements] {$element genSPICEString}] \n]
         }
     }
@@ -2183,7 +2189,7 @@ namespace eval ::SpiceGenTcl {
         property filepath
         variable filepath
         variable FileData
-        variable SubcktsBoundaries
+        variable SubcktsTree
         variable ElemsMethods
         variable DotsMethods
         variable SupModelsTypes
@@ -2210,6 +2216,8 @@ namespace eval ::SpiceGenTcl {
             set SubcircuitTemplate {oo::class create @classname@ {
                 superclass ::SpiceGenTcl::Subcircuit
                 constructor {} {
+                    @definitions@
+                    @elements@
                     set pins @pins@
                     set params @params@
                     next @subname@ $pins $params
@@ -2225,7 +2233,7 @@ namespace eval ::SpiceGenTcl {
         method GetSubcircuitLines {} {
             error "Not implemented"
         }
-        method BuildSubcktFromDef {subcktName subcktBounds} {
+        method BuildSubcktFromDef {subcktPath} {
             error "Not implemented"
         }
         method buildTopNetlist {} {
@@ -2233,19 +2241,29 @@ namespace eval ::SpiceGenTcl {
             if {![info exists FileData]} {
                 error "Parser object '[my configure -parsername]' doesn't have prepared data"
             }
-            set allLines $FileData
+            #set allLines $FileData
             set topNetlist [my configure -topnetlist]
             my GetSubcircuitLines
             # parse found subcircuits definitions first
-            if {[info exists SubcktsBoundaries]} {
-                set subcktsBoundaries $SubcktsBoundaries
-                dict for {subcktName subcktBounds} $subcktsBoundaries {
-                    my BuildSubcktFromDef $subcktName $subcktBounds
-                    lappend lines2remove {*}[lseq [@ $subcktBounds 0] [@ $subcktBounds 1]]
+            if {[info exists SubcktsTree]} {
+                set lines2remove {}
+                $SubcktsTree walk / -order post -type bfs node {
+                    if {$node eq {/}} {
+                        continue
+                    }
+                    my BuildSubcktFromDef $node
+                    if {[$SubcktsTree parent $node] eq {/}} {
+                        eval [$SubcktsTree get $node definition]
+                        $topNetlist add [eval {*}[list [string totitle [file tail $node]] new]]
+                    }
+                    set startLine [$SubcktsTree get $node startLine]
+                    set endLine [$SubcktsTree get $node endLine]
+                    set children [$SubcktsTree children $node]
+                    lappend lines2remove {*}[lseq $startLine $endLine]
                 }
-                set allLines [lremove $allLines {*}$lines2remove]
+                set FileData [lremove $FileData {*}$lines2remove]
             }
-            my BuildNetlist $allLines $topNetlist
+            my BuildNetlist $FileData $topNetlist
             return
         }
         method BuildNetlist {lines netlistObj} {
@@ -2263,8 +2281,20 @@ namespace eval ::SpiceGenTcl {
                 if {$firstChar eq {.}} {
                     set restChars [string tolower $restChars]
                     if {$restChars in $dots} {
-                        ##nagelfar ignore Non static subcommand
-                        my [dict get $DotsMethods $restChars] $line $netlistObj
+                        if {$restChars eq {model}} {
+                            ##nagelfar ignore Non static subcommand
+                            set modelCommands [my [dict get $DotsMethods $restChars] $line]
+                            if {[llength $modelCommands]==2} {
+                                eval [@ $modelCommands 0]
+                                $netlistObj add [eval {*}[list [@ $modelCommands 1]]]
+                            } else {
+                                ##nagelfar ignore Non static subcommand
+                                catch {$netlistObj add [eval {*}[list [my [dict get $DotsMethods $restChars] $line]]]}
+                            }
+                        } else {
+                            ##nagelfar ignore Non static subcommand
+                            $netlistObj add [eval {*}[list [my [dict get $DotsMethods $restChars] $line]]]
+                        }
                     } else {
                         puts "Line '$lineList' contains unsupported dot statement '$firstWord', skip that line"
                         continue
@@ -2272,7 +2302,7 @@ namespace eval ::SpiceGenTcl {
                 } elseif {[string match {[a-z]} $firstChar]} {
                     if {$firstChar in $elems} {
                         ##nagelfar ignore Non static subcommand
-                        my [dict get $ElemsMethods $firstChar] $line $netlistObj
+                        $netlistObj add [eval {*}[list [my [dict get $ElemsMethods $firstChar] $line]]]
                     } else {
                         puts "Line '$lineList' contains unsupported element '$firstWord', skip that line"
                         continue
@@ -2283,6 +2313,55 @@ namespace eval ::SpiceGenTcl {
                 }
             }
             return
+        }
+        method BuildSubcktNetlist {lines} {
+            # Builds netlist from passed lines and add it to passed object
+            #   lines - list of lines to parse
+            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` and its childrens
+            set elems [dkeys $ElemsMethods]
+            set dots [dkeys $DotsMethods]
+            set netlist {}
+            for {set i 1} {$i<[= {[llength $lines]-1}]} {incr i} {
+                set line [@ $lines $i]
+                set lineList [split $line]
+                set firstWord [@ $lineList 0]
+                set firstChar [string index $firstWord 0]
+                set restChars [string range $firstWord 1 end]
+                if {$firstChar eq {.}} {
+                    set restChars [string tolower $restChars]
+                    if {$restChars in $dots} {
+                        if {$restChars eq {model}} {
+                            ##nagelfar ignore Non static subcommand
+                            set modelCommands [my [dict get $DotsMethods $restChars] $line]
+                            if {[llength $modelCommands]==2} {
+                                eval [@ $modelCommands 0]
+                                lappend netlist [list [@ $modelCommands 1]]
+                            } else {
+                                ##nagelfar ignore Non static subcommand
+                                lappend netlist [list [my [dict get $DotsMethods $restChars] $line]]
+                            }
+                        } else {
+                            ##nagelfar ignore Non static subcommand
+                            lappend netlist [list [my [dict get $DotsMethods $restChars] $line]]
+                        }
+                    } else {
+                        puts "Line '$lineList' contains unsupported dot statement '$firstWord', skip that line"
+                        continue
+                    }
+                } elseif {[string match {[a-z]} $firstChar]} {
+                    if {$firstChar in $elems} {
+                        ##nagelfar ignore Non static subcommand
+                        lappend netlist [list [my [dict get $ElemsMethods $firstChar] $line]]
+                    } else {
+                        puts "Line '$lineList' contains unsupported element '$firstWord', skip that line"
+                        continue
+                    }
+                } else {
+                    puts "Line '$lineList' starts with illegal character '$firstChar', skip that line"
+                    continue
+                }
+            }
+            return $netlist
         }
         method ParseParams {list start {exclude {}} {format arg}} {
             # Parses parameters from the list starts from `start` that is in form `name=value`, or `name={value}`.
