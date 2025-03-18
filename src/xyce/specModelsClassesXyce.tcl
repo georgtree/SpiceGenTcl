@@ -1,10 +1,10 @@
 #  .|'''.|            ||                   ..|'''.|                   |''||''|         '||'
-#  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||  
-#   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||  
-# .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||  
-# |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||. 
-#            ||                                                                             
-#           ''''                                                                            
+#  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||
+#   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||
+# .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||
+# |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||.
+#            ||
+#           ''''
 # specModelsClassesXyce.tcl
 # Describes Xyce models classes
 #
@@ -15,17 +15,17 @@
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 
 namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
-    
-    namespace export RModel CModel LModel VSwitchModel CSwitchModel 
 
-    
-###  RModel class 
-    
+    namespace export RModel CModel LModel VSwitchModel CSwitchModel
+
+
+###  RModel class
+
     oo::class create RModel {
         superclass ::SpiceGenTcl::Model
         constructor {name args} {
             # Creates object of class `RModel` that describes semiconductor resistor model.
-            #  name - name of the model 
+            #  name - name of the model
             #  args - keyword instance parameters, for details please refer to Xyce reference manual, 2.3.7 section.
             # Example of class initialization:
             # ```
@@ -36,13 +36,13 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
         }
     }
 
-###  CModel class 
-    
+###  CModel class
+
     oo::class create CModel {
         superclass ::SpiceGenTcl::Model
         constructor {name args} {
             # Creates object of class `CModel` that describes semiconductor capacitor model.
-            #  name - name of the model 
+            #  name - name of the model
             #  args - keyword instance parameters, for details please refer to Xyce reference manual, 2.3.4 section.
             # Example of class initialization:
             # ```
@@ -53,13 +53,13 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
         }
     }
 
-###  LModel class 
-    
+###  LModel class
+
     oo::class create LModel {
         superclass ::SpiceGenTcl::Model
         constructor {name args} {
             # Creates object of class `LModel` that describes inductor model.
-            #  name - name of the model 
+            #  name - name of the model
             #  args - keyword instance parameters, for details please refer to Xyce reference manual, 2.3.5 section.
             # Example of class initialization:
             # ```
@@ -68,15 +68,15 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # Synopsis: name ?-option value ...?
             next $name l [my argsPreprocess {ic l tc1 tc2 tnom} {*}$args]
         }
-    }    
-    
-###  VSwitchModel class 
-    
+    }
+
+###  VSwitchModel class
+
     oo::class create VSwitchModel {
         superclass ::SpiceGenTcl::Model
         constructor {name args} {
             # Creates object of class `VSwitchModel` that describes voltage switch model.
-            #  name - name of the model 
+            #  name - name of the model
             #  args - keyword instance parameters, for details please refer to Xyce reference manual, 2.3.22 section.
             # Example of class initialization:
             # ```
@@ -87,13 +87,13 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
         }
     }
 
-###  CSwitchModel class 
-    
+###  CSwitchModel class
+
     oo::class create CSwitchModel {
         superclass ::SpiceGenTcl::Model
         constructor {name args} {
             # Creates object of class `CSwitchModel` that describes current switch model.
-            #  name - name of the model 
+            #  name - name of the model
             #  args - keyword instance parameters, for details please refer to Xyce reference manual, 2.3.22 section.
             # Example of class initialization:
             # ```
@@ -104,18 +104,18 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
         }
     }
 }
-    
-namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {    
-    
+
+namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
+
     namespace export DiodeModel BjtGPModel Jfet1Model Jfet2Model Mesfet1Model
-    
-###  DiodeModel class 
-    
+
+###  DiodeModel class
+
     oo::class create DiodeModel {
         superclass ::SpiceGenTcl::Model
         constructor {name args} {
             # Creates object of class `DiodeModel` that describes semiconductor diode model.
-            #  name - name of the model 
+            #  name - name of the model
             #  args - keyword model parameters, for details please refer to Xyce reference manual, 2.3.8 section.
             # Example of class initialization:
             # ```
@@ -126,15 +126,15 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
                                      nr ns php rs tbv1 tbv2 tikf tnom trs trs1 trs2 tt vb vj vjsw xti}
             next $name d [my argsPreprocess $paramsNames {*}$args]
         }
-    }    
-    
-###  BjtGPModel class 
-    
+    }
+
+###  BjtGPModel class
+
     oo::class create BjtGPModel {
         superclass ::SpiceGenTcl::Model
         constructor {name type args} {
             # Creates object of class `BjtGPModel` that describes Gummel-Poon model of semiconductor bipolar transistor.
-            #  name - name of the model 
+            #  name - name of the model
             #  type - npn or pnp
             #  args - keyword model parameters, for details please refer to Xyce reference manual, 2.3.17 section.
             # Example of class initialization:
@@ -149,15 +149,15 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             set params [my argsPreprocess $paramsNames {*}$args]
             next $name $type [linsert $params 0 {level 1}]
         }
-    } 
-        
-###  Jfet1Model class 
-    
+    }
+
+###  Jfet1Model class
+
     oo::class create Jfet1Model {
         superclass ::SpiceGenTcl::Model
         constructor {name type args} {
             # Creates object of class `Jfet1Model` that describes JFET level 1 model with Parker Skellern modification.
-            #  name - name of the model 
+            #  name - name of the model
             #  type - njf or pjf
             #  args - keyword model parameters, for details please refer to Xyce reference manual, 2.3.18 section.
             # Example of class initialization:
@@ -169,14 +169,14 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             next $name $type [linsert [my argsPreprocess $paramsNames {*}$args] 0 {level 1}]
         }
     }
-    
-###  Jfet2Model class 
-    
+
+###  Jfet2Model class
+
     oo::class create Jfet2Model {
         superclass ::SpiceGenTcl::Model
         constructor {name type args} {
             # Creates object of class `Jfet2Model` that describes JFET level 2 model with Parker Skellern modification.
-            #  name - name of the model 
+            #  name - name of the model
             #  type - njf or pjf
             #  args - keyword model parameters, for details please refer to Xyce reference manual, 2.3.18 section.
             # Example of class initialization:
@@ -187,15 +187,15 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             set paramsNames {af b beta cgd cgs delta fc is kf lambda pb rd rs tempmodel theta tnom vto}
             next $name $type [linsert [my argsPreprocess $paramsNames {*}$args] 0 {level 2}]
         }
-    } 
-    
-###  Mesfet1Model class 
-    
+    }
+
+###  Mesfet1Model class
+
     oo::class create Mesfet1Model {
         superclass ::SpiceGenTcl::Model
         constructor {name type args} {
             # Creates object of class `Mesfet1Model` that describes MESFET model by Statz e.a..
-            #  name - name of the model 
+            #  name - name of the model
             #  type - nmf or pmf
             #  args - keyword model parameters, for details please refer to Xyce reference manual, 2.3.19 section.
             # Example of class initialization:
@@ -206,5 +206,5 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             set paramsNames {af alpha b beta cgd cgs fc is kf lambda pb rd rs tempmodel tnom vto}
             next $name $type [linsert [my argsPreprocess $paramsNames {*}$args] 0 {level 1}]
         }
-    } 
+    }
 }

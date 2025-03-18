@@ -1,10 +1,10 @@
 #  .|'''.|            ||                   ..|'''.|                   |''||''|         '||'
-#  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||  
-#   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||  
-# .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||  
-# |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||. 
-#            ||                                                                             
-#           ''''                                                                            
+#  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||
+#   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||
+# .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||
+# |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||.
+#            ||
+#           ''''
 # specAnalysesClassesCommon.tcl
 # Describes Common analyses classes
 #
@@ -21,14 +21,14 @@ namespace eval ::SpiceGenTcl {
 }
 
 namespace eval ::SpiceGenTcl::Common::Analyses {
-    
-### Dc class 
+
+### Dc class
 
     oo::class create Dc {
         superclass ::SpiceGenTcl::Analysis
         mixin ::SpiceGenTcl::Utility
         constructor {args} {
-            # Creates object of class `Dc` that describes DC analysis. 
+            # Creates object of class `Dc` that describes DC analysis.
             #  -src - name of independent voltage or current source, a resistor, or the circuit temperature
             #  -start - start value
             #  -stop - stop value
@@ -58,13 +58,13 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
         }
     }
 
-###  Ac class 
+###  Ac class
 
     oo::class create Ac {
         superclass ::SpiceGenTcl::Analysis
         mixin ::SpiceGenTcl::Utility
         constructor {args} {
-            # Creates object of class `Ac` that describes AC analysis. 
+            # Creates object of class `Ac` that describes AC analysis.
             #  -variation - parameter that defines frequency scale, could be dec, oct or lin
             #  -n - number of points
             #  -fstart - start frequency
@@ -93,14 +93,14 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
             next ac $params -name $name
         }
     }
-    
-###  Tran class 
+
+###  Tran class
 
     oo::class create Tran {
         superclass ::SpiceGenTcl::Analysis
         mixin ::SpiceGenTcl::Utility
         constructor {args} {
-            # Creates object of class `Tran` that describes TRAN analysis. 
+            # Creates object of class `Tran` that describes TRAN analysis.
             #  -tstep - size of maximum time step for plotting
             #  -tstop - stop time value
             #  -tstart - start time of saving data, optional
@@ -133,14 +133,14 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
             next tran $params -name $name
         }
     }
-    
-###  Op class 
+
+###  Op class
 
     oo::class create Op {
         superclass ::SpiceGenTcl::Analysis
         mixin ::SpiceGenTcl::Utility
         constructor {args} {
-            # Creates object of class `Op` that describes OP analysis. 
+            # Creates object of class `Op` that describes OP analysis.
             #  -name - name argument, optional
             # ```
             # .op

@@ -1,10 +1,10 @@
 #  .|'''.|            ||                   ..|'''.|                   |''||''|         '||'
-#  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||  
-#   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||  
-# .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||  
-# |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||. 
-#            ||                                                                             
-#           ''''                                                                            
+#  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||
+#   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||
+# .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||
+# |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||.
+#            ||
+#           ''''
 # specSimulatorClassesLtspice.tcl
 # Describes LTspice simulators classes
 #
@@ -15,9 +15,9 @@
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 
 namespace eval ::SpiceGenTcl::Ltspice::Simulators {
-    
+
     namespace export Batch BatchLiveLog
-    
+
     oo::configurable create Batch {
         # this class represent batch simulation of LTspice
         superclass ::SpiceGenTcl::Simulator
@@ -25,7 +25,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Simulators {
             if {[info exists log]} {
                 return $log
             } else {
-                return -code error "Log does not exists for simulator '[my configure -name]'" 
+                return -code error "Log does not exists for simulator '[my configure -name]'"
             }
         }
         variable log
@@ -98,7 +98,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Simulators {
             set logFile [open [file join [my configure -runlocation] ${LastRunFileName}.log] r+]
             set log [read $logFile]
             close $logFile
-            return 
+            return
         }
         method readData {} {
             # Reads raw data file, create RawFile object and return it's reference name.

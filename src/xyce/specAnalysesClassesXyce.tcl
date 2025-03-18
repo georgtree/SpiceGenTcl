@@ -1,10 +1,10 @@
 #  .|'''.|            ||                   ..|'''.|                   |''||''|         '||'
-#  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||  
-#   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||  
-# .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||  
-# |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||. 
-#            ||                                                                             
-#           ''''                                                                            
+#  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||
+#   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||
+# .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||
+# |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||.
+#            ||
+#           ''''
 # specAnalysesClassesXyce.tcl
 # Describes Xyce analyses classes
 #
@@ -22,29 +22,29 @@ namespace eval ::SpiceGenTcl {
 
 namespace eval ::SpiceGenTcl::Xyce::Analyses {
 
-    
-###  Dc class 
+
+###  Dc class
 
     oo::class create Dc {
         superclass ::SpiceGenTcl::Common::Analyses::Dc
     }
 
-###  Ac class 
+###  Ac class
 
     oo::class create Ac {
         superclass ::SpiceGenTcl::Common::Analyses::Ac
     }
 
-###  SensAc class 
+###  SensAc class
 
     oo::class create Sens {
         superclass ::SpiceGenTcl::Analysis
         mixin ::SpiceGenTcl::Utility
         constructor {args} {
-            # Creates object of class `Sens` that describes SENS ac analysis. 
+            # Creates object of class `Sens` that describes SENS ac analysis.
             #  -objfunc - output expression
             #  -param - circuit parameter(s)
-            #  -name - name argument, optional 
+            #  -name - name argument, optional
             # ```
             # .SENS objfunc=<output =ession(s)> param=<circuit parameter(s)>
             # ```
@@ -65,14 +65,14 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
             next sens $params -name $name
         }
     }
-    
-###  Tran class 
+
+###  Tran class
 
     oo::class create Tran {
         superclass ::SpiceGenTcl::Common::Analyses::Tran
     }
-    
-###  Op class 
+
+###  Op class
 
     oo::class create Op {
         superclass ::SpiceGenTcl::Common::Analyses::Op

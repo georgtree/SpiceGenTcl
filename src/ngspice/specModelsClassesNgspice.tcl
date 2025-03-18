@@ -1,10 +1,10 @@
 #  .|'''.|            ||                   ..|'''.|                   |''||''|         '||'
-#  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||  
-#   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||  
-# .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||  
-# |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||. 
-#            ||                                                                             
-#           ''''                                                                            
+#  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||
+#   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||
+# .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||
+# |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||.
+#            ||
+#           ''''
 # specModelsClassesNgspice.tcl
 # Describes Ngspice models classes
 #
@@ -15,17 +15,17 @@
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 
 namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
-    
-    namespace export RModel CModel LModel VSwitchModel CSwitchModel 
-    
-###  RModel class 
-    
+
+    namespace export RModel CModel LModel VSwitchModel CSwitchModel
+
+###  RModel class
+
     oo::class create RModel {
         superclass ::SpiceGenTcl::Model
         constructor {name args} {
             # Creates object of class `RModel` that describes semiconductor resistor model.
-            #  name - name of the model 
-            #  args - keyword instance parameters 
+            #  name - name of the model
+            #  args - keyword instance parameters
             # Example of class initialization:
             # ```
             # ::SpiceGenTcl::Ngspice::BasicDevices::RModel new resmod -tc1 1 -tc2 2
@@ -35,14 +35,14 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
         }
     }
 
-###  CModel class 
-    
+###  CModel class
+
     oo::class create CModel {
         superclass ::SpiceGenTcl::Model
         constructor {name args} {
             # Creates object of class `CModel` that describes semiconductor capacitor model.
-            #  name - name of the model 
-            #  args - keyword instance parameters 
+            #  name - name of the model
+            #  args - keyword instance parameters
             # Example of class initialization:
             # ```
             # ::SpiceGenTcl::Ngspice::BasicDevices::CModel new capmod -tc1 1 -tc2 2
@@ -52,14 +52,14 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
         }
     }
 
-###  LModel class 
-    
+###  LModel class
+
     oo::class create LModel {
         superclass ::SpiceGenTcl::Model
         constructor {name args} {
             # Creates object of class `LModel` that describes inductor model.
-            #  name - name of the model 
-            #  args - keyword instance parameters 
+            #  name - name of the model
+            #  args - keyword instance parameters
             # Example of class initialization:
             # ```
             # ::SpiceGenTcl::Ngspice::BasicDevices::LModel new indmod -tc1 1 -tc2 2
@@ -67,15 +67,15 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # Synopsis: name ?-option value ...?
             next $name l [my argsPreprocess {ind csect dia length tc1 tc2 tnom nt mu} {*}$args]
         }
-    }    
-###  VSwitchModel class 
-    
+    }
+###  VSwitchModel class
+
     oo::class create VSwitchModel {
         superclass ::SpiceGenTcl::Model
         constructor {name args} {
             # Creates object of class `VSwitchModel` that describes voltage switch model.
-            #  name - name of the model 
-            #  args - keyword instance parameters 
+            #  name - name of the model
+            #  args - keyword instance parameters
             # Example of class initialization:
             # ```
             # ::SpiceGenTcl::Ngspice::BasicDevices::VSwitchModel new swmod -vt 1 -vh 0.5 -ron 1 -roff 1e6
@@ -85,14 +85,14 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
         }
     }
 
-###  CSwitchModel class 
-    
+###  CSwitchModel class
+
     oo::class create CSwitchModel {
         superclass ::SpiceGenTcl::Model
         constructor {name args} {
             # Creates object of class `CSwitchModel` that describes current switch model.
-            #  name - name of the model 
-            #  args - keyword instance parameters 
+            #  name - name of the model
+            #  args - keyword instance parameters
             # Example of class initialization:
             # ```
             # ::SpiceGenTcl::Ngspice::BasicDevices::CSwitchModel new cswmod -it 1 -ih 0.5 -ron 1 -roff 1e6
@@ -102,18 +102,18 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
         }
     }
 }
-    
-namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {    
-    
+
+namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
+
     namespace export DiodeModel BjtGPModel Jfet1Model Jfet2Model Mesfet1Model
-    
-###  DiodeModel class 
-    
+
+###  DiodeModel class
+
     oo::class create DiodeModel {
         superclass ::SpiceGenTcl::Model
         constructor {name args} {
             # Creates object of class `DiodeModel` that describes semiconductor diode model.
-            #  name - name of the model 
+            #  name - name of the model
             #  args - keyword model parameters, for details please see Ngspice manual, chapter 7.
             # Example of class initialization:
             # ```
@@ -126,15 +126,15 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
                                      {cta ctc}}
             next $name d [my argsPreprocess $paramsNames {*}$args]
         }
-    }    
-    
-###  BjtGPModel class 
-    
+    }
+
+###  BjtGPModel class
+
     oo::class create BjtGPModel {
         superclass ::SpiceGenTcl::Model
         constructor {name type args} {
             # Creates object of class `BjtGPModel` that describes Gummel-Poon model of semiconductor bipolar transistor.
-            #  name - name of the model 
+            #  name - name of the model
             #  type - npn or pnp
             #  args - keyword model parameters, for details please see Ngspice manual, chapter 8.
             # Example of class initialization:
@@ -151,15 +151,15 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             set params [my argsPreprocess $paramsNames {*}$args]
             next $name $type [linsert $params 0 {level 1}]
         }
-    } 
-        
-###  Jfet1Model class 
-    
+    }
+
+###  Jfet1Model class
+
     oo::class create Jfet1Model {
         superclass ::SpiceGenTcl::Model
         constructor {name type args} {
             # Creates object of class `Jfet1Model` that describes JFET level 1 model with Parker Skellern modification.
-            #  name - name of the model 
+            #  name - name of the model
             #  type - njf or pjf
             #  args - keyword model parameters, for details please see Ngspice manual, chapter 9.
             # Example of class initialization:
@@ -172,14 +172,14 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             next $name $type [linsert [my argsPreprocess $paramsNames {*}$args] 0 {level 1}]
         }
     }
-    
-###  Jfet2Model class 
-    
+
+###  Jfet2Model class
+
     oo::class create Jfet2Model {
         superclass ::SpiceGenTcl::Model
         constructor {name type args} {
             # Creates object of class `Jfet2Model` that describes JFET level 2 model with Parker Skellern modification.
-            #  name - name of the model 
+            #  name - name of the model
             #  type - njf or pjf
             #  args - keyword model parameters, for details please see Ngspice manual, chapter 9.
             # Example of class initialization:
@@ -191,15 +191,15 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
                                      q rs rd  taud taug vbd vbi vst vto xc xi z rg lg ls ld cdss afac nfing tnom temp}
             next $name $type [linsert [my argsPreprocess $paramsNames {*}$args] 0 {level 2}]
         }
-    } 
-    
-###  Mesfet1Model class 
-    
+    }
+
+###  Mesfet1Model class
+
     oo::class create Mesfet1Model {
         superclass ::SpiceGenTcl::Model
         constructor {name type args} {
             # Creates object of class `Mesfet1Model` that describes MESFET model by Statz e.a..
-            #  name - name of the model 
+            #  name - name of the model
             #  type - nmf or pmf
             #  args - keyword model parameters, for details please see Ngspice manual, chapter 10.
             # Example of class initialization:
@@ -210,5 +210,5 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             set params [my argsPreprocess {vto beta b alpha lambda rd rs cgs cgd pb kf af fc} {*}$args]
             next $name $type [linsert $params 0 {level 1}]
         }
-    } 
+    }
 }

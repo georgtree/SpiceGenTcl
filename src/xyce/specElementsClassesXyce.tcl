@@ -1,10 +1,10 @@
 #  .|'''.|            ||                   ..|'''.|                   |''||''|         '||'
-#  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||  
-#   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||  
-# .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||  
-# |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||. 
-#            ||                                                                             
-#           ''''                                                                            
+#  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||
+#   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||
+# .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||
+# |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||.
+#            ||
+#           ''''
 # specElementsClassesXyce.tcl
 # Describes Xyce elements classes
 #
@@ -25,21 +25,21 @@ namespace eval ::SpiceGenTcl {
     }
     namespace eval Xyce::SemiconductorDevices {
         namespace export Diode D Bjt Q BjtSub QSub BjtSubTj QSubTj Jfet J Mesfet Z Mosfet M
-    } 
+    }
 }
 
 
 
-###  Basic devices 
+###  Basic devices
 
 namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
-    
-####  Resistor class 
+
+####  Resistor class
 
     oo::class create Resistor {
         superclass ::SpiceGenTcl::Device
         constructor {name npNode nmNode args} {
-            # Creates object of class `Resistor` that describes resistor. 
+            # Creates object of class `Resistor` that describes resistor.
             #  name - name of the device without first-letter designator R
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
@@ -71,7 +71,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ```
             # ::SpiceGenTcl::Xyce::BasicDevices::Resistor new 1 netp netm -model resm -l 1e-6 -w 10e-6
             # ```
-            # Synopsis: name npNode nmNode -r value ?-tc1 value? ?-tc2 value? ?-tce value? ?-m value? ?-temp value? 
+            # Synopsis: name npNode nmNode -r value ?-tc1 value? ?-tc2 value? ?-tce value? ?-m value? ?-temp value?
             # Synopsis: name npNode nmNode -r value -beh ?-tc1 value? ?-tc2 value? ?-tce value? ?-m value? ?-temp value?
             # Synopsis: name npNode nmNode -r value -model ?-tc1 value? ?-tc2 value? ?-tce value? ?-m value? ?-temp value?
             #   ?-l value? ?-w value?
@@ -110,20 +110,20 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             next r$name [list [list np $npNode] [list nm $nmNode]] $params
         }
     }
-    
-####  R class 
-    
+
+####  R class
+
     # alias for Resistor class
     oo::class create R {
         superclass Resistor
     }
 
-####  Capacitor class 
+####  Capacitor class
 
     oo::class create Capacitor {
         superclass ::SpiceGenTcl::Device
         constructor {name npNode nmNode args} {
-            # Creates object of class `Capacitor` that describes capacitor. 
+            # Creates object of class `Capacitor` that describes capacitor.
             #  name - name of the device without first-letter designator C
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
@@ -213,20 +213,20 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             next c$name [list [list np $npNode] [list nm $nmNode]] $params
         }
     }
-    
-####  C class 
+
+####  C class
 
     # alias for Capacitor class
     oo::class create C {
         superclass Capacitor
     }
 
-####  Inductor class 
+####  Inductor class
 
     oo::class create Inductor {
         superclass ::SpiceGenTcl::Device
         constructor {name npNode nmNode args} {
-            # Creates object of class `Inductor` that describes inductor. 
+            # Creates object of class `Inductor` that describes inductor.
             #  name - name of the device without first-letter designator L
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
@@ -249,8 +249,8 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ```
             # ::SpiceGenTcl::Xyce::BasicDevices::Inductor new 1 netp netm -l 1e-6 -model indm
             # ```
-            # Synopsis: name npNode nmNode -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value? 
-            # Synopsis: name npNode nmNode -model value -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value?   
+            # Synopsis: name npNode nmNode -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value?
+            # Synopsis: name npNode nmNode -model value -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value?
             #   ?-ic value?
             set arguments [argparse -inline {
                 {-l= -required}
@@ -278,42 +278,42 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             next l$name [list [list np $npNode] [list nm $nmNode]] $params
         }
     }
-    
-####  L class 
-    
+
+####  L class
+
     # alias for Inductor class
     oo::class create L {
         superclass Inductor
-    }   
-    
-####  VSwitch class 
-  
+    }
+
+####  VSwitch class
+
     oo::class create VSwitch {
         superclass ::SpiceGenTcl::Common::BasicDevices::VSwitch
     }
 
-####  VSw class 
-    
+####  VSw class
+
     # alias for VSwitch class
     oo::class create VSw {
         superclass VSwitch
     }
-    
-####  CSwitch class 
-  
+
+####  CSwitch class
+
     oo::class create CSwitch {
         superclass ::SpiceGenTcl::Common::BasicDevices::CSwitch
     }
 
-####  W class 
-    
+####  W class
+
     # alias for CSwitch class
     oo::class create W {
         superclass CSwitch
     }
-    
-####  GenSwitch class 
-  
+
+####  GenSwitch class
+
     oo::class create GenSwitch {
         superclass ::SpiceGenTcl::Device
         constructor {name npNode nmNode args} {
@@ -349,14 +349,14 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
         }
     }
 
-####  GenS class 
-    
+####  GenS class
+
     # alias for GenSwitch class
     oo::class create GenS {
         superclass GenSwitch
-    }        
-    
-####  SubcircuitInstance class 
+    }
+
+####  SubcircuitInstance class
 
     oo::class create SubcircuitInstance {
         superclass ::SpiceGenTcl::Device
@@ -379,15 +379,15 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
         }
     }
 
-####  X class 
-    
+####  X class
+
     # alias for SubcircuitInstance class
     oo::class create X {
         superclass SubcircuitInstance
     }
-    
-####  SubcircuitInstanceAuto class 
-    
+
+####  SubcircuitInstanceAuto class
+
     oo::class create SubcircuitInstanceAuto {
         superclass ::SpiceGenTcl::Device
         constructor {subcktObj name nodes args} {
@@ -405,7 +405,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstanceAuto new $subcktObj 1 {net1 net2} -r 1 -c {cpar -eq}
             # ```
             # Synopsis: subcktObj name nodes ?-paramName {paramValue ?-eq?} ...?
-            
+
             # check that inputs object class is Subcircuit
             if {[info object class $subcktObj "::SpiceGenTcl::Subcircuit"]!=1} {
                 set objClass [info object class $subcktObj]
@@ -413,7 +413,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
                         '::SpiceGenTcl::Subcircuit'"
             }
             # get name of subcircuit
-            set subName [$subcktObj configure -name] 
+            set subName [$subcktObj configure -name]
             # get pins names of subcircuit
             set pinsNames [dict keys [$subcktObj getPins]]
             # check if number of pins in subcircuit definition matchs the number of supplied nodes
@@ -452,157 +452,157 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
         }
     }
 
-####  XAuto class 
-    
+####  XAuto class
+
     # alias for SubcircuitInstanceAuto class
     oo::class create XAuto {
         superclass SubcircuitInstanceAuto
     }
 }
 
-###  Sources devices 
+###  Sources devices
 
 namespace eval ::SpiceGenTcl::Xyce::Sources {
 
-    
-####  Vdc class 
-        
+
+####  Vdc class
+
     oo::class create Vdc {
         superclass ::SpiceGenTcl::Common::Sources::Vdc
     }
 
-####  Vac class 
-    
+####  Vac class
+
     oo::class create Vac {
         superclass ::SpiceGenTcl::Common::Sources::Vac
     }
-    
-####  Vpulse class 
+
+####  Vpulse class
 
     oo::class create Vpulse {
         superclass ::SpiceGenTcl::Common::Sources::Vpulse
-    }  
-    
-####  Vsin class 
+    }
+
+####  Vsin class
 
     oo::class create Vsin {
         superclass ::SpiceGenTcl::Common::Sources::Vsin
     }
-    
-####  Vexp class 
+
+####  Vexp class
 
     oo::class create Vexp {
         superclass ::SpiceGenTcl::Common::Sources::Vexp
     }
-    
-####  Vpwl class 
+
+####  Vpwl class
 
     oo::class create Vpwl {
         superclass ::SpiceGenTcl::Common::Sources::Vpwl
-    }    
-    
-####  Vsffm class 
+    }
+
+####  Vsffm class
 
     oo::class create Vsffm {
         superclass ::SpiceGenTcl::Common::Sources::Vsffm
-    }     
-    
-####  Idc class 
+    }
+
+####  Idc class
 
     oo::class create Idc {
         superclass ::SpiceGenTcl::Common::Sources::Idc
     }
 
-####  Iac class 
+####  Iac class
 
     oo::class create Iac {
         superclass ::SpiceGenTcl::Common::Sources::Iac
     }
-    
-####  Ipulse class 
+
+####  Ipulse class
 
     oo::class create Ipulse {
         superclass ::SpiceGenTcl::Common::Sources::Ipulse
     }
-    
-####  Isin class 
+
+####  Isin class
 
     oo::class create Isin {
         superclass ::SpiceGenTcl::Common::Sources::Isin
     }
-    
-####  Iexp class 
+
+####  Iexp class
 
     oo::class create Iexp {
         superclass ::SpiceGenTcl::Common::Sources::Iexp
     }
 
-####  Ipwl class 
+####  Ipwl class
 
     oo::class create Ipwl {
         superclass ::SpiceGenTcl::Common::Sources::Ipwl
-    }   
-    
-####  Isffm class 
+    }
+
+####  Isffm class
 
     oo::class create Isffm {
         superclass ::SpiceGenTcl::Common::Sources::Isffm
-    }        
-    
-####  Vccs class 
-  
+    }
+
+####  Vccs class
+
     oo::class create Vccs {
         superclass ::SpiceGenTcl::Common::Sources::Vccs
     }
 
-####  G class 
-    
+####  G class
+
     # alias for Vccs class
     oo::class create G {
         superclass Vccs
-    }    
+    }
 
-####  Vcvs class 
-  
+####  Vcvs class
+
     oo::class create Vcvs {
         superclass ::SpiceGenTcl::Common::Sources::Vcvs
     }
 
-####  E class 
-    
+####  E class
+
     # alias for Vcvs class
     oo::class create E {
         superclass Vcvs
-    } 
-    
-####  Cccs class 
-  
+    }
+
+####  Cccs class
+
     oo::class create Cccs {
         superclass ::SpiceGenTcl::Common::Sources::Cccs
     }
 
-####  F class 
-    
+####  F class
+
     # alias for Cccs class
     oo::class create F {
         superclass Cccs
-    } 
-        
-####  Ccvs class 
-  
+    }
+
+####  Ccvs class
+
     oo::class create Ccvs {
         superclass ::SpiceGenTcl::Common::Sources::Ccvs
     }
 
-####  H class 
-    
+####  H class
+
     # alias for Ccvs class
     oo::class create H {
         superclass Ccvs
-    } 
-    
-####  BehaviouralSource class 
-    
+    }
+
+####  BehaviouralSource class
+
     oo::class create BehaviouralSource {
         superclass ::SpiceGenTcl::Device
         constructor {name npNode nmNode args} {
@@ -647,19 +647,19 @@ namespace eval ::SpiceGenTcl::Xyce::Sources {
         }
     }
 
-####  B class 
-    
+####  B class
+
     # alias for BehaviouralSource class
     oo::class create B {
         superclass BehaviouralSource
     }
 }
-###  SemiconductorDevices 
+###  SemiconductorDevices
 
 namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
-    
-####  Diode class 
-    
+
+####  Diode class
+
     oo::class create Diode {
         superclass ::SpiceGenTcl::Device
         constructor {name npNode nmNode args} {
@@ -730,14 +730,14 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
     }
 
 ####  D class #
-    
+
     # alias for Diode class
     oo::class create D {
         superclass Diode
     }
-    
-####  Bjt class 
-    
+
+####  Bjt class
+
     oo::class create Bjt {
         superclass ::SpiceGenTcl::Device
         constructor {name ncNode nbNode neNode args} {
@@ -753,7 +753,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             #  -ic1 - initial conditions for vbe, optional
             #  -ic2 - initial conditions for vce, optional
             #  -ns - name of node connected to substrate pin, optional
-            #  -tj - name of node connected to thermal pin, optional, requires -ns 
+            #  -tj - name of node connected to thermal pin, optional, requires -ns
             # ```
             # QXXXXXXX nc nb ne <ns> <tj> mname <area=val> <areac=val>
             # + <areab=val> <m=val> <off> <ic=vbe,vce> <temp=val>
@@ -763,7 +763,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             # ```
             # ::SpiceGenTcl::Xyce::SemiconductorDevices::Bjt new 1 netc netb nete -model bjtmod -ns nets -area 1e-3
             # ```
-            # Synopsis: name ncNode nbNode neNode -model value ?-ns value ?-tj value?? ?-area value? ?-m value? 
+            # Synopsis: name ncNode nbNode neNode -model value ?-ns value ?-tj value?? ?-area value? ?-m value?
             #   ?-temp value? ?-off? ?-ic1 value? ?-ic2 value?
             set arguments [argparse -inline {
                 {-model= -required}
@@ -775,7 +775,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
                 -ic2=
                 -ns=
                 {-tj= -require {ns}}
-            }]            
+            }]
             lappend params [list model [dget $arguments model] -posnocheck]
             if {[dexist $arguments area]} {
                 set areaVal [dget $arguments area]
@@ -813,14 +813,14 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
     }
 
 ####  Q class #
-    
+
     # alias for Bjt class
     oo::class create Q {
         superclass Bjt
     }
-    
-####  Jfet class 
-    
+
+####  Jfet class
+
     oo::class create Jfet {
         superclass ::SpiceGenTcl::Device
         constructor {name ndNode ngNode nsNode args} {
@@ -864,14 +864,14 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
     }
 
 ####  J class #
-    
+
     # alias for Jfet class
     oo::class create J {
         superclass Jfet
     }
-    
-####  Mesfet class 
-    
+
+####  Mesfet class
+
     oo::class create Mesfet {
         superclass ::SpiceGenTcl::Device
         constructor {name ndNode ngNode nsNode args} {
@@ -915,14 +915,14 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
     }
 
 ####  Z class #
-    
+
     # alias for Mesfet class
     oo::class create Z {
         superclass Mesfet
-    }   
- 
-####  Mosfet class 
-    
+    }
+
+####  Mosfet class
+
     oo::class create Mosfet {
         superclass ::SpiceGenTcl::Device
         constructor {name ndNode ngNode nsNode args} {
@@ -966,7 +966,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             # ```
             # Synopsis: name ndNode ngNode nsNode -model value ?-n4 value ?-n5 value ?-n6 value ?-n7 value???? ?-m value?
             #   ?-l value? ?-w value? ?-ad value|-nrd value? ?-as value|-nrs value? ?-temp value? ?-off? ?-pd value?
-            #   ?-ps value? ?-ic \{value value value\}? 
+            #   ?-ps value? ?-ic \{value value value\}?
             #   ?-custparams param1 \{param1Val ?-eq|-poseq|-posnocheck|-pos|-nocheck?\} ...?
             set arguments [argparse -inline {
                 {-model= -required}
@@ -1023,13 +1023,9 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
     }
 
 ####  M class #
-    
+
     # alias for Mosfet class
     oo::class create M {
         superclass Mosfet
-    }    
+    }
 }
-
-
-
-

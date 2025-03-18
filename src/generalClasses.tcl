@@ -1,10 +1,10 @@
 #  .|'''.|            ||                   ..|'''.|                   |''||''|         '||'
-#  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||  
-#   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||  
-# .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||  
-# |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||. 
-#            ||                                                                             
-#           ''''                                                                            
+#  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||
+#   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||
+# .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||
+# |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||.
+#            ||
+#           ''''
 # generalClasses.tcl
 # Describes all general classes
 #
@@ -22,7 +22,7 @@ namespace eval ::SpiceGenTcl {
             EmptyTrace RawFile Ic Nodeset ParameterNode ParameterNodeEquation Global Parser
     namespace export importNgspice importXyce importCommon importLtspice forgetNgspice forgetXyce forgetCommon\
             forgetLtspice
-    
+
     proc importCommon {} {
         # Imports all ::SpiceGenTcl::Common commands to caller namespace
         uplevel 1 {foreach nameSpc [namespace children ::SpiceGenTcl::Common] {
@@ -34,7 +34,7 @@ namespace eval ::SpiceGenTcl {
         uplevel 1 {foreach nameSpc [namespace children ::SpiceGenTcl::Common] {
             namespace forget ${nameSpc}::*
         }}
-    }   
+    }
     proc importNgspice {} {
         # Imports all ::SpiceGenTcl::Ngspice commands to caller namespace
         uplevel 1 {foreach nameSpc [namespace children ::SpiceGenTcl::Ngspice] {
@@ -71,23 +71,23 @@ namespace eval ::SpiceGenTcl {
             namespace forget ${nameSpc}::*
         }}
     }
-    
-###  SPICEElement class definition 
-    
+
+###  SPICEElement class definition
+
     oo::configurable create SPICEElement {
         self mixin -append oo::abstract
         # Abstract class of all elements of SPICE netlist
         #  and it forces implementation of genSPICEString method for all subclasses.
         variable name
         method genSPICEString {} {
-            # Declaration of method common for all SPICE elements that generates 
+            # Declaration of method common for all SPICE elements that generates
             #  representation of element in SPICE netlist. Not implemented in
             #  abstraction class.
             error "Not implemented"
         }
     }
 
-###  Utility class definition 
+###  Utility class definition
 
     oo::class create Utility {
         self mixin -append oo::abstract
@@ -212,8 +212,8 @@ namespace eval ::SpiceGenTcl {
             return $itemDup
         }
     }
-    
-###  Pin class definition 
+
+###  Pin class definition
     ##nagelfar subcmd+ _obj,Pin configure
     oo::configurable create Pin {
         superclass SPICEElement
@@ -244,7 +244,7 @@ namespace eval ::SpiceGenTcl {
             # It has general interface method `genSPICEString` that returns
             # name of the node connected to it, this method must be called only
             # in method with the same name in other classes. We can check if pin is
-            # floating by checking the name of connected node in method `checkFloating` - 
+            # floating by checking the name of connected node in method `checkFloating` -
             # if is contains empty string it is floating.
             # Floating pin can't be netlisted, so it throws error when try to
             # do so. Set pin name empty by special method `unsetNodeName`.
@@ -273,8 +273,8 @@ namespace eval ::SpiceGenTcl {
             return [my configure -nodename]
         }
     }
-    
-###  ParameterSwitch class definition 
+
+###  ParameterSwitch class definition
     ##nagelfar subcmd+ _obj,ParameterSwitch configure
     oo::configurable create ParameterSwitch {
         superclass SPICEElement
@@ -293,7 +293,7 @@ namespace eval ::SpiceGenTcl {
         constructor {name} {
             # Creates object of class `ParameterSwitch` with parameter name.
             #  name - name of the parameter
-            # Class models base parameter acting like a switch - 
+            # Class models base parameter acting like a switch -
             # its presence gives us information that something it controls is on.
             # This parameter doesn't have a value, and it is the most basic class
             # in Parameter class family.
@@ -305,11 +305,11 @@ namespace eval ::SpiceGenTcl {
             return [my configure -name]
         }
     }
-    
-###  Parameter class definition 
+
+###  Parameter class definition
 
     oo::configurable create Parameter {
-        superclass ParameterSwitch 
+        superclass ParameterSwitch
         property value
         constructor {name value} {
             # Creates object of class `Parameter` with parameter name and value.
@@ -337,10 +337,10 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  ParameterNode class definition 
+###  ParameterNode class definition
 
     oo::configurable create ParameterNode {
-        superclass Parameter 
+        superclass Parameter
         property name -set {
             if {$value eq {}} {
                 return -code error "ParameterNode must have a name, empty string was provided"
@@ -366,7 +366,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  ParameterNodeEquation class definition 
+###  ParameterNodeEquation class definition
 
     oo::configurable create ParameterNodeEquation {
         superclass ParameterNode
@@ -393,7 +393,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  ParameterNoCheck class definition 
+###  ParameterNoCheck class definition
 
     oo::configurable create ParameterNoCheck {
         superclass Parameter
@@ -411,12 +411,12 @@ namespace eval ::SpiceGenTcl {
         method <WriteProp-value> val {
             if {$val eq {}} {
                 return -code error "Value '$val' is not a valid value"
-            } 
+            }
             set value $val
         }
     }
-    
-###  ParameterPositional class definition 
+
+###  ParameterPositional class definition
 
     oo::configurable create ParameterPositional {
         superclass Parameter
@@ -425,10 +425,10 @@ namespace eval ::SpiceGenTcl {
             #  name - name of parameter
             #  value - value of parameter
             # Class models parameter that has a name and a value, but it differs from
-            # parent class in the sense of netlist representation: this parameter represents only 
+            # parent class in the sense of netlist representation: this parameter represents only
             # by the value in the netlist. It's meaning for holding element is taken from
             # it's position in the element's definition, for example, R1 np nm 100 tc1=1 tc2=0 - resistor
-            # with positional parameter R=100, you can't put it after parameters tc1 and tc2, it must be placed 
+            # with positional parameter R=100, you can't put it after parameters tc1 and tc2, it must be placed
             # right after the pins definition.
             next $name $value
         }
@@ -438,8 +438,8 @@ namespace eval ::SpiceGenTcl {
             return [my configure -value]
         }
     }
-    
-###  ParameterPositionalNoCheck class definition 
+
+###  ParameterPositionalNoCheck class definition
 
     oo::configurable create ParameterPositionalNoCheck {
         superclass ParameterPositional
@@ -462,12 +462,12 @@ namespace eval ::SpiceGenTcl {
         method <WriteProp-value> val {
             if {$val eq {}} {
                 return -code error "Value '$val' is not a valid value"
-            } 
+            }
             set value $val
         }
     }
-    
-###  ParameterDefault class definition 
+
+###  ParameterDefault class definition
 
     oo::configurable create ParameterDefault {
         superclass Parameter
@@ -480,7 +480,7 @@ namespace eval ::SpiceGenTcl {
                         set defvalue [string tolower $value]
                     } else {
                         return -code error "Default value '$value' is not a valid value"
-                    } 
+                    }
                 } else {
                     set suffix [string tolower [string index $value end]]
                     if {$suffix in {f p n u m k g t}} {
@@ -488,7 +488,7 @@ namespace eval ::SpiceGenTcl {
                             set defvalue [string tolower $value]
                         } else {
                             return -code error "Default value '$value' is not a valid value"
-                        } 
+                        }
                     } else {
                         return -code error "Default value '$value' is not a valid value"
                     }
@@ -507,15 +507,15 @@ namespace eval ::SpiceGenTcl {
             my configure -defvalue $defValue
             next $name $value
         }
-        
+
         method resetValue {} {
             # Resets value of the parameter to it's default value.
             my configure -value [my configure -defvalue]
             return
         }
     }
-    
-###  ParameterEquation class definition 
+
+###  ParameterEquation class definition
 
     oo::configurable create ParameterEquation {
         superclass Parameter
@@ -545,7 +545,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  ParameterPositionalEquation class definition 
+###  ParameterPositionalEquation class definition
 
     oo::configurable create ParameterPositionalEquation {
         superclass ParameterEquation
@@ -564,8 +564,8 @@ namespace eval ::SpiceGenTcl {
             return \{[my configure -value]\}
         }
     }
-    
-###  Device class definition 
+
+###  Device class definition
     ##nagelfar subcmd+ _obj,Device AddPin addParam configure getParams
     oo::configurable create Device {
         superclass SPICEElement
@@ -593,17 +593,17 @@ namespace eval ::SpiceGenTcl {
             #  params - list of instance parameters in form `{{Name Value ?-pos|eq|poseq?} {Name Value ?-pos|eq|poseq?}
             #   {Name Value ?-pos|eq|poseq?} ...}` Parameter list can be empty if device doesn't have instance
             #   parameters.
-            # Class models general device in SPICE, number of which 
+            # Class models general device in SPICE, number of which
             # must be assembled (connected) to get the circuit to simulate. This class provides basic machinery
             # for creating any device that can be connected to net in circuit. It can be instantiated to create
-            # device that contains: 
+            # device that contains:
             #  - reference name, like R1, L1, M1, etc;
-            #  - list of pins in the order of appearence of device's definition, for example, 'drain gate source' for 
+            #  - list of pins in the order of appearence of device's definition, for example, 'drain gate source' for
             #     MOS transistor;
             #  - list of parameters, that could be positional (+equation), keyword (+equation) parameters, like
             #     `R1 nm np 100 tc1=1 tc2={tc0*tc12}`, where 100 - positional parameter, tc1 - keyword parameters and
             #     tc2 - keyword parameter with equation
-            # This class accept definition that contains elements listed above, and generates classes: Pin, Parameter, 
+            # This class accept definition that contains elements listed above, and generates classes: Pin, Parameter,
             # PositionalParameter with compositional relationship (has a).
             my configure -name $name
             # create Pins objects
@@ -611,7 +611,7 @@ namespace eval ::SpiceGenTcl {
                 my AddPin [@ $pin 0] [@ $pin 1]
             }
             #ruff
-            # Each parameter definition could be modified by 
+            # Each parameter definition could be modified by
             #  optional flags:
             #  - pos - parameter has strict position and only '$Value' is displayed in netlist
             #  - eq - parameter may contain equation in terms of functions and other parsmeters,
@@ -685,9 +685,9 @@ namespace eval ::SpiceGenTcl {
             #  paramName - name of parameter
             #  value - value of parameter
             #  -eq - parameter is of class [::SpiceGenTcl::ParameterEquation], optional, forbids other switches
-            #  -poseq - parameter is of class [::SpiceGenTcl::ParameterPositionalEquation], optional, forbids other 
+            #  -poseq - parameter is of class [::SpiceGenTcl::ParameterPositionalEquation], optional, forbids other
             #    switches
-            #  -posnocheck - parameter is of class [::SpiceGenTcl::ParameterPositionalNoCheck], optional, forbids other 
+            #  -posnocheck - parameter is of class [::SpiceGenTcl::ParameterPositionalNoCheck], optional, forbids other
             #    switches
             #  -pos - parameter is of class [::SpiceGenTcl::ParameterPositional], optional, forbids other switches
             #  -nocheck - parameter is of class [::SpiceGenTcl::ParameterNoCheck], optional, forbids other switches
@@ -795,7 +795,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  Model class definition 
+###  Model class definition
     ##nagelfar subcmd+ _obj,Model configure addParam
     oo::configurable create Model {
         superclass SPICEElement
@@ -855,7 +855,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  RawString class definition 
+###  RawString class definition
     ##nagelfar subcmd+ _obj,RawString configure
     oo::configurable create RawString {
         superclass SPICEElement
@@ -872,7 +872,7 @@ namespace eval ::SpiceGenTcl {
             #  -name - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist] object
             #    and its descendants, optional
             # Class represent arbitary string.
-            #  It can be used to pass any string directly into netlist, 
+            #  It can be used to pass any string directly into netlist,
             #  for example, it can add elements that doesn't have dedicated class.
             # Synopsis: value ?-name value?
             argparse {
@@ -892,7 +892,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  Comment class definition 
+###  Comment class definition
 
     oo::configurable create Comment {
         superclass RawString
@@ -920,9 +920,9 @@ namespace eval ::SpiceGenTcl {
             set prepared [join [lmap line $splitted {set result "*$line"}] \n]
             return $prepared
         }
-    }    
-    
-###  Include class definition 
+    }
+
+###  Include class definition
 
     oo::configurable create Include {
         superclass RawString
@@ -948,10 +948,10 @@ namespace eval ::SpiceGenTcl {
             # Returns: SPICE netlist's string
             return ".include [my configure -value]"
         }
-    }   
-    
+    }
+
 ###  Library class definition
-    
+
     oo::configurable create Library {
         superclass RawString
         # this variable contains selected library name inside sourced file
@@ -982,9 +982,9 @@ namespace eval ::SpiceGenTcl {
             # Returns: SPICE netlist's string
             return ".lib [my configure -value] [my configure -libvalue]"
         }
-    }   
-    
-###  Options class definition 
+    }
+
+###  Options class definition
     ##nagelfar subcmd+ _obj,Options configure addParam
     oo::configurable create Options {
         superclass SPICEElement
@@ -1015,7 +1015,7 @@ namespace eval ::SpiceGenTcl {
                     error "Value '$param' is not a valid value"
                 } else {
                     my addParam {*}$param
-                }  
+                }
             }
         }
         method getParams {} {
@@ -1057,8 +1057,8 @@ namespace eval ::SpiceGenTcl {
             return ".options [join [lmap param [dict values $Params] {$param genSPICEString}]]"
         }
     }
-    
-###  ParamStatement class definition 
+
+###  ParamStatement class definition
     ##nagelfar subcmd+ _obj,ParamStatement configure addParam
     oo::configurable create ParamStatement {
         superclass SPICEElement
@@ -1088,7 +1088,7 @@ namespace eval ::SpiceGenTcl {
                     error "Value '$param' is not a valid value"
                 } else {
                     my addParam {*}$param
-                }  
+                }
             }
         }
         method getParams {*}[info class definition ::SpiceGenTcl::Device getParams]
@@ -1125,7 +1125,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  Ic class definition 
+###  Ic class definition
     ##nagelfar subcmd+ _obj,Ic configure addParam
     oo::configurable create Ic {
         superclass SPICEElement
@@ -1155,7 +1155,7 @@ namespace eval ::SpiceGenTcl {
                     error "Value '$param' is not a valid value"
                 } else {
                     my addParam {*}$param
-                }  
+                }
             }
         }
         method getParams {*}[info class definition ::SpiceGenTcl::Device getParams]
@@ -1192,8 +1192,8 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  Nodeset class definition 
-    
+###  Nodeset class definition
+
     oo::configurable create Nodeset {
         superclass Ic
         mixin Utility
@@ -1205,7 +1205,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  Global class definition 
+###  Global class definition
     ##nagelfar subcmd+ _obj,Global configure addNets
     oo::configurable create Global {
         superclass SPICEElement
@@ -1266,7 +1266,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  Temp class definition 
+###  Temp class definition
     ##nagelfar subcmd+ _obj,Temp configure AddParam
     oo::configurable create Temp {
         superclass SPICEElement
@@ -1302,7 +1302,7 @@ namespace eval ::SpiceGenTcl {
             #  -eq - optional parameter qualificator
             # Synopsis: paramName value ?-eq?
             set arguments [argparse {
-                {-eq -boolean} 
+                {-eq -boolean}
             }]
             ##nagelfar variable eq
             if {$eq} {
@@ -1328,10 +1328,10 @@ namespace eval ::SpiceGenTcl {
             } else {
                 return -code error "Wrong value '$eq' of qualifier"
             }
-        }    
+        }
     }
-        
-###  Netlist class definition 
+
+###  Netlist class definition
     ##nagelfar subcmd+ _obj,Netlist configure getAllElemNames
     oo::configurable create Netlist {
         superclass SPICEElement
@@ -1414,9 +1414,9 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-    
-###  Circuit class definition 
-    
+
+###  Circuit class definition
+
     oo::configurable create Circuit {
         superclass Netlist
         # simulator object that run simulation
@@ -1523,8 +1523,8 @@ namespace eval ::SpiceGenTcl {
             my configure -log [$simulator configure -log] -data [$simulator configure -data]
         }
     }
-    
-###  Subcircuit class definition 
+
+###  Subcircuit class definition
     ##nagelfar subcmd+ _obj,Subcircuit AddPin addParam
     oo::configurable create Subcircuit {
         superclass Netlist
@@ -1540,7 +1540,7 @@ namespace eval ::SpiceGenTcl {
             #  params - list of input parameters in form `{{name value} {name value} {name value} ...}`
             # This class implements subcircuit, it is subclass of netlist because it holds list of elements
             # inside subcircuit, together with header and connection of elements inside.
-            
+
             # create Pins objects, nodes are set to empty line
             foreach pin $pins {
                 my AddPin [@ $pin 0] {}
@@ -1552,7 +1552,7 @@ namespace eval ::SpiceGenTcl {
                         my addParam [@ $param 0] [@ $param 1]
                     } else {
                         error "Wrong parameter '[@ $param 0]' definition in subcircuit $name"
-                    }  
+                    }
                 }
             }
             next $name
@@ -1579,10 +1579,10 @@ namespace eval ::SpiceGenTcl {
             dict append Params $paramName [::SpiceGenTcl::Parameter new $paramName $value]
             return
         }
-        
+
         method add {args} {
             # Add element object reference to `Netlist`, it extends add method to add check of element class because
-            # subcircuit can't contain particular elements inside, like [::SpiceGenTcl::Include], 
+            # subcircuit can't contain particular elements inside, like [::SpiceGenTcl::Include],
             # [::SpiceGenTcl::Library], [::SpiceGenTcl::Options] and [::SpiceGenTcl::Analysis].
             #  args - elements objects references
             foreach arg $args {
@@ -1607,13 +1607,13 @@ namespace eval ::SpiceGenTcl {
                 set params [lmap param [dict values $Params] {$param genSPICEString}]
                 set header ".subckt $name [join $nodes] [join $params]"
             }
-            # get netlist elements from netlist genSPICEString method 
+            # get netlist elements from netlist genSPICEString method
             set resStr [next]
             return [join [list $header $resStr ".ends $name"] \n]
         }
     }
-    
-###  Analysis class definition 
+
+###  Analysis class definition
     ##nagelfar subcmd+ _obj,Analysis configure addParam
     oo::configurable create Analysis {
         superclass SPICEElement
@@ -1637,7 +1637,7 @@ namespace eval ::SpiceGenTcl {
         constructor {type params args} {
             # Creates object of class `Analysis`.
             #  type - type of analysis, for example, tran, ac, dc, etc
-            #  params - list of instance parameters in form 
+            #  params - list of instance parameters in form
             #   `{{name value} {name -sw} {name Value -eq} {name Value -posnocheck} ...}`
             #  -name - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist] object
             #    and its descendants, optional
@@ -1659,13 +1659,13 @@ namespace eval ::SpiceGenTcl {
                     error "Value '$param' is not a valid value"
                 } else {
                     my addParam {*}$param
-                }  
+                }
             }
         }
         method getParams {*}[info class definition ::SpiceGenTcl::Device getParams]
         method addParam {*}[info class definition ::SpiceGenTcl::Device addParam]
         method deleteParam {*}[info class definition ::SpiceGenTcl::Device deleteParam]
-        method setParamValue {*}[info class definition ::SpiceGenTcl::Device setParamValue] 
+        method setParamValue {*}[info class definition ::SpiceGenTcl::Device setParamValue]
         method genSPICEString {} {
             # Creates analysis for SPICE netlist.
             # Returns: string SPICE netlist's string
@@ -1677,8 +1677,8 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  Simulator class definition 
-    
+###  Simulator class definition
+
     oo::configurable create Simulator {
         self mixin -append oo::abstract
         property name
@@ -1704,10 +1704,10 @@ namespace eval ::SpiceGenTcl {
             # Reads raw data file of last simulation.
             error "Not implemented"
         }
-    }     
+    }
 
-###  BinaryReader class definition 
-   
+###  BinaryReader class definition
+
     oo::configurable create BinaryReader {
         self mixin -append oo::abstract
         method readFloat64 {file} {
@@ -1753,8 +1753,8 @@ namespace eval ::SpiceGenTcl {
             return
         }
     }
-    
-###  Dataset class 
+
+###  Dataset class
     ##nagelfar subcmd+ _obj,Dataset configure
     oo::configurable create Dataset {
         # This class models general raw dataset
@@ -1805,15 +1805,15 @@ namespace eval ::SpiceGenTcl {
             } else {
                 return -code error "Dataset with name '[my configure -name]' doesn't contain non-zero points"
             }
-            return 
+            return
         }
         method getStr {} {
             return "Name: '[my configure -name]', Type: '[my configure -type]', Length: '[my configure -len]',\
                     Numerical type: '[my configure -numtype]'"
         }
     }
-    
-###  Axis class definition 
+
+###  Axis class definition
 
     oo::configurable create Axis {
         # class that represents axis in raw file
@@ -1827,8 +1827,8 @@ namespace eval ::SpiceGenTcl {
             next $name $type $len $numType
         }
     }
-    
-###  Trace class definition 
+
+###  Trace class definition
 
     oo::configurable create Trace {
         # class that represents trace in raw file
@@ -1846,8 +1846,8 @@ namespace eval ::SpiceGenTcl {
             next $name $type $len $numType
         }
     }
-    
-###  EmptyTrace class definition 
+
+###  EmptyTrace class definition
 
     oo::configurable create EmptyTrace {
         # Class represents empty trace (trace that was not readed) in raw file
@@ -1865,11 +1865,11 @@ namespace eval ::SpiceGenTcl {
             if {[info exists DataPoints]} {
                 return {}
             }
-            return 
+            return
         }
     }
-    
-###  RawFile class definition 
+
+###  RawFile class definition
     ##nagelfar subcmd+ _obj,RawFile configure
     oo::configurable create RawFile {
         # Class represents raw file
@@ -1879,10 +1879,10 @@ namespace eval ::SpiceGenTcl {
         variable path
         # parameters of raw file readed from it's header
         property rawparams
-        variable rawparams 
+        variable rawparams
         # number of points in raw file
         property npoints
-        variable npoints 
+        variable npoints
         # number of variables in raw file
         property nvariables
         variable nvariables
@@ -1894,7 +1894,7 @@ namespace eval ::SpiceGenTcl {
                 return -code error "Raw file '[my configure -path]' doesn't have an axis"
             }
         }
-        variable axis 
+        variable axis
         # objects references of traces in raw file
         property traces
         variable traces
@@ -1903,15 +1903,15 @@ namespace eval ::SpiceGenTcl {
         constructor {path {traces2read *} {simulator ngspice}} {
             # Creates RawFile object.
             #  path - path to raw file including it's file name
-            #  traces2read - list of traces that will be readed, default value is \*, 
+            #  traces2read - list of traces that will be readed, default value is \*,
             #   that means reading all traces
             #  simulator - simulator that produced this raw file, default is ngspice
             my configure -path $path
             set fileSize [file size $path]
             set file [open $path r]
             fconfigure $file -translation binary
-            
-####  read header 
+
+####  read header
 
             set ch [read $file 6]
             if {[encoding convertfrom utf-8 $ch] eq {Title:}} {
@@ -1928,7 +1928,7 @@ namespace eval ::SpiceGenTcl {
             }
             my configure -rawparams [dcreate Filename $path]
             set header {}
-            set binaryStart 6            
+            set binaryStart 6
             while true {
                 set ch [encoding convertfrom $encode [read $file $encSize]]
                 incr binaryStart $encSize
@@ -1947,7 +1947,7 @@ namespace eval ::SpiceGenTcl {
                 }
             }
 
-####  save header parameters 
+####  save header parameters
 
             foreach line $header {
                 set lineList [split $line :]
@@ -1973,9 +1973,9 @@ namespace eval ::SpiceGenTcl {
                     set numType real
                 }
             }
-            
-####  parse variables 
-            
+
+####  parse variables
+
             set i [lsearch $header Variables:]
             set ivar 0
             foreach line [lrange $header [+ $i 1] end-1] {
@@ -2010,8 +2010,8 @@ namespace eval ::SpiceGenTcl {
                 close $file
                 return
             }
-            
-####  read data 
+
+####  read data
             if {$rawType eq {Binary:}} {
                 set BlockSize [= {($fileSize - $binaryStart)/$npoints}]
                 set scanFunctions {}
@@ -2020,23 +2020,23 @@ namespace eval ::SpiceGenTcl {
                     if {[$trace configure -numtype] eq {double}} {
                         incr calcBlockSize 8
                         if {[info object class $trace ::SpiceGenTcl::EmptyTrace]} {
-                            set fun skip8bytes 
+                            set fun skip8bytes
                         } else {
                             set fun readFloat64
                         }
                     } elseif {[$trace configure -numtype] eq {complex}} {
                         incr calcBlockSize 16
                         if {[info object class $trace ::SpiceGenTcl::EmptyTrace]} {
-                            set fun skip16bytes 
+                            set fun skip16bytes
                         } else {
-                            set fun readComplex 
+                            set fun readComplex
                         }
                     } elseif {[$trace configure -numtype] eq {real}} {
                         incr calcBlockSize 4
                         if {[info object class $trace ::SpiceGenTcl::EmptyTrace]} {
-                            set fun skip4bytes 
+                            set fun skip4bytes
                         } else {
-                            set fun readFloat32 
+                            set fun readFloat32
                         }
                     } else {
                         close $file
@@ -2051,7 +2051,7 @@ namespace eval ::SpiceGenTcl {
                 }
                  for {set i 0} {$i<$npoints} {incr i} {
                     for {set j 0} {$j<[llength [my configure -traces]]} {incr j} {
-                        set value [eval "my [@ $scanFunctions $j]" $file] 
+                        set value [eval "my [@ $scanFunctions $j]" $file]
                         set trace [@ [my configure -traces] $j]
                         if {$j==0} {
                             # workaround for bug with negative values in time axis
@@ -2060,8 +2060,8 @@ namespace eval ::SpiceGenTcl {
                             }
                         }
                         if {[info object class $trace] ne {::SpiceGenTcl::EmptyTrace}} {
-                            $trace appendDataPoints $value 
-                        }  
+                            $trace appendDataPoints $value
+                        }
                     }
                  }
             } elseif {$rawType eq {Values:}} {
@@ -2084,7 +2084,7 @@ namespace eval ::SpiceGenTcl {
                                 set value [split [@ $lineList 1] ","]
                             } else {
                                 set value [@ $lineList 1]
-                            } 
+                            }
                         } else {
                             if {$numType eq {complex}} {
                                 set value [split [@ $lineList 1] ","]
@@ -2093,7 +2093,7 @@ namespace eval ::SpiceGenTcl {
                             }
                         }
                         set trace [@ [my configure -traces] $j]
-                        $trace appendDataPoints $value 
+                        $trace appendDataPoints $value
                     }
                 }
             }
@@ -2180,7 +2180,7 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  Parser class definition 
+###  Parser class definition
     ##nagelfar subcmd+ _obj,Parser configure CheckEqual Unbrace ParseWithEqual CheckBraced CheckBracedWithEqual\
             ParseBracedWithEqual BuildNetlist
     oo::configurable create Parser {
@@ -2518,7 +2518,7 @@ namespace eval ::SpiceGenTcl {
             # Unquotes input string, `'value'` to `value`, value inside braces must not contain `'`, `'` and `=` symbols,
             # and be empty
             #   string - input braced string
-            # Returns: string without braces, 
+            # Returns: string without braces,
             if {[my CheckQuoted $string]} {
                 return [@ [regexp -inline {^\'([^='']+)\'$} $string] 1]
             } else {
@@ -2541,7 +2541,7 @@ namespace eval ::SpiceGenTcl {
                 regexp {^([a-zA-Z_][a-zA-Z0-9_()]*)=\{([^={}]+)\}$} $string match name value
                 return [list $name $value]
             } else {
-                return -code error "String '${string}' isn't of form 'name={value}', value must not contain '{' or '}'\ 
+                return -code error "String '${string}' isn't of form 'name={value}', value must not contain '{' or '}'\
                         symbols, name must contain only alphanumeric characters and '_' symbol"
             }
         }
@@ -2559,11 +2559,9 @@ namespace eval ::SpiceGenTcl {
                 regexp {^([a-zA-Z_][a-zA-Z0-9_()]*)=([^={}]+)$} $string match name value
                 return [list $name $value]
             } else {
-                return -code error "String '${string}' isn't of form 'name=value', value must not contain '{' or '}'\ 
+                return -code error "String '${string}' isn't of form 'name=value', value must not contain '{' or '}'\
                         symbols, name must contain only alphanumeric characters and '_' symbol"
             }
         }
     }
 }
-
-

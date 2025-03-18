@@ -24,7 +24,6 @@ namespace import ::tcl::mathop::*
 package provide SpiceGenTcl 0.66
 
 interp alias {} dget {} dict get
-
 interp alias {} @ {} lindex
 interp alias {} = {} expr
 interp alias {} dexist {} dict exists

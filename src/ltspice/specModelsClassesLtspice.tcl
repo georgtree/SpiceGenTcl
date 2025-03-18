@@ -1,10 +1,10 @@
 #  .|'''.|            ||                   ..|'''.|                   |''||''|         '||'
-#  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||  
-#   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||  
-# .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||  
-# |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||. 
-#            ||                                                                             
-#           ''''                                                                            
+#  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||
+#   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||
+# .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||
+# |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||.
+#            ||
+#           ''''
 # specModelsClassesLtspice.tcl
 # Describes LTspice models classes
 #
@@ -15,17 +15,17 @@
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 
 namespace eval ::SpiceGenTcl::Ltspice::BasicDevices {
-    
-    namespace export VSwitchModel CSwitchModel 
-   
-###  VSwitchModel class 
-    
+
+    namespace export VSwitchModel CSwitchModel
+
+###  VSwitchModel class
+
     oo::class create VSwitchModel {
         superclass ::SpiceGenTcl::Model
         constructor {name args} {
             # Creates object of class `VSwitchModel` that describes voltage switch model.
-            #  name - name of the model 
-            #  args - keyword instance parameters 
+            #  name - name of the model
+            #  args - keyword instance parameters
             # Example of class initialization:
             # ```
             # ::SpiceGenTcl::Ltspice::BasicDevices::VSwitchModel new swmod -vt 1 -vh 0.5 -ron 1 -roff 1e6
@@ -35,14 +35,14 @@ namespace eval ::SpiceGenTcl::Ltspice::BasicDevices {
         }
     }
 
-###  CSwitchModel class 
-    
+###  CSwitchModel class
+
     oo::class create CSwitchModel {
         superclass ::SpiceGenTcl::Model
         constructor {name args} {
             # Creates object of class `CSwitchModel` that describes current switch model.
-            #  name - name of the model 
-            #  args - keyword instance parameters 
+            #  name - name of the model
+            #  args - keyword instance parameters
             # Example of class initialization:
             # ```
             # ::SpiceGenTcl::Ltspice::BasicDevices::CSwitchModel new cswmod -it 1 -ih 0.5 -ron 1 -roff 1e6
@@ -52,18 +52,18 @@ namespace eval ::SpiceGenTcl::Ltspice::BasicDevices {
         }
     }
 }
-    
-namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {    
-    
+
+namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
+
     namespace export DiodeModel DiodeIdealModel BjtGPModel JfetModel MesfetModel
-    
-###  DiodeModel class 
-    
+
+###  DiodeModel class
+
     oo::class create DiodeModel {
         superclass ::SpiceGenTcl::Model
         constructor {name args} {
             # Creates object of class `DiodeModel` that describes semiconductor diode model.
-            #  name - name of the model 
+            #  name - name of the model
             #  args - keyword model parameters, for details please see LTspice manual.
             # Example of class initialization:
             # ```
@@ -76,13 +76,13 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
         }
     }
 
-###  DiodeIdealModel class 
-    
+###  DiodeIdealModel class
+
     oo::class create DiodeIdealModel {
         superclass ::SpiceGenTcl::Model
         constructor {name args} {
             # Creates object of class `DiodeIdealModel` that describes semiconductor diode model.
-            #  name - name of the model 
+            #  name - name of the model
             #  args - keyword model parameters, for details please see LTspice manual.
             # Example of class initialization:
             # ```
@@ -93,14 +93,14 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
             next $name d [my argsPreprocess $paramsNames {*}$args]
         }
     }
- 
-###  BjtGPModel class 
-    
+
+###  BjtGPModel class
+
     oo::class create BjtGPModel {
         superclass ::SpiceGenTcl::Model
         constructor {name type args} {
             # Creates object of class `BjtGPModel` that describes Gummel-Poon model of semiconductor bipolar transistor.
-            #  name - name of the model 
+            #  name - name of the model
             #  type - npn or pnp
             #  args - keyword model parameters, for details please see LTspice manual.
             # Example of class initialization:
@@ -116,15 +116,15 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
             set params [my argsPreprocess $paramsNames {*}$args]
             next $name $type $params
         }
-    } 
-        
-###  Jfet1Model class 
-    
+    }
+
+###  Jfet1Model class
+
     oo::class create JfetModel {
         superclass ::SpiceGenTcl::Model
         constructor {name type args} {
             # Creates object of class `JfetModel` that describes JFET level 1 model with Parker Skellern modification.
-            #  name - name of the model 
+            #  name - name of the model
             #  type - njf or pjf
             #  args - keyword model parameters, for details please see LTspice manual.
             # Example of class initialization:
@@ -137,14 +137,14 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
             next $name $type [my argsPreprocess $paramsNames {*}$args]
         }
     }
-    
-###  Mesfet1Model class 
-    
+
+###  Mesfet1Model class
+
     oo::class create MesfetModel {
         superclass ::SpiceGenTcl::Model
         constructor {name type args} {
             # Creates object of class `MesfetModel` that describes MESFET model by Statz e.a..
-            #  name - name of the model 
+            #  name - name of the model
             #  type - nmf or pmf
             #  args - keyword model parameters, for details please see LTspice manual, chapter 10.
             # Example of class initialization:
@@ -155,5 +155,5 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
             set params [my argsPreprocess {vto beta b alpha lambda rd rs cgs cgd pb kf af fc is} {*}$args]
             next $name $type $params
         }
-    } 
+    }
 }

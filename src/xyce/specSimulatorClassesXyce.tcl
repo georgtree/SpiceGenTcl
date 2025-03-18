@@ -1,10 +1,10 @@
 #  .|'''.|            ||                   ..|'''.|                   |''||''|         '||'
-#  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||  
-#   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||  
-# .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||  
-# |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||. 
-#            ||                                                                             
-#           ''''                                                                            
+#  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||
+#   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||
+# .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||
+# |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||.
+#            ||
+#           ''''
 # specSimulatorClassesXyce.tcl
 # Describes Xyce simulators classes
 #
@@ -15,9 +15,9 @@
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 
 namespace eval ::SpiceGenTcl::Xyce::Simulators {
-    
+
     namespace export Batch
-    
+
     oo::configurable create Batch {
         # this class represent batch simulation of ngspice
         superclass ::SpiceGenTcl::Simulator
@@ -25,7 +25,7 @@ namespace eval ::SpiceGenTcl::Xyce::Simulators {
             if {[info exists log]} {
                 return $log
             } else {
-                return -code error "Log does not exists for simulator '[my configure -name]'" 
+                return -code error "Log does not exists for simulator '[my configure -name]'"
             }
         }
         variable log
@@ -78,7 +78,7 @@ namespace eval ::SpiceGenTcl::Xyce::Simulators {
             set logFile [open [file join [my configure -runlocation] ${LastRunFileName}.log] r+]
             set log [read $logFile]
             close $logFile
-            return 
+            return
         }
         method readData {} {
             # Reads raw data file, create RawFile object and return it's reference name.
@@ -88,5 +88,5 @@ namespace eval ::SpiceGenTcl::Xyce::Simulators {
             return
         }
     }
-    
+
 }

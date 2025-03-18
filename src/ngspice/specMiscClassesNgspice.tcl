@@ -1,10 +1,10 @@
 #  .|'''.|            ||                   ..|'''.|                   |''||''|         '||'
-#  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||  
-#   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||  
-# .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||  
-# |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||. 
-#            ||                                                                             
-#           ''''                                                                            
+#  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||
+#   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||
+# .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||
+# |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||.
+#            ||
+#           ''''
 # specMiscClassesNgspice.tcl
 # Describes Ngspice miscellaneous classes
 #
@@ -23,14 +23,14 @@ namespace eval ::SpiceGenTcl {
 namespace eval ::SpiceGenTcl::Ngspice::Misc {
 
 
-###  OptionsNgspice class 
+###  OptionsNgspice class
 
     oo::class create OptionsNgspice {
         superclass ::SpiceGenTcl::Options
         mixin ::SpiceGenTcl::Utility
         constructor {args} {
-            # Creates object of class `OptionsNgspice` that describes Ngspice simulation options. 
-            #   args - keyword instance parameters 
+            # Creates object of class `OptionsNgspice` that describes Ngspice simulation options.
+            #   args - keyword instance parameters
             # ```
             # .options opt1 opt2 ... (or opt=optval ...)
             # ```

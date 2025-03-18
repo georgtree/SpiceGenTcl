@@ -1,10 +1,10 @@
 #  .|'''.|            ||                   ..|'''.|                   |''||''|         '||'
-#  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||  
-#   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||  
-# .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||  
-# |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||. 
-#            ||                                                                             
-#           ''''                                                                            
+#  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||
+#   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||
+# .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||
+# |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||.
+#            ||
+#           ''''
 # specElementsClassesNgspice.tcl
 # Describes Ngspice elements classes
 #
@@ -25,12 +25,12 @@ namespace eval ::SpiceGenTcl {
     }
     namespace eval Ngspice::SemiconductorDevices {
         namespace export Diode D Bjt Q Jfet J Mesfet Z Mosfet M
-    } 
+    }
 }
 
 
 
-###  Basic devices 
+###  Basic devices
 
 namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
 
@@ -39,7 +39,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
     oo::class create Resistor {
         superclass ::SpiceGenTcl::Device
         constructor {name npNode nmNode args} {
-            # Creates object of class `Resistor` that describes resistor. 
+            # Creates object of class `Resistor` that describes resistor.
             #  name - name of the device without first-letter designator R
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
@@ -75,7 +75,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # ::SpiceGenTcl::Ngspice::BasicDevices::Resistor new 1 netp netm -model resm -l 1e-6 -w 10e-6
             # ```
-            # Synopsis: name npNode nmNode -r value ?-tc1 value? ?-tc2 value? ?-ac value? ?-m value? ?-noisy 0|1? 
+            # Synopsis: name npNode nmNode -r value ?-tc1 value? ?-tc2 value? ?-ac value? ?-m value? ?-noisy 0|1?
             #   ?-temp value|-dtemp value? ?-scale value?
             # Synopsis: name npNode nmNode -beh -r value ?-tc1 value? ?-tc2 value?
             # Synopsis: name npNode nmNode -model value ?-r value? ?-l value? ?-w value? ?-temp value|-dtemp value?
@@ -119,18 +119,18 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             next r$name [list [list np $npNode] [list nm $nmNode]] $params
         }
     }
-####  R class 
+####  R class
     # alias for Resistor class
     oo::class create R {
         superclass Resistor
     }
 
-####  Capacitor class 
+####  Capacitor class
 
     oo::class create Capacitor {
         superclass ::SpiceGenTcl::Device
         constructor {name npNode nmNode args} {
-            # Creates object of class `Capacitor` that describes capacitor. 
+            # Creates object of class `Capacitor` that describes capacitor.
             #  name - name of the device without first-letter designator C
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
@@ -172,7 +172,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # ::SpiceGenTcl::Ngspice::BasicDevices::Capacitor new 1 netp netm -model capm -l 1e-6 -w 10e-6
             # ```
-            # Synopsis: name npNode nmNode -c value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value|-dtemp value? 
+            # Synopsis: name npNode nmNode -c value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value|-dtemp value?
             #   ?-scale value? ?-ic value?
             # Synopsis: name npNode nmNode -beh -c value ?-tc1 value? ?-tc2 value?
             # Synopsis: name npNode nmNode -beh -q value ?-tc1 value? ?-tc2 value?
@@ -221,18 +221,18 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             next c$name [list [list np $npNode] [list nm $nmNode]] $params
         }
     }
-####  C class 
+####  C class
     # alias for Capacitor class
     oo::class create C {
         superclass Capacitor
     }
 
-####  Inductor class 
+####  Inductor class
 
     oo::class create Inductor {
         superclass ::SpiceGenTcl::Device
         constructor {name npNode nmNode args} {
-            # Creates object of class `Inductor` that describes inductor. 
+            # Creates object of class `Inductor` that describes inductor.
             #  name - name of the device without first-letter designator L
             #  npNode - name of node connected to positive pin
             #  nmNode - name of node connected to negative pin
@@ -268,10 +268,10 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # ::SpiceGenTcl::Ngspice::BasicDevices::Inductor new 1 netp netm -l 1e-6 -model indm
             # ```
-            # Synopsis: name npNode nmNode -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value|-dtemp value? 
+            # Synopsis: name npNode nmNode -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value|-dtemp value?
             #   ?-scale value? ?-ic value?
             # Synopsis: name npNode nmNode -beh -l value ?-tc1 value? ?-tc2 value?
-            # Synopsis: name npNode nmNode -model value ?-l value? ?-temp value|-dtemp value? ?-m value? ?scale value? 
+            # Synopsis: name npNode nmNode -model value ?-l value? ?-temp value|-dtemp value? ?-m value? ?scale value?
             #   ?-ic value? ?-nt value? ?-tc1 value? ?-tc2 value?
             set arguments [argparse -inline {
                 -l=
@@ -311,12 +311,12 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
         }
     }
 
-####  Coupling class 
+####  Coupling class
 
     oo::class create Coupling {
         superclass ::SpiceGenTcl::Device
         constructor {name args} {
-            # Creates object of class `Coupling` that describes inductance coupling between inductors. 
+            # Creates object of class `Coupling` that describes inductance coupling between inductors.
             #  name - name of the device without first-letter designator L
             #  -l1 - first inductor name
             #  -l2 - second inductor name
@@ -328,7 +328,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # ::SpiceGenTcl::Ngspice::BasicDevices::Coupling new 1 -l1 la -l2 lb -k 0.5
             # ```
-            # Synopsis: name -l1 value -l2 value -k value 
+            # Synopsis: name -l1 value -l2 value -k value
             argparse {
                 {-l1= -required}
                 {-l2= -required}
@@ -349,47 +349,47 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
         }
     }
 
-####  K class 
+####  K class
 
     # alias for Coupling class
     oo::class create K {
         superclass Coupling
     }
 
-####  L class 
-    
+####  L class
+
     # alias for Inductor class
     oo::class create L {
         superclass Inductor
-    }    
-    
-####  VSwitch class 
-  
+    }
+
+####  VSwitch class
+
     oo::class create VSwitch {
         superclass ::SpiceGenTcl::Common::BasicDevices::VSwitch
     }
 
-####  S class 
-    
+####  S class
+
     # alias for VSwitch class
     oo::class create S {
         superclass VSwitch
-    }    
-    
-####  CSwitch class 
-  
+    }
+
+####  CSwitch class
+
     oo::class create CSwitch {
         superclass ::SpiceGenTcl::Common::BasicDevices::CSwitch
     }
 
-####  W class 
-    
+####  W class
+
     # alias for CSwitch class
     oo::class create W {
         superclass CSwitch
     }
-    
-####  SubcircuitInstance class 
+
+####  SubcircuitInstance class
 
     oo::class create SubcircuitInstance {
         superclass ::SpiceGenTcl::Device
@@ -411,15 +411,15 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
         }
     }
 
-####  X class 
-    
+####  X class
+
     # alias for SubcircuitInstance class
     oo::class create X {
         superclass SubcircuitInstance
     }
-    
-####  SubcircuitInstanceAuto class 
-    
+
+####  SubcircuitInstanceAuto class
+
     oo::class create SubcircuitInstanceAuto {
         superclass ::SpiceGenTcl::Device
         constructor {subcktObj name nodes args} {
@@ -445,7 +445,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
                         '::SpiceGenTcl::Subcircuit'"
             }
             # get name of subcircuit
-            set subName [$subcktObj configure -name] 
+            set subName [$subcktObj configure -name]
             # get pins names of subcircuit
             set pinsNames [dict keys [$subcktObj getPins]]
             # check if number of pins in subcircuit definition matchs the number of supplied nodes
@@ -481,14 +481,14 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
         }
     }
 
-####  XAuto class 
-    
+####  XAuto class
+
     # alias for SubcircuitInstanceAuto class
     oo::class create XAuto {
         superclass SubcircuitInstanceAuto
     }
 
-####  VerilogA class 
+####  VerilogA class
 
     oo::class create VerilogA {
         superclass ::SpiceGenTcl::Device
@@ -499,7 +499,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             #  modName - name of Verilog-A model
             #  params - {{paramName paramValue ?-eq?} {paramName paramValue ?-eq?}}
             # ```
-            # NYYYYYYY N1 <N2 N3 ...> MODNAME 
+            # NYYYYYYY N1 <N2 N3 ...> MODNAME
             # ```
             # Example of class initialization:
             # ```
@@ -510,8 +510,8 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
         }
     }
 
-####  N class 
-    
+####  N class
+
     # alias for VerilogA class
     oo::class create N {
         superclass VerilogA
@@ -521,13 +521,13 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
 
 
 
-###  Sources devices 
+###  Sources devices
 
 namespace eval ::SpiceGenTcl::Ngspice::Sources {
 
-     
-####  pulse sources template class 
-    
+
+####  pulse sources template class
+
     oo::abstract create pulse {
         superclass ::SpiceGenTcl::Device
         mixin ::SpiceGenTcl::Utility
@@ -587,11 +587,11 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             my ParamsProcess $paramsOrder $arguments params
             next $type$name [list [list np $npNode] [list nm $nmNode]] $params
         }
-    } 
-       
+    }
 
-####  sffm sources template class 
-    
+
+####  sffm sources template class
+
     oo::abstract create sffm {
         superclass ::SpiceGenTcl::Device
         mixin ::SpiceGenTcl::Utility
@@ -651,10 +651,10 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             my ParamsProcess $paramsOrder $arguments params
             next $type$name [list [list np $npNode] [list nm $nmNode]] $params
         }
-    }      
+    }
 
-####  am sources template class 
-    
+####  am sources template class
+
     oo::abstract create am {
         superclass ::SpiceGenTcl::Device
         mixin ::SpiceGenTcl::Utility
@@ -705,21 +705,21 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             my ParamsProcess $paramsOrder $arguments params
             next $type$name [list [list np $npNode] [list nm $nmNode]] $params
         }
-    }   
-    
-####  Vdc class 
-        
+    }
+
+####  Vdc class
+
     oo::class create Vdc {
         superclass ::SpiceGenTcl::Common::Sources::Vdc
     }
 
-####  Vac class 
-    
+####  Vac class
+
     oo::class create Vac {
         superclass ::SpiceGenTcl::Common::Sources::Vac
     }
 
-####  Vport class     
+####  Vport class
 
     oo::class create Vport {
         superclass ::SpiceGenTcl::Device
@@ -763,8 +763,8 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             next v$name [list [list np $npNode] [list nm $nmNode]] $params
         }
     }
-    
-####  Vpulse class 
+
+####  Vpulse class
 
     oo::class create Vpulse {
         superclass ::SpiceGenTcl::Ngspice::Sources::pulse
@@ -791,31 +791,31 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             # ```
             # ::SpiceGenTcl::Ngspice::Sources::Vpulse new 1 net1 net2 -low 0 -high 1 -td {td -eq} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6 -np {np -eq}
             # ```
-            # Synopsis: name npNode nmNode -low|voff value -high|von value -td value -tr value -tf value -pw|ton value 
+            # Synopsis: name npNode nmNode -low|voff value -high|von value -td value -tr value -tf value -pw|ton value
             #   -per|tper value ?-np value?
             next $name v $npNode $nmNode {*}$args
         }
-    }  
-    
-####  Vsin class 
+    }
+
+####  Vsin class
 
     oo::class create Vsin {
         superclass ::SpiceGenTcl::Common::Sources::Vsin
     }
-    
-####  Vexp class 
+
+####  Vexp class
 
     oo::class create Vexp {
         superclass ::SpiceGenTcl::Common::Sources::Vexp
     }
-    
-####  Vpwl class 
+
+####  Vpwl class
 
     oo::class create Vpwl {
         superclass ::SpiceGenTcl::Common::Sources::Vpwl
-    }    
-    
-####  Vsffm class 
+    }
+
+####  Vsffm class
 
     oo::class create Vsffm {
         superclass ::SpiceGenTcl::Ngspice::Sources::sffm
@@ -841,13 +841,13 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             # ```
             # ::SpiceGenTcl::Ngspice::Sources::Vsin new 1 net1 net2 -v0 0 -va 1 -fc {freq -eq} -mdi 0 -fs 1e3 -phasec {phase -eq}
             # ```
-            # Synopsis: name npNode nmNode -v0|voff value -va|vamp value -fc|fcar value -mdi value -fs|fsig value 
+            # Synopsis: name npNode nmNode -v0|voff value -va|vamp value -fc|fcar value -mdi value -fs|fsig value
             #   ?-phasec value  ?-phases value??
             next $name v $npNode $nmNode {*}$args
         }
     }
-    
-####  Vam class 
+
+####  Vam class
 
     oo::class create Vam {
         superclass ::SpiceGenTcl::Ngspice::Sources::am
@@ -875,22 +875,22 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             # Synopsis: name npNode nmNode -v0 value -va value -mf value -fc value ?-td value ?-phases value??
             next $name v $npNode $nmNode {*}$args
         }
-    }    
-    
-####  Idc class 
+    }
+
+####  Idc class
 
     oo::class create Idc {
         superclass ::SpiceGenTcl::Common::Sources::Idc
     }
 
-####  Iac class 
+####  Iac class
 
     oo::class create Iac {
         superclass ::SpiceGenTcl::Common::Sources::Iac
     }
-    
 
-####  Ipulse class 
+
+####  Ipulse class
 
     oo::class create Ipulse {
         superclass ::SpiceGenTcl::Ngspice::Sources::pulse
@@ -922,26 +922,26 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             next $name i $npNode $nmNode {*}$args
         }
     }
-    
-####  Isin class 
+
+####  Isin class
 
     oo::class create Isin {
         superclass ::SpiceGenTcl::Common::Sources::Isin
     }
-    
-####  Iexp class 
+
+####  Iexp class
 
     oo::class create Iexp {
         superclass ::SpiceGenTcl::Common::Sources::Iexp
     }
 
-####  Ipwl class 
+####  Ipwl class
 
     oo::class create Ipwl {
         superclass ::SpiceGenTcl::Common::Sources::Ipwl
-    }   
-    
-####  Isffm class 
+    }
+
+####  Isffm class
 
     oo::class create Isffm {
         superclass ::SpiceGenTcl::Ngspice::Sources::sffm
@@ -967,13 +967,13 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             # ```
             # ::SpiceGenTcl::Ngspice::Sources::Isin new 1 net1 net2 -i0 0 -ia 1 -fc {freq -eq} -mdi 0 -fs 1e3 -phasec {phase -eq}
             # ```
-            # Synopsis: name npNode nmNode -i0|ioff value -ia|iamp value -fc|fcar value -mdi value -fs|fsig value  
+            # Synopsis: name npNode nmNode -i0|ioff value -ia|iamp value -fc|fcar value -mdi value -fs|fsig value
             #   ?-phasec value ?-phases value??
             next $name i $npNode $nmNode {*}$args
         }
     }
-        
-####  Iam class 
+
+####  Iam class
 
     oo::class create Iam {
         superclass ::SpiceGenTcl::Ngspice::Sources::am
@@ -999,61 +999,61 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             next $name i $npNode $nmNode {*}$args
         }
     }
-    
-####  Vccs class 
-  
+
+####  Vccs class
+
     oo::class create Vccs {
         superclass ::SpiceGenTcl::Common::Sources::Vccs
     }
 
-####  G class 
-    
+####  G class
+
     # alias for Vccs class
     oo::class create G {
         superclass Vccs
-    }    
+    }
 
-####  Vcvs class 
-  
+####  Vcvs class
+
     oo::class create Vcvs {
         superclass ::SpiceGenTcl::Common::Sources::Vcvs
     }
 
-####  E class 
-    
+####  E class
+
     # alias for Vcvs class
     oo::class create E {
         superclass Vcvs
-    } 
-    
-####  Cccs class 
-  
+    }
+
+####  Cccs class
+
     oo::class create Cccs {
         superclass ::SpiceGenTcl::Common::Sources::Cccs
     }
 
-####  F class 
-    
+####  F class
+
     # alias for Cccs class
     oo::class create F {
         superclass Cccs
-    } 
-        
-####  Ccvs class 
-  
+    }
+
+####  Ccvs class
+
     oo::class create Ccvs {
         superclass ::SpiceGenTcl::Common::Sources::Ccvs
     }
 
-####  H class 
-    
+####  H class
+
     # alias for Ccvs class
     oo::class create H {
         superclass Ccvs
-    } 
-    
-####  BehaviouralSource class 
-    
+    }
+
+####  BehaviouralSource class
+
     oo::class create BehaviouralSource {
         superclass ::SpiceGenTcl::Device
         constructor {name npNode nmNode args} {
@@ -1096,20 +1096,20 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             next b$name [list [list np $npNode] [list nm $nmNode]] $params
         }
     }
-    
-####  B class 
+
+####  B class
 
     # alias for BehaviouralSource class
     oo::class create B {
         superclass BehaviouralSource
     }
 }
-###  SemiconductorDevices 
+###  SemiconductorDevices
 
 namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
-    
-####  Diode class 
-    
+
+####  Diode class
+
     oo::class create Diode {
         superclass ::SpiceGenTcl::Device
         constructor {name npNode nmNode args} {
@@ -1167,15 +1167,15 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
         }
     }
 
-####  D class 
-    
+####  D class
+
     # alias for Diode class
     oo::class create D {
         superclass Diode
     }
-    
-####  Bjt class 
-    
+
+####  Bjt class
+
     oo::class create Bjt {
         superclass ::SpiceGenTcl::Device
         constructor {name ncNode nbNode neNode args} {
@@ -1204,7 +1204,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             # ```
             # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Bjt new 1 netc netb nete -model bjtmod -ns nets -area 1e-3
             # ```
-            # Synopsis: name ncNode nbNode neNode -model value ?-ns value ?-tj value?? ?-area value? ?-areac value? 
+            # Synopsis: name ncNode nbNode neNode -model value ?-ns value ?-tj value?? ?-area value? ?-areac value?
             #   ?-areab value? ?-m value? ?-ic \{value value\}? ?-temp value|-dtemp value? ?-off?
             set arguments [argparse -inline {
                 {-model= -required}
@@ -1218,7 +1218,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
                 -ns=
                 {-tj= -require {ns}}
                 {-off -boolean}
-            }]            
+            }]
             lappend params [list model [dget $arguments model] -posnocheck]
             if {[dget $arguments off]==1} {
                 lappend params {off -sw}
@@ -1242,15 +1242,15 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
         }
     }
 
-####  Q class 
-    
+####  Q class
+
     # alias for Bjt class
     oo::class create Q {
         superclass Bjt
     }
-    
-####  Jfet class 
-    
+
+####  Jfet class
+
     oo::class create Jfet {
         superclass ::SpiceGenTcl::Device
         constructor {name ndNode ngNode nsNode args} {
@@ -1303,15 +1303,15 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
         }
     }
 
-####  J class 
-    
+####  J class
+
     # alias for Jfet class
     oo::class create J {
         superclass Jfet
     }
-    
-####  Mesfet class 
-    
+
+####  Mesfet class
+
     oo::class create Mesfet {
         superclass ::SpiceGenTcl::Device
         constructor {name ndNode ngNode nsNode args} {
@@ -1354,19 +1354,19 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
                 lappend params [list ic [join [dget $arguments ic] ,] -nocheck]
             }
             next z$name [list [list nd $ndNode] [list ng $ngNode] [list ns $nsNode]] $params
-            
+
         }
     }
 
-####  Z class 
-    
+####  Z class
+
     # alias for Mesfet class
     oo::class create Z {
         superclass Mesfet
-    }   
- 
-####  Mosfet class 
-    
+    }
+
+####  Mosfet class
+
     oo::class create Mosfet {
         superclass ::SpiceGenTcl::Device
         constructor {name ndNode ngNode nsNode args} {
@@ -1406,7 +1406,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             # ```
             # Synopsis: name ndNode ngNode nsNode -model value ?-n4 value ?-n5 value ?-n6 value ?-n7 value???? ?-m value?
             #   ?-l value? ?-w value? ?-ad value|-nrd value? ?-as value|-nrs value? ?-temp value? ?-off? ?-pd value?
-            #   ?-ps value? ?-ic \{value value value\}? 
+            #   ?-ps value? ?-ic \{value value value\}?
             #   ?-custparams param1 \{param1Val ?-eq|-poseq|-posnocheck|-pos|-nocheck?\} ...?
             set arguments [argparse -inline {
                 {-model= -required}
@@ -1466,13 +1466,10 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
         }
     }
 
-####  M class 
-    
+####  M class
+
     # alias for Mosfet class
     oo::class create M {
         superclass Mosfet
-    }    
+    }
 }
-
-
-

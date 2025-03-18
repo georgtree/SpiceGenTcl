@@ -1,10 +1,10 @@
 #  .|'''.|            ||                   ..|'''.|                   |''||''|         '||'
-#  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||  
-#   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||  
-# .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||  
-# |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||. 
-#            ||                                                                             
-#           ''''                                                                            
+#  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||
+#   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||
+# .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||
+# |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||.
+#            ||
+#           ''''
 # specAnalysesClassesNgspice.tcl
 # Describes Ngspice analyses classes
 #
@@ -22,25 +22,25 @@ namespace eval ::SpiceGenTcl {
 
 namespace eval ::SpiceGenTcl::Ngspice::Analyses {
 
-###  Dc class 
+###  Dc class
 
     oo::class create Dc {
         superclass ::SpiceGenTcl::Common::Analyses::Dc
     }
 
-###  Ac class 
+###  Ac class
 
     oo::class create Ac {
         superclass ::SpiceGenTcl::Common::Analyses::Ac
     }
 
-###  Sp class 
+###  Sp class
 
     oo::class create Sp {
         superclass ::SpiceGenTcl::Analysis
         mixin ::SpiceGenTcl::Utility
         constructor {args} {
-            # Creates object of class `Sp` that describes s-parameter analysis. 
+            # Creates object of class `Sp` that describes s-parameter analysis.
             #  -variation - parameter that defines frequency scale, could be dec, oct or lin
             #  -n - number of points
             #  -fstart - start frequency
@@ -68,20 +68,20 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             set paramsOrder {n fstart fstop}
             my ParamsProcess $paramsOrder $arguments params
             if {[dexist $arguments donoise]} {
-                lappend params {donoise 1 -pos} 
+                lappend params {donoise 1 -pos}
             }
             ##nagelfar variable name
             next sp $params -name $name
         }
     }
-    
-###  SensAc class 
+
+###  SensAc class
 
     oo::class create SensAc {
         superclass ::SpiceGenTcl::Analysis
         mixin ::SpiceGenTcl::Utility
         constructor {args} {
-            # Creates object of class `SensAc` that describes SENS ac analysis. 
+            # Creates object of class `SensAc` that describes SENS ac analysis.
             #  -outvar - output variable
             #  -variation - parameter that defines frequency scale, could be dec, oct or lin
             #  -n - number of points
@@ -114,18 +114,18 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             next sens $params -name $name
         }
     }
-    
-###  SensDc class 
+
+###  SensDc class
 
     oo::class create SensDc {
         superclass ::SpiceGenTcl::Analysis
         mixin ::SpiceGenTcl::Utility
         constructor {args} {
-            # Creates object of class `SensDc` that describes SENS dc analysis. 
+            # Creates object of class `SensDc` that describes SENS dc analysis.
             #  -outvar - output variable
             #  -name - name argument, optional
             # ```
-            # .senc outvar 
+            # .senc outvar
             # ```
             # Example of class initialization:
             # ```
@@ -142,14 +142,14 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             next sens $params -name $name
         }
     }
-    
-###  Tran class 
+
+###  Tran class
 
     oo::class create Tran {
         superclass ::SpiceGenTcl::Common::Analyses::Tran
     }
-    
-###  Op class 
+
+###  Op class
 
     oo::class create Op {
         superclass ::SpiceGenTcl::Common::Analyses::Op
