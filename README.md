@@ -15,7 +15,7 @@ SPICE-like simulators written in Python.
 
 ![Static Badge](https://img.shields.io/badge/Windows_11-pass-green)
 
-![Static Badge](https://img.shields.io/badge/coverage-96.3%25-green)
+![Static Badge](https://img.shields.io/badge/coverage-96.56%25-green)
 
 ## General concept
 The general concept of the package is to build a netlist using Tcl scripts. It is based on the TclOO
@@ -36,6 +36,7 @@ SpiceGenTcl can be used if you need:
 - change netlist structure on the fly
 - simulate different models in the same circuit setup
 - run circuit optimization with parameters variations as well as variations in circuit topology
+- parse existing netlist and gain control over all circuit elements with Tcl
 
 Currently, there are range of examples for common analyses (DC, AC, transient) for all simulators, and advanced examples
 for some of them:

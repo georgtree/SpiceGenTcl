@@ -2254,7 +2254,7 @@ namespace eval ::SpiceGenTcl {
             set tree [::struct::tree]
             $tree rename root /
             set lineNum 0
-            set stack [list /]
+            set stack /
             set currentPath /
             foreach line $fileData {
                 # Check if line starts with .subckt
@@ -2348,6 +2348,9 @@ namespace eval ::SpiceGenTcl {
                                                         {*}$lines2remove] true]
             set elements {}
             foreach element $netlist {
+                if {$element eq {}} {
+                    continue
+                }
                 if {[regexp {^oo::class\s+(\S+)} $element]} {
                     lappend elements $element
                 } else {
@@ -2370,7 +2373,7 @@ namespace eval ::SpiceGenTcl {
             if {![info exists FileData]} {
                 error "Parser object '[my configure -parsername]' doesn't have prepared data"
             }
-            #set allLines $FileData
+            set allLines $FileData
             set topNetlist [my configure -topnetlist]
             my GetSubcircuitLines
             # parse found subcircuits definitions first
@@ -2390,9 +2393,9 @@ namespace eval ::SpiceGenTcl {
                     set children [$SubcktsTree children $node]
                     lappend lines2remove {*}[lseq $startLine $endLine]
                 }
-                set FileData [lremove $FileData {*}$lines2remove]
+                set allLines [lremove $allLines {*}$lines2remove]
             }
-            foreach element [my BuildNetlist $FileData] {
+            foreach element [my BuildNetlist $allLines] {
                 # check the netlist string for presence of class definition
                 if {$element eq {}} {
                     continue

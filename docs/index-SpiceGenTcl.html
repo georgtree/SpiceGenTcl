@@ -2833,7 +2833,7 @@
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Parser::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Parser::buildTopNetlist" title="buildTopNetlist" class='ruff_cmd'>buildTopNetlist</a></td><td>Builds top netlist corresponding to parsed netlist file.</td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
-<tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Parser::readAndParse" title="readAndParse" class='ruff_cmd'>readAndParse</a></td><td>Not documented.</td></tr>
+<tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Parser::readAndParse" title="readAndParse" class='ruff_cmd'>readAndParse</a></td><td>Calls methods <code>readFile</code> and <code>buildTopNetlist</code> in a sequence.</td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Parser::readFile" title="readFile" class='ruff_cmd'>readFile</a></td><td>Not documented.</td></tr>
 </table>
 <h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#b9b96e>-filepath</font></code>, <code><font color=#b9b96e>-parsername</font></code>, <code><font color=#b9b96e>-topnetlist</font></code></p>
@@ -2888,7 +2888,7 @@
     <b><font color=#ffa500>if</font></b> {![<b><font color=#ffa500>info</font></b> exists FileData]} {
         <b><font color=#ffa500>error</font></b> <font color=#90ee90>&quot;Parser object '<font color=#f1b479>[</font>my configure -parsername<font color=#f1b479>]</font>' doesn't have prepared data&quot;</font>
     }
-    <i><font color=#76a396>#set allLines $FileData</font></i>
+    <b><font color=#ffa500>set</font></b> allLines <font color=#f1b479>$FileData</font>
     <b><font color=#ffa500>set</font></b> topNetlist [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-topnetlist</font>]
     <b><font color=#fe6efe>my</font></b> GetSubcircuitLines
     <i><font color=#76a396># parse found subcircuits definitions first</font></i>
@@ -2900,7 +2900,7 @@
             }
             <b><font color=#fe6efe>my</font></b> BuildSubcktFromDef <font color=#f1b479>$node</font>
             <b><font color=#ffa500>if</font></b> {[<font color=#f1b479>$SubcktsTree</font> parent <font color=#f1b479>$node</font>] eq {/}} {
-                <b><font color=#ffa500>eval</font></b> [<font color=#f1b479>$SubcktsTree</font> get <font color=#f1b479>$node</font> definition]
+                <b><font color=#ffa500>uplevel</font></b> 1 [<font color=#f1b479>$SubcktsTree</font> get <font color=#f1b479>$node</font> definition]
                 <font color=#f1b479>$topNetlist</font> add [<b><font color=#ffa500>eval</font></b> {<b><font color=#ffa500>*</font></b>}[<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>string</font></b> totitle [<b><font color=#ffa500>file</font></b> tail <font color=#f1b479>$node</font>]] new]]
             }
             <b><font color=#ffa500>set</font></b> startLine [<font color=#f1b479>$SubcktsTree</font> get <font color=#f1b479>$node</font> startLine]
@@ -2908,20 +2908,34 @@
             <b><font color=#ffa500>set</font></b> children [<font color=#f1b479>$SubcktsTree</font> children <font color=#f1b479>$node</font>]
             <b><font color=#ffa500>lappend</font></b> lines2remove {<b><font color=#ffa500>*</font></b>}[lseq <font color=#f1b479>$startLine</font> <font color=#f1b479>$endLine</font>]
         }
-        <b><font color=#ffa500>set</font></b> FileData [lremove <font color=#f1b479>$FileData</font> {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$lines2remove</font>]
+        <b><font color=#ffa500>set</font></b> allLines [lremove <font color=#f1b479>$allLines</font> {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$lines2remove</font>]
     }
-    <b><font color=#fe6efe>my</font></b> BuildNetlist <font color=#f1b479>$FileData</font> <font color=#f1b479>$topNetlist</font>
+    <b><font color=#ffa500>foreach</font></b> element [<b><font color=#fe6efe>my</font></b> BuildNetlist <font color=#f1b479>$allLines</font>] {
+        <i><font color=#76a396># check the netlist string for presence of class definition</font></i>
+        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$element</font> eq {}} {
+            <b><font color=#fe6efe>continue</font></b>
+        }
+        <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>regexp</font></b> {^oo::class\s+(\S+)} <font color=#f1b479>$element</font>]} {
+            <b><font color=#ffa500>uplevel</font></b> 1 <font color=#f1b479>$element</font>
+        } <b><font color=#ffa500>else</font></b> {
+            <font color=#f1b479>$topNetlist</font> add [<b><font color=#ffa500>eval</font></b> <font color=#f1b479>$element</font>]
+        }
+    }
     <b><font color=#fe6efe>return</font></b>
 }</pre></div>
 </div></details>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Parser::readAndParse'>readAndParse</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Parser" title="::SpiceGenTcl::Parser" class='ruff_cmd'>::SpiceGenTcl::Parser</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Parser'>Parser</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
+<p class='ruff'>Calls methods <code>readFile</code> and <code>buildTopNetlist</code> in a sequence</p>
 <div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT readAndParse</span> </div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Parser_readAndParse' href="javascript:toggleSource('SpiceGenTcl_Parser_readAndParse')">Show source</a></p>
 <div id='SpiceGenTcl_Parser_readAndParse' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> readAndParse {} {
 
-    <b><font color=#ffa500>error</font></b> <font color=#90ee90>&quot;Not implemented&quot;</font>
+    <i><font color=#76a396># Calls methods `readFile` and `buildTopNetlist` in a sequence</font></i>
+    <b><font color=#fe6efe>my</font></b> readFile
+    <b><font color=#fe6efe>my</font></b> buildTopNetlist
+    <b><font color=#fe6efe>return</font></b>
 }</pre></div>
 </div></details>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Parser::readFile'>readFile</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Parser" title="::SpiceGenTcl::Parser" class='ruff_cmd'>::SpiceGenTcl::Parser</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Parser'>Parser</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
@@ -4159,7 +4173,8 @@
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Parser'>Parser</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Parser::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;Parser create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name filepath&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;Parser new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name filepath&lt;/span&gt;</pre>Creates object of class <code>Parser</code> that do parsing of valid simulator netlist.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Parser::buildTopNetlist'>buildTopNetlist</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT buildTopNetlist&lt;/span&gt; </pre>Builds top netlist corresponding to parsed netlist file
-</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Parser::readAndParse'>readAndParse</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT readAndParse&lt;/span&gt; </pre></span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Parser::readFile'>readFile</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT readFile&lt;/span&gt; </pre></span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Pin'>Pin</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Pin::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Pin</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name nodeName&lt;/span&gt;
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Parser::readAndParse'>readAndParse</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT readAndParse&lt;/span&gt; </pre>Calls methods <code>readFile</code> and <code>buildTopNetlist</code> in a sequence
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Parser::readFile'>readFile</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT readFile&lt;/span&gt; </pre></span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Pin'>Pin</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Pin::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Pin</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name nodeName&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Pin</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name nodeName&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Pin</font></b></code> with name and connected node
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Pin::checkFloating'>checkFloating</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT checkFloating&lt;/span&gt; </pre>Determines if pin is connected to the node.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Pin::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre>Creates string for SPICE netlist.
