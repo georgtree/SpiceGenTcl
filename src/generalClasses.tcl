@@ -2304,7 +2304,6 @@ namespace eval ::SpiceGenTcl {
                 error "Parser object '[my configure -parsername]' doesn't have prepared data"
             }
             set allLines $FileData
-            #set topNetlist [my configure -topnetlist]
             set startLine [$SubcktsTree get $subcktPath startLine]
             set endLine [$SubcktsTree get $subcktPath endLine]
             set children [$SubcktsTree children $subcktPath]
@@ -2349,10 +2348,10 @@ namespace eval ::SpiceGenTcl {
                                                         {*}$lines2remove] true]
             set elements {}
             foreach element $netlist {
-                if {[regexp {^oo::class\s+(\S+)} [@ $element 0]]} {
-                    lappend elements [@ $element 0]
+                if {[regexp {^oo::class\s+(\S+)} $element]} {
+                    lappend elements $element
                 } else {
-                    lappend elements "my add \[[@ $element 0]\]"
+                    lappend elements "my add \[$element\]"
                 }
             }
             set definition [string map [list @classname@ $subcktClassName\
@@ -2395,7 +2394,6 @@ namespace eval ::SpiceGenTcl {
             }
             foreach element [my BuildNetlist $FileData] {
                 # check the netlist string for presence of class definition
-                set element [@ $element 0]
                 if {$element eq {}} {
                     continue
                 }
@@ -2434,15 +2432,15 @@ namespace eval ::SpiceGenTcl {
                             ##nagelfar ignore Non static subcommand
                             set modelCommands [my [dict get $DotsMethods $restChars] $line]
                             if {[llength $modelCommands]==2} {
-                                lappend netlist [list [@ $modelCommands 0]]
-                                lappend netlist [list [@ $modelCommands 1]]
+                                lappend netlist [@ $modelCommands 0]
+                                lappend netlist [@ $modelCommands 1]
                             } else {
                                 ##nagelfar ignore Non static subcommand
-                                lappend netlist [list [my [dict get $DotsMethods $restChars] $line]]
+                                lappend netlist [my [dict get $DotsMethods $restChars] $line]
                             }
                         } else {
                             ##nagelfar ignore Non static subcommand
-                            lappend netlist [list [my [dict get $DotsMethods $restChars] $line]]
+                            lappend netlist [my [dict get $DotsMethods $restChars] $line]
                         }
                     } else {
                         puts "Line '$lineList' contains unsupported dot statement '$firstWord', skip that line"
@@ -2451,7 +2449,7 @@ namespace eval ::SpiceGenTcl {
                 } elseif {[string match {[a-z]} $firstChar]} {
                     if {$firstChar in $elems} {
                         ##nagelfar ignore Non static subcommand
-                        lappend netlist [list [my [dict get $ElemsMethods $firstChar] $line]]
+                        lappend netlist [my [dict get $ElemsMethods $firstChar] $line]
                     } else {
                         puts "Line '$lineList' contains unsupported element '$firstWord', skip that line"
                         continue
