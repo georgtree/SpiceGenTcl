@@ -2182,7 +2182,7 @@ namespace eval ::SpiceGenTcl {
 
 ###  Parser class definition
     ##nagelfar subcmd+ _obj,Parser configure CheckEqual Unbrace ParseWithEqual CheckBraced CheckBracedWithEqual\
-            ParseBracedWithEqual BuildNetlist
+            ParseBracedWithEqual BuildNetlist buildTopNetlist ParseParams
     oo::configurable create Parser {
         property parsername
         variable parsername
@@ -2427,6 +2427,7 @@ namespace eval ::SpiceGenTcl {
                 set lineList [split $line]
                 set firstWord [@ $lineList 0]
                 set firstChar [string index $firstWord 0]
+                ##nagelfar ignore
                 set restChars [string range $firstWord 1 end]
                 if {$firstChar eq {.}} {
                     set restChars [string tolower $restChars]
