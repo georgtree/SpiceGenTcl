@@ -319,11 +319,17 @@
         {<font color=#b9b96e>-l2</font>= <font color=#b9b96e>-required</font>}
         {<font color=#b9b96e>-k</font>= <font color=#b9b96e>-required</font>}
     }
+    <i><font color=#76a396>##nagelfar variable k</font></i>
     <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$k</font>]&gt;1) && ([@ <font color=#f1b479>$k</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
+        <i><font color=#76a396>##nagelfar ignore</font></i>
         <b><font color=#ffa500>set</font></b> k [<b><font color=#ffa500>list</font></b> k [@ <font color=#f1b479>$k</font> 0] <font color=#b9b96e>-poseq</font>]
     } <b><font color=#ffa500>else</font></b> {
+        <i><font color=#76a396>##nagelfar ignore</font></i>
         <b><font color=#ffa500>set</font></b> k [<b><font color=#ffa500>list</font></b> k <font color=#f1b479>$k</font> <font color=#b9b96e>-pos</font>]
     }
+    <i><font color=#76a396>##nagelfar variable l1</font></i>
+    <i><font color=#76a396>##nagelfar variable l2</font></i>
+    <i><font color=#76a396>##nagelfar ignore</font></i>
     <b><font color=#ffa500>next</font></b> k<font color=#f1b479>$name</font> {} [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> l1 <font color=#f1b479>$l1</font> <font color=#b9b96e>-posnocheck</font>] [<b><font color=#ffa500>list</font></b> l2 <font color=#f1b479>$l2</font> <font color=#b9b96e>-posnocheck</font>] <font color=#f1b479>$k</font>]
 }</pre></div>
 </div></details>
@@ -1036,9 +1042,11 @@
         <b><font color=#ffa500>lappend</font></b> pinsList [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$pinName</font> <font color=#f1b479>$node</font>]
     }
     <i><font color=#76a396># get parameters names of subcircuit</font></i>
-    <b><font color=#ffa500>set</font></b> paramsNames [<b><font color=#ffa500>dict</font></b> keys [<font color=#f1b479>$subcktObj</font> getParams]]
-    <b><font color=#ffa500>foreach</font></b> paramName <font color=#f1b479>$paramsNames</font> {
-        <b><font color=#ffa500>lappend</font></b> paramDefList -<font color=#f1b479>${paramName}</font>=
+    <b><font color=#ffa500>if</font></b> {![<b><font color=#ffa500>catch</font></b> {<font color=#f1b479>$subcktObj</font> getParams}]} {
+        <b><font color=#ffa500>set</font></b> paramsNames [<b><font color=#ffa500>dict</font></b> keys [<font color=#f1b479>$subcktObj</font> getParams]]
+        <b><font color=#ffa500>foreach</font></b> paramName <font color=#f1b479>$paramsNames</font> {
+            <b><font color=#ffa500>lappend</font></b> paramDefList -<font color=#f1b479>${paramName}</font>=
+        }
     }
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> exists paramDefList]} {
         <i><font color=#76a396># create definition for argparse module for passing parameters as optional arguments</font></i>

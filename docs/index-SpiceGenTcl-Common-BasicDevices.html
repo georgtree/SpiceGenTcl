@@ -567,8 +567,10 @@
         <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Wrong number of nodes '<font color=#f1b479>[</font>llength <font color=#f1b479>$</font>nodes<font color=#f1b479>]</font>' in definition, should be '<font color=#f1b479>[</font>llength <font color=#f1b479>$</font>pinsNames<font color=#f1b479>]</font>'&quot;</font>
     }
     <b><font color=#ffa500>set</font></b> pinsList [<b><font color=#ffa500>lmap</font></b> pinName <font color=#f1b479>$pinsNames</font> node <font color=#f1b479>$nodes</font> {<b><font color=#ffa500>join</font></b> [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$pinName</font> <font color=#f1b479>$node</font>]}]
-    <b><font color=#ffa500>set</font></b> paramDefList [<b><font color=#ffa500>lmap</font></b> paramName [<b><font color=#ffa500>dict</font></b> keys [<font color=#f1b479>$subcktObj</font> getParams]] {<b><font color=#ffa500>subst</font></b> -<font color=#f1b479>${paramName}</font>=}]
-    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramDefList</font> ne {}} {
+    <b><font color=#ffa500>if</font></b> {![<b><font color=#ffa500>catch</font></b> {<font color=#f1b479>$subcktObj</font> getParams}]} {
+        <b><font color=#ffa500>set</font></b> paramDefList [<b><font color=#ffa500>lmap</font></b> paramName [<b><font color=#ffa500>dict</font></b> keys [<font color=#f1b479>$subcktObj</font> getParams]] {<b><font color=#ffa500>subst</font></b> -<font color=#f1b479>${paramName}</font>=}]
+    }
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> exists paramDefList]} {
         <i><font color=#76a396># create definition for argparse module for passing parameters as optional arguments</font></i>
         <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> <font color=#90ee90>&quot;</font>
 <font color=#90ee90>            <font color=#f1b479>[</font>join <font color=#f1b479>$</font>paramDefList \n<font color=#f1b479>]</font></font>

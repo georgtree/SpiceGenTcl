@@ -592,9 +592,11 @@
         <b><font color=#ffa500>lappend</font></b> pinsList [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$pinName</font> <font color=#f1b479>$node</font>]
     }
     <i><font color=#76a396># get parameters names of subcircuit</font></i>
-    <b><font color=#ffa500>set</font></b> paramsNames [<b><font color=#ffa500>dict</font></b> keys [<font color=#f1b479>$subcktObj</font> getParams]]
-    <b><font color=#ffa500>foreach</font></b> paramName <font color=#f1b479>$paramsNames</font> {
-        <b><font color=#ffa500>lappend</font></b> paramDefList -<font color=#f1b479>${paramName}</font>=
+    <b><font color=#ffa500>if</font></b> {![<b><font color=#ffa500>catch</font></b> {<font color=#f1b479>$subcktObj</font> getParams}]} {
+        <b><font color=#ffa500>set</font></b> paramsNames [<b><font color=#ffa500>dict</font></b> keys [<font color=#f1b479>$subcktObj</font> getParams]]
+        <b><font color=#ffa500>foreach</font></b> paramName <font color=#f1b479>$paramsNames</font> {
+            <b><font color=#ffa500>lappend</font></b> paramDefList -<font color=#f1b479>${paramName}</font>=
+        }
     }
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> exists paramDefList]} {
         <i><font color=#76a396># create definition for argparse module for passing parameters as optional arguments</font></i>

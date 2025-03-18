@@ -65,8 +65,6 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT getDataDict\fP
 .br
-\fBOBJECT getElement\fP \fIelemName\fP
-.br
 \fBOBJECT runAndRead\fP \fI?-nodelete?\fP
 .br
 \fBOBJECT constructor\fP \fIvalue ?-name value?\fP
@@ -853,7 +851,7 @@ getDataDict
 Method to get dictionary with raw data vectors\&.
 .TP
 getElement
-Gets particular element object reference by its name\&.
+See \fINetlist\&.getElement\fP
 .TP
 runAndRead
 Invokes 'runAndRead', 'configure -log' and 'configure -data' methods from attached simulator\&.
@@ -984,22 +982,6 @@ Method to get dictionary with raw data vectors\&.
 \fBReturn value\fR
 .PP
 dict with vectors data, keys - names of vectors
-.PP
-.RS -4n
-\fBgetElement\fR (::SpiceGenTcl::Circuit)
-.RE
-.PP
-Gets particular element object reference by its name\&.
-.RS 4n\fBOBJECT getElement\fP \fIelemName\fP
-.br
-.RE
-.PP
-\fBParameters\fR
-.RS 4n
-.TP
-elemName
-Name of element\&.
-.RE
 .PP
 .RS -4n
 \fBrunAndRead\fR (::SpiceGenTcl::Circuit)
@@ -3380,9 +3362,9 @@ Not documented\&.
 .PP
 \fBProperties\fR
 .PP
-Readable: -filepath, -topnetlist
+Readable: -filepath, -parsername, -topnetlist
 .PP
-Writable: -filepath, -topnetlist
+Writable: -filepath, -parsername, -topnetlist
 .PP
 \fBSubclasses\fR
 .PP

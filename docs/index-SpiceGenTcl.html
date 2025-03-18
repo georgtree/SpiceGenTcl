@@ -186,10 +186,8 @@
     <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-type</font> <font color=#f1b479>$type</font>
     <i><font color=#76a396># create Analysis objects</font></i>
     <b><font color=#ffa500>foreach</font></b> param <font color=#f1b479>$params</font> {
-        <b><font color=#ffa500>if</font></b> {[@ <font color=#f1b479>$param</font> 2] eq {}} {
-            <b><font color=#fe6efe>my</font></b> addParam [@ <font color=#f1b479>$param</font> 0] [@ <font color=#f1b479>$param</font> 1]
-        } <b><font color=#ffa500>elseif</font></b> {[@ <font color=#f1b479>$param</font> 1] eq {<font color=#b9b96e>-sw</font>}} {
-            <b><font color=#fe6efe>my</font></b> addParam [@ <font color=#f1b479>$param</font> 0] <font color=#b9b96e>-sw</font>
+        <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$param</font>]&lt;2} {
+            <b><font color=#ffa500>error</font></b> <font color=#90ee90>&quot;Value '<font color=#f1b479>$</font>param' is not a valid value&quot;</font>
         } <b><font color=#ffa500>else</font></b> {
             <b><font color=#fe6efe>my</font></b> addParam {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$param</font>
         }
@@ -244,6 +242,7 @@
     <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$value</font> eq {<font color=#b9b96e>-sw</font>}} {
         <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterSwitch new <font color=#f1b479>$paramName</font>]
     } <b><font color=#ffa500>else</font></b> {
+        <i><font color=#76a396>##nagelfar variable paramQual</font></i>
         <b><font color=#ffa500>switch</font></b> <font color=#f1b479>$paramQual</font> {
             pos {
                 <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterPositional new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
@@ -530,7 +529,7 @@
 <tr><td><code>getAllElemNames</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Netlist::getAllElemNames" title="Netlist.getAllElemNames" class='ruff_cmd'>Netlist.getAllElemNames</a></td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::getDataCsv" title="getDataCsv" class='ruff_cmd'>getDataCsv</a></td><td>Returns string with csv formatting containing all data.</td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::getDataDict" title="getDataDict" class='ruff_cmd'>getDataDict</a></td><td>Method to get dictionary with raw data vectors.</td></tr>
-<tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::getElement" title="getElement" class='ruff_cmd'>getElement</a></td><td>Gets particular element object reference by its name.</td></tr>
+<tr><td><code>getElement</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Netlist::getElement" title="Netlist.getElement" class='ruff_cmd'>Netlist.getElement</a></td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::runAndRead" title="runAndRead" class='ruff_cmd'>runAndRead</a></td><td>Invokes 'runAndRead', 'configure -log' and 'configure -data' methods from attached simulator.</td></tr>
 </table>
 <h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#b9b96e>-data</font></code>, <code><font color=#b9b96e>-log</font></code>, <code><font color=#b9b96e>-name</font></code>, <code><font color=#b9b96e>-simulator</font></code></p>
@@ -682,28 +681,6 @@
     <i><font color=#76a396># Method to get dictionary with raw data vectors.</font></i>
     <i><font color=#76a396># Returns: dict with vectors data, keys - names of vectors</font></i>
     <b><font color=#fe6efe>return</font></b> [[<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-data</font>] getTracesData]
-}</pre></div>
-</div></details>
-<h4 class='ruffmethod'><a name='::SpiceGenTcl::Circuit::getElement'>getElement</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Circuit'>Circuit</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
-<div style='clear:both;'></div>
-<p class='ruff'>Gets particular element object reference by its name.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT getElement</span> <span class='ruff_arg'>elemName</span></div>
-<details><summary class='ruff-expand'><span>Details</span></summary>
-<h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
-<tr><td><code>elemName</code></td><td>Name of element.</td></tr>
-</table>
-<div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Circuit_getElement' href="javascript:toggleSource('SpiceGenTcl_Circuit_getElement')">Show source</a></p>
-<div id='SpiceGenTcl_Circuit_getElement' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> getElement {elemName} {
-
-    <i><font color=#76a396># Gets particular element object reference by its name.</font></i>
-    <i><font color=#76a396>#  elemName - name of element</font></i>
-    <b><font color=#ffa500>set</font></b> elemName [<b><font color=#ffa500>string</font></b> tolower <font color=#f1b479>$elemName</font>]
-    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>catch</font></b> {<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Elements</font> <font color=#f1b479>$elemName</font>}]} {
-        <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Element with name '<font color=#f1b479>$</font>elemName' was not found in netlist's '<font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font>' list of elements&quot;</font>
-    } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>set</font></b> foundElem [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Elements</font> <font color=#f1b479>$elemName</font>]
-    }
-    <b><font color=#fe6efe>return</font></b> <font color=#f1b479>$foundElem</font>
 }</pre></div>
 </div></details>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Circuit::runAndRead'>runAndRead</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Circuit'>Circuit</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
@@ -966,16 +943,8 @@
     <i><font color=#76a396>#  - poseq - combination of both flags, print only '{$equation}'</font></i>
     <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$params</font> ne {}} {
         <b><font color=#ffa500>foreach</font></b> param <font color=#f1b479>$params</font> {
-            <b><font color=#ffa500>if</font></b> {[@ <font color=#f1b479>$param</font> 2] eq {}} {
-                <b><font color=#fe6efe>my</font></b> addParam [@ <font color=#f1b479>$param</font> 0] [@ <font color=#f1b479>$param</font> 1]
-            } <b><font color=#ffa500>elseif</font></b> {[@ <font color=#f1b479>$param</font> 1] eq {<font color=#b9b96e>-sw</font>}} {
-                <b><font color=#fe6efe>my</font></b> addParam [@ <font color=#f1b479>$param</font> 0] <font color=#b9b96e>-sw</font>
-            } <b><font color=#ffa500>else</font></b> {
-                <b><font color=#fe6efe>my</font></b> addParam {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$param</font>
-            }
+            <b><font color=#fe6efe>my</font></b> addParam {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$param</font>
         }
-    } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>set</font></b> Params {}
     }
 }</pre></div>
 </div></details>
@@ -1027,6 +996,7 @@
     <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$value</font> eq {<font color=#b9b96e>-sw</font>}} {
         <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterSwitch new <font color=#f1b479>$paramName</font>]
     } <b><font color=#ffa500>else</font></b> {
+        <i><font color=#76a396>##nagelfar variable paramQual</font></i>
         <b><font color=#ffa500>switch</font></b> <font color=#f1b479>$paramQual</font> {
             pos {
                 <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterPositional new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
@@ -1425,12 +1395,10 @@
         <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-name</font> [<b><font color=#fe6efe>self</font></b> object]
     }
     <b><font color=#ffa500>foreach</font></b> param <font color=#f1b479>$params</font> {
-        <b><font color=#ffa500>if</font></b> {[@ <font color=#f1b479>$param</font> 2] eq {}} {
-            <b><font color=#fe6efe>my</font></b> addParam [@ <font color=#f1b479>$param</font> 0] [@ <font color=#f1b479>$param</font> 1]
-        } <b><font color=#ffa500>elseif</font></b> {[@ <font color=#f1b479>$param</font> 2] eq {<font color=#b9b96e>-eq</font>}} {
-            <b><font color=#fe6efe>my</font></b> addParam [@ <font color=#f1b479>$param</font> 0] [@ <font color=#f1b479>$param</font> 1] <font color=#b9b96e>-eq</font>
+        <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$param</font>]&lt;2} {
+            <b><font color=#ffa500>error</font></b> <font color=#90ee90>&quot;Value '<font color=#f1b479>$</font>param' is not a valid value&quot;</font>
         } <b><font color=#ffa500>else</font></b> {
-            <b><font color=#ffa500>error</font></b> {Wrong parameter definition in Ic}
+            <b><font color=#fe6efe>my</font></b> addParam {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$param</font>
         }
     }
 }</pre></div>
@@ -1711,16 +1679,8 @@
     <i><font color=#76a396># create Params objects</font></i>
     <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$params</font> ne {}} {
         <b><font color=#ffa500>foreach</font></b> param <font color=#f1b479>$params</font> {
-            <b><font color=#ffa500>if</font></b> {[@ <font color=#f1b479>$param</font> 2] eq {}} {
-                <b><font color=#fe6efe>my</font></b> addParam [@ <font color=#f1b479>$param</font> 0] [@ <font color=#f1b479>$param</font> 1]
-            } <b><font color=#ffa500>elseif</font></b> {[@ <font color=#f1b479>$param</font> 2] eq {<font color=#b9b96e>-eq</font>}} {
-                <b><font color=#fe6efe>my</font></b> addParam [@ <font color=#f1b479>$param</font> 0] [@ <font color=#f1b479>$param</font> 1] <font color=#b9b96e>-eq</font>
-            } <b><font color=#ffa500>else</font></b> {
-                <b><font color=#ffa500>error</font></b> <font color=#90ee90>&quot;Wrong parameter definition in model <font color=#f1b479>$</font>name&quot;</font>
-            }
+            <b><font color=#fe6efe>my</font></b> addParam {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$param</font>
         }
-    } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>set</font></b> Params {}
     }
 }</pre></div>
 </div></details>
@@ -1772,6 +1732,7 @@
     <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$value</font> eq {<font color=#b9b96e>-sw</font>}} {
         <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterSwitch new <font color=#f1b479>$paramName</font>]
     } <b><font color=#ffa500>else</font></b> {
+        <i><font color=#76a396>##nagelfar variable paramQual</font></i>
         <b><font color=#ffa500>switch</font></b> <font color=#f1b479>$paramQual</font> {
             pos {
                 <b><font color=#ffa500>dict</font></b> append Params <font color=#f1b479>$paramName</font> [::SpiceGenTcl::ParameterPositional new <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
@@ -1829,7 +1790,7 @@
 
     <i><font color=#76a396># Creates model string for SPICE netlist.</font></i>
     <i><font color=#76a396># Returns: SPICE netlist's string</font></i>
-    <b><font color=#ffa500>if</font></b> {(<font color=#f1b479>$Params</font> eq {}) || (![<b><font color=#ffa500>info</font></b> exists Params])} {
+    <b><font color=#ffa500>if</font></b> {![<b><font color=#ffa500>info</font></b> exists Params]} {
         <b><font color=#ffa500>lappend</font></b> params {}
         <b><font color=#fe6efe>return</font></b> <font color=#90ee90>&quot;.model <font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font> <font color=#f1b479>[</font>my configure -type<font color=#f1b479>]</font>&quot;</font>
     } <b><font color=#ffa500>else</font></b> {
@@ -1939,10 +1900,6 @@
     <i><font color=#76a396># Adds elements objects to Elements dictionary.</font></i>
     <i><font color=#76a396>#  args - elements objects references</font></i>
     <b><font color=#ffa500>foreach</font></b> arg <font color=#f1b479>$args</font> {
-        <b><font color=#ffa500>set</font></b> argClass [<b><font color=#ffa500>info</font></b> object class <font color=#f1b479>$arg</font>]
-        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$argClass</font> in {::SpiceGenTcl::Options ::SpiceGenTcl::Analysis}} {
-            <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;<font color=#f1b479>$</font>argClass element can't be included in general netlist&quot;</font>
-        }
         <b><font color=#ffa500>lappend</font></b> elementsNamesList [<b><font color=#ffa500>string</font></b> tolower [<font color=#f1b479>$arg</font> configure <font color=#b9b96e>-name</font>]]
     }
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> exists Elements]} {
@@ -1997,6 +1954,9 @@
 
     <i><font color=#76a396># Creates netlist string for SPICE netlist.</font></i>
     <i><font color=#76a396># Returns: SPICE netlist's string</font></i>
+    <b><font color=#ffa500>if</font></b> {![<b><font color=#ffa500>info</font></b> exists Elements]} {
+        <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Netlist '<font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font>' doesn't have attached elements&quot;</font>
+    }
     <b><font color=#fe6efe>return</font></b> [<b><font color=#ffa500>join</font></b> [<b><font color=#ffa500>lmap</font></b> element [<b><font color=#ffa500>dict</font></b> values <font color=#f1b479>$Elements</font>] {<font color=#f1b479>$element</font> genSPICEString}] \n]
 }</pre></div>
 </div></details>
@@ -2011,6 +1971,9 @@
 
     <i><font color=#76a396># Gets names of all elements in netlist.</font></i>
     <i><font color=#76a396># Returns: list of elements names</font></i>
+    <b><font color=#ffa500>if</font></b> {![<b><font color=#ffa500>info</font></b> exists Elements]} {
+        <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Netlist '<font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font>' doesn't have attached elements&quot;</font>
+    }
     <b><font color=#fe6efe>return</font></b> [<b><font color=#ffa500>dict</font></b> keys <font color=#f1b479>$Elements</font>]
 }</pre></div>
 </div></details>
@@ -2119,10 +2082,8 @@
         <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-name</font> [<b><font color=#fe6efe>self</font></b> object]
     }
     <b><font color=#ffa500>foreach</font></b> param <font color=#f1b479>$params</font> {
-        <b><font color=#ffa500>if</font></b> {[@ <font color=#f1b479>$param</font> 2] eq {}} {
-            <b><font color=#fe6efe>my</font></b> addParam [@ <font color=#f1b479>$param</font> 0] [@ <font color=#f1b479>$param</font> 1]
-        } <b><font color=#ffa500>elseif</font></b> {[@ <font color=#f1b479>$param</font> 1] eq {<font color=#b9b96e>-sw</font>}} {
-            <b><font color=#fe6efe>my</font></b> addParam [@ <font color=#f1b479>$param</font> 0] <font color=#b9b96e>-sw</font>
+        <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$param</font>]&lt;2} {
+            <b><font color=#ffa500>error</font></b> <font color=#90ee90>&quot;Value '<font color=#f1b479>$</font>param' is not a valid value&quot;</font>
         } <b><font color=#ffa500>else</font></b> {
             <b><font color=#fe6efe>my</font></b> addParam {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$param</font>
         }
@@ -2738,12 +2699,10 @@
         <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-name</font> [<b><font color=#fe6efe>self</font></b> object]
     }
     <b><font color=#ffa500>foreach</font></b> param <font color=#f1b479>$params</font> {
-        <b><font color=#ffa500>if</font></b> {[@ <font color=#f1b479>$param</font> 2] eq {}} {
-            <b><font color=#fe6efe>my</font></b> addParam [@ <font color=#f1b479>$param</font> 0] [@ <font color=#f1b479>$param</font> 1]
-        } <b><font color=#ffa500>elseif</font></b> {[@ <font color=#f1b479>$param</font> 2] eq {<font color=#b9b96e>-eq</font>}} {
-            <b><font color=#fe6efe>my</font></b> addParam [@ <font color=#f1b479>$param</font> 0] [@ <font color=#f1b479>$param</font> 1] <font color=#b9b96e>-eq</font>
+        <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$param</font>]&lt;2} {
+            <b><font color=#ffa500>error</font></b> <font color=#90ee90>&quot;Value '<font color=#f1b479>$</font>param' is not a valid value&quot;</font>
         } <b><font color=#ffa500>else</font></b> {
-            <b><font color=#ffa500>error</font></b> <font color=#90ee90>&quot;Wrong parameter definition in ParamStatement&quot;</font>
+            <b><font color=#fe6efe>my</font></b> addParam {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$param</font>
         }
     }
 }</pre></div>
@@ -2877,8 +2836,8 @@
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Parser::readAndParse" title="readAndParse" class='ruff_cmd'>readAndParse</a></td><td>Not documented.</td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Parser::readFile" title="readFile" class='ruff_cmd'>readFile</a></td><td>Not documented.</td></tr>
 </table>
-<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#b9b96e>-filepath</font></code>, <code><font color=#b9b96e>-topnetlist</font></code></p>
-<p class='ruff'>Writable: <code><font color=#b9b96e>-filepath</font></code>, <code><font color=#b9b96e>-topnetlist</font></code></p>
+<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#b9b96e>-filepath</font></code>, <code><font color=#b9b96e>-parsername</font></code>, <code><font color=#b9b96e>-topnetlist</font></code></p>
+<p class='ruff'>Writable: <code><font color=#b9b96e>-filepath</font></code>, <code><font color=#b9b96e>-parsername</font></code>, <code><font color=#b9b96e>-topnetlist</font></code></p>
 <h5 class='ruff'>Subclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Ngspice.html#::SpiceGenTcl::Ngspice::NgspiceParser" title="::SpiceGenTcl::Ngspice::NgspiceParser" class='ruff_cmd'>::SpiceGenTcl::Ngspice::NgspiceParser</a></p>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Parser::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Parser" title="::SpiceGenTcl::Parser" class='ruff_cmd'>::SpiceGenTcl::Parser</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Parser'>Parser</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
@@ -2895,7 +2854,7 @@
     <i><font color=#76a396># Creates object of class `Parser` that do parsing of valid simulator netlist.</font></i>
     <i><font color=#76a396>#   name - name of the object</font></i>
     <i><font color=#76a396>#   filepath - path to file that should be parsed</font></i>
-    <b><font color=#ffa500>set</font></b> Name <font color=#f1b479>$name</font>
+    <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-parsername</font> <font color=#f1b479>$name</font>
     <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-filepath</font> <font color=#f1b479>$filepath</font>
     <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-topnetlist</font> [::SpiceGenTcl::Netlist new [<b><font color=#ffa500>file</font></b> tail <font color=#f1b479>$filepath</font>]]
     <b><font color=#ffa500>set</font></b> ModelTemplate {<b><font color=#fe6efe>oo::class</font></b> create @type@ {
@@ -2908,6 +2867,8 @@
     <b><font color=#ffa500>set</font></b> SubcircuitTemplate {<b><font color=#fe6efe>oo::class</font></b> create @classname@ {
         superclass ::SpiceGenTcl::Subcircuit
         <b><font color=#fe6efe>constructor</font></b> {} {
+            @definitions@
+            @elements@
             <b><font color=#ffa500>set</font></b> pins @pins@
             <b><font color=#ffa500>set</font></b> params @params@
             <b><font color=#ffa500>next</font></b> @subname@ <font color=#f1b479>$pins</font> <font color=#f1b479>$params</font>
@@ -2925,21 +2886,31 @@
 
     <i><font color=#76a396># Builds top netlist corresponding to parsed netlist file</font></i>
     <b><font color=#ffa500>if</font></b> {![<b><font color=#ffa500>info</font></b> exists FileData]} {
-        <b><font color=#ffa500>error</font></b> <font color=#90ee90>&quot;Parser object '<font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font>' doesn't have prepared data&quot;</font>
+        <b><font color=#ffa500>error</font></b> <font color=#90ee90>&quot;Parser object '<font color=#f1b479>[</font>my configure -parsername<font color=#f1b479>]</font>' doesn't have prepared data&quot;</font>
     }
-    <b><font color=#ffa500>set</font></b> allLines <font color=#f1b479>$FileData</font>
+    <i><font color=#76a396>#set allLines $FileData</font></i>
     <b><font color=#ffa500>set</font></b> topNetlist [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-topnetlist</font>]
     <b><font color=#fe6efe>my</font></b> GetSubcircuitLines
     <i><font color=#76a396># parse found subcircuits definitions first</font></i>
-    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> exists SubcktsBoundaries]} {
-        <b><font color=#ffa500>set</font></b> subcktsBoundaries <font color=#f1b479>$SubcktsBoundaries</font>
-        <b><font color=#ffa500>dict</font></b> for {subcktName subcktBounds} <font color=#f1b479>$subcktsBoundaries</font> {
-            <b><font color=#fe6efe>my</font></b> BuildSubcktFromDef <font color=#f1b479>$subcktName</font> <font color=#f1b479>$subcktBounds</font>
-            <b><font color=#ffa500>lappend</font></b> lines2remove {<b><font color=#ffa500>*</font></b>}[lseq [@ <font color=#f1b479>$subcktBounds</font> 0] [@ <font color=#f1b479>$subcktBounds</font> 1]]
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> exists SubcktsTree]} {
+        <b><font color=#ffa500>set</font></b> lines2remove {}
+        <font color=#f1b479>$SubcktsTree</font> walk / <font color=#b9b96e>-order</font> post <font color=#b9b96e>-type</font> bfs node {
+            <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$node</font> eq {/}} {
+                <b><font color=#fe6efe>continue</font></b>
+            }
+            <b><font color=#fe6efe>my</font></b> BuildSubcktFromDef <font color=#f1b479>$node</font>
+            <b><font color=#ffa500>if</font></b> {[<font color=#f1b479>$SubcktsTree</font> parent <font color=#f1b479>$node</font>] eq {/}} {
+                <b><font color=#ffa500>eval</font></b> [<font color=#f1b479>$SubcktsTree</font> get <font color=#f1b479>$node</font> definition]
+                <font color=#f1b479>$topNetlist</font> add [<b><font color=#ffa500>eval</font></b> {<b><font color=#ffa500>*</font></b>}[<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>string</font></b> totitle [<b><font color=#ffa500>file</font></b> tail <font color=#f1b479>$node</font>]] new]]
+            }
+            <b><font color=#ffa500>set</font></b> startLine [<font color=#f1b479>$SubcktsTree</font> get <font color=#f1b479>$node</font> startLine]
+            <b><font color=#ffa500>set</font></b> endLine [<font color=#f1b479>$SubcktsTree</font> get <font color=#f1b479>$node</font> endLine]
+            <b><font color=#ffa500>set</font></b> children [<font color=#f1b479>$SubcktsTree</font> children <font color=#f1b479>$node</font>]
+            <b><font color=#ffa500>lappend</font></b> lines2remove {<b><font color=#ffa500>*</font></b>}[lseq <font color=#f1b479>$startLine</font> <font color=#f1b479>$endLine</font>]
         }
-        <b><font color=#ffa500>set</font></b> allLines [lremove <font color=#f1b479>$allLines</font> {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$lines2remove</font>]
+        <b><font color=#ffa500>set</font></b> FileData [lremove <font color=#f1b479>$FileData</font> {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$lines2remove</font>]
     }
-    <b><font color=#fe6efe>my</font></b> BuildNetlist <font color=#f1b479>$allLines</font> <font color=#f1b479>$topNetlist</font>
+    <b><font color=#fe6efe>my</font></b> BuildNetlist <font color=#f1b479>$FileData</font> <font color=#f1b479>$topNetlist</font>
     <b><font color=#fe6efe>return</font></b>
 }</pre></div>
 </div></details>
@@ -3245,7 +3216,7 @@
                                 <font color=#f1b479>$trace</font> appendDataPoints <font color=#f1b479>$value</font>
                             }
                         }
-                    }
+                     }
                 } <b><font color=#ffa500>elseif</font></b> {<font color=#f1b479>$rawType</font> eq {Values:}} {
                     <b><font color=#ffa500>for</font></b> {<b><font color=#ffa500>set</font></b> i 0} {<font color=#f1b479>$i</font>&lt;<font color=#f1b479>$npoints</font>} {<b><font color=#ffa500>incr</font></b> i} {
                         <b><font color=#ffa500>set</font></b> firstVar true
@@ -3352,7 +3323,9 @@
         <b><font color=#ffa500>for</font></b> {<b><font color=#ffa500>set</font></b> i 0} {<font color=#f1b479>$i</font>&lt;[<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-npoints</font>]} {<b><font color=#ffa500>incr</font></b> i} {
             <b><font color=#ffa500>lappend</font></b> tracesList [<b><font color=#ffa500>lmap</font></b> traceValues [<b><font color=#ffa500>dict</font></b> values <font color=#f1b479>$tracesDict</font>] {@ <font color=#f1b479>$traceValues</font> <font color=#f1b479>$i</font>}]
         }
+    <i><font color=#76a396>##nagelfar ignore</font></i>
     } <b><font color=#ffa500>elseif</font></b> {[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> traces] ne {}} {
+        <i><font color=#76a396>##nagelfar ignore</font></i>
         <b><font color=#ffa500>foreach</font></b> traceName [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> traces] {
             <b><font color=#ffa500>set</font></b> traceObj [<b><font color=#fe6efe>my</font></b> getTrace <font color=#f1b479>$traceName</font>]
             <b><font color=#ffa500>dict</font></b> append tracesDict [<font color=#f1b479>$traceObj</font> configure <font color=#b9b96e>-name</font>] [<font color=#f1b479>$traceObj</font> getDataPoints]
@@ -3621,8 +3594,6 @@
                 <b><font color=#ffa500>error</font></b> <font color=#90ee90>&quot;Wrong parameter '<font color=#f1b479>[</font>@ <font color=#f1b479>$</font>param 0<font color=#f1b479>]</font>' definition in subcircuit <font color=#f1b479>$</font>name&quot;</font>
             }
         }
-    } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>set</font></b> Params {}
     }
     <b><font color=#ffa500>next</font></b> <font color=#f1b479>$name</font>
 }</pre></div>
@@ -3717,7 +3688,7 @@
     <i><font color=#76a396># Returns: SPICE netlist's string</font></i>
     <b><font color=#ffa500>set</font></b> name [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-name</font>]
     <b><font color=#ffa500>set</font></b> nodes [<b><font color=#ffa500>lmap</font></b> pin [<b><font color=#ffa500>dict</font></b> values <font color=#f1b479>$Pins</font>] {<font color=#f1b479>$pin</font> configure <font color=#b9b96e>-name</font>}]
-    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$Params</font> eq {}} {
+    <b><font color=#ffa500>if</font></b> {![<b><font color=#ffa500>info</font></b> exists Params]} {
         <b><font color=#ffa500>set</font></b> header <font color=#90ee90>&quot;.subckt <font color=#f1b479>$</font>name <font color=#f1b479>[</font>join <font color=#f1b479>$</font>nodes<font color=#f1b479>]</font>&quot;</font>
     } <b><font color=#ffa500>else</font></b> {
         <b><font color=#ffa500>set</font></b> params [<b><font color=#ffa500>lmap</font></b> param [<b><font color=#ffa500>dict</font></b> values <font color=#f1b479>$Params</font>] {<font color=#f1b479>$param</font> genSPICEString}]
@@ -3823,6 +3794,7 @@
     }
     <i><font color=#76a396>#set [my varname value] $value</font></i>
     <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-name</font> temp
+    <i><font color=#76a396>##nagelfar variable eq</font></i>
     <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$eq</font>} {
         <b><font color=#fe6efe>my</font></b> AddParam temp <font color=#f1b479>$value</font> <font color=#b9b96e>-eq</font>
     } <b><font color=#ffa500>else</font></b> {
@@ -4097,7 +4069,6 @@
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre>Creates circuit string for SPICE netlist.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::getDataCsv'>getDataCsv</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getDataCsv&lt;/span&gt; &lt;span class='ruff_arg'&gt;?-all? ?-traces list? ?-sep value?&lt;/span&gt;</pre>Returns string with csv formatting containing all data
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::getDataDict'>getDataDict</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getDataDict&lt;/span&gt; </pre>Method to get dictionary with raw data vectors.
-</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::getElement'>getElement</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getElement&lt;/span&gt; &lt;span class='ruff_arg'&gt;elemName&lt;/span&gt;</pre>Gets particular element object reference by its name.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::runAndRead'>runAndRead</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT runAndRead&lt;/span&gt; &lt;span class='ruff_arg'&gt;?-nodelete?&lt;/span&gt;</pre>Invokes 'runAndRead', 'configure -log' and 'configure -data' methods from attached simulator.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Comment'>Comment</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Comment::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;value ?-name value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Comment</font></b></code>.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Comment::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre>Creates comment string for SPICE netlist.

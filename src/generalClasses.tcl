@@ -2189,6 +2189,17 @@ namespace eval ::SpiceGenTcl {
         property filepath
         variable filepath
         variable FileData
+        # The SubcktsTree contains a tree object from the `struct::tree` library, representing a hierarchical subcircuit
+        # structure with possible nested subcircuits. Each node's name corresponds to the full path of a particular 
+        # subcircuit in the hierarchy. For example, `/topsubckt/middlesubckt/innersubckt` represents the subcircuit
+        # `innersubckt`, defined inside `middlesubckt`, which is itself defined within `topsubckt`.
+        # Each node has the following attributes:
+        #   startLine - The line number in the processed netlist where the subcircuit definition (.subckt) begins.
+        #   endLine - The line number in the processed netlist where the subcircuit definition (.ends) ends.
+        #   definition - A code string containing the subcircuit's definition corresponding to the node. This is built 
+        #     from the bottom up, meaning the definition of the top subcircuit includes the definitions of its child 
+        #     subcircuits in its constructor and local namespace. Each child subcircuit's definition, in turn, includes 
+        #     the definitions of its own children, continuing down the hierarchy.
         variable SubcktsTree
         variable ElemsMethods
         variable DotsMethods
@@ -2315,9 +2326,9 @@ namespace eval ::SpiceGenTcl {
             return
         }
         method BuildSubcktNetlist {lines} {
-            # Builds netlist from passed lines and add it to passed object
+            # Builds netlist from passed lines
             #   lines - list of lines to parse
-            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` and its childrens
+            # Returns: code string for objects creation
             set elems [dkeys $ElemsMethods]
             set dots [dkeys $DotsMethods]
             set netlist {}

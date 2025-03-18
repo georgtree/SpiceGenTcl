@@ -26,8 +26,8 @@
 <tr><td><a href="index-SpiceGenTcl-Ngspice.html#::SpiceGenTcl::Ngspice::NgspiceParser::readAndParse" title="readAndParse" class='ruff_cmd'>readAndParse</a></td><td>Calls methods <code>readFile</code> and <code>buildTopNetlist</code> in a sequence.</td></tr>
 <tr><td><a href="index-SpiceGenTcl-Ngspice.html#::SpiceGenTcl::Ngspice::NgspiceParser::readFile" title="readFile" class='ruff_cmd'>readFile</a></td><td>Reads netlist file and prepare for parsing: remove redundant white space characters, collapse continuation lines and remove comments lines.</td></tr>
 </table>
-<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#b9b96e>-filepath</font></code>, <code><font color=#b9b96e>-topnetlist</font></code></p>
-<p class='ruff'>Writable: <code><font color=#b9b96e>-filepath</font></code>, <code><font color=#b9b96e>-topnetlist</font></code></p>
+<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#b9b96e>-filepath</font></code>, <code><font color=#b9b96e>-parsername</font></code>, <code><font color=#b9b96e>-topnetlist</font></code></p>
+<p class='ruff'>Writable: <code><font color=#b9b96e>-filepath</font></code>, <code><font color=#b9b96e>-parsername</font></code>, <code><font color=#b9b96e>-topnetlist</font></code></p>
 <h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Parser" title="::SpiceGenTcl::Parser" class='ruff_cmd'>::SpiceGenTcl::Parser</a></p>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::NgspiceParser::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice.html#::SpiceGenTcl::Ngspice::NgspiceParser" title="::SpiceGenTcl::Ngspice::NgspiceParser" class='ruff_cmd'>::SpiceGenTcl::Ngspice::NgspiceParser</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice.html#::SpiceGenTcl::Ngspice::NgspiceParser'>NgspiceParser</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
@@ -46,7 +46,7 @@
     <i><font color=#76a396>#   filepath - path to file that should be parsed</font></i>
     <b><font color=#ffa500>set</font></b> ElemsMethods [<b><font color=#ffa500>dcreate</font></b> b CreateBehSource c CreateCap d CreateDio e CreateVCVS f CreateCCCS g CreateVCCS h CreateCCVS i CreateVIsource j CreateJFET k CreateCoupling l CreateInd m CreateMOSFET n CreateVerilogA q CreateBJT r CreateRes s CreateVSwitch v CreateVIsource w CreateCSwitch x CreateSubcktInst z CreateMESFET]
     <b><font color=#ffa500>set</font></b> DotsMethods [<b><font color=#ffa500>dcreate</font></b> ac CreateAc dc CreateDc func CreateFunc global CreateGlobal ic CreateIc include CreateInclude model CreateModel nodeset CreateNodeset op CreateOp options CreateOptions option CreateOptions opt CreateOptions param CreateParam temp CreateTemp tran CreateTran params CreateParam lib CreateLib sens CreateSens sp CreateSp]
-    <b><font color=#ffa500>set</font></b> SupModelsTypes {r c l sw csw d npn pnp njf pjf nmos pmos nmf pmf}
+    <b><font color=#ffa500>set</font></b> SupModelsTypes {r c l sw csw d npn pnp njf pjf nmf pmf}
     <b><font color=#ffa500>set</font></b> NamespacePath ::SpiceGenTcl::Ngspice
     <b><font color=#ffa500>next</font></b> <font color=#f1b479>$name</font> <font color=#f1b479>$filepath</font>
 }</pre></div>
@@ -83,7 +83,7 @@
     <b><font color=#ffa500>foreach</font></b> line <font color=#f1b479>$fileData</font> {
         <b><font color=#ffa500>set</font></b> processedLine [<b><font color=#ffa500>regsub</font></b> <font color=#b9b96e>-all</font> {[[:space:]]+} [<b><font color=#ffa500>string</font></b> trim <font color=#f1b479>$line</font>] { }]
         <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$processedLine</font> ne {}} {
-            <b><font color=#ffa500>lappend</font></b> lines [<b><font color=#ffa500>string</font></b> tolower <font color=#f1b479>$processedLine</font>]
+            <b><font color=#ffa500>lappend</font></b> lines <font color=#f1b479>$processedLine</font>
         }
     }
     <i><font color=#76a396># find continuations and move them to line that is the start of continuation</font></i>
@@ -96,6 +96,7 @@
         <b><font color=#ffa500>set</font></b> line [@ <font color=#f1b479>$fileData</font> <font color=#f1b479>$i</font>]
         <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>string</font></b> index <font color=#f1b479>$line</font> 0] eq <font color=#90ee90>&quot;+&quot;</font>} {
             <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$contFlag</font>} {
+                <i><font color=#76a396>##nagelfar variable startIndex</font></i>
                 <b><font color=#ffa500>dict</font></b> lappend continLinesIndex <font color=#f1b479>$startIndex</font> <font color=#f1b479>$i</font>
                 <b><font color=#fe6efe>continue</font></b>
             }
@@ -110,21 +111,28 @@
     }
     <i><font color=#76a396># append continuation lines to start line of each continuation list with first symbol removal (it is assumed</font></i>
     <i><font color=#76a396># to be `+` symbol)</font></i>
-    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> exists continLinesIndex]} {
-        <b><font color=#ffa500>dict</font></b> map {lineIndex contLinesIndexes} <font color=#f1b479>$continLinesIndex</font> {
-            <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$contLinesIndexes</font> eq {}} {
-                <b><font color=#ffa500>lappend</font></b> finalList [@ <font color=#f1b479>$fileData</font> <font color=#f1b479>$lineIndex</font>]
-            } <b><font color=#ffa500>else</font></b> {
-                <b><font color=#ffa500>set</font></b> locList [@ <font color=#f1b479>$fileData</font> <font color=#f1b479>$lineIndex</font>]
-                <b><font color=#ffa500>foreach</font></b> contLineIndex <font color=#f1b479>$contLinesIndexes</font> {
-                    <b><font color=#ffa500>lappend</font></b> locList [<b><font color=#ffa500>string</font></b> trim [<b><font color=#ffa500>string</font></b> range [@ <font color=#f1b479>$fileData</font> <font color=#f1b479>$contLineIndex</font>] 1 end]]
-                }
-                <b><font color=#ffa500>lappend</font></b> finalList [<b><font color=#ffa500>join</font></b> <font color=#f1b479>$locList</font>]
+    <b><font color=#ffa500>dict</font></b> map {lineIndex contLinesIndexes} <font color=#f1b479>$continLinesIndex</font> {
+        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$contLinesIndexes</font> eq {}} {
+            <b><font color=#ffa500>lappend</font></b> finalList [@ <font color=#f1b479>$fileData</font> <font color=#f1b479>$lineIndex</font>]
+        } <b><font color=#ffa500>else</font></b> {
+            <b><font color=#ffa500>set</font></b> locList [@ <font color=#f1b479>$fileData</font> <font color=#f1b479>$lineIndex</font>]
+            <b><font color=#ffa500>foreach</font></b> contLineIndex <font color=#f1b479>$contLinesIndexes</font> {
+                <b><font color=#ffa500>lappend</font></b> locList [<b><font color=#ffa500>string</font></b> trim [<b><font color=#ffa500>string</font></b> range [@ <font color=#f1b479>$fileData</font> <font color=#f1b479>$contLineIndex</font>] 1 end]]
             }
+            <b><font color=#ffa500>lappend</font></b> finalList [<b><font color=#ffa500>join</font></b> <font color=#f1b479>$locList</font>]
         }
-    } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>set</font></b> finalList <font color=#f1b479>$fileData</font>
     }
+    <i><font color=#76a396># convert each line to lower case except lines that contains paths in .lib or .include statements</font></i>
+    <b><font color=#ffa500>foreach</font></b> line <font color=#f1b479>$finalList</font> {
+        <b><font color=#ffa500>set</font></b> tempLine [<b><font color=#ffa500>string</font></b> tolower <font color=#f1b479>$line</font>]
+        <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>regexp</font></b> {^\.(include|lib).*} <font color=#f1b479>$tempLine</font>]} {
+            <b><font color=#ffa500>lappend</font></b> tempList <font color=#f1b479>$line</font>
+        } <b><font color=#ffa500>else</font></b> {
+            <b><font color=#ffa500>lappend</font></b> tempList <font color=#f1b479>$tempLine</font>
+        }
+    }
+    <b><font color=#ffa500>set</font></b> finalList <font color=#f1b479>$tempList</font>
+    <b><font color=#ffa500>unset</font></b> tempList
     <i><font color=#76a396># remove all comments that start with `*` symbol</font></i>
     <b><font color=#ffa500>set</font></b> finalList [<b><font color=#ffa500>lsearch</font></b> <font color=#b9b96e>-all</font> <font color=#b9b96e>-inline</font> <font color=#b9b96e>-not</font> <font color=#b9b96e>-glob</font> <font color=#f1b479>$finalList</font> {\**}]
     <i><font color=#76a396># remove all end of line comments that starts with symbols \;, \$ and //</font></i>
