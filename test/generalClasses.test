@@ -1943,39 +1943,12 @@ test testParserClass-2 {test creation of Parser class instance} -setup {
     unset parser errorStr
 }
 
-test testParserClass-3 {test creation of Parser class instance} -setup {
-    set parser [Parser new {voltage divider netlist} path]
-} -body {
-    catch {[info object namespace $parser]::my GetSubcircuitLines} errorStr
-    return $errorStr
-} -result {Not implemented} -cleanup {
-    unset parser errorStr
-}
-
-test testParserClass-4 {test creation of Parser class instance} -setup {
-    set parser [Parser new {voltage divider netlist} path]
-} -body {
-    catch {[info object namespace $parser]::my GetSubcircuitLines} errorStr
-    return $errorStr
-} -result {Not implemented} -cleanup {
-    unset parser errorStr
-}
-
 test testParserClass-5 {test creation of Parser class instance} -setup {
     set parser [Parser new {voltage divider netlist} path]
 } -body {
     catch {$parser buildTopNetlist} errorStr
     return $errorStr
 } -result {Parser object 'voltage divider netlist' doesn't have prepared data} -cleanup {
-    unset parser errorStr
-}
-
-test testParserClass-6 {test creation of Parser class instance} -setup {
-    set parser [Parser new {voltage divider netlist} path]
-} -body {
-    catch {[info object namespace $parser]::my BuildSubcktFromDef subcktName} errorStr
-    return $errorStr
-} -result {Not implemented} -cleanup {
     unset parser errorStr
 }
 

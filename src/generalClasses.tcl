@@ -2239,13 +2239,132 @@ namespace eval ::SpiceGenTcl {
             error "Not implemented"
         }
         method readAndParse {} {
-            error "Not implemented"
+            # Calls methods `readFile` and `buildTopNetlist` in a sequence
+            my readFile
+            my buildTopNetlist
+            return
         }
         method GetSubcircuitLines {} {
-            error "Not implemented"
+            # Parses line by line and creates tree with each node represent subcircuit that can contain
+            #   other subcircuits as it's children. As attributes we have number of start and end lines of subcircuit.
+            if {![info exists FileData]} {
+                error "Parser object '[my configure -parsername]' doesn't have prepared data"
+            }
+            set fileData $FileData
+            set tree [::struct::tree]
+            $tree rename root /
+            set lineNum 0
+            set stack [list /]
+            set currentPath /
+            foreach line $fileData {
+                # Check if line starts with .subckt
+                if {[regexp {^\.subckt\s+(\S+)} $line -> subcktName]} {
+                    # Build hierarchical path
+                    if {$currentPath eq {/}} {
+                        set newPath /$subcktName
+                    } else {
+                        set newPath $currentPath/$subcktName
+                    }
+                    # Create new node in tree - use full path as node name
+                    set currentNode [lindex $stack end]
+                    $tree insert $currentNode end $newPath
+                    $tree set $newPath startLine $lineNum
+                    # Update stack and current path
+                    lappend stack $newPath
+                    set currentPath $newPath
+                }
+                if {[regexp {^\.ends} $line]} {
+                    if {[llength $stack] > 1} {  # > 1 because root is always in stack
+                        set currentNode [lindex $stack end]
+                        $tree set $currentNode endLine $lineNum
+                        # Pop from stack and restore parent path
+                        set stack [lrange $stack 0 end-1]
+                        set currentPath [lindex $stack end]
+                    } else {
+                        # .ends without matching .subckt
+                        error {.ends statement without matching .subckt}
+                    }
+                }
+                incr lineNum
+            }
+            # Check for unclosed .subckt statements
+            if {[llength $stack] > 1} {  # > 1 because root is always in stack
+                set unclosedNode [lindex $stack end]
+                set line [$tree get $unclosedNode startLine]
+                error "Unclosed .subckt '$unclosedNode' started at line [@ $fileData $line]"
+            }
+            set SubcktsTree $tree
+            return
         }
         method BuildSubcktFromDef {subcktPath} {
-            error "Not implemented"
+            # Builds subcircuit definition code from passed lines and save it to attribute `definition` of corresponding
+            # node.
+            #   subcktPath - subcircuit as a name of the tree node
+            if {![info exists FileData]} {
+                error "Parser object '[my configure -parsername]' doesn't have prepared data"
+            }
+            set allLines $FileData
+            #set topNetlist [my configure -topnetlist]
+            set startLine [$SubcktsTree get $subcktPath startLine]
+            set endLine [$SubcktsTree get $subcktPath endLine]
+            set children [$SubcktsTree children $subcktPath]
+            # parse definition line of subcircuit
+            set defLine [@ $allLines $startLine]
+            set defLine [string map {" :" ":"} $defLine]
+            set lineList [split $defLine]
+            lassign $lineList elemName
+            set elemName [string range $elemName 1 end]
+            if {[set paramsStatIndex [lsearch -exact $lineList params:]]!=-1} {
+                set lineList [lremove $lineList $paramsStatIndex]
+            }
+            set i 0
+            foreach word $lineList {
+                if {[my CheckEqual $word] || [my CheckBracedWithEqual $word]} {
+                    set paramsStartIndex $i
+                    break
+                }
+                incr i
+            }
+            if {![info exists paramsStartIndex]} {
+                set paramsStartIndex [llength $lineList]
+            }
+            set subName [@ $lineList 1]
+            set pinList [lrange $lineList 2 [= {$paramsStartIndex-1}]]
+            set params [my ParseParams $lineList $paramsStartIndex {} list]
+            # create instance of subcircuit
+            set subcktClassName [string totitle $subName]
+            set definitions {}
+            foreach child $children {
+                lappend definitions [$SubcktsTree get $child definition]
+                set objString "\[[string totitle [file tail $child]] new\]"
+                lappend definitions "my add $objString"
+            }
+            # find lines to add to subcircuit, excluding nested subcircuits lines
+            set lines2remove {}
+            foreach child $children {
+                lappend lines2remove {*}[lseq [= {[$SubcktsTree get $child startLine]-$startLine}]\
+                                                 [= {[$SubcktsTree get $child endLine]-$startLine}]]
+            }
+            set netlist [my BuildNetlist [lremove [lrange $allLines [= {$startLine}] [= {$endLine}]]\
+                                                        {*}$lines2remove] true]
+            set elements {}
+            foreach element $netlist {
+                if {[regexp {^oo::class\s+(\S+)} [@ $element 0]]} {
+                    lappend elements [@ $element 0]
+                } else {
+                    lappend elements "my add \[[@ $element 0]\]"
+                }
+            }
+            set definition [string map [list @classname@ $subcktClassName\
+                                                @pins@ [list $pinList]\
+                                                @params@ [list $params]\
+                                                @subname@ $subName\
+                                                @definitions@ [join $definitions "\n"]\
+                                                @elements@ [join $elements "\n"]]\
+                                    $SubcircuitTemplate]
+            ##nagelfar ignore
+            $SubcktsTree append $subcktPath definition $definition
+            return
         }
         method buildTopNetlist {} {
             # Builds top netlist corresponding to parsed netlist file
@@ -2264,7 +2383,7 @@ namespace eval ::SpiceGenTcl {
                     }
                     my BuildSubcktFromDef $node
                     if {[$SubcktsTree parent $node] eq {/}} {
-                        eval [$SubcktsTree get $node definition]
+                        uplevel 1 [$SubcktsTree get $node definition]
                         $topNetlist add [eval {*}[list [string totitle [file tail $node]] new]]
                     }
                     set startLine [$SubcktsTree get $node startLine]
@@ -2274,65 +2393,35 @@ namespace eval ::SpiceGenTcl {
                 }
                 set FileData [lremove $FileData {*}$lines2remove]
             }
-            my BuildNetlist $FileData $topNetlist
-            return
-        }
-        method BuildNetlist {lines netlistObj} {
-            # Builds netlist from passed lines and add it to passed object
-            #   lines - list of lines to parse
-            #   netlistObj - reference to the object of class `::SpiceGenTcl::Netlist` and its childrens
-            set elems [dkeys $ElemsMethods]
-            set dots [dkeys $DotsMethods]
-            for {set i 0} {$i<[llength $lines]} {incr i} {
-                set line [@ $lines $i]
-                set lineList [split $line]
-                set firstWord [@ $lineList 0]
-                set firstChar [string index $firstWord 0]
-                set restChars [string range $firstWord 1 end]
-                if {$firstChar eq {.}} {
-                    set restChars [string tolower $restChars]
-                    if {$restChars in $dots} {
-                        if {$restChars eq {model}} {
-                            ##nagelfar ignore Non static subcommand
-                            set modelCommands [my [dict get $DotsMethods $restChars] $line]
-                            if {[llength $modelCommands]==2} {
-                                eval [@ $modelCommands 0]
-                                $netlistObj add [eval {*}[list [@ $modelCommands 1]]]
-                            } else {
-                                ##nagelfar ignore Non static subcommand
-                                catch {$netlistObj add [eval {*}[list [my [dict get $DotsMethods $restChars] $line]]]}
-                            }
-                        } else {
-                            ##nagelfar ignore Non static subcommand
-                            $netlistObj add [eval {*}[list [my [dict get $DotsMethods $restChars] $line]]]
-                        }
-                    } else {
-                        puts "Line '$lineList' contains unsupported dot statement '$firstWord', skip that line"
-                        continue
-                    }
-                } elseif {[string match {[a-z]} $firstChar]} {
-                    if {$firstChar in $elems} {
-                        ##nagelfar ignore Non static subcommand
-                        $netlistObj add [eval {*}[list [my [dict get $ElemsMethods $firstChar] $line]]]
-                    } else {
-                        puts "Line '$lineList' contains unsupported element '$firstWord', skip that line"
-                        continue
-                    }
-                } else {
-                    puts "Line '$lineList' starts with illegal character '$firstChar', skip that line"
+            foreach element [my BuildNetlist $FileData] {
+                # check the netlist string for presence of class definition
+                set element [@ $element 0]
+                if {$element eq {}} {
                     continue
+                }
+                if {[regexp {^oo::class\s+(\S+)} $element]} {
+                    uplevel 1 $element
+                } else {
+                    $topNetlist add [eval $element]
                 }
             }
             return
         }
-        method BuildSubcktNetlist {lines} {
+        method BuildNetlist {lines {subckt false}} {
             # Builds netlist from passed lines
             #   lines - list of lines to parse
             # Returns: code string for objects creation
             set elems [dkeys $ElemsMethods]
             set dots [dkeys $DotsMethods]
+            if {$subckt} {
+                set start 1
+                set end [= {[llength $lines]-1}]
+            } else {
+                set start 0
+                set end [llength $lines]
+            }
             set netlist {}
-            for {set i 1} {$i<[= {[llength $lines]-1}]} {incr i} {
+            for {set i $start} {$i<$end} {incr i} {
                 set line [@ $lines $i]
                 set lineList [split $line]
                 set firstWord [@ $lineList 0]
@@ -2345,7 +2434,7 @@ namespace eval ::SpiceGenTcl {
                             ##nagelfar ignore Non static subcommand
                             set modelCommands [my [dict get $DotsMethods $restChars] $line]
                             if {[llength $modelCommands]==2} {
-                                eval [@ $modelCommands 0]
+                                lappend netlist [list [@ $modelCommands 0]]
                                 lappend netlist [list [@ $modelCommands 1]]
                             } else {
                                 ##nagelfar ignore Non static subcommand

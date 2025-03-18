@@ -21,7 +21,7 @@ set currentDir [file normalize [file dirname [info script]]]
 source [file join $currentDir .. testUtilities.tcl]
 importNgspice
 
-proc testTemplateParse {testName descr location fileName refStr} {
+proc testTemplateParse {testName descr location fileName refStr {cleanupList {}}} {
     test $testName $descr -setup {
         set parser [::SpiceGenTcl::Ngspice::NgspiceParser new parser1 [file join $location $fileName]]
         $parser readFile
@@ -30,7 +30,13 @@ proc testTemplateParse {testName descr location fileName refStr} {
             return $errorStr
         }
         return [[$parser configure -topnetlist] genSPICEString]
-    } -result $refStr
+    } -result $refStr -cleanup {
+        if {$cleanupList ne {}} {
+            foreach name $cleanupList {
+                rename $name {}
+            }
+        }
+    }
 }
 
 proc testTemplateParse1 {testName descr testStr location refStr} {
@@ -175,7 +181,7 @@ x1 1 2 3 4 5 6 7 8 9 10 11 12 0 13 99 fourbit
 .options noinit acct
 .tran 500p 6400n
 .model n1 nmosmodel(level=49 version=3.3)
-.model p1 pmosmodel(level=49 version=3.3)}
+.model p1 pmosmodel(level=49 version=3.3)} {Fourbit Twobit Onebit Nand NmosModel PmosModel}
 
 testTemplateParse testNgspiceParserClass-9 {} $netlistsLoc ring51_40.sp\
 {.subckt inv25 dd ss sub in out
@@ -209,52 +215,10 @@ cout buf ss 1pf
 .options reltol=1e-4
 .tran 0.2n 16n
 .include ./bsim4soi/nmos4p0.mod
-.include ./bsim4soi/pmos4p0.mod}
+.include ./bsim4soi/pmos4p0.mod} {Inv25 Inv5 Inv1}
 
-test testNgspiceParserClass-10 {} -setup {
-    set parser [::SpiceGenTcl::Ngspice::NgspiceParser new parser1 [file join $netlistsLoc ring51_40.sp]]
-    $parser readAndParse
-} -body {
-    return [[$parser configure -topnetlist] genSPICEString]
-} -result {.subckt inv25 dd ss sub in out
-xinv1 dd ss sub in 1 inv5
-xinv2 dd ss sub 1 2 inv5
-xinv3 dd ss sub 2 3 inv5
-xinv4 dd ss sub 3 4 inv5
-xinv5 dd ss sub 4 out inv5
-.ends inv25
-.subckt inv5 dd ss sub in out
-xinv1 dd ss sub in 1 inv1
-xinv2 dd ss sub 1 2 inv1
-xinv3 dd ss sub 2 3 inv1
-xinv4 dd ss sub 3 4 inv1
-xinv5 dd ss sub 4 out inv1
-.ends inv5
-.subckt inv1 dd ss sub in out
-mn1 out in ss sub n1 w=4u l=0.15u as=6p ad=6p ps=7u pd=7u
-mp1 out in dd sub p1 w=10u l=0.15u as=15p ad=15p ps=13u pd=13u
-.ends inv1
-vin in out dc 2 pulse 2 0 0.1n 5n 1 1 1
-vdd dd 0 dc 0 pulse 0 1.5 0 1n 1 1 1
-vss ss 0 0
-ve sub 0 0
-vn n1 0 0
-xinv1 dd ss sub in out25 inv25
-xinv2 dd ss sub out25 out50 inv25
-xinv5 dd ss sub out50 out inv1
-xinv11 dd ss sub out buf inv1
-cout buf ss 1pf
-.options reltol=1e-4
-.tran 0.2n 16n
-.include ./bsim4soi/nmos4p0.mod
-.include ./bsim4soi/pmos4p0.mod}
-
-test testNgspiceParserClass-11 {} -setup {
-    set parser [::SpiceGenTcl::Ngspice::NgspiceParser new parser1 [file join $netlistsLoc 555-timer-2.cir]]
-    $parser readAndParse
-} -body {
-    return [[$parser configure -topnetlist] genSPICEString]
-} -result {.subckt ua555 32 30 19 23 33 1 21
+testTemplateParse testNgspiceParserClass-11 {} $netlistsLoc 555-timer-2.cir\
+{.subckt ua555 32 30 19 23 33 1 21
 q4 25 2 3 qp
 q5 0 6 3 qp
 q6 6 6 8 qp
@@ -314,7 +278,7 @@ ra 2 17 1k
 rb 17 16 5k
 c 16 0 0.5u
 rl 2 13 1k
-x1 16 15 16 res 13 17 2 0 tlc555}
+x1 16 15 16 res 13 17 2 0 tlc555} {Ua555}
 
 testTemplateParse testNgspiceParserClass-12 {} $netlistsLoc adder_mos_nested_subckt.cir\
 {.subckt fourbit 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
@@ -355,7 +319,7 @@ x1 1 2 3 4 5 6 7 8 9 10 11 12 0 13 99 fourbit
 .options noinit acct
 .tran 500p 6400ns
 .model n1 nmosmodel(level=49 version=3.3)
-.model p1 pmosmodel(level=49 version=3.3)}
+.model p1 pmosmodel(level=49 version=3.3)} {Fourbit Twobit Onebit NmosModel PmosModel}
 
 ### Resistors parsing test
 
@@ -461,7 +425,7 @@ testTemplateParse testNgspiceParserClassModels-1 {} $netlistsLoc models_test.cir
 .model jfetmod3 njf(level=2 vto=-2 beta=10e-4 rs=1e-4 vbi=1.2)
 .model mesfetmod1 nmf(level=1 vto=2 beta=1e-3 lambda=1e-4 cgd=1e-12)
 .model mesfetmod2 pmf(level=1 vto=-2 beta=1e-3 lambda=1e-4 cgd=1e-12)
-.model res3mod r3model(tc1=1 tc2=2)}
+.model res3mod r3model(tc1=1 tc2=2)} {R3Model}
 
 testTemplateParse1 testNgspiceParserClassModels-2 {} {.model swmod sw(vt= vh=0.5 ron=1 roff=1e6)} $netlistsLoc\
         {Parameter 'vt=vh=0.5' parsing failed}
@@ -499,6 +463,7 @@ test testNgspiceParserClassModels-4 {test NgspiceParser class, models parsing, e
 } -result {Model type 'r3' is not in the list of supported types, custom type 'R3Model' was created} -cleanup {
     file delete [file join $netlistsLoc temp1]
     unset parser output
+    rename R3Model {}
 }
 
 testTemplateParse1 testNgspiceParserClassModels-5 {} {.model sw@mod sw(vt= vh=0.5 ron=1 roff=1e6)} $netlistsLoc\
@@ -801,11 +766,12 @@ r7 in e r={60}
 r8 in e r={60}
 .ends inner1
 r6 in d r={50}
+.model res3mod r3model(tc1=1 tc2=2)
 r9 d out r={70}
 .ends middle2
 r1 in a r={10}
 r10 a out r={80}
-.ends top}
+.ends top} {Top}
 
 ### Includes and libraries parsing test
 
