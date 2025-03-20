@@ -19,7 +19,7 @@ namespace eval ::SpiceGenTcl {
     namespace export Pin ParameterSwitch Parameter ParameterNoCheck ParameterPositional ParameterPositionalNoCheck\
             ParameterDefault ParameterEquation ParameterPositionalEquation Device Model RawString Comment Include\
             Options ParamStatement Temp Netlist Circuit Library Subcircuit Analysis Simulator Dataset Axis Trace\
-            EmptyTrace RawFile Ic Nodeset ParameterNode ParameterNodeEquation Global Parser ParameterVector
+            EmptyTrace RawFile Ic Nodeset ParameterNode ParameterNodeEquation Global Parser ParameterVector Save
     namespace export importNgspice importXyce importCommon importLtspice forgetNgspice forgetXyce forgetCommon\
             forgetLtspice
 
@@ -1138,6 +1138,77 @@ namespace eval ::SpiceGenTcl {
             # Creates parameter statement string for SPICE netlist.
             # Returns: SPICE netlist's string
             return ".param [join [join [lmap param [dict values $Params] {$param genSPICEString}]]]"
+        }
+    }
+
+###  Save class definition
+    ##nagelfar subcmd+ _obj,Save configure addParam
+    oo::configurable create Save {
+        superclass SPICEElement
+        mixin Utility
+        property name -set {
+            set name [string tolower $value]
+        }
+        variable name
+        variable Vectors
+        constructor {vectors args} {
+            # Creates object of class `ParamStatement`.
+            #  vectors - list of vectors in form `{vec0 vec1 vec2 ...}`
+            #  -name - name of the library that could be used to retrieve element from [::SpiceGenTcl::Netlist] object
+            #    and its descendants, optional
+            # Class represent .save statement.
+            # Synopsis: vectors ?-name value?
+            argparse {
+                -name=
+            }
+            if {[info exists name]} {
+                my configure -name $name
+            } else {
+                my configure -name [self object]
+            }
+            foreach vector $vectors {
+                if {[llength $vector]>1} {
+                    error "Name '$vector' is not a valid name of the vector"
+                } else {
+                    my addVector {*}$vector
+                }
+            }
+        }
+        method getVectors {} {
+            # Gets the dictionary of vector names
+            # Returns: vectors dictionary
+            return $Vectors
+        }
+        method addVector {vectorName} {
+            # Adds new `ParameterVector` object to the list Vectors.
+            #  vectorName - name of vector
+            set vectorName [string tolower $vectorName]
+            if {[info exists Vectors]} {
+                set vectorList [dict keys $Vectors]
+            }
+            lappend vectorList $vectorName
+            if {[my duplListCheck $vectorList]} {
+                return -code error "Vectors list '$vectorList' has already contains vector with name '$vectorName'"
+            }
+            dict append Vectors $vectorName [::SpiceGenTcl::ParameterVector new $vectorName]
+            return
+        }
+        method deleteVector {vectorName} {
+            # Deletes existing `ParameterVector` object from dictionary `Vectors`.
+            #  vectorName - name of parameter that will be deleted
+            set vectorName [string tolower $vectorName]
+            if {[catch {dget $Vectors $vectorName}]} {
+                return -code error "Vector with name '$vectorName' was not found in device's '[my configure -name]'\
+                        list of parameters '[dict keys $Vectors]'"
+            } else {
+                set Vectors [dict remove $Vectors $vectorName]
+            }
+            return
+        }
+        method genSPICEString {} {
+            # Creates save statement string for SPICE netlist.
+            # Returns: SPICE netlist's string
+            return ".save [join [join [lmap vector [dict values $Vectors] {$vector genSPICEString}]]]"
         }
     }
 

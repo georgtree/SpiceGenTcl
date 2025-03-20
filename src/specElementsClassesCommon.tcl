@@ -26,7 +26,6 @@ namespace eval ::SpiceGenTcl {
 }
 
 
-
 ###  Basic devices 
 
 namespace eval ::SpiceGenTcl::Common::BasicDevices {
@@ -160,7 +159,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             # Synopsis: name npNode nmNode -l value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value?
             set arguments [argparse -inline {
                 {-l= -required}
-                -m= 
+                -m=
                 -temp=
                 -tc1=
                 -tc2=

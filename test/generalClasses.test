@@ -679,6 +679,49 @@ testTemplate testParamStatementClass-7 {} {ParamStatement new {{U0T rf+1 -eq} {U
         {Parameters list 'u0t u0t' has already contains parameter with name 'u0t'}
 testTemplate testParamStatementClass-8 {} {ParamStatement new {{U0T rf+1 -eq} {U0T}}} {Value 'U0T' is not a valid value}
 
+###  Save class tests
+
+testTemplate testSaveClass-8 {} {Save new {v(node) i(vin) vsource#branch @m2[vdsat] node}}\
+        {.save v(node) i(vin) vsource#branch @m2[vdsat] node}
+
+test testSaveClass-2 {} -setup {
+    set elemInst [Save new {v(node) i(vin) vsource#branch @m2[vdsat] node}]
+} -body {
+    $elemInst addVector node5
+    set result [$elemInst genSPICEString]
+} -result {.save v(node) i(vin) vsource#branch @m2[vdsat] node node5} -cleanup {
+    unset elemInst result
+}
+
+test testSaveClass-3 {} -setup {
+    set elemInst [Save new {v(node) i(vin) vsource#branch @m2[vdsat] node}]
+} -body {
+    $elemInst deleteVector vsource#branch
+    set result [$elemInst genSPICEString]
+} -result {.save v(node) i(vin) @m2[vdsat] node} -cleanup {
+    unset elemInst result
+}
+
+test testSaveClass-4 {} -setup {
+    set elemInst [Save new {v(node) i(vin) vsource#branch @m2[vdsat] node} -name save1]
+} -body {
+    catch {$elemInst deleteVector {i(vin1)}} errorStr
+    return $errorStr
+} -result {Vector with name 'i(vin1)' was not found in device's 'save1' list of parameters 'v(node) i(vin)\
+vsource#branch {@m2[vdsat]} node'} -cleanup {
+    unset elemInst errorStr
+}
+
+test testSaveClass-5 {} -setup {
+    set elemInst [Save new {v(node) i(vin) vsource#branch @m2[vdsat] node} -name save1]
+} -body {
+    catch {$elemInst addVector {i(vin)}} errorStr
+    return $errorStr
+} -result {Vectors list 'v(node) i(vin) vsource#branch {@m2[vdsat]} node i(vin)' has already contains vector with name\
+'i(vin)'} -cleanup {
+    unset elemInst errorStr
+}
+
 ###  Ic class tests 
 
 testTemplate testIcClass-1 {} {Ic new {{v(a) v1 -eq} {v(b) 10}}} {.ic v(a)={v1} v(b)=10}
