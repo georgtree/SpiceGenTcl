@@ -19,7 +19,7 @@ namespace eval ::SpiceGenTcl {
     namespace export Pin ParameterSwitch Parameter ParameterNoCheck ParameterPositional ParameterPositionalNoCheck\
             ParameterDefault ParameterEquation ParameterPositionalEquation Device Model RawString Comment Include\
             Options ParamStatement Temp Netlist Circuit Library Subcircuit Analysis Simulator Dataset Axis Trace\
-            EmptyTrace RawFile Ic Nodeset ParameterNode ParameterNodeEquation Global Parser
+            EmptyTrace RawFile Ic Nodeset ParameterNode ParameterNodeEquation Global Parser ParameterVector
     namespace export importNgspice importXyce importCommon importLtspice forgetNgspice forgetXyce forgetCommon\
             forgetLtspice
 
@@ -391,6 +391,22 @@ namespace eval ::SpiceGenTcl {
                 return -code error "Parameter '[my configure -name]' equation can't be empty"
             }
         }
+    }
+
+###  ParameterVector class definition
+
+    oo::configurable create ParameterVector {
+        superclass ParameterSwitch
+        property name -set {
+            if {$value eq {}} {
+                return -code error "ParameterVector must have a name, empty string was provided"
+            } elseif {[regexp {^([a-zA-Z0-9]+|[vi]\([a-zA-Z0-9]+\)|[a-zA-Z0-9]+#[a-zA-Z0-9]+|@[a-zA-Z0-9]+\[[a-zA-Z0-9]+\])$} $value]} {
+                set name [string tolower $value]
+            } else {
+                return -code error "Parameter name '$value' is not a valid name"
+            }
+        }
+        variable name
     }
 
 ###  ParameterNoCheck class definition

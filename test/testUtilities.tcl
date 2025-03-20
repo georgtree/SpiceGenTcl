@@ -76,8 +76,11 @@ proc testTemplate {testName descr createStr refStr} {
     test $testName $descr -body {
         if {[catch {set inst [{*}$createStr]} errorStr]} {
             return $errorStr
+        } elseif {[catch {set result [$inst genSPICEString]} errorStr]} {
+            return $errorStr
+        } else {
+            return $result
         }
-        return [$inst genSPICEString]
     } -result $refStr
 }
 
