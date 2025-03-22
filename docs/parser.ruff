@@ -42,15 +42,14 @@ namespace eval Parser {
         This netlist doesn't contains subcircuits or unknown models, but contains various elements: independent
         sources, resistors, bipolar transistors, `.model` and `.sens` statements.
 
-        We crate parser for Ngspice netlist with command [::SpiceGenTcl::Ngspice::NgspiceParser]:
+        We create parser for Ngspice netlist with command [::SpiceGenTcl::Ngspice::NgspiceParser]:
         ```tcl
         set netlistsLoc [file dirname [info script]]
         set parser [::SpiceGenTcl::Ngspice::NgspiceParser new parser1 [file join $netlistsLoc diffpair.cir]]
         ```
 
-        After that, we use method [::SpiceGenTcl::Parser::readAndParse] to read provided circuit file
-        and parse it content. As a result, method returns [::SpiceGenTcl::Netlist] object that contains all succesfully
-        parsed elements objects:
+        After that, we use method [::SpiceGenTcl::Parser::readAndParse] to read circuit file and parse it content.
+        As a result, method returns [::SpiceGenTcl::Netlist] object that contains all parsed elements objects:
         ```tcl
         set netlist [$parser readAndParse]
         ```
@@ -81,8 +80,8 @@ namespace eval Parser {
         .sens v(5,4)
         ```
 
-        Also, [::SpiceGenTcl::Ngspice::NgspiceParser] has `definitions` property that contains ready for evaluation
-        list of commands to create elements objects parsed from the file:
+        Object of class [::SpiceGenTcl::Ngspice::NgspiceParser] has `definitions` property that contains ready for 
+        evaluation list of commands to create elements objects parsed from the file:
         ```tcl
         puts [join [$parser configure -definitions] "\n"]
         ```
@@ -108,17 +107,17 @@ namespace eval Parser {
         ::SpiceGenTcl::Ngspice::Analyses::SensDc new -outvar v(5,4)
         ```
 
-        You can use this result directly in SpiceGenTcl, or modify it before that. If you don't want adding element
-        to netlist object and evaluate models and subcircuits classes, you can call 
-        [::SpiceGenTcl::Parser::readAndParse] command with switch `-noeval`, and in that case it 
-        returns the content of `definitions` parser property:
+        We can use this result directly in SpiceGenTcl, or modify it before that. If we don't want adding element
+        to netlist object and evaluate models and subcircuits classes, we can call 
+        [::SpiceGenTcl::Parser::readAndParse] command with switch `-noeval`, and in that case it returns the content
+        of `definitions` parser's property:
         ```tcl
         puts [join [$parser readAndParse -noeval] "\n"]
         ```
 
-        And you will get the same results we got with previous run and accessing `definitions` property.
+        After that we will get the same results we've got in previous run by accessing `definitions` property.
 
-        Then, you can attach that netlist to the [::SpiceGenTcl::Circuit] class object and run the simulation:
+        Then, we can attach that netlist to the [::SpiceGenTcl::Circuit] class object and run the simulation:
         ```tcl
         set circuit [Circuit new {diffpair}]
         set simulator [BatchLiveLog new {batch1}]
@@ -136,14 +135,15 @@ namespace eval Parser {
         vrc1=6.032e-04 vrc2=-6.032e-04
         ```
 
-        So, as you can see, you don't need to translate circuit manually to Tcl code, you can do that with the parser
-        in automatic way. It could not be seen like a big burden, but it will once you have multiple large netlists,
-        like in the next example.
+        We don’t need to manually translate the circuit into Tcl code; this can be done automatically using the parser. 
+        It might not seem like a major task, but it becomes cumbersome when dealing with multiple large netlists, as 
+        shown in the following example.
+
 
         ## Parse of large circuit
 
-        Our next example is the circuit with size of 430 lines. This circuit is a part of ISCAS85 testbench of SPICE
-        simulators. It contains subcircuits implementing logical cells with transistors from 45nm_HP.pm library.
+        This example represents a circuit with 430 lines. It is part of the ISCAS85 testbench for SPICE simulators and
+        contains subcircuits that implement logical cells using transistors from the 45nm_HP.pm library.
 
         Read and build circuit with parser:
         ```tcl
@@ -151,8 +151,8 @@ namespace eval Parser {
         set netlist [$parser readAndParse]
         ```
         
-        Subcircuit definitions are wrapped as the new classes with [::SpiceGenTcl::Subcircuit] class as a superclass,
-        and evaluated in caller scope. So, for example, the nor2 subcircuit is represented by class `Nor2`:
+        Subcircuit definitions are wrapped as new classes, with the [::SpiceGenTcl::Subcircuit] class as the superclass, 
+        and are evaluated in the caller's scope. For example, the `nor2` subcircuit is represented by the class `Nor2`:
         ```tcl
         oo::class create Nor2 {
             superclass ::SpiceGenTcl::Subcircuit
@@ -171,13 +171,13 @@ namespace eval Parser {
         }
         ```
         
-        And it is now availible in caller scope as `Nor2` command, so parser create new object of that class and add it
+        It is now availible in caller's scope as `Nor2` command, so parser creates new object of that class and add it
         to netlist object:
         ```tcl
         Nor2 new
         ```
 
-        Then we can create circuit, run it and read waveform results:
+        After that, we can create circuit, run it and read waveform results:
         ```tcl
         set circuit [Circuit new {c432_test}]
         set simulator [BatchLiveLog new {batch1}]
@@ -192,7 +192,7 @@ namespace eval Parser {
         }
         ```
 
-        And plot it with ticklecharts:
+        Make plot with `ticklecharts`:
         ```tcl
         set chartVout [ticklecharts::chart new]
         $chartVout Xaxis -name "time, s" -minorTick {show "True"} -type "value" -splitLine {show "True"}
@@ -219,7 +219,7 @@ namespace eval Parser {
 
         ## Parse of nested subcircuits
 
-        Nested subcircuit definition is also supported by the parser. For example, we can use that artificial example
+        Nested subcircuits definitions are also supported by the parser. For example, we can use that artificial example
         of nested subcircuit to demonstrate how it works:
         ```spice
         .subckt top in out
@@ -337,12 +337,12 @@ namespace eval Parser {
         Top new
         ```
 
-        You can see that class definitions are created inside constructors of parent subcircuit definition class,
-        and so local to namespace of that subcircuit class object. Despite the clear artificial nature of this example,
-        it shows capability of parser and the logic of parsing nested subcircuits. 
+        You can see that class definitions are created inside the constructors of the parent subcircuit definition 
+        class, making them local to the namespace of that subcircuit class object. Despite the clearly artificial nature
+        of this example, it demonstrates the parser's capability and the logic of parsing nested subcircuits.
 
-        Also, because there is an unknown model `r3` for SpiceGenTcl parser, it creates new model class during parsing
-        inside the constructor of parent subcircuit definition class.
+        Additionally, because the model r3 is unknown to the SpiceGenTcl parser, a new model class is created during 
+        parsing within the constructor of the parent subcircuit definition class.
     }
 
 }
