@@ -396,7 +396,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             set value [lrange $lineList 1 end-1]
             set libValue [@ $lineList end]
             return [list ::SpiceGenTcl::Library new $value $libValue]
-         }
+        }
         method CreateNodeset {line} {
             # Creates [::SpiceGenTcl::Nodeset] object from passed line and add it to `netlistObj`
             #   line - line to parse

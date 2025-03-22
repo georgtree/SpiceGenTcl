@@ -1142,7 +1142,7 @@ namespace eval ::SpiceGenTcl {
     }
 
 ###  Save class definition
-    ##nagelfar subcmd+ _obj,Save configure addParam
+    ##nagelfar subcmd+ _obj,Save configure addParam addVector
     oo::configurable create Save {
         superclass SPICEElement
         mixin Utility
@@ -2293,6 +2293,8 @@ namespace eval ::SpiceGenTcl {
         variable SupModelsTypes
         property topnetlist
         variable topnetlist
+        variable definitions
+        property definitions
         variable ModelTemplate
         variable SubcircuitTemplate
         variable NamespacePath
@@ -2325,11 +2327,10 @@ namespace eval ::SpiceGenTcl {
         method readFile {} {
             error "Not implemented"
         }
-        method readAndParse {} {
+        method readAndParse {args} {
             # Calls methods `readFile` and `buildTopNetlist` in a sequence
             my readFile
-            my buildTopNetlist
-            return
+            return [my buildTopNetlist {*}$args]
         }
         method GetSubcircuitLines {} {
             # Parses line by line and creates tree with each node represent subcircuit that can contain
@@ -2419,11 +2420,11 @@ namespace eval ::SpiceGenTcl {
             set params [my ParseParams $lineList $paramsStartIndex {} list]
             # create instance of subcircuit
             set subcktClassName [string totitle $subName]
-            set definitions {}
+            set definitionsLoc {}
             foreach child $children {
-                lappend definitions [$SubcktsTree get $child definition]
+                lappend definitionsLoc [$SubcktsTree get $child definition]
                 set objString "\[[string totitle [file tail $child]] new\]"
-                lappend definitions "my add $objString"
+                lappend definitionsLoc "my add $objString"
             }
             # find lines to add to subcircuit, excluding nested subcircuits lines
             set lines2remove {}
@@ -2448,15 +2449,22 @@ namespace eval ::SpiceGenTcl {
                                                 @pins@ [list $pinList]\
                                                 @params@ [list $params]\
                                                 @subname@ $subName\
-                                                @definitions@ [join $definitions "\n"]\
+                                                @definitions@ [join $definitionsLoc "\n"]\
                                                 @elements@ [join $elements "\n"]]\
                                     $SubcircuitTemplate]
             ##nagelfar ignore
             $SubcktsTree append $subcktPath definition $definition
             return
         }
-        method buildTopNetlist {} {
-            # Builds top netlist corresponding to parsed netlist file
+        method buildTopNetlist {args} {
+            # Builds top netlist corresponding to parsed netlist file.
+            # For unknowns to SpiceGenTcl models the new model class is created during the parsing and evaluated in
+            # a caller context. For each subcircuit (and nested subcircuits) the corresponding class is created
+            # and evaluated in a caller context.
+            # Returns: [::SpiceGenTcl::Netlist] object with attached elements succesfully parsed in input netlist file.
+            argparse {
+                -noeval
+            }
             if {![info exists FileData]} {
                 error "Parser object '[my configure -parsername]' doesn't have prepared data"
             }
@@ -2472,8 +2480,16 @@ namespace eval ::SpiceGenTcl {
                     }
                     my BuildSubcktFromDef $node
                     if {[$SubcktsTree parent $node] eq {/}} {
-                        uplevel 1 [$SubcktsTree get $node definition]
-                        $topNetlist add [eval {*}[list [string totitle [file tail $node]] new]]
+                        set definition [$SubcktsTree get $node definition]
+                        lappend definitions $definition
+                        if {![info exists noeval]} {
+                            uplevel 1 $definition
+                        }
+                        set definition [list [string totitle [file tail $node]] new]
+                        lappend definitions $definition
+                        if {![info exists noeval]} {
+                            $topNetlist add [eval {*}$definition]
+                        }
                     }
                     set startLine [$SubcktsTree get $node startLine]
                     set endLine [$SubcktsTree get $node endLine]
@@ -2482,18 +2498,26 @@ namespace eval ::SpiceGenTcl {
                 }
                 set allLines [lremove $allLines {*}$lines2remove]
             }
-            foreach element [my BuildNetlist $allLines] {
-                # check the netlist string for presence of class definition
-                if {$element eq {}} {
-                    continue
-                }
-                if {[regexp {^oo::class\s+(\S+)} $element]} {
-                    uplevel 1 $element
-                } else {
-                    $topNetlist add [eval $element]
+            set topDefinitions [my BuildNetlist $allLines]
+            lappend definitions {*}$topDefinitions
+            if {![info exists noeval]} {
+                foreach element $topDefinitions {
+                    # check the netlist string for presence of class definition
+                    if {$element eq {}} {
+                        continue
+                    }
+                    if {[regexp {^oo::class\s+(\S+)} $element]} {
+                        uplevel 1 $element
+                    } else {
+                        $topNetlist add [eval $element]
+                    }
                 }
             }
-            return
+            if {[info exists noeval]} {
+                return $definitions
+            } else {
+                return $topNetlist
+            }
         }
         method BuildNetlist {lines {subckt false}} {
             # Builds netlist from passed lines

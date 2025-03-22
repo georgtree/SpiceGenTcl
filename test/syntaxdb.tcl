@@ -81,6 +81,7 @@ SpiceGenTcl::Global
 SpiceGenTcl::Ic
 SpiceGenTcl::Include
 SpiceGenTcl::Library
+SpiceGenTcl::ParameterVector
 SpiceGenTcl::Ltspice::Analyses::Ac
 SpiceGenTcl::Ltspice::Analyses::Dc
 SpiceGenTcl::Ltspice::Analyses::Op

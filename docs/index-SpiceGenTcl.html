@@ -2615,7 +2615,7 @@
 <h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#b9b96e>-name</font></code></p>
 <p class='ruff'>Writable: <code><font color=#b9b96e>-name</font></code></p>
 <h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::SPICEElement" title="SPICEElement" class='ruff_cmd'>SPICEElement</a></p>
-<h5 class='ruff'>Subclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Parameter" title="Parameter" class='ruff_cmd'>Parameter</a></p>
+<h5 class='ruff'>Subclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Parameter" title="Parameter" class='ruff_cmd'>Parameter</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParameterVector" title="ParameterVector" class='ruff_cmd'>ParameterVector</a></p>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::ParameterSwitch::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParameterSwitch" title="::SpiceGenTcl::ParameterSwitch" class='ruff_cmd'>::SpiceGenTcl::ParameterSwitch</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParameterSwitch'>ParameterSwitch</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>ParameterSwitch</font></b></code> with parameter name.</p>
@@ -2651,6 +2651,15 @@
     <b><font color=#fe6efe>return</font></b> [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-name</font>]
 }</pre></div>
 </div></details>
+<h3 class='ruffclass'><a name='::SpiceGenTcl::ParameterVector'>ParameterVector</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl" title="::SpiceGenTcl" class='ruff_cmd'>::SpiceGenTcl</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
+<div style='clear:both;'></div>
+<h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
+<tr><td><code>configure</code></td><td>Configure properties.</td></tr>
+<tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParameterSwitch::genSPICEString" title="ParameterSwitch.genSPICEString" class='ruff_cmd'>ParameterSwitch.genSPICEString</a></td></tr>
+</table>
+<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#b9b96e>-name</font></code></p>
+<p class='ruff'>Writable: <code><font color=#b9b96e>-name</font></code></p>
+<h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParameterSwitch" title="ParameterSwitch" class='ruff_cmd'>ParameterSwitch</a></p>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::ParamStatement'>ParamStatement</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl" title="::SpiceGenTcl" class='ruff_cmd'>::SpiceGenTcl</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
@@ -2831,13 +2840,13 @@
 <div style='clear:both;'></div>
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Parser::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
-<tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Parser::buildTopNetlist" title="buildTopNetlist" class='ruff_cmd'>buildTopNetlist</a></td><td>Builds top netlist corresponding to parsed netlist file.</td></tr>
+<tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Parser::buildTopNetlist" title="buildTopNetlist" class='ruff_cmd'>buildTopNetlist</a></td><td>Builds top netlist corresponding to parsed netlist file. For unknowns to SpiceGenTcl models the new model class is created during the parsing and evaluated in a caller context. For each subcircuit (and nested subcircuits) the corresponding class is created and evaluated in a caller context.</td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Parser::readAndParse" title="readAndParse" class='ruff_cmd'>readAndParse</a></td><td>Calls methods <code>readFile</code> and <code>buildTopNetlist</code> in a sequence.</td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Parser::readFile" title="readFile" class='ruff_cmd'>readFile</a></td><td>Not documented.</td></tr>
 </table>
-<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#b9b96e>-filepath</font></code>, <code><font color=#b9b96e>-parsername</font></code>, <code><font color=#b9b96e>-topnetlist</font></code></p>
-<p class='ruff'>Writable: <code><font color=#b9b96e>-filepath</font></code>, <code><font color=#b9b96e>-parsername</font></code>, <code><font color=#b9b96e>-topnetlist</font></code></p>
+<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#b9b96e>-definitions</font></code>, <code><font color=#b9b96e>-filepath</font></code>, <code><font color=#b9b96e>-parsername</font></code>, <code><font color=#b9b96e>-topnetlist</font></code></p>
+<p class='ruff'>Writable: <code><font color=#b9b96e>-definitions</font></code>, <code><font color=#b9b96e>-filepath</font></code>, <code><font color=#b9b96e>-parsername</font></code>, <code><font color=#b9b96e>-topnetlist</font></code></p>
 <h5 class='ruff'>Subclasses</h5><p class='ruff'><a href="index-SpiceGenTcl-Ngspice.html#::SpiceGenTcl::Ngspice::NgspiceParser" title="::SpiceGenTcl::Ngspice::NgspiceParser" class='ruff_cmd'>::SpiceGenTcl::Ngspice::NgspiceParser</a></p>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Parser::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Parser" title="::SpiceGenTcl::Parser" class='ruff_cmd'>::SpiceGenTcl::Parser</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Parser'>Parser</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
@@ -2878,13 +2887,23 @@
 </div></details>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Parser::buildTopNetlist'>buildTopNetlist</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Parser" title="::SpiceGenTcl::Parser" class='ruff_cmd'>::SpiceGenTcl::Parser</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Parser'>Parser</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
-<p class='ruff'>Builds top netlist corresponding to parsed netlist file</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT buildTopNetlist</span> </div>
+<p class='ruff'>Builds top netlist corresponding to parsed netlist file. For unknowns to SpiceGenTcl models the new model class is created during the parsing and evaluated in a caller context. For each subcircuit (and nested subcircuits) the corresponding class is created and evaluated in a caller context.</p>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT buildTopNetlist</span> <span class='ruff_arg'>?args?</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
+<h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
+</table>
+<h5 class='ruff'>Return value</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Netlist" title="::SpiceGenTcl::Netlist" class='ruff_cmd'>::SpiceGenTcl::Netlist</a> object with attached elements succesfully parsed in input netlist file.</p>
 <div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Parser_buildTopNetlist' href="javascript:toggleSource('SpiceGenTcl_Parser_buildTopNetlist')">Show source</a></p>
-<div id='SpiceGenTcl_Parser_buildTopNetlist' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> buildTopNetlist {} {
+<div id='SpiceGenTcl_Parser_buildTopNetlist' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> buildTopNetlist {args} {
 
-    <i><font color=#76a396># Builds top netlist corresponding to parsed netlist file</font></i>
+    <i><font color=#76a396># Builds top netlist corresponding to parsed netlist file.</font></i>
+    <i><font color=#76a396># For unknowns to SpiceGenTcl models the new model class is created during the parsing and evaluated in</font></i>
+    <i><font color=#76a396># a caller context. For each subcircuit (and nested subcircuits) the corresponding class is created</font></i>
+    <i><font color=#76a396># and evaluated in a caller context.</font></i>
+    <i><font color=#76a396># Returns: [::SpiceGenTcl::Netlist] object with attached elements succesfully parsed in input netlist file.</font></i>
+    argparse {
+        <font color=#b9b96e>-noeval</font>
+    }
     <b><font color=#ffa500>if</font></b> {![<b><font color=#ffa500>info</font></b> exists FileData]} {
         <b><font color=#ffa500>error</font></b> <font color=#90ee90>&quot;Parser object '<font color=#f1b479>[</font>my configure -parsername<font color=#f1b479>]</font>' doesn't have prepared data&quot;</font>
     }
@@ -2900,8 +2919,16 @@
             }
             <b><font color=#fe6efe>my</font></b> BuildSubcktFromDef <font color=#f1b479>$node</font>
             <b><font color=#ffa500>if</font></b> {[<font color=#f1b479>$SubcktsTree</font> parent <font color=#f1b479>$node</font>] eq {/}} {
-                <b><font color=#ffa500>uplevel</font></b> 1 [<font color=#f1b479>$SubcktsTree</font> get <font color=#f1b479>$node</font> definition]
-                <font color=#f1b479>$topNetlist</font> add [<b><font color=#ffa500>eval</font></b> {<b><font color=#ffa500>*</font></b>}[<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>string</font></b> totitle [<b><font color=#ffa500>file</font></b> tail <font color=#f1b479>$node</font>]] new]]
+                <b><font color=#ffa500>set</font></b> definition [<font color=#f1b479>$SubcktsTree</font> get <font color=#f1b479>$node</font> definition]
+                <b><font color=#ffa500>lappend</font></b> definitions <font color=#f1b479>$definition</font>
+                <b><font color=#ffa500>if</font></b> {![<b><font color=#ffa500>info</font></b> exists noeval]} {
+                    <b><font color=#ffa500>uplevel</font></b> 1 <font color=#f1b479>$definition</font>
+                }
+                <b><font color=#ffa500>set</font></b> definition [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>string</font></b> totitle [<b><font color=#ffa500>file</font></b> tail <font color=#f1b479>$node</font>]] new]
+                <b><font color=#ffa500>lappend</font></b> definitions <font color=#f1b479>$definition</font>
+                <b><font color=#ffa500>if</font></b> {![<b><font color=#ffa500>info</font></b> exists noeval]} {
+                    <font color=#f1b479>$topNetlist</font> add [<b><font color=#ffa500>eval</font></b> {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$definition</font>]
+                }
             }
             <b><font color=#ffa500>set</font></b> startLine [<font color=#f1b479>$SubcktsTree</font> get <font color=#f1b479>$node</font> startLine]
             <b><font color=#ffa500>set</font></b> endLine [<font color=#f1b479>$SubcktsTree</font> get <font color=#f1b479>$node</font> endLine]
@@ -2910,32 +2937,41 @@
         }
         <b><font color=#ffa500>set</font></b> allLines [lremove <font color=#f1b479>$allLines</font> {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$lines2remove</font>]
     }
-    <b><font color=#ffa500>foreach</font></b> element [<b><font color=#fe6efe>my</font></b> BuildNetlist <font color=#f1b479>$allLines</font>] {
-        <i><font color=#76a396># check the netlist string for presence of class definition</font></i>
-        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$element</font> eq {}} {
-            <b><font color=#fe6efe>continue</font></b>
-        }
-        <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>regexp</font></b> {^oo::class\s+(\S+)} <font color=#f1b479>$element</font>]} {
-            <b><font color=#ffa500>uplevel</font></b> 1 <font color=#f1b479>$element</font>
-        } <b><font color=#ffa500>else</font></b> {
-            <font color=#f1b479>$topNetlist</font> add [<b><font color=#ffa500>eval</font></b> <font color=#f1b479>$element</font>]
+    <b><font color=#ffa500>set</font></b> topDefinitions [<b><font color=#fe6efe>my</font></b> BuildNetlist <font color=#f1b479>$allLines</font>]
+    <b><font color=#ffa500>lappend</font></b> definitions {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$topDefinitions</font>
+    <b><font color=#ffa500>if</font></b> {![<b><font color=#ffa500>info</font></b> exists noeval]} {
+        <b><font color=#ffa500>foreach</font></b> element <font color=#f1b479>$topDefinitions</font> {
+            <i><font color=#76a396># check the netlist string for presence of class definition</font></i>
+            <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$element</font> eq {}} {
+                <b><font color=#fe6efe>continue</font></b>
+            }
+            <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>regexp</font></b> {^oo::class\s+(\S+)} <font color=#f1b479>$element</font>]} {
+                <b><font color=#ffa500>uplevel</font></b> 1 <font color=#f1b479>$element</font>
+            } <b><font color=#ffa500>else</font></b> {
+                <font color=#f1b479>$topNetlist</font> add [<b><font color=#ffa500>eval</font></b> <font color=#f1b479>$element</font>]
+            }
         }
     }
-    <b><font color=#fe6efe>return</font></b>
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> exists noeval]} {
+        <b><font color=#fe6efe>return</font></b> <font color=#f1b479>$definitions</font>
+    } <b><font color=#ffa500>else</font></b> {
+        <b><font color=#fe6efe>return</font></b> <font color=#f1b479>$topNetlist</font>
+    }
 }</pre></div>
 </div></details>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Parser::readAndParse'>readAndParse</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Parser" title="::SpiceGenTcl::Parser" class='ruff_cmd'>::SpiceGenTcl::Parser</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Parser'>Parser</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Calls methods <code>readFile</code> and <code>buildTopNetlist</code> in a sequence</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT readAndParse</span> </div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT readAndParse</span> <span class='ruff_arg'>?args?</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
+<h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
+</table>
 <div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Parser_readAndParse' href="javascript:toggleSource('SpiceGenTcl_Parser_readAndParse')">Show source</a></p>
-<div id='SpiceGenTcl_Parser_readAndParse' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> readAndParse {} {
+<div id='SpiceGenTcl_Parser_readAndParse' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> readAndParse {args} {
 
     <i><font color=#76a396># Calls methods `readFile` and `buildTopNetlist` in a sequence</font></i>
     <b><font color=#fe6efe>my</font></b> readFile
-    <b><font color=#fe6efe>my</font></b> buildTopNetlist
-    <b><font color=#fe6efe>return</font></b>
+    <b><font color=#fe6efe>return</font></b> [<b><font color=#fe6efe>my</font></b> buildTopNetlist {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$args</font>]
 }</pre></div>
 </div></details>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Parser::readFile'>readFile</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Parser" title="::SpiceGenTcl::Parser" class='ruff_cmd'>::SpiceGenTcl::Parser</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Parser'>Parser</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
@@ -3467,6 +3503,136 @@
     <b><font color=#fe6efe>return</font></b> [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-value</font>]
 }</pre></div>
 </div></details>
+<h3 class='ruffclass'><a name='::SpiceGenTcl::Save'>Save</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl" title="::SpiceGenTcl" class='ruff_cmd'>::SpiceGenTcl</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
+<div style='clear:both;'></div>
+<h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
+<tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Save::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
+<tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Save::addVector" title="addVector" class='ruff_cmd'>addVector</a></td><td>Adds new <code>ParameterVector</code> object to the list Vectors.</td></tr>
+<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="Utility.argsPreprocess" class='ruff_cmd'>Utility.argsPreprocess</a></td></tr>
+<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="Utility.buildArgStr" class='ruff_cmd'>Utility.buildArgStr</a></td></tr>
+<tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="Utility.buildSwArgStr" class='ruff_cmd'>Utility.buildSwArgStr</a></td></tr>
+<tr><td><code>configure</code></td><td>Configure properties.</td></tr>
+<tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Save::deleteVector" title="deleteVector" class='ruff_cmd'>deleteVector</a></td><td>Deletes existing <code>ParameterVector</code> object from dictionary <code>Vectors</code>.</td></tr>
+<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheck" title="Utility.duplListCheck" class='ruff_cmd'>Utility.duplListCheck</a></td></tr>
+<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheckRet" title="Utility.duplListCheckRet" class='ruff_cmd'>Utility.duplListCheckRet</a></td></tr>
+<tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Save::genSPICEString" title="genSPICEString" class='ruff_cmd'>genSPICEString</a></td><td>Creates save statement string for SPICE netlist.</td></tr>
+<tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Save::getVectors" title="getVectors" class='ruff_cmd'>getVectors</a></td><td>Gets the dictionary of vector names.</td></tr>
+</table>
+<h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#b9b96e>-name</font></code></p>
+<p class='ruff'>Writable: <code><font color=#b9b96e>-name</font></code></p>
+<h5 class='ruff'>Superclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::SPICEElement" title="SPICEElement" class='ruff_cmd'>SPICEElement</a></p>
+<h5 class='ruff'>Mixins</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility" title="Utility" class='ruff_cmd'>Utility</a></p>
+<h4 class='ruffmethod'><a name='::SpiceGenTcl::Save::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Save" title="::SpiceGenTcl::Save" class='ruff_cmd'>::SpiceGenTcl::Save</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Save'>Save</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
+<div style='clear:both;'></div>
+<p class='ruff'>Creates object of class <code><b><font color=#ffa500>ParamStatement</font></b></code>.</p>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>vectors ?-name value?</span></div>
+<details><summary class='ruff-expand'><span>Details</span></summary>
+<h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
+<tr><td><code>vectors</code></td><td>List of vectors in form <code>{vec0 vec1 vec2 ...}</code></td></tr>
+<tr><td><code><font color=#b9b96e>-name</font></code></td><td>Name of the library that could be used to retrieve element from <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Netlist" title="::SpiceGenTcl::Netlist" class='ruff_cmd'>::SpiceGenTcl::Netlist</a> object and its descendants, optional.</td></tr>
+</table>
+<h5 class='ruff'>Description</h5><p class='ruff'>Class represent .save statement.</p>
+<div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Save_constructor' href="javascript:toggleSource('SpiceGenTcl_Save_constructor')">Show source</a></p>
+<div id='SpiceGenTcl_Save_constructor' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> constructor {vectors args} {
+
+    <i><font color=#76a396># Creates object of class `ParamStatement`.</font></i>
+    <i><font color=#76a396>#  vectors - list of vectors in form `{vec0 vec1 vec2 ...}`</font></i>
+    <i><font color=#76a396>#  -name - name of the library that could be used to retrieve element from [::SpiceGenTcl::Netlist] object</font></i>
+    <i><font color=#76a396>#    and its descendants, optional</font></i>
+    <i><font color=#76a396># Class represent .save statement.</font></i>
+    <i><font color=#76a396># Synopsis: vectors ?-name value?</font></i>
+    argparse {
+        <font color=#b9b96e>-name</font>=
+    }
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> exists name]} {
+        <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-name</font> <font color=#f1b479>$name</font>
+    } <b><font color=#ffa500>else</font></b> {
+        <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-name</font> [<b><font color=#fe6efe>self</font></b> object]
+    }
+    <b><font color=#ffa500>foreach</font></b> vector <font color=#f1b479>$vectors</font> {
+        <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$vector</font>]&gt;1} {
+            <b><font color=#ffa500>error</font></b> <font color=#90ee90>&quot;Name '<font color=#f1b479>$</font>vector' is not a valid name of the vector&quot;</font>
+        } <b><font color=#ffa500>else</font></b> {
+            <b><font color=#fe6efe>my</font></b> addVector {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$vector</font>
+        }
+    }
+}</pre></div>
+</div></details>
+<h4 class='ruffmethod'><a name='::SpiceGenTcl::Save::addVector'>addVector</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Save" title="::SpiceGenTcl::Save" class='ruff_cmd'>::SpiceGenTcl::Save</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Save'>Save</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
+<div style='clear:both;'></div>
+<p class='ruff'>Adds new <code>ParameterVector</code> object to the list Vectors.</p>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT addVector</span> <span class='ruff_arg'>vectorName</span></div>
+<details><summary class='ruff-expand'><span>Details</span></summary>
+<h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
+<tr><td><code>vectorName</code></td><td>Name of vector.</td></tr>
+</table>
+<div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Save_addVector' href="javascript:toggleSource('SpiceGenTcl_Save_addVector')">Show source</a></p>
+<div id='SpiceGenTcl_Save_addVector' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> addVector {vectorName} {
+
+    <i><font color=#76a396># Adds new `ParameterVector` object to the list Vectors.</font></i>
+    <i><font color=#76a396>#  vectorName - name of vector</font></i>
+    <b><font color=#ffa500>set</font></b> vectorName [<b><font color=#ffa500>string</font></b> tolower <font color=#f1b479>$vectorName</font>]
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> exists Vectors]} {
+        <b><font color=#ffa500>set</font></b> vectorList [<b><font color=#ffa500>dict</font></b> keys <font color=#f1b479>$Vectors</font>]
+    }
+    <b><font color=#ffa500>lappend</font></b> vectorList <font color=#f1b479>$vectorName</font>
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#fe6efe>my</font></b> duplListCheck <font color=#f1b479>$vectorList</font>]} {
+        <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Vectors list '<font color=#f1b479>$</font>vectorList' has already contains vector with name '<font color=#f1b479>$</font>vectorName'&quot;</font>
+    }
+    <b><font color=#ffa500>dict</font></b> append Vectors <font color=#f1b479>$vectorName</font> [::SpiceGenTcl::ParameterVector new <font color=#f1b479>$vectorName</font>]
+    <b><font color=#fe6efe>return</font></b>
+}</pre></div>
+</div></details>
+<h4 class='ruffmethod'><a name='::SpiceGenTcl::Save::deleteVector'>deleteVector</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Save" title="::SpiceGenTcl::Save" class='ruff_cmd'>::SpiceGenTcl::Save</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Save'>Save</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
+<div style='clear:both;'></div>
+<p class='ruff'>Deletes existing <code>ParameterVector</code> object from dictionary <code>Vectors</code>.</p>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT deleteVector</span> <span class='ruff_arg'>vectorName</span></div>
+<details><summary class='ruff-expand'><span>Details</span></summary>
+<h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
+<tr><td><code>vectorName</code></td><td>Name of parameter that will be deleted.</td></tr>
+</table>
+<div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Save_deleteVector' href="javascript:toggleSource('SpiceGenTcl_Save_deleteVector')">Show source</a></p>
+<div id='SpiceGenTcl_Save_deleteVector' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> deleteVector {vectorName} {
+
+    <i><font color=#76a396># Deletes existing `ParameterVector` object from dictionary `Vectors`.</font></i>
+    <i><font color=#76a396>#  vectorName - name of parameter that will be deleted</font></i>
+    <b><font color=#ffa500>set</font></b> vectorName [<b><font color=#ffa500>string</font></b> tolower <font color=#f1b479>$vectorName</font>]
+    <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>catch</font></b> {<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$Vectors</font> <font color=#f1b479>$vectorName</font>}]} {
+        <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Vector with name '<font color=#f1b479>$</font>vectorName' was not found in device's '<font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font>' list of parameters '<font color=#f1b479>[</font>dict keys <font color=#f1b479>$</font>Vectors<font color=#f1b479>]</font>'&quot;</font>
+    } <b><font color=#ffa500>else</font></b> {
+        <b><font color=#ffa500>set</font></b> Vectors [<b><font color=#ffa500>dict</font></b> remove <font color=#f1b479>$Vectors</font> <font color=#f1b479>$vectorName</font>]
+    }
+    <b><font color=#fe6efe>return</font></b>
+}</pre></div>
+</div></details>
+<h4 class='ruffmethod'><a name='::SpiceGenTcl::Save::genSPICEString'>genSPICEString</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Save" title="::SpiceGenTcl::Save" class='ruff_cmd'>::SpiceGenTcl::Save</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Save'>Save</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
+<div style='clear:both;'></div>
+<p class='ruff'>Creates save statement string for SPICE netlist.</p>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT genSPICEString</span> </div>
+<details><summary class='ruff-expand'><span>Details</span></summary>
+<h5 class='ruff'>Return value</h5><p class='ruff'>SPICE netlist's string</p>
+<div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Save_genSPICEString' href="javascript:toggleSource('SpiceGenTcl_Save_genSPICEString')">Show source</a></p>
+<div id='SpiceGenTcl_Save_genSPICEString' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> genSPICEString {} {
+
+    <i><font color=#76a396># Creates save statement string for SPICE netlist.</font></i>
+    <i><font color=#76a396># Returns: SPICE netlist's string</font></i>
+    <b><font color=#fe6efe>return</font></b> <font color=#90ee90>&quot;.save <font color=#f1b479>[</font>join <font color=#f1b479>[</font>join <font color=#f1b479>[</font>lmap vector <font color=#f1b479>[</font>dict values <font color=#f1b479>$</font>Vectors<font color=#f1b479>]</font> <font color=#f1b479>{$</font>vector genSPICEString<font color=#f1b479>}]]]</font>&quot;</font>
+}</pre></div>
+</div></details>
+<h4 class='ruffmethod'><a name='::SpiceGenTcl::Save::getVectors'>getVectors</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Save" title="::SpiceGenTcl::Save" class='ruff_cmd'>::SpiceGenTcl::Save</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Save'>Save</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
+<div style='clear:both;'></div>
+<p class='ruff'>Gets the dictionary of vector names</p>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT getVectors</span> </div>
+<details><summary class='ruff-expand'><span>Details</span></summary>
+<h5 class='ruff'>Return value</h5><p class='ruff'>vectors dictionary</p>
+<div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Save_getVectors' href="javascript:toggleSource('SpiceGenTcl_Save_getVectors')">Show source</a></p>
+<div id='SpiceGenTcl_Save_getVectors' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> getVectors {} {
+
+    <i><font color=#76a396># Gets the dictionary of vector names</font></i>
+    <i><font color=#76a396># Returns: vectors dictionary</font></i>
+    <b><font color=#fe6efe>return</font></b> <font color=#f1b479>$Vectors</font>
+}</pre></div>
+</div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Simulator'>Simulator</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl" title="::SpiceGenTcl" class='ruff_cmd'>::SpiceGenTcl</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
@@ -3534,7 +3700,7 @@
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::SPICEElement::genSPICEString" title="genSPICEString" class='ruff_cmd'>genSPICEString</a></td><td>Declaration of method common for all SPICE elements that generates representation of element in SPICE netlist. Not implemented in abstraction class.</td></tr>
 </table>
-<h5 class='ruff'>Subclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Pin" title="Pin" class='ruff_cmd'>Pin</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParameterSwitch" title="ParameterSwitch" class='ruff_cmd'>ParameterSwitch</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device" title="Device" class='ruff_cmd'>Device</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model" title="Model" class='ruff_cmd'>Model</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawString" title="RawString" class='ruff_cmd'>RawString</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Options" title="Options" class='ruff_cmd'>Options</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement" title="ParamStatement" class='ruff_cmd'>ParamStatement</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Ic" title="Ic" class='ruff_cmd'>Ic</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Global" title="Global" class='ruff_cmd'>Global</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Temp" title="Temp" class='ruff_cmd'>Temp</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Netlist" title="Netlist" class='ruff_cmd'>Netlist</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis" title="Analysis" class='ruff_cmd'>Analysis</a></p>
+<h5 class='ruff'>Subclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Pin" title="Pin" class='ruff_cmd'>Pin</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParameterSwitch" title="ParameterSwitch" class='ruff_cmd'>ParameterSwitch</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device" title="Device" class='ruff_cmd'>Device</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model" title="Model" class='ruff_cmd'>Model</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawString" title="RawString" class='ruff_cmd'>RawString</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Options" title="Options" class='ruff_cmd'>Options</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement" title="ParamStatement" class='ruff_cmd'>ParamStatement</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Save" title="Save" class='ruff_cmd'>Save</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Ic" title="Ic" class='ruff_cmd'>Ic</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Global" title="Global" class='ruff_cmd'>Global</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Temp" title="Temp" class='ruff_cmd'>Temp</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Netlist" title="Netlist" class='ruff_cmd'>Netlist</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis" title="Analysis" class='ruff_cmd'>Analysis</a></p>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::SPICEElement::genSPICEString'>genSPICEString</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::SPICEElement" title="::SpiceGenTcl::SPICEElement" class='ruff_cmd'>::SpiceGenTcl::SPICEElement</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::SPICEElement'>SPICEElement</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Declaration of method common for all SPICE elements that generates representation of element in SPICE netlist. Not implemented in abstraction class.</p>
@@ -3877,7 +4043,7 @@
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheck" title="duplListCheck" class='ruff_cmd'>duplListCheck</a></td><td>Checks if list contains duplicates.</td></tr>
 <tr><td><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheckRet" title="duplListCheckRet" class='ruff_cmd'>duplListCheckRet</a></td><td>Checks if list contains duplicates and return value of first duplicate.</td></tr>
 </table>
-<h5 class='ruff'>Subclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device" title="Device" class='ruff_cmd'>Device</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model" title="Model" class='ruff_cmd'>Model</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Options" title="Options" class='ruff_cmd'>Options</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement" title="ParamStatement" class='ruff_cmd'>ParamStatement</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Ic" title="Ic" class='ruff_cmd'>Ic</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Nodeset" title="Nodeset" class='ruff_cmd'>Nodeset</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Global" title="Global" class='ruff_cmd'>Global</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Netlist" title="Netlist" class='ruff_cmd'>Netlist</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis" title="Analysis" class='ruff_cmd'>Analysis</a>, <a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::pulse" title="::SpiceGenTcl::Common::Sources::pulse" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::pulse</a>, <a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::sin" title="::SpiceGenTcl::Common::Sources::sin" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::sin</a>, <a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::exp" title="::SpiceGenTcl::Common::Sources::exp" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::exp</a>, <a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::sffm" title="::SpiceGenTcl::Common::Sources::sffm" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::sffm</a>, <a href="index-SpiceGenTcl-Common-Analyses.html#::SpiceGenTcl::Common::Analyses::Dc" title="::SpiceGenTcl::Common::Analyses::Dc" class='ruff_cmd'>::SpiceGenTcl::Common::Analyses::Dc</a>, <a href="index-SpiceGenTcl-Common-Analyses.html#::SpiceGenTcl::Common::Analyses::Ac" title="::SpiceGenTcl::Common::Analyses::Ac" class='ruff_cmd'>::SpiceGenTcl::Common::Analyses::Ac</a>, <a href="index-SpiceGenTcl-Common-Analyses.html#::SpiceGenTcl::Common::Analyses::Tran" title="::SpiceGenTcl::Common::Analyses::Tran" class='ruff_cmd'>::SpiceGenTcl::Common::Analyses::Tran</a>, <a href="index-SpiceGenTcl-Common-Analyses.html#::SpiceGenTcl::Common::Analyses::Op" title="::SpiceGenTcl::Common::Analyses::Op" class='ruff_cmd'>::SpiceGenTcl::Common::Analyses::Op</a>, <a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::pulse" title="::SpiceGenTcl::Ngspice::Sources::pulse" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources::pulse</a>, <a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::sffm" title="::SpiceGenTcl::Ngspice::Sources::sffm" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources::sffm</a>, <a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::am" title="::SpiceGenTcl::Ngspice::Sources::am" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources::am</a>, <a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Sp" title="::SpiceGenTcl::Ngspice::Analyses::Sp" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::Sp</a>, <a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::SensAc" title="::SpiceGenTcl::Ngspice::Analyses::SensAc" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::SensAc</a>, <a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::SensDc" title="::SpiceGenTcl::Ngspice::Analyses::SensDc" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::SensDc</a>, <a href="index-SpiceGenTcl-Ngspice-Misc.html#::SpiceGenTcl::Ngspice::Misc::OptionsNgspice" title="::SpiceGenTcl::Ngspice::Misc::OptionsNgspice" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Misc::OptionsNgspice</a>, <a href="index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Sens" title="::SpiceGenTcl::Xyce::Analyses::Sens" class='ruff_cmd'>::SpiceGenTcl::Xyce::Analyses::Sens</a>, <a href="index-SpiceGenTcl-Ltspice-Sources.html#::SpiceGenTcl::Ltspice::Sources::pulse" title="::SpiceGenTcl::Ltspice::Sources::pulse" class='ruff_cmd'>::SpiceGenTcl::Ltspice::Sources::pulse</a>, <a href="index-SpiceGenTcl-Ltspice-Sources.html#::SpiceGenTcl::Ltspice::Sources::sin" title="::SpiceGenTcl::Ltspice::Sources::sin" class='ruff_cmd'>::SpiceGenTcl::Ltspice::Sources::sin</a>, <a href="index-SpiceGenTcl-Ltspice-Sources.html#::SpiceGenTcl::Ltspice::Sources::exp" title="::SpiceGenTcl::Ltspice::Sources::exp" class='ruff_cmd'>::SpiceGenTcl::Ltspice::Sources::exp</a>, <a href="index-SpiceGenTcl-Ltspice-Sources.html#::SpiceGenTcl::Ltspice::Sources::sffm" title="::SpiceGenTcl::Ltspice::Sources::sffm" class='ruff_cmd'>::SpiceGenTcl::Ltspice::Sources::sffm</a></p>
+<h5 class='ruff'>Subclasses</h5><p class='ruff'><a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device" title="Device" class='ruff_cmd'>Device</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model" title="Model" class='ruff_cmd'>Model</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Options" title="Options" class='ruff_cmd'>Options</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement" title="ParamStatement" class='ruff_cmd'>ParamStatement</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Save" title="Save" class='ruff_cmd'>Save</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Ic" title="Ic" class='ruff_cmd'>Ic</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Nodeset" title="Nodeset" class='ruff_cmd'>Nodeset</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Global" title="Global" class='ruff_cmd'>Global</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Netlist" title="Netlist" class='ruff_cmd'>Netlist</a>, <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Analysis" title="Analysis" class='ruff_cmd'>Analysis</a>, <a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::pulse" title="::SpiceGenTcl::Common::Sources::pulse" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::pulse</a>, <a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::sin" title="::SpiceGenTcl::Common::Sources::sin" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::sin</a>, <a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::exp" title="::SpiceGenTcl::Common::Sources::exp" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::exp</a>, <a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::sffm" title="::SpiceGenTcl::Common::Sources::sffm" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::sffm</a>, <a href="index-SpiceGenTcl-Common-Analyses.html#::SpiceGenTcl::Common::Analyses::Dc" title="::SpiceGenTcl::Common::Analyses::Dc" class='ruff_cmd'>::SpiceGenTcl::Common::Analyses::Dc</a>, <a href="index-SpiceGenTcl-Common-Analyses.html#::SpiceGenTcl::Common::Analyses::Ac" title="::SpiceGenTcl::Common::Analyses::Ac" class='ruff_cmd'>::SpiceGenTcl::Common::Analyses::Ac</a>, <a href="index-SpiceGenTcl-Common-Analyses.html#::SpiceGenTcl::Common::Analyses::Tran" title="::SpiceGenTcl::Common::Analyses::Tran" class='ruff_cmd'>::SpiceGenTcl::Common::Analyses::Tran</a>, <a href="index-SpiceGenTcl-Common-Analyses.html#::SpiceGenTcl::Common::Analyses::Op" title="::SpiceGenTcl::Common::Analyses::Op" class='ruff_cmd'>::SpiceGenTcl::Common::Analyses::Op</a>, <a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::pulse" title="::SpiceGenTcl::Ngspice::Sources::pulse" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources::pulse</a>, <a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::sffm" title="::SpiceGenTcl::Ngspice::Sources::sffm" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources::sffm</a>, <a href="index-SpiceGenTcl-Ngspice-Sources.html#::SpiceGenTcl::Ngspice::Sources::am" title="::SpiceGenTcl::Ngspice::Sources::am" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Sources::am</a>, <a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::Sp" title="::SpiceGenTcl::Ngspice::Analyses::Sp" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::Sp</a>, <a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::SensAc" title="::SpiceGenTcl::Ngspice::Analyses::SensAc" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::SensAc</a>, <a href="index-SpiceGenTcl-Ngspice-Analyses.html#::SpiceGenTcl::Ngspice::Analyses::SensDc" title="::SpiceGenTcl::Ngspice::Analyses::SensDc" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Analyses::SensDc</a>, <a href="index-SpiceGenTcl-Ngspice-Misc.html#::SpiceGenTcl::Ngspice::Misc::OptionsNgspice" title="::SpiceGenTcl::Ngspice::Misc::OptionsNgspice" class='ruff_cmd'>::SpiceGenTcl::Ngspice::Misc::OptionsNgspice</a>, <a href="index-SpiceGenTcl-Xyce-Analyses.html#::SpiceGenTcl::Xyce::Analyses::Sens" title="::SpiceGenTcl::Xyce::Analyses::Sens" class='ruff_cmd'>::SpiceGenTcl::Xyce::Analyses::Sens</a>, <a href="index-SpiceGenTcl-Ltspice-Sources.html#::SpiceGenTcl::Ltspice::Sources::pulse" title="::SpiceGenTcl::Ltspice::Sources::pulse" class='ruff_cmd'>::SpiceGenTcl::Ltspice::Sources::pulse</a>, <a href="index-SpiceGenTcl-Ltspice-Sources.html#::SpiceGenTcl::Ltspice::Sources::sin" title="::SpiceGenTcl::Ltspice::Sources::sin" class='ruff_cmd'>::SpiceGenTcl::Ltspice::Sources::sin</a>, <a href="index-SpiceGenTcl-Ltspice-Sources.html#::SpiceGenTcl::Ltspice::Sources::exp" title="::SpiceGenTcl::Ltspice::Sources::exp" class='ruff_cmd'>::SpiceGenTcl::Ltspice::Sources::exp</a>, <a href="index-SpiceGenTcl-Ltspice-Sources.html#::SpiceGenTcl::Ltspice::Sources::sffm" title="::SpiceGenTcl::Ltspice::Sources::sffm" class='ruff_cmd'>::SpiceGenTcl::Ltspice::Sources::sffm</a></p>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Utility::argsPreprocess'>argsPreprocess</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility" title="::SpiceGenTcl::Utility" class='ruff_cmd'>::SpiceGenTcl::Utility</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Utility'>Utility</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Calls argparse and constructs list for passing to Device constructor.</p>
@@ -4032,6 +4198,7 @@
 <li class='ruff-toc1'><a href='index-Tutorials.html'>Tutorials</a></li>
 <li class='ruff-toc1'><a href='index-Tips.html'>Tips</a></li>
 <li class='ruff-toc1'><a href='index-Advanced.html'>Advanced</a></li>
+<li class='ruff-toc1'><a href='index-Parser.html'>Parser</a></li>
 <li class='ruff-toc1'><a class='ruff-highlight' href='index-SpiceGenTcl.html'>SpiceGenTcl</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Common-BasicDevices.html'>SpiceGenTcl::Common::BasicDevices</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Common-Analyses.html'>SpiceGenTcl::Common::Analyses</a></li>
@@ -4164,7 +4331,7 @@
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParameterSwitch'>ParameterSwitch</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParameterSwitch::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>ParameterSwitch</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>ParameterSwitch</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>ParameterSwitch</font></b></code> with parameter name.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParameterSwitch::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre>Creates string for SPICE netlist.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement'>ParamStatement</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;params ?-name value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>ParamStatement</font></b></code>.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParameterVector'>ParameterVector</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement'>ParamStatement</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;params ?-name value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>ParamStatement</font></b></code>.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement::addParam'>addParam</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT addParam&lt;/span&gt; &lt;span class='ruff_arg'&gt;paramName value ?-eq?&lt;/span&gt;</pre>Adds new Parameter object to the list Params.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement::deleteParam'>deleteParam</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT deleteParam&lt;/span&gt; &lt;span class='ruff_arg'&gt;paramName&lt;/span&gt;</pre>Deletes existing <code><b><font color=#ffa500>Parameter</font></b></code> object from list <code>Params</code>.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre>Creates parameter statement string for SPICE netlist.
@@ -4172,8 +4339,8 @@
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::ParamStatement::setParamValue'>setParamValue</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT setParamValue&lt;/span&gt; &lt;span class='ruff_arg'&gt;name value ?name value ...?&lt;/span&gt;</pre>Sets (or change) value of particular parameters.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Parser'>Parser</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Parser::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;Parser create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name filepath&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;Parser new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name filepath&lt;/span&gt;</pre>Creates object of class <code>Parser</code> that do parsing of valid simulator netlist.
-</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Parser::buildTopNetlist'>buildTopNetlist</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT buildTopNetlist&lt;/span&gt; </pre>Builds top netlist corresponding to parsed netlist file
-</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Parser::readAndParse'>readAndParse</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT readAndParse&lt;/span&gt; </pre>Calls methods <code>readFile</code> and <code>buildTopNetlist</code> in a sequence
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Parser::buildTopNetlist'>buildTopNetlist</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT buildTopNetlist&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Builds top netlist corresponding to parsed netlist file. For unknowns to SpiceGenTcl models the new model class is created during the parsing and evaluated in a caller context. For each subcircuit (and nested subcircuits) the corresponding class is created and evaluated in a caller context.
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Parser::readAndParse'>readAndParse</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT readAndParse&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Calls methods <code>readFile</code> and <code>buildTopNetlist</code> in a sequence
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Parser::readFile'>readFile</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT readFile&lt;/span&gt; </pre></span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Pin'>Pin</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Pin::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Pin</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name nodeName&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Pin</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name nodeName&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Pin</font></b></code> with name and connected node
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Pin::checkFloating'>checkFloating</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT checkFloating&lt;/span&gt; </pre>Determines if pin is connected to the node.
@@ -4190,6 +4357,11 @@
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawFile::getVoltagesNames'>getVoltagesNames</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getVoltagesNames&lt;/span&gt; </pre>Returns list that contains names of all voltage variables
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawString'>RawString</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawString::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;value ?-name value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>RawString</font></b></code>.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawString::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre>Creates raw string for SPICE netlist.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Save'>Save</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Save::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;vectors ?-name value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>ParamStatement</font></b></code>.
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Save::addVector'>addVector</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT addVector&lt;/span&gt; &lt;span class='ruff_arg'&gt;vectorName&lt;/span&gt;</pre>Adds new <code>ParameterVector</code> object to the list Vectors.
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Save::deleteVector'>deleteVector</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT deleteVector&lt;/span&gt; &lt;span class='ruff_arg'&gt;vectorName&lt;/span&gt;</pre>Deletes existing <code>ParameterVector</code> object from dictionary <code>Vectors</code>.
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Save::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre>Creates save statement string for SPICE netlist.
+</span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Save::getVectors'>getVectors</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getVectors&lt;/span&gt; </pre>Gets the dictionary of vector names
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Simulator'>Simulator</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Simulator::getLog'>getLog</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT getLog&lt;/span&gt; </pre>Returns log file of completed simulations.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Simulator::readData'>readData</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT readData&lt;/span&gt; </pre>Reads raw data file of last simulation.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Simulator::readLog'>readLog</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT readLog&lt;/span&gt; </pre>Reads log file of completed simulations.

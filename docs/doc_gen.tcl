@@ -12,6 +12,7 @@ source [file join $docDir tutorials.ruff]
 source [file join $docDir faq.ruff]
 source [file join $docDir tips.ruff]
 source [file join $docDir advanced.ruff]
+source [file join $docDir parser.ruff]
 source [file join $docDir .. SpiceGenTcl.tcl]
 
 set packageVersion [package versions SpiceGenTcl]
@@ -26,7 +27,7 @@ set commonNroff [list -title $title -sortnamespaces false -preamble $startPage -
                          -pagesplit namespace -autopunctuate true -compact false -includeprivate false\
                          -product SpiceGenTcl -diagrammer "ditaa --border-width 1" -version $packageVersion\
                          -copyright "George Yashin" {*}$::argv]
-set namespaces [list "::List of devices" ::FAQ ::Tutorials ::Tips ::Advanced ::SpiceGenTcl\
+set namespaces [list "::List of devices" ::FAQ ::Tutorials ::Tips ::Advanced ::Parser ::SpiceGenTcl\
                 ::SpiceGenTcl::Common::BasicDevices ::SpiceGenTcl::Common::Analyses\
                 ::SpiceGenTcl::Common::Sources ::SpiceGenTcl::Ngspice ::SpiceGenTcl::Ngspice::BasicDevices\
                 ::SpiceGenTcl::Ngspice::Sources ::SpiceGenTcl::Ngspice::SemiconductorDevices\
@@ -92,3 +93,5 @@ set chartsMap [dcreate !ticklechart_mark_monte_carlo_typ_mag_ngspice! monte_carl
                        !ticklechart_mark_monte_carlo_dists_comb_ngspice! monte_carlo_combined.html\
                        !ticklechart_mark_diode_extract_ngspice! diode_extract.html]
 fileutil::updateInPlace [file join $docDir index-Advanced.html] processContentsTutorial
+set chartsMap [dcreate !ticklechart_mark_c432_test_with_parsing_ngspice! c432_test_with_parsing.html]
+fileutil::updateInPlace [file join $docDir index-Parser.html] processContentsTutorial

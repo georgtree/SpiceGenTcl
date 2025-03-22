@@ -253,9 +253,9 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBParser new\fP \fIname filepath\fP
 .br
-\fBOBJECT buildTopNetlist\fP
+\fBOBJECT buildTopNetlist\fP \fI?args?\fP
 .br
-\fBOBJECT readAndParse\fP
+\fBOBJECT readAndParse\fP \fI?args?\fP
 .br
 \fBOBJECT readFile\fP
 .br
@@ -290,6 +290,16 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 \fBOBJECT constructor\fP \fIvalue ?-name value?\fP
 .br
 \fBOBJECT genSPICEString\fP
+.br
+\fBOBJECT constructor\fP \fIvectors ?-name value?\fP
+.br
+\fBOBJECT addVector\fP \fIvectorName\fP
+.br
+\fBOBJECT deleteVector\fP \fIvectorName\fP
+.br
+\fBOBJECT genSPICEString\fP
+.br
+\fBOBJECT getVectors\fP
 .br
 \fBOBJECT getLog\fP
 .br
@@ -3132,7 +3142,7 @@ Writable: -name
 .PP
 \fBSubclasses\fR
 .PP
-\fIParameter\fP
+\fIParameter\fP, \fIParameterVector\fP
 .PP
 .RS -4n
 \fBconstructor\fR (::SpiceGenTcl::ParameterSwitch)
@@ -3171,6 +3181,30 @@ Creates string for SPICE netlist\&.
 \fBReturn value\fR
 .PP
 string '\fI$name\fP'
+.PP
+.RS -4n
+\fBParameterVector\fR (::SpiceGenTcl)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+configure
+Configure properties\&.
+.TP
+genSPICEString
+See \fIParameterSwitch\&.genSPICEString\fP
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -name
+.PP
+Writable: -name
+.PP
+\fBSuperclasses\fR
+.PP
+\fIParameterSwitch\fP
 .PP
 .RS -4n
 \fBParamStatement\fR (::SpiceGenTcl)
@@ -3348,7 +3382,7 @@ constructor
 Constructor for the class\&.
 .TP
 buildTopNetlist
-Builds top netlist corresponding to parsed netlist file\&.
+Builds top netlist corresponding to parsed netlist file\&. For unknowns to SpiceGenTcl models the new model class is created during the parsing and evaluated in a caller context\&. For each subcircuit (and nested subcircuits) the corresponding class is created and evaluated in a caller context\&.
 .TP
 configure
 Configure properties\&.
@@ -3362,9 +3396,9 @@ Not documented\&.
 .PP
 \fBProperties\fR
 .PP
-Readable: -filepath, -parsername, -topnetlist
+Readable: -definitions, -filepath, -parsername, -topnetlist
 .PP
-Writable: -filepath, -parsername, -topnetlist
+Writable: -definitions, -filepath, -parsername, -topnetlist
 .PP
 \fBSubclasses\fR
 .PP
@@ -3395,18 +3429,33 @@ Path to file that should be parsed\&.
 \fBbuildTopNetlist\fR (::SpiceGenTcl::Parser)
 .RE
 .PP
-Builds top netlist corresponding to parsed netlist file
-.RS 4n\fBOBJECT buildTopNetlist\fP
+Builds top netlist corresponding to parsed netlist file\&.
+For unknowns to SpiceGenTcl models the new model class is created during the parsing and evaluated in
+a caller context\&. For each subcircuit (and nested subcircuits) the corresponding class is created
+and evaluated in a caller context\&.
+.RS 4n\fBOBJECT buildTopNetlist\fP \fI?args?\fP
 .br
 .RE
+.PP
+\fBParameters\fR
+.RS 4n
+.RE
+.PP
+\fBReturn value\fR
+.PP
+\fI::SpiceGenTcl::Netlist\fP object with attached elements succesfully parsed in input netlist file\&.
 .PP
 .RS -4n
 \fBreadAndParse\fR (::SpiceGenTcl::Parser)
 .RE
 .PP
 Calls methods readFile and buildTopNetlist in a sequence
-.RS 4n\fBOBJECT readAndParse\fP
+.RS 4n\fBOBJECT readAndParse\fP \fI?args?\fP
 .br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
 .RE
 .PP
 .RS -4n
@@ -3785,6 +3834,142 @@ Creates raw string for SPICE netlist\&.
 SPICE netlists string
 .PP
 .RS -4n
+\fBSave\fR (::SpiceGenTcl)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+addVector
+Adds new ParameterVector object to the list Vectors\&.
+.TP
+argsPreprocess
+See \fIUtility\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fIUtility\&.buildArgStr\fP
+.TP
+buildSwArgStr
+See \fIUtility\&.buildSwArgStr\fP
+.TP
+configure
+Configure properties\&.
+.TP
+deleteVector
+Deletes existing ParameterVector object from dictionary Vectors\&.
+.TP
+duplListCheck
+See \fIUtility\&.duplListCheck\fP
+.TP
+duplListCheckRet
+See \fIUtility\&.duplListCheckRet\fP
+.TP
+genSPICEString
+Creates save statement string for SPICE netlist\&.
+.TP
+getVectors
+Gets the dictionary of vector names\&.
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -name
+.PP
+Writable: -name
+.PP
+\fBSuperclasses\fR
+.PP
+\fISPICEElement\fP
+.PP
+\fBMixins\fR
+.PP
+\fIUtility\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Save)
+.RE
+.PP
+Creates object of class ParamStatement\&.
+.RS 4n\fBOBJECT constructor\fP \fIvectors ?-name value?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+vectors
+List of vectors in form {vec0 vec1 vec2 \&.\&.\&.}
+.TP
+-name
+Name of the library that could be used to retrieve element from \fI::SpiceGenTcl::Netlist\fP object and its descendants, optional\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+Class represent \&.save statement\&.
+.PP
+.RS -4n
+\fBaddVector\fR (::SpiceGenTcl::Save)
+.RE
+.PP
+Adds new ParameterVector object to the list Vectors\&.
+.RS 4n\fBOBJECT addVector\fP \fIvectorName\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+vectorName
+Name of vector\&.
+.RE
+.PP
+.RS -4n
+\fBdeleteVector\fR (::SpiceGenTcl::Save)
+.RE
+.PP
+Deletes existing ParameterVector object from dictionary Vectors\&.
+.RS 4n\fBOBJECT deleteVector\fP \fIvectorName\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+vectorName
+Name of parameter that will be deleted\&.
+.RE
+.PP
+.RS -4n
+\fBgenSPICEString\fR (::SpiceGenTcl::Save)
+.RE
+.PP
+Creates save statement string for SPICE netlist\&.
+.RS 4n\fBOBJECT genSPICEString\fP
+.br
+.RE
+.PP
+\fBReturn value\fR
+.PP
+SPICE netlist's string
+.PP
+.RS -4n
+\fBgetVectors\fR (::SpiceGenTcl::Save)
+.RE
+.PP
+Gets the dictionary of vector names
+.RS 4n\fBOBJECT getVectors\fP
+.br
+.RE
+.PP
+\fBReturn value\fR
+.PP
+vectors dictionary
+.PP
+.RS -4n
 \fBSimulator\fR (::SpiceGenTcl)
 .RE
 .PP
@@ -3873,7 +4058,7 @@ Declaration of method common for all SPICE elements that generates representatio
 .PP
 \fBSubclasses\fR
 .PP
-\fIPin\fP, \fIParameterSwitch\fP, \fIDevice\fP, \fIModel\fP, \fIRawString\fP, \fIOptions\fP, \fIParamStatement\fP, \fIIc\fP, \fIGlobal\fP, \fITemp\fP, \fINetlist\fP, \fIAnalysis\fP
+\fIPin\fP, \fIParameterSwitch\fP, \fIDevice\fP, \fIModel\fP, \fIRawString\fP, \fIOptions\fP, \fIParamStatement\fP, \fISave\fP, \fIIc\fP, \fIGlobal\fP, \fITemp\fP, \fINetlist\fP, \fIAnalysis\fP
 .PP
 .RS -4n
 \fBgenSPICEString\fR (::SpiceGenTcl::SPICEElement)
@@ -4252,7 +4437,7 @@ Checks if list contains duplicates and return value of first duplicate\&.
 .PP
 \fBSubclasses\fR
 .PP
-\fIDevice\fP, \fIModel\fP, \fIOptions\fP, \fIParamStatement\fP, \fIIc\fP, \fINodeset\fP, \fIGlobal\fP, \fINetlist\fP, \fIAnalysis\fP, \fI::SpiceGenTcl::Common::Sources::pulse\fP, \fI::SpiceGenTcl::Common::Sources::sin\fP, \fI::SpiceGenTcl::Common::Sources::exp\fP, \fI::SpiceGenTcl::Common::Sources::sffm\fP, \fI::SpiceGenTcl::Common::Analyses::Dc\fP, \fI::SpiceGenTcl::Common::Analyses::Ac\fP, \fI::SpiceGenTcl::Common::Analyses::Tran\fP, \fI::SpiceGenTcl::Common::Analyses::Op\fP, \fI::SpiceGenTcl::Ngspice::Sources::pulse\fP, \fI::SpiceGenTcl::Ngspice::Sources::sffm\fP, \fI::SpiceGenTcl::Ngspice::Sources::am\fP, \fI::SpiceGenTcl::Ngspice::Analyses::Sp\fP, \fI::SpiceGenTcl::Ngspice::Analyses::SensAc\fP, \fI::SpiceGenTcl::Ngspice::Analyses::SensDc\fP, \fI::SpiceGenTcl::Ngspice::Misc::OptionsNgspice\fP, \fI::SpiceGenTcl::Xyce::Analyses::Sens\fP, \fI::SpiceGenTcl::Ltspice::Sources::pulse\fP, \fI::SpiceGenTcl::Ltspice::Sources::sin\fP, \fI::SpiceGenTcl::Ltspice::Sources::exp\fP, \fI::SpiceGenTcl::Ltspice::Sources::sffm\fP
+\fIDevice\fP, \fIModel\fP, \fIOptions\fP, \fIParamStatement\fP, \fISave\fP, \fIIc\fP, \fINodeset\fP, \fIGlobal\fP, \fINetlist\fP, \fIAnalysis\fP, \fI::SpiceGenTcl::Common::Sources::pulse\fP, \fI::SpiceGenTcl::Common::Sources::sin\fP, \fI::SpiceGenTcl::Common::Sources::exp\fP, \fI::SpiceGenTcl::Common::Sources::sffm\fP, \fI::SpiceGenTcl::Common::Analyses::Dc\fP, \fI::SpiceGenTcl::Common::Analyses::Ac\fP, \fI::SpiceGenTcl::Common::Analyses::Tran\fP, \fI::SpiceGenTcl::Common::Analyses::Op\fP, \fI::SpiceGenTcl::Ngspice::Sources::pulse\fP, \fI::SpiceGenTcl::Ngspice::Sources::sffm\fP, \fI::SpiceGenTcl::Ngspice::Sources::am\fP, \fI::SpiceGenTcl::Ngspice::Analyses::Sp\fP, \fI::SpiceGenTcl::Ngspice::Analyses::SensAc\fP, \fI::SpiceGenTcl::Ngspice::Analyses::SensDc\fP, \fI::SpiceGenTcl::Ngspice::Misc::OptionsNgspice\fP, \fI::SpiceGenTcl::Xyce::Analyses::Sens\fP, \fI::SpiceGenTcl::Ltspice::Sources::pulse\fP, \fI::SpiceGenTcl::Ltspice::Sources::sin\fP, \fI::SpiceGenTcl::Ltspice::Sources::exp\fP, \fI::SpiceGenTcl::Ltspice::Sources::sffm\fP
 .PP
 .RS -4n
 \fBargsPreprocess\fR (::SpiceGenTcl::Utility)

@@ -1,0 +1,348 @@
+namespace eval Parser {
+    variable _ruff_preamble {
+        This section provides examples of netlist parser usage, Ngspice netlists in particular.  
+        
+        - [Simple netlist parsing] - "examples/ngspice/parse.tcl" file
+        - [Parse of large circuit] - "examples/ngspice/transient/c432_test_with_parsing.tcl" file
+        - [Parse of nested subcircuits]
+
+        ## Simple netlist parsing
+        
+        Let's start with simple example of differential pair netlist that we used in tutorial section:
+
+        ```spice
+        simple differential pair - CM and DM dc sensitivity
+
+        * Models:
+        .model qnl npn(level=1 bf=80 rb=100 tf=0.3n tr=6n cje=3p cjc=2p vaf=50)
+        .model qnr npn(level=1 bf=80 rb=100 tf=0.3n tr=6n cje=3p cjc=2p vaf=50)
+
+        .options noacct
+
+        * Circuit description:
+        q1 4 2 6 qnr
+        q2 5 3 6 qnl   
+        rs1 11 2 1k
+        rs2 3 1 1k
+        rc1 4 8 10k
+        rc2 5 8 10k
+        q3 7 7 9 qnl
+        q4 6 7 9 qnr   
+        rbias 7 8 20k	
+
+        * Inputs/Supplies:
+        vcm 1 0 dc 0 sin(0 0.1 5meg) ac 1
+        vdm  1 11 dc 0 sin(0 0.1 5meg) ac 1
+        vcc 8 0 12
+        vee 9 0 -12
+
+        * Analysys:
+        .sens v(5,4)
+        ```
+        This netlist doesn't contains subcircuits or unknown models, but contains various elements: independent
+        sources, resistors, bipolar transistors, `.model` and `.sens` statements.
+
+        We crate parser for Ngspice netlist with command [::SpiceGenTcl::Ngspice::NgspiceParser]:
+        ```tcl
+        set netlistsLoc [file dirname [info script]]
+        set parser [::SpiceGenTcl::Ngspice::NgspiceParser new parser1 [file join $netlistsLoc diffpair.cir]]
+        ```
+
+        After that, we use method [::SpiceGenTcl::Parser::readAndParse] to read provided circuit file
+        and parse it content. As a result, method returns [::SpiceGenTcl::Netlist] object that contains all succesfully
+        parsed elements objects:
+        ```tcl
+        set netlist [$parser readAndParse]
+        ```
+        
+        We can get SPICE string representation of this netlist:
+        ```tcl
+        puts [$netlist genSPICEString]
+        ```
+        
+        The result is:
+        ```spice
+        .model qnl npn(level=1 bf=80 rb=100 tf=0.3n tr=6n cje=3p cjc=2p vaf=50)
+        .model qnr npn(level=1 bf=80 rb=100 tf=0.3n tr=6n cje=3p cjc=2p vaf=50)
+        .options noacct
+        q1 4 2 6 qnr
+        q2 5 3 6 qnl
+        rs1 11 2 1k
+        rs2 3 1 1k
+        rc1 4 8 10k
+        rc2 5 8 10k
+        q3 7 7 9 qnl
+        q4 6 7 9 qnr
+        rbias 7 8 20k
+        vcm 1 0 dc 0 ac 1 sin 0 0.1 5meg
+        vdm 1 11 dc 0 ac 1 sin 0 0.1 5meg
+        vcc 8 0 12
+        vee 9 0 -12
+        .sens v(5,4)
+        ```
+
+        Also, [::SpiceGenTcl::Ngspice::NgspiceParser] has `definitions` property that contains ready for evaluation
+        list of commands to create elements objects parsed from the file:
+        ```tcl
+        puts [join [$parser configure -definitions] "\n"]
+        ```
+        
+        Result is:
+        ```tcl
+        ::SpiceGenTcl::Ngspice::SemiconductorDevices::BjtGPModel new qnl npn -bf 80 -rb 100 -tf 0.3n -tr 6n -cje 3p -cjc 2p -vaf 50
+        ::SpiceGenTcl::Ngspice::SemiconductorDevices::BjtGPModel new qnr npn -bf 80 -rb 100 -tf 0.3n -tr 6n -cje 3p -cjc 2p -vaf 50
+        ::SpiceGenTcl::Ngspice::Misc::OptionsNgspice new -noacct
+        ::SpiceGenTcl::Ngspice::SemiconductorDevices::Q new 1 4 2 6 -model qnr
+        ::SpiceGenTcl::Ngspice::SemiconductorDevices::Q new 2 5 3 6 -model qnl
+        ::SpiceGenTcl::Ngspice::BasicDevices::R new s1 11 2 -r 1k
+        ::SpiceGenTcl::Ngspice::BasicDevices::R new s2 3 1 -r 1k
+        ::SpiceGenTcl::Ngspice::BasicDevices::R new c1 4 8 -r 10k
+        ::SpiceGenTcl::Ngspice::BasicDevices::R new c2 5 8 -r 10k
+        ::SpiceGenTcl::Ngspice::SemiconductorDevices::Q new 3 7 7 9 -model qnl
+        ::SpiceGenTcl::Ngspice::SemiconductorDevices::Q new 4 6 7 9 -model qnr
+        ::SpiceGenTcl::Ngspice::BasicDevices::R new bias 7 8 -r 20k
+        ::SpiceGenTcl::Ngspice::Sources::Vsin new cm 1 0 -dc 0 -ac 1 -v0 0 -va 0.1 -freq 5meg
+        ::SpiceGenTcl::Ngspice::Sources::Vsin new dm 1 11 -dc 0 -ac 1 -v0 0 -va 0.1 -freq 5meg
+        ::SpiceGenTcl::Ngspice::Sources::Vdc new cc 8 0 -dc 12
+        ::SpiceGenTcl::Ngspice::Sources::Vdc new ee 9 0 -dc -12
+        ::SpiceGenTcl::Ngspice::Analyses::SensDc new -outvar v(5,4)
+        ```
+
+        You can use this result directly in SpiceGenTcl, or modify it before that. If you don't want adding element
+        to netlist object and evaluate models and subcircuits classes, you can call 
+        [::SpiceGenTcl::Parser::readAndParse] command with switch `-noeval`, and in that case it 
+        returns the content of `definitions` parser property:
+        ```tcl
+        puts [join [$parser readAndParse -noeval] "\n"]
+        ```
+
+        And you will get the same results we got with previous run and accessing `definitions` property.
+
+        Then, you can attach that netlist to the [::SpiceGenTcl::Circuit] class object and run the simulation:
+        ```tcl
+        set circuit [Circuit new {diffpair}]
+        set simulator [BatchLiveLog new {batch1}]
+        $circuit add $netlist
+        $circuit configure -simulator $simulator
+        $circuit runAndRead
+        set data [$circuit getDataDict]
+        set vrc1 [dget $data v(rc1)]
+        set vrc2 [dget $data v(rc2)]
+        puts [format "vrc1=%.3e vrc2=%.3e" $vrc1 $vrc2]
+        ```
+        
+        Result is:
+        ```
+        vrc1=6.032e-04 vrc2=-6.032e-04
+        ```
+
+        So, as you can see, you don't need to translate circuit manually to Tcl code, you can do that with the parser
+        in automatic way. It could not be seen like a big burden, but it will once you have multiple large netlists,
+        like in the next example.
+
+        ## Parse of large circuit
+
+        Our next example is the circuit with size of 430 lines. This circuit is a part of ISCAS85 testbench of SPICE
+        simulators. It contains subcircuits implementing logical cells with transistors from 45nm_HP.pm library.
+
+        Read and build circuit with parser:
+        ```tcl
+        set parser [::SpiceGenTcl::Ngspice::NgspiceParser new parser1 [file join $currentDir c432.net]]
+        set netlist [$parser readAndParse]
+        ```
+        
+        Subcircuit definitions are wrapped as the new classes with [::SpiceGenTcl::Subcircuit] class as a superclass,
+        and evaluated in caller scope. So, for example, the nor2 subcircuit is represented by class `Nor2`:
+        ```tcl
+        oo::class create Nor2 {
+            superclass ::SpiceGenTcl::Subcircuit
+            constructor {} {
+                my add [::SpiceGenTcl::Ngspice::SemiconductorDevices::M new 01 vdd a 01 -model pmos -n4 vdd -l 0.12u -w 1.54u -as 0.4081p -ad 0.4081p -ps 3.61u -pd 3.61u]
+                my add [::SpiceGenTcl::Ngspice::SemiconductorDevices::M new 02 vss a z -model nmos -n4 vss -l 0.12u -w 0.44u -as 0.1166p -ad 0.1166p -ps 1.41u -pd 1.41u]
+                my add [::SpiceGenTcl::Ngspice::SemiconductorDevices::M new 03 01 b z -model pmos -n4 vdd -l 0.12u -w 1.54u -as 0.4081p -ad 0.4081p -ps 3.61u -pd 3.61u]
+                my add [::SpiceGenTcl::Ngspice::SemiconductorDevices::M new 04 z b vss -model nmos -n4 vss -l 0.12u -w 0.44u -as 0.1166p -ad 0.1166p -ps 1.41u -pd 1.41u]
+                my add [::SpiceGenTcl::Ngspice::BasicDevices::C new 4 a vss -c 0.341f]
+                my add [::SpiceGenTcl::Ngspice::BasicDevices::C new 3 b vss -c 0.433f]
+                my add [::SpiceGenTcl::Ngspice::BasicDevices::C new 2 z vss -c 0.677f]
+                set pins {a b vdd vss z}
+                set params {}
+                next nor2 $pins $params
+            }
+        }
+        ```
+        
+        And it is now availible in caller scope as `Nor2` command, so parser create new object of that class and add it
+        to netlist object:
+        ```tcl
+        Nor2 new
+        ```
+
+        Then we can create circuit, run it and read waveform results:
+        ```tcl
+        set circuit [Circuit new {c432_test}]
+        set simulator [BatchLiveLog new {batch1}]
+        $circuit add $netlist
+        $circuit configure -simulator $simulator
+        $circuit runAndRead
+        set data [$circuit getDataDict]
+        set time [dget $data time]
+        foreach time [dget $data time] vg429 [dget $data v(g429)] vg430 [dget $data v(g430)] {
+            lappend timeVg429 [list $time $vg429]
+            lappend timeVg430 [list $time $vg430]
+        }
+        ```
+
+        And plot it with ticklecharts:
+        ```tcl
+        set chartVout [ticklecharts::chart new]
+        $chartVout Xaxis -name "time, s" -minorTick {show "True"} -type "value" -splitLine {show "True"}
+        $chartVout Yaxis -name "g429 voltage, V" -minorTick {show "True"} -type "value" -splitLine {show "True"}
+        $chartVout SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
+                -toolbox {feature {dataZoom {yAxisIndex "none"}}} -backgroundColor "#212121"
+        $chartVout Add "lineSeries" -data $timeVg429 -showAllSymbol "nothing" -symbolSize "0"
+        set chartImeas [ticklecharts::chart new]
+        $chartImeas Xaxis -name "time, s" -minorTick {show "True"} -type "value" -splitLine {show "True"}
+        $chartImeas Yaxis -name "g430 voltage, V" -minorTick {show "True"} -type "value" -splitLine {show "True"}
+        $chartImeas SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
+                -toolbox {feature {dataZoom {yAxisIndex "none"}}} -backgroundColor "#212121"
+        $chartImeas Add "lineSeries" -data $timeVg430 -showAllSymbol "nothing" -symbolSize "0"
+        # create multiplot
+        set layout [ticklecharts::Gridlayout new]
+        $layout Add $chartVout -bottom "5%" -height "40%" -width "80%"
+        $layout Add $chartImeas -bottom "55%" -height "40%" -width "80%"
+
+        set fbasename [file rootname [file tail [info script]]]
+        $layout Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -height 800px
+        ```
+
+        !ticklechart_mark_c432_test_with_parsing_ngspice!
+
+        ## Parse of nested subcircuits
+
+        Nested subcircuit definition is also supported by the parser. For example, we can use that artificial example
+        of nested subcircuit to demonstrate how it works:
+        ```spice
+        .subckt top in out
+        r1 in a r=10
+        .subckt middle1 in out
+        r2 in b r=20
+        .subckt inner1 in out
+        r3 in c r=30
+        .subckt innerInner1 in out
+        r4 in c r=30
+        .ends innerInner1
+        .ends inner1
+        r5 b out r=40
+        .ends middle1
+        .subckt middle2 in out
+        r6 in d r=50
+        .model res3mod r3(tc1=1 tc2=2)
+        .subckt inner2 in out
+        r7 in e r=60
+        .ends inner2
+        .subckt inner1 in out
+        r8 in e r=60
+        .ends inner1
+        r9 d out r=70
+        .ends middle2
+        r10 a out r=80
+        .ends top
+        ```
+
+        Parser creates next definitions:
+        ```tcl
+        oo::class create Top {
+            superclass ::SpiceGenTcl::Subcircuit
+            constructor {} {
+                oo::class create Middle1 {
+                    superclass ::SpiceGenTcl::Subcircuit
+                    constructor {} {
+                        oo::class create Inner1 {
+                            superclass ::SpiceGenTcl::Subcircuit
+                            constructor {} {
+                                oo::class create Innerinner1 {
+                                    superclass ::SpiceGenTcl::Subcircuit
+                                    constructor {} {
+                                        
+                                        my add [::SpiceGenTcl::Ngspice::BasicDevices::R new 4 in c -r 30 -beh]
+                                        set pins {in out}
+                                        set params {}
+                                        next innerinner1 $pins $params
+                                    }
+                                }
+                                my add [Innerinner1 new]
+                                my add [::SpiceGenTcl::Ngspice::BasicDevices::R new 3 in c -r 30 -beh]
+                                set pins {in out}
+                                set params {}
+                                next inner1 $pins $params
+                            }
+                        }
+                        my add [Inner1 new]
+                        my add [::SpiceGenTcl::Ngspice::BasicDevices::R new 2 in b -r 20 -beh]
+                        my add [::SpiceGenTcl::Ngspice::BasicDevices::R new 5 b out -r 40 -beh]
+                        set pins {in out}
+                        set params {}
+                        next middle1 $pins $params
+                    }
+                }
+                my add [Middle1 new]
+                oo::class create Middle2 {
+                    superclass ::SpiceGenTcl::Subcircuit
+                    constructor {} {
+                        oo::class create Inner2 {
+                            superclass ::SpiceGenTcl::Subcircuit
+                            constructor {} {
+                                
+                                my add [::SpiceGenTcl::Ngspice::BasicDevices::R new 7 in e -r 60 -beh]
+                                set pins {in out}
+                                set params {}
+                                next inner2 $pins $params
+                            }
+                        }
+                        my add [Inner2 new]
+                        oo::class create Inner1 {
+                            superclass ::SpiceGenTcl::Subcircuit
+                            constructor {} {
+                                
+                                my add [::SpiceGenTcl::Ngspice::BasicDevices::R new 8 in e -r 60 -beh]
+                                set pins {in out}
+                                set params {}
+                                next inner1 $pins $params
+                            }
+                        }
+                        my add [Inner1 new]
+                        my add [::SpiceGenTcl::Ngspice::BasicDevices::R new 6 in d -r 50 -beh]
+                        oo::class create R3Model {
+                            superclass ::SpiceGenTcl::Model
+                            constructor {name args} {
+                                set paramsNames [list tc1 tc2]
+                                next $name R3Model [my argsPreprocess $paramsNames {*}$args]
+                            }
+                        }
+                        my add [R3Model new res3mod -tc1 1 -tc2 2]
+                        my add [::SpiceGenTcl::Ngspice::BasicDevices::R new 9 d out -r 70 -beh]
+                        set pins {in out}
+                        set params {}
+                        next middle2 $pins $params
+                    }
+                }
+                my add [Middle2 new]
+                my add [::SpiceGenTcl::Ngspice::BasicDevices::R new 1 in a -r 10 -beh]
+                my add [::SpiceGenTcl::Ngspice::BasicDevices::R new 10 a out -r 80 -beh]
+                set pins {in out}
+                set params {}
+                next top $pins $params
+            }
+        }
+        Top new
+        ```
+
+        You can see that class definitions are created inside constructors of parent subcircuit definition class,
+        and so local to namespace of that subcircuit class object. Despite the clear artificial nature of this example,
+        it shows capability of parser and the logic of parsing nested subcircuits. 
+
+        Also, because there is an unknown model `r3` for SpiceGenTcl parser, it creates new model class during parsing
+        inside the constructor of parent subcircuit definition class.
+    }
+
+}
