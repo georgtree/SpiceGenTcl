@@ -1998,7 +1998,7 @@ namespace eval ::SpiceGenTcl {
             set file [open $path r]
             fconfigure $file -translation binary
 
-####  read header
+####   read header
 
             set ch [read $file 6]
             if {[encoding convertfrom utf-8 $ch] eq {Title:}} {
@@ -2034,7 +2034,7 @@ namespace eval ::SpiceGenTcl {
                 }
             }
 
-####  save header parameters
+####   save header parameters
 
             foreach line $header {
                 set lineList [split $line :]
@@ -2061,7 +2061,7 @@ namespace eval ::SpiceGenTcl {
                 }
             }
 
-####  parse variables
+####   parse variables
 
             set i [lsearch $header Variables:]
             set ivar 0
@@ -2079,18 +2079,19 @@ namespace eval ::SpiceGenTcl {
                         set axisNumType $numType
                     }
                     my configure -axis [::SpiceGenTcl::Axis new $name $varType $npoints $axisNumType]
-                    set trace [my configure -axis]
+                    dappend traces [string tolower $name] [my configure -axis]
                 } elseif {($traces2read eq {*}) || ($name in $traces2read)} {
                     if {$hasAxis} {
-                        set trace [::SpiceGenTcl::Trace new $name $varType $npoints\
-                                           [[my configure -axis] configure -name] $numType]
+                        dappend traces [string tolower $name] [::SpiceGenTcl::Trace new $name $varType $npoints\
+                                                                       [[my configure -axis] configure -name] $numType]
                     } else {
-                        set trace [::SpiceGenTcl::Trace new $name $varType $npoints {} $numType]
+                        dappend traces [string tolower $name]\
+                                [::SpiceGenTcl::Trace new $name $varType $npoints {} $numType]
                     }
                 } else {
-                    set trace [::SpiceGenTcl::EmptyTrace new $name $varType $npoints $numType]
+                    dappend traces [string tolower $name]\
+                            [::SpiceGenTcl::EmptyTrace new $name $varType $npoints $numType]
                 }
-                lappend traces $trace
                 incr ivar
             }
             if {($traces2read eq {}) || ![llength $traces2read]} {
@@ -2098,12 +2099,12 @@ namespace eval ::SpiceGenTcl {
                 return
             }
 
-####  read data
+####   read data
             if {$rawType eq {Binary:}} {
                 set BlockSize [= {($fileSize - $binaryStart)/$npoints}]
                 set scanFunctions {}
                 set calcBlockSize 0
-                foreach trace [my configure -traces] {
+                foreach trace [dvalues [my configure -traces]] {
                     if {[$trace configure -numtype] eq {double}} {
                         incr calcBlockSize 8
                         if {[info object class $trace ::SpiceGenTcl::EmptyTrace]} {
@@ -2137,9 +2138,9 @@ namespace eval ::SpiceGenTcl {
                             '$calcBlockSize' bytes"
                 }
                  for {set i 0} {$i<$npoints} {incr i} {
-                    for {set j 0} {$j<[llength [my configure -traces]]} {incr j} {
+                    for {set j 0} {$j<[dict size [my configure -traces]]} {incr j} {
                         set value [eval "my [@ $scanFunctions $j]" $file]
-                        set trace [@ [my configure -traces] $j]
+                        set trace [@ [dvalues [my configure -traces]] $j]
                         if {$j==0} {
                             # workaround for bug with negative values in time axis
                             if {[info exists axisIsTime]} {
@@ -2154,7 +2155,7 @@ namespace eval ::SpiceGenTcl {
             } elseif {$rawType eq {Values:}} {
                 for {set i 0} {$i<$npoints} {incr i} {
                     set firstVar true
-                    for {set j 0} {$j<[llength [my configure -traces]]} {incr j} {
+                    for {set j 0} {$j<[dict size [my configure -traces]]} {incr j} {
                         set line [gets $file]
                         if {$line eq {}} {
                             continue
@@ -2179,7 +2180,7 @@ namespace eval ::SpiceGenTcl {
                                 set value [@ $lineList 1]
                             }
                         }
-                        set trace [@ [my configure -traces] $j]
+                        set trace [@ [dvalues [my configure -traces]] $j]
                         $trace appendDataPoints $value
                     }
                 }
@@ -2189,7 +2190,7 @@ namespace eval ::SpiceGenTcl {
         method getTrace {traceName} {
             # Returns trace object reference by it's name
             set traceFoundFlag false
-            foreach trace [my configure -traces] {
+            foreach trace [dvalues [my configure -traces]] {
                 if {[$trace configure -name] eq $traceName} {
                     set traceFound $trace
                     set traceFoundFlag true
@@ -2204,30 +2205,30 @@ namespace eval ::SpiceGenTcl {
         }
         method getVariablesNames {} {
             # Returns list that contains names of all variables
-            return [lmap trace [my configure -traces] {$trace configure -name}]
+            return [dkeys [my configure -traces]]
         }
         method getVoltagesNames {} {
             # Returns list that contains names of all voltage variables
-            return [lmap trace [my configure -traces]\
+            return [lmap trace [dvalues [my configure -traces]]\
                             {expr {[string match -nocase {*voltage*} [$trace configure -type]] ?\
                                            [$trace configure -name] : [continue]}}]
         }
         method getCurrentsNames {} {
             # Returns list that contains names of all current variables
-            return [lmap trace [my configure -traces]\
+            return [lmap trace [dvalues [my configure -traces]]\
                             {expr {[string match -nocase {*current*} [$trace configure -type]] ?\
                                            [$trace configure -name] : [continue]}}]
         }
         method getTracesStr {} {
             # Returns information about all Traces in raw file in form of string
-            return [lmap trace [my configure -traces]\
+            return [lmap trace [dvalues [my configure -traces]]\
                             {join [list [$trace configure -name] [$trace configure -type] [$trace configure -numtype]]}]
         }
         method getTracesData {} {
             # Returns dictionary that contains all data in value and name as a key
             set dict {}
-            foreach trace [my configure -traces] {
-                dict append dict [$trace configure -name] [$trace getDataPoints]
+            dict for {traceName trace} [my configure -traces] {
+                dict append dict $traceName [$trace getDataPoints]
             }
             return $dict
         }

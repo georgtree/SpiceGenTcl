@@ -31,6 +31,7 @@ interp alias {} dcreate {} dict create
 interp alias {} dset {} dict set
 interp alias {} dappend {} dict append
 interp alias {} dkeys {} dict keys
+interp alias {} dvalues {} dict values
 
 set dir [file dirname [file normalize [info script]]]
 set libDir "${dir}/lib"
