@@ -103,10 +103,10 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
   </head>
   <body>
-    <div id="id_8373210d0bab4f099548c1ba613d988f" class="chart-container" style="width:1000px; height:500px;"></div>
+    <div id="id_1799119bc1414d198d012ef177ac296d" class="chart-container" style="width:1000px; height:500px;"></div>
     <script>
-      var chart_8373210d0bab4f099548c1ba613d988f = echarts.init(document.getElementById("id_8373210d0bab4f099548c1ba613d988f"), null, {renderer: "canvas"});
-      var option_8373210d0bab4f099548c1ba613d988f = {
+      var chart_1799119bc1414d198d012ef177ac296d = echarts.init(document.getElementById("id_1799119bc1414d198d012ef177ac296d"), null, {renderer: "canvas"});
+      var option_1799119bc1414d198d012ef177ac296d = {
   "xAxis": [{
       "show": true,
       "type": "log",
@@ -2417,7 +2417,7 @@
       "silent": false
     }]
 };
-      chart_8373210d0bab4f099548c1ba613d988f.setOption(option_8373210d0bab4f099548c1ba613d988f);
+      chart_1799119bc1414d198d012ef177ac296d.setOption(option_1799119bc1414d198d012ef177ac296d);
     </script>
   </body>
 </html>
@@ -2426,17 +2426,7 @@
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#fe6efe>proc</font></b> findBW {freqs vals trigVal} {
     <i><font color=#76a396># calculate bandwidth of results</font></i>
-    <b><font color=#ffa500>set</font></b> freqsLen [<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$freqs</font>]
-    <b><font color=#ffa500>for</font></b> {<b><font color=#ffa500>set</font></b> i 0} {<font color=#f1b479>$i</font>&lt;<font color=#f1b479>$freqsLen</font>} {<b><font color=#ffa500>incr</font></b> i} {
-        <b><font color=#ffa500>set</font></b> iVal [@ <font color=#f1b479>$vals</font> <font color=#f1b479>$i</font>]
-        <b><font color=#ffa500>set</font></b> ip1Val [@ <font color=#f1b479>$vals</font> [+ <font color=#f1b479>$i</font> 1]]
-        <b><font color=#ffa500>if</font></b> {(<font color=#f1b479>$iVal</font>&lt;=<font color=#f1b479>$trigVal</font>) && (<font color=#f1b479>$ip1Val</font>&gt;=<font color=#f1b479>$trigVal</font>)} {
-            <b><font color=#ffa500>set</font></b> freqStart [@ <font color=#f1b479>$freqs</font> <font color=#f1b479>$i</font>]
-        } <b><font color=#ffa500>elseif</font></b> {(<font color=#f1b479>$iVal</font>&gt;=<font color=#f1b479>$trigVal</font>) && (<font color=#f1b479>$ip1Val</font>&lt;=<font color=#f1b479>$trigVal</font>)} {
-            <b><font color=#ffa500>set</font></b> freqEnd [@ <font color=#f1b479>$freqs</font> <font color=#f1b479>$i</font>]
-        }
-    }
-    <b><font color=#ffa500>set</font></b> bw [= {<font color=#f1b479>$freqEnd</font>-<font color=#f1b479>$freqStart</font>}]
+    <b><font color=#ffa500>set</font></b> bw [<b><font color=#ffa500>dget</font></b> [measure <font color=#b9b96e>-xname</font> freqs <font color=#b9b96e>-data</font> [<b><font color=#ffa500>dcreate</font></b> freqs <font color=#f1b479>$freqs</font> vals <font color=#f1b479>$vals</font>] <font color=#b9b96e>-trig</font> <font color=#90ee90>&quot;-vec vals -val <font color=#f1b479>$</font>trigVal -rise 1&quot;</font> <font color=#b9b96e>-targ</font> <font color=#90ee90>&quot;-vec vals -val <font color=#f1b479>$</font>trigVal -fall 1&quot;</font>] xdelta]
     <b><font color=#fe6efe>return</font></b> <font color=#f1b479>$bw</font>
 }
 </pre>
@@ -2579,10 +2569,10 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
   </head>
   <body>
-    <div id="id_a655c9205dee4c819a02120a61da95fa" class="chart-container" style="width:1200px; height:800px;"></div>
+    <div id="id_788be805b27c404789b6c0babe9f8519" class="chart-container" style="width:1200px; height:800px;"></div>
     <script>
-      var chart_a655c9205dee4c819a02120a61da95fa = echarts.init(document.getElementById("id_a655c9205dee4c819a02120a61da95fa"), null, {renderer: "canvas"});
-      var option_a655c9205dee4c819a02120a61da95fa = {
+      var chart_788be805b27c404789b6c0babe9f8519 = echarts.init(document.getElementById("id_788be805b27c404789b6c0babe9f8519"), null, {renderer: "canvas"});
+      var option_788be805b27c404789b6c0babe9f8519 = {
   "darkMode": true,
   "backgroundColor": "#212121",
   "color": [
@@ -2608,21 +2598,21 @@
       "show": true,
       "type": "category",
       "data": [
-        "<=9.98e+05",
-        "9.98e+05-1.01e+06",
-        "1.01e+06-1.02e+06",
-        "1.02e+06-1.04e+06",
+        "<=1.02e+06",
+        "1.02e+06-1.03e+06",
+        "1.03e+06-1.04e+06",
         "1.04e+06-1.05e+06",
         "1.05e+06-1.06e+06",
-        "1.06e+06-1.07e+06",
-        "1.07e+06-1.09e+06",
+        "1.06e+06-1.08e+06",
+        "1.08e+06-1.09e+06",
         "1.09e+06-1.10e+06",
         "1.10e+06-1.11e+06",
-        "1.11e+06-1.12e+06",
-        "1.12e+06-1.14e+06",
+        "1.11e+06-1.13e+06",
+        "1.13e+06-1.14e+06",
         "1.14e+06-1.15e+06",
         "1.15e+06-1.16e+06",
-        "1.16e+06-1.17e+06"
+        "1.16e+06-1.17e+06",
+        "1.17e+06-1.19e+06"
       ],
       "gridIndex": 0,
       "position": "bottom",
@@ -2698,21 +2688,21 @@
       "show": true,
       "type": "category",
       "data": [
-        "<=9.92e+05",
-        "9.92e+05-1.01e+06",
-        "1.01e+06-1.02e+06",
-        "1.02e+06-1.04e+06",
-        "1.04e+06-1.05e+06",
-        "1.05e+06-1.07e+06",
-        "1.07e+06-1.08e+06",
-        "1.08e+06-1.09e+06",
-        "1.09e+06-1.11e+06",
-        "1.11e+06-1.12e+06",
-        "1.12e+06-1.14e+06",
-        "1.14e+06-1.15e+06",
-        "1.15e+06-1.17e+06",
-        "1.17e+06-1.18e+06",
-        "1.18e+06-1.20e+06"
+        "<=9.96e+05",
+        "9.96e+05-1.01e+06",
+        "1.01e+06-1.03e+06",
+        "1.03e+06-1.04e+06",
+        "1.04e+06-1.06e+06",
+        "1.06e+06-1.07e+06",
+        "1.07e+06-1.09e+06",
+        "1.09e+06-1.10e+06",
+        "1.10e+06-1.12e+06",
+        "1.12e+06-1.13e+06",
+        "1.13e+06-1.15e+06",
+        "1.15e+06-1.16e+06",
+        "1.16e+06-1.18e+06",
+        "1.18e+06-1.19e+06",
+        "1.19e+06-1.21e+06"
       ],
       "gridIndex": 1,
       "position": "bottom",
@@ -2986,19 +2976,19 @@
       "largeThreshold": 400,
       "data": [
         1,
-        0,
-        6,
-        10,
-        29,
-        83,
-        193,
+        9,
+        21,
+        43,
+        76,
         113,
-        190,
         176,
-        78,
-        88,
-        18,
-        10,
+        177,
+        146,
+        129,
+        49,
+        41,
+        9,
+        5,
         5
       ],
       "zlevel": 0,
@@ -3025,20 +3015,20 @@
       "largeThreshold": 400,
       "data": [
         1,
-        17,
-        44,
-        82,
-        102,
-        117,
-        108,
-        94,
-        77,
-        81,
-        91,
+        21,
+        59,
         86,
-        60,
-        32,
-        8
+        106,
+        107,
+        100,
+        103,
+        84,
+        116,
+        89,
+        68,
+        40,
+        16,
+        4
       ],
       "zlevel": 0,
       "z": 2,
@@ -3060,7 +3050,7 @@
     }
   ]
 };
-      chart_a655c9205dee4c819a02120a61da95fa.setOption(option_a655c9205dee4c819a02120a61da95fa);
+      chart_788be805b27c404789b6c0babe9f8519.setOption(option_788be805b27c404789b6c0babe9f8519);
     </script>
   </body>
 </html>
@@ -3087,29 +3077,29 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
   </head>
   <body>
-    <div id="id_824141ca08254f478d66c0388fbc9f3b" class="chart-container" style="width:1200px; height:800px;"></div>
+    <div id="id_502fda0f28de4ac681b0c50333b6dc47" class="chart-container" style="width:1200px; height:800px;"></div>
     <script>
-      var chart_824141ca08254f478d66c0388fbc9f3b = echarts.init(document.getElementById("id_824141ca08254f478d66c0388fbc9f3b"), null, {renderer: "canvas"});
-      var option_824141ca08254f478d66c0388fbc9f3b = {
+      var chart_502fda0f28de4ac681b0c50333b6dc47 = echarts.init(document.getElementById("id_502fda0f28de4ac681b0c50333b6dc47"), null, {renderer: "canvas"});
+      var option_502fda0f28de4ac681b0c50333b6dc47 = {
   "xAxis": [{
       "show": true,
       "type": "category",
       "data": [
-        "<=9.92e+05",
-        "9.92e+05-1.01e+06",
-        "1.01e+06-1.02e+06",
-        "1.02e+06-1.04e+06",
-        "1.04e+06-1.05e+06",
-        "1.05e+06-1.07e+06",
-        "1.07e+06-1.08e+06",
-        "1.08e+06-1.09e+06",
-        "1.09e+06-1.11e+06",
-        "1.11e+06-1.12e+06",
-        "1.12e+06-1.14e+06",
-        "1.14e+06-1.15e+06",
-        "1.15e+06-1.17e+06",
-        "1.17e+06-1.18e+06",
-        "1.18e+06-1.20e+06"
+        "<=9.96e+05",
+        "9.96e+05-1.01e+06",
+        "1.01e+06-1.03e+06",
+        "1.03e+06-1.04e+06",
+        "1.04e+06-1.06e+06",
+        "1.06e+06-1.07e+06",
+        "1.07e+06-1.09e+06",
+        "1.09e+06-1.10e+06",
+        "1.10e+06-1.12e+06",
+        "1.12e+06-1.13e+06",
+        "1.13e+06-1.15e+06",
+        "1.15e+06-1.16e+06",
+        "1.16e+06-1.18e+06",
+        "1.18e+06-1.19e+06",
+        "1.19e+06-1.21e+06"
       ],
       "gridIndex": 0,
       "position": "bottom",
@@ -3341,20 +3331,20 @@
       "largeThreshold": 400,
       "data": [
         1,
-        17,
-        44,
-        82,
-        102,
-        117,
-        108,
-        94,
-        77,
-        81,
-        91,
+        21,
+        59,
         86,
-        60,
-        32,
-        8
+        106,
+        107,
+        100,
+        103,
+        84,
+        116,
+        89,
+        68,
+        40,
+        16,
+        4
       ],
       "zlevel": 0,
       "z": 2,
@@ -3377,18 +3367,18 @@
       "largeThreshold": 400,
       "data": [
         0,
-        1,
-        6,
-        10,
-        69,
+        0,
+        9,
+        22,
+        63,
+        112,
+        197,
+        229,
+        178,
         121,
-        228,
-        190,
-        153,
-        101,
-        88,
-        26,
-        6,
+        49,
+        10,
+        9,
         1,
         0
       ],
@@ -3398,7 +3388,7 @@
     }
   ]
 };
-      chart_824141ca08254f478d66c0388fbc9f3b.setOption(option_824141ca08254f478d66c0388fbc9f3b);
+      chart_502fda0f28de4ac681b0c50333b6dc47.setOption(option_502fda0f28de4ac681b0c50333b6dc47);
     </script>
   </body>
 </html>

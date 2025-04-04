@@ -287,6 +287,8 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT getVoltagesNames\fP
 .br
+\fBOBJECT measure\fP \fI?args?\fP
+.br
 \fBOBJECT constructor\fP \fIvalue ?-name value?\fP
 .br
 \fBOBJECT genSPICEString\fP
@@ -336,6 +338,8 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 \fBTrace create OBJNAME\fP \fIname type len axis ?numType?\fP
 .br
 \fBTrace new\fP \fIname type len axis ?numType?\fP
+.br
+\fBOBJECT allow\fP \fInames keysList\fP
 .br
 \fBOBJECT argsPreprocess\fP \fIparamsNames ?args?\fP
 .br
@@ -435,6 +439,9 @@ Constructor for the class\&.
 .TP
 addParam
 Adds new parameter to device, and throws error on dublicated names\&.
+.TP
+allow
+See \fIUtility\&.allow\fP
 .TP
 argsPreprocess
 See \fIUtility\&.argsPreprocess\fP
@@ -824,6 +831,9 @@ Constructor for the class\&.
 add
 Adds elements object to Circuit Elements dictionary\&.
 .TP
+allow
+See \fIUtility\&.allow\fP
+.TP
 argsPreprocess
 See \fIUtility\&.argsPreprocess\fP
 .TP
@@ -1194,6 +1204,9 @@ Constructor for the class\&.
 addParam
 Adds new parameter to device, and throws error on dublicated names\&.
 .TP
+allow
+See \fIUtility\&.allow\fP
+.TP
 argsPreprocess
 See \fIUtility\&.argsPreprocess\fP
 .TP
@@ -1536,6 +1549,9 @@ Constructor for the class\&.
 addNets
 Not documented\&.
 .TP
+allow
+See \fIUtility\&.allow\fP
+.TP
 argsPreprocess
 See \fIUtility\&.argsPreprocess\fP
 .TP
@@ -1654,6 +1670,9 @@ Constructor for the class\&.
 .TP
 addParam
 Adds new Parameter object to the list Params\&.
+.TP
+allow
+See \fIUtility\&.allow\fP
 .TP
 argsPreprocess
 See \fIUtility\&.argsPreprocess\fP
@@ -1953,6 +1972,9 @@ Constructor for the class\&.
 addParam
 Adds new parameter to device, and throws error on dublicated names\&.
 .TP
+allow
+See \fIUtility\&.allow\fP
+.TP
 argsPreprocess
 See \fIUtility\&.argsPreprocess\fP
 .TP
@@ -2142,6 +2164,9 @@ Constructor for the class\&.
 add
 Adds elements objects to Elements dictionary\&.
 .TP
+allow
+See \fIUtility\&.allow\fP
+.TP
 argsPreprocess
 See \fIUtility\&.argsPreprocess\fP
 .TP
@@ -2298,6 +2323,9 @@ Name of element\&.
 addParam
 See \fIIc\&.addParam\fP
 .TP
+allow
+See \fIUtility\&.allow\fP
+.TP
 argsPreprocess
 See \fIUtility\&.argsPreprocess\fP
 .TP
@@ -2368,6 +2396,9 @@ Constructor for the class\&.
 .TP
 addParam
 Creates new parameter object and add it to the list Params\&.
+.TP
+allow
+See \fIUtility\&.allow\fP
 .TP
 argsPreprocess
 See \fIUtility\&.argsPreprocess\fP
@@ -3219,6 +3250,9 @@ Constructor for the class\&.
 addParam
 Adds new Parameter object to the list Params\&.
 .TP
+allow
+See \fIUtility\&.allow\fP
+.TP
 argsPreprocess
 See \fIUtility\&.argsPreprocess\fP
 .TP
@@ -3576,8 +3610,26 @@ Makes pin floating by setting nodename with empty string\&.
 constructor
 Constructor for the class\&.
 .TP
+allow
+See \fIUtility\&.allow\fP
+.TP
+argsPreprocess
+See \fIUtility\&.argsPreprocess\fP
+.TP
+buildArgStr
+See \fIUtility\&.buildArgStr\fP
+.TP
+buildSwArgStr
+See \fIUtility\&.buildSwArgStr\fP
+.TP
 configure
 Configure properties\&.
+.TP
+duplListCheck
+See \fIUtility\&.duplListCheck\fP
+.TP
+duplListCheckRet
+See \fIUtility\&.duplListCheckRet\fP
 .TP
 getCurrentsNames
 Returns list that contains names of all current variables\&.
@@ -3599,6 +3651,9 @@ Returns list that contains names of all variables\&.
 .TP
 getVoltagesNames
 Returns list that contains names of all voltage variables\&.
+.TP
+measure
+Not documented\&.
 .TP
 readComplex
 See \fIBinaryReader\&.readComplex\fP
@@ -3627,7 +3682,7 @@ Writable: -axis, -npoints, -nvariables, -path, -rawparams, -traces
 .PP
 \fBMixins\fR
 .PP
-\fIBinaryReader\fP
+\fIBinaryReader\fP, \fIUtility\fP
 .PP
 .RS -4n
 \fBconstructor\fR (::SpiceGenTcl::RawFile)
@@ -3765,6 +3820,17 @@ Returns list that contains names of all voltage variables
 Returns list that contains names of all voltage variables
 .PP
 .RS -4n
+\fBmeasure\fR (::SpiceGenTcl::RawFile)
+.RE
+.RS 4n\fBOBJECT measure\fP \fI?args?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.RE
+.PP
+.RS -4n
 \fBRawString\fR (::SpiceGenTcl)
 .RE
 .PP
@@ -3845,6 +3911,9 @@ Constructor for the class\&.
 .TP
 addVector
 Adds new ParameterVector object to the list Vectors\&.
+.TP
+allow
+See \fIUtility\&.allow\fP
 .TP
 argsPreprocess
 See \fIUtility\&.argsPreprocess\fP
@@ -4086,6 +4155,9 @@ Add element object reference to Netlist, it extends add method to add check of e
 .TP
 addParam
 Adds new parameter to subcircuit, and throws error on dublicated names\&.
+.TP
+allow
+See \fIUtility\&.allow\fP
 .TP
 argsPreprocess
 See \fIUtility\&.argsPreprocess\fP
@@ -4419,6 +4491,9 @@ Numerical type of trace\&. Optional, default real\&.
 \fBMethod summary\fR
 .RS 4n
 .TP
+allow
+Not documented\&.
+.TP
 argsPreprocess
 Calls argparse and constructs list for passing to Device constructor\&.
 .TP
@@ -4437,7 +4512,24 @@ Checks if list contains duplicates and return value of first duplicate\&.
 .PP
 \fBSubclasses\fR
 .PP
-\fIDevice\fP, \fIModel\fP, \fIOptions\fP, \fIParamStatement\fP, \fISave\fP, \fIIc\fP, \fINodeset\fP, \fIGlobal\fP, \fINetlist\fP, \fIAnalysis\fP, \fI::SpiceGenTcl::Common::Sources::pulse\fP, \fI::SpiceGenTcl::Common::Sources::sin\fP, \fI::SpiceGenTcl::Common::Sources::exp\fP, \fI::SpiceGenTcl::Common::Sources::sffm\fP, \fI::SpiceGenTcl::Common::Analyses::Dc\fP, \fI::SpiceGenTcl::Common::Analyses::Ac\fP, \fI::SpiceGenTcl::Common::Analyses::Tran\fP, \fI::SpiceGenTcl::Common::Analyses::Op\fP, \fI::SpiceGenTcl::Ngspice::Sources::pulse\fP, \fI::SpiceGenTcl::Ngspice::Sources::sffm\fP, \fI::SpiceGenTcl::Ngspice::Sources::am\fP, \fI::SpiceGenTcl::Ngspice::Analyses::Sp\fP, \fI::SpiceGenTcl::Ngspice::Analyses::SensAc\fP, \fI::SpiceGenTcl::Ngspice::Analyses::SensDc\fP, \fI::SpiceGenTcl::Ngspice::Misc::OptionsNgspice\fP, \fI::SpiceGenTcl::Xyce::Analyses::Sens\fP, \fI::SpiceGenTcl::Ltspice::Sources::pulse\fP, \fI::SpiceGenTcl::Ltspice::Sources::sin\fP, \fI::SpiceGenTcl::Ltspice::Sources::exp\fP, \fI::SpiceGenTcl::Ltspice::Sources::sffm\fP
+\fIDevice\fP, \fIModel\fP, \fIOptions\fP, \fIParamStatement\fP, \fISave\fP, \fIIc\fP, \fINodeset\fP, \fIGlobal\fP, \fINetlist\fP, \fIAnalysis\fP, \fIRawFile\fP, \fI::SpiceGenTcl::Common::Sources::pulse\fP, \fI::SpiceGenTcl::Common::Sources::sin\fP, \fI::SpiceGenTcl::Common::Sources::exp\fP, \fI::SpiceGenTcl::Common::Sources::sffm\fP, \fI::SpiceGenTcl::Common::Analyses::Dc\fP, \fI::SpiceGenTcl::Common::Analyses::Ac\fP, \fI::SpiceGenTcl::Common::Analyses::Tran\fP, \fI::SpiceGenTcl::Common::Analyses::Op\fP, \fI::SpiceGenTcl::Ngspice::Sources::pulse\fP, \fI::SpiceGenTcl::Ngspice::Sources::sffm\fP, \fI::SpiceGenTcl::Ngspice::Sources::am\fP, \fI::SpiceGenTcl::Ngspice::Analyses::Sp\fP, \fI::SpiceGenTcl::Ngspice::Analyses::SensAc\fP, \fI::SpiceGenTcl::Ngspice::Analyses::SensDc\fP, \fI::SpiceGenTcl::Ngspice::Misc::OptionsNgspice\fP, \fI::SpiceGenTcl::Xyce::Analyses::Sens\fP, \fI::SpiceGenTcl::Ltspice::Sources::pulse\fP, \fI::SpiceGenTcl::Ltspice::Sources::sin\fP, \fI::SpiceGenTcl::Ltspice::Sources::exp\fP, \fI::SpiceGenTcl::Ltspice::Sources::sffm\fP
+.PP
+.RS -4n
+\fBallow\fR (::SpiceGenTcl::Utility)
+.RE
+.RS 4n\fBOBJECT allow\fP \fInames keysList\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+names
+Not documented\&.
+.TP
+keysList
+Not documented\&.
+.RE
 .PP
 .RS -4n
 \fBargsPreprocess\fR (::SpiceGenTcl::Utility)

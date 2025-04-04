@@ -25,17 +25,8 @@ proc calcDbMagVec {vector} {
 
 proc findBW {freqs vals trigVal} {
     # calculate bandwidth of results
-    set freqsLen [llength $freqs]
-    for {set i 0} {$i<$freqsLen} {incr i} {
-        set iVal [@ $vals $i]
-        set ip1Val [@ $vals [+ $i 1]]
-        if {($iVal<=$trigVal) && ($ip1Val>=$trigVal)} {
-            set freqStart [@ $freqs $i]
-        } elseif {($iVal>=$trigVal) && ($ip1Val<=$trigVal)} {
-            set freqEnd [@ $freqs $i]
-        }
-    }
-    set bw [= {$freqEnd-$freqStart}]
+    set bw [dget [measure -xname freqs -data [dcreate freqs $freqs vals $vals] -trig "-vec vals -val $trigVal -rise 1"\
+                          -targ "-vec vals -val $trigVal -fall 1"] xdelta]
     return $bw
 }
 
@@ -132,6 +123,7 @@ for {set i 0} {$i<$mcRuns} {incr i} {
     # calculate bandwidths values
     lappend bwsUni [findBW $freqRes [@ $traceListUni end] -10]
 }
+unset freqRes
 # get distribution of bandwidths with uniform parameters distribution
 set uniIntervals [createIntervals $bwsUni $numOfIntervals]
 set uniDist [createDist $bwsUni [dget $uniIntervals intervals]]
