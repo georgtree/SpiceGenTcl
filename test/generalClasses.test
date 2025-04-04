@@ -1477,6 +1477,39 @@ test testRawFileClass-6 {test creation of RawFile class instance and getDataCsv 
     unset circuit data simulator dataObj
 }
 
+test testRawFileClass-7 {} -setup {
+    set data [RawFile new "${currentDir}/ngspice/raw_data_ngspice/tran.raw"]
+} -body {
+    return [$data measure -avg {-vec v(vdd)}]
+} -result 3.0000000000000138 -cleanup {
+    unset data
+}
+
+test testRawFileClass-8 {} -setup {
+    set data [RawFile new "${currentDir}/ngspice/raw_data_ngspice/tran.raw"]
+} -body {
+    return [$data measure -when {-vec v(osc_out) -val 0.5 -rise 3}]
+} -result 8.699963889119589e-9 -cleanup {
+    unset data
+}
+
+test testRawFileClass-9 {} -setup {
+    set data [RawFile new "${currentDir}/ngspice/raw_data_ngspice/tran.raw"]
+} -body {
+    return [$data measure -find v(osc_out) -when {-vec v(osc_out) -val 0.5 -rise 3}]
+} -result 0.4999999999999959 -cleanup {
+    unset data
+}
+
+test testRawFileClass-10 {} -setup {
+    set data [RawFile new "${currentDir}/ngspice/raw_data_ngspice/tran.raw"]
+} -body {
+    return [$data measure -find v(vdd) -when {-vec v(osc_out) -val 0.5 -rise 3}]
+} -result 3.0 -cleanup {
+    unset data
+}
+
+
 ###  Circuit class tests 
 
 test testCircuitClass-1 {test creation of Circuit class instance and getDataCsv interface} -setup {

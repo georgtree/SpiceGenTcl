@@ -211,6 +211,12 @@ namespace eval ::SpiceGenTcl {
             }
             return $itemDup
         }
+        method allow {names keysList} {
+            foreach name $names {
+                lappend indexes [lsearch -exact $keysList $name]
+            }
+            return [lremove $keysList {*}$indexes]
+        }
     }
 
 ###  Pin class definition
@@ -1960,7 +1966,7 @@ namespace eval ::SpiceGenTcl {
     ##nagelfar subcmd+ _obj,RawFile configure
     oo::configurable create RawFile {
         # Class represents raw file
-        mixin BinaryReader
+        mixin BinaryReader Utility
         # path to raw file including it's file name
         property path
         variable path
@@ -2069,7 +2075,7 @@ namespace eval ::SpiceGenTcl {
                 set lineList [split [string trim $line] \t]
                 lassign $lineList idx name varType
                 if {$ivar==0} {
-                    if {$simulator eq {ltspice} && $name eq {time}} {
+                    if {($simulator eq {ltspice}) && ($name eq {time})} {
                         # workaround for bug with negative values in time axis
                         set axisIsTime true
                     }
@@ -2265,6 +2271,10 @@ namespace eval ::SpiceGenTcl {
                         'getTracesCsv' method"
             }
             return [::csv::joinlist $tracesList [dget $arguments sep]]
+        }
+        method measure {args} {
+            set data [my getTracesData]
+            return [::measure::measure -xname [[my configure -axis] configure -name] -data $data {*}$args]
         }
     }
 

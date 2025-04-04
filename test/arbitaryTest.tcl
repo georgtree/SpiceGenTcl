@@ -5,27 +5,7 @@ package require math::constants
 namespace import ::tcltest::*
 ::math::constants::constants radtodeg degtorad pi
 variable pi
-set testDir [file dirname [info script]]
-set netlistsLoc [file join $testDir ngspice netlists_parser]
-set epsilon 1e-8
-proc testTemplateParse {testName descr location fileName refStr {cleanupList {}}} {
-    test $testName $descr -setup {
-        set parser [::SpiceGenTcl::Ngspice::NgspiceParser new parser1 [file join $location $fileName]]
-        $parser readFile
-    } -body {
-        if {[catch {$parser buildTopNetlist} errorStr]} {
-            return $errorStr
-        }
-        puts [join [$parser configure -definitions] "\n"]
-        return [[$parser configure -topnetlist] genSPICEString]
-    } -result $refStr -cleanup {
-        if {$cleanupList ne {}} {
-            foreach name $cleanupList {
-                rename $name {}
-            }
-        }
-    }
-}
+
 namespace import ::SpiceGenTcl::*
 set testDir [file dirname [info script]]
 set netlistsLoc [file join $testDir ngspice netlists_parser]
@@ -34,186 +14,34 @@ importNgspice
 set currentDir [file normalize [file dirname [info script]]]
 source [file join $currentDir  testUtilities.tcl]
 
-testTemplateParse testNgspiceParserClassSubcircuitsDefinition-2 {} $netlistsLoc deeply_nested_subckt.cir\
-{.subckt top in out
-.subckt middle1 in out
-.subckt inner1 in out
-.subckt innerinner1 in out
-r4 in c r={30}
-.ends innerinner1
-r3 in c r={30}
-.ends inner1
-r2 in b r={20}
-r5 b out r={40}
-.ends middle1
-.subckt middle2 in out
-.subckt inner2 in out
-r7 in e r={60}
-.ends inner2
-.subckt inner1 in out
-r8 in e r={60}
-.ends inner1
-r6 in d r={50}
-r9 d out r={70}
-.ends middle2
-r1 in a r={10}
-r10 a out r={80}
-.ends top}
 
-oo::class create Middle1 {
-    superclass ::SpiceGenTcl::Subcircuit
-    constructor {} {
-        oo::class create Inner1 {
-            superclass ::SpiceGenTcl::Subcircuit
-            constructor {} {
-                oo::class create Innerinner1 {
-                    superclass ::SpiceGenTcl::Subcircuit
-                    constructor {} {
-                        
-                        my add [::SpiceGenTcl::Ngspice::BasicDevices::R new 4 in c -r 30 -beh]
-                        set pins {in out}
-                        set params {}
-                        next innerinner1 $pins $params
-                    }
-                }
-                my add [Innerinner1 new]
-                my add [::SpiceGenTcl::Ngspice::BasicDevices::R new 3 in c -r 30 -beh]
-                set pins {in out}
-                set params {}
-                next inner1 $pins $params
-            }
-        }
-        my add [Inner1 new]
-        my add [::SpiceGenTcl::Ngspice::BasicDevices::R new 2 in b -r 20 -beh]
-        my add [::SpiceGenTcl::Ngspice::BasicDevices::R new 5 b out -r 40 -beh]
-        set pins {in out}
-        set params {}
-        next middle1 $pins $params
-    }
+test testRawFileClass-1 {test creation of RawFile class instance and getDataCsv interface} -setup {
+    set circuit [Circuit new {voltage divider netlist}]
+    $circuit add [Vdc new 1 in 0 -dc 1]
+    $circuit add [R new 1 in out -r 1e3]
+    $circuit add [R new 2 out 0 -r 2e3]
+    $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1]
+    set simulator [Batch new {batch1}]
+    $circuit configure -simulator $simulator
+    $circuit runAndRead
+    set dataObj [$circuit configure -data]
+} -body {
+    set data [$dataObj getTracesCsv -all]
+    set rawObj [$simulator configure -data]
+    $rawObj measure -trig {-vec v(1) -val 2 -rise 1} -targ {-vec v(2) -val 2 -cross 1}
+    $rawObj measure -find v(1) -when {-vec v(2) -val 2 -cross 1}
+    $rawObj measure -when {-vec v(2) -val 2 -cross 1}
+    $rawObj measure -when {-vec1 v(2) -vec2 v(3) -cross 1}
+    $rawObj measure -find v(1) -when {-vec1 v(2) -vec2 v(3) -cross 1}
+    $rawObj measure -find v(1) -at 1u
+    return $data
+} -result {v(v-sweep),v(in),v(out),i(v1)
+0.0,0.0,0.0,0.0
+1.0,1.0,0.6666666666666666,-0.0003333333333333334
+2.0,2.0,1.3333333333333333,-0.0006666666666666668
+3.0,3.0,2.0,-0.001
+4.0,4.0,2.6666666666666665,-0.0013333333333333335
+5.0,5.0,3.333333333333333,-0.001666666666666667
+} -cleanup {
+    unset circuit data simulator dataObj
 }
-my add [Middle1 new]
-oo::class create Middle2 {
-    superclass ::SpiceGenTcl::Subcircuit
-    constructor {} {
-        oo::class create Inner2 {
-            superclass ::SpiceGenTcl::Subcircuit
-            constructor {} {
-                
-                my add [::SpiceGenTcl::Ngspice::BasicDevices::R new 7 in e -r 60 -beh]
-                set pins {in out}
-                set params {}
-                next inner2 $pins $params
-            }
-        }
-        my add [Inner2 new]
-        oo::class create Inner1 {
-            superclass ::SpiceGenTcl::Subcircuit
-            constructor {} {
-                
-                my add [::SpiceGenTcl::Ngspice::BasicDevices::R new 8 in e -r 60 -beh]
-                set pins {in out}
-                set params {}
-                next inner1 $pins $params
-            }
-        }
-        my add [Inner1 new]
-        my add [::SpiceGenTcl::Ngspice::BasicDevices::R new 6 in d -r 50 -beh]
-        oo::class create R3Model {
-            superclass ::SpiceGenTcl::Model
-            constructor {name args} {
-                set paramsNames [list tc1 tc2]
-                next $name R3Model [my argsPreprocess $paramsNames {*}$args]
-            }
-        }
-        my add [R3Model new res3mod -tc1 1 -tc2 2]
-        my add [::SpiceGenTcl::Ngspice::BasicDevices::R new 9 d out -r 70 -beh]
-        set pins {in out}
-        set params {}
-        next middle2 $pins $params
-    }
-}
-my add [Middle2 new]
-oo::class create Top {
-    superclass ::SpiceGenTcl::Subcircuit
-    constructor {} {
-        oo::class create Middle1 {
-            superclass ::SpiceGenTcl::Subcircuit
-            constructor {} {
-                oo::class create Inner1 {
-                    superclass ::SpiceGenTcl::Subcircuit
-                    constructor {} {
-                        oo::class create Innerinner1 {
-                            superclass ::SpiceGenTcl::Subcircuit
-                            constructor {} {
-                                
-                                my add [::SpiceGenTcl::Ngspice::BasicDevices::R new 4 in c -r 30 -beh]
-                                set pins {in out}
-                                set params {}
-                                next innerinner1 $pins $params
-                            }
-                        }
-                        my add [Innerinner1 new]
-                        my add [::SpiceGenTcl::Ngspice::BasicDevices::R new 3 in c -r 30 -beh]
-                        set pins {in out}
-                        set params {}
-                        next inner1 $pins $params
-                    }
-                }
-                my add [Inner1 new]
-                my add [::SpiceGenTcl::Ngspice::BasicDevices::R new 2 in b -r 20 -beh]
-                my add [::SpiceGenTcl::Ngspice::BasicDevices::R new 5 b out -r 40 -beh]
-                set pins {in out}
-                set params {}
-                next middle1 $pins $params
-            }
-        }
-        my add [Middle1 new]
-        oo::class create Middle2 {
-            superclass ::SpiceGenTcl::Subcircuit
-            constructor {} {
-                oo::class create Inner2 {
-                    superclass ::SpiceGenTcl::Subcircuit
-                    constructor {} {
-                        
-                        my add [::SpiceGenTcl::Ngspice::BasicDevices::R new 7 in e -r 60 -beh]
-                        set pins {in out}
-                        set params {}
-                        next inner2 $pins $params
-                    }
-                }
-                my add [Inner2 new]
-                oo::class create Inner1 {
-                    superclass ::SpiceGenTcl::Subcircuit
-                    constructor {} {
-                        
-                        my add [::SpiceGenTcl::Ngspice::BasicDevices::R new 8 in e -r 60 -beh]
-                        set pins {in out}
-                        set params {}
-                        next inner1 $pins $params
-                    }
-                }
-                my add [Inner1 new]
-                my add [::SpiceGenTcl::Ngspice::BasicDevices::R new 6 in d -r 50 -beh]
-                oo::class create R3Model {
-                    superclass ::SpiceGenTcl::Model
-                    constructor {name args} {
-                        set paramsNames [list tc1 tc2]
-                        next $name R3Model [my argsPreprocess $paramsNames {*}$args]
-                    }
-                }
-                my add [R3Model new res3mod -tc1 1 -tc2 2]
-                my add [::SpiceGenTcl::Ngspice::BasicDevices::R new 9 d out -r 70 -beh]
-                set pins {in out}
-                set params {}
-                next middle2 $pins $params
-            }
-        }
-        my add [Middle2 new]
-        my add [::SpiceGenTcl::Ngspice::BasicDevices::R new 1 in a -r 10 -beh]
-        my add [::SpiceGenTcl::Ngspice::BasicDevices::R new 10 a out -r 80 -beh]
-        set pins {in out}
-        set params {}
-        next top $pins $params
-    }
-}
-Top new
