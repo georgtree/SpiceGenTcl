@@ -102,7 +102,7 @@ Good tutorial for Tcl language could be found [here](http://tcl.tk/man/tcltutori
 
 Documentation was generated with [ruff!](https://ruff.magicsplat.com/).
 
-Tcl syntax highlightning was done with [hl_tcl](https://github.com/aplsimple/hl_tcl).
+Tcl syntax highlighting was done with [hl_tcl](https://github.com/aplsimple/hl_tcl).
 
 ## Supported platforms
 
@@ -145,6 +145,9 @@ interp alias {} = {} expr
 interp alias {} dexist {} dict exists
 interp alias {} dcreate {} dict create
 interp alias {} dset {} dict set
+interp alias {} dappend {} dict append
+interp alias {} dkeys {} dict keys
+interp alias {} dvalues {} dict values
 ```
 - <font color="red"> **Important note 4**</font>: source code follows the pattern, if method or variable name
 of the class starts from capital letter, it is intended to be private and not directly accessible from outside the 
@@ -191,7 +194,7 @@ First step is creating circuit object:
 ```tcl
 set circuit [Circuit new {voltage divider netlist}]
 ```
-The `Circuit` command creates a new object of the [::SpiceGenTcl::Circuit] class, which is imported from the 
+The `Circuit` command creates a new object of the `::SpiceGenTcl::Circuit` class, which is imported from the 
 `::SpiceGenTcl` namespace and represents the top-level circuit. 
 The only argument we provide is the name of the circuit, which will be printed on the first line of the netlist.
 
@@ -202,8 +205,8 @@ $circuit add [R new 1 in out -r 1e3]
 $circuit add [R new 2 out 0 -r 2e3]
 $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 0.1]
 ```
-An instance of the [::SpiceGenTcl::Circuit] class, referenced by the `circuit` variable, has an
-[::SpiceGenTcl::Circuit::add] method that appends the references of argument objects to it. The object-creating
+An instance of the `::SpiceGenTcl::Circuit` class, referenced by the `circuit` variable, has an
+`::SpiceGenTcl::Circuit::add` method that appends the references of argument objects to it. The object-creating
 commands `Vdc`, `R`, and `Dc` — which represent a DC voltage source, a basic resistor, and a DC analysis,
 respectively — are imported from the `::SpiceGenTcl::Ngspice::Sources`, `::SpiceGenTcl::Ngspice::BasicElements`, 
 and `::SpiceGenTcl::Ngspice::Analyses` namespaces.
@@ -212,8 +215,8 @@ When using the `new` subcommand, you provide the basic arguments for the element
 you would supply the name '1', the name of the net connected to the positive node 'in', the name of the net
 connected to the negative node '0' (which is the global ground), and the resistance value '1e3'.
 
-The last necessary step is to create [::SpiceGenTcl::Simulator] object with command `Batch` from
-`::SpiceGenTcl::Ngspice` namespace and attach it to [::SpiceGenTcl::Circuit] object:
+The last necessary step is to create `::SpiceGenTcl::Simulator` object with command `Batch` from
+`::SpiceGenTcl::Ngspice` namespace and attach it to `::SpiceGenTcl::Circuit` object:
 ```tcl
 set simulator [Batch new {batch1} {/usr/local/bin/}]
 $circuit configure -Simulator $simulator
@@ -222,7 +225,7 @@ Now we are ready to run simulation:
 ```tcl
 $circuit runAndRead
 ```
-After the simulation, we can read the resulting data. We use the [::SpiceGenTcl::Circuit::getDataDict] method to
+After the simulation, we can read the resulting data. We use the `::SpiceGenTcl::Circuit::getDataDict` method to
 obtain a dictionary where the keys are the names of the result vectors:
 ```tcl
 set data [$circuit getDataDict]

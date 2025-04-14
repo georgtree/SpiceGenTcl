@@ -364,7 +364,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
     }
 }
 
-###  Sources devices  
+###  Sources devices
 
 namespace eval ::SpiceGenTcl::Common::Sources {
 
