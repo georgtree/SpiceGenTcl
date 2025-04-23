@@ -66,11 +66,11 @@
         <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> dc <font color=#f1b479>$dcVal</font> <font color=#b9b96e>-pos</font>]
     }
     <b><font color=#ffa500>set</font></b> acVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ac]
-    <b><font color=#ffa500>lappend</font></b> params {ac <font color=#b9b96e>-sw</font>}
+    <b><font color=#ffa500>lappend</font></b> params {acsw ac <font color=#b9b96e>-posnocheck</font>}
     <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acVal</font>]&gt;1) && ([@ <font color=#f1b479>$acVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
-        <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> acval [@ <font color=#f1b479>$acVal</font> 0] <font color=#b9b96e>-poseq</font>]
+        <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> ac [@ <font color=#f1b479>$acVal</font> 0] <font color=#b9b96e>-poseq</font>]
     } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> acval <font color=#f1b479>$acVal</font> <font color=#b9b96e>-pos</font>]
+        <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> ac <font color=#f1b479>$acVal</font> <font color=#b9b96e>-pos</font>]
     }
     <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$arguments</font> {
         <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {ac dc}} {
@@ -381,12 +381,12 @@
         }
     }
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> ac]} {
-        <b><font color=#ffa500>lappend</font></b> params {ac <font color=#b9b96e>-sw</font>}
+        <b><font color=#ffa500>lappend</font></b> params {acsw ac <font color=#b9b96e>-posnocheck</font>}
         <b><font color=#ffa500>set</font></b> acVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ac]
         <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acVal</font>]&gt;1) && ([@ <font color=#f1b479>$acVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
-            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> acval [@ <font color=#f1b479>$acVal</font> 0] <font color=#b9b96e>-poseq</font>]
+            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> ac [@ <font color=#f1b479>$acVal</font> 0] <font color=#b9b96e>-poseq</font>]
         } <b><font color=#ffa500>else</font></b> {
-            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> acval <font color=#f1b479>$acVal</font> <font color=#b9b96e>-pos</font>]
+            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> ac <font color=#f1b479>$acVal</font> <font color=#b9b96e>-pos</font>]
         }
         <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> acphase]} {
             <b><font color=#ffa500>set</font></b> acphaseVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> acphase]
@@ -1054,12 +1054,12 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
         }
     }
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> ac]} {
-        <b><font color=#ffa500>lappend</font></b> params {ac <font color=#b9b96e>-sw</font>}
+        <b><font color=#ffa500>lappend</font></b> params {acsw ac <font color=#b9b96e>-posnocheck</font>}
         <b><font color=#ffa500>set</font></b> acVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ac]
         <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acVal</font>]&gt;1) && ([@ <font color=#f1b479>$acVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
-            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> acval [@ <font color=#f1b479>$acVal</font> 0] <font color=#b9b96e>-poseq</font>]
+            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> ac [@ <font color=#f1b479>$acVal</font> 0] <font color=#b9b96e>-poseq</font>]
         } <b><font color=#ffa500>else</font></b> {
-            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> acval <font color=#f1b479>$acVal</font> <font color=#b9b96e>-pos</font>]
+            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> ac <font color=#f1b479>$acVal</font> <font color=#b9b96e>-pos</font>]
         }
         <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> acphase]} {
             <b><font color=#ffa500>set</font></b> acphaseVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> acphase]
@@ -1135,12 +1135,12 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
         <b><font color=#ffa500>incr</font></b> start 2
     }
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> ac]} {
-        <b><font color=#ffa500>lappend</font></b> paramList {ac <font color=#b9b96e>-sw</font>}
+        <b><font color=#ffa500>lappend</font></b> paramList {acsw ac <font color=#b9b96e>-posnocheck</font>}
         <b><font color=#ffa500>set</font></b> acVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ac]
         <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acVal</font>]&gt;1) && ([@ <font color=#f1b479>$acVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
-            <b><font color=#ffa500>lappend</font></b> paramList [<b><font color=#ffa500>list</font></b> acval [@ <font color=#f1b479>$acVal</font> 0] <font color=#b9b96e>-poseq</font>]
+            <b><font color=#ffa500>lappend</font></b> paramList [<b><font color=#ffa500>list</font></b> ac [@ <font color=#f1b479>$acVal</font> 0] <font color=#b9b96e>-poseq</font>]
         } <b><font color=#ffa500>else</font></b> {
-            <b><font color=#ffa500>lappend</font></b> paramList [<b><font color=#ffa500>list</font></b> acval <font color=#f1b479>$acVal</font> <font color=#b9b96e>-pos</font>]
+            <b><font color=#ffa500>lappend</font></b> paramList [<b><font color=#ffa500>list</font></b> ac <font color=#f1b479>$acVal</font> <font color=#b9b96e>-pos</font>]
         }
         <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> acphase]} {
             <b><font color=#ffa500>set</font></b> acphaseVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> acphase]
@@ -1243,12 +1243,12 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
         }
     }
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> ac]} {
-        <b><font color=#ffa500>lappend</font></b> params {ac <font color=#b9b96e>-sw</font>}
+        <b><font color=#ffa500>lappend</font></b> params {acsw ac <font color=#b9b96e>-posnocheck</font>}
         <b><font color=#ffa500>set</font></b> acVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ac]
         <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acVal</font>]&gt;1) && ([@ <font color=#f1b479>$acVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
-            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> acval [@ <font color=#f1b479>$acVal</font> 0] <font color=#b9b96e>-poseq</font>]
+            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> ac [@ <font color=#f1b479>$acVal</font> 0] <font color=#b9b96e>-poseq</font>]
         } <b><font color=#ffa500>else</font></b> {
-            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> acval <font color=#f1b479>$acVal</font> <font color=#b9b96e>-pos</font>]
+            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> ac <font color=#f1b479>$acVal</font> <font color=#b9b96e>-pos</font>]
         }
         <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> acphase]} {
             <b><font color=#ffa500>set</font></b> acphaseVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> acphase]
@@ -1335,12 +1335,12 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
         }
     }
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> ac]} {
-        <b><font color=#ffa500>lappend</font></b> params {ac <font color=#b9b96e>-sw</font>}
+        <b><font color=#ffa500>lappend</font></b> params {acsw ac <font color=#b9b96e>-posnocheck</font>}
         <b><font color=#ffa500>set</font></b> acVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ac]
         <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$acVal</font>]&gt;1) && ([@ <font color=#f1b479>$acVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
-            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> acval [@ <font color=#f1b479>$acVal</font> 0] <font color=#b9b96e>-poseq</font>]
+            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> ac [@ <font color=#f1b479>$acVal</font> 0] <font color=#b9b96e>-poseq</font>]
         } <b><font color=#ffa500>else</font></b> {
-            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> acval <font color=#f1b479>$acVal</font> <font color=#b9b96e>-pos</font>]
+            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> ac <font color=#f1b479>$acVal</font> <font color=#b9b96e>-pos</font>]
         }
         <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> acphase]} {
             <b><font color=#ffa500>set</font></b> acphaseVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> acphase]

@@ -364,7 +364,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
     }
 }
 
-###  Sources devices
+###  Sources devices  
 
 namespace eval ::SpiceGenTcl::Common::Sources {
 
@@ -403,11 +403,11 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 lappend params [list dc $dcVal -pos]
             }
             set acVal [dget $arguments ac]
-            lappend params {ac -sw}
+            lappend params {acsw ac -posnocheck}
             if {([llength $acVal]>1) && ([@ $acVal 1] eq {-eq})} {
-                lappend params [list acval [@ $acVal 0] -poseq]
+                lappend params [list ac [@ $acVal 0] -poseq]
             } else {
-                lappend params [list acval $acVal -pos]
+                lappend params [list ac $acVal -pos]
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {ac dc}} {
@@ -456,12 +456,12 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 }
             }
             if {[dexist $arguments ac]} {
-                lappend params {ac -sw}
+                lappend params {acsw ac -posnocheck}
                 set acVal [dget $arguments ac]
                 if {([llength $acVal]>1) && ([@ $acVal 1] eq {-eq})} {
-                    lappend params [list acval [@ $acVal 0] -poseq]
+                    lappend params [list ac [@ $acVal 0] -poseq]
                 } else {
-                    lappend params [list acval $acVal -pos]
+                    lappend params [list ac $acVal -pos]
                 }
                 if {[dexist $arguments acphase]} {
                     set acphaseVal [dget $arguments acphase]
@@ -517,12 +517,12 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 }
             }
             if {[dexist $arguments ac]} {
-                lappend params {ac -sw}
+                lappend params {acsw ac -posnocheck}
                 set acVal [dget $arguments ac]
                 if {([llength $acVal]>1) && ([@ $acVal 1] eq {-eq})} {
-                    lappend params [list acval [@ $acVal 0] -poseq]
+                    lappend params [list ac [@ $acVal 0] -poseq]
                 } else {
-                    lappend params [list acval $acVal -pos]
+                    lappend params [list ac $acVal -pos]
                 }
                 if {[dexist $arguments acphase]} {
                     set acphaseVal [dget $arguments acphase]
@@ -571,12 +571,12 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 }
             }
             if {[dexist $arguments ac]} {
-                lappend params {ac -sw}
+                lappend params {acsw ac -posnocheck}
                 set acVal [dget $arguments ac]
                 if {([llength $acVal]>1) && ([@ $acVal 1] eq {-eq})} {
-                    lappend params [list acval [@ $acVal 0] -poseq]
+                    lappend params [list ac [@ $acVal 0] -poseq]
                 } else {
-                    lappend params [list acval $acVal -pos]
+                    lappend params [list ac $acVal -pos]
                 }
                 if {[dexist $arguments acphase]} {
                     set acphaseVal [dget $arguments acphase]
@@ -619,12 +619,12 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 incr start 2
             }
             if {[dexist $arguments ac]} {
-                lappend paramList {ac -sw}
+                lappend paramList {acsw ac -posnocheck}
                 set acVal [dget $arguments ac]
                 if {([llength $acVal]>1) && ([@ $acVal 1] eq {-eq})} {
-                    lappend paramList [list acval [@ $acVal 0] -poseq]
+                    lappend paramList [list ac [@ $acVal 0] -poseq]
                 } else {
-                    lappend paramList [list acval $acVal -pos]
+                    lappend paramList [list ac $acVal -pos]
                 }
                 if {[dexist $arguments acphase]} {
                     set acphaseVal [dget $arguments acphase]
@@ -697,12 +697,12 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 }
             }
             if {[dexist $arguments ac]} {
-                lappend params {ac -sw}
+                lappend params {acsw ac -posnocheck}
                 set acVal [dget $arguments ac]
                 if {([llength $acVal]>1) && ([@ $acVal 1] eq {-eq})} {
-                    lappend params [list acval [@ $acVal 0] -poseq]
+                    lappend params [list ac [@ $acVal 0] -poseq]
                 } else {
-                    lappend params [list acval $acVal -pos]
+                    lappend params [list ac $acVal -pos]
                 }
                 if {[dexist $arguments acphase]} {
                     set acphaseVal [dget $arguments acphase]
