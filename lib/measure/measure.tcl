@@ -1,9 +1,7 @@
 package require argparse
+package require extexpr
 package provide measure 0.1
 
-# TODO - taking into the account situation when the match esists only for the last element of the array.
-# in current inmplementation such match is not possible, but implementing this check increase number of checks and code 
-# branches significantly while such situation occurs very rare in typical application with floating-point numbers.
 namespace eval ::measure {
 
     namespace import ::tcl::mathop::*
@@ -64,6 +62,7 @@ proc ::measure::measure {args} {
     #  -pp - contains conditions for finding peak to peak value in the interval
     #  -minat - contains conditions for finding time of minimum value in the interval
     #  -maxat - contains conditions for finding time of maximum value in the interval
+    #  -between - contains conditions for fetching data in the interval
     # This procedure imitates the .meas command from SPICE3 and Ngspice in particular. It has mutiple modes, and each mod
     #  could have different forms:
     #  ###### **Trigger-Target**
@@ -117,13 +116,13 @@ proc ::measure::measure {args} {
     #   -from - start of the range in which search happens, default is minimum value of x.
     #   -to - end of the range in which search happens, default is maximum value of x.
     #   -cross - condition's count, cross conditions counts every time vector crosses value, and saves
-    #     only n-th crossing the value. The possible values are positive integers, or `last` string.
+    #     only n-th crossing the value. The possible values are positive integers, `all` or `last` string.
     #   -rise - condition's count, rise conditions counts every time vector crosses value from lower to higher
-    #     (rising slope), and saves only n-th crossing the value. The possible values are positive integers, or `last` 
-    #     string.
+    #     (rising slope), and saves only n-th crossing the value. The possible values are positive integers, `all` or
+    #     `last` string.
     #   -fall - condition's count, fall conditions counts every time vector crosses value from higher to lower
-    #     (falling slope), and saves only n-th crossing the value. The possible values are positive integers, or `last` 
-    #     string.
+    #     (falling slope), and saves only n-th crossing the value. The possible values are positive integers, `all` or 
+    #     `last` string.
     #
     #  or
     #
@@ -178,7 +177,7 @@ proc ::measure::measure {args} {
     # ::measure::measure -xname x -data [dcreate x $x y1 $y1 y2 $y2] -deriv y1 -at 5
     # ```
     # Synopsis: -xname value -data value -deriv value -at value
-    #  ###### **Min|Max|PP|MinAt|MaxAt**
+    #  ###### **Min|Max|PP|MinAt|MaxAt|Between**
     #  This mode is combination of many modes with the same interface.
     #   -vec - name of vector in data dictionary
     #   -from - start of the range in which search happens, default is minimum value of x.
@@ -187,9 +186,21 @@ proc ::measure::measure {args} {
     # ```
     # ::measure::measure -xname x -data [dcreate x $x y1 $y1 y2 $y2] -avg {-vec y1 -from 1 -to 5}
     # ```
-    # Synopsis: -xname value -data value -avg|rms|pp|min|max|minat|maxat \{-vec value ?-td value? ?-from value?
+    # In **Between** mode, the x and y values are returned within specified interval.
+    # Synopsis: -xname value -data value -avg|rms|pp|min|max|minat|maxat|between \{-vec value ?-td value? ?-from value?
     #   ?-to value?\}
-    set keysList {trig targ find when at integ deriv avg min max pp rms minat maxat}
+    #  ###### **Integ**
+    #  This mode is combination of many modes with the same interface.
+    #   -vec - name of vector in data dictionary
+    #   -from - start of the integration range, default is minimum value of x.
+    #   -to - end of the integration range, default is maximum value of x.
+    #   -cum - optional flag to return cumulative integration result list instead of thhe final value
+    # Examples of usages:
+    # ```
+    # ::measure::measure -xname x -data [dcreate x $x y1 $y1 y2 $y2] -avg {-vec y1 -from 1 -to 5}
+    # ```
+    # Synopsis: -xname value -data value -integ \{-vec value ?-td value? ?-from value? ?-to value? ?-cum?\}
+    set keysList {trig targ find when at integ deriv avg min max pp rms minat maxat between}
     argparse "
         {-xname= -required}
         {-data= -required}
@@ -206,7 +217,8 @@ proc ::measure::measure {args} {
         \{-pp= -forbid \{[Allow pp $keysList]\}\}
         \{-rms= -forbid \{[Allow rms $keysList]\}\}
         \{-minat= -forbid \{[Allow minat $keysList]\}\}
-        \{-maxat= -forbid \{[Allow maxat $keysList]\}\}"
+        \{-maxat= -forbid \{[Allow maxat $keysList]\}\}
+        \{-between= -forbid \{[Allow between $keysList]\}\}"
     if {[info exists at]} {
         if {![info exists find] && ![info exists deriv]} {
             return -code error "When -at switch is presented, -find switch or -deriv switch is required"
@@ -276,7 +288,7 @@ proc ::measure::measure {args} {
             {-vec1= -require vec2 -forbid {vec val}}
             {-vec2= -require vec1 -forbid {vec val}}
             {-td|delay= -default 0.0 -validate {[string is double $arg]}}
-            {-from= -default 0.0 -validate {[string is double $arg]}}
+            {-from= -validate {[string is double $arg]}}
             {-to= -validate {[string is double $arg]}}
             {-cross= -forbid {rise fall}}
             {-rise= -forbid {cross fall}}
@@ -288,8 +300,8 @@ proc ::measure::measure {args} {
             if {[dget $whenArgs $whenVecCond]<=0} {
                 return -code error "Trig count '[dget $whenArgs $whenVecCond]' must be more than 0"
             }
-        } elseif {[dget $whenArgs $whenVecCond] ne {last}} {
-            return -code error "Trig count '[dget $whenArgs $whenVecCond]' must be an integer or 'last' string"
+        } elseif {[dget $whenArgs $whenVecCond] ni {last all}} {
+            return -code error "Trig count '[dget $whenArgs $whenVecCond]' must be an integer, 'last' or 'all' string"
         }
         FromTo $whenArgs $data $xname
         if {[dexist $whenArgs vec1]} {
@@ -311,7 +323,7 @@ proc ::measure::measure {args} {
             {-vec1= -require vec2 -forbid {vec val}}
             {-vec2= -require vec1 -forbid {vec val}}
             {-td|delay= -default 0.0 -validate {[string is double $arg]}}
-            {-from= -default 0.0 -validate {[string is double $arg]}}
+            {-from= -validate {[string is double $arg]}}
             {-to= -validate {[string is double $arg]}}
             {-cross= -forbid {rise fall}}
             {-rise= -forbid {cross fall}}
@@ -323,8 +335,8 @@ proc ::measure::measure {args} {
             if {[dget $whenArgs $whenVecCond]<=0} {
                 return -code error "Trig count '[dget $whenArgs $whenVecCond]' must be more than 0"
             }
-        } elseif {[dget $whenArgs $whenVecCond] ne {last}} {
-            return -code error "Trig count '[dget $whenArgs $whenVecCond]' must be an integer or 'last' string"
+        } elseif {[dget $whenArgs $whenVecCond] ni {last all}} {
+            return -code error "Trig count '[dget $whenArgs $whenVecCond]' must be an integer, 'last' or 'all' string"
         }
         FromTo $whenArgs $data $xname
         if {[dexist $whenArgs vec1]} {
@@ -346,7 +358,7 @@ proc ::measure::measure {args} {
             {-vec1= -require vec2 -forbid {vec val}}
             {-vec2= -require vec1 -forbid {vec val}}
             {-td|delay= -default 0.0 -validate {[string is double $arg]}}
-            {-from= -default 0.0 -validate {[string is double $arg]}}
+            {-from= -validate {[string is double $arg]}}
             {-to= -validate {[string is double $arg]}}
             {-cross= -forbid {rise fall}}
             {-rise= -forbid {cross fall}}
@@ -358,8 +370,8 @@ proc ::measure::measure {args} {
             if {[dget $whenArgs $whenVecCond]<=0} {
                 return -code error "Trig count '[dget $whenArgs $whenVecCond]' must be more than 0"
             }
-        } elseif {[dget $whenArgs $whenVecCond] ne {last}} {
-            return -code error "Trig count '[dget $whenArgs $whenVecCond]' must be an integer or 'last' string"
+        } elseif {[dget $whenArgs $whenVecCond] ni {last all}} {
+            return -code error "Trig count '[dget $whenArgs $whenVecCond]' must be an integer, 'last' or 'all' string"
         }
         FromTo $whenArgs $data $xname
         if {[dexist $whenArgs vec1]} {
@@ -379,9 +391,10 @@ proc ::measure::measure {args} {
             {-vec= -required}
             {-from= -validate {[string is double $arg]}}
             {-to= -validate {[string is double $arg]}}
+            {-cum -boolean}
         } $integ]
         FromTo $integArgs $data $xname
-        return [Integ [dget $data $xname] [dget $data [dget $integArgs vec]] $from $to]
+        return [Integ [dget $data $xname] [dget $data [dget $integArgs vec]] $from $to [dget $integArgs cum]]
     } elseif {[info exists avg]} {
         set avgArgs [argparse -inline {
             {-vec= -required}
@@ -398,7 +411,8 @@ proc ::measure::measure {args} {
         } $rms]
         FromTo $rmsArgs $data $xname
         return [Rms [dget $data $xname] [dget $data [dget $rmsArgs vec]] $from $to]
-    } elseif {[info exists min] || [info exists max] || [info exists pp] || [info exists minat] || [info exists maxat]} {
+    } elseif {[info exists min] || [info exists max] || [info exists pp] || [info exists minat] || [info exists maxat]\
+                      || [info exists between]} {
         if {[info exists min]} {
             set type min
             set argsDict $min
@@ -414,6 +428,9 @@ proc ::measure::measure {args} {
         } elseif {[info exists maxat]} {
             set type maxat
             set argsDict $maxat
+        } elseif {[info exists between]} {
+            set type between
+            set argsDict $between
         }
         set resDict [argparse -inline {
             {-vec= -required}
@@ -440,7 +457,7 @@ proc ::measure::TrigTarg {x trigVec val1 targVec val2 trigVecCond trigVecCondCou
     set targVecCount 0
     set trigVecFoundFlag false
     set targVecFoundFlag false
-    for {set i 0} {$i<[= {$trigVecLen-1}]} {incr i} {
+    for {set i 0} {$i<$trigVecLen-1} {incr i} {
         set xi [@ $x $i]
         if {($xi<$trigVecDelay) && ($xi<$targVecDelay)} {
             continue
@@ -572,9 +589,9 @@ proc ::measure::FindDerivWhen {x mode findVec whenVecLS val whenVecRS whenVecCon
     set whenVecCount 0
     set whenVecFoundFlag false
     if {$mode in {when findwhen derivwhen}} {
-        for {set i 0} {$i<[= {$whenVecLSLen-1}]} {incr i} {
+        for {set i 0} {$i<$whenVecLSLen-1} {incr i} {
             set xi [@ $x $i]
-            if {($xi<$delay) || ($xi<$from) || ($xi>$to)} {
+            if {($xi<($from+$delay)) || ($xi>$to)} {
                 continue
             }
             set xip1 [@ $x [= {$i+1}]]
@@ -616,10 +633,19 @@ proc ::measure::FindDerivWhen {x mode findVec whenVecLS val whenVecRS whenVecCon
                             set yDeriv [CalcYBetween $xi [@ $findVec $i] $xip1 [@ $findVec [= {$i+1}]] $xWhen]
                             set lastDerYWhenHit [DerivSelect $i $xi $xWhen $xip1 $x $findVec $yDeriv]
                         }
+                    } elseif {$whenVecCondCount eq {all}} {
+                        set xWhenLoc [CalcXBetween $xi $whenVecLSI $xip1 $whenVecLSIp1 $val]
+                        lappend xWhen $xWhenLoc
+                        if {$mode eq {findwhen}} {
+                            lappend yFind [CalcYBetween $xi [@ $findVec $i] $xip1 [@ $findVec [= {$i+1}]] $xWhenLoc]
+                        } elseif {$mode eq {derivwhen}} {
+                            set yDeriv [CalcYBetween $xi [@ $findVec $i] $xip1 [@ $findVec [= {$i+1}]] $xWhenLoc]
+                            lappend derY [Deriv {*}[DerivSelect $i $xi $xWhenLoc $xip1 $x $findVec $yDeriv]]
+                        }
                     }
                 }
             }
-            if {$whenVecCondCount ne {last}} {
+            if {$whenVecCondCount ni {last all}} {
                 if {($whenVecCount==$whenVecCondCount) && !$whenVecFoundFlag} {
                     set whenVecFoundFlag true
                     set xWhen [CalcXBetween $xi $whenVecLSI $xip1 $whenVecLSIp1 $val]
@@ -634,9 +660,9 @@ proc ::measure::FindDerivWhen {x mode findVec whenVecLS val whenVecRS whenVecCon
             }
         }
     } elseif {$mode in {wheneq findwheneq derivwheneq}} {
-        for {set i 0} {$i<[= {$whenVecLSLen-1}]} {incr i} {
+        for {set i 0} {$i<$whenVecLSLen-1} {incr i} {
             set xi [@ $x $i]
-            if {($xi<$delay) || ($xi<$from) || ($xi>$to)} {
+            if {($xi<($from+$delay)) || ($xi>$to)} {
                 continue
             }
             set xip1 [@ $x [= {$i+1}]]
@@ -680,15 +706,25 @@ proc ::measure::FindDerivWhen {x mode findVec whenVecLS val whenVecRS whenVecCon
                                 set yDeriv [CalcYBetween $xi [@ $findVec $i] $xip1 [@ $findVec [= {$i+1}]] $xWhen]
                                 set lastDerYWhenHit [DerivSelect $i $xi $xWhen $xip1 $x $findVec $yDeriv]
                             }
+                        } elseif {$whenVecCondCount eq {all}} {
+                            set xWhenLoc [@ [CalcCrossPoint $xi $whenVecLSI $xip1 $whenVecLSIp1 $xi $whenVecRSI $xip1\
+                                                  $whenVecRSIp1] 0]
+                            lappend xWhen $xWhenLoc
+                            if {$mode eq {findwheneq}} {
+                                lappend yFind [CalcYBetween $xi [@ $findVec $i] $xip1 [@ $findVec [= {$i+1}]] $xWhenLoc]
+                            } elseif {$mode eq {derivwheneq}} {
+                                set yDeriv [CalcYBetween $xi [@ $findVec $i] $xip1 [@ $findVec [= {$i+1}]] $xWhenLoc]
+                                lappend derY [Deriv {*}[DerivSelect $i $xi $xWhenLoc $xip1 $x $findVec $yDeriv]]
+                            }
                         }
                     }
                 }
             }
-            if {$whenVecCondCount ne {last}} {
+            if {$whenVecCondCount ni {last all}} {
                 if {($whenVecCount==$whenVecCondCount) && !$whenVecFoundFlag} {
                     set whenVecFoundFlag true
-                    set xWhen [@ [CalcCrossPoint $xi $whenVecLSI $xip1 $whenVecLSIp1 $xi $whenVecRSI\
-                                          $xip1 $whenVecRSIp1] 0]
+                    set xWhen [@ [CalcCrossPoint $xi $whenVecLSI $xip1 $whenVecLSIp1 $xi $whenVecRSI $xip1\
+                                          $whenVecRSIp1] 0]
                     if {$mode eq {findwheneq}} {
                         set yFind [CalcYBetween $xi [@ $findVec $i] $xip1 [@ $findVec [= {$i+1}]] $xWhen]
                     } elseif {$mode eq {derivwheneq}} {
@@ -740,7 +776,7 @@ proc ::measure::FindAt {x val findVec} {
     if {$xLen != $findVecLen} {
         return -code error "Length of x '$xLen' is not equal to length of findVec '$findVec'"
     }
-    for {set i 0} {$i<[= {$xLen-1}]} {incr i} {
+    for {set i 0} {$i<$xLen-1} {incr i} {
         set xi [@ $x $i]
         set xip1 [@ $x [= {$i+1}]]
         set findVecLSI [@ $findVec $i]
@@ -759,7 +795,7 @@ proc ::measure::DerivAt {x val derivVec} {
     if {$xLen != $derivVecLen} {
         return -code error "Length of x '$xLen' is not equal to length of derivVec '$derivVec'"
     }
-    for {set i 0} {$i<[= {$xLen-1}]} {incr i} {
+    for {set i 0} {$i<$xLen-1} {incr i} {
         set xi [@ $x $i]
         set xip1 [@ $x [= {$i+1}]]
         set derivVecLSI [@ $derivVec $i]
@@ -771,7 +807,7 @@ proc ::measure::DerivAt {x val derivVec} {
     }
 }
 
-proc ::measure::Integ {x y xstart xend} {
+proc ::measure::Integ {x y xstart xend {cum false}} {
     set xLen [llength $x]
     set yLen [llength $y]
     if {$xLen != $yLen} {
@@ -787,7 +823,7 @@ proc ::measure::Integ {x y xstart xend} {
     set result 0.0
     set startFlagFound false
     set endFlagFound false
-    for {set i 0} {$i<[= {$xLen-1}]} {incr i} {
+    for {set i 0} {$i<$xLen-1} {incr i} {
         set xi [@ $x $i]
         set xip1 [@ $x [= {$i+1}]]
         set yi [@ $y $i]
@@ -806,20 +842,36 @@ proc ::measure::Integ {x y xstart xend} {
                 set xi $xstart
                 set yi $ystart
                 set result [= {$result+($yip1+$yi)/2.0*($xip1-$xi)}]
+                if {$cum} {
+                    dict lappend resultCum x $xi 
+                    dict lappend resultCum y $result
+                }
                 continue
             } elseif {$endFlagFound} {
                 if {$i==$iend} {
                     set xip1 $xend
                     set yip1 $yend
                     set result [= {$result+($yip1+$yi)/2.0*($xip1-$xi)}]
+                    if {$cum} {
+                        dict lappend resultCum x $xip1
+                        dict lappend resultCum y $result
+                    }
                     break
                 }
             } else {
                 set result [= {$result+($yip1+$yi)/2.0*($xip1-$xi)}]
+                if {$cum} {
+                    dict lappend resultCum x $xi
+                    dict lappend resultCum y $result
+                }
             }
         }
     }
-    return $result
+    if {$cum} {
+        return $resultCum
+    } else {
+        return $result
+    }
 }
 
 proc ::measure::Avg {x y xstart xend} {
@@ -828,7 +880,7 @@ proc ::measure::Avg {x y xstart xend} {
 }
 
 proc ::measure::Rms {x y xstart xend} {
-    set ySq [lmap yVal $y {= $yVal*$yVal}]
+    set ySq [= {mulll($y,$y)}]
     set integral [Integ $x $ySq $xstart $xend]
     return [= {sqrt($integral/($xend-$xstart))}]
 }
@@ -846,10 +898,9 @@ proc ::measure::MinMaxPPMinAtMaxAt {x y xstart xend type} {
     } elseif {$xstart>=$xend} {
         return -code error "Start of the interval should be lower than the end of the interval"
     }
-    set result 0.0
     set startFlagFound false
     set endFlagFound false
-    for {set i 0} {$i<[= {$xLen-1}]} {incr i} {
+    for {set i 0} {$i<$xLen-1} {incr i} {
         set xi [@ $x $i]
         set xip1 [@ $x [= {$i+1}]]
         set yi [@ $y $i]
@@ -879,6 +930,10 @@ proc ::measure::MinMaxPPMinAtMaxAt {x y xstart xend type} {
             } elseif {$type eq {maxat}} {
                 lappend xTargetList $xstart {*}[lrange $x [= {$istart+1}] $iend] $xend
                 return [@ $xTargetList [lsearch -real -exact $targetList [tcl::mathfunc::max {*}$targetList]]]
+            } elseif {$type eq {between}} {
+                dict append result x [list $xstart {*}[lrange $x [= {$istart+1}] $iend] $xend]
+                dict append result y [list $ystart {*}[lrange $y [= {$istart+1}] $iend] $yend]
+                return $result
             }
         }
     }
