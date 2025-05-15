@@ -114,9 +114,9 @@ testTemplate testVpulseClass-5 {}\
         {Vpulse new 1 net1 net2 -tf 1e-9 -pw 10e-6 -per 20e-6 -np 10 -low 0 -high 1 -td 1e-9 -tr 1e-9}\
         {v1 net1 net2 pulse 0 1 1e-9 1e-9 1e-9 10e-6 20e-6 10}
 testTemplate testVpulseClass-6 {} {Vpulse new 1 net1 net2 -tf 1e-9 -pw 10e-6 -per 20e-6 -np 10 -high 1 -td 1e-9 -tr 1e-9}\
-        {-low, -voff or -ioff must be presented}
+        {missing required switch: -voff|ioff|low}
 testTemplate testVpulseClass-7 {} {Vpulse new 1 net1 net2 -tf 1e-9 -pw 10e-6 -per 20e-6 -voff 0 -np 10 -td 1e-9 -tr 1e-9}\
-        {-high, -von or -ion must be presented}
+        {missing required switch: -von|ion|high}
 
 ####  Vsin class test 
 
@@ -129,7 +129,7 @@ testTemplate testVsinClass-4 {} {Vsin new 1 net1 net2 -v0 0 -va 2 -freq 50} {v1 
 testTemplate testVsinClass-5 {} {Vsin new 1 net1 net2 -v0 0 -theta {theta -eq} -vamp 2 -freq 50 -td 1e-6}\
         {v1 net1 net2 sin 0 2 50 1e-6 {theta}}
 testTemplate testVsinClass-6 {} {Vsin new 1 net1 net2 -v0 0 -theta {theta -eq} -freq 50 -td 1e-6}\
-        {-va, -ia, -vamp or -iamp must be presented}
+        {missing required switch: -ia|vamp|iamp|va}
 testTemplate testVsinClass-7 {} {Vsin new 1 net1 net2 -v0 0 -theta {theta -eq} -vamp 2 -freq 50 -td 1e-6 -ncycles 2}\
         {-ncycles switch requires -phase or -phi switch}
 testTemplate testVsinClass-8 {} {Vsin new 1 net1 net2 -voffset 0 -va 2 -freq 50 -td 1e-6 -theta {theta -eq} -phi 1}\
@@ -147,7 +147,7 @@ testTemplate testVexpClass-2 {} {Vexp new 1 net1 net2 -v1 0 -v2 1 -td1 1e-9 -tau
 testTemplate testVexpClass-3 {} {Vexp new 1 net1 net2 -v1 0 -tau1 1e-9 -v2 1 -td2 1e-9 -td1 1e-9 -tau2 10e-6}\
         {v1 net1 net2 exp 0 1 1e-9 1e-9 1e-9 10e-6}
 testTemplate testVexpClass-4 {} {Vexp new 1 net1 net2 -tau1 1e-9 -v2 1 -td2 1e-9 -td1 1e-9 -tau2 10e-6}\
-        {-v1 or -i1 must be presented}
+        {missing required switch: -i1|v1}
 
 ####  Vpwl class test 
 

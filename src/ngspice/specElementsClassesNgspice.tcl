@@ -536,21 +536,14 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
                 -dc=
                 -ac=
                 {-acphase= -require ac}
-                {-low= -forbid {voff ioff}}
-                {-voff= -forbid {low ioff}}
-                {-ioff= -forbid {low voff}}
-                {-high= -forbid {von ion}}
-                {-von= -forbid {high ion}}
-                {-ion= -forbid {high von}}
+                {-voff|ioff|low= -required}
+                {-von|ion|high= -required}
                 {-td= -required}
                 {-tr= -required}
                 {-tf= -required}
-                {-pw= -forbid ton}
-                {-ton= -forbid pw}
-                {-per= -forbid tper}
-                {-tper= -forbid per}
-                {-np= -forbid ncycles}
-                {-ncycles= -forbid np}
+                {-pw|ton= -required}
+                {-per|tper= -required}
+                -ncycles|np=
             }]
             if {[dexist $arguments dc]} {
                 lappend params {dc -sw}
@@ -578,11 +571,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
                     }
                 }
             }
-            my AliasesKeysCheck $arguments {low voff ioff}
-            my AliasesKeysCheck $arguments {high von ion}
-            my AliasesKeysCheck $arguments {pw ton}
-            my AliasesKeysCheck $arguments {per tper}
-            set paramsOrder {low voff ioff high von ion td tr tf pw ton per tper np ncycles}
+            set paramsOrder {low high td tr tf ton tper np}
             lappend params {model pulse -posnocheck}
             my ParamsProcess $paramsOrder $arguments params
             next $type$name [list [list np $npNode] [list nm $nmNode]] $params
@@ -600,19 +589,11 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
                 -dc=
                 -ac=
                 {-acphase= -require ac}
-                {-v0= -forbid {i0 voff ioff}}
-                {-i0= -forbid {v0 voff ioff}}
-                {-voff= -forbid {v0 i0 ioff}}
-                {-ioff= -forbid {v0 i0 voff}}
-                {-va= -forbid {ia vamp iamp}}
-                {-ia= -forbid {va vamp iamp}}
-                {-vamp= -forbid {va ia iamp}}
-                {-iamp= -forbid {va ia vamp}}
-                {-fc= -forbid fcar}
-                {-fcar= -forbid fc}
+                {-i0|voff|ioff|v0= -required}
+                {-ia|vamp|iamp|va= -required}
+                {-fcar|fc= -required}
                 {-mdi= -required}
-                {-fs= -forbid fsig}
-                {-fsig= -forbid fs}
+                {-fsig|fs= -required}
                 -phasec=
                 {-phases= -require {phasec}}
             }]
@@ -642,11 +623,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
                     }
                 }
             }
-            my AliasesKeysCheck $arguments {v0 i0 voff ioff}
-            my AliasesKeysCheck $arguments {va ia vamp iamp}
-            my AliasesKeysCheck $arguments {fc fcar}
-            my AliasesKeysCheck $arguments {fs fsig}
-            set paramsOrder {v0 i0 voff ioff va ia vamp iamp fc fcar mdi fs fsig phasec phases}
+            set paramsOrder {v0 va fc mdi fs phasec phases}
             lappend params {model sffm -posnocheck}
             my ParamsProcess $paramsOrder $arguments params
             next $type$name [list [list np $npNode] [list nm $nmNode]] $params
@@ -663,10 +640,8 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
                 -dc=
                 -ac=
                 {-acphase= -require ac}
-                {-v0= -forbid i0}
-                {-i0= -forbid v0}
-                {-va= -forbid ia}
-                {-ia= -forbid va}
+                {-i0|v0= -required}
+                {-ia|va= -required}
                 {-mf= -required}
                 {-fc= -required}
                 {-td= -required}
@@ -698,9 +673,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
                     }
                 }
             }
-            my AliasesKeysCheck $arguments {v0 i0}
-            my AliasesKeysCheck $arguments {va ia}
-            set paramsOrder {v0 i0 va ia mf fc td phases}
+            set paramsOrder {v0 va mf fc td phases}
             lappend params {model am -posnocheck}
             my ParamsProcess $paramsOrder $arguments params
             next $type$name [list [list np $npNode] [list nm $nmNode]] $params

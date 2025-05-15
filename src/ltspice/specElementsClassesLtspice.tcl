@@ -420,29 +420,18 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
         mixin ::SpiceGenTcl::Utility
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
-                {-low= -forbid {voff ioff}}
-                {-voff= -forbid {low ioff}}
-                {-ioff= -forbid {low voff}}
-                {-high= -forbid {von ion}}
-                {-von= -forbid {high ion}}
-                {-ion= -forbid {high von}}
+                {-voff|ioff|low= -required}
+                {-von|ion|high= -required}
                 {-td= -required}
                 {-tr= -required}
                 {-tf= -required}
-                {-pw= -forbid ton}
-                {-ton= -forbid pw}
-                {-per= -forbid tper}
-                {-tper= -forbid per}
-                {-np= -forbid ncycles}
-                {-ncycles= -forbid np}
+                {-pw|ton= -required}
+                {-per|tper= -required}
+                -ncycles|np=
                 -rser=
                 -cpar=
             }]
-            my AliasesKeysCheck $arguments {low voff ioff}
-            my AliasesKeysCheck $arguments {high von ion}
-            my AliasesKeysCheck $arguments {pw ton}
-            my AliasesKeysCheck $arguments {per tper}
-            set paramsOrder {low voff ioff high von ion td tr tf pw ton per tper np ncycles}
+            set paramsOrder {low high td tr tf ton tper np}
             lappend params {model pulse -posnocheck}
             my ParamsProcess $paramsOrder $arguments params
             dict for {paramName value} $arguments {
@@ -465,14 +454,8 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
         mixin ::SpiceGenTcl::Utility
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
-                {-v0= -forbid {i0 voffset ioffset}}
-                {-i0= -forbid {v0 voffset ioffset}}
-                {-voffset= -forbid {v0 i0 ioffset}}
-                {-ioffset= -forbid {v0 i0 voffset}}
-                {-va= -forbid {ia vamp iamp}}
-                {-ia= -forbid {va vamp iamp}}
-                {-vamp= -forbid {va ia iamp}}
-                {-iamp= -forbid {va ia vamp}}
+                {-i0|voffset|ioffset|v0= -required}
+                {-ia|vamp|iamp|va= -required}
                 {-freq= -required}
                 -td=
                 {-theta= -require {td}}
@@ -485,9 +468,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             if {(![dexist $arguments phase] && ![dexist $arguments phi]) && [dexist $arguments ncycles]} {
                 return -code error "-ncycles switch requires -phase or -phi switch"
             }
-            my AliasesKeysCheck $arguments {v0 i0 voffset ioffset}
-            my AliasesKeysCheck $arguments {va ia vamp iamp}
-            set paramsOrder {v0 i0 voffset ioffset va ia vamp iamp freq td theta phase phi ncycles}
+            set paramsOrder {v0 va freq td theta phase phi ncycles}
             lappend params {model sin -posnocheck}
             my ParamsProcess $paramsOrder $arguments params
             dict for {paramName value} $arguments {
@@ -510,10 +491,8 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
         mixin ::SpiceGenTcl::Utility
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
-                {-v1= -forbid i1}
-                {-i1= -forbid v1}
-                {-v2= -forbid i2}
-                {-i2= -forbid v2}
+                {-i1|v1= -required}
+                {-i2|v2= -required}
                 {-td1= -required}
                 {-tau1= -required}
                 {-td2= -required}
@@ -521,9 +500,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
                 -rser=
                 -cpar=
             }]
-            my AliasesKeysCheck $arguments {v1 i1}
-            my AliasesKeysCheck $arguments {v2 i2}
-            set paramsOrder {v1 i1 v2 i2 td1 tau1 td2 tau2}
+            set paramsOrder {v1 v2 td1 tau1 td2 tau2}
             lappend params {model exp -posnocheck}
             my ParamsProcess $paramsOrder $arguments params
             dict for {paramName value} $arguments {
@@ -592,27 +569,15 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
         mixin ::SpiceGenTcl::Utility
         constructor {name type npNode nmNode args} {
             set arguments [argparse -inline {
-                {-v0= -forbid {i0 voff ioff}}
-                {-i0= -forbid {v0 voff ioff}}
-                {-voff= -forbid {v0 i0 ioff}}
-                {-ioff= -forbid {v0 i0 voff}}
-                {-va= -forbid {ia vamp iamp}}
-                {-ia= -forbid {va vamp iamp}}
-                {-vamp= -forbid {va ia iamp}}
-                {-iamp= -forbid {va ia vamp}}
-                {-fc= -forbid fcar}
-                {-fcar= -forbid fc}
+                {-i0|voff|ioff|v0= -required}
+                {-ia|vamp|iamp|va= -required}
+                {-fcar|fc= -required}
                 {-mdi= -required}
-                {-fs= -forbid fsig}
-                {-fsig= -forbid fs}
+                {-fsig|fs= -required}
                 -rser=
                 -cpar=
             }]
-            my AliasesKeysCheck $arguments {v0 i0 voff ioff}
-            my AliasesKeysCheck $arguments {va ia vamp iamp}
-            my AliasesKeysCheck $arguments {fc fcar}
-            my AliasesKeysCheck $arguments {fs fsig}
-            set paramsOrder {v0 i0 voff ioff va ia vamp iamp fc fcar mdi fs fsig}
+            set paramsOrder {v0 va fc mdi fs}
             lappend params {model sffm -posnocheck}
             my ParamsProcess $paramsOrder $arguments params
             dict for {paramName value} $arguments {

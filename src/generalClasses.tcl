@@ -161,10 +161,7 @@ namespace eval ::SpiceGenTcl {
             # Returns: list of parameters formatted for Device/Model constructor
             foreach paramName $paramsNames {
                 if {[llength $paramName]>1} {
-                    for {set i 0} {$i<[llength $paramName]} {incr i} {
-                        set paramNameAlias [@ $paramName $i]
-                        lappend paramDefList "\{-${paramNameAlias}= -forbid \{[lremove $paramName $i]\}\}"
-                    }
+                    lappend paramDefList "-[join $paramName |]="
                 } else {
                     lappend paramDefList -${paramName}=
                 }

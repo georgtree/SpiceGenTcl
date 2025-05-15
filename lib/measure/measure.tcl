@@ -1,4 +1,4 @@
-package require argparse
+package require argparse 0.52
 package require extexpr
 package provide measure 0.1
 
@@ -201,24 +201,25 @@ proc ::measure::measure {args} {
     # ```
     # Synopsis: -xname value -data value -integ \{-vec value ?-td value? ?-from value? ?-to value? ?-cum?\}
     set keysList {trig targ find when at integ deriv avg min max pp rms minat maxat between}
-    argparse "
+    argparse {
         {-xname= -required}
         {-data= -required}
-        \{-trig= -require targ -forbid \{[Allow {trig targ} $keysList]\}\}
-        \{-targ= -require trig -forbid \{[Allow {trig targ} $keysList]\}\}
-        \{-find= -forbid \{[Allow {find when at} $keysList]\}\}
-        \{-when= -forbid \{[Allow {find when deriv} $keysList]\}\}
-        \{-at= -validate {\[string is double \$arg\]} -forbid \{[Allow {find deriv at} $keysList]\}\}
-        \{-integ= -forbid \{[Allow integ $keysList]\}\}
-        \{-deriv= -forbid \{[Allow {deriv when at} $keysList]\}\}
-        \{-avg= -forbid \{[Allow avg $keysList]\}\}
-        \{-min= -forbid \{[Allow min $keysList]\}\}
-        \{-max= -forbid \{[Allow max $keysList]\}\}
-        \{-pp= -forbid \{[Allow pp $keysList]\}\}
-        \{-rms= -forbid \{[Allow rms $keysList]\}\}
-        \{-minat= -forbid \{[Allow minat $keysList]\}\}
-        \{-maxat= -forbid \{[Allow maxat $keysList]\}\}
-        \{-between= -forbid \{[Allow between $keysList]\}\}"
+        {-trig= -require targ -allow {data xname targ}}
+        {-targ= -require trig -allow {data xname trig}}
+        {-find= -allow {data xname when at}}
+        {-when= -allow {data xname find deriv}}
+        {-at= -type double -allow {data xname find deriv}}
+        {-integ= -allow {data xname}}
+        {-deriv= -allow {data xname deriv when at}}
+        {-avg= -allow {data xname}}
+        {-min= -allow {data xname}}
+        {-max= -allow {data xname}}
+        {-pp= -allow {data xname}}
+        {-rms= -allow {data xname}}
+        {-minat= -allow {data xname}}
+        {-maxat= -allow {data xname}}
+        {-between= -allow {data xname}}
+    }
     if {[info exists at]} {
         if {![info exists find] && ![info exists deriv]} {
             return -code error "When -at switch is presented, -find switch or -deriv switch is required"
@@ -231,10 +232,10 @@ proc ::measure::measure {args} {
     }
     if {[info exists trig]} {
         set definition {
-            {-at= -forbid {vec val delay cross rise fall} -validate {[string is double $arg]}}
+            {-at= -forbid {vec val delay cross rise fall} -type double}
             {-vec= -forbid at -require val}
-            {-val= -forbid at -validate {[string is double $arg]}}
-            {-td|delay= -default 0.0 -forbid at -require {vec val} -validate {[string is double $arg]}}
+            {-val= -forbid at -type double}
+            {-td|delay= -default 0.0 -forbid at -require {vec val} -type double}
             {-cross= -forbid {rise fall} -forbid at -require {vec val}}
             {-rise= -forbid {cross fall} -forbid at -require {vec val}}
             {-fall= -forbid {cross rise} -forbid at -require {vec val}}
@@ -287,9 +288,9 @@ proc ::measure::measure {args} {
             {-val= -require vec -forbid {vec1 vec2}}
             {-vec1= -require vec2 -forbid {vec val}}
             {-vec2= -require vec1 -forbid {vec val}}
-            {-td|delay= -default 0.0 -validate {[string is double $arg]}}
-            {-from= -validate {[string is double $arg]}}
-            {-to= -validate {[string is double $arg]}}
+            {-td|delay= -default 0.0 -type double}
+            {-from= -type double}
+            {-to= -type double}
             {-cross= -forbid {rise fall}}
             {-rise= -forbid {cross fall}}
             {-fall= -forbid {cross rise}}
@@ -322,9 +323,9 @@ proc ::measure::measure {args} {
             {-val= -require vec -forbid {vec1 vec2}}
             {-vec1= -require vec2 -forbid {vec val}}
             {-vec2= -require vec1 -forbid {vec val}}
-            {-td|delay= -default 0.0 -validate {[string is double $arg]}}
-            {-from= -validate {[string is double $arg]}}
-            {-to= -validate {[string is double $arg]}}
+            {-td|delay= -default 0.0 -type double}
+            {-from= -type double}
+            {-to= -type double}
             {-cross= -forbid {rise fall}}
             {-rise= -forbid {cross fall}}
             {-fall= -forbid {cross rise}}
@@ -357,9 +358,9 @@ proc ::measure::measure {args} {
             {-val= -require vec -forbid {vec1 vec2}}
             {-vec1= -require vec2 -forbid {vec val}}
             {-vec2= -require vec1 -forbid {vec val}}
-            {-td|delay= -default 0.0 -validate {[string is double $arg]}}
-            {-from= -validate {[string is double $arg]}}
-            {-to= -validate {[string is double $arg]}}
+            {-td|delay= -default 0.0 -type double}
+            {-from= -type double}
+            {-to= -type double}
             {-cross= -forbid {rise fall}}
             {-rise= -forbid {cross fall}}
             {-fall= -forbid {cross rise}}
@@ -389,8 +390,8 @@ proc ::measure::measure {args} {
     } elseif {[info exists integ]} {
         set integArgs [argparse -inline {
             {-vec= -required}
-            {-from= -validate {[string is double $arg]}}
-            {-to= -validate {[string is double $arg]}}
+            {-from= -type double}
+            {-to= -type double}
             {-cum -boolean}
         } $integ]
         FromTo $integArgs $data $xname
@@ -398,16 +399,16 @@ proc ::measure::measure {args} {
     } elseif {[info exists avg]} {
         set avgArgs [argparse -inline {
             {-vec= -required}
-            {-from= -validate {[string is double $arg]}}
-            {-to= -validate {[string is double $arg]}}
+            {-from= -type double}
+            {-to= -type double}
         } $avg]
         FromTo $avgArgs $data $xname
         return [Avg [dget $data $xname] [dget $data [dget $avgArgs vec]] $from $to]
     } elseif {[info exists rms]} {
         set rmsArgs [argparse -inline {
             {-vec= -required}
-            {-from= -validate {[string is double $arg]}}
-            {-to= -validate {[string is double $arg]}}
+            {-from= -type double}
+            {-to= -type double}
         } $rms]
         FromTo $rmsArgs $data $xname
         return [Rms [dget $data $xname] [dget $data [dget $rmsArgs vec]] $from $to]
