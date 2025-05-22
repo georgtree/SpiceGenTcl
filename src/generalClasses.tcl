@@ -117,25 +117,13 @@ namespace eval ::SpiceGenTcl {
                 set name $object
             }
         }
-        method AliasesKeysCheck {arguments keys} {
-            foreach key $keys {
-                if {[dexist $arguments $key]} {
-                    return
-                }
-            }
-            set formKeys [lmap key $keys {subst -$key}]
-            return -code error "[join [lrange $formKeys 0 end-1] ", "] or [@ $formKeys end] must be presented"
-        }
         method buildArgStr {paramsNames} {
             # Builds argument list for argparse.
             #  paramsNames - list of parameter names
             # Returns: string in form `-paramName= ...`, or `{-paramName= -forbid {alias0 alias1 ...}}`
             foreach paramName $paramsNames {
                 if {[llength $paramName]>1} {
-                    for {set i 0} {$i<[llength $paramName]} {incr i} {
-                        set paramNameAlias [@ $paramName $i]
-                        lappend paramDefList "\{-${paramNameAlias}= -forbid \{[lremove $paramName $i]\}\}"
-                    }
+                    lappend paramDefList -[join $paramName |]=
                 } else {
                     lappend paramDefList -${paramName}=
                 }
@@ -207,12 +195,6 @@ namespace eval ::SpiceGenTcl {
                 }
             }
             return $itemDup
-        }
-        method allow {names keysList} {
-            foreach name $names {
-                lappend indexes [lsearch -exact $keysList $name]
-            }
-            return [lremove $keysList {*}$indexes]
         }
     }
 
