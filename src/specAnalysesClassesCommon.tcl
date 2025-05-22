@@ -42,12 +42,13 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
             # ::SpiceGenTcl::Common::Analyses::Dc new -src v1 -start {time1 -eq} -stop 5 -incr 0.1 -name dc1
             # ```
             # Synopsis: -src value -start value -stop value -incr value ?-name value?
-            set arguments [argparse -inline {
-                -name=
-                {-src= -required}
-                {-start= -required}
-                {-stop= -required}
-                {-incr= -required}
+            set arguments [argparse -inline -help {Creates object of class `Dc` that describes DC analysis} {
+                {-name= -help {Name argument}}
+                {-src= -required -help {Name of independent voltage or current source, a resistor, or the circuit\
+                                                temperature}}
+                {-start= -required -help {Start value}}
+                {-stop= -required -help {Stop value}}
+                {-incr= -required -help {Incrementing value}}
             }]
             my NameProcess $arguments [self object]
             lappend params [list src [dget $arguments src] -posnocheck]
@@ -68,7 +69,7 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
             #  -variation - parameter that defines frequency scale, could be dec, oct or lin
             #  -n - number of points
             #  -fstart - start frequency
-            #  -fstop - start frequency
+            #  -fstop - stop frequency
             #  -name - name argument, optional
             # ```
             # .ac variation n fstart fstop
@@ -78,12 +79,12 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
             # ::SpiceGenTcl::Common::Analyses::Ac new -variation dec -n 10 -fstart 1 -fstop 1e6 -name dc1
             # ```
             # Synopsis: -variation value -n value -fstart value -fstop value ?-name value?
-            set arguments [argparse -inline {
+            set arguments [argparse -inline -help {Creates object of class `Ac` that describes AC analysis} {
                 -name=
-                {-variation= -required -enum {dec oct lin}}
-                {-n= -required}
-                {-fstart= -required}
-                {-fstop= -required}
+                {-variation= -required -enum {dec oct lin} -help {Frequency scale}}
+                {-n= -required -help {Number of points}}
+                {-fstart= -required -help {Start frequency}}
+                {-fstop= -required -help {Stop frequency}}
             }]
             my NameProcess $arguments [self object]
             lappend params [list variation [dget $arguments variation] -posnocheck]
@@ -115,13 +116,13 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
             # ::SpiceGenTcl::Common::Analyses::Tran new -tstep 1e-9 -tstop 10e-6 -name dc1
             # ```
             # Synopsis: -tstep value -tstop value ?-tstart value ?-tmax value?? ?-uic? ?-name value?
-            set arguments [argparse -inline {
+            set arguments [argparse -inline -help {Creates object of class `Tran` that describes TRAN analysis} {
                 -name=
-                {-tstep= -required}
-                {-tstop= -required}
-                -tstart=
-                {-tmax= -require {tstart}}
-                {-uic -boolean}
+                {-tstep= -required -help {Size of maximum time step for plotting}}
+                {-tstop= -required -help {Stop time value}}
+                {-tstart= -help {Start time of saving data}}
+                {-tmax= -require {tstart} -help {Size of maximum time step in actual simulation}}
+                {-uic -boolean -help {Skip initial operating point solution}}
             }]
             my NameProcess $arguments [self object]
             set paramsOrder {tstep tstop tstart tmax}
@@ -150,12 +151,12 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
             # ::SpiceGenTcl::Common::Analyses::Op new -name op1
             # ```
             # Synopsis: ?-name value?
-            set arguments [argparse -inline {
+            set arguments [argparse -inline -help {Creates object of class `Op` that describes OP analysis} {
                 -name=
             }]
             my NameProcess $arguments [self object]
             ##nagelfar variable name
-            next op "" -name $name
+            next op {} -name $name
         }
     }
 }

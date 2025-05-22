@@ -55,13 +55,13 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             # ::SpiceGenTcl::Ngspice::Analyses::Sp new -variation dec -n 10 -fstart 1 -fstop 1e6 -name sp1 -donoise
             # ```
             # Synopsis: -variation value -n value -fstart value -fstop value ?-name value? ?-donoise?
-            set arguments [argparse -inline {
+            set arguments [argparse -inline -help {Creates object of class 'Sp' that describes s-parameter analysis} {
                 -name=
-                {-variation= -required -enum {dec oct lin}}
-                {-n= -required}
-                {-fstart= -required}
-                {-fstop= -required}
-                {-donoise}
+                {-variation= -required -enum {dec oct lin} -help {Frequency scale}}
+                {-n= -required -help {Number of points}}
+                {-fstart= -required -help {Start frequency}}
+                {-fstop= -required -help {Stop frequency}}
+                {-donoise -help {Activate s-parameter noise}}
             }]
             my NameProcess $arguments [self object]
             lappend params [list variation [dget $arguments variation] -posnocheck]
@@ -96,13 +96,13 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             # ::SpiceGenTcl::Ngspice::Analyses::SensAc new -outvar v(1,out) -variation dec -n 10 -fstart 1 -fstop 1e6 -name dc1
             # ```
             # Synopsis: -outvar value -variation value -n value -fstart value -fstop value ?-name value?
-            set arguments [argparse -inline {
+            set arguments [argparse -inline -help {Creates object of class 'SensAc' that describes SENS ac analysis} {
                 -name=
-                {-outvar= -required}
-                {-variation= -required}
-                {-n= -required}
-                {-fstart= -required}
-                {-fstop= -required}
+                {-outvar= -required -help {Output variable}}
+                {-variation= -required -help {Frequency scale}}
+                {-n= -required -help {Number of points}}
+                {-fstart= -required -help {Start frequency}}
+                {-fstop= -required -help {Stop frequency}}
             }]
             my NameProcess $arguments [self object]
             lappend params [list outvar [dget $arguments outvar] -posnocheck]
@@ -132,9 +132,9 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             # ::SpiceGenTcl::Ngspice::Analyses::SensDc new -outvar v(1,out) -name sensdc1
             # ```
             # Synopsis: -outvar value ?-name value?
-            set arguments [argparse -inline {
+            set arguments [argparse -inline -help {Creates object of class 'SensDc' that describes SENS dc analysis} {
                 -name=
-                {-outvar= -required}
+                {-outvar= -required -help {Output variable}}
             }]
             ##nagelfar variable name
             my NameProcess $arguments [self object]

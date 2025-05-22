@@ -23,24 +23,15 @@ namespace import ::tcl::mathop::*
 
 package provide SpiceGenTcl 0.66
 
-interp alias {} dget {} dict get
-interp alias {} @ {} lindex
-interp alias {} = {} expr
-interp alias {} dexist {} dict exists
-interp alias {} dcreate {} dict create
-interp alias {} dset {} dict set
-interp alias {} dappend {} dict append
-interp alias {} dkeys {} dict keys
-interp alias {} dvalues {} dict values
-
 set dir [file dirname [file normalize [info script]]]
-set libDir "${dir}/lib"
+set libDir [file join $dir lib]
 lappend auto_path $libDir
-set sourceDir "${dir}/src"
+set sourceDir [file join $dir src]
 
 source [file join $libDir argparse argparse.tcl]
 source [file join $libDir extexpr extexpr.tcl]
 source [file join $libDir measure measure.tcl]
+source [file join $sourceDir aliases.tcl]
 source [file join $sourceDir generalClasses.tcl]
 source [file join $sourceDir specElementsClassesCommon.tcl]
 source [file join $sourceDir specAnalysesClassesCommon.tcl]

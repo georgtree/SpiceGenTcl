@@ -33,9 +33,9 @@ SpiceGenTcl::Xyce::BasicDevices - Commands in namespace SpiceGenTcl::Xyce::Basic
 .br
 \fBOBJECT constructor\fP \fIname ?-option value \&.\&.\&.?\fP
 .br
-\fBSubcircuitInstance create OBJNAME\fP \fIname pins subName params\fP
+\fBSubcircuitInstance create OBJNAME\fP \fI?args?\fP
 .br
-\fBSubcircuitInstance new\fP \fIname pins subName params\fP
+\fBSubcircuitInstance new\fP \fI?args?\fP
 .br
 \fBOBJECT constructor\fP \fIsubcktObj name nodes ?-paramName paramValue ?-eq? \&.\&.\&.?\fP
 .br
@@ -195,17 +195,53 @@ Creates object of class Capacitor that describes capacitor\&.
 \fBParameters\fR
 .RS 4n
 .TP
+-age
+Aging coefficient, optional\&.
+.TP
+-beh
+Selects behavioural type of capacitor, optional\&.
+.TP
+-c
+Capacitance value or equation\&.
+.TP
+-d
+Aging coefficient, optional\&.
+.TP
+-ic
+Initial voltage on capacitor, optional\&.
+.TP
+-l
+Length of semiconductor capacitor, optional\&.
+.TP
+-m
+Multiplier value, optional\&.
+.TP
+-model
+Model of the capacitor, optional\&.
+.TP
+-q
+Charge equation\&.
+.TP
+-tc1
+Linear thermal coefficient, optional\&.
+.TP
+-tc2
+Quadratic thermal coefficient, optional\&.
+.TP
+-temp
+Device temperature, optional\&.
+.TP
+-w
+Width of semiconductor capacitor, optional\&.
+.TP
 name
 Name of the device without first-letter designator C\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
 .TP
 nmNode
 Name of node connected to negative pin\&.
 .TP
-args
-Keyword instance parameters\&.
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
@@ -661,15 +697,6 @@ Creates object of class GenSwitch that describes generic switch device\&.
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Name of the device without first-letter designator S\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
-.TP
-nmNode
-Name of node connected to negative pin\&.
-.TP
 -control
 Control equation\&.
 .TP
@@ -678,6 +705,15 @@ Model name\&.
 .TP
 -on/-off
 Initial state of switch\&.
+.TP
+name
+Name of the device without first-letter designator S\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
@@ -780,17 +816,35 @@ Creates object of class Inductor that describes inductor\&.
 \fBParameters\fR
 .RS 4n
 .TP
+-ic
+Initial current through inductor, optional\&.
+.TP
+-l
+Inductance value\&.
+.TP
+-m
+Multiplier value, optional\&.
+.TP
+-model
+Model of the inductor, optional\&.
+.TP
+-tc1
+Linear thermal coefficient, optional\&.
+.TP
+-tc2
+Quadratic thermal coefficient, optional\&.
+.TP
+-temp
+Device temperature, optional\&.
+.TP
 name
 Name of the device without first-letter designator L\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
 .TP
 nmNode
 Name of node connected to negative pin\&.
 .TP
-args
-Keyword instance parameters\&.
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
@@ -1127,17 +1181,44 @@ Creates object of class Resistor that describes resistor\&.
 \fBParameters\fR
 .RS 4n
 .TP
+-beh
+Selects behavioural type of resistor, optional\&.
+.TP
+-l
+Length of semiconductor resistor, optional\&.
+.TP
+-m
+Multiplier value, optional\&.
+.TP
+-model
+Model of the resistor, optional\&.
+.TP
+-r
+Resistance value or equation\&.
+.TP
+-tc1
+Linear thermal coefficient, optional\&.
+.TP
+-tc2
+Quadratic thermal coefficient, optional\&.
+.TP
+-tce
+Exponential thermal coefficient, optional\&.
+.TP
+-temp
+Device temperature, optional\&.
+.TP
+-w
+Width of semiconductor resistor, optional\&.
+.TP
 name
 Name of the device without first-letter designator R\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
 .TP
 nmNode
 Name of node connected to negative pin\&.
 .TP
-args
-Keyword instance parameters\&.
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
@@ -1354,9 +1435,9 @@ Writable: -name
 .RE
 .PP
 Creates object of class SubcircuitInstance that describes subcircuit instance\&.
-.RS 4n\fBSubcircuitInstance create OBJNAME\fP \fIname pins subName params\fP
+.RS 4n\fBSubcircuitInstance create OBJNAME\fP \fI?args?\fP
 .br
-\fBSubcircuitInstance new\fP \fIname pins subName params\fP
+\fBSubcircuitInstance new\fP \fI?args?\fP
 .br
 .RE
 .PP
@@ -1366,14 +1447,14 @@ Creates object of class SubcircuitInstance that describes subcircuit instance\&.
 name
 Name of the device without first-letter designator X\&.
 .TP
+params
+{{paramName paramValue ?-eq?} {paramName paramValue ?-eq?}}
+.TP
 pins
 List of pins {{pinName nodeName} {pinName nodeName} \&.\&.\&.}
 .TP
 subName
 Name of subcircuit definition\&.
-.TP
-params
-{{paramName paramValue ?-eq?} {paramName paramValue ?-eq?}}
 .RE
 .PP
 \fBDescription\fR

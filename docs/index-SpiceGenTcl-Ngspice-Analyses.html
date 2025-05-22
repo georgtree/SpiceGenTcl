@@ -135,13 +135,13 @@
     <i><font color=#76a396># ::SpiceGenTcl::Ngspice::Analyses::SensAc new -outvar v(1,out) -variation dec -n 10 -fstart 1 -fstop 1e6 -name dc1</font></i>
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># Synopsis: -outvar value -variation value -n value -fstart value -fstop value ?-name value?</font></i>
-    <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> {
+    <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> <font color=#b9b96e>-help</font> {Creates object of class 'SensAc' that describes SENS ac analysis} {
         <font color=#b9b96e>-name</font>=
-        {<font color=#b9b96e>-outvar</font>= <font color=#b9b96e>-required</font>}
-        {<font color=#b9b96e>-variation</font>= <font color=#b9b96e>-required</font>}
-        {<font color=#b9b96e>-n</font>= <font color=#b9b96e>-required</font>}
-        {<font color=#b9b96e>-fstart</font>= <font color=#b9b96e>-required</font>}
-        {<font color=#b9b96e>-fstop</font>= <font color=#b9b96e>-required</font>}
+        {<font color=#b9b96e>-outvar</font>= <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {Output variable}}
+        {<font color=#b9b96e>-variation</font>= <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {Frequency scale}}
+        {<font color=#b9b96e>-n</font>= <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {Number of points}}
+        {<font color=#b9b96e>-fstart</font>= <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {Start frequency}}
+        {<font color=#b9b96e>-fstop</font>= <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {Stop frequency}}
     }]
     <b><font color=#fe6efe>my</font></b> NameProcess <font color=#f1b479>$arguments</font> [<b><font color=#fe6efe>self</font></b> object]
     <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> outvar [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> outvar] <font color=#b9b96e>-posnocheck</font>]
@@ -206,9 +206,9 @@
     <i><font color=#76a396># ::SpiceGenTcl::Ngspice::Analyses::SensDc new -outvar v(1,out) -name sensdc1</font></i>
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># Synopsis: -outvar value ?-name value?</font></i>
-    <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> {
+    <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> <font color=#b9b96e>-help</font> {Creates object of class 'SensDc' that describes SENS dc analysis} {
         <font color=#b9b96e>-name</font>=
-        {<font color=#b9b96e>-outvar</font>= <font color=#b9b96e>-required</font>}
+        {<font color=#b9b96e>-outvar</font>= <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {Output variable}}
     }]
     <i><font color=#76a396>##nagelfar variable name</font></i>
     <b><font color=#fe6efe>my</font></b> NameProcess <font color=#f1b479>$arguments</font> [<b><font color=#fe6efe>self</font></b> object]
@@ -277,13 +277,13 @@
     <i><font color=#76a396># ::SpiceGenTcl::Ngspice::Analyses::Sp new -variation dec -n 10 -fstart 1 -fstop 1e6 -name sp1 -donoise</font></i>
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># Synopsis: -variation value -n value -fstart value -fstop value ?-name value? ?-donoise?</font></i>
-    <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> {
+    <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> <font color=#b9b96e>-help</font> {Creates object of class 'Sp' that describes s-parameter analysis} {
         <font color=#b9b96e>-name</font>=
-        {<font color=#b9b96e>-variation</font>= <font color=#b9b96e>-required</font> <font color=#b9b96e>-enum</font> {dec oct lin}}
-        {<font color=#b9b96e>-n</font>= <font color=#b9b96e>-required</font>}
-        {<font color=#b9b96e>-fstart</font>= <font color=#b9b96e>-required</font>}
-        {<font color=#b9b96e>-fstop</font>= <font color=#b9b96e>-required</font>}
-        {<font color=#b9b96e>-donoise</font>}
+        {<font color=#b9b96e>-variation</font>= <font color=#b9b96e>-required</font> <font color=#b9b96e>-enum</font> {dec oct lin} <font color=#b9b96e>-help</font> {Frequency scale}}
+        {<font color=#b9b96e>-n</font>= <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {Number of points}}
+        {<font color=#b9b96e>-fstart</font>= <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {Start frequency}}
+        {<font color=#b9b96e>-fstop</font>= <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {Stop frequency}}
+        {<font color=#b9b96e>-donoise</font> <font color=#b9b96e>-help</font> {Activate s-parameter noise}}
     }]
     <b><font color=#fe6efe>my</font></b> NameProcess <font color=#f1b479>$arguments</font> [<b><font color=#fe6efe>self</font></b> object]
     <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> variation [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> variation] <font color=#b9b96e>-posnocheck</font>]

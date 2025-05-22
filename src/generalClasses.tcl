@@ -83,7 +83,7 @@ namespace eval ::SpiceGenTcl {
             # Declaration of method common for all SPICE elements that generates
             #  representation of element in SPICE netlist. Not implemented in
             #  abstraction class.
-            error "Not implemented"
+            error {Not implemented}
         }
     }
 
@@ -161,13 +161,13 @@ namespace eval ::SpiceGenTcl {
             # Returns: list of parameters formatted for Device/Model constructor
             foreach paramName $paramsNames {
                 if {[llength $paramName]>1} {
-                    lappend paramDefList "-[join $paramName |]="
+                    lappend paramDefList -[join $paramName |]=
                 } else {
                     lappend paramDefList -${paramName}=
                 }
             }
             set paramDefStr [join $paramDefList \n]
-            set arguments [argparse -inline "
+            set arguments [argparse -inline -help {} "
                 $paramDefStr
             "]
             set params {}
@@ -223,13 +223,13 @@ namespace eval ::SpiceGenTcl {
         # name of the node connected to pin
         property nodename -set {
             if {![regexp {^(?![0-9]+[a-zA-Z])[^= %\(\),\[\]<>~]*$} $value]} {
-                return -code error "Node name '${value}' is not a valid name"
+                return -code error "Node name '$value' is not a valid name"
             }
             set nodename [string tolower $value]
         }
         property name -set {
             if {$value eq {}} {
-                return -code error "Pin must have a name, empty string was provided"
+                return -code error {Pin must have a name, empty string was provided}
             } elseif {![regexp {^(?![0-9]+[a-zA-Z])[^= %\(\),\[\]<>~]*$} $value]} {
                 return -code error "Pin name '$value' is not a valid name"
             }
@@ -283,7 +283,7 @@ namespace eval ::SpiceGenTcl {
         superclass SPICEElement
         property name -set {
             if {$value eq {}} {
-                return -code error "Parameter must have a name, empty string was provided"
+                return -code error {Parameter must have a name, empty string was provided}
             } elseif {[regexp {[^A-Za-z0-9_]+} $value]} {
                 return -code error "Parameter name '$value' is not a valid name"
             } elseif {[regexp {^[A-Za-z][A-Za-z0-9_]*} $value]} {
@@ -346,7 +346,7 @@ namespace eval ::SpiceGenTcl {
         superclass Parameter
         property name -set {
             if {$value eq {}} {
-                return -code error "ParameterNode must have a name, empty string was provided"
+                return -code error {ParameterNode must have a name, empty string was provided}
             } elseif {[regexp {[^A-Za-z0-9_()]+} $value]} {
                 return -code error "Parameter name '$value' is not a valid name"
             } elseif {[regexp {^[A-Za-z][A-Za-z0-9_()]*} $value]} {
@@ -402,8 +402,9 @@ namespace eval ::SpiceGenTcl {
         superclass ParameterSwitch
         property name -set {
             if {$value eq {}} {
-                return -code error "ParameterVector must have a name, empty string was provided"
-            } elseif {[regexp {^([a-zA-Z0-9]+|[vi]\([a-zA-Z0-9]+\)|[a-zA-Z0-9]+#[a-zA-Z0-9]+|@[a-zA-Z0-9]+\[[a-zA-Z0-9]+\])$} $value]} {
+                return -code error {ParameterVector must have a name, empty string was provided}
+            } elseif {[regexp -expanded {^([a-zA-Z0-9]+|[vi]\([a-zA-Z0-9]+\)|[a-zA-Z0-9]+\#[a-zA-Z0-9]+|@[a-zA-Z0-9]+
+                                           \[[a-zA-Z0-9]+\])$} $value]} {
                 set name [string tolower $value]
             } else {
                 return -code error "Parameter name '$value' is not a valid name"
@@ -821,7 +822,7 @@ namespace eval ::SpiceGenTcl {
         mixin Utility
         property name -set {
             if {$value eq {}} {
-                return -code error "Model must have a name, empty string was provided"
+                return -code error {Model must have a name, empty string was provided}
             } elseif {[regexp {[^A-Za-z0-9_]+} $value]} {
                 return -code error "Model name '$value' is not a valid name"
             } else {
@@ -830,7 +831,7 @@ namespace eval ::SpiceGenTcl {
         }
         property type -set {
             if {$value eq {}} {
-                return -code error "Model must have a type, empty string was provided"
+                return -code error {Model must have a type, empty string was provided}
             } elseif {[regexp {[^A-Za-z0-9]+} $value]} {
                 return -code error "Model type '$value' is not a valid type"
             } else {
@@ -935,8 +936,8 @@ namespace eval ::SpiceGenTcl {
         method genSPICEString {} {
             # Creates comment string for SPICE netlist.
             # Returns: SPICE netlist's string
-            set splitted [split [my configure -value] "\n"]
-            set prepared [join [lmap line $splitted {set result "*$line"}] \n]
+            set splitted [split [my configure -value] \n]
+            set prepared [join [lmap line $splitted {set result *$line}] \n]
             return $prepared
         }
     }
@@ -1330,7 +1331,7 @@ namespace eval ::SpiceGenTcl {
                 if {$net ne {}} {
                     lappend netsList $net
                     if {[my duplListCheck $netsList]} {
-                        error "Net with name '${net}' is already attached to the object '[my configure -name]'"
+                        error "Net with name '$net' is already attached to the object '[my configure -name]'"
                     }
                 } else {
                     error {Net name couldn't be empty}
@@ -1344,7 +1345,7 @@ namespace eval ::SpiceGenTcl {
             if {[set index [lsearch -exact $netsList $net]] !=-1} {
                 set netsList [lremove $netsList $index]
             } else {
-                error "Global statement '${name}' doesn't have attached net with name '${net}'"
+                error "Global statement '$name' doesn't have attached net with name '$net'"
             }
             set Nets $netsList
             return
@@ -1561,7 +1562,7 @@ namespace eval ::SpiceGenTcl {
                 set elemName [string tolower $arg]
                 if {[catch {dget $Elements $elemName}]} {
                     return -code error "Element with name '$elemName' was not found in circuit's '[my configure -name]'\
-                        list of elements"
+                            list of elements"
                 } else {
                     if {[info object class [dget $Elements $elemName] {::SpiceGenTcl::Analysis}]} {
                         unset ContainAnalysis
@@ -1762,7 +1763,7 @@ namespace eval ::SpiceGenTcl {
             if {[info exists Params]} {
                 return ".[my configure -type] [join [lmap param [dict values $Params] {$param genSPICEString}]]"
             } else {
-                return ".[my configure -type]"
+                return .[my configure -type]
             }
         }
     }
@@ -1780,19 +1781,19 @@ namespace eval ::SpiceGenTcl {
         variable data
         method run {} {
             # Runs simulation.
-            error "Not implemented"
+            error {Not implemented}
         }
         method readLog {} {
             # Reads log file of completed simulations.
-            error "Not implemented"
+            error {Not implemented}
         }
         method getLog {} {
             # Returns log file of completed simulations.
-            error "Not implemented"
+            error {Not implemented}
         }
         method readData {} {
             # Reads raw data file of last simulation.
-            error "Not implemented"
+            error {Not implemented}
         }
     }
 
@@ -2024,7 +2025,7 @@ namespace eval ::SpiceGenTcl {
                 incr binaryStart $encSize
                 if {$ch eq "\n"} {
                     if {$encode eq {utf-8}} {
-                        set line [string trimright $line "\r"]
+                        set line [string trimright $line \r]
                     }
                     lappend header $line
                     if {$line in {Binary: Values:}} {
@@ -2137,7 +2138,7 @@ namespace eval ::SpiceGenTcl {
                 }
                 if {$calcBlockSize!=$BlockSize} {
                     close $file
-                    error "Error in calculating the block size. Expected '${BlockSize}' bytes, but found\
+                    error "Error in calculating the block size. Expected '$BlockSize' bytes, but found\
                             '$calcBlockSize' bytes"
                 }
                  for {set i 0} {$i<$npoints} {incr i} {
@@ -2172,13 +2173,13 @@ namespace eval ::SpiceGenTcl {
                                 error {Error reading file}
                             }
                             if {$numType eq {complex}} {
-                                set value [split [@ $lineList 1] ","]
+                                set value [split [@ $lineList 1] ,]
                             } else {
                                 set value [@ $lineList 1]
                             }
                         } else {
                             if {$numType eq {complex}} {
-                                set value [split [@ $lineList 1] ","]
+                                set value [split [@ $lineList 1] ,]
                             } else {
                                 set value [@ $lineList 1]
                             }
@@ -2200,7 +2201,7 @@ namespace eval ::SpiceGenTcl {
                     break
                 }
             }
-            if {$traceFoundFlag==false} {
+            if {!$traceFoundFlag} {
                 return -code error "Trace with name '$traceName' was not found in raw file '[my configure -path]' list\
                         of traces"
             }
@@ -2213,13 +2214,13 @@ namespace eval ::SpiceGenTcl {
         method getVoltagesNames {} {
             # Returns list that contains names of all voltage variables
             return [lmap trace [dvalues [my configure -traces]]\
-                            {expr {[string match -nocase {*voltage*} [$trace configure -type]] ?\
+                            {expr {[string match -nocase *voltage* [$trace configure -type]] ?\
                                            [$trace configure -name] : [continue]}}]
         }
         method getCurrentsNames {} {
             # Returns list that contains names of all current variables
             return [lmap trace [dvalues [my configure -traces]]\
-                            {expr {[string match -nocase {*current*} [$trace configure -type]] ?\
+                            {expr {[string match -nocase *current* [$trace configure -type]] ?\
                                            [$trace configure -name] : [continue]}}]
         }
         method getTracesStr {} {
@@ -2264,8 +2265,8 @@ namespace eval ::SpiceGenTcl {
                     lappend tracesList [lmap traceValues [dict values $tracesDict] {@ $traceValues $i}]
                 }
             } else {
-                return -code error "Arguments '-all' or '-traces traceName1 traceName2 ...' must be provided to\
-                        'getTracesCsv' method"
+                return -code error {Arguments '-all' or '-traces traceName1 traceName2 ...' must be provided to\
+                                            'getTracesCsv' method}
             }
             return [::csv::joinlist $tracesList [dget $arguments sep]]
         }
@@ -2333,7 +2334,7 @@ namespace eval ::SpiceGenTcl {
             }}
         }
         method readFile {} {
-            error "Not implemented"
+            error {Not implemented}
         }
         method readAndParse {args} {
             # Calls methods `readFile` and `buildTopNetlist` in a sequence
@@ -2457,8 +2458,8 @@ namespace eval ::SpiceGenTcl {
                                                 @pins@ [list $pinList]\
                                                 @params@ [list $params]\
                                                 @subname@ $subName\
-                                                @definitions@ [join $definitionsLoc "\n"]\
-                                                @elements@ [join $elements "\n"]]\
+                                                @definitions@ [join $definitionsLoc \n]\
+                                                @elements@ [join $elements \n]]\
                                     $SubcircuitTemplate]
             ##nagelfar ignore
             $SubcktsTree append $subcktPath definition $definition
@@ -2609,19 +2610,19 @@ namespace eval ::SpiceGenTcl {
                         set nameValue [list $name $value -eq]
                     }
                 } else {
-                    return -code error "Parameter '${elem}' parsing failed"
+                    return -code error "Parameter '$elem' parsing failed"
                 }
                 if {$format eq {arg}} {
-                    if {$name ni [lmap nameExc $exclude {subst "$nameExc"}]} {
+                    if {$name ni [lmap nameExc $exclude {subst $nameExc}]} {
                         if {$value eq {}} {
-                            return -code error "Parameter '${elem}' parsing failed: value is empty"
+                            return -code error "Parameter '$elem' parsing failed: value is empty"
                         }
                         lappend results {*}$nameValue
                     }
                 } elseif {$format eq {list}} {
-                    if {$name ni [lmap nameExc $exclude {subst "$nameExc"}]} {
+                    if {$name ni [lmap nameExc $exclude {subst $nameExc}]} {
                         if {$value eq {}} {
-                            return -code error "Parameter '${elem}' parsing failed: value is empty"
+                            return -code error "Parameter '$elem' parsing failed: value is empty"
                         }
                         lappend results $nameValue
                     }
@@ -2664,19 +2665,19 @@ namespace eval ::SpiceGenTcl {
                     }
                     set switch true
                 } else {
-                    return -code error "Parameter '${elem}' parsing failed"
+                    return -code error "Parameter '$elem' parsing failed"
                 }
                 if {$format eq {arg}} {
-                    if {$name ni [lmap nameExc $exclude {subst "-$nameExc"}]} {
+                    if {$name ni [lmap nameExc $exclude {subst -$nameExc}]} {
                         if {$value eq {} && !$switch} {
-                            return -code error "Parameter '${elem}' parsing failed: value is empty"
+                            return -code error "Parameter '$elem' parsing failed: value is empty"
                         }
                         lappend results {*}$nameValue
                     }
                 } else {
-                    if {$name ni [lmap nameExc $exclude {subst "$nameExc"}]} {
+                    if {$name ni [lmap nameExc $exclude {subst $nameExc}]} {
                         if {$value eq {} && !$switch} {
-                            return -code error "Parameter '${elem}' parsing failed: value is empty"
+                            return -code error "Parameter '$elem' parsing failed: value is empty"
                         }
                         lappend results $nameValue
                     }
@@ -2726,7 +2727,7 @@ namespace eval ::SpiceGenTcl {
             if {[my CheckBraced $string]} {
                 return [@ [regexp -inline {^\{([^={}]+)\}$} $string] 1]
             } else {
-                return -code error "String '${string}' isn't of form {string}, string must not contain '{' and '}'\
+                return -code error "String '$string' isn't of form {string}, string must not contain '{' and '}'\
                         symbols"
             }
         }
@@ -2743,7 +2744,7 @@ namespace eval ::SpiceGenTcl {
             if {[my CheckQuoted $string]} {
                 return [@ [regexp -inline {^\'([^='']+)\'$} $string] 1]
             } else {
-                return -code error "String '${string}' isn't of form 'string', string must not contain ''' and '''\
+                return -code error "String '$string' isn't of form 'string', string must not contain ''' and '''\
                         symbols"
             }
         }
@@ -2762,7 +2763,7 @@ namespace eval ::SpiceGenTcl {
                 regexp {^([a-zA-Z_][a-zA-Z0-9_()]*)=\{([^={}]+)\}$} $string match name value
                 return [list $name $value]
             } else {
-                return -code error "String '${string}' isn't of form 'name={value}', value must not contain '{' or '}'\
+                return -code error "String '$string' isn't of form 'name={value}', value must not contain '{' or '}'\
                         symbols, name must contain only alphanumeric characters and '_' symbol"
             }
         }
@@ -2780,7 +2781,7 @@ namespace eval ::SpiceGenTcl {
                 regexp {^([a-zA-Z_][a-zA-Z0-9_()]*)=([^={}]+)$} $string match name value
                 return [list $name $value]
             } else {
-                return -code error "String '${string}' isn't of form 'name=value', value must not contain '{' or '}'\
+                return -code error "String '$string' isn't of form 'name=value', value must not contain '{' or '}'\
                         symbols, name must contain only alphanumeric characters and '_' symbol"
             }
         }

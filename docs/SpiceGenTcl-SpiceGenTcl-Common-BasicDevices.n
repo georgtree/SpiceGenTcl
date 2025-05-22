@@ -13,9 +13,11 @@ SpiceGenTcl::Common::BasicDevices - Commands in namespace SpiceGenTcl::Common::B
 .br
 \fBOBJECT constructor\fP \fIname npNode nmNode -r value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value?\fP
 .br
-\fBSubcircuitInstance create OBJNAME\fP \fIname pins subName params\fP
+\fBOBJECT destroy\fP
 .br
-\fBSubcircuitInstance new\fP \fIname pins subName params\fP
+\fBSubcircuitInstance create OBJNAME\fP \fI?args?\fP
+.br
+\fBSubcircuitInstance new\fP \fI?args?\fP
 .br
 \fBOBJECT constructor\fP \fIsubcktObj name nodes ?-paramName paramValue ?-eq? \&.\&.\&.?\fP
 .br
@@ -169,15 +171,6 @@ Creates object of class Capacitor that describes capacitor\&.
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Name of the device without first-letter designator C\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
-.TP
-nmNode
-Name of node connected to negative pin\&.
-.TP
 -c
 Capacitance value\&.
 .TP
@@ -195,6 +188,15 @@ Quadratic thermal coefficient, optional\&.
 .TP
 -temp
 Device temperature, optional, optional\&.
+.TP
+name
+Name of the device without first-letter designator C\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
@@ -297,15 +299,6 @@ Creates object of class CSwitch that describes current controlled switch device\
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Name of the device without first-letter designator W\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
-.TP
-nmNode
-Name of node connected to negative pin\&.
-.TP
 -icntrl
 Source of control current\&.
 .TP
@@ -314,6 +307,15 @@ Model name\&.
 .TP
 -on/-off
 Initial state of switch\&.
+.TP
+name
+Name of the device without first-letter designator W\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
@@ -414,15 +416,6 @@ Creates object of class Inductor that describes inductor\&.
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Name of the device without first-letter designator L\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
-.TP
-nmNode
-Name of node connected to negative pin\&.
-.TP
 -l
 Inductance value\&.
 .TP
@@ -437,6 +430,15 @@ Quadratic thermal coefficient, optional\&.
 .TP
 -temp
 Device temperature, optional, optional\&.
+.TP
+name
+Name of the device without first-letter designator L\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
@@ -593,6 +595,9 @@ Writable: -name
 constructor
 Constructor for the class\&.
 .TP
+destructor
+Destructor for the class\&.
+.TP
 addParam
 See \fI::SpiceGenTcl::Device\&.addParam\fP
 .TP
@@ -665,15 +670,6 @@ Creates object of class Resistor that describes resistor\&.
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Name of the device without first-letter designator R\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
-.TP
-nmNode
-Name of node connected to negative pin\&.
-.TP
 -m
 Multiplier value, optional\&.
 .TP
@@ -687,7 +683,16 @@ Linear thermal coefficient, optional\&.
 Quadratic thermal coefficient, optional\&.
 .TP
 -temp
-Device temperature, optional, optional\&.
+Device temperature, optional\&.
+.TP
+name
+Name of the device without first-letter designator R\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
@@ -706,6 +711,13 @@ Example of class initialization:
 .nf
 ::SpiceGenTcl::Common::BasicDevices::Resistor new 1 netp netm -r 1e3 -tc1 1 -temp {temp_amb -eq}
 .fi
+.RE
+.PP
+.RS -4n
+\fBdestructor\fR (::SpiceGenTcl::Common::BasicDevices::Resistor)
+.RE
+.RS 4n\fBOBJECT destroy\fP
+.br
 .RE
 .PP
 .RS -4n
@@ -783,9 +795,9 @@ Writable: -name
 .RE
 .PP
 Creates object of class SubcircuitInstance that describes subcircuit instance\&.
-.RS 4n\fBSubcircuitInstance create OBJNAME\fP \fIname pins subName params\fP
+.RS 4n\fBSubcircuitInstance create OBJNAME\fP \fI?args?\fP
 .br
-\fBSubcircuitInstance new\fP \fIname pins subName params\fP
+\fBSubcircuitInstance new\fP \fI?args?\fP
 .br
 .RE
 .PP
@@ -795,14 +807,14 @@ Creates object of class SubcircuitInstance that describes subcircuit instance\&.
 name
 Name of the device without first-letter designator X\&.
 .TP
+params
+{{paramName paramValue ?-eq?} {paramName paramValue ?-eq?}}
+.TP
 pins
 List of pins {{pinName nodeName} {pinName nodeName} \&.\&.\&.}
 .TP
 subName
 Name of subcircuit definition\&.
-.TP
-params
-{{paramName paramValue ?-eq?} {paramName paramValue ?-eq?}}
 .RE
 .PP
 \fBDescription\fR
@@ -1078,26 +1090,26 @@ Creates object of class VSwitch that describes voltage controlled switch device\
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Name of the device without first-letter designator S\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
-.TP
-nmNode
-Name of node connected to negative pin\&.
-.TP
-ncpNode
-Name of node connected to positive controlling pin\&.
-.TP
-ncmNode
-Name of node connected to negative controlling pin\&.
-.TP
 -model
 Model name\&.
 .TP
 -on/-off
 Initial state of switch\&.
+.TP
+name
+Name of the device without first-letter designator S\&.
+.TP
+ncmNode
+Name of node connected to negative controlling pin\&.
+.TP
+ncpNode
+Name of node connected to positive controlling pin\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR

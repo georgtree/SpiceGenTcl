@@ -5,9 +5,9 @@
 .SH NAME
 SpiceGenTcl::Ngspice::Sources - Commands in namespace SpiceGenTcl::Ngspice::Sources
 .SH SYNOPSIS
-\fBam create OBJNAME\fP \fIname type npNode nmNode ?args?\fP
+\fBam create OBJNAME\fP \fItype ?args?\fP
 .br
-\fBam new\fP \fIname type npNode nmNode ?args?\fP
+\fBam new\fP \fItype ?args?\fP
 .br
 \fBOBJECT constructor\fP \fIname npNode nmNode -i value ?-tc1 value? ?-tc2 value? ?-noisy 0|1? ?-temp value|-dtemp value?\fP
 .br
@@ -19,13 +19,13 @@ SpiceGenTcl::Ngspice::Sources - Commands in namespace SpiceGenTcl::Ngspice::Sour
 .br
 \fBOBJECT constructor\fP \fIname npNode nmNode -i0|ioff value -ia|iamp value -fc|fcar value -mdi value -fs|fsig value ?-phasec value ?-phases value??\fP
 .br
-\fBpulse create OBJNAME\fP \fIname type npNode nmNode ?args?\fP
+\fBpulse create OBJNAME\fP \fItype ?args?\fP
 .br
-\fBpulse new\fP \fIname type npNode nmNode ?args?\fP
+\fBpulse new\fP \fItype ?args?\fP
 .br
-\fBsffm create OBJNAME\fP \fIname type npNode nmNode ?args?\fP
+\fBsffm create OBJNAME\fP \fItype ?args?\fP
 .br
-\fBsffm new\fP \fIname type npNode nmNode ?args?\fP
+\fBsffm new\fP \fItype ?args?\fP
 .br
 \fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -mf value -fc value ?-td value ?-phases value??\fP
 .br
@@ -115,25 +115,16 @@ Writable: -name
 .RS -4n
 \fBconstructor\fR (::SpiceGenTcl::Ngspice::Sources::am)
 .RE
-.RS 4n\fBam create OBJNAME\fP \fIname type npNode nmNode ?args?\fP
+.RS 4n\fBam create OBJNAME\fP \fItype ?args?\fP
 .br
-\fBam new\fP \fIname type npNode nmNode ?args?\fP
+\fBam new\fP \fItype ?args?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Not documented\&.
-.TP
 type
-Not documented\&.
-.TP
-npNode
-Not documented\&.
-.TP
-nmNode
 Not documented\&.
 .RE
 .PP
@@ -284,20 +275,35 @@ Creates object of class BehaviouralSource that describes behavioural source\&.
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Name of the device without first-letter designator B\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
-.TP
-nmNode
-Name of node connected to negative pin\&.
+-dtemp
+Temperature offset, optional\&.
 .TP
 -i
 Current expression\&.
 .TP
+-noisy
+Selects noise behaviour\&.
+.TP
+-tc1
+Linear thermal coefficient, optional\&.
+.TP
+-tc2
+Quadratic thermal coefficient, optional\&.
+.TP
+-temp
+Device temperature, optional\&.
+.TP
 -v
 Voltage expression\&.
+.TP
+name
+Name of the device without first-letter designator B\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
@@ -843,15 +849,6 @@ Creates object of class Iam that describes single-frequency FM current source\&.
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Name of the device without first-letter designator I\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
-.TP
-nmNode
-Name of node connected to negative pin\&.
-.TP
 -fc
 Carrier frequency\&.
 .TP
@@ -869,6 +866,15 @@ Phase, optional, require -td\&.
 .TP
 -td
 Signal delay, optional\&.
+.TP
+name
+Name of the device without first-letter designator I\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
@@ -1091,15 +1097,6 @@ Creates object of class Ipulse that describes pulse current source\&.
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Name of the device without first-letter designator I\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
-.TP
-nmNode
-Name of node connected to negative pin\&.
-.TP
 -ac
 AC value, optional\&.
 .TP
@@ -1132,6 +1129,15 @@ Fall time\&.
 .TP
 -tr
 Rise time\&.
+.TP
+name
+Name of the device without first-letter designator I\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
@@ -1291,15 +1297,6 @@ Creates object of class Isffm that describes single-frequency FM current source\
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Name of the device without first-letter designator I\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
-.TP
-nmNode
-Name of node connected to negative pin\&.
-.TP
 -ac
 AC value, optional\&.
 .TP
@@ -1329,6 +1326,15 @@ Carrier phase, optional\&.
 .TP
 -phases
 Signal phase, optional, require -phasec\&.
+.TP
+name
+Name of the device without first-letter designator I\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
@@ -1487,25 +1493,16 @@ Writable: -name
 .RS -4n
 \fBconstructor\fR (::SpiceGenTcl::Ngspice::Sources::pulse)
 .RE
-.RS 4n\fBpulse create OBJNAME\fP \fIname type npNode nmNode ?args?\fP
+.RS 4n\fBpulse create OBJNAME\fP \fItype ?args?\fP
 .br
-\fBpulse new\fP \fIname type npNode nmNode ?args?\fP
+\fBpulse new\fP \fItype ?args?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Not documented\&.
-.TP
 type
-Not documented\&.
-.TP
-npNode
-Not documented\&.
-.TP
-nmNode
 Not documented\&.
 .RE
 .PP
@@ -1586,25 +1583,16 @@ Writable: -name
 .RS -4n
 \fBconstructor\fR (::SpiceGenTcl::Ngspice::Sources::sffm)
 .RE
-.RS 4n\fBsffm create OBJNAME\fP \fIname type npNode nmNode ?args?\fP
+.RS 4n\fBsffm create OBJNAME\fP \fItype ?args?\fP
 .br
-\fBsffm new\fP \fIname type npNode nmNode ?args?\fP
+\fBsffm new\fP \fItype ?args?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Not documented\&.
-.TP
 type
-Not documented\&.
-.TP
-npNode
-Not documented\&.
-.TP
-nmNode
 Not documented\&.
 .RE
 .PP
@@ -1741,22 +1729,13 @@ Writable: -name
 \fBconstructor\fR (::SpiceGenTcl::Ngspice::Sources::Vam)
 .RE
 .PP
-Creates object of class Vam that describes single-frequency FM voltage source\&.
+Creates object of class Vam that describes single-frequency AM voltage source\&.
 .RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -mf value -fc value ?-td value ?-phases value??\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
-.TP
-name
-Name of the device without first-letter designator V\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
-.TP
-nmNode
-Name of node connected to negative pin\&.
 .TP
 -ac
 AC value, optional\&.
@@ -1784,6 +1763,15 @@ Initial value\&.
 .TP
 -va
 Pulsed value\&.
+.TP
+name
+Name of the device without first-letter designator V\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
@@ -2140,15 +2128,6 @@ Creates object of class Vport that describes simple constant voltage source\&.
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Name of the device without first-letter designator V\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
-.TP
-nmNode
-Name of node connected to negative pin\&.
-.TP
 -ac
 AC voltage value\&.
 .TP
@@ -2160,6 +2139,15 @@ Number of port\&.
 .TP
 -z0
 Internal source impedance\&.
+.TP
+name
+Name of the device without first-letter designator V\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
@@ -2256,15 +2244,6 @@ Creates object of class Vpulse that describes pulse voltage source\&.
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Name of the device without first-letter designator V\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
-.TP
-nmNode
-Name of node connected to negative pin\&.
-.TP
 -ac
 AC value, optional\&.
 .TP
@@ -2297,6 +2276,15 @@ Fall time\&.
 .TP
 -tr
 Rise time\&.
+.TP
+name
+Name of the device without first-letter designator V\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
@@ -2456,15 +2444,6 @@ Creates object of class Vsffm that describes single-frequency FM voltage source\
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Name of the device without first-letter designator V\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
-.TP
-nmNode
-Name of node connected to negative pin\&.
-.TP
 -ac
 AC value, optional\&.
 .TP
@@ -2494,6 +2473,15 @@ Initial value, aliases: -voff, -i0, -ioff\&.
 .TP
 -va
 Pulsed value, aliases: -vamp, -ia, -iamp\&.
+.TP
+name
+Name of the device without first-letter designator V\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR

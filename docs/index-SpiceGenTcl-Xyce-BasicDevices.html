@@ -69,10 +69,22 @@
 <div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -c value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value? ?-age value? ?-d value?</span><br><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -beh -c value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value? ?-age value? ?-d value?</span><br><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -beh -q value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value? ?-age value? ?-d value?</span><br><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -model value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value? ?-age value? ?-d value? ?-l value? ?-w value?</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
+<tr><td><code><font color=#b9b96e>-age</font></code></td><td>Aging coefficient, optional.</td></tr>
+<tr><td><code><font color=#b9b96e>-beh</font></code></td><td>Selects behavioural type of capacitor, optional.</td></tr>
+<tr><td><code><font color=#b9b96e>-c</font></code></td><td>Capacitance value or equation.</td></tr>
+<tr><td><code><font color=#b9b96e>-d</font></code></td><td>Aging coefficient, optional.</td></tr>
+<tr><td><code><font color=#b9b96e>-ic</font></code></td><td>Initial voltage on capacitor, optional.</td></tr>
+<tr><td><code><font color=#b9b96e>-l</font></code></td><td>Length of semiconductor capacitor, optional.</td></tr>
+<tr><td><code><font color=#b9b96e>-m</font></code></td><td>Multiplier value, optional.</td></tr>
+<tr><td><code><font color=#b9b96e>-model</font></code></td><td>Model of the capacitor, optional.</td></tr>
+<tr><td><code><font color=#b9b96e>-q</font></code></td><td>Charge equation.</td></tr>
+<tr><td><code><font color=#b9b96e>-tc1</font></code></td><td>Linear thermal coefficient, optional.</td></tr>
+<tr><td><code><font color=#b9b96e>-tc2</font></code></td><td>Quadratic thermal coefficient, optional.</td></tr>
+<tr><td><code><font color=#b9b96e>-temp</font></code></td><td>Device temperature, optional.</td></tr>
+<tr><td><code><font color=#b9b96e>-w</font></code></td><td>Width of semiconductor capacitor, optional.</td></tr>
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator C.</td></tr>
-<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
 <tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>args</code></td><td>Keyword instance parameters.</td></tr>
+<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5><p class='ruff'>Capacitor type could be specified with additional switches: <code><font color=#b9b96e>-beh</font></code> if we want to model circuit's variable dependent capacitor, or <code><font color=#b9b96e>-model</font> modelName</code> if we want to simulate capacitor with model card. Simple capacitor:</p>
 
@@ -115,13 +127,25 @@
 </pre>
 
 </figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Xyce_BasicDevices_Capacitor_constructor' href="javascript:toggleSource('SpiceGenTcl_Xyce_BasicDevices_Capacitor_constructor')">Show source</a></p>
-<div id='SpiceGenTcl_Xyce_BasicDevices_Capacitor_constructor' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> constructor {name npNode nmNode args} {
+<div id='SpiceGenTcl_Xyce_BasicDevices_Capacitor_constructor' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> constructor {args} {
 
     <i><font color=#76a396># Creates object of class `Capacitor` that describes capacitor.</font></i>
     <i><font color=#76a396>#  name - name of the device without first-letter designator C</font></i>
     <i><font color=#76a396>#  npNode - name of node connected to positive pin</font></i>
     <i><font color=#76a396>#  nmNode - name of node connected to negative pin</font></i>
-    <i><font color=#76a396>#  args - keyword instance parameters</font></i>
+    <i><font color=#76a396>#  -c - capacitance value or equation</font></i>
+    <i><font color=#76a396>#  -q - charge equation</font></i>
+    <i><font color=#76a396>#  -beh - selects behavioural type of capacitor, optional</font></i>
+    <i><font color=#76a396>#  -model - model of the capacitor, optional</font></i>
+    <i><font color=#76a396>#  -m - multiplier value, optional</font></i>
+    <i><font color=#76a396>#  -temp - device temperature, optional</font></i>
+    <i><font color=#76a396>#  -tc1 - linear thermal coefficient, optional</font></i>
+    <i><font color=#76a396>#  -tc2 - quadratic thermal coefficient, optional</font></i>
+    <i><font color=#76a396>#  -ic - initial voltage on capacitor, optional</font></i>
+    <i><font color=#76a396>#  -age - aging coefficient, optional</font></i>
+    <i><font color=#76a396>#  -d - aging coefficient, optional</font></i>
+    <i><font color=#76a396>#  -l - length of semiconductor capacitor, optional</font></i>
+    <i><font color=#76a396>#  -w - width of semiconductor capacitor, optional</font></i>
     <i><font color=#76a396># Capacitor type could be specified with additional switches: `-beh` if we</font></i>
     <i><font color=#76a396># want to model circuit's variable dependent capacitor, or `-model modelName`</font></i>
     <i><font color=#76a396># if we want to simulate capacitor with model card.</font></i>
@@ -165,20 +189,23 @@
     <i><font color=#76a396>#   ?-age value? ?-d value?</font></i>
     <i><font color=#76a396># Synopsis: name npNode nmNode -model value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value?</font></i>
     <i><font color=#76a396>#   ?-age value? ?-d value? ?-l value? ?-w value?</font></i>
-    <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> {
-        {<font color=#b9b96e>-c</font>= <font color=#b9b96e>-forbid</font> {q}}
-        {<font color=#b9b96e>-q</font>= <font color=#b9b96e>-require</font> {beh} <font color=#b9b96e>-forbid</font> {c model}}
-        {<font color=#b9b96e>-beh</font> <font color=#b9b96e>-forbid</font> {model}}
-        {<font color=#b9b96e>-model</font>= <font color=#b9b96e>-forbid</font> {beh}}
-        <font color=#b9b96e>-m</font>=
-        <font color=#b9b96e>-temp</font>=
-        <font color=#b9b96e>-tc1</font>=
-        <font color=#b9b96e>-tc2</font>=
-        <font color=#b9b96e>-ic</font>=
-        <font color=#b9b96e>-age</font>=
-        <font color=#b9b96e>-d</font>=
-        {<font color=#b9b96e>-l</font>= <font color=#b9b96e>-require</font> {model}}
-        {<font color=#b9b96e>-w</font>= <font color=#b9b96e>-require</font> {model}}
+    <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> <font color=#b9b96e>-pfirst</font> <font color=#b9b96e>-help</font> {Creates object of class 'Capacitor' that describes capacitor} {
+        {<font color=#b9b96e>-c</font>= <font color=#b9b96e>-forbid</font> q <font color=#b9b96e>-help</font> {Capacitance value or equation}}
+        {<font color=#b9b96e>-q</font>= <font color=#b9b96e>-require</font> beh <font color=#b9b96e>-forbid</font> {c model} <font color=#b9b96e>-help</font> {Charge equation}}
+        {<font color=#b9b96e>-beh</font> <font color=#b9b96e>-forbid</font> model <font color=#b9b96e>-help</font> {Selects behavioural type of capacitor}}
+        {<font color=#b9b96e>-model</font>= <font color=#b9b96e>-forbid</font> beh <font color=#b9b96e>-help</font> {<b><font color=#ffa500>Model</font></b> of the capacitor}}
+        {<font color=#b9b96e>-m</font>= <font color=#b9b96e>-help</font> {Multiplier value}}
+        {<font color=#b9b96e>-temp</font>= <font color=#b9b96e>-help</font> {<b><font color=#ffa500>Device</font></b> temperature}}
+        {<font color=#b9b96e>-tc1</font>= <font color=#b9b96e>-help</font> {Linear thermal coefficient}}
+        {<font color=#b9b96e>-tc2</font>= <font color=#b9b96e>-help</font> {Quadratic thermal coefficient}}
+        {<font color=#b9b96e>-ic</font>= <font color=#b9b96e>-help</font> {Initial voltage on capacitor}}
+        {<font color=#b9b96e>-age</font>= <font color=#b9b96e>-help</font> {Aging coefficient}}
+        {<font color=#b9b96e>-d</font>= <font color=#b9b96e>-help</font> {Aging coefficient}}
+        {<font color=#b9b96e>-l</font>= <font color=#b9b96e>-require</font> model <font color=#b9b96e>-help</font> {Length of semiconductor capacitor}}
+        {<font color=#b9b96e>-w</font>= <font color=#b9b96e>-require</font> model <font color=#b9b96e>-help</font> {Width of semiconductor capacitor}}
+        {name <font color=#b9b96e>-help</font> {Name of the device without first-letter designator}}
+        {npNode <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
+        {nmNode <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
     }]
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> model]} {
         <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> model [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> model] <font color=#b9b96e>-posnocheck</font>]
@@ -193,18 +220,18 @@
             <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> c <font color=#f1b479>$cVal</font> <font color=#b9b96e>-pos</font>]
         }
     } <b><font color=#ffa500>elseif</font></b> {![<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> model] && ![<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> q]} {
-        <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Capacitor value must be specified with '-c value'&quot;</font>
+        <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error {<b><font color=#ffa500>Capacitor</font></b> value must be specified with '-c value'}
     }
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> q]} {
         <b><font color=#ffa500>set</font></b> qVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> q]
         <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> q <font color=#f1b479>$qVal</font> <font color=#b9b96e>-eq</font>]
     }
     <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$arguments</font> {
-        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {c q beh model}} {
+        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {c q beh model name npNode nmNode}} {
             <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$paramName</font> {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$value</font>]
         }
     }
-    <b><font color=#ffa500>next</font></b> c<font color=#f1b479>$name</font> [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np <font color=#f1b479>$npNode</font>] [<b><font color=#ffa500>list</font></b> nm <font color=#f1b479>$nmNode</font>]] <font color=#f1b479>$params</font>
+    <b><font color=#ffa500>next</font></b> c[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> npNode]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nmNode]]] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Xyce::BasicDevices::CModel'>CModel</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices" title="::SpiceGenTcl::Xyce::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -378,12 +405,12 @@
 <div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -model value -control value ?-on|off?</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
-<tr><td><code>name</code></td><td>Name of the device without first-letter designator S.</td></tr>
-<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
-<tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
 <tr><td><code><font color=#b9b96e>-control</font></code></td><td>Control equation.</td></tr>
 <tr><td><code><font color=#b9b96e>-model</font></code></td><td>Model name.</td></tr>
 <tr><td><code><font color=#b9b96e>-on</font>/-off</code></td><td>Initial state of switch.</td></tr>
+<tr><td><code>name</code></td><td>Name of the device without first-letter designator S.</td></tr>
+<tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
+<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>S&lt;name&gt; &lt;(+) switch node&gt; &lt;(-) switch node&gt; &lt;model name&gt; [ON] [OFF] &lt;control = =ession&gt;
@@ -395,7 +422,7 @@
 </pre>
 
 </figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Xyce_BasicDevices_GenSwitch_constructor' href="javascript:toggleSource('SpiceGenTcl_Xyce_BasicDevices_GenSwitch_constructor')">Show source</a></p>
-<div id='SpiceGenTcl_Xyce_BasicDevices_GenSwitch_constructor' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> constructor {name npNode nmNode args} {
+<div id='SpiceGenTcl_Xyce_BasicDevices_GenSwitch_constructor' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> constructor {args} {
 
     <i><font color=#76a396># Creates object of class `GenSwitch` that describes generic switch device.</font></i>
     <i><font color=#76a396>#  name - name of the device without first-letter designator S</font></i>
@@ -412,11 +439,14 @@
     <i><font color=#76a396># ::SpiceGenTcl::Xyce::BasicDevices::GenSwitch new 1 net1 0 -model sw1 -control {I(VMON)}</font></i>
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># Synopsis: name npNode nmNode -model value -control value ?-on|off?</font></i>
-    <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> {
-        {<font color=#b9b96e>-model</font>= <font color=#b9b96e>-required</font>}
-        {<font color=#b9b96e>-control</font>= <font color=#b9b96e>-required</font>}
-        {<font color=#b9b96e>-on</font> <font color=#b9b96e>-forbid</font> {off}}
-        {<font color=#b9b96e>-off</font> <font color=#b9b96e>-forbid</font> {on}}
+    <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> <font color=#b9b96e>-pfirst</font> <font color=#b9b96e>-help</font> {Creates object of class 'GenSwitch' that describes generic switch device} {
+        {<font color=#b9b96e>-model</font>= <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {<b><font color=#ffa500>Model</font></b> name}}
+        {<font color=#b9b96e>-control</font>= <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {Control equation}}
+        {<font color=#b9b96e>-on</font> <font color=#b9b96e>-forbid</font> {off} <font color=#b9b96e>-help</font> {Initial on state of switch}}
+        {<font color=#b9b96e>-off</font> <font color=#b9b96e>-forbid</font> {on} <font color=#b9b96e>-help</font> {Initial off state of switch}}
+        {name <font color=#b9b96e>-help</font> {Name of the device without first-letter designator}}
+        {npNode <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
+        {nmNode <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
     }]
     <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> model [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> model] <font color=#b9b96e>-posnocheck</font>]
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> on]} {
@@ -425,7 +455,7 @@
         <b><font color=#ffa500>lappend</font></b> params {off <font color=#b9b96e>-sw</font>}
     }
     <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> control [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> control] <font color=#b9b96e>-eq</font>]
-    <b><font color=#ffa500>next</font></b> s<font color=#f1b479>$name</font> [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np <font color=#f1b479>$npNode</font>] [<b><font color=#ffa500>list</font></b> nm <font color=#f1b479>$nmNode</font>]] <font color=#f1b479>$params</font>
+    <b><font color=#ffa500>next</font></b> s[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> npNode]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nmNode]]] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Xyce::BasicDevices::Inductor'>Inductor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices" title="::SpiceGenTcl::Xyce::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -458,10 +488,16 @@
 <div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value?</span><br><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -model value -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value?</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
+<tr><td><code><font color=#b9b96e>-ic</font></code></td><td>Initial current through inductor, optional.</td></tr>
+<tr><td><code><font color=#b9b96e>-l</font></code></td><td>Inductance value.</td></tr>
+<tr><td><code><font color=#b9b96e>-m</font></code></td><td>Multiplier value, optional.</td></tr>
+<tr><td><code><font color=#b9b96e>-model</font></code></td><td>Model of the inductor, optional.</td></tr>
+<tr><td><code><font color=#b9b96e>-tc1</font></code></td><td>Linear thermal coefficient, optional.</td></tr>
+<tr><td><code><font color=#b9b96e>-tc2</font></code></td><td>Quadratic thermal coefficient, optional.</td></tr>
+<tr><td><code><font color=#b9b96e>-temp</font></code></td><td>Device temperature, optional.</td></tr>
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator L.</td></tr>
-<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
 <tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>args</code></td><td>Keyword instance parameters.</td></tr>
+<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5><p class='ruff'>Inductor type could be specified with additional switch <code><font color=#b9b96e>-model</font> modelName</code> if we want to simulate inductor with model card. Simple inductor:</p>
 
@@ -484,13 +520,19 @@
 </pre>
 
 </figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Xyce_BasicDevices_Inductor_constructor' href="javascript:toggleSource('SpiceGenTcl_Xyce_BasicDevices_Inductor_constructor')">Show source</a></p>
-<div id='SpiceGenTcl_Xyce_BasicDevices_Inductor_constructor' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> constructor {name npNode nmNode args} {
+<div id='SpiceGenTcl_Xyce_BasicDevices_Inductor_constructor' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> constructor {args} {
 
     <i><font color=#76a396># Creates object of class `Inductor` that describes inductor.</font></i>
     <i><font color=#76a396>#  name - name of the device without first-letter designator L</font></i>
     <i><font color=#76a396>#  npNode - name of node connected to positive pin</font></i>
     <i><font color=#76a396>#  nmNode - name of node connected to negative pin</font></i>
-    <i><font color=#76a396>#  args - keyword instance parameters</font></i>
+    <i><font color=#76a396>#  -l - inductance value</font></i>
+    <i><font color=#76a396>#  -model - model of the inductor, optional</font></i>
+    <i><font color=#76a396>#  -m - multiplier value, optional</font></i>
+    <i><font color=#76a396>#  -temp - device temperature, optional</font></i>
+    <i><font color=#76a396>#  -tc1 - linear thermal coefficient, optional</font></i>
+    <i><font color=#76a396>#  -tc2 - quadratic thermal coefficient, optional</font></i>
+    <i><font color=#76a396>#  -ic - initial current through inductor, optional</font></i>
     <i><font color=#76a396># Inductor type could be specified with additional switch `-model modelName`</font></i>
     <i><font color=#76a396># if we want to simulate inductor with model card.</font></i>
     <i><font color=#76a396># Simple inductor:</font></i>
@@ -512,14 +554,17 @@
     <i><font color=#76a396># Synopsis: name npNode nmNode -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value?</font></i>
     <i><font color=#76a396># Synopsis: name npNode nmNode -model value -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value?</font></i>
     <i><font color=#76a396>#   ?-ic value?</font></i>
-    <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> {
-        {<font color=#b9b96e>-l</font>= <font color=#b9b96e>-required</font>}
-        <font color=#b9b96e>-model</font>=
-        <font color=#b9b96e>-m</font>=
-        <font color=#b9b96e>-temp</font>=
-        <font color=#b9b96e>-tc1</font>=
-        <font color=#b9b96e>-tc2</font>=
-        <font color=#b9b96e>-ic</font>=
+    <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> <font color=#b9b96e>-pfirst</font> <font color=#b9b96e>-help</font> {Creates object of class 'Capacitor' that describes capacitor} {
+        {<font color=#b9b96e>-l</font>= <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {Inductance value}}
+        {<font color=#b9b96e>-model</font>= <font color=#b9b96e>-help</font> {<b><font color=#ffa500>Model</font></b> of the inductor}}
+        {<font color=#b9b96e>-m</font>= <font color=#b9b96e>-help</font> {Multiplier value}}
+        {<font color=#b9b96e>-temp</font>= <font color=#b9b96e>-help</font> {<b><font color=#ffa500>Device</font></b> temperature}}
+        {<font color=#b9b96e>-tc1</font>= <font color=#b9b96e>-help</font> {Linear thermal coefficient}}
+        {<font color=#b9b96e>-tc2</font>= <font color=#b9b96e>-help</font> {Quadratic thermal coefficient}}
+        {<font color=#b9b96e>-ic</font>= <font color=#b9b96e>-help</font> {Initial current through inductor}}
+        {name <font color=#b9b96e>-help</font> {Name of the device without first-letter designator}}
+        {npNode <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
+        {nmNode <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
     }]
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> model]} {
         <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> model [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> model] <font color=#b9b96e>-posnocheck</font>]
@@ -531,11 +576,11 @@
         <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> l <font color=#f1b479>$lVal</font> <font color=#b9b96e>-pos</font>]
     }
     <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$arguments</font> {
-        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {l model}} {
+        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {l model name npNode nmNode}} {
             <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$paramName</font> {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$value</font>]
         }
     }
-    <b><font color=#ffa500>next</font></b> l<font color=#f1b479>$name</font> [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np <font color=#f1b479>$npNode</font>] [<b><font color=#ffa500>list</font></b> nm <font color=#f1b479>$nmNode</font>]] <font color=#f1b479>$params</font>
+    <b><font color=#ffa500>next</font></b> l[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> npNode]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nmNode]]] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Xyce::BasicDevices::L'>L</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices" title="::SpiceGenTcl::Xyce::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -660,10 +705,19 @@
 <div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -r value ?-tc1 value? ?-tc2 value? ?-tce value? ?-m value? ?-temp value?</span><br><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -r value -beh ?-tc1 value? ?-tc2 value? ?-tce value? ?-m value? ?-temp value?</span><br><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -r value -model ?-tc1 value? ?-tc2 value? ?-tce value? ?-m value? ?-temp value? ?-l value? ?-w value?</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
+<tr><td><code><font color=#b9b96e>-beh</font></code></td><td>Selects behavioural type of resistor, optional.</td></tr>
+<tr><td><code><font color=#b9b96e>-l</font></code></td><td>Length of semiconductor resistor, optional.</td></tr>
+<tr><td><code><font color=#b9b96e>-m</font></code></td><td>Multiplier value, optional.</td></tr>
+<tr><td><code><font color=#b9b96e>-model</font></code></td><td>Model of the resistor, optional.</td></tr>
+<tr><td><code><font color=#b9b96e>-r</font></code></td><td>Resistance value or equation.</td></tr>
+<tr><td><code><font color=#b9b96e>-tc1</font></code></td><td>Linear thermal coefficient, optional.</td></tr>
+<tr><td><code><font color=#b9b96e>-tc2</font></code></td><td>Quadratic thermal coefficient, optional.</td></tr>
+<tr><td><code><font color=#b9b96e>-tce</font></code></td><td>Exponential thermal coefficient, optional.</td></tr>
+<tr><td><code><font color=#b9b96e>-temp</font></code></td><td>Device temperature, optional.</td></tr>
+<tr><td><code><font color=#b9b96e>-w</font></code></td><td>Width of semiconductor resistor, optional.</td></tr>
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator R.</td></tr>
-<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
 <tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>args</code></td><td>Keyword instance parameters.</td></tr>
+<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5><p class='ruff'>Resistor type could be specified with additional switches: <code><font color=#b9b96e>-beh</font></code> if we want to model circuit's variable dependent resistor, or <code><font color=#b9b96e>-model</font> modelName</code> if we want to simulate resistor with model card. Simple resistor:</p>
 
@@ -696,13 +750,22 @@
 </pre>
 
 </figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Xyce_BasicDevices_Resistor_constructor' href="javascript:toggleSource('SpiceGenTcl_Xyce_BasicDevices_Resistor_constructor')">Show source</a></p>
-<div id='SpiceGenTcl_Xyce_BasicDevices_Resistor_constructor' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> constructor {name npNode nmNode args} {
+<div id='SpiceGenTcl_Xyce_BasicDevices_Resistor_constructor' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> constructor {args} {
 
     <i><font color=#76a396># Creates object of class `Resistor` that describes resistor.</font></i>
     <i><font color=#76a396>#  name - name of the device without first-letter designator R</font></i>
     <i><font color=#76a396>#  npNode - name of node connected to positive pin</font></i>
     <i><font color=#76a396>#  nmNode - name of node connected to negative pin</font></i>
-    <i><font color=#76a396>#  args - keyword instance parameters</font></i>
+    <i><font color=#76a396>#  -r - resistance value or equation</font></i>
+    <i><font color=#76a396>#  -beh - selects behavioural type of resistor, optional</font></i>
+    <i><font color=#76a396>#  -model - model of the resistor, optional</font></i>
+    <i><font color=#76a396>#  -m - multiplier value, optional</font></i>
+    <i><font color=#76a396>#  -temp - device temperature, optional</font></i>
+    <i><font color=#76a396>#  -tc1 - linear thermal coefficient, optional</font></i>
+    <i><font color=#76a396>#  -tc2 - quadratic thermal coefficient, optional</font></i>
+    <i><font color=#76a396>#  -tce - exponential thermal coefficient, optional</font></i>
+    <i><font color=#76a396>#  -l - length of semiconductor resistor, optional</font></i>
+    <i><font color=#76a396>#  -w - width of semiconductor resistor, optional</font></i>
     <i><font color=#76a396># Resistor type could be specified with additional switches: `-beh` if we</font></i>
     <i><font color=#76a396># want to model circuit's variable dependent resistor, or `-model modelName`</font></i>
     <i><font color=#76a396># if we want to simulate resistor with model card.</font></i>
@@ -734,17 +797,20 @@
     <i><font color=#76a396># Synopsis: name npNode nmNode -r value -beh ?-tc1 value? ?-tc2 value? ?-tce value? ?-m value? ?-temp value?</font></i>
     <i><font color=#76a396># Synopsis: name npNode nmNode -r value -model ?-tc1 value? ?-tc2 value? ?-tce value? ?-m value? ?-temp value?</font></i>
     <i><font color=#76a396>#   ?-l value? ?-w value?</font></i>
-    <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> {
-        <font color=#b9b96e>-r</font>=
-        {<font color=#b9b96e>-beh</font> <font color=#b9b96e>-forbid</font> {model} <font color=#b9b96e>-require</font> {r}}
-        {<font color=#b9b96e>-model</font>= <font color=#b9b96e>-forbid</font> {beh}}
-        <font color=#b9b96e>-m</font>=
-        <font color=#b9b96e>-temp</font>=
-        <font color=#b9b96e>-tc1</font>=
-        <font color=#b9b96e>-tc2</font>=
-        <font color=#b9b96e>-tce</font>=
-        {<font color=#b9b96e>-l</font>= <font color=#b9b96e>-require</font> {model}}
-        {<font color=#b9b96e>-w</font>= <font color=#b9b96e>-require</font> {model}}
+    <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> <font color=#b9b96e>-pfirst</font> <font color=#b9b96e>-help</font> {Creates object of class 'Resistor' that describes resistor} {
+        {<font color=#b9b96e>-r</font>= <font color=#b9b96e>-help</font> {Resistance value or equation}}
+        {<font color=#b9b96e>-beh</font> <font color=#b9b96e>-forbid</font> model <font color=#b9b96e>-require</font> r <font color=#b9b96e>-help</font> {Selects behavioural type of resistor}}
+        {<font color=#b9b96e>-model</font>= <font color=#b9b96e>-forbid</font> beh <font color=#b9b96e>-help</font> {<b><font color=#ffa500>Model</font></b> of the resistor}}
+        {<font color=#b9b96e>-m</font>= <font color=#b9b96e>-help</font> {Multiplier value}}
+        {<font color=#b9b96e>-temp</font>= <font color=#b9b96e>-help</font> {<b><font color=#ffa500>Device</font></b> temperature}}
+        {<font color=#b9b96e>-tc1</font>= <font color=#b9b96e>-help</font> {Linear thermal coefficient}}
+        {<font color=#b9b96e>-tc2</font>= <font color=#b9b96e>-help</font> {Quadratic thermal coefficient}}
+        {<font color=#b9b96e>-tce</font>= <font color=#b9b96e>-help</font> {Exponential thermal coefficient}}
+        {<font color=#b9b96e>-l</font>= <font color=#b9b96e>-require</font> model <font color=#b9b96e>-help</font> {Length of semiconductor resistor}}
+        {<font color=#b9b96e>-w</font>= <font color=#b9b96e>-require</font> model <font color=#b9b96e>-help</font> {Width of semiconductor resistor}}
+        {name <font color=#b9b96e>-help</font> {Name of the device without first-letter designator}}
+        {npNode <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
+        {nmNode <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
     }]
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> model]} {
         <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> model [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> model] <font color=#b9b96e>-posnocheck</font>]
@@ -759,14 +825,14 @@
             <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> r <font color=#f1b479>$rVal</font> <font color=#b9b96e>-pos</font>]
         }
     } <b><font color=#ffa500>elseif</font></b> {![<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> model]} {
-        <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Resistor value must be specified with '-r value'&quot;</font>
+        <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error {<b><font color=#ffa500>Resistor</font></b> value must be specified with '-r value'}
     }
     <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$arguments</font> {
-        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {r beh model}} {
+        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {r beh model name npNode nmNode}} {
             <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$paramName</font> {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$value</font>]
         }
     }
-    <b><font color=#ffa500>next</font></b> r<font color=#f1b479>$name</font> [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np <font color=#f1b479>$npNode</font>] [<b><font color=#ffa500>list</font></b> nm <font color=#f1b479>$nmNode</font>]] <font color=#f1b479>$params</font>
+    <b><font color=#ffa500>next</font></b> r[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> npNode]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nmNode]]] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Xyce::BasicDevices::RModel'>RModel</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices" title="::SpiceGenTcl::Xyce::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -844,13 +910,13 @@
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstance::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstance" title="::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstance" class='ruff_cmd'>::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstance</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstance'>SubcircuitInstance</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>SubcircuitInstance</font></b></code> that describes subcircuit instance.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>SubcircuitInstance create OBJNAME</span> <span class='ruff_arg'>name pins subName params</span><br><span class='ruff_cmd'>SubcircuitInstance new</span> <span class='ruff_arg'>name pins subName params</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>SubcircuitInstance create OBJNAME</span> <span class='ruff_arg'>?args?</span><br><span class='ruff_cmd'>SubcircuitInstance new</span> <span class='ruff_arg'>?args?</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator X.</td></tr>
+<tr><td><code>params</code></td><td>{{paramName paramValue ?-eq?} {paramName paramValue ?-eq?}}</td></tr>
 <tr><td><code>pins</code></td><td>List of pins {{pinName nodeName} {pinName nodeName} ...}</td></tr>
 <tr><td><code>subName</code></td><td>Name of subcircuit definition.</td></tr>
-<tr><td><code>params</code></td><td>{{paramName paramValue ?-eq?} {paramName paramValue ?-eq?}}</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>X</font></b>&lt;name&gt; [nodes] &lt;subcircuit name&gt; [PARAMS: [&lt;name&gt; = &lt;value&gt;] ...]
@@ -862,7 +928,7 @@
 </pre>
 
 </figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Xyce_BasicDevices_SubcircuitInstance_constructor' href="javascript:toggleSource('SpiceGenTcl_Xyce_BasicDevices_SubcircuitInstance_constructor')">Show source</a></p>
-<div id='SpiceGenTcl_Xyce_BasicDevices_SubcircuitInstance_constructor' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> constructor {name pins subName params} {
+<div id='SpiceGenTcl_Xyce_BasicDevices_SubcircuitInstance_constructor' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> constructor {args} {
 
     <i><font color=#76a396># Creates object of class `SubcircuitInstance` that describes subcircuit instance.</font></i>
     <i><font color=#76a396>#  name - name of the device without first-letter designator X</font></i>
@@ -876,6 +942,12 @@
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar -eq}}</font></i>
     <i><font color=#76a396># ```</font></i>
+    argparse <font color=#b9b96e>-pfirst</font> <font color=#b9b96e>-help</font> {Creates object of class 'SubcircuitInstance' that describes subcircuit instance} {
+        {name <font color=#b9b96e>-help</font> {Name of the device without first-letter designator}}
+        {pins <font color=#b9b96e>-help</font> {List of pins {{pinName nodeName} {pinName nodeName} ...}}}
+        {subName <font color=#b9b96e>-help</font> {Name of subcircuit definition}}
+        {params <font color=#b9b96e>-help</font> {List of parameters {{paramName paramValue ?-eq?} {paramName paramValue ?-eq?}}}}
+    }
     <b><font color=#ffa500>set</font></b> params [<b><font color=#ffa500>linsert</font></b> <font color=#f1b479>$params</font> 0 [<b><font color=#ffa500>list</font></b> model <font color=#f1b479>$subName</font> <font color=#b9b96e>-posnocheck</font>]]
     <b><font color=#ffa500>set</font></b> params [<b><font color=#ffa500>linsert</font></b> <font color=#f1b479>$params</font> 1 {params PARAMS: <font color=#b9b96e>-posnocheck</font>}]
     <b><font color=#ffa500>next</font></b> x<font color=#f1b479>$name</font> <font color=#f1b479>$pins</font> <font color=#f1b479>$params</font>
@@ -1189,8 +1261,8 @@
 &lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode <font color=#b9b96e>-r</font> value <font color=#b9b96e>-beh</font> ?-tc1 value? ?-tc2 value? ?-tce value? ?-m value? ?-temp value?&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode <font color=#b9b96e>-r</font> value <font color=#b9b96e>-model</font> ?-tc1 value? ?-tc2 value? ?-tce value? ?-m value? ?-temp value? ?-l value? ?-w value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Resistor</font></b></code> that describes resistor.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::RModel'>RModel</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::RModel::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name ?-option value ...?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>RModel</font></b></code> that describes semiconductor resistor model.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstance'>SubcircuitInstance</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstance::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>SubcircuitInstance</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;name pins subName params&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>SubcircuitInstance</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;name pins subName params&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>SubcircuitInstance</font></b></code> that describes subcircuit instance.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstance'>SubcircuitInstance</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstance::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>SubcircuitInstance</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;
+&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>SubcircuitInstance</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>SubcircuitInstance</font></b></code> that describes subcircuit instance.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstanceAuto'>SubcircuitInstanceAuto</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstanceAuto::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;subcktObj name nodes ?-paramName paramValue ?-eq? ...?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>SubcircuitInstanceAuto</font></b></code> that describes subcircuit instance with already created subcircuit definition object.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::VSw'>VSw</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::VSwitch'>VSwitch</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::VSwitchModel'>VSwitchModel</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::VSwitchModel::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name ?-option value ...?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>VSwitchModel</font></b></code> that describes voltage switch model.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::W'>W</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::X'>X</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html#::SpiceGenTcl::Xyce::BasicDevices::XAuto'>XAuto</a></li></ul></nav><footer class='ruff-layout-footer ruff-ft'><div style='float: right;'>Document generated by <a href='https://ruff.magicsplat.com'>Ruff!</a></div><div>&copy; George Yashin</div></footer>

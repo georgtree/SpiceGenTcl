@@ -35,15 +35,15 @@ SpiceGenTcl::Ngspice::BasicDevices - Commands in namespace SpiceGenTcl::Ngspice:
 .br
 \fBOBJECT constructor\fP \fIname ?-option value \&.\&.\&.?\fP
 .br
-\fBSubcircuitInstance create OBJNAME\fP \fIname pins subName params\fP
+\fBSubcircuitInstance create OBJNAME\fP \fI?args?\fP
 .br
-\fBSubcircuitInstance new\fP \fIname pins subName params\fP
+\fBSubcircuitInstance new\fP \fI?args?\fP
 .br
 \fBOBJECT constructor\fP \fIsubcktObj name nodes ?-paramName paramValue ?-eq? \&.\&.\&.?\fP
 .br
-\fBVerilogA create OBJNAME\fP \fIname pins modName params\fP
+\fBVerilogA create OBJNAME\fP \fI?args?\fP
 .br
-\fBVerilogA new\fP \fIname pins modName params\fP
+\fBVerilogA new\fP \fI?args?\fP
 .br
 \fBOBJECT constructor\fP \fIname ?-option value \&.\&.\&.?\fP
 .br
@@ -201,24 +201,60 @@ Creates object of class Capacitor that describes capacitor\&.
 \fBParameters\fR
 .RS 4n
 .TP
+-beh
+Selects behavioural type of resistor, optional\&.
+.TP
+-c
+Capacitance value or equation\&.
+.TP
+-dtemp
+Temperature offset, optional\&.
+.TP
+-ic
+Initial voltage on capacitor, optional\&.
+.TP
+-l
+Length of semiconductor capacitor, optional\&.
+.TP
+-m
+Multiplier value, optional\&.
+.TP
+-model
+Model of the resistor, optional\&.
+.TP
+-q
+Charge equation\&.
+.TP
+-scale
+Scaling factor, optional\&.
+.TP
+-tc1
+Linear thermal coefficient, optional\&.
+.TP
+-tc2
+Quadratic thermal coefficient, optional\&.
+.TP
+-temp
+Device temperature, optional\&.
+.TP
+-w
+Width of semiconductor capacitor, optional\&.
+.TP
 name
 Name of the device without first-letter designator C\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
 .TP
 nmNode
 Name of node connected to negative pin\&.
 .TP
-args
-Keyword instance parameters\&.
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
 .PP
 Capacitor type could be specified with additional switches: -beh if we
 want to model circuit's variable dependent capacitor, or -model modelName
-if we want to simulate capacitor with model card\&.
+if we want to simulate capacitor with model card (semiconductor capacitor)\&.
 Simple capacitor:
 .PP
 .RS 4n
@@ -453,9 +489,6 @@ Creates object of class Coupling that describes inductance coupling between indu
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Name of the device without first-letter designator L\&.
-.TP
 -k
 Coupling coefficient\&.
 .TP
@@ -464,6 +497,9 @@ First inductor name\&.
 .TP
 -l2
 Second inductor name\&.
+.TP
+name
+Name of the device without first-letter designator L\&.
 .RE
 .PP
 \fBDescription\fR
@@ -721,17 +757,47 @@ Creates object of class Inductor that describes inductor\&.
 \fBParameters\fR
 .RS 4n
 .TP
+-beh
+Selects behavioural type of inductor, optional\&.
+.TP
+-dtemp
+Temperature offset, optional\&.
+.TP
+-ic
+Initial current through inductor, optional\&.
+.TP
+-l
+Inductance value or equation\&.
+.TP
+-m
+Multiplier value, optional\&.
+.TP
+-model
+Model of the inductor, optional\&.
+.TP
+-nt
+Number of turns, optional\&.
+.TP
+-scale
+Scaling factor, optional\&.
+.TP
+-tc1
+Linear thermal coefficient, optional\&.
+.TP
+-tc2
+Quadratic thermal coefficient, optional\&.
+.TP
+-temp
+Device temperature, optional\&.
+.TP
 name
 Name of the device without first-letter designator L\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
 .TP
 nmNode
 Name of node connected to negative pin\&.
 .TP
-args
-Keyword instance parameters\&.
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
@@ -1215,24 +1281,60 @@ Creates object of class Resistor that describes resistor\&.
 \fBParameters\fR
 .RS 4n
 .TP
+-ac
+AC resistance value, optional\&.
+.TP
+-beh
+Selects behavioural type of resistor, optional\&.
+.TP
+-dtemp
+Temperature offset, optional\&.
+.TP
+-l
+Length of semiconductor resistor, optional\&.
+.TP
+-m
+Multiplier value, optional\&.
+.TP
+-model
+Model of the resistor, optional\&.
+.TP
+-noisy
+Selects noise behaviour\&.
+.TP
+-r
+Resistance value or equation\&.
+.TP
+-scale
+Scaling factor, optional\&.
+.TP
+-tc1
+Linear thermal coefficient, optional\&.
+.TP
+-tc2
+Quadratic thermal coefficient, optional\&.
+.TP
+-temp
+Device temperature, optional\&.
+.TP
+-w
+Width of semiconductor resistor, optional\&.
+.TP
 name
 Name of the device without first-letter designator R\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
 .TP
 nmNode
 Name of node connected to negative pin\&.
 .TP
-args
-Keyword instance parameters\&.
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
 .PP
 Resistor type could be specified with additional switches: -beh if we
 want to model circuit's variable dependent resistor, or -model modelName
-if we want to simulate resistor with model card\&.
+if we want to simulate resistor with model card (semiconductor resistor)\&.
 Simple resistor:
 .PP
 .RS 4n
@@ -1509,9 +1611,9 @@ Writable: -name
 .RE
 .PP
 Creates object of class SubcircuitInstance that describes subcircuit instance\&.
-.RS 4n\fBSubcircuitInstance create OBJNAME\fP \fIname pins subName params\fP
+.RS 4n\fBSubcircuitInstance create OBJNAME\fP \fI?args?\fP
 .br
-\fBSubcircuitInstance new\fP \fIname pins subName params\fP
+\fBSubcircuitInstance new\fP \fI?args?\fP
 .br
 .RE
 .PP
@@ -1521,14 +1623,14 @@ Creates object of class SubcircuitInstance that describes subcircuit instance\&.
 name
 Name of the device without first-letter designator X\&.
 .TP
+params
+{{paramName paramValue ?-eq?} {paramName paramValue ?-eq?}}
+.TP
 pins
 List of pins {{pinName nodeName} {pinName nodeName} \&.\&.\&.}
 .TP
 subName
 Name of subcircuit definition\&.
-.TP
-params
-{{paramName paramValue ?-eq?} {paramName paramValue ?-eq?}}
 .RE
 .PP
 \fBDescription\fR
@@ -1734,26 +1836,26 @@ Writable: -name
 .RE
 .PP
 Creates object of class VerilogA that describes Verilog-A instance\&.
-.RS 4n\fBVerilogA create OBJNAME\fP \fIname pins modName params\fP
+.RS 4n\fBVerilogA create OBJNAME\fP \fI?args?\fP
 .br
-\fBVerilogA new\fP \fIname pins modName params\fP
+\fBVerilogA new\fP \fI?args?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Name of the device without first-letter designator N\&.
-.TP
-pins
-List of pins {{pinName nodeName} {pinName nodeName} \&.\&.\&.}
-.TP
 modName
 Name of Verilog-A model\&.
 .TP
+name
+Name of the device without first-letter designator N\&.
+.TP
 params
 {{paramName paramValue ?-eq?} {paramName paramValue ?-eq?}}
+.TP
+pins
+List of pins {{pinName nodeName} {pinName nodeName} \&.\&.\&.}
 .RE
 .PP
 \fBDescription\fR

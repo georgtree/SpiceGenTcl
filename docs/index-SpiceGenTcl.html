@@ -304,7 +304,7 @@
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>info</font></b> exists Params]} {
         <b><font color=#fe6efe>return</font></b> <font color=#90ee90>&quot;.<font color=#f1b479>[</font>my configure -type<font color=#f1b479>]</font> <font color=#f1b479>[</font>join <font color=#f1b479>[</font>lmap param <font color=#f1b479>[</font>dict values <font color=#f1b479>$</font>Params<font color=#f1b479>]</font> <font color=#f1b479>{$</font>param genSPICEString<font color=#f1b479>}]]</font>&quot;</font>
     } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#fe6efe>return</font></b> <font color=#90ee90>&quot;.<font color=#f1b479>[</font>my configure -type<font color=#f1b479>]</font>&quot;</font>
+        <b><font color=#fe6efe>return</font></b> .[<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-type</font>]
     }
 }</pre></div>
 </div></details>
@@ -764,8 +764,8 @@
 
     <i><font color=#76a396># Creates comment string for SPICE netlist.</font></i>
     <i><font color=#76a396># Returns: SPICE netlist's string</font></i>
-    <b><font color=#ffa500>set</font></b> splitted [<b><font color=#ffa500>split</font></b> [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-value</font>] <font color=#90ee90>&quot;\n&quot;</font>]
-    <b><font color=#ffa500>set</font></b> prepared [<b><font color=#ffa500>join</font></b> [<b><font color=#ffa500>lmap</font></b> line <font color=#f1b479>$splitted</font> {<b><font color=#ffa500>set</font></b> result <font color=#90ee90>&quot;*<font color=#f1b479>$</font>line&quot;</font>}] \n]
+    <b><font color=#ffa500>set</font></b> splitted [<b><font color=#ffa500>split</font></b> [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-value</font>] \n]
+    <b><font color=#ffa500>set</font></b> prepared [<b><font color=#ffa500>join</font></b> [<b><font color=#ffa500>lmap</font></b> line <font color=#f1b479>$splitted</font> {<b><font color=#ffa500>set</font></b> result *<font color=#f1b479>$line</font>}] \n]
     <b><font color=#fe6efe>return</font></b> <font color=#f1b479>$prepared</font>
 }</pre></div>
 </div></details>
@@ -1306,7 +1306,7 @@
         <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$net</font> ne {}} {
             <b><font color=#ffa500>lappend</font></b> netsList <font color=#f1b479>$net</font>
             <b><font color=#ffa500>if</font></b> {[<b><font color=#fe6efe>my</font></b> duplListCheck <font color=#f1b479>$netsList</font>]} {
-                <b><font color=#ffa500>error</font></b> <font color=#90ee90>&quot;Net with name '<font color=#f1b479>${</font>net<font color=#f1b479>}</font>' is already attached to the object '<font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font>'&quot;</font>
+                <b><font color=#ffa500>error</font></b> <font color=#90ee90>&quot;Net with name '<font color=#f1b479>$</font>net' is already attached to the object '<font color=#f1b479>[</font>my configure -name<font color=#f1b479>]</font>'&quot;</font>
             }
         } <b><font color=#ffa500>else</font></b> {
             <b><font color=#ffa500>error</font></b> {Net name couldn't be empty}
@@ -1330,7 +1330,7 @@
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>set</font></b> index [<b><font color=#ffa500>lsearch</font></b> <font color=#b9b96e>-exact</font> <font color=#f1b479>$netsList</font> <font color=#f1b479>$net</font>]] !=-1} {
         <b><font color=#ffa500>set</font></b> netsList [lremove <font color=#f1b479>$netsList</font> <font color=#f1b479>$index</font>]
     } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#ffa500>error</font></b> <font color=#90ee90>&quot;Global statement '<font color=#f1b479>${</font>name<font color=#f1b479>}</font>' doesn't have attached net with name '<font color=#f1b479>${</font>net<font color=#f1b479>}</font>'&quot;</font>
+        <b><font color=#ffa500>error</font></b> <font color=#90ee90>&quot;Global statement '<font color=#f1b479>$</font>name' doesn't have attached net with name '<font color=#f1b479>$</font>net'&quot;</font>
     }
     <b><font color=#ffa500>set</font></b> Nets <font color=#f1b479>$netsList</font>
     <b><font color=#fe6efe>return</font></b>
@@ -2991,7 +2991,7 @@
 <div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Parser_readFile' href="javascript:toggleSource('SpiceGenTcl_Parser_readFile')">Show source</a></p>
 <div id='SpiceGenTcl_Parser_readFile' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> readFile {} {
 
-    <b><font color=#ffa500>error</font></b> <font color=#90ee90>&quot;Not implemented&quot;</font>
+    <b><font color=#ffa500>error</font></b> {Not implemented}
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Pin'>Pin</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl" title="::SpiceGenTcl" class='ruff_cmd'>::SpiceGenTcl</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -3157,7 +3157,7 @@
                     <b><font color=#ffa500>incr</font></b> binaryStart <font color=#f1b479>$encSize</font>
                     <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$ch</font> eq <font color=#90ee90>&quot;\n&quot;</font>} {
                         <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$encode</font> eq {utf-8}} {
-                            <b><font color=#ffa500>set</font></b> line [<b><font color=#ffa500>string</font></b> trimright <font color=#f1b479>$line</font> <font color=#90ee90>&quot;\r&quot;</font>]
+                            <b><font color=#ffa500>set</font></b> line [<b><font color=#ffa500>string</font></b> trimright <font color=#f1b479>$line</font> \r]
                         }
                         <b><font color=#ffa500>lappend</font></b> header <font color=#f1b479>$line</font>
                         <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$line</font> in {Binary: Values:}} {
@@ -3266,7 +3266,7 @@
                     }
                     <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$calcBlockSize</font>!=<font color=#f1b479>$BlockSize</font>} {
                         <b><font color=#ffa500>close</font></b> <font color=#f1b479>$file</font>
-                        <b><font color=#ffa500>error</font></b> <font color=#90ee90>&quot;Error in calculating the block size. Expected '<font color=#f1b479>${</font>BlockSize<font color=#f1b479>}</font>' bytes, but found '<font color=#f1b479>$</font>calcBlockSize' bytes&quot;</font>
+                        <b><font color=#ffa500>error</font></b> <font color=#90ee90>&quot;Error in calculating the block size. Expected '<font color=#f1b479>$</font>BlockSize' bytes, but found '<font color=#f1b479>$</font>calcBlockSize' bytes&quot;</font>
                     }
                      <b><font color=#ffa500>for</font></b> {<b><font color=#ffa500>set</font></b> i 0} {<font color=#f1b479>$i</font>&lt;<font color=#f1b479>$npoints</font>} {<b><font color=#ffa500>incr</font></b> i} {
                         <b><font color=#ffa500>for</font></b> {<b><font color=#ffa500>set</font></b> j 0} {<font color=#f1b479>$j</font>&lt;[<b><font color=#ffa500>dict</font></b> size [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-traces</font>]]} {<b><font color=#ffa500>incr</font></b> j} {
@@ -3300,13 +3300,13 @@
                                     <b><font color=#ffa500>error</font></b> {Error reading file}
                                 }
                                 <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$numType</font> eq {complex}} {
-                                    <b><font color=#ffa500>set</font></b> value [<b><font color=#ffa500>split</font></b> [@ <font color=#f1b479>$lineList</font> 1] <font color=#90ee90>&quot;,&quot;</font>]
+                                    <b><font color=#ffa500>set</font></b> value [<b><font color=#ffa500>split</font></b> [@ <font color=#f1b479>$lineList</font> 1] ,]
                                 } <b><font color=#ffa500>else</font></b> {
                                     <b><font color=#ffa500>set</font></b> value [@ <font color=#f1b479>$lineList</font> 1]
                                 }
                             } <b><font color=#ffa500>else</font></b> {
                                 <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$numType</font> eq {complex}} {
-                                    <b><font color=#ffa500>set</font></b> value [<b><font color=#ffa500>split</font></b> [@ <font color=#f1b479>$lineList</font> 1] <font color=#90ee90>&quot;,&quot;</font>]
+                                    <b><font color=#ffa500>set</font></b> value [<b><font color=#ffa500>split</font></b> [@ <font color=#f1b479>$lineList</font> 1] ,]
                                 } <b><font color=#ffa500>else</font></b> {
                                     <b><font color=#ffa500>set</font></b> value [@ <font color=#f1b479>$lineList</font> 1]
                                 }
@@ -3329,7 +3329,7 @@
 <div id='SpiceGenTcl_RawFile_getCurrentsNames' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> getCurrentsNames {} {
 
     <i><font color=#76a396># Returns list that contains names of all current variables</font></i>
-    <b><font color=#fe6efe>return</font></b> [<b><font color=#ffa500>lmap</font></b> trace [dvalues [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-traces</font>]] {<b><font color=#ffa500>expr</font></b> {[<b><font color=#ffa500>string</font></b> match <font color=#b9b96e>-nocase</font> {*current*} [<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-type</font>]] ? [<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-name</font>] : [<b><font color=#fe6efe>continue</font></b>]}}]
+    <b><font color=#fe6efe>return</font></b> [<b><font color=#ffa500>lmap</font></b> trace [dvalues [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-traces</font>]] {<b><font color=#ffa500>expr</font></b> {[<b><font color=#ffa500>string</font></b> match <font color=#b9b96e>-nocase</font> *current* [<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-type</font>]] ? [<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-name</font>] : [<b><font color=#fe6efe>continue</font></b>]}}]
 }</pre></div>
 </div></details>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::RawFile::getTrace'>getTrace</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile" title="::SpiceGenTcl::RawFile" class='ruff_cmd'>::SpiceGenTcl::RawFile</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawFile'>RawFile</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
@@ -3353,7 +3353,7 @@
             <b><font color=#fe6efe>break</font></b>
         }
     }
-    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$traceFoundFlag</font>==false} {
+    <b><font color=#ffa500>if</font></b> {!<font color=#f1b479>$traceFoundFlag</font>} {
         <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Trace with name '<font color=#f1b479>$</font>traceName' was not found in raw file '<font color=#f1b479>[</font>my configure -path<font color=#f1b479>]</font>' list of traces&quot;</font>
     }
     <b><font color=#fe6efe>return</font></b> <font color=#f1b479>$traceFound</font>
@@ -3401,7 +3401,7 @@
             <b><font color=#ffa500>lappend</font></b> tracesList [<b><font color=#ffa500>lmap</font></b> traceValues [<b><font color=#ffa500>dict</font></b> values <font color=#f1b479>$tracesDict</font>] {@ <font color=#f1b479>$traceValues</font> <font color=#f1b479>$i</font>}]
         }
     } <b><font color=#ffa500>else</font></b> {
-        <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error <font color=#90ee90>&quot;Arguments '-all' or '-traces traceName1 traceName2 ...' must be provided to 'getTracesCsv' method&quot;</font>
+        <b><font color=#fe6efe>return</font></b> <font color=#b9b96e>-code</font> error {Arguments '-all' or '-traces traceName1 traceName2 ...' must be provided to 'getTracesCsv' method}
     }
     <b><font color=#fe6efe>return</font></b> [::csv::joinlist <font color=#f1b479>$tracesList</font> [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> sep]]
 }</pre></div>
@@ -3459,7 +3459,7 @@
 <div id='SpiceGenTcl_RawFile_getVoltagesNames' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> getVoltagesNames {} {
 
     <i><font color=#76a396># Returns list that contains names of all voltage variables</font></i>
-    <b><font color=#fe6efe>return</font></b> [<b><font color=#ffa500>lmap</font></b> trace [dvalues [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-traces</font>]] {<b><font color=#ffa500>expr</font></b> {[<b><font color=#ffa500>string</font></b> match <font color=#b9b96e>-nocase</font> {*voltage*} [<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-type</font>]] ? [<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-name</font>] : [<b><font color=#fe6efe>continue</font></b>]}}]
+    <b><font color=#fe6efe>return</font></b> [<b><font color=#ffa500>lmap</font></b> trace [dvalues [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-traces</font>]] {<b><font color=#ffa500>expr</font></b> {[<b><font color=#ffa500>string</font></b> match <font color=#b9b96e>-nocase</font> *voltage* [<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-type</font>]] ? [<font color=#f1b479>$trace</font> configure <font color=#b9b96e>-name</font>] : [<b><font color=#fe6efe>continue</font></b>]}}]
 }</pre></div>
 </div></details>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::RawFile::measure'>measure</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile" title="::SpiceGenTcl::RawFile" class='ruff_cmd'>::SpiceGenTcl::RawFile</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawFile'>RawFile</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
@@ -3685,7 +3685,7 @@
 <div id='SpiceGenTcl_Simulator_getLog' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> getLog {} {
 
     <i><font color=#76a396># Returns log file of completed simulations.</font></i>
-    <b><font color=#ffa500>error</font></b> <font color=#90ee90>&quot;Not implemented&quot;</font>
+    <b><font color=#ffa500>error</font></b> {Not implemented}
 }</pre></div>
 </div></details>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Simulator::readData'>readData</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Simulator" title="::SpiceGenTcl::Simulator" class='ruff_cmd'>::SpiceGenTcl::Simulator</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Simulator'>Simulator</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
@@ -3697,7 +3697,7 @@
 <div id='SpiceGenTcl_Simulator_readData' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> readData {} {
 
     <i><font color=#76a396># Reads raw data file of last simulation.</font></i>
-    <b><font color=#ffa500>error</font></b> <font color=#90ee90>&quot;Not implemented&quot;</font>
+    <b><font color=#ffa500>error</font></b> {Not implemented}
 }</pre></div>
 </div></details>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Simulator::readLog'>readLog</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Simulator" title="::SpiceGenTcl::Simulator" class='ruff_cmd'>::SpiceGenTcl::Simulator</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Simulator'>Simulator</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
@@ -3709,7 +3709,7 @@
 <div id='SpiceGenTcl_Simulator_readLog' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> readLog {} {
 
     <i><font color=#76a396># Reads log file of completed simulations.</font></i>
-    <b><font color=#ffa500>error</font></b> <font color=#90ee90>&quot;Not implemented&quot;</font>
+    <b><font color=#ffa500>error</font></b> {Not implemented}
 }</pre></div>
 </div></details>
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Simulator::run'>run</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::Simulator" title="::SpiceGenTcl::Simulator" class='ruff_cmd'>::SpiceGenTcl::Simulator</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::Simulator'>Simulator</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
@@ -3721,7 +3721,7 @@
 <div id='SpiceGenTcl_Simulator_run' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> run {} {
 
     <i><font color=#76a396># Runs simulation.</font></i>
-    <b><font color=#ffa500>error</font></b> <font color=#90ee90>&quot;Not implemented&quot;</font>
+    <b><font color=#ffa500>error</font></b> {Not implemented}
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::SPICEElement'>SPICEElement</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl" title="::SpiceGenTcl" class='ruff_cmd'>::SpiceGenTcl</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -3742,7 +3742,7 @@
     <i><font color=#76a396># Declaration of method common for all SPICE elements that generates</font></i>
     <i><font color=#76a396>#  representation of element in SPICE netlist. Not implemented in</font></i>
     <i><font color=#76a396>#  abstraction class.</font></i>
-    <b><font color=#ffa500>error</font></b> <font color=#90ee90>&quot;Not implemented&quot;</font>
+    <b><font color=#ffa500>error</font></b> {Not implemented}
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Subcircuit'>Subcircuit</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl" title="::SpiceGenTcl" class='ruff_cmd'>::SpiceGenTcl</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -4113,16 +4113,13 @@
     <i><font color=#76a396># Returns: list of parameters formatted for Device/Model constructor</font></i>
     <b><font color=#ffa500>foreach</font></b> paramName <font color=#f1b479>$paramsNames</font> {
         <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$paramName</font>]&gt;1} {
-            <b><font color=#ffa500>for</font></b> {<b><font color=#ffa500>set</font></b> i 0} {<font color=#f1b479>$i</font>&lt;[<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$paramName</font>]} {<b><font color=#ffa500>incr</font></b> i} {
-                <b><font color=#ffa500>set</font></b> paramNameAlias [@ <font color=#f1b479>$paramName</font> <font color=#f1b479>$i</font>]
-                <b><font color=#ffa500>lappend</font></b> paramDefList <font color=#90ee90>&quot;\{-<font color=#f1b479>${</font>paramNameAlias<font color=#f1b479>}</font>= -forbid \{<font color=#f1b479>[</font>lremove <font color=#f1b479>$</font>paramName <font color=#f1b479>$</font>i<font color=#f1b479>]</font>\}\}&quot;</font>
-            }
+            <b><font color=#ffa500>lappend</font></b> paramDefList -[<b><font color=#ffa500>join</font></b> <font color=#f1b479>$paramName</font> |]=
         } <b><font color=#ffa500>else</font></b> {
             <b><font color=#ffa500>lappend</font></b> paramDefList -<font color=#f1b479>${paramName}</font>=
         }
     }
     <b><font color=#ffa500>set</font></b> paramDefStr [<b><font color=#ffa500>join</font></b> <font color=#f1b479>$paramDefList</font> \n]
-    <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> <font color=#90ee90>&quot;</font>
+    <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> <font color=#b9b96e>-help</font> {} <font color=#90ee90>&quot;</font>
 <font color=#90ee90>        <font color=#f1b479>$</font>paramDefStr</font>
 <font color=#90ee90>    &quot;</font>]
     <b><font color=#ffa500>set</font></b> params {}

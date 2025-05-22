@@ -129,10 +129,10 @@
     <i><font color=#76a396># ::SpiceGenTcl::Analyses::Xyce::Sens new -objfunc &quot;0.5*(V(B)-3.0)**2.0&quot; -param &quot;R1:R,R2:R&quot; -name dc1</font></i>
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># Synopsis: -objfunc value -param value ?-name value?</font></i>
-    <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> {
+    <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> <font color=#b9b96e>-help</font> {Creates object of class 'Sens' that describes SENS ac analysis} {
         <font color=#b9b96e>-name</font>=
-        {<font color=#b9b96e>-objfunc</font>= <font color=#b9b96e>-required</font>}
-        {<font color=#b9b96e>-param</font>= <font color=#b9b96e>-required</font>}
+        {<font color=#b9b96e>-objfunc</font>= <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {Output expression}}
+        {<font color=#b9b96e>-param</font>= <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {<b><font color=#ffa500>Circuit</font></b> parameter(s)}}
     }]
     <b><font color=#fe6efe>my</font></b> NameProcess <font color=#f1b479>$arguments</font> [<b><font color=#fe6efe>self</font></b> object]
     <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> objfunc [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> objfunc] <font color=#b9b96e>-eq</font>]

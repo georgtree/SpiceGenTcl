@@ -17,9 +17,9 @@ SpiceGenTcl::Ltspice::BasicDevices - Commands in namespace SpiceGenTcl::Ltspice:
 .br
 \fBOBJECT constructor\fP \fIname npNode nmNode -model value ?-l value? ?-temp value|-dtemp value? ?-m value? ?scale value? ?-ic value? ?-nt value? ?-tc1 value? ?-tc2 value?\fP
 .br
-\fBSubcircuitInstance create OBJNAME\fP \fIname pins subName params\fP
+\fBSubcircuitInstance create OBJNAME\fP \fI?args?\fP
 .br
-\fBSubcircuitInstance new\fP \fIname pins subName params\fP
+\fBSubcircuitInstance new\fP \fI?args?\fP
 .br
 \fBOBJECT constructor\fP \fIsubcktObj name nodes ?-paramName paramValue ?-eq? \&.\&.\&.?\fP
 .br
@@ -175,17 +175,44 @@ Creates object of class Capacitor that describes capacitor\&.
 \fBParameters\fR
 .RS 4n
 .TP
+-c
+Capacitance value or equation\&.
+.TP
+-cpar
+Parallel capacitor, optional\&.
+.TP
+-ic
+Initial voltage on capacitor, optional\&.
+.TP
+-lser
+Series inductance, optional\&.
+.TP
+-m
+Multiplier value, optional\&.
+.TP
+-q
+Charge equation\&.
+.TP
+-rlshunt
+Shunt resistance across series inductance, optional\&.
+.TP
+-rpar
+Parallel resistance, optional\&.
+.TP
+-rser
+Series resistance, optional\&.
+.TP
+-temp
+Device temperature, optional\&.
+.TP
 name
 Name of the device without first-letter designator C\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
 .TP
 nmNode
 Name of node connected to negative pin\&.
 .TP
-args
-Keyword instance parameters\&.
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
@@ -466,17 +493,68 @@ Creates object of class Inductor that describes inductor\&.
 \fBParameters\fR
 .RS 4n
 .TP
+-a
+Cross sectional area\&.
+.TP
+-br
+Remnant flux density\&.
+.TP
+-bs
+Saturation flux density\&.
+.TP
+-cpar
+Parallel capacitor\&.
+.TP
+-flux
+Equation for the flux\&.
+.TP
+-hc
+Coercive force\&.
+.TP
+-hyst
+Nonlinear inductor model switch\&.
+.TP
+-ic
+Initial current\&.
+.TP
+-l
+Inductance value\&.
+.TP
+-lg
+Length of gap\&.
+.TP
+-lm
+Magnetic Length (excl\&. gap)
+.TP
+-m
+Number of parallel units\&.
+.TP
+-n
+Number of turns\&.
+.TP
+-rpar
+Parallel resistance\&.
+.TP
+-rser
+Series resistance\&.
+.TP
+-tc1
+Linear inductance temperature coefficient\&.
+.TP
+-tc2
+Quadratic inductance temperature coefficient\&.
+.TP
+-temp
+Device temperature\&.
+.TP
 name
 Name of the device without first-letter designator L\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
 .TP
 nmNode
 Name of node connected to negative pin\&.
 .TP
-args
-Keyword instance parameters\&.
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
@@ -804,9 +882,9 @@ Writable: -name
 .RE
 .PP
 Creates object of class SubcircuitInstance that describes subcircuit instance\&.
-.RS 4n\fBSubcircuitInstance create OBJNAME\fP \fIname pins subName params\fP
+.RS 4n\fBSubcircuitInstance create OBJNAME\fP \fI?args?\fP
 .br
-\fBSubcircuitInstance new\fP \fIname pins subName params\fP
+\fBSubcircuitInstance new\fP \fI?args?\fP
 .br
 .RE
 .PP
@@ -816,14 +894,14 @@ Creates object of class SubcircuitInstance that describes subcircuit instance\&.
 name
 Name of the device without first-letter designator X\&.
 .TP
+params
+{{paramName paramValue ?-eq?} {paramName paramValue ?-eq?}}
+.TP
 pins
 List of pins {{pinName nodeName} {pinName nodeName} \&.\&.\&.}
 .TP
 subName
 Name of subcircuit definition\&.
-.TP
-params
-{{paramName paramValue ?-eq?} {paramName paramValue ?-eq?}}
 .RE
 .PP
 \fBDescription\fR

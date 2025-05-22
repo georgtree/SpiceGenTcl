@@ -131,7 +131,7 @@ testTemplate testVsinClass-5 {} {Vsin new 1 net1 net2 -v0 0 -theta {theta -eq} -
 testTemplate testVsinClass-6 {} {Vsin new 1 net1 net2 -v0 0 -theta {theta -eq} -freq 50 -td 1e-6}\
         {missing required switch: -ia|vamp|iamp|va}
 testTemplate testVsinClass-7 {} {Vsin new 1 net1 net2 -v0 0 -theta {theta -eq} -vamp 2 -freq 50 -td 1e-6 -ncycles 2}\
-        {-ncycles switch requires -phase or -phi switch}
+        {-ncycles requires -phase}
 testTemplate testVsinClass-8 {} {Vsin new 1 net1 net2 -voffset 0 -va 2 -freq 50 -td 1e-6 -theta {theta -eq} -phi 1}\
         {v1 net1 net2 sin 0 2 50 1e-6 {theta} 1}
 testTemplate testVsinClass-9 {}\
@@ -360,6 +360,8 @@ testTemplate testJClass-2 {} {J new 1 netd netg nets -model jfetmod -area {area*
         {j1 netd netg nets jfetmod {area*2} temp=25}
 testTemplate testJClass-3 {} {J new 1 netd netg nets -model jfetmod -off -area {area*2 -eq} -temp 25}\
         {j1 netd netg nets jfetmod {area*2} off temp=25}
+testTemplate testJClass-4 {} {J new 1 netd -netg nets -model jfetmod -off -area {area*2 -eq} -temp 25}\
+        {j1 netd -netg nets jfetmod {area*2} off temp=25}
 
 ####  Mesfet class tests 
 

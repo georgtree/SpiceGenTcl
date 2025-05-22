@@ -69,13 +69,13 @@
 <div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -i value</span><br><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -v value ?-smoothbsrc? ?-rcconst value?</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
-<tr><td><code>name</code></td><td>Name of the device without first-letter designator B.</td></tr>
-<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
-<tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
 <tr><td><code><font color=#b9b96e>-i</font></code></td><td>Current expression.</td></tr>
 <tr><td><code><font color=#b9b96e>-rcconst</font></code></td><td>Rc constant of the RC network, optional, require -v.</td></tr>
 <tr><td><code><font color=#b9b96e>-smoothbsrc</font></code></td><td>Enables the smooth transitions, optional, require -v.</td></tr>
 <tr><td><code><font color=#b9b96e>-v</font></code></td><td>Voltage expression.</td></tr>
+<tr><td><code>name</code></td><td>Name of the device without first-letter designator B.</td></tr>
+<tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
+<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>B</font></b>&lt;name&gt; &lt;(+) node&gt; &lt;(-) node&gt; V={expression} [device parameters]
@@ -88,7 +88,7 @@
 </pre>
 
 </figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Xyce_Sources_BehaviouralSource_constructor' href="javascript:toggleSource('SpiceGenTcl_Xyce_Sources_BehaviouralSource_constructor')">Show source</a></p>
-<div id='SpiceGenTcl_Xyce_Sources_BehaviouralSource_constructor' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> constructor {name npNode nmNode args} {
+<div id='SpiceGenTcl_Xyce_Sources_BehaviouralSource_constructor' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> constructor {args} {
 
     <i><font color=#76a396># Creates object of class `BehaviouralSource` that describes behavioural source.</font></i>
     <i><font color=#76a396>#  name - name of the device without first-letter designator B</font></i>
@@ -108,11 +108,14 @@
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># Synopsis: name npNode nmNode -i value</font></i>
     <i><font color=#76a396># Synopsis: name npNode nmNode -v value ?-smoothbsrc? ?-rcconst value?</font></i>
-    <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> {
-        {<font color=#b9b96e>-i</font>= <font color=#b9b96e>-forbid</font> {v}}
-        {<font color=#b9b96e>-v</font>= <font color=#b9b96e>-forbid</font> {i}}
-        {<font color=#b9b96e>-smoothbsrc</font> <font color=#b9b96e>-require</font> {v}}
-        {<font color=#b9b96e>-rcconst</font>= <font color=#b9b96e>-require</font> {v}}
+    <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> <font color=#b9b96e>-pfirst</font> <font color=#b9b96e>-help</font> {Creates object of class 'BehaviouralSource' that describes behavioural source} {
+        {<font color=#b9b96e>-i</font>= <font color=#b9b96e>-forbid</font> {v} <font color=#b9b96e>-help</font> {Current expression}}
+        {<font color=#b9b96e>-v</font>= <font color=#b9b96e>-forbid</font> {i} <font color=#b9b96e>-help</font> {Voltage expression}}
+        {<font color=#b9b96e>-smoothbsrc</font> <font color=#b9b96e>-require</font> {v} <font color=#b9b96e>-help</font> {Enables the smooth transitions}}
+        {<font color=#b9b96e>-rcconst</font>= <font color=#b9b96e>-require</font> {v} <font color=#b9b96e>-help</font> {RC constant of the RC network}}
+        {name <font color=#b9b96e>-help</font> {Name of the device without first-letter designator}}
+        {npNode <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
+        {nmNode <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
     }]
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> i]} {
         <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> i [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> i] <font color=#b9b96e>-eq</font>]
@@ -127,7 +130,7 @@
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> rcconst]} {
         <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> rcconst [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> rcconst]]
     }
-    <b><font color=#ffa500>next</font></b> b<font color=#f1b479>$name</font> [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np <font color=#f1b479>$npNode</font>] [<b><font color=#ffa500>list</font></b> nm <font color=#f1b479>$nmNode</font>]] <font color=#f1b479>$params</font>
+    <b><font color=#ffa500>next</font></b> b[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> npNode]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nmNode]]] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Xyce::Sources::Cccs'>Cccs</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-Sources.html#::SpiceGenTcl::Xyce::Sources" title="::SpiceGenTcl::Xyce::Sources" class='ruff_cmd'>::SpiceGenTcl::Xyce::Sources</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>

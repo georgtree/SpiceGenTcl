@@ -5,21 +5,21 @@
 .SH NAME
 SpiceGenTcl::Ltspice::Sources - Commands in namespace SpiceGenTcl::Ltspice::Sources
 .SH SYNOPSIS
-\fBac create OBJNAME\fP \fIname type npNode nmNode ?args?\fP
+\fBac create OBJNAME\fP \fItype ?args?\fP
 .br
-\fBac new\fP \fIname type npNode nmNode ?args?\fP
+\fBac new\fP \fItype ?args?\fP
 .br
 \fBOBJECT constructor\fP \fIname npNode nmNode -v value ?-ic value? ?-tripdv value -tripdt value? ?-laplace value ?-window value? ?-nfft value? ?-mtol value??\fP
 .br
 \fBOBJECT constructor\fP \fIname npNode nmNode -i value ?-ic value? ?-tripdv value -tripdt value? ?-laplace value ?-window value? ?-nfft value? ?-mtol value??\fP
 .br
-\fBdc create OBJNAME\fP \fIname type npNode nmNode ?args?\fP
+\fBdc create OBJNAME\fP \fItype ?args?\fP
 .br
-\fBdc new\fP \fIname type npNode nmNode ?args?\fP
+\fBdc new\fP \fItype ?args?\fP
 .br
-\fBexp create OBJNAME\fP \fIname type npNode nmNode ?args?\fP
+\fBexp create OBJNAME\fP \fItype ?args?\fP
 .br
-\fBexp new\fP \fIname type npNode nmNode ?args?\fP
+\fBexp new\fP \fItype ?args?\fP
 .br
 \fBOBJECT constructor\fP \fIname npNode nmNode -ac value ?-dc value?\fP
 .br
@@ -35,21 +35,21 @@ SpiceGenTcl::Ltspice::Sources - Commands in namespace SpiceGenTcl::Ltspice::Sour
 .br
 \fBOBJECT constructor\fP \fIname npNode nmNode -i0|ioffset value -ia|iamp value -freq value ?-td value ?-theta value ?-phase|phi value ?-ncycles value????\fP
 .br
-\fBpulse create OBJNAME\fP \fIname type npNode nmNode ?args?\fP
+\fBpulse create OBJNAME\fP \fItype ?args?\fP
 .br
-\fBpulse new\fP \fIname type npNode nmNode ?args?\fP
+\fBpulse new\fP \fItype ?args?\fP
 .br
-\fBpwl create OBJNAME\fP \fIname type npNode nmNode ?args?\fP
+\fBpwl create OBJNAME\fP \fItype ?args?\fP
 .br
-\fBpwl new\fP \fIname type npNode nmNode ?args?\fP
+\fBpwl new\fP \fItype ?args?\fP
 .br
-\fBsffm create OBJNAME\fP \fIname type npNode nmNode ?args?\fP
+\fBsffm create OBJNAME\fP \fItype ?args?\fP
 .br
-\fBsffm new\fP \fIname type npNode nmNode ?args?\fP
+\fBsffm new\fP \fItype ?args?\fP
 .br
-\fBsin create OBJNAME\fP \fIname type npNode nmNode ?args?\fP
+\fBsin create OBJNAME\fP \fItype ?args?\fP
 .br
-\fBsin new\fP \fIname type npNode nmNode ?args?\fP
+\fBsin new\fP \fItype ?args?\fP
 .br
 \fBOBJECT constructor\fP \fIname npNode nmNode -ac value ?-dc value? ?-rser value? ?-cpar value?\fP
 .br
@@ -141,25 +141,16 @@ Writable: -name
 .RS -4n
 \fBconstructor\fR (::SpiceGenTcl::Ltspice::Sources::ac)
 .RE
-.RS 4n\fBac create OBJNAME\fP \fIname type npNode nmNode ?args?\fP
+.RS 4n\fBac create OBJNAME\fP \fItype ?args?\fP
 .br
-\fBac new\fP \fIname type npNode nmNode ?args?\fP
+\fBac new\fP \fItype ?args?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Not documented\&.
-.TP
 type
-Not documented\&.
-.TP
-npNode
-Not documented\&.
-.TP
-nmNode
 Not documented\&.
 .RE
 .PP
@@ -310,15 +301,6 @@ Creates object of class BehaviouralSource that describes behavioural source\&.
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Name of the device without first-letter designator B\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
-.TP
-nmNode
-Name of node connected to negative pin\&.
-.TP
 -i
 Current expression\&.
 .TP
@@ -333,6 +315,15 @@ Voltage control step rejection\&.
 .TP
 -v
 Voltage expression\&.
+.TP
+name
+Name of the device without first-letter designator B\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
@@ -570,25 +561,16 @@ Writable: -name
 .RS -4n
 \fBconstructor\fR (::SpiceGenTcl::Ltspice::Sources::dc)
 .RE
-.RS 4n\fBdc create OBJNAME\fP \fIname type npNode nmNode ?args?\fP
+.RS 4n\fBdc create OBJNAME\fP \fItype ?args?\fP
 .br
-\fBdc new\fP \fIname type npNode nmNode ?args?\fP
+\fBdc new\fP \fItype ?args?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Not documented\&.
-.TP
 type
-Not documented\&.
-.TP
-npNode
-Not documented\&.
-.TP
-nmNode
 Not documented\&.
 .RE
 .PP
@@ -732,25 +714,16 @@ Writable: -name
 .RS -4n
 \fBconstructor\fR (::SpiceGenTcl::Ltspice::Sources::exp)
 .RE
-.RS 4n\fBexp create OBJNAME\fP \fIname type npNode nmNode ?args?\fP
+.RS 4n\fBexp create OBJNAME\fP \fItype ?args?\fP
 .br
-\fBexp new\fP \fIname type npNode nmNode ?args?\fP
+\fBexp new\fP \fItype ?args?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Not documented\&.
-.TP
 type
-Not documented\&.
-.TP
-npNode
-Not documented\&.
-.TP
-nmNode
 Not documented\&.
 .RE
 .PP
@@ -1021,20 +994,20 @@ Creates object of class Iac that describes ac current source\&.
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Name of the device without first-letter designator I\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
-.TP
-nmNode
-Name of node connected to negative pin\&.
-.TP
 -ac
 AC current value\&.
 .TP
 -dc
 DC current value, default 0\&.
+.TP
+name
+Name of the device without first-letter designator I\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
@@ -1131,17 +1104,17 @@ Creates object of class Idc that describes simple constant current source\&.
 \fBParameters\fR
 .RS 4n
 .TP
+-dc
+DC current value\&.
+.TP
 name
 Name of the device without first-letter designator I\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
 .TP
 nmNode
 Name of node connected to negative pin\&.
 .TP
--dc
-DC current value\&.
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
@@ -1238,15 +1211,6 @@ Creates object of class Iexp that describes exponential current source\&.
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Name of the device without first-letter designator I\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
-.TP
-nmNode
-Name of node connected to negative pin\&.
-.TP
 -i1
 Initial value\&.
 .TP
@@ -1264,6 +1228,15 @@ Rise delay time\&.
 .TP
 -td2
 Fall delay time\&.
+.TP
+name
+Name of the device without first-letter designator I\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
@@ -1360,15 +1333,6 @@ Creates object of class Ipulse that describes pulse current source\&.
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Name of the device without first-letter designator I\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
-.TP
-nmNode
-Name of node connected to negative pin\&.
-.TP
 -high
 High value, aliases: -von, ion\&.
 .TP
@@ -1392,6 +1356,15 @@ Fall time\&.
 .TP
 -tr
 Rise time\&.
+.TP
+name
+Name of the device without first-letter designator I\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
@@ -1488,15 +1461,6 @@ Creates object of class Ipwl that describes piece-wise current source\&.
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Name of the device without first-letter designator I\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
-.TP
-nmNode
-Name of node connected to negative pin\&.
-.TP
 -cpar
 Parallel capacitor value, optional\&.
 .TP
@@ -1505,6 +1469,15 @@ Series resistor value, optional\&.
 .TP
 -seq
 Sequence of pwl points in form {t0 v0 t1 v1 t2 v2 t3 v3 \&.\&.\&.}
+.TP
+name
+Name of the device without first-letter designator I\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
@@ -1601,15 +1574,6 @@ Creates object of class Isffm that describes single-frequency FM current source\
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Name of the device without first-letter designator I\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
-.TP
-nmNode
-Name of node connected to negative pin\&.
-.TP
 -fc
 Carrier frequency, alias -fcar\&.
 .TP
@@ -1624,6 +1588,15 @@ Pulsed value, aliases: -vamp, -va, -iamp\&.
 .TP
 -mdi
 Modulation index\&.
+.TP
+name
+Name of the device without first-letter designator I\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
@@ -1720,15 +1693,6 @@ Creates object of class Isin that describes sinusoidal current source\&.
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Name of the device without first-letter designator I\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
-.TP
-nmNode
-Name of node connected to negative pin\&.
-.TP
 -freq
 Frequency of sinusoidal signal\&.
 .TP
@@ -1749,6 +1713,15 @@ DC shift value, aliases: -voffset, -v0, -ioffset\&.
 .TP
 -va
 Amplitude value, aliases: -vamp, -va, -iamp\&.
+.TP
+name
+Name of the device without first-letter designator I\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
@@ -1844,25 +1817,16 @@ Writable: -name
 .RS -4n
 \fBconstructor\fR (::SpiceGenTcl::Ltspice::Sources::pulse)
 .RE
-.RS 4n\fBpulse create OBJNAME\fP \fIname type npNode nmNode ?args?\fP
+.RS 4n\fBpulse create OBJNAME\fP \fItype ?args?\fP
 .br
-\fBpulse new\fP \fIname type npNode nmNode ?args?\fP
+\fBpulse new\fP \fItype ?args?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Not documented\&.
-.TP
 type
-Not documented\&.
-.TP
-npNode
-Not documented\&.
-.TP
-nmNode
 Not documented\&.
 .RE
 .PP
@@ -1939,25 +1903,16 @@ Writable: -name
 .RS -4n
 \fBconstructor\fR (::SpiceGenTcl::Ltspice::Sources::pwl)
 .RE
-.RS 4n\fBpwl create OBJNAME\fP \fIname type npNode nmNode ?args?\fP
+.RS 4n\fBpwl create OBJNAME\fP \fItype ?args?\fP
 .br
-\fBpwl new\fP \fIname type npNode nmNode ?args?\fP
+\fBpwl new\fP \fItype ?args?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Not documented\&.
-.TP
 type
-Not documented\&.
-.TP
-npNode
-Not documented\&.
-.TP
-nmNode
 Not documented\&.
 .RE
 .PP
@@ -2038,25 +1993,16 @@ Writable: -name
 .RS -4n
 \fBconstructor\fR (::SpiceGenTcl::Ltspice::Sources::sffm)
 .RE
-.RS 4n\fBsffm create OBJNAME\fP \fIname type npNode nmNode ?args?\fP
+.RS 4n\fBsffm create OBJNAME\fP \fItype ?args?\fP
 .br
-\fBsffm new\fP \fIname type npNode nmNode ?args?\fP
+\fBsffm new\fP \fItype ?args?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Not documented\&.
-.TP
 type
-Not documented\&.
-.TP
-npNode
-Not documented\&.
-.TP
-nmNode
 Not documented\&.
 .RE
 .PP
@@ -2137,25 +2083,16 @@ Writable: -name
 .RS -4n
 \fBconstructor\fR (::SpiceGenTcl::Ltspice::Sources::sin)
 .RE
-.RS 4n\fBsin create OBJNAME\fP \fIname type npNode nmNode ?args?\fP
+.RS 4n\fBsin create OBJNAME\fP \fItype ?args?\fP
 .br
-\fBsin new\fP \fIname type npNode nmNode ?args?\fP
+\fBsin new\fP \fItype ?args?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Not documented\&.
-.TP
 type
-Not documented\&.
-.TP
-npNode
-Not documented\&.
-.TP
-nmNode
 Not documented\&.
 .RE
 .PP
@@ -2237,15 +2174,6 @@ Creates object of class Vac that describes ac voltage source\&.
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Name of the device without first-letter designator V\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
-.TP
-nmNode
-Name of node connected to negative pin\&.
-.TP
 -ac
 AC voltage value\&.
 .TP
@@ -2257,6 +2185,15 @@ DC voltage value, default 0\&.
 .TP
 -rser
 Series resistor value, optional\&.
+.TP
+name
+Name of the device without first-letter designator V\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
@@ -2487,15 +2424,6 @@ Creates object of class Vdc that describes simple constant voltage source\&.
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Name of the device without first-letter designator V\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
-.TP
-nmNode
-Name of node connected to negative pin\&.
-.TP
 -cpar
 Parallel capacitor value, optional\&.
 .TP
@@ -2504,6 +2432,15 @@ DC voltage value\&.
 .TP
 -rser
 Series resistor value, optional\&.
+.TP
+name
+Name of the device without first-letter designator V\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
@@ -2600,15 +2537,6 @@ Creates object of class Vexp that describes exponential voltage source\&.
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Name of the device without first-letter designator V\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
-.TP
-nmNode
-Name of node connected to negative pin\&.
-.TP
 -cpar
 Parallel capacitor value, optional\&.
 .TP
@@ -2632,6 +2560,15 @@ Initial value\&.
 .TP
 -v2
 Pulsed value\&.
+.TP
+name
+Name of the device without first-letter designator V\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
@@ -2728,15 +2665,6 @@ Creates object of class Vpulse that describes pulse voltage source\&.
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Name of the device without first-letter designator V\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
-.TP
-nmNode
-Name of node connected to negative pin\&.
-.TP
 -cpar
 Parallel capacitor value, optional\&.
 .TP
@@ -2766,6 +2694,15 @@ Fall time\&.
 .TP
 -tr
 Rise time\&.
+.TP
+name
+Name of the device without first-letter designator V\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
@@ -2862,15 +2799,6 @@ Creates object of class Vpwl that describes piece-wise voltage source\&.
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Name of the device without first-letter designator V\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
-.TP
-nmNode
-Name of node connected to negative pin\&.
-.TP
 -cpar
 Parallel capacitor value, optional\&.
 .TP
@@ -2879,6 +2807,15 @@ Series resistor value, optional\&.
 .TP
 -seq
 Sequence of pwl points in form {t0 v0 t1 v1 t2 v2 t3 v3 \&.\&.\&.}
+.TP
+name
+Name of the device without first-letter designator V\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
@@ -2975,15 +2912,6 @@ Creates object of class Vsffm that describes single-frequency FM voltage source\
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Name of the device without first-letter designator V\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
-.TP
-nmNode
-Name of node connected to negative pin\&.
-.TP
 -cpar
 Parallel capacitor value, optional\&.
 .TP
@@ -3004,6 +2932,15 @@ Initial value, aliases: -voff, -i0, -ioff\&.
 .TP
 -va
 Pulsed value, aliases: -vamp, -ia, -iamp\&.
+.TP
+name
+Name of the device without first-letter designator V\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
@@ -3100,15 +3037,6 @@ Creates object of class Vsin that describes sinusoidal voltage source\&.
 \fBParameters\fR
 .RS 4n
 .TP
-name
-Name of the device without first-letter designator V\&.
-.TP
-npNode
-Name of node connected to positive pin\&.
-.TP
-nmNode
-Name of node connected to negative pin\&.
-.TP
 -cpar
 Parallel capacitor value, optional\&.
 .TP
@@ -3135,6 +3063,15 @@ DC shift value, aliases: -voffset, -i0, -ioffset\&.
 .TP
 -va
 Amplitude value, aliases: -vamp, -ia, -iamp\&.
+.TP
+name
+Name of the device without first-letter designator V\&.
+.TP
+nmNode
+Name of node connected to negative pin\&.
+.TP
+npNode
+Name of node connected to positive pin\&.
 .RE
 .PP
 \fBDescription\fR
