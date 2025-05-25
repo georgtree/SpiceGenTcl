@@ -38,8 +38,8 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
         constructor {args} {
             # Creates object of class `Resistor` that describes resistor.
             #  name - name of the device without first-letter designator R
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
+            #  np - name of node connected to positive pin
+            #  nm - name of node connected to negative pin
             #  -r - resistance value
             #  -m - multiplier value, optional
             #  -temp - device temperature, optional
@@ -53,7 +53,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             # ```
             # ::SpiceGenTcl::Common::BasicDevices::Resistor new 1 netp netm -r 1e3 -tc1 1 -temp {temp_amb -eq}
             # ```
-            # Synopsis: name npNode nmNode -r value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value?
+            # Synopsis: name np nm -r value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value?
             set arguments [argparse -inline -pfirst -helplevel 1 -help {Creates object of class `Resistor` that describes\
                                                                                resistor} {
                 {-r= -required -help {Resistance value}}
@@ -62,8 +62,8 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 {-tc1= -help {Linear thermal coefficient}}
                 {-tc2= -help {Quadratic thermal coefficient}}
                 {name -help {Name of the device without first-letter designator R}}
-                {npNode -help {Name of node connected to positive pin}}
-                {nmNode -help {Name of node connected to negative pin}}
+                {np -help {Name of node connected to positive pin}}
+                {nm -help {Name of node connected to negative pin}}
             }]
             set rVal [dget $arguments r]
             if {([llength $rVal]>1) && ([@ $rVal 1] eq {-eq})} {
@@ -72,11 +72,11 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 lappend params [list r $rVal -pos]
             }
             dict for {paramName value} $arguments {
-                if {$paramName ni {r name npNode nmNode}} {
+                if {$paramName ni {r name np nm}} {
                     lappend params [list $paramName {*}$value]
                 }
             }
-            next r[dget $arguments name] [list [list np [dget $arguments npNode]] [list nm [dget $arguments nmNode]]]\
+            next r[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
                     $params
         }
         destructor {
@@ -96,8 +96,8 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
         constructor {args} {
             # Creates object of class `Capacitor` that describes capacitor.
             #  name - name of the device without first-letter designator C
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
+            #  np - name of node connected to positive pin
+            #  nm - name of node connected to negative pin
             #  -c - capacitance value
             #  -m - multiplier value, optional
             #  -temp - device temperature, optional, optional
@@ -112,7 +112,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             # ```
             # ::SpiceGenTcl::Common::BasicDevices::Capacitor new 1 netp netm -c 1e3 -tc1 1 -temp {temp_amb -eq}
             # ```
-            # Synopsis: name npNode nmNode -c value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value? ?-ic value?
+            # Synopsis: name np nm -c value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value? ?-ic value?
             set arguments [argparse -inline -pfirst -help {Creates object of class `Capacitor` that describes capacitor.} {
                 {-c= -required -help {Capacitance value}}
                 {-m= -help {Multiplier value}}
@@ -121,8 +121,8 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 {-tc2= -help {Quadratic thermal coefficient}}
                 {-ic= -help {Initial condition} }
                 {name -help {Name of the device without first-letter designator C}}
-                {npNode -help {Name of node connected to positive pin}}
-                {nmNode -help {Name of node connected to negative pin}}
+                {np -help {Name of node connected to positive pin}}
+                {nm -help {Name of node connected to negative pin}}
             }]
             set cVal [dget $arguments c]
             if {([llength $cVal]>1) && ([@ $cVal 1] eq {-eq})} {
@@ -131,11 +131,11 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 lappend params [list c $cVal -pos]
             }
             dict for {paramName value} $arguments {
-                if {$paramName ni {c name npNode nmNode}} {
+                if {$paramName ni {c name np nm}} {
                     lappend params [list $paramName {*}$value]
                 }
             }
-            next c[dget $arguments name] [list [list np [dget $arguments npNode]] [list nm [dget $arguments nmNode]]]\
+            next c[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
                     $params
         }
     }
@@ -153,8 +153,8 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
         constructor {args} {
             # Creates object of class `Inductor` that describes inductor.
             #  name - name of the device without first-letter designator L
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
+            #  np - name of node connected to positive pin
+            #  nm - name of node connected to negative pin
             #  -l - inductance value
             #  -m - multiplier value, optional
             #  -temp - device temperature, optional, optional
@@ -168,7 +168,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             # ```
             # ::SpiceGenTcl::Common::BasicDevices::Inductor new 1 netp netm -l 1e3 -tc1 1 -temp {temp_amb -eq}
             # ```
-            # Synopsis: name npNode nmNode -l value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value?
+            # Synopsis: name np nm -l value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value?
             set arguments [argparse -inline -pfirst -help {Creates object of class `Inductor` that describes inductor} {
                 {-l= -required -help {Inductance value}}
                 {-m= -help {Multiplier value}}
@@ -176,8 +176,8 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 {-tc1= -help {Linear thermal coefficient}}
                 {-tc2= -help {Quadratic thermal coefficient}}
                 {name -help {Name of the device without first-letter designator L}}
-                {npNode -help {Name of node connected to positive pin}}
-                {nmNode -help {Name of node connected to negative pin}}
+                {np -help {Name of node connected to positive pin}}
+                {nm -help {Name of node connected to negative pin}}
             }]
             set lVal [dget $arguments l]
             if {([llength $lVal]>1) && ([@ $lVal 1] eq {-eq})} {
@@ -186,11 +186,11 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 lappend params [list l $lVal -pos]
             }
             dict for {paramName value} $arguments {
-                if {$paramName ni {l name npNode nmNode}} {
+                if {$paramName ni {l name np nm}} {
                     lappend params [list $paramName {*}$value]
                 }
             }
-            next l[dget $arguments name] [list [list np [dget $arguments npNode]] [list nm [dget $arguments nmNode]]]\
+            next l[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
                     $params
         }
     }
@@ -245,10 +245,10 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
         constructor {args} {
             # Creates object of class `VSwitch` that describes voltage controlled switch device.
             #  name - name of the device without first-letter designator S
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
-            #  ncpNode - name of node connected to positive controlling pin
-            #  ncmNode - name of node connected to negative controlling pin
+            #  np - name of node connected to positive pin
+            #  nm - name of node connected to negative pin
+            #  ncp - name of node connected to positive controlling pin
+            #  ncm - name of node connected to negative controlling pin
             #  -model - model name
             #  -on/-off - initial state of switch
             # ```
@@ -258,17 +258,17 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             # ```
             # ::SpiceGenTcl::Ngspice::BasicDevices::VSwitch new 1 net1 0 netc 0 -model sw1 -on
             # ```
-            # Synopsis: name npNode nmNode ncpNode ncmNode -model value ?-on|-off?
+            # Synopsis: name np nm ncp ncm -model value ?-on|-off?
             set arguments [argparse -inline -pfirst -help {Creates object of class `VSwitch` that describes voltage\
                                                                   controlled switch device} {
                 {-model= -required -help {Model name}}
                 {-on -forbid {off} -help {Initial on state of switch}}
                 {-off -forbid {on} -help {Initial off state of switch}}
                 {name -help {Name of the device without first-letter designator}}
-                {npNode -help {Name of node connected to positive pin}}
-                {nmNode -help {Name of node connected to negative pin}}
-                {ncpNode -help {Name of node connected to positive controlling pin}}
-                {ncmNode -help {Name of node connected to negative controlling pin}}
+                {np -help {Name of node connected to positive pin}}
+                {nm -help {Name of node connected to negative pin}}
+                {ncp -help {Name of node connected to positive controlling pin}}
+                {ncm -help {Name of node connected to negative controlling pin}}
             }]
             lappend params [list model [dget $arguments model] -posnocheck]
             if {[dexist $arguments on]} {
@@ -276,8 +276,8 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             } elseif {[dexist $arguments off]} {
                 lappend params {off -sw}
             }
-            next s[dget $arguments name] [list [list np [dget $arguments npNode]] [list nm [dget $arguments nmNode]]\
-                                 [list ncp [dget $arguments ncpNode]] [list ncm [dget $arguments ncmNode]]] $params
+            next s[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]\
+                                 [list ncp [dget $arguments ncp]] [list ncm [dget $arguments ncm]]] $params
         }
     }
 
@@ -296,8 +296,8 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
         constructor {args} {
             # Creates object of class `CSwitch` that describes current controlled switch device.
             #  name - name of the device without first-letter designator W
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
+            #  np - name of node connected to positive pin
+            #  nm - name of node connected to negative pin
             #  -icntrl - source of control current
             #  -model - model name
             #  -on/-off - initial state of switch
@@ -308,7 +308,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             # ```
             # ::SpiceGenTcl::Ngspice::BasicDevices::CSwitch new 1 net1 0 -icntrl v1 -model sw1 -on
             # ```
-            # Synopsis: name npNode nmNode -icntrl value -model value ?-on|-off?
+            # Synopsis: name np nm -icntrl value -model value ?-on|-off?
             set arguments [argparse -inline -pfirst -help {Creates object of class `CSwitch` that describes current\
                                                                   controlled switch device} {
                 {-icntrl= -required -help {Source of control current}}
@@ -316,8 +316,8 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 {-on -forbid {off} -help {Initial on state of switch}}
                 {-off -forbid {on} -help {Initial off state of switch}}
                 {name -help {Name of the device without first-letter designator W}}
-                {npNode -help {Name of node connected to positive pin}}
-                {nmNode -help {Name of node connected to negative pin}}
+                {np -help {Name of node connected to positive pin}}
+                {nm -help {Name of node connected to negative pin}}
             }]
             lappend params [list icntrl [dget $arguments icntrl] -posnocheck]
             lappend params [list model [dget $arguments model] -posnocheck]
@@ -326,7 +326,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             } elseif {[dexist $arguments off]} {
                 lappend params {off -sw}
             }
-            next w[dget $arguments name] [list [list np [dget $arguments npNode]] [list nm [dget $arguments nmNode]]]\
+            next w[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
                     $params
         }
     }
@@ -417,8 +417,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                     constant $typeName source" {
                 {-dc= -required -help {DC value}}
                 {name -help {Name of the device without first-letter designator}}
-                {npNode -help {Name of node connected to positive pin}}
-                {nmNode -help {Name of node connected to negative pin}}
+                {np -help {Name of node connected to positive pin}}
+                {nm -help {Name of node connected to negative pin}}
             }]
             set dcVal [dget $arguments dc]
             if {([llength $dcVal]>1) && ([@ $dcVal 1] eq {-eq})} {
@@ -426,8 +426,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             } else {
                 lappend params [list dc $dcVal -pos]
             }
-            next $type[dget $arguments name] [list [list np [dget $arguments npNode]]\
-                                                      [list nm [dget $arguments nmNode]]] $params
+            next $type[dget $arguments name] [list [list np [dget $arguments np]]\
+                                                      [list nm [dget $arguments nm]]] $params
         }
     }
 
@@ -447,8 +447,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {-ac= -required -help {AC voltage value}}
                 {-acphase= -help {Phase of AC voltage}}
                 {name -help {Name of the device without first-letter designator}}
-                {npNode -help {Name of node connected to positive pin}}
-                {nmNode -help {Name of node connected to negative pin}}
+                {np -help {Name of node connected to positive pin}}
+                {nm -help {Name of node connected to negative pin}}
             }]
             set dcVal [dget $arguments dc]
             if {([llength $dcVal]>1) && ([@ $dcVal 1] eq {-eq})} {
@@ -464,7 +464,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 lappend params [list ac $acVal -pos]
             }
             dict for {paramName value} $arguments {
-                if {$paramName ni {ac dc name npNode nmNode}} {
+                if {$paramName ni {ac dc name np nm}} {
                     if {([llength $value]>1) && ([@ $value 1] eq {-eq})} {
                         lappend params [list $paramName [@ $value 0] -poseq]
                     } else {
@@ -472,8 +472,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                     }
                 }
             }
-            next $type[dget $arguments name] [list [list np [dget $arguments npNode]]\
-                                                      [list nm [dget $arguments nmNode]]] $params
+            next $type[dget $arguments name] [list [list np [dget $arguments np]]\
+                                                      [list nm [dget $arguments nm]]] $params
         }
     }   
     
@@ -501,8 +501,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {-pw|ton= -required -help {Width of pulse}}
                 {-per|tper= -required -help {Period time}}
                 {name -help {Name of the device without first-letter designator}}
-                {npNode -help {Name of node connected to positive pin}}
-                {nmNode -help {Name of node connected to negative pin}}
+                {np -help {Name of node connected to positive pin}}
+                {nm -help {Name of node connected to negative pin}}
             }]
             if {[dexist $arguments dc]} {
                 lappend params {dc -sw}
@@ -533,8 +533,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             set paramsOrder {low high td tr tf ton tper}
             lappend params {model pulse -posnocheck}
             my ParamsProcess $paramsOrder $arguments params
-            next $type[dget $arguments name] [list [list np [dget $arguments npNode]]\
-                                                      [list nm [dget $arguments nmNode]]] $params
+            next $type[dget $arguments name] [list [list np [dget $arguments np]]\
+                                                      [list nm [dget $arguments nm]]] $params
         }
     } 
     
@@ -561,8 +561,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {-theta= -require {td} -help {Damping factor}}
                 {-phi|phase= -require {td theta} -help {Phase of signal}}
                 {name -help {Name of the device without first-letter designator}}
-                {npNode -help {Name of node connected to positive pin}}
-                {nmNode -help {Name of node connected to negative pin}}
+                {np -help {Name of node connected to positive pin}}
+                {nm -help {Name of node connected to negative pin}}
             }]
             if {[dexist $arguments dc]} {
                 lappend params {dc -sw}
@@ -593,8 +593,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             set paramsOrder {v0 va freq td theta phase}
             lappend params {model sin -posnocheck}
             my ParamsProcess $paramsOrder $arguments params
-            next $type[dget $arguments name] [list [list np [dget $arguments npNode]]\
-                                                      [list nm [dget $arguments nmNode]]] $params
+            next $type[dget $arguments name] [list [list np [dget $arguments np]]\
+                                                      [list nm [dget $arguments nm]]] $params
         }
     }  
     
@@ -621,8 +621,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {-td2= -required -help {Fall delay time}}
                 {-tau2= -required -help {Fall time constant}}
                 {name -help {Name of the device without first-letter designator}}
-                {npNode -help {Name of node connected to positive pin}}
-                {nmNode -help {Name of node connected to negative pin}}
+                {np -help {Name of node connected to positive pin}}
+                {nm -help {Name of node connected to negative pin}}
             }]
             if {[dexist $arguments dc]} {
                 lappend params {dc -sw}
@@ -653,8 +653,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             set paramsOrder {v1 v2 td1 tau1 td2 tau2}
             lappend params {model exp -posnocheck}
             my ParamsProcess $paramsOrder $arguments params
-            next $type[dget $arguments name] [list [list np [dget $arguments npNode]]\
-                                                      [list nm [dget $arguments nmNode]]] $params
+            next $type[dget $arguments name] [list [list np [dget $arguments np]]\
+                                                      [list nm [dget $arguments nm]]] $params
         }
     }    
     
@@ -675,8 +675,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {-acphase= -require ac -help {Phase of AC signal}}
                 {-seq= -required -help {Sequence of pwl points in form {t0 i0 t1 i1 t2 i2 t3 i3 ...}}}
                 {name -help {Name of the device without first-letter designator}}
-                {npNode -help {Name of node connected to positive pin}}
-                {nmNode -help {Name of node connected to negative pin}}
+                {np -help {Name of node connected to positive pin}}
+                {nm -help {Name of node connected to negative pin}}
             }]
             set start 0
             if {[dexist $arguments dc]} {
@@ -731,8 +731,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 }
             }
             set paramList [linsert $paramList $start {model pwl -posnocheck}]
-            next $type[dget $arguments name] [list [list np [dget $arguments npNode]]\
-                                                      [list nm [dget $arguments nmNode]]] $paramList
+            next $type[dget $arguments name] [list [list np [dget $arguments np]]\
+                                                      [list nm [dget $arguments nm]]] $paramList
         }
     }
 
@@ -758,8 +758,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {-mdi= -required -help {Modulation index}}
                 {-fsig|fs= -required -help {Signal frequency}}
                 {name -help {Name of the device without first-letter designator}}
-                {npNode -help {Name of node connected to positive pin}}
-                {nmNode -help {Name of node connected to negative pin}}
+                {np -help {Name of node connected to positive pin}}
+                {nm -help {Name of node connected to negative pin}}
             }]
             if {[dexist $arguments dc]} {
                 lappend params {dc -sw}
@@ -790,8 +790,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             set paramsOrder {v0 va fc mdi fs}
             lappend params {model sffm -posnocheck}
             my ParamsProcess $paramsOrder $arguments params
-            next $type[dget $arguments name] [list [list np [dget $arguments npNode]]\
-                                                      [list nm [dget $arguments nmNode]]] $params
+            next $type[dget $arguments name] [list [list np [dget $arguments np]]\
+                                                      [list nm [dget $arguments nm]]] $params
         }
     }      
     
@@ -802,8 +802,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         constructor {args} {
             # Creates object of class `Vdc` that describes simple constant voltage source.
             #  name - name of the device without first-letter designator V
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
+            #  np - name of node connected to positive pin
+            #  nm - name of node connected to negative pin
             #  -dc - DC voltage value
             # ```
             # VYYYYYYY n+ n- <<DC> DC/TRAN VALUE>>
@@ -812,7 +812,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Vdc new 1 netp netm -dc 10
             # ```
-            # Synopsis: name npNode nmNode -dc value
+            # Synopsis: name np nm -dc value
             next v {*}$args
         }
     }
@@ -824,8 +824,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         constructor {args} {
             # Creates object of class `Vac` that describes ac voltage source.
             #  name - name of the device without first-letter designator V
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
+            #  np - name of node connected to positive pin
+            #  nm - name of node connected to negative pin
             #  -ac - AC voltage value
             #  -acphase - phase of AC voltage
             # ```
@@ -835,7 +835,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Vac new 1 netp netm -ac 10 -acphase 45
             # ```
-            # Synopsis: name npNode nmNode -ac value ?-acphase value?
+            # Synopsis: name np nm -ac value ?-acphase value?
             next v {*}$args
 
         }
@@ -848,8 +848,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         constructor {args} {
             # Creates object of class `Vpulse` that describes pulse voltage source.
             #  name - name of the device without first-letter designator V
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
+            #  np - name of node connected to positive pin
+            #  nm - name of node connected to negative pin
             #  -low - low value, aliases: -voff, -ioff
             #  -high - high value, aliases: -von, ion
             #  -td - time delay
@@ -867,7 +867,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Vpulse new 1 net1 net2 -low 0 -high 1 -td {td -eq} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6
             # ```
-            # Synopsis: name npNode nmNode -voff|ioff|low value -von|ion|high value -td value -tr value -tf value 
+            # Synopsis: name np nm -voff|ioff|low value -von|ion|high value -td value -tr value -tf value 
             #   -pw|ton value ?-dc value? ?-ac value ?-acphase value??
             next v {*}$args
         }
@@ -880,8 +880,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         constructor {args} {
             # Creates object of class `Vsin` that describes sinusoidal voltage source.
             #  name - name of the device without first-letter designator V
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
+            #  np - name of node connected to positive pin
+            #  nm - name of node connected to negative pin
             #  -v0 - DC shift value, aliases: -voffset, -i0, -ioffset
             #  -va - amplitude value, aliases: -vamp, -ia, -iamp
             #  -freq - frequency of sinusoidal signal
@@ -898,7 +898,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Vsin new 1 net1 net2 -v0 0 -va 2 -freq {freq -eq} -td 1e-6 -theta {theta -eq}
             # ```
-            # Synopsis: name npNode nmNode -i0|voffset|ioffset|v0 value -ia|vamp|iamp|va value -freq value
+            # Synopsis: name np nm -i0|voffset|ioffset|v0 value -ia|vamp|iamp|va value -freq value
             #   ?-td value ?-theta value ?-phi|phase value???
             next v {*}$args
         }
@@ -911,8 +911,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         constructor {args} {
             # Creates object of class `Vexp` that describes exponential voltage source.
             #  name - name of the device without first-letter designator V
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
+            #  np - name of node connected to positive pin
+            #  nm - name of node connected to negative pin
             #  -v1 - initial value
             #  -v2 - pulsed value
             #  -td1 - rise delay time
@@ -929,7 +929,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Vexp new 1 net1 net2 -v1 0 -v2 1 -td1 1e-9 -tau1 1e-9 -td2 {td2 -eq} -tau2 10e-6
             # ```
-            # Synopsis: name npNode nmNode -i1|v1 value -i2|v2 value -td1 value -tau1 value -td2 value -tau2 value
+            # Synopsis: name np nm -i1|v1 value -i2|v2 value -td1 value -tau1 value -td2 value -tau2 value
             #   ?-phi|phase value???
             next v {*}$args
         }
@@ -942,8 +942,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         constructor {args} {
             # Creates object of class `Vpwl` that describes piece-wise voltage source.
             #  name - name of the device without first-letter designator V
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
+            #  np - name of node connected to positive pin
+            #  nm - name of node connected to negative pin
             #  -seq - sequence of pwl points in form {t0 v0 t1 v1 t2 v2 t3 v3 ...}
             #  -dc - DC value, optional
             #  -ac - AC value, optional
@@ -953,9 +953,9 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::Sources::Vpwl new 1 npNode nmNode -seq {0 0 {t1 -eq} 1 2 2 3 3 4 4}
+            # ::SpiceGenTcl::Common::Sources::Vpwl new 1 np nm -seq {0 0 {t1 -eq} 1 2 2 3 3 4 4}
             # ```
-            # Synopsis: name npNode nmNode -seq list ?-phase|phi value???
+            # Synopsis: name np nm -seq list ?-phase|phi value???
             next v {*}$args
         }
     }    
@@ -967,8 +967,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         constructor {args} {
             # Creates object of class `Vsffm` that describes single-frequency FM voltage source.
             #  name - name of the device without first-letter designator V
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
+            #  np - name of node connected to positive pin
+            #  nm - name of node connected to negative pin
             #  -v0 - initial value, aliases: -voff, -i0, -ioff
             #  -va - pulsed value, aliases: -vamp, -ia, -iamp
             #  -fc - carrier frequency, alias -fcar
@@ -984,7 +984,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Vsin new 1 net1 net2 -v0 0 -va 1 -fc {freq -eq} -mdi 0 -fs 1e3
             # ```
-            # Synopsis: name npNode nmNode -i0|voff|ioff|v0 value -ia|vamp|iamp|va value -fc|fcar value -mdi value 
+            # Synopsis: name np nm -i0|voff|ioff|v0 value -ia|vamp|iamp|va value -fc|fcar value -mdi value 
             #   -fs|fsig ?-phi|phase value???
             next v {*}$args
         }
@@ -998,8 +998,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         constructor {args} {
             # Creates object of class `Idc` that describes simple constant current source.
             #  name - name of the device without first-letter designator I
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
+            #  np - name of node connected to positive pin
+            #  nm - name of node connected to negative pin
             #  -dc - DC voltage value
             # ```
             # IYYYYYYY n+ n- <<DC> DC/TRAN VALUE>>
@@ -1008,7 +1008,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Idc new 1 netp netm -dc 10
             # ```
-            # Synopsis: name npNode nmNode -dc value
+            # Synopsis: name np nm -dc value
             next i {*}$args
         }
     }
@@ -1020,8 +1020,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         constructor {args} {
             # Creates object of class `Iac` that describes ac current source.
             #  name - name of the device without first-letter designator I
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
+            #  np - name of node connected to positive pin
+            #  nm - name of node connected to negative pin
             #  -dc - AC current value
             #  -acphase - phase of AC current
             # ```
@@ -1030,7 +1030,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # Example of class initialization:
             # ```
             # ::SpiceGenTcl::Common::Sources::Iac new 1 netp netm -ac 10 -acphase 45
-            # Synopsis: name npNode nmNode -ac value ?-acphase value?
+            # Synopsis: name np nm -ac value ?-acphase value?
             next i {*}$args
         }
     }
@@ -1043,8 +1043,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         constructor {args} {
             # Creates object of class `Ipulse` that describes pulse current source.
             #  name - name of the device without first-letter designator I
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
+            #  np - name of node connected to positive pin
+            #  nm - name of node connected to negative pin
             #  -low - low value, aliases: -voff, -ioff
             #  -high - high value, aliases: -von, ion
             #  -td - time delay
@@ -1062,7 +1062,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Ipulse new 1 net1 net2 -low 0 -high 1 -td {td -eq} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6
             # ```
-            # Synopsis: name npNode nmNode -voff|ioff|low value -von|ion|high value -td value -tr value -tf value
+            # Synopsis: name np nm -voff|ioff|low value -von|ion|high value -td value -tr value -tf value
             #   -pw|ton value ?-phase|phi value???
             next i {*}$args
         }
@@ -1075,8 +1075,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         constructor {args} {
             # Creates object of class `Isin` that describes sinusoidal current source.
             #  name - name of the device without first-letter designator I
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
+            #  np - name of node connected to positive pin
+            #  nm - name of node connected to negative pin
             #  -i0 - DC shift value, aliases: -voffset, -v0, -ioffset
             #  -ia - amplitude value, aliases: -vamp, -va, -iamp
             #  -freq - frequency of sinusoidal signal
@@ -1093,7 +1093,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Isin new 1 net1 net2 -i0 0 -ia 2 -freq {freq -eq} -td 1e-6 -theta {theta -eq}
             # ```
-            # Synopsis: name npNode nmNode -i0|ioffset value -ia|iamp value -freq value ?-td value ?-theta value
+            # Synopsis: name np nm -i0|ioffset value -ia|iamp value -freq value ?-td value ?-theta value
             #   ?-phase|phi value???
             next i {*}$args
         }
@@ -1106,8 +1106,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         constructor {args} {
             # Creates object of class `Iexp` that describes exponential current source.
             #  name - name of the device without first-letter designator I
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
+            #  np - name of node connected to positive pin
+            #  nm - name of node connected to negative pin
             #  -i1 - initial value
             #  -i2 - pulsed value
             #  -td1 - rise delay time
@@ -1124,7 +1124,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Iexp new 1 net1 net2 -i1 0 -i2 1 -td1 1e-9 -tau1 1e-9 -td2 {td2 -eq} -tau2 10e-6
             # ```
-            # Synopsis: name npNode nmNode -i1 value -i2 value -td1 value -tau1 value -td2 value -tau2 value
+            # Synopsis: name np nm -i1 value -i2 value -td1 value -tau1 value -td2 value -tau2 value
             #   ?-phase|phi value???
             next i {*}$args
         }
@@ -1137,8 +1137,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         constructor {args} {
             # Creates object of class `Ipwl` that describes piece-wise current source.
             #  name - name of the device without first-letter designator I
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
+            #  np - name of node connected to positive pin
+            #  nm - name of node connected to negative pin
             #  -seq - sequence of pwl points in form {t0 i0 t1 i1 t2 i2 t3 i3 ...}
             #  -dc - DC value, optional
             #  -ac - AC value, optional
@@ -1148,9 +1148,9 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::Sources::Ipwl new 1 npNode nmNode -seq {0 0 {t1 -eq} 1 2 2 3 3 4 4}
+            # ::SpiceGenTcl::Common::Sources::Ipwl new 1 np nm -seq {0 0 {t1 -eq} 1 2 2 3 3 4 4}
             # ```
-            # Synopsis: name npNode nmNode -seq list ?-phase|phi value???
+            # Synopsis: name np nm -seq list ?-phase|phi value???
             next i {*}$args
         }
     }   
@@ -1162,8 +1162,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         constructor {args} {
             # Creates object of class `Isffm` that describes single-frequency FM current source.
             #  name - name of the device without first-letter designator I
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
+            #  np - name of node connected to positive pin
+            #  nm - name of node connected to negative pin
             #  -i0 - initial value, aliases: -voff, -v0, -ioff
             #  -ia - pulsed value, aliases: -vamp, -va, -iamp
             #  -fc - carrier frequency, alias -fcar
@@ -1179,7 +1179,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Isin new 1 net1 net2 -i0 0 -ia 1 -fc {freq -eq} -mdi 0 -fs 1e3
             # ```
-            # Synopsis: name npNode nmNode -i0|voff|ioff|v0 value -ia|vamp|iamp|va value -fc|fcar value -mdi value 
+            # Synopsis: name np nm -i0|voff|ioff|v0 value -ia|vamp|iamp|va value -fc|fcar value -mdi value 
             #   -fs|fsig value ?-phi|phase value???
             next i {*}$args
         }
@@ -1192,10 +1192,10 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         constructor {args} {
             # Creates object of class `Vccs` that describes linear voltage-controlled current source.
             #  name - name of the device without first-letter designator G
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
-            #  ncpNode - name of node connected to positive controlling pin
-            #  ncmNode - name of node connected to negative controlling pin
+            #  np - name of node connected to positive pin
+            #  nm - name of node connected to negative pin
+            #  ncp - name of node connected to positive controlling pin
+            #  ncm - name of node connected to negative controlling pin
             #  -trcond - transconductance
             #  -m - multiplier factor, optional
             # ```
@@ -1205,16 +1205,16 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Vccs new 1 net1 0 netc 0 -trcond 10 -m 1
             # ```
-            # Synopsis: name npNode nmNode ncpNode ncmNode -trcond value ?-m value?
+            # Synopsis: name np nm ncp ncm -trcond value ?-m value?
             set arguments [argparse -inline -pfirst -help {Creates object of class `Vccs` that describes linear\
                                                                   voltage-controlled current source} {
                 {-trcond -required -help Transconductance}
                 {-m= -help {Multiplier factor}}
                 {name -help {Name of the device without first-letter designator G}}
-                {npNode -help {Name of node connected to positive pin}}
-                {nmNode -help {Name of node connected to negative pin}}
-                {ncpNode -help {Name of node connected to positive controlling pin}}
-                {ncmNode -help {Name of node connected to negative controlling pin}}
+                {np -help {Name of node connected to positive pin}}
+                {nm -help {Name of node connected to negative pin}}
+                {ncp -help {Name of node connected to positive controlling pin}}
+                {ncm -help {Name of node connected to negative controlling pin}}
             }]
             set trcondVal [dget $arguments trcond]
             if {([llength $trcondVal]>1) && ([@ $trcondVal 1] eq {-eq})} {
@@ -1223,13 +1223,13 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 lappend params [list trcond $trcondVal -pos]
             }
             dict for {paramName value} $arguments {
-                if {$paramName ni {trcond name npNode nmNode ncpNode ncmNode}} {
+                if {$paramName ni {trcond name np nm ncp ncm}} {
                     lappend params [list $paramName {*}$value]
                 }
             }
-            next g[dget $arguments name] [list [list np [dget $arguments npNode]] [list nm [dget $arguments nmNode]]\
-                                                  [list ncp [dget $arguments ncpNode]]\
-                                                  [list ncm [dget $arguments ncmNode]]] $params
+            next g[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]\
+                                                  [list ncp [dget $arguments ncp]]\
+                                                  [list ncm [dget $arguments ncm]]] $params
         }
     }
 
@@ -1247,10 +1247,10 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         constructor {args} {
             # Creates object of class `Vcvs` that describes linear voltage-controlled current source.
             #  name - name of the device without first-letter designator E
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
-            #  ncpNode - name of node connected to positive controlling pin
-            #  ncmNode - name of node connected to negative controlling pin
+            #  np - name of node connected to positive pin
+            #  nm - name of node connected to negative pin
+            #  ncp - name of node connected to positive controlling pin
+            #  ncm - name of node connected to negative controlling pin
             #  -gain - voltage gain
             # ```
             # EXXXXXXX N+ N- NC+ NC- VALUE
@@ -1259,15 +1259,15 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Vcvs new 1 net1 0 netc 0 -gain 10
             # ```
-            # Synopsis: name npNode nmNode ncpNode ncmNode -gain value
+            # Synopsis: name np nm ncp ncm -gain value
             set arguments [argparse -inline -pfirst -help {Creates object of class `Vcvs` that describes linear\
                                                                   voltage-controlled current source} {
                 {-gain -required -help {Voltage gain}}
                 {name -help {Name of the device without first-letter designator E}}
-                {npNode -help {Name of node connected to positive pin}}
-                {nmNode -help {Name of node connected to negative pin}}
-                {ncpNode -help {Name of node connected to positive controlling pin}}
-                {ncmNode -help {Name of node connected to negative controlling pin}}
+                {np -help {Name of node connected to positive pin}}
+                {nm -help {Name of node connected to negative pin}}
+                {ncp -help {Name of node connected to positive controlling pin}}
+                {ncm -help {Name of node connected to negative controlling pin}}
             }]
             set gainVal [dget $arguments gain]
             if {([llength $gainVal]>1) && ([@ $gainVal 1] eq {-eq})} {
@@ -1275,9 +1275,9 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             } else {
                 lappend params [list vgain $gainVal -pos]
             }
-            next e[dget $arguments name] [list [list np [dget $arguments npNode]] [list nm [dget $arguments nmNode]]\
-                                                  [list ncp [dget $arguments ncpNode]]\
-                                                  [list ncm [dget $arguments ncmNode]]] $params
+            next e[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]\
+                                                  [list ncp [dget $arguments ncp]]\
+                                                  [list ncm [dget $arguments ncm]]] $params
         }
     }
 
@@ -1295,8 +1295,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         constructor {args} {
             # Creates object of class `Cccs` that describes linear current-controlled current source. 
             #  name - name of the device without first-letter designator F
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
+            #  np - name of node connected to positive pin
+            #  nm - name of node connected to negative pin
             #  -consrc - name of controlling source
             #  -gain - current gain 
             #  -m - parallel source multiplicator
@@ -1307,15 +1307,15 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Cccs new 1 net1 0 netc 0 -consrc vc -gain 10 -m 1
             # ```
-            # Synopsis: name npNode nmNode -consrc value -gain value ?-m value?
+            # Synopsis: name np nm -consrc value -gain value ?-m value?
             set arguments [argparse -inline -pfirst -help {Creates object of class `Cccs` that describes linear\
                                                                   current-controlled current source} {
                 {-consrc -required -help {Name of controlling source}}
                 {-gain -required -help {Current gain}}
                 {-m= -help {Parallel source multiplicator}}
                 {name -help {Name of the device without first-letter designator F}}
-                {npNode -help {Name of node connected to positive pin}}
-                {nmNode -help {Name of node connected to negative pin}}
+                {np -help {Name of node connected to positive pin}}
+                {nm -help {Name of node connected to negative pin}}
             }]
             set consrcVal [dget $arguments consrc]
             lappend params [list consrc $consrcVal -posnocheck]
@@ -1326,11 +1326,11 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 lappend params [list igain $gainVal -pos]
             }
             dict for {paramName value} $arguments {
-                if {$paramName ni {consrc gain name npNode nmNode}} {
+                if {$paramName ni {consrc gain name np nm}} {
                     lappend params [list $paramName {*}$value]
                 }
             }
-            next f[dget $arguments name] [list [list np [dget $arguments npNode]] [list nm [dget $arguments nmNode]]]\
+            next f[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
                 $params
         } 
     }
@@ -1349,8 +1349,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
         constructor {args} {
             # Creates object of class `Ccvs` that describes linear current-controlled current source.
             #  name - name of the device without first-letter designator H
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
+            #  np - name of node connected to positive pin
+            #  nm - name of node connected to negative pin
             #  -consrc - name of controlling source
             #  -transr - transresistance 
             # ```
@@ -1360,14 +1360,14 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # ::SpiceGenTcl::Common::Sources::Ccvs new 1 net1 0 -consrc vc -transr {tres -eq}
             # ```
-            # Synopsis: name npNode nmNode -consrc value -transr value
+            # Synopsis: name np nm -consrc value -transr value
             set arguments [argparse -inline -pfirst -help {Creates object of class `Ccvs` that describes linear\
                                                                   current-controlled current source} {
                 {-consrc -required -help {Name of controlling source}}
                 {-transr -required -help Transresistance}
                 {name -help {Name of the device without first-letter designator H}}
-                {npNode -help {Name of node connected to positive pin}}
-                {nmNode -help {Name of node connected to negative pin}}
+                {np -help {Name of node connected to positive pin}}
+                {nm -help {Name of node connected to negative pin}}
             }]
             set consrcVal [dget $arguments consrc]
             lappend params [list consrc $consrcVal -posnocheck]
@@ -1377,7 +1377,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             } else {
                 lappend params [list transr $transrVal -pos]
             }
-            next h[dget $arguments name] [list [list np [dget $arguments npNode]] [list nm [dget $arguments nmNode]]]\
+            next h[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
                     $params
         }
     }

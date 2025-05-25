@@ -64,7 +64,7 @@
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Ltspice::BasicDevices::Capacitor::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ltspice-BasicDevices.html#::SpiceGenTcl::Ltspice::BasicDevices::Capacitor" title="::SpiceGenTcl::Ltspice::BasicDevices::Capacitor" class='ruff_cmd'>::SpiceGenTcl::Ltspice::BasicDevices::Capacitor</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ltspice-BasicDevices.html#::SpiceGenTcl::Ltspice::BasicDevices::Capacitor'>Capacitor</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Capacitor</font></b></code> that describes capacitor.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -c value ?-m value? ?-temp value? ?-ic value? ?-rser value? ?-lser value? ?-rpar value? ?-cpar value? ?-rlshunt value?</span><br><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -q value ?-m value? ?-ic value? ?-rser value? ?-lser value? ?-rpar value? ?-cpar value? ?-rlshunt value?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name np nm -c value ?-m value? ?-temp value? ?-ic value? ?-rser value? ?-lser value? ?-rpar value? ?-cpar value? ?-rlshunt value?</span><br><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name np nm -q value ?-m value? ?-ic value? ?-rser value? ?-lser value? ?-rpar value? ?-cpar value? ?-rlshunt value?</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-c</font></code></td><td>Capacitance value or equation.</td></tr>
@@ -78,8 +78,8 @@
 <tr><td><code><font color=#b9b96e>-rser</font></code></td><td>Series resistance, optional.</td></tr>
 <tr><td><code><font color=#b9b96e>-temp</font></code></td><td>Device temperature, optional.</td></tr>
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator C.</td></tr>
-<tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
+<tr><td><code>nm</code></td><td>Name of node connected to negative pin.</td></tr>
+<tr><td><code>np</code></td><td>Name of node connected to positive pin.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5><p class='ruff'>Capacitor type could be specified with additional switch <code><font color=#b9b96e>-q</font></code> if we want to model circuit's variable dependent capacitor. Simple capacitor:</p>
 
@@ -109,8 +109,8 @@
 
     <i><font color=#76a396># Creates object of class `Capacitor` that describes capacitor.</font></i>
     <i><font color=#76a396>#  name - name of the device without first-letter designator C</font></i>
-    <i><font color=#76a396>#  npNode - name of node connected to positive pin</font></i>
-    <i><font color=#76a396>#  nmNode - name of node connected to negative pin</font></i>
+    <i><font color=#76a396>#  np - name of node connected to positive pin</font></i>
+    <i><font color=#76a396>#  nm - name of node connected to negative pin</font></i>
     <i><font color=#76a396>#  -c - capacitance value or equation</font></i>
     <i><font color=#76a396>#  -q - charge equation</font></i>
     <i><font color=#76a396>#  -m - multiplier value, optional</font></i>
@@ -142,9 +142,9 @@
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Ltspice::BasicDevices::Capacitor new 1 netp netm -q &quot;V(a)+V(b)+pow(V(c),2)&quot;</font></i>
     <i><font color=#76a396># ```</font></i>
-    <i><font color=#76a396># Synopsis: name npNode nmNode -c value ?-m value? ?-temp value? ?-ic value? ?-rser value? ?-lser value?</font></i>
+    <i><font color=#76a396># Synopsis: name np nm -c value ?-m value? ?-temp value? ?-ic value? ?-rser value? ?-lser value?</font></i>
     <i><font color=#76a396>#   ?-rpar value? ?-cpar value? ?-rlshunt value?</font></i>
-    <i><font color=#76a396># Synopsis: name npNode nmNode -q value ?-m value? ?-ic value? ?-rser value? ?-lser value? ?-rpar value?</font></i>
+    <i><font color=#76a396># Synopsis: name np nm -q value ?-m value? ?-ic value? ?-rser value? ?-lser value? ?-rpar value?</font></i>
     <i><font color=#76a396>#   ?-cpar value? ?-rlshunt value?</font></i>
     <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> <font color=#b9b96e>-pfirst</font> <font color=#b9b96e>-help</font> {Creates object of class 'Capacitor' that describes capacitor} {
         {<font color=#b9b96e>-c</font>= <font color=#b9b96e>-forbid</font> q <font color=#b9b96e>-help</font> {Capacitance value or equation}}
@@ -158,8 +158,8 @@
         {<font color=#b9b96e>-cpar</font>= <font color=#b9b96e>-help</font> {Parallel capacitor}}
         {<font color=#b9b96e>-rlshunt</font>= <font color=#b9b96e>-help</font> {Shunt resistance across series inductance}}
         {name <font color=#b9b96e>-help</font> {Name of the device without first-letter designator}}
-        {npNode <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
-        {nmNode <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
+        {np <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
+        {nm <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
     }]
     <b><font color=#ffa500>set</font></b> params {}
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> c]} {
@@ -177,11 +177,11 @@
         <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> q <font color=#f1b479>$qVal</font> <font color=#b9b96e>-eq</font>]
     }
     <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$arguments</font> {
-        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {c q name npNode nmNode}} {
+        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {c q name np nm}} {
             <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$paramName</font> {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$value</font>]
         }
     }
-    <b><font color=#ffa500>next</font></b> c[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> npNode]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nmNode]]] <font color=#f1b479>$params</font>
+    <b><font color=#ffa500>next</font></b> c[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> np]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nm]]] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Ltspice::BasicDevices::CSwitch'>CSwitch</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ltspice-BasicDevices.html#::SpiceGenTcl::Ltspice::BasicDevices" title="::SpiceGenTcl::Ltspice::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Ltspice::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -279,7 +279,7 @@
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Ltspice::BasicDevices::Inductor::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ltspice-BasicDevices.html#::SpiceGenTcl::Ltspice::BasicDevices::Inductor" title="::SpiceGenTcl::Ltspice::BasicDevices::Inductor" class='ruff_cmd'>::SpiceGenTcl::Ltspice::BasicDevices::Inductor</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ltspice-BasicDevices.html#::SpiceGenTcl::Ltspice::BasicDevices::Inductor'>Inductor</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Inductor</font></b></code> that describes inductor.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value|-dtemp value? ?-scale value? ?-ic value?</span><br><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -beh -l value ?-tc1 value? ?-tc2 value?</span><br><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -model value ?-l value? ?-temp value|-dtemp value? ?-m value? ?scale value? ?-ic value? ?-nt value? ?-tc1 value? ?-tc2 value?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name np nm -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value|-dtemp value? ?-scale value? ?-ic value?</span><br><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name np nm -beh -l value ?-tc1 value? ?-tc2 value?</span><br><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name np nm -model value ?-l value? ?-temp value|-dtemp value? ?-m value? ?scale value? ?-ic value? ?-nt value? ?-tc1 value? ?-tc2 value?</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-a</font></code></td><td>Cross sectional area.</td></tr>
@@ -301,8 +301,8 @@
 <tr><td><code><font color=#b9b96e>-tc2</font></code></td><td>Quadratic inductance temperature coefficient.</td></tr>
 <tr><td><code><font color=#b9b96e>-temp</font></code></td><td>Device temperature.</td></tr>
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator L.</td></tr>
-<tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
+<tr><td><code>nm</code></td><td>Name of node connected to negative pin.</td></tr>
+<tr><td><code>np</code></td><td>Name of node connected to positive pin.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5><p class='ruff'>Inductor type could be specified with additional switches: <code><font color=#b9b96e>-beh</font></code> if we want to model circuit's variable dependent inductor, or <code><font color=#b9b96e>-model</font> modelName</code> if we want to simulate inductor with model card. Simple inductor:</p>
 
@@ -343,8 +343,8 @@
 
     <i><font color=#76a396># Creates object of class `Inductor` that describes inductor.</font></i>
     <i><font color=#76a396>#  name - name of the device without first-letter designator L</font></i>
-    <i><font color=#76a396>#  npNode - name of node connected to positive pin</font></i>
-    <i><font color=#76a396>#  nmNode - name of node connected to negative pin</font></i>
+    <i><font color=#76a396>#  np - name of node connected to positive pin</font></i>
+    <i><font color=#76a396>#  nm - name of node connected to negative pin</font></i>
     <i><font color=#76a396>#  -l - inductance value</font></i>
     <i><font color=#76a396>#  -flux - equation for the flux</font></i>
     <i><font color=#76a396>#  -hyst - nonlinear inductor model switch</font></i>
@@ -394,10 +394,10 @@
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Ngspice::BasicDevices::Inductor new 1 netp netm -l 1e-6 -model indm</font></i>
     <i><font color=#76a396># ```</font></i>
-    <i><font color=#76a396># Synopsis: name npNode nmNode -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value|-dtemp value?</font></i>
+    <i><font color=#76a396># Synopsis: name np nm -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value|-dtemp value?</font></i>
     <i><font color=#76a396>#   ?-scale value? ?-ic value?</font></i>
-    <i><font color=#76a396># Synopsis: name npNode nmNode -beh -l value ?-tc1 value? ?-tc2 value?</font></i>
-    <i><font color=#76a396># Synopsis: name npNode nmNode -model value ?-l value? ?-temp value|-dtemp value? ?-m value? ?scale value?</font></i>
+    <i><font color=#76a396># Synopsis: name np nm -beh -l value ?-tc1 value? ?-tc2 value?</font></i>
+    <i><font color=#76a396># Synopsis: name np nm -model value ?-l value? ?-temp value|-dtemp value? ?-m value? ?scale value?</font></i>
     <i><font color=#76a396>#   ?-ic value? ?-nt value? ?-tc1 value? ?-tc2 value?</font></i>
     <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> <font color=#b9b96e>-pfirst</font> <font color=#b9b96e>-help</font> {Creates object of class 'Inductor' that describes inductor} {
         {<font color=#b9b96e>-l</font>= <font color=#b9b96e>-forbid</font> {flux hyst} <font color=#b9b96e>-help</font> {Inductance value}}
@@ -419,8 +419,8 @@
         {<font color=#b9b96e>-a</font>= <font color=#b9b96e>-help</font> {Cross sectional area}}
         {<font color=#b9b96e>-n</font>= <font color=#b9b96e>-help</font> {Number of turns}}
         {name <font color=#b9b96e>-help</font> {Name of the device without first-letter designator}}
-        {npNode <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
-        {nmNode <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
+        {np <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
+        {nm <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
     }]
     <b><font color=#ffa500>set</font></b> params {}
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> l]} {
@@ -438,11 +438,11 @@
         <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> flux [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> flux] <font color=#b9b96e>-eq</font>]
     }
     <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$arguments</font> {
-        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {l flux hyst name npNode nmNode}} {
+        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {l flux hyst name np nm}} {
             <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$paramName</font> {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$value</font>]
         }
     }
-    <b><font color=#ffa500>next</font></b> l[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> npNode]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nmNode]]] <font color=#f1b479>$params</font>
+    <b><font color=#ffa500>next</font></b> l[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> np]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nm]]] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Ltspice::BasicDevices::L'>L</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ltspice-BasicDevices.html#::SpiceGenTcl::Ltspice::BasicDevices" title="::SpiceGenTcl::Ltspice::BasicDevices" class='ruff_cmd'>::SpiceGenTcl::Ltspice::BasicDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -863,12 +863,12 @@
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ltspice-SemiconductorDevices.html'>SpiceGenTcl::Ltspice::SemiconductorDevices</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ltspice-Analyses.html'>SpiceGenTcl::Ltspice::Analyses</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ltspice-Simulators.html'>SpiceGenTcl::Ltspice::Simulators</a></li>
-<hr><li class='ruff-toc2'><a href='#::SpiceGenTcl::Ltspice::BasicDevices-Classes'>Classes</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ltspice-BasicDevices.html#::SpiceGenTcl::Ltspice::BasicDevices::C'>C</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ltspice-BasicDevices.html#::SpiceGenTcl::Ltspice::BasicDevices::Capacitor'>Capacitor</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ltspice-BasicDevices.html#::SpiceGenTcl::Ltspice::BasicDevices::Capacitor::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode <font color=#b9b96e>-c</font> value ?-m value? ?-temp value? ?-ic value? ?-rser value? ?-lser value? ?-rpar value? ?-cpar value? ?-rlshunt value?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode <font color=#b9b96e>-q</font> value ?-m value? ?-ic value? ?-rser value? ?-lser value? ?-rpar value? ?-cpar value? ?-rlshunt value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Capacitor</font></b></code> that describes capacitor.
+<hr><li class='ruff-toc2'><a href='#::SpiceGenTcl::Ltspice::BasicDevices-Classes'>Classes</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ltspice-BasicDevices.html#::SpiceGenTcl::Ltspice::BasicDevices::C'>C</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ltspice-BasicDevices.html#::SpiceGenTcl::Ltspice::BasicDevices::Capacitor'>Capacitor</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ltspice-BasicDevices.html#::SpiceGenTcl::Ltspice::BasicDevices::Capacitor::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name np nm <font color=#b9b96e>-c</font> value ?-m value? ?-temp value? ?-ic value? ?-rser value? ?-lser value? ?-rpar value? ?-cpar value? ?-rlshunt value?&lt;/span&gt;
+&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name np nm <font color=#b9b96e>-q</font> value ?-m value? ?-ic value? ?-rser value? ?-lser value? ?-rpar value? ?-cpar value? ?-rlshunt value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Capacitor</font></b></code> that describes capacitor.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ltspice-BasicDevices.html#::SpiceGenTcl::Ltspice::BasicDevices::CSwitch'>CSwitch</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ltspice-BasicDevices.html#::SpiceGenTcl::Ltspice::BasicDevices::CSwitchModel'>CSwitchModel</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ltspice-BasicDevices.html#::SpiceGenTcl::Ltspice::BasicDevices::CSwitchModel::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name ?-option value ...?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>CSwitchModel</font></b></code> that describes current switch model.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ltspice-BasicDevices.html#::SpiceGenTcl::Ltspice::BasicDevices::Inductor'>Inductor</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ltspice-BasicDevices.html#::SpiceGenTcl::Ltspice::BasicDevices::Inductor::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode <font color=#b9b96e>-l</font> value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value|-dtemp value? ?-scale value? ?-ic value?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode <font color=#b9b96e>-beh</font> <font color=#b9b96e>-l</font> value ?-tc1 value? ?-tc2 value?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode <font color=#b9b96e>-model</font> value ?-l value? ?-temp value|-dtemp value? ?-m value? ?scale value? ?-ic value? ?-nt value? ?-tc1 value? ?-tc2 value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Inductor</font></b></code> that describes inductor.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ltspice-BasicDevices.html#::SpiceGenTcl::Ltspice::BasicDevices::Inductor'>Inductor</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ltspice-BasicDevices.html#::SpiceGenTcl::Ltspice::BasicDevices::Inductor::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name np nm <font color=#b9b96e>-l</font> value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value|-dtemp value? ?-scale value? ?-ic value?&lt;/span&gt;
+&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name np nm <font color=#b9b96e>-beh</font> <font color=#b9b96e>-l</font> value ?-tc1 value? ?-tc2 value?&lt;/span&gt;
+&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name np nm <font color=#b9b96e>-model</font> value ?-l value? ?-temp value|-dtemp value? ?-m value? ?scale value? ?-ic value? ?-nt value? ?-tc1 value? ?-tc2 value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Inductor</font></b></code> that describes inductor.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ltspice-BasicDevices.html#::SpiceGenTcl::Ltspice::BasicDevices::L'>L</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ltspice-BasicDevices.html#::SpiceGenTcl::Ltspice::BasicDevices::R'>R</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ltspice-BasicDevices.html#::SpiceGenTcl::Ltspice::BasicDevices::Resistor'>Resistor</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ltspice-BasicDevices.html#::SpiceGenTcl::Ltspice::BasicDevices::SubcircuitInstance'>SubcircuitInstance</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ltspice-BasicDevices.html#::SpiceGenTcl::Ltspice::BasicDevices::SubcircuitInstance::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>SubcircuitInstance</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>SubcircuitInstance</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>SubcircuitInstance</font></b></code> that describes subcircuit instance.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ltspice-BasicDevices.html#::SpiceGenTcl::Ltspice::BasicDevices::SubcircuitInstanceAuto'>SubcircuitInstanceAuto</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ltspice-BasicDevices.html#::SpiceGenTcl::Ltspice::BasicDevices::SubcircuitInstanceAuto::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;subcktObj name nodes ?-paramName paramValue ?-eq? ...?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>SubcircuitInstanceAuto</font></b></code> that describes subcircuit instance with already created subcircuit definition object.

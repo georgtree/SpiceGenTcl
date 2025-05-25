@@ -41,8 +41,8 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
         constructor {args} {
             # Creates object of class `Resistor` that describes resistor.
             #  name - name of the device without first-letter designator R
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
+            #  np - name of node connected to positive pin
+            #  nm - name of node connected to negative pin
             #  -r - resistance value or equation
             #  -beh - selects behavioural type of resistor, optional
             #  -model - model of the resistor, optional
@@ -80,9 +80,9 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ```
             # ::SpiceGenTcl::Xyce::BasicDevices::Resistor new 1 netp netm -model resm -l 1e-6 -w 10e-6
             # ```
-            # Synopsis: name npNode nmNode -r value ?-tc1 value? ?-tc2 value? ?-tce value? ?-m value? ?-temp value?
-            # Synopsis: name npNode nmNode -r value -beh ?-tc1 value? ?-tc2 value? ?-tce value? ?-m value? ?-temp value?
-            # Synopsis: name npNode nmNode -r value -model ?-tc1 value? ?-tc2 value? ?-tce value? ?-m value? ?-temp value?
+            # Synopsis: name np nm -r value ?-tc1 value? ?-tc2 value? ?-tce value? ?-m value? ?-temp value?
+            # Synopsis: name np nm -r value -beh ?-tc1 value? ?-tc2 value? ?-tce value? ?-m value? ?-temp value?
+            # Synopsis: name np nm -r value -model ?-tc1 value? ?-tc2 value? ?-tce value? ?-m value? ?-temp value?
             #   ?-l value? ?-w value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'Resistor' that describes resistor} {
                 {-r= -help {Resistance value or equation}}
@@ -96,8 +96,8 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
                 {-l= -require model -help {Length of semiconductor resistor}}
                 {-w= -require model -help {Width of semiconductor resistor}}
                 {name -help {Name of the device without first-letter designator}}
-                {npNode -help {Name of node connected to positive pin}}
-                {nmNode -help {Name of node connected to negative pin}}
+                {np -help {Name of node connected to positive pin}}
+                {nm -help {Name of node connected to negative pin}}
             }]
             if {[dexist $arguments model]} {
                 lappend params [list model [dget $arguments model] -posnocheck]
@@ -115,11 +115,11 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
                 return -code error {Resistor value must be specified with '-r value'}
             }
             dict for {paramName value} $arguments {
-                if {$paramName ni {r beh model name npNode nmNode}} {
+                if {$paramName ni {r beh model name np nm}} {
                     lappend params [list $paramName {*}$value]
                 }
             }
-            next r[dget $arguments name] [list [list np [dget $arguments npNode]] [list nm [dget $arguments nmNode]]]\
+            next r[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
                     $params
         }
     }
@@ -138,8 +138,8 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
         constructor {args} {
             # Creates object of class `Capacitor` that describes capacitor.
             #  name - name of the device without first-letter designator C
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
+            #  np - name of node connected to positive pin
+            #  nm - name of node connected to negative pin
             #  -c - capacitance value or equation
             #  -q - charge equation
             #  -beh - selects behavioural type of capacitor, optional
@@ -188,13 +188,13 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ```
             # ::SpiceGenTcl::Xyce::BasicDevices::Capacitor new 1 netp netm -model capm -l 1e-6 -w 10e-6
             # ```
-            # Synopsis: name npNode nmNode -c value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value?
+            # Synopsis: name np nm -c value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value?
             #   ?-age value? ?-d value?
-            # Synopsis: name npNode nmNode -beh -c value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value?
+            # Synopsis: name np nm -beh -c value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value?
             #   ?-age value? ?-d value?
-            # Synopsis: name npNode nmNode -beh -q value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value?
+            # Synopsis: name np nm -beh -q value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value?
             #   ?-age value? ?-d value?
-            # Synopsis: name npNode nmNode -model value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value?
+            # Synopsis: name np nm -model value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value?
             #   ?-age value? ?-d value? ?-l value? ?-w value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'Capacitor' that describes capacitor} {
                 {-c= -forbid q -help {Capacitance value or equation}}
@@ -211,8 +211,8 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
                 {-l= -require model -help {Length of semiconductor capacitor}}
                 {-w= -require model -help {Width of semiconductor capacitor}}
                 {name -help {Name of the device without first-letter designator}}
-                {npNode -help {Name of node connected to positive pin}}
-                {nmNode -help {Name of node connected to negative pin}}
+                {np -help {Name of node connected to positive pin}}
+                {nm -help {Name of node connected to negative pin}}
             }]
             if {[dexist $arguments model]} {
                 lappend params [list model [dget $arguments model] -posnocheck]
@@ -234,11 +234,11 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
                 lappend params [list q $qVal -eq]
             }
             dict for {paramName value} $arguments {
-                if {$paramName ni {c q beh model name npNode nmNode}} {
+                if {$paramName ni {c q beh model name np nm}} {
                     lappend params [list $paramName {*}$value]
                 }
             }
-            next c[dget $arguments name] [list [list np [dget $arguments npNode]] [list nm [dget $arguments nmNode]]]\
+            next c[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
                     $params
         }
     }
@@ -257,8 +257,8 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
         constructor {args} {
             # Creates object of class `Inductor` that describes inductor.
             #  name - name of the device without first-letter designator L
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
+            #  np - name of node connected to positive pin
+            #  nm - name of node connected to negative pin
             #  -l - inductance value
             #  -model - model of the inductor, optional
             #  -m - multiplier value, optional
@@ -284,8 +284,8 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ```
             # ::SpiceGenTcl::Xyce::BasicDevices::Inductor new 1 netp netm -l 1e-6 -model indm
             # ```
-            # Synopsis: name npNode nmNode -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value?
-            # Synopsis: name npNode nmNode -model value -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value?
+            # Synopsis: name np nm -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value?
+            # Synopsis: name np nm -model value -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value?
             #   ?-ic value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'Capacitor' that describes capacitor} {
                 {-l= -required -help {Inductance value}}
@@ -296,8 +296,8 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
                 {-tc2= -help {Quadratic thermal coefficient}}
                 {-ic= -help {Initial current through inductor}}
                 {name -help {Name of the device without first-letter designator}}
-                {npNode -help {Name of node connected to positive pin}}
-                {nmNode -help {Name of node connected to negative pin}}
+                {np -help {Name of node connected to positive pin}}
+                {nm -help {Name of node connected to negative pin}}
             }]
             if {[dexist $arguments model]} {
                 lappend params [list model [dget $arguments model] -posnocheck]
@@ -309,11 +309,11 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
                 lappend params [list l $lVal -pos]
             }
             dict for {paramName value} $arguments {
-                if {$paramName ni {l model name npNode nmNode}} {
+                if {$paramName ni {l model name np nm}} {
                     lappend params [list $paramName {*}$value]
                 }
             }
-            next l[dget $arguments name] [list [list np [dget $arguments npNode]] [list nm [dget $arguments nmNode]]]\
+            next l[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
                     $params
         }
     }
@@ -358,8 +358,8 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
         constructor {args} {
             # Creates object of class `GenSwitch` that describes generic switch device.
             #  name - name of the device without first-letter designator S
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
+            #  np - name of node connected to positive pin
+            #  nm - name of node connected to negative pin
             #  -model - model name
             #  -control - control equation
             #  -on/-off - initial state of switch
@@ -370,7 +370,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ```
             # ::SpiceGenTcl::Xyce::BasicDevices::GenSwitch new 1 net1 0 -model sw1 -control {I(VMON)}
             # ```
-            # Synopsis: name npNode nmNode -model value -control value ?-on|off?
+            # Synopsis: name np nm -model value -control value ?-on|off?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'GenSwitch' that describes generic\
                                                                   switch device} {
                 {-model= -required -help {Model name}}
@@ -378,8 +378,8 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
                 {-on -forbid {off} -help {Initial on state of switch}}
                 {-off -forbid {on} -help {Initial off state of switch}}
                 {name -help {Name of the device without first-letter designator}}
-                {npNode -help {Name of node connected to positive pin}}
-                {nmNode -help {Name of node connected to negative pin}}
+                {np -help {Name of node connected to positive pin}}
+                {nm -help {Name of node connected to negative pin}}
             }]
             lappend params [list model [dget $arguments model] -posnocheck]
             if {[dexist $arguments on]} {
@@ -388,7 +388,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
                 lappend params {off -sw}
             }
             lappend params [list control [dget $arguments control] -eq]
-            next s[dget $arguments name] [list [list np [dget $arguments npNode]] [list nm [dget $arguments nmNode]]]\
+            next s[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
                     $params
         }
     }
@@ -658,8 +658,8 @@ namespace eval ::SpiceGenTcl::Xyce::Sources {
         constructor {args} {
             # Creates object of class `BehaviouralSource` that describes behavioural source.
             #  name - name of the device without first-letter designator B
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
+            #  np - name of node connected to positive pin
+            #  nm - name of node connected to negative pin
             #  -i - current expression
             #  -v - voltage expression
             #  -smoothbsrc - enables the smooth transitions, optional, require -v
@@ -672,8 +672,8 @@ namespace eval ::SpiceGenTcl::Xyce::Sources {
             # ```
             # ::SpiceGenTcl::Xyce::Sources::BehaviouralSource new 1 netp netm -v "V(a)+V(b)+pow(V(c),2)"
             # ```
-            # Synopsis: name npNode nmNode -i value
-            # Synopsis: name npNode nmNode -v value ?-smoothbsrc? ?-rcconst value?
+            # Synopsis: name np nm -i value
+            # Synopsis: name np nm -v value ?-smoothbsrc? ?-rcconst value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'BehaviouralSource' that describes\
                                                                   behavioural source} {
                 {-i= -forbid {v} -help {Current expression}}
@@ -681,8 +681,8 @@ namespace eval ::SpiceGenTcl::Xyce::Sources {
                 {-smoothbsrc -require {v} -help {Enables the smooth transitions}}
                 {-rcconst= -require {v} -help {RC constant of the RC network}}
                 {name -help {Name of the device without first-letter designator}}
-                {npNode -help {Name of node connected to positive pin}}
-                {nmNode -help {Name of node connected to negative pin}}
+                {np -help {Name of node connected to positive pin}}
+                {nm -help {Name of node connected to negative pin}}
             }]
             if {[dexist $arguments i]} {
                 lappend params [list i [dget $arguments i] -eq]
@@ -697,7 +697,7 @@ namespace eval ::SpiceGenTcl::Xyce::Sources {
             if {[dexist $arguments rcconst]} {
                 lappend params [list rcconst [dget $arguments rcconst]]
             }
-            next b[dget $arguments name] [list [list np [dget $arguments npNode]] [list nm [dget $arguments nmNode]]]\
+            next b[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
                     $params
         }
     }
@@ -720,8 +720,8 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
         constructor {args} {
             # Creates object of class `Diode` that describes semiconductor diode device.
             #  name - name of the device without first-letter designator D
-            #  npNode - name of node connected to positive pin
-            #  nmNode - name of node connected to negative pin
+            #  np - name of node connected to positive pin
+            #  nm - name of node connected to negative pin
             #  -model - name of the model
             #  -area - area scale factor, optional
             #  -m - multiplier of area and perimeter, optional
@@ -738,7 +738,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             # ```
             # ::SpiceGenTcl::Xyce::SemiconductorDevices::Diode new 1 netp netm -model diomod -area 1e-6
             # ```
-            # Synopsis: name npNode nmNode -model value ?-area value? ?-pj value? ?-ic value? ?-m value? ?-temp value?
+            # Synopsis: name np nm -model value ?-area value? ?-pj value? ?-ic value? ?-m value? ?-temp value?
             #   ?-custparams param1 \{param1Val ?-eq|-poseq|-posnocheck|-pos|-nocheck?\} ...?
             set arguments [argparse -inline -pfirst -help {Creates object of class `Diode` that describes semiconductor\
                                                                   diode device} {
@@ -753,8 +753,8 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
                                                       '-custparams param1 param1Val param2 {param2eq -eq} param3\
                                                       param3Val ...'}}
                 {name -help {Name of the device without first-letter designator}}
-                {npNode -help {Name of node connected to positive pin}}
-                {nmNode -help {Name of node connected to negative pin}}
+                {np -help {Name of node connected to positive pin}}
+                {nm -help {Name of node connected to negative pin}}
             }]
             lappend params [list model [dget $arguments model] -posnocheck]
             if {[dexist $arguments area]} {
@@ -774,7 +774,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
                 }
             }
             dict for {paramName value} $arguments {
-                if {$paramName ni {model custparams area pj name npNode nmNode}} {
+                if {$paramName ni {model custparams area pj name np nm}} {
                     lappend params [list $paramName {*}$value]
                 }
             }
@@ -787,7 +787,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
                     lappend params [list $paramName {*}$value]
                 }
             }
-            next d[dget $arguments name] [list [list np [dget $arguments npNode]] [list nm [dget $arguments nmNode]]]\
+            next d[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
                     $params
         }
     }
@@ -806,9 +806,9 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
         constructor {args} {
             # Creates object of class `Bjt` that describes semiconductor bipolar junction transistor device.
             #  name - name of the device without first-letter designator Q
-            #  ncNode - name of node connected to collector pin
-            #  nbNode - name of node connected to base pin
-            #  neNode - name of node connected to emitter pin
+            #  nc - name of node connected to collector pin
+            #  nb - name of node connected to base pin
+            #  ne - name of node connected to emitter pin
             #  -model - name of the model
             #  -area - scale factor, optional
             #  -m - multiplier of area and perimeter, optional
@@ -826,7 +826,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             # ```
             # ::SpiceGenTcl::Xyce::SemiconductorDevices::Bjt new 1 netc netb nete -model bjtmod -ns nets -area 1e-3
             # ```
-            # Synopsis: name ncNode nbNode neNode -model value ?-ns value ?-tj value?? ?-area value? ?-m value?
+            # Synopsis: name nc nb ne -model value ?-ns value ?-tj value?? ?-area value? ?-m value?
             #   ?-temp value? ?-off? ?-ic1 value? ?-ic2 value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'Bjt' that describes semiconductor\
                                                                   bipolar junction transistor device} {
@@ -840,9 +840,9 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
                 {-ns= -help {Name of node connected to substrate pin}}
                 {-tj= -require {ns} -help {Name of node connected to thermal pin}}
                 {name -help {Name of the device without first-letter designator}}
-                {ncNode -help {Name of node connected to collector pin}}
-                {nbNode -help {Name of node connected to base pin}}
-                {neNode -help {Name of node connected to emitter pin}}
+                {nc -help {Name of node connected to collector pin}}
+                {nb -help {Name of node connected to base pin}}
+                {ne -help {Name of node connected to emitter pin}}
             }]
             lappend params [list model [dget $arguments model] -posnocheck]
             if {[dexist $arguments area]} {
@@ -854,12 +854,12 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
                 }
             }
             dict for {paramName value} $arguments {
-                if {$paramName ni {model area off ns tj name ncNode nbNode neNode}} {
+                if {$paramName ni {model area off ns tj name nc nb ne}} {
                     lappend params [list $paramName {*}$value]
                 }
             }
-            set pinList [list [list nc [dget $arguments ncNode]] [list nb [dget $arguments nbNode]]\
-                                 [list ne [dget $arguments neNode]]]
+            set pinList [list [list nc [dget $arguments nc]] [list nb [dget $arguments nb]]\
+                                 [list ne [dget $arguments ne]]]
             if {[dexist $arguments ns]} {
                 lappend pinList [list ns [dget $arguments ns]]
                 if {[dexist $arguments tj]} {
@@ -895,9 +895,9 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
         constructor {args} {
             # Creates object of class `Jfet` that describes semiconductor junction FET device.
             #  name - name of the device without first-letter designator J
-            #  ndNode - name of node connected to drain pin
-            #  ngNode - name of node connected to gate pin
-            #  nsNode - name of node connected to source pin
+            #  nd - name of node connected to drain pin
+            #  ng - name of node connected to gate pin
+            #  ns - name of node connected to source pin
             #  -model - name of the model
             #  -area - scale factor, optional
             #  -temp - device temperature, optional
@@ -908,16 +908,16 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             # ```
             # ::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet new 1 netd netg nets -model jfetmod -area {area*2 -eq} -temp 25
             # ```
-            # Synopsis: name ndNode ngNode nsNode -model value ?-area value? ?-temp value?
+            # Synopsis: name nd ng ns -model value ?-area value? ?-temp value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'Jfet' that describes semiconductor\
                                                                   junction FET device} {
                 {-model= -required -help {Name of the model}}
                 {-area= -help {Emitter scale factor}}
                 {-temp= -help {Device temperature}}
                 {name -help {Name of the device without first-letter designator}}
-                {ndNode -help {Name of node connected to drain pin}}
-                {ngNode -help {Name of node connected to gate pin}}
-                {nsNode -help {Name of node connected to source pin}}
+                {nd -help {Name of node connected to drain pin}}
+                {ng -help {Name of node connected to gate pin}}
+                {ns -help {Name of node connected to source pin}}
             }]
             lappend params [list model [dget $arguments model] -posnocheck]
             if {[dexist $arguments area]} {
@@ -929,12 +929,12 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
                 }
             }
             dict for {paramName value} $arguments {
-                if {$paramName ni {model area name ndNode ngNode nsNode}} {
+                if {$paramName ni {model area name nd ng ns}} {
                     lappend params [list $paramName {*}$value]
                 }
             }
-            next j[dget $arguments name] [list [list nd [dget $arguments ndNode]] [list ng [dget $arguments ngNode]]\
-                                                  [list ns [dget $arguments nsNode]]] $params
+            next j[dget $arguments name] [list [list nd [dget $arguments nd]] [list ng [dget $arguments ng]]\
+                                                  [list ns [dget $arguments ns]]] $params
         }
     }
 
@@ -952,9 +952,9 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
         constructor {args} {
             # Creates object of class `Mesfet` that describes semiconductor MESFET device.
             #  name - name of the device without first-letter designator Z
-            #  ndNode - name of node connected to drain pin
-            #  ngNode - name of node connected to gate pin
-            #  nsNode - name of node connected to source pin
+            #  nd - name of node connected to drain pin
+            #  ng - name of node connected to gate pin
+            #  ns - name of node connected to source pin
             #  -model - name of the model
             #  -area - scale factor, optional
             #  -temp - device temperature, optional
@@ -965,16 +965,16 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             # ```
             # ::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet new 1 netd netg nets -model mesfetmod -area {area*2 -eq}
             # ```
-            # Synopsis: name ndNode ngNode nsNode -model value ?-area value? ?-temp value?
+            # Synopsis: name nd ng ns -model value ?-area value? ?-temp value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'Mesfet' that describes semiconductor\
                                                                   MESFET device} {
                 {-model= -required -help {Name of the model}}
                 {-area= -help {Scale factor}}
                 {-temp= -help {Device temperature}}
                 {name -help {Name of the device without first-letter designator}}
-                {ndNode -help {Name of node connected to drain pin}}
-                {ngNode -help {Name of node connected to gate pin}}
-                {nsNode -help {Name of node connected to source pin}}
+                {nd -help {Name of node connected to drain pin}}
+                {ng -help {Name of node connected to gate pin}}
+                {ns -help {Name of node connected to source pin}}
             }]
             lappend params [list model [dget $arguments model] -posnocheck]
             if {[dexist $arguments area]} {
@@ -986,12 +986,12 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
                 }
             }
             dict for {paramName value} $arguments {
-                if {$paramName ni {model area name ndNode ngNode nsNode}} {
+                if {$paramName ni {model area name nd ng ns}} {
                     lappend params [list $paramName {*}$value]
                 }
             }
-            next z[dget $arguments name] [list [list nd [dget $arguments ndNode]] [list ng [dget $arguments ngNode]]\
-                                                  [list ns [dget $arguments nsNode]]] $params
+            next z[dget $arguments name] [list [list nd [dget $arguments nd]] [list ng [dget $arguments ng]]\
+                                                  [list ns [dget $arguments ns]]] $params
         }
     }
 
@@ -1009,9 +1009,9 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
         constructor {args} {
             # Creates object of class `Mosfet` that describes semiconductor MOSFET device.
             #  name - name of the device without first-letter designator M
-            #  ndNode - name of node connected to drain pin
-            #  ngNode - name of node connected to gate pin
-            #  nsNode - name of node connected to source pin
+            #  nd - name of node connected to drain pin
+            #  ng - name of node connected to gate pin
+            #  ns - name of node connected to source pin
             #  -model - name of the model
             #  -m - multiplier, optional
             #  -l - length of channel, optional
@@ -1045,7 +1045,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             # ```
             # ::SpiceGenTcl::Xyce::Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5
             # ```
-            # Synopsis: name ndNode ngNode nsNode -model value ?-n4 value ?-n5 value ?-n6 value ?-n7 value???? ?-m value?
+            # Synopsis: name nd ng ns -model value ?-n4 value ?-n5 value ?-n6 value ?-n7 value???? ?-m value?
             #   ?-l value? ?-w value? ?-ad value|-nrd value? ?-as value|-nrs value? ?-temp value? ?-off? ?-pd value?
             #   ?-ps value? ?-ic \{value value value\}?
             #   ?-custparams param1 \{param1Val ?-eq|-poseq|-posnocheck|-pos|-nocheck?\} ...?
@@ -1073,16 +1073,16 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
                                                       '-custparams param1 param1Val param2 {param2eq -eq} param3\
                                                       param3Val ...'}}
                 {name -help {Name of the device without first-letter designator}}
-                {ndNode -help {Name of node connected to drain pin}}
-                {ngNode -help {Name of node connected to gate pin}}
-                {nsNode -help {Name of node connected to source pin}}
+                {nd -help {Name of node connected to drain pin}}
+                {ng -help {Name of node connected to gate pin}}
+                {ns -help {Name of node connected to source pin}}
             }]
             lappend params [list model [dget $arguments model] -posnocheck]
             if {[dexist $arguments ic]} {
                 lappend params [list ic [join [dget $arguments ic] ,] -nocheck]
             }
             dict for {paramName value} $arguments {
-                if {$paramName ni {model off ic n4 n5 n6 n7 custparams name ndNode ngNode nsNode}} {
+                if {$paramName ni {model off ic n4 n5 n6 n7 custparams name nd ng ns}} {
                     lappend params [list $paramName {*}$value]
                 }
             }
@@ -1095,8 +1095,8 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
                     lappend params [list $paramName {*}$value]
                 }
             }
-            set pinList [list [list nd [dget $arguments ndNode]] [list ng [dget $arguments ngNode]]\
-                                 [list ns [dget $arguments nsNode]]]
+            set pinList [list [list nd [dget $arguments nd]] [list ng [dget $arguments ng]]\
+                                 [list ns [dget $arguments ns]]]
             if {[dexist $arguments n4]} {
                 lappend pinList [list n4 [dget $arguments n4]]
                 if {[dexist $arguments n5]} {

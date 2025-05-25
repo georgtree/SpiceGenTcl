@@ -16,16 +16,16 @@ oo::class create Core {
             {-len= -default 0.1 -help {Length of the core}}
             {-area= -default 1 -help {Cross-section area of the core}}
             {name -help {Name of the device without first-letter designator}}
-            {pNode -help {Name of node connected to positive pin}}
-            {nNode -help {Name of node connected to negative pin}}
+            {p -help {Name of node connected to positive pin}}
+            {n -help {Name of node connected to negative pin}}
         }]
         lappend params [list model [dget $arguments model] -posnocheck]
         dict for {paramName value} $arguments {
-            if {$paramName ni {model name pNode nNode}} {
+            if {$paramName ni {model name p n}} {
                 lappend params [list $paramName $value]
             }
         }
-        next n[dget $arguments name] [list [list p [dget $arguments pNode]] [list n [dget $arguments nNode]]] $params
+        next n[dget $arguments name] [list [list p [dget $arguments p]] [list n [dget $arguments n]]] $params
     }
 }
 
@@ -44,16 +44,16 @@ oo::class create Gap {
             {-len= -required -help {Length of the gap}}
             {-area= -required -help {Cross-section area of the gap}}
             {name -help {Name of the device without first-letter designator}}
-            {pNode -help {Name of node connected to positive pin}}
-            {nNode -help {Name of node connected to negative pin}}
+            {p -help {Name of node connected to positive pin}}
+            {n -help {Name of node connected to negative pin}}
         }]
         lappend params [list model [dget $arguments model] -posnocheck]
         dict for {paramName value} $arguments {
-            if {$paramName ni {model name pNode nNode}} {
+            if {$paramName ni {model name p n}} {
                 lappend params [list $paramName $value]
             }
         }
-        next n[dget $arguments name] [list [list p [dget $arguments pNode]] [list n [dget $arguments nNode]]] $params
+        next n[dget $arguments name] [list [list p [dget $arguments p]] [list n [dget $arguments n]]] $params
     }
 }
 
@@ -74,19 +74,19 @@ oo::class create Winding {
             {-model= -required -help {Model of the gap}}
             {-turns= -required -help {Number of turns}}
             {name -help {Name of the device without first-letter designator}}
-            {e1Node -help {Name of node connected to first electrical pin}}
-            {e2Node -help {Name of node connected to second electrical pin}}
-            {m1Node -help {Name of node connected to first magnetic pin}}
-            {m2Node -help {Name of node connected to second magnetic pin}}
+            {e1 -help {Name of node connected to first electrical pin}}
+            {e2 -help {Name of node connected to second electrical pin}}
+            {m1 -help {Name of node connected to first magnetic pin}}
+            {m2 -help {Name of node connected to second magnetic pin}}
         }]
         lappend params [list model [dget $arguments model] -posnocheck]
         dict for {paramName value} $arguments {
-            if {$paramName ni {model name e1Node e2Node m1Node m2Node}} {
+            if {$paramName ni {model name e1 e2 m1 m2}} {
                 lappend params [list $paramName $value]
             }
         }
-        next n[dget $arguments name] [list [list e1 [dget $arguments e1Node]] [list e2 [dget $arguments e2Node]]\
-                                              [list m1 [dget $arguments m1Node]] [list m2 [dget $arguments m2Node]]]\
+        next n[dget $arguments name] [list [list e1 [dget $arguments e1]] [list e2 [dget $arguments e2]]\
+                                              [list m1 [dget $arguments m1]] [list m2 [dget $arguments m2]]]\
                 $params
     }
 }

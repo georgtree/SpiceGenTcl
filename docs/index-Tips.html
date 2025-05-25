@@ -102,16 +102,16 @@ endmodule
             {<font color=#b9b96e>-len</font>= <font color=#b9b96e>-default</font> 0.1 <font color=#b9b96e>-help</font> {Length of the core}}
             {<font color=#b9b96e>-area</font>= <font color=#b9b96e>-default</font> 1 <font color=#b9b96e>-help</font> {Cross-section area of the core}}
             {name <font color=#b9b96e>-help</font> {Name of the device without first-letter designator}}
-            {pNode <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
-            {nNode <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
+            {p <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
+            {n <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
         }]
         <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> model [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> model] <font color=#b9b96e>-posnocheck</font>]
         <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$arguments</font> {
-            <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {model name pNode nNode}} {
+            <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {model name p n}} {
                 <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
             }
         }
-        <b><font color=#ffa500>next</font></b> n[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> p [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> pNode]] [<b><font color=#ffa500>list</font></b> n [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nNode]]] <font color=#f1b479>$params</font>
+        <b><font color=#ffa500>next</font></b> n[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> p [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> p]] [<b><font color=#ffa500>list</font></b> n [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> n]]] <font color=#f1b479>$params</font>
     }
 }
 </pre>
@@ -139,19 +139,19 @@ endmodule
     {<font color=#b9b96e>-len</font>= <font color=#b9b96e>-default</font> 0.1 <font color=#b9b96e>-help</font> {Length of the core}}
     {<font color=#b9b96e>-area</font>= <font color=#b9b96e>-default</font> 1 <font color=#b9b96e>-help</font> {Cross-section area of the core}}
     {name <font color=#b9b96e>-help</font> {Name of the device without first-letter designator}}
-    {pNode <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
-    {nNode <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
+    {p <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
+    {n <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
 }]
 </pre>
 
-</figure><p class='ruff'>Switch <code><font color=#b9b96e>-pfirst</font></code> allows to pass required parameters (name, pNode and nNode) first, before switches. <code><font color=#b9b96e>-help</font></code> switch allows to call constructor of the <code>Core</code> with argument <code><font color=#b9b96e>-help</font></code> and get interactive help message. Required parameters are: <code>name</code>, positive node <code>pNode</code> and negative node <code>nNode</code>.</p>
+</figure><p class='ruff'>Switch <code><font color=#b9b96e>-pfirst</font></code> allows to pass required parameters (name, p and n) first, before switches. <code><font color=#b9b96e>-help</font></code> switch allows to call constructor of the <code>Core</code> with argument <code><font color=#b9b96e>-help</font></code> and get interactive help message. Required parameters are: <code>name</code>, positive node <code>p</code> and negative node <code>n</code>.</p>
 <p class='ruff'>Next we define required <code><font color=#b9b96e>-model</font></code> argument, and optional instance arguments <code><font color=#b9b96e>-len</font></code> and <code><font color=#b9b96e>-area</font></code> with default values. Due to these lines we can pass parameters to element in forms <code><font color=#b9b96e>-paramName</font> <font color=#f1b479>$paramValue</font> <font color=#f1b479>$paramQual</font></code>, for example: <code><font color=#b9b96e>-area</font> 1e-4</code> or <code><font color=#b9b96e>-area</font> l*m <font color=#b9b96e>-eq</font></code>.</p>
 <p class='ruff'>Possible qualificator is <code><font color=#b9b96e>-eq</font></code> - it means that parameter should be inserted into SPICE netlist as <code>paramName={expression}</code></p>
 <p class='ruff'>In the next few lines we build parameter list that will be passed to <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device" title="::SpiceGenTcl::Device" class='ruff_cmd'>::SpiceGenTcl::Device</a> constructor:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> model [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> model] <font color=#b9b96e>-posnocheck</font>]
 <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$arguments</font> {
-    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {model name pNode nNode}} {
+    <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {model name p n}} {
         <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
     }
 }
@@ -159,10 +159,10 @@ endmodule
 
 </figure><p class='ruff'>The last but not the least is step of passing arguments to <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device" title="::SpiceGenTcl::Device" class='ruff_cmd'>::SpiceGenTcl::Device</a> constructor:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>next</font></b> n[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> p [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> pNode]] [<b><font color=#ffa500>list</font></b> n [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nNode]]] <font color=#f1b479>$params</font>
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>next</font></b> n[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> p [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> p]] [<b><font color=#ffa500>list</font></b> n [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> n]]] <font color=#f1b479>$params</font>
 </pre>
 
-</figure><p class='ruff'>This superclass accept arguments in form <code><b><font color=#fe6efe>constructor</font></b> {name pins params}</code>. So, we pass string <code>n[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name]</code> as device name, <code>n</code> is reference designator for Verilog-A devices in Ngspice. Secondly we pass list of nodes <code>[<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> p [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> pNode]] [<b><font color=#ffa500>list</font></b> n [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nNode]]]</code> in form of <code>{{Name0 NodeName} {Name1 NodeName} {Name2 NodeName} ...}</code>.</p>
+</figure><p class='ruff'>This superclass accept arguments in form <code><b><font color=#fe6efe>constructor</font></b> {name pins params}</code>. So, we pass string <code>n[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name]</code> as device name, <code>n</code> is reference designator for Verilog-A devices in Ngspice. Secondly we pass list of nodes <code>[<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> p [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> p]] [<b><font color=#ffa500>list</font></b> n [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> n]]]</code> in form of <code>{{Name0 NodeName} {Name1 NodeName} {Name2 NodeName} ...}</code>.</p>
 <p class='ruff'>And the last is list of parameters in form <code>{{model Value <font color=#b9b96e>-posnocheck</font>} {Name Value ?-eq?} {Name Value ?-eq?} {Name Value ?-eq?} ...}</code>.</p>
 <p class='ruff'>So, after that we can create a new instance of newly created class:</p>
 

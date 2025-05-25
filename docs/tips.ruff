@@ -94,16 +94,16 @@ namespace eval Tips {
                     {-len= -default 0.1 -help {Length of the core}}
                     {-area= -default 1 -help {Cross-section area of the core}}
                     {name -help {Name of the device without first-letter designator}}
-                    {pNode -help {Name of node connected to positive pin}}
-                    {nNode -help {Name of node connected to negative pin}}
+                    {p -help {Name of node connected to positive pin}}
+                    {n -help {Name of node connected to negative pin}}
                 }]
                 lappend params [list model [dget $arguments model] -posnocheck]
                 dict for {paramName value} $arguments {
-                    if {$paramName ni {model name pNode nNode}} {
+                    if {$paramName ni {model name p n}} {
                         lappend params [list $paramName $value]
                     }
                 }
-                next n[dget $arguments name] [list [list p [dget $arguments pNode]] [list n [dget $arguments nNode]]]\
+                next n[dget $arguments name] [list [list p [dget $arguments p]] [list n [dget $arguments n]]]\
                         $params
             }
         }
@@ -134,13 +134,13 @@ namespace eval Tips {
             {-len= -default 0.1 -help {Length of the core}}
             {-area= -default 1 -help {Cross-section area of the core}}
             {name -help {Name of the device without first-letter designator}}
-            {pNode -help {Name of node connected to positive pin}}
-            {nNode -help {Name of node connected to negative pin}}
+            {p -help {Name of node connected to positive pin}}
+            {n -help {Name of node connected to negative pin}}
         }]
         ```
-        Switch `-pfirst` allows to pass required parameters (name, pNode and nNode) first, before switches. `-help`
+        Switch `-pfirst` allows to pass required parameters (name, p and n) first, before switches. `-help`
         switch allows to call constructor of the `Core` with argument `-help` and get interactive help message.
-        Required parameters are: `name`, positive node `pNode` and negative node `nNode`.
+        Required parameters are: `name`, positive node `p` and negative node `n`.
 
         Next we define required `-model` argument, and optional instance arguments `-len` and `-area` with default 
         values. Due to these lines we can pass parameters to element in forms `-paramName $paramValue $paramQual`, for
@@ -153,7 +153,7 @@ namespace eval Tips {
         ```tcl
         lappend params [list model [dget $arguments model] -posnocheck]
         dict for {paramName value} $arguments {
-            if {$paramName ni {model name pNode nNode}} {
+            if {$paramName ni {model name p n}} {
                 lappend params [list $paramName $value]
             }
         }
@@ -161,14 +161,14 @@ namespace eval Tips {
         
         The last but not the least is step of passing arguments to [::SpiceGenTcl::Device] constructor:
         ```tcl
-        next n[dget $arguments name] [list [list p [dget $arguments pNode]] [list n [dget $arguments nNode]]]\
+        next n[dget $arguments name] [list [list p [dget $arguments p]] [list n [dget $arguments n]]]\
                         $params
         ```
         
         This superclass accept arguments in form `constructor {name pins params}`.
         So, we pass string `n[dget $arguments name]` as device name, `n` is reference designator for Verilog-A devices
         in Ngspice. Secondly we pass list of nodes
-        `[list [list p [dget $arguments pNode]] [list n [dget $arguments nNode]]]` in form of 
+        `[list [list p [dget $arguments p]] [list n [dget $arguments n]]]` in form of 
         `{{Name0 NodeName} {Name1 NodeName} {Name2 NodeName} ...}`.
         
         And the last is list of parameters in form `{{model Value -posnocheck} {Name Value ?-eq?} {Name Value ?-eq?}

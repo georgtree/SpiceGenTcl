@@ -60,8 +60,8 @@
         {<font color=#b9b96e>-ac</font>= <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {AC voltage value}}
         {<font color=#b9b96e>-acphase</font>= <font color=#b9b96e>-help</font> {Phase of AC voltage}}
         {name <font color=#b9b96e>-help</font> {Name of the device without first-letter designator}}
-        {npNode <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
-        {nmNode <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
+        {np <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
+        {nm <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
     }]
     <b><font color=#ffa500>set</font></b> dcVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> dc]
     <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$dcVal</font>]&gt;1) && ([@ <font color=#f1b479>$dcVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
@@ -77,7 +77,7 @@
         <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> ac <font color=#f1b479>$acVal</font> <font color=#b9b96e>-pos</font>]
     }
     <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$arguments</font> {
-        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {ac dc name npNode nmNode}} {
+        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {ac dc name np nm}} {
             <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$value</font>]&gt;1) && ([@ <font color=#f1b479>$value</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
                 <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$paramName</font> [@ <font color=#f1b479>$value</font> 0] <font color=#b9b96e>-poseq</font>]
             } <b><font color=#ffa500>else</font></b> {
@@ -85,7 +85,7 @@
             }
         }
     }
-    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$type</font>[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> npNode]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nmNode]]] <font color=#f1b479>$params</font>
+    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$type</font>[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> np]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nm]]] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Common::Sources::Cccs'>Cccs</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources" title="::SpiceGenTcl::Common::Sources" class='ruff_cmd'>::SpiceGenTcl::Common::Sources</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -114,15 +114,15 @@
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Common::Sources::Cccs::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Cccs" title="::SpiceGenTcl::Common::Sources::Cccs" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::Cccs</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Cccs'>Cccs</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Cccs</font></b></code> that describes linear current-controlled current source.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -consrc value -gain value ?-m value?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name np nm -consrc value -gain value ?-m value?</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-consrc</font></code></td><td>Name of controlling source.</td></tr>
 <tr><td><code><font color=#b9b96e>-gain</font></code></td><td>Current gain.</td></tr>
 <tr><td><code><font color=#b9b96e>-m</font></code></td><td>Parallel source multiplicator.</td></tr>
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator F.</td></tr>
-<tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
+<tr><td><code>nm</code></td><td>Name of node connected to negative pin.</td></tr>
+<tr><td><code>np</code></td><td>Name of node connected to positive pin.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>FXXXXXXX N+ N- VNAM VALUE &lt;m=val&gt;
@@ -138,8 +138,8 @@
 
     <i><font color=#76a396># Creates object of class `Cccs` that describes linear current-controlled current source.</font></i>
     <i><font color=#76a396>#  name - name of the device without first-letter designator F</font></i>
-    <i><font color=#76a396>#  npNode - name of node connected to positive pin</font></i>
-    <i><font color=#76a396>#  nmNode - name of node connected to negative pin</font></i>
+    <i><font color=#76a396>#  np - name of node connected to positive pin</font></i>
+    <i><font color=#76a396>#  nm - name of node connected to negative pin</font></i>
     <i><font color=#76a396>#  -consrc - name of controlling source</font></i>
     <i><font color=#76a396>#  -gain - current gain</font></i>
     <i><font color=#76a396>#  -m - parallel source multiplicator</font></i>
@@ -150,14 +150,14 @@
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Common::Sources::Cccs new 1 net1 0 netc 0 -consrc vc -gain 10 -m 1</font></i>
     <i><font color=#76a396># ```</font></i>
-    <i><font color=#76a396># Synopsis: name npNode nmNode -consrc value -gain value ?-m value?</font></i>
+    <i><font color=#76a396># Synopsis: name np nm -consrc value -gain value ?-m value?</font></i>
     <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> <font color=#b9b96e>-pfirst</font> <font color=#b9b96e>-help</font> {Creates object of class `Cccs` that describes linear current-controlled current source} {
         {<font color=#b9b96e>-consrc</font> <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {Name of controlling source}}
         {<font color=#b9b96e>-gain</font> <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {Current gain}}
         {<font color=#b9b96e>-m</font>= <font color=#b9b96e>-help</font> {Parallel source multiplicator}}
         {name <font color=#b9b96e>-help</font> {Name of the device without first-letter designator F}}
-        {npNode <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
-        {nmNode <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
+        {np <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
+        {nm <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
     }]
     <b><font color=#ffa500>set</font></b> consrcVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> consrc]
     <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> consrc <font color=#f1b479>$consrcVal</font> <font color=#b9b96e>-posnocheck</font>]
@@ -168,11 +168,11 @@
         <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> igain <font color=#f1b479>$gainVal</font> <font color=#b9b96e>-pos</font>]
     }
     <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$arguments</font> {
-        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {consrc gain name npNode nmNode}} {
+        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {consrc gain name np nm}} {
             <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$paramName</font> {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$value</font>]
         }
     }
-    <b><font color=#ffa500>next</font></b> f[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> npNode]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nmNode]]] <font color=#f1b479>$params</font>
+    <b><font color=#ffa500>next</font></b> f[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> np]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nm]]] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Common::Sources::Ccvs'>Ccvs</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources" title="::SpiceGenTcl::Common::Sources" class='ruff_cmd'>::SpiceGenTcl::Common::Sources</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -201,14 +201,14 @@
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Common::Sources::Ccvs::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Ccvs" title="::SpiceGenTcl::Common::Sources::Ccvs" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::Ccvs</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Ccvs'>Ccvs</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Ccvs</font></b></code> that describes linear current-controlled current source.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -consrc value -transr value</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name np nm -consrc value -transr value</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-consrc</font></code></td><td>Name of controlling source.</td></tr>
 <tr><td><code><font color=#b9b96e>-transr</font></code></td><td>Transresistance.</td></tr>
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator H.</td></tr>
-<tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
+<tr><td><code>nm</code></td><td>Name of node connected to negative pin.</td></tr>
+<tr><td><code>np</code></td><td>Name of node connected to positive pin.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>HXXXXXXX N+ N- VNAM VALUE
@@ -224,8 +224,8 @@
 
     <i><font color=#76a396># Creates object of class `Ccvs` that describes linear current-controlled current source.</font></i>
     <i><font color=#76a396>#  name - name of the device without first-letter designator H</font></i>
-    <i><font color=#76a396>#  npNode - name of node connected to positive pin</font></i>
-    <i><font color=#76a396>#  nmNode - name of node connected to negative pin</font></i>
+    <i><font color=#76a396>#  np - name of node connected to positive pin</font></i>
+    <i><font color=#76a396>#  nm - name of node connected to negative pin</font></i>
     <i><font color=#76a396>#  -consrc - name of controlling source</font></i>
     <i><font color=#76a396>#  -transr - transresistance</font></i>
     <i><font color=#76a396># ```</font></i>
@@ -235,13 +235,13 @@
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Common::Sources::Ccvs new 1 net1 0 -consrc vc -transr {tres -eq}</font></i>
     <i><font color=#76a396># ```</font></i>
-    <i><font color=#76a396># Synopsis: name npNode nmNode -consrc value -transr value</font></i>
+    <i><font color=#76a396># Synopsis: name np nm -consrc value -transr value</font></i>
     <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> <font color=#b9b96e>-pfirst</font> <font color=#b9b96e>-help</font> {Creates object of class `Ccvs` that describes linear current-controlled current source} {
         {<font color=#b9b96e>-consrc</font> <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {Name of controlling source}}
         {<font color=#b9b96e>-transr</font> <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> Transresistance}
         {name <font color=#b9b96e>-help</font> {Name of the device without first-letter designator H}}
-        {npNode <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
-        {nmNode <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
+        {np <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
+        {nm <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
     }]
     <b><font color=#ffa500>set</font></b> consrcVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> consrc]
     <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> consrc <font color=#f1b479>$consrcVal</font> <font color=#b9b96e>-posnocheck</font>]
@@ -251,7 +251,7 @@
     } <b><font color=#ffa500>else</font></b> {
         <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> transr <font color=#f1b479>$transrVal</font> <font color=#b9b96e>-pos</font>]
     }
-    <b><font color=#ffa500>next</font></b> h[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> npNode]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nmNode]]] <font color=#f1b479>$params</font>
+    <b><font color=#ffa500>next</font></b> h[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> np]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nm]]] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Common::Sources::dc'>dc</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources" title="::SpiceGenTcl::Common::Sources" class='ruff_cmd'>::SpiceGenTcl::Common::Sources</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -295,8 +295,8 @@
     <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> <font color=#b9b96e>-pfirst</font> <font color=#b9b96e>-help</font> <font color=#90ee90>&quot;Creates object of class '<font color=#f1b479>[</font>string totitle <font color=#f1b479>${</font>type<font color=#f1b479>}</font>dc<font color=#f1b479>]</font>' that describes simple constant <font color=#f1b479>$</font>typeName source&quot;</font> {
         {<font color=#b9b96e>-dc</font>= <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {DC value}}
         {name <font color=#b9b96e>-help</font> {Name of the device without first-letter designator}}
-        {npNode <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
-        {nmNode <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
+        {np <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
+        {nm <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
     }]
     <b><font color=#ffa500>set</font></b> dcVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> dc]
     <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$dcVal</font>]&gt;1) && ([@ <font color=#f1b479>$dcVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
@@ -304,7 +304,7 @@
     } <b><font color=#ffa500>else</font></b> {
         <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> dc <font color=#f1b479>$dcVal</font> <font color=#b9b96e>-pos</font>]
     }
-    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$type</font>[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> npNode]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nmNode]]] <font color=#f1b479>$params</font>
+    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$type</font>[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> np]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nm]]] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Common::Sources::E'>E</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources" title="::SpiceGenTcl::Common::Sources" class='ruff_cmd'>::SpiceGenTcl::Common::Sources</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -378,8 +378,8 @@
         {<font color=#b9b96e>-td2</font>= <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {Fall delay time}}
         {<font color=#b9b96e>-tau2</font>= <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {Fall time constant}}
         {name <font color=#b9b96e>-help</font> {Name of the device without first-letter designator}}
-        {npNode <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
-        {nmNode <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
+        {np <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
+        {nm <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
     }]
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> dc]} {
         <b><font color=#ffa500>lappend</font></b> params {dc <font color=#b9b96e>-sw</font>}
@@ -410,7 +410,7 @@
     <b><font color=#ffa500>set</font></b> paramsOrder {v1 v2 td1 tau1 td2 tau2}
     <b><font color=#ffa500>lappend</font></b> params {model exp <font color=#b9b96e>-posnocheck</font>}
     <b><font color=#fe6efe>my</font></b> ParamsProcess <font color=#f1b479>$paramsOrder</font> <font color=#f1b479>$arguments</font> params
-    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$type</font>[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> npNode]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nmNode]]] <font color=#f1b479>$params</font>
+    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$type</font>[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> np]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nm]]] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Common::Sources::F'>F</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources" title="::SpiceGenTcl::Common::Sources" class='ruff_cmd'>::SpiceGenTcl::Common::Sources</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -508,8 +508,8 @@
 <tr><td><code><font color=#b9b96e>-acphase</font></code></td><td>Phase of AC current.</td></tr>
 <tr><td><code><font color=#b9b96e>-dc</font></code></td><td>AC current value.</td></tr>
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator I.</td></tr>
-<tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
+<tr><td><code>nm</code></td><td>Name of node connected to negative pin.</td></tr>
+<tr><td><code>np</code></td><td>Name of node connected to positive pin.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>IYYYYYYY n+ n- &lt;AC&lt;ACMAG&lt;ACPHASE&gt;&gt;&gt;
@@ -518,7 +518,7 @@
 </figure><p class='ruff'>Example of class initialization:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Common::Sources::Iac new 1 netp netm <font color=#b9b96e>-ac</font> 10 <font color=#b9b96e>-acphase</font> 45
-Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase value?
+Synopsis: name np nm <font color=#b9b96e>-ac</font> value ?-acphase value?
 </pre>
 
 </figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Common_Sources_Iac_constructor' href="javascript:toggleSource('SpiceGenTcl_Common_Sources_Iac_constructor')">Show source</a></p>
@@ -526,8 +526,8 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 
     <i><font color=#76a396># Creates object of class `Iac` that describes ac current source.</font></i>
     <i><font color=#76a396>#  name - name of the device without first-letter designator I</font></i>
-    <i><font color=#76a396>#  npNode - name of node connected to positive pin</font></i>
-    <i><font color=#76a396>#  nmNode - name of node connected to negative pin</font></i>
+    <i><font color=#76a396>#  np - name of node connected to positive pin</font></i>
+    <i><font color=#76a396>#  nm - name of node connected to negative pin</font></i>
     <i><font color=#76a396>#  -dc - AC current value</font></i>
     <i><font color=#76a396>#  -acphase - phase of AC current</font></i>
     <i><font color=#76a396># ```</font></i>
@@ -536,7 +536,7 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
     <i><font color=#76a396># Example of class initialization:</font></i>
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Common::Sources::Iac new 1 netp netm -ac 10 -acphase 45</font></i>
-    <i><font color=#76a396># Synopsis: name npNode nmNode -ac value ?-acphase value?</font></i>
+    <i><font color=#76a396># Synopsis: name np nm -ac value ?-acphase value?</font></i>
     <b><font color=#ffa500>next</font></b> i {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$args</font>
 }</pre></div>
 </div></details>
@@ -566,13 +566,13 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Common::Sources::Idc::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Idc" title="::SpiceGenTcl::Common::Sources::Idc" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::Idc</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Idc'>Idc</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Idc</font></b></code> that describes simple constant current source.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -dc value</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name np nm -dc value</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-dc</font></code></td><td>DC voltage value.</td></tr>
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator I.</td></tr>
-<tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
+<tr><td><code>nm</code></td><td>Name of node connected to negative pin.</td></tr>
+<tr><td><code>np</code></td><td>Name of node connected to positive pin.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>IYYYYYYY n+ n- &lt;&lt;DC&gt; DC/TRAN VALUE&gt;&gt;
@@ -588,8 +588,8 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 
     <i><font color=#76a396># Creates object of class `Idc` that describes simple constant current source.</font></i>
     <i><font color=#76a396>#  name - name of the device without first-letter designator I</font></i>
-    <i><font color=#76a396>#  npNode - name of node connected to positive pin</font></i>
-    <i><font color=#76a396>#  nmNode - name of node connected to negative pin</font></i>
+    <i><font color=#76a396>#  np - name of node connected to positive pin</font></i>
+    <i><font color=#76a396>#  nm - name of node connected to negative pin</font></i>
     <i><font color=#76a396>#  -dc - DC voltage value</font></i>
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># IYYYYYYY n+ n- &lt;&lt;DC&gt; DC/TRAN VALUE&gt;&gt;</font></i>
@@ -598,7 +598,7 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Common::Sources::Idc new 1 netp netm -dc 10</font></i>
     <i><font color=#76a396># ```</font></i>
-    <i><font color=#76a396># Synopsis: name npNode nmNode -dc value</font></i>
+    <i><font color=#76a396># Synopsis: name np nm -dc value</font></i>
     <b><font color=#ffa500>next</font></b> i {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$args</font>
 }</pre></div>
 </div></details>
@@ -628,7 +628,7 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Common::Sources::Iexp::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Iexp" title="::SpiceGenTcl::Common::Sources::Iexp" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::Iexp</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Iexp'>Iexp</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Iexp</font></b></code> that describes exponential current source.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -i1 value -i2 value -td1 value -tau1 value -td2 value -tau2 value ?-phase|phi value???</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name np nm -i1 value -i2 value -td1 value -tau1 value -td2 value -tau2 value ?-phase|phi value???</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-ac</font></code></td><td>AC value, optional.</td></tr>
@@ -641,8 +641,8 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <tr><td><code><font color=#b9b96e>-td1</font></code></td><td>Rise delay time.</td></tr>
 <tr><td><code><font color=#b9b96e>-td2</font></code></td><td>Fall delay time.</td></tr>
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator I.</td></tr>
-<tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
+<tr><td><code>nm</code></td><td>Name of node connected to negative pin.</td></tr>
+<tr><td><code>np</code></td><td>Name of node connected to positive pin.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>IYYYYYYY n+ n- EXP(V1 V2 TD1 TAU1 TD2 TAU2)
@@ -658,8 +658,8 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 
     <i><font color=#76a396># Creates object of class `Iexp` that describes exponential current source.</font></i>
     <i><font color=#76a396>#  name - name of the device without first-letter designator I</font></i>
-    <i><font color=#76a396>#  npNode - name of node connected to positive pin</font></i>
-    <i><font color=#76a396>#  nmNode - name of node connected to negative pin</font></i>
+    <i><font color=#76a396>#  np - name of node connected to positive pin</font></i>
+    <i><font color=#76a396>#  nm - name of node connected to negative pin</font></i>
     <i><font color=#76a396>#  -i1 - initial value</font></i>
     <i><font color=#76a396>#  -i2 - pulsed value</font></i>
     <i><font color=#76a396>#  -td1 - rise delay time</font></i>
@@ -676,7 +676,7 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Common::Sources::Iexp new 1 net1 net2 -i1 0 -i2 1 -td1 1e-9 -tau1 1e-9 -td2 {td2 -eq} -tau2 10e-6</font></i>
     <i><font color=#76a396># ```</font></i>
-    <i><font color=#76a396># Synopsis: name npNode nmNode -i1 value -i2 value -td1 value -tau1 value -td2 value -tau2 value</font></i>
+    <i><font color=#76a396># Synopsis: name np nm -i1 value -i2 value -td1 value -tau1 value -td2 value -tau2 value</font></i>
     <i><font color=#76a396>#   ?-phase|phi value???</font></i>
     <b><font color=#ffa500>next</font></b> i {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$args</font>
 }</pre></div>
@@ -707,7 +707,7 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Common::Sources::Ipulse::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Ipulse" title="::SpiceGenTcl::Common::Sources::Ipulse" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::Ipulse</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Ipulse'>Ipulse</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Ipulse</font></b></code> that describes pulse current source.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -voff|ioff|low value -von|ion|high value -td value -tr value -tf value -pw|ton value ?-phase|phi value???</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name np nm -voff|ioff|low value -von|ion|high value -td value -tr value -tf value -pw|ton value ?-phase|phi value???</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-ac</font></code></td><td>AC value, optional.</td></tr>
@@ -721,8 +721,8 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <tr><td><code><font color=#b9b96e>-tf</font></code></td><td>Fall time.</td></tr>
 <tr><td><code><font color=#b9b96e>-tr</font></code></td><td>Rise time.</td></tr>
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator I.</td></tr>
-<tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
+<tr><td><code>nm</code></td><td>Name of node connected to negative pin.</td></tr>
+<tr><td><code>np</code></td><td>Name of node connected to positive pin.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>IYYYYYYY n+ n- PULSE(V1 V2 TD TR TF PW PER)
@@ -738,8 +738,8 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 
     <i><font color=#76a396># Creates object of class `Ipulse` that describes pulse current source.</font></i>
     <i><font color=#76a396>#  name - name of the device without first-letter designator I</font></i>
-    <i><font color=#76a396>#  npNode - name of node connected to positive pin</font></i>
-    <i><font color=#76a396>#  nmNode - name of node connected to negative pin</font></i>
+    <i><font color=#76a396>#  np - name of node connected to positive pin</font></i>
+    <i><font color=#76a396>#  nm - name of node connected to negative pin</font></i>
     <i><font color=#76a396>#  -low - low value, aliases: -voff, -ioff</font></i>
     <i><font color=#76a396>#  -high - high value, aliases: -von, ion</font></i>
     <i><font color=#76a396>#  -td - time delay</font></i>
@@ -757,7 +757,7 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Common::Sources::Ipulse new 1 net1 net2 -low 0 -high 1 -td {td -eq} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6</font></i>
     <i><font color=#76a396># ```</font></i>
-    <i><font color=#76a396># Synopsis: name npNode nmNode -voff|ioff|low value -von|ion|high value -td value -tr value -tf value</font></i>
+    <i><font color=#76a396># Synopsis: name np nm -voff|ioff|low value -von|ion|high value -td value -tr value -tf value</font></i>
     <i><font color=#76a396>#   -pw|ton value ?-phase|phi value???</font></i>
     <b><font color=#ffa500>next</font></b> i {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$args</font>
 }</pre></div>
@@ -788,7 +788,7 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Common::Sources::Ipwl::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Ipwl" title="::SpiceGenTcl::Common::Sources::Ipwl" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::Ipwl</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Ipwl'>Ipwl</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Ipwl</font></b></code> that describes piece-wise current source.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -seq list ?-phase|phi value???</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name np nm -seq list ?-phase|phi value???</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-ac</font></code></td><td>AC value, optional.</td></tr>
@@ -796,8 +796,8 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <tr><td><code><font color=#b9b96e>-dc</font></code></td><td>DC value, optional.</td></tr>
 <tr><td><code><font color=#b9b96e>-seq</font></code></td><td>Sequence of pwl points in form {t0 i0 t1 i1 t2 i2 t3 i3 ...}</td></tr>
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator I.</td></tr>
-<tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
+<tr><td><code>nm</code></td><td>Name of node connected to negative pin.</td></tr>
+<tr><td><code>np</code></td><td>Name of node connected to positive pin.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>IYYYYYYY n+ n- PWL (T1 I1 &lt;T2 I2 T3 I3 T4 I4 ...&gt;)
@@ -805,7 +805,7 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 
 </figure><p class='ruff'>Example of class initialization:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Common::Sources::Ipwl new 1 npNode nmNode <font color=#b9b96e>-seq</font> {0 0 {t1 <font color=#b9b96e>-eq</font>} 1 2 2 3 3 4 4}
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Common::Sources::Ipwl new 1 np nm <font color=#b9b96e>-seq</font> {0 0 {t1 <font color=#b9b96e>-eq</font>} 1 2 2 3 3 4 4}
 </pre>
 
 </figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Common_Sources_Ipwl_constructor' href="javascript:toggleSource('SpiceGenTcl_Common_Sources_Ipwl_constructor')">Show source</a></p>
@@ -813,8 +813,8 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 
     <i><font color=#76a396># Creates object of class `Ipwl` that describes piece-wise current source.</font></i>
     <i><font color=#76a396>#  name - name of the device without first-letter designator I</font></i>
-    <i><font color=#76a396>#  npNode - name of node connected to positive pin</font></i>
-    <i><font color=#76a396>#  nmNode - name of node connected to negative pin</font></i>
+    <i><font color=#76a396>#  np - name of node connected to positive pin</font></i>
+    <i><font color=#76a396>#  nm - name of node connected to negative pin</font></i>
     <i><font color=#76a396>#  -seq - sequence of pwl points in form {t0 i0 t1 i1 t2 i2 t3 i3 ...}</font></i>
     <i><font color=#76a396>#  -dc - DC value, optional</font></i>
     <i><font color=#76a396>#  -ac - AC value, optional</font></i>
@@ -824,9 +824,9 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># Example of class initialization:</font></i>
     <i><font color=#76a396># ```</font></i>
-    <i><font color=#76a396># ::SpiceGenTcl::Common::Sources::Ipwl new 1 npNode nmNode -seq {0 0 {t1 -eq} 1 2 2 3 3 4 4}</font></i>
+    <i><font color=#76a396># ::SpiceGenTcl::Common::Sources::Ipwl new 1 np nm -seq {0 0 {t1 -eq} 1 2 2 3 3 4 4}</font></i>
     <i><font color=#76a396># ```</font></i>
-    <i><font color=#76a396># Synopsis: name npNode nmNode -seq list ?-phase|phi value???</font></i>
+    <i><font color=#76a396># Synopsis: name np nm -seq list ?-phase|phi value???</font></i>
     <b><font color=#ffa500>next</font></b> i {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$args</font>
 }</pre></div>
 </div></details>
@@ -856,7 +856,7 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Common::Sources::Isffm::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Isffm" title="::SpiceGenTcl::Common::Sources::Isffm" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::Isffm</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Isffm'>Isffm</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Isffm</font></b></code> that describes single-frequency FM current source.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -i0|voff|ioff|v0 value -ia|vamp|iamp|va value -fc|fcar value -mdi value -fs|fsig value ?-phi|phase value???</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name np nm -i0|voff|ioff|v0 value -ia|vamp|iamp|va value -fc|fcar value -mdi value -fs|fsig value ?-phi|phase value???</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-ac</font></code></td><td>AC value, optional.</td></tr>
@@ -868,8 +868,8 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <tr><td><code><font color=#b9b96e>-ia</font></code></td><td>Pulsed value, aliases: -vamp, -va, -iamp.</td></tr>
 <tr><td><code><font color=#b9b96e>-mdi</font></code></td><td>Modulation index.</td></tr>
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator I.</td></tr>
-<tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
+<tr><td><code>nm</code></td><td>Name of node connected to negative pin.</td></tr>
+<tr><td><code>np</code></td><td>Name of node connected to positive pin.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>IYYYYYYY n+ n- SFFM(VO VA FC MDI FS)
@@ -885,8 +885,8 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 
     <i><font color=#76a396># Creates object of class `Isffm` that describes single-frequency FM current source.</font></i>
     <i><font color=#76a396>#  name - name of the device without first-letter designator I</font></i>
-    <i><font color=#76a396>#  npNode - name of node connected to positive pin</font></i>
-    <i><font color=#76a396>#  nmNode - name of node connected to negative pin</font></i>
+    <i><font color=#76a396>#  np - name of node connected to positive pin</font></i>
+    <i><font color=#76a396>#  nm - name of node connected to negative pin</font></i>
     <i><font color=#76a396>#  -i0 - initial value, aliases: -voff, -v0, -ioff</font></i>
     <i><font color=#76a396>#  -ia - pulsed value, aliases: -vamp, -va, -iamp</font></i>
     <i><font color=#76a396>#  -fc - carrier frequency, alias -fcar</font></i>
@@ -902,7 +902,7 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Common::Sources::Isin new 1 net1 net2 -i0 0 -ia 1 -fc {freq -eq} -mdi 0 -fs 1e3</font></i>
     <i><font color=#76a396># ```</font></i>
-    <i><font color=#76a396># Synopsis: name npNode nmNode -i0|voff|ioff|v0 value -ia|vamp|iamp|va value -fc|fcar value -mdi value</font></i>
+    <i><font color=#76a396># Synopsis: name np nm -i0|voff|ioff|v0 value -ia|vamp|iamp|va value -fc|fcar value -mdi value</font></i>
     <i><font color=#76a396>#   -fs|fsig value ?-phi|phase value???</font></i>
     <b><font color=#ffa500>next</font></b> i {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$args</font>
 }</pre></div>
@@ -933,7 +933,7 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Common::Sources::Isin::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Isin" title="::SpiceGenTcl::Common::Sources::Isin" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::Isin</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Isin'>Isin</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Isin</font></b></code> that describes sinusoidal current source.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -i0|ioffset value -ia|iamp value -freq value ?-td value ?-theta value ?-phase|phi value???</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name np nm -i0|ioffset value -ia|iamp value -freq value ?-td value ?-theta value ?-phase|phi value???</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-ac</font></code></td><td>AC value, optional.</td></tr>
@@ -946,8 +946,8 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <tr><td><code><font color=#b9b96e>-td</font></code></td><td>Time delay, optional.</td></tr>
 <tr><td><code><font color=#b9b96e>-theta</font></code></td><td>Damping factor, optional, require -td.</td></tr>
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator I.</td></tr>
-<tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
+<tr><td><code>nm</code></td><td>Name of node connected to negative pin.</td></tr>
+<tr><td><code>np</code></td><td>Name of node connected to positive pin.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>IYYYYYYY n+ n- SIN(VO VA FREQ TD THETA PHASE)
@@ -963,8 +963,8 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 
     <i><font color=#76a396># Creates object of class `Isin` that describes sinusoidal current source.</font></i>
     <i><font color=#76a396>#  name - name of the device without first-letter designator I</font></i>
-    <i><font color=#76a396>#  npNode - name of node connected to positive pin</font></i>
-    <i><font color=#76a396>#  nmNode - name of node connected to negative pin</font></i>
+    <i><font color=#76a396>#  np - name of node connected to positive pin</font></i>
+    <i><font color=#76a396>#  nm - name of node connected to negative pin</font></i>
     <i><font color=#76a396>#  -i0 - DC shift value, aliases: -voffset, -v0, -ioffset</font></i>
     <i><font color=#76a396>#  -ia - amplitude value, aliases: -vamp, -va, -iamp</font></i>
     <i><font color=#76a396>#  -freq - frequency of sinusoidal signal</font></i>
@@ -981,7 +981,7 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Common::Sources::Isin new 1 net1 net2 -i0 0 -ia 2 -freq {freq -eq} -td 1e-6 -theta {theta -eq}</font></i>
     <i><font color=#76a396># ```</font></i>
-    <i><font color=#76a396># Synopsis: name npNode nmNode -i0|ioffset value -ia|iamp value -freq value ?-td value ?-theta value</font></i>
+    <i><font color=#76a396># Synopsis: name np nm -i0|ioffset value -ia|iamp value -freq value ?-td value ?-theta value</font></i>
     <i><font color=#76a396>#   ?-phase|phi value???</font></i>
     <b><font color=#ffa500>next</font></b> i {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$args</font>
 }</pre></div>
@@ -1037,8 +1037,8 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
         {<font color=#b9b96e>-pw</font>|ton= <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {Width of pulse}}
         {<font color=#b9b96e>-per</font>|tper= <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {Period time}}
         {name <font color=#b9b96e>-help</font> {Name of the device without first-letter designator}}
-        {npNode <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
-        {nmNode <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
+        {np <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
+        {nm <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
     }]
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> dc]} {
         <b><font color=#ffa500>lappend</font></b> params {dc <font color=#b9b96e>-sw</font>}
@@ -1069,7 +1069,7 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
     <b><font color=#ffa500>set</font></b> paramsOrder {low high td tr tf ton tper}
     <b><font color=#ffa500>lappend</font></b> params {model pulse <font color=#b9b96e>-posnocheck</font>}
     <b><font color=#fe6efe>my</font></b> ParamsProcess <font color=#f1b479>$paramsOrder</font> <font color=#f1b479>$arguments</font> params
-    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$type</font>[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> npNode]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nmNode]]] <font color=#f1b479>$params</font>
+    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$type</font>[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> np]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nm]]] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Common::Sources::pwl'>pwl</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources" title="::SpiceGenTcl::Common::Sources" class='ruff_cmd'>::SpiceGenTcl::Common::Sources</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -1116,8 +1116,8 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
         {<font color=#b9b96e>-acphase</font>= <font color=#b9b96e>-require</font> ac <font color=#b9b96e>-help</font> {Phase of AC signal}}
         {<font color=#b9b96e>-seq</font>= <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {Sequence of pwl points in form {t0 i0 t1 i1 t2 i2 t3 i3 ...}}}
         {name <font color=#b9b96e>-help</font> {Name of the device without first-letter designator}}
-        {npNode <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
-        {nmNode <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
+        {np <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
+        {nm <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
     }]
     <b><font color=#ffa500>set</font></b> start 0
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> dc]} {
@@ -1170,7 +1170,7 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
         }
     }
     <b><font color=#ffa500>set</font></b> paramList [<b><font color=#ffa500>linsert</font></b> <font color=#f1b479>$paramList</font> <font color=#f1b479>$start</font> {model pwl <font color=#b9b96e>-posnocheck</font>}]
-    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$type</font>[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> npNode]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nmNode]]] <font color=#f1b479>$paramList</font>
+    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$type</font>[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> np]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nm]]] <font color=#f1b479>$paramList</font>
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Common::Sources::sffm'>sffm</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources" title="::SpiceGenTcl::Common::Sources" class='ruff_cmd'>::SpiceGenTcl::Common::Sources</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -1222,8 +1222,8 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
         {<font color=#b9b96e>-mdi</font>= <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {Modulation index}}
         {<font color=#b9b96e>-fsig</font>|fs= <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {Signal frequency}}
         {name <font color=#b9b96e>-help</font> {Name of the device without first-letter designator}}
-        {npNode <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
-        {nmNode <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
+        {np <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
+        {nm <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
     }]
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> dc]} {
         <b><font color=#ffa500>lappend</font></b> params {dc <font color=#b9b96e>-sw</font>}
@@ -1254,7 +1254,7 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
     <b><font color=#ffa500>set</font></b> paramsOrder {v0 va fc mdi fs}
     <b><font color=#ffa500>lappend</font></b> params {model sffm <font color=#b9b96e>-posnocheck</font>}
     <b><font color=#fe6efe>my</font></b> ParamsProcess <font color=#f1b479>$paramsOrder</font> <font color=#f1b479>$arguments</font> params
-    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$type</font>[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> npNode]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nmNode]]] <font color=#f1b479>$params</font>
+    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$type</font>[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> np]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nm]]] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Common::Sources::sin'>sin</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources" title="::SpiceGenTcl::Common::Sources" class='ruff_cmd'>::SpiceGenTcl::Common::Sources</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -1307,8 +1307,8 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
         {<font color=#b9b96e>-theta</font>= <font color=#b9b96e>-require</font> {td} <font color=#b9b96e>-help</font> {Damping factor}}
         {<font color=#b9b96e>-phi</font>|phase= <font color=#b9b96e>-require</font> {td theta} <font color=#b9b96e>-help</font> {Phase of signal}}
         {name <font color=#b9b96e>-help</font> {Name of the device without first-letter designator}}
-        {npNode <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
-        {nmNode <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
+        {np <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
+        {nm <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
     }]
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> dc]} {
         <b><font color=#ffa500>lappend</font></b> params {dc <font color=#b9b96e>-sw</font>}
@@ -1339,7 +1339,7 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
     <b><font color=#ffa500>set</font></b> paramsOrder {v0 va freq td theta phase}
     <b><font color=#ffa500>lappend</font></b> params {model sin <font color=#b9b96e>-posnocheck</font>}
     <b><font color=#fe6efe>my</font></b> ParamsProcess <font color=#f1b479>$paramsOrder</font> <font color=#f1b479>$arguments</font> params
-    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$type</font>[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> npNode]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nmNode]]] <font color=#f1b479>$params</font>
+    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$type</font>[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> np]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nm]]] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Common::Sources::Vac'>Vac</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources" title="::SpiceGenTcl::Common::Sources" class='ruff_cmd'>::SpiceGenTcl::Common::Sources</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -1368,14 +1368,14 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Common::Sources::Vac::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vac" title="::SpiceGenTcl::Common::Sources::Vac" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::Vac</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vac'>Vac</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Vac</font></b></code> that describes ac voltage source.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -ac value ?-acphase value?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name np nm -ac value ?-acphase value?</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-ac</font></code></td><td>AC voltage value.</td></tr>
 <tr><td><code><font color=#b9b96e>-acphase</font></code></td><td>Phase of AC voltage.</td></tr>
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator V.</td></tr>
-<tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
+<tr><td><code>nm</code></td><td>Name of node connected to negative pin.</td></tr>
+<tr><td><code>np</code></td><td>Name of node connected to positive pin.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>VYYYYYYY n+ n- &lt;AC&lt;ACMAG&lt;ACPHASE&gt;&gt;&gt;
@@ -1391,8 +1391,8 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 
     <i><font color=#76a396># Creates object of class `Vac` that describes ac voltage source.</font></i>
     <i><font color=#76a396>#  name - name of the device without first-letter designator V</font></i>
-    <i><font color=#76a396>#  npNode - name of node connected to positive pin</font></i>
-    <i><font color=#76a396>#  nmNode - name of node connected to negative pin</font></i>
+    <i><font color=#76a396>#  np - name of node connected to positive pin</font></i>
+    <i><font color=#76a396>#  nm - name of node connected to negative pin</font></i>
     <i><font color=#76a396>#  -ac - AC voltage value</font></i>
     <i><font color=#76a396>#  -acphase - phase of AC voltage</font></i>
     <i><font color=#76a396># ```</font></i>
@@ -1402,7 +1402,7 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Common::Sources::Vac new 1 netp netm -ac 10 -acphase 45</font></i>
     <i><font color=#76a396># ```</font></i>
-    <i><font color=#76a396># Synopsis: name npNode nmNode -ac value ?-acphase value?</font></i>
+    <i><font color=#76a396># Synopsis: name np nm -ac value ?-acphase value?</font></i>
     <b><font color=#ffa500>next</font></b> v {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$args</font>
 }</pre></div>
 </div></details>
@@ -1432,16 +1432,16 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Common::Sources::Vccs::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vccs" title="::SpiceGenTcl::Common::Sources::Vccs" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::Vccs</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vccs'>Vccs</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Vccs</font></b></code> that describes linear voltage-controlled current source.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode ncpNode ncmNode -trcond value ?-m value?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name np nm ncp ncm -trcond value ?-m value?</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-m</font></code></td><td>Multiplier factor, optional.</td></tr>
 <tr><td><code><font color=#b9b96e>-trcond</font></code></td><td>Transconductance.</td></tr>
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator G.</td></tr>
-<tr><td><code>ncmNode</code></td><td>Name of node connected to negative controlling pin.</td></tr>
-<tr><td><code>ncpNode</code></td><td>Name of node connected to positive controlling pin.</td></tr>
-<tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
+<tr><td><code>ncm</code></td><td>Name of node connected to negative controlling pin.</td></tr>
+<tr><td><code>ncp</code></td><td>Name of node connected to positive controlling pin.</td></tr>
+<tr><td><code>nm</code></td><td>Name of node connected to negative pin.</td></tr>
+<tr><td><code>np</code></td><td>Name of node connected to positive pin.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>GXXXXXXX N+ N- NC+ NC- VALUE &lt;m=val&gt;
@@ -1457,10 +1457,10 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 
     <i><font color=#76a396># Creates object of class `Vccs` that describes linear voltage-controlled current source.</font></i>
     <i><font color=#76a396>#  name - name of the device without first-letter designator G</font></i>
-    <i><font color=#76a396>#  npNode - name of node connected to positive pin</font></i>
-    <i><font color=#76a396>#  nmNode - name of node connected to negative pin</font></i>
-    <i><font color=#76a396>#  ncpNode - name of node connected to positive controlling pin</font></i>
-    <i><font color=#76a396>#  ncmNode - name of node connected to negative controlling pin</font></i>
+    <i><font color=#76a396>#  np - name of node connected to positive pin</font></i>
+    <i><font color=#76a396>#  nm - name of node connected to negative pin</font></i>
+    <i><font color=#76a396>#  ncp - name of node connected to positive controlling pin</font></i>
+    <i><font color=#76a396>#  ncm - name of node connected to negative controlling pin</font></i>
     <i><font color=#76a396>#  -trcond - transconductance</font></i>
     <i><font color=#76a396>#  -m - multiplier factor, optional</font></i>
     <i><font color=#76a396># ```</font></i>
@@ -1470,15 +1470,15 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Common::Sources::Vccs new 1 net1 0 netc 0 -trcond 10 -m 1</font></i>
     <i><font color=#76a396># ```</font></i>
-    <i><font color=#76a396># Synopsis: name npNode nmNode ncpNode ncmNode -trcond value ?-m value?</font></i>
+    <i><font color=#76a396># Synopsis: name np nm ncp ncm -trcond value ?-m value?</font></i>
     <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> <font color=#b9b96e>-pfirst</font> <font color=#b9b96e>-help</font> {Creates object of class `Vccs` that describes linear voltage-controlled current source} {
         {<font color=#b9b96e>-trcond</font> <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> Transconductance}
         {<font color=#b9b96e>-m</font>= <font color=#b9b96e>-help</font> {Multiplier factor}}
         {name <font color=#b9b96e>-help</font> {Name of the device without first-letter designator G}}
-        {npNode <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
-        {nmNode <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
-        {ncpNode <font color=#b9b96e>-help</font> {Name of node connected to positive controlling pin}}
-        {ncmNode <font color=#b9b96e>-help</font> {Name of node connected to negative controlling pin}}
+        {np <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
+        {nm <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
+        {ncp <font color=#b9b96e>-help</font> {Name of node connected to positive controlling pin}}
+        {ncm <font color=#b9b96e>-help</font> {Name of node connected to negative controlling pin}}
     }]
     <b><font color=#ffa500>set</font></b> trcondVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> trcond]
     <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$trcondVal</font>]&gt;1) && ([@ <font color=#f1b479>$trcondVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
@@ -1487,11 +1487,11 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
         <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> trcond <font color=#f1b479>$trcondVal</font> <font color=#b9b96e>-pos</font>]
     }
     <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$arguments</font> {
-        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {trcond name npNode nmNode ncpNode ncmNode}} {
+        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {trcond name np nm ncp ncm}} {
             <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$paramName</font> {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$value</font>]
         }
     }
-    <b><font color=#ffa500>next</font></b> g[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> npNode]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nmNode]] [<b><font color=#ffa500>list</font></b> ncp [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ncpNode]] [<b><font color=#ffa500>list</font></b> ncm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ncmNode]]] <font color=#f1b479>$params</font>
+    <b><font color=#ffa500>next</font></b> g[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> np]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nm]] [<b><font color=#ffa500>list</font></b> ncp [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ncp]] [<b><font color=#ffa500>list</font></b> ncm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ncm]]] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Common::Sources::Vcvs'>Vcvs</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources" title="::SpiceGenTcl::Common::Sources" class='ruff_cmd'>::SpiceGenTcl::Common::Sources</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -1520,15 +1520,15 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Common::Sources::Vcvs::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vcvs" title="::SpiceGenTcl::Common::Sources::Vcvs" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::Vcvs</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vcvs'>Vcvs</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Vcvs</font></b></code> that describes linear voltage-controlled current source.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode ncpNode ncmNode -gain value</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name np nm ncp ncm -gain value</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-gain</font></code></td><td>Voltage gain.</td></tr>
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator E.</td></tr>
-<tr><td><code>ncmNode</code></td><td>Name of node connected to negative controlling pin.</td></tr>
-<tr><td><code>ncpNode</code></td><td>Name of node connected to positive controlling pin.</td></tr>
-<tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
+<tr><td><code>ncm</code></td><td>Name of node connected to negative controlling pin.</td></tr>
+<tr><td><code>ncp</code></td><td>Name of node connected to positive controlling pin.</td></tr>
+<tr><td><code>nm</code></td><td>Name of node connected to negative pin.</td></tr>
+<tr><td><code>np</code></td><td>Name of node connected to positive pin.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>EXXXXXXX N+ N- NC+ NC- VALUE
@@ -1544,10 +1544,10 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 
     <i><font color=#76a396># Creates object of class `Vcvs` that describes linear voltage-controlled current source.</font></i>
     <i><font color=#76a396>#  name - name of the device without first-letter designator E</font></i>
-    <i><font color=#76a396>#  npNode - name of node connected to positive pin</font></i>
-    <i><font color=#76a396>#  nmNode - name of node connected to negative pin</font></i>
-    <i><font color=#76a396>#  ncpNode - name of node connected to positive controlling pin</font></i>
-    <i><font color=#76a396>#  ncmNode - name of node connected to negative controlling pin</font></i>
+    <i><font color=#76a396>#  np - name of node connected to positive pin</font></i>
+    <i><font color=#76a396>#  nm - name of node connected to negative pin</font></i>
+    <i><font color=#76a396>#  ncp - name of node connected to positive controlling pin</font></i>
+    <i><font color=#76a396>#  ncm - name of node connected to negative controlling pin</font></i>
     <i><font color=#76a396>#  -gain - voltage gain</font></i>
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># EXXXXXXX N+ N- NC+ NC- VALUE</font></i>
@@ -1556,14 +1556,14 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Common::Sources::Vcvs new 1 net1 0 netc 0 -gain 10</font></i>
     <i><font color=#76a396># ```</font></i>
-    <i><font color=#76a396># Synopsis: name npNode nmNode ncpNode ncmNode -gain value</font></i>
+    <i><font color=#76a396># Synopsis: name np nm ncp ncm -gain value</font></i>
     <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> <font color=#b9b96e>-pfirst</font> <font color=#b9b96e>-help</font> {Creates object of class `Vcvs` that describes linear voltage-controlled current source} {
         {<font color=#b9b96e>-gain</font> <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {Voltage gain}}
         {name <font color=#b9b96e>-help</font> {Name of the device without first-letter designator E}}
-        {npNode <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
-        {nmNode <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
-        {ncpNode <font color=#b9b96e>-help</font> {Name of node connected to positive controlling pin}}
-        {ncmNode <font color=#b9b96e>-help</font> {Name of node connected to negative controlling pin}}
+        {np <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
+        {nm <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
+        {ncp <font color=#b9b96e>-help</font> {Name of node connected to positive controlling pin}}
+        {ncm <font color=#b9b96e>-help</font> {Name of node connected to negative controlling pin}}
     }]
     <b><font color=#ffa500>set</font></b> gainVal [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> gain]
     <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$gainVal</font>]&gt;1) && ([@ <font color=#f1b479>$gainVal</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
@@ -1571,7 +1571,7 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
     } <b><font color=#ffa500>else</font></b> {
         <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> vgain <font color=#f1b479>$gainVal</font> <font color=#b9b96e>-pos</font>]
     }
-    <b><font color=#ffa500>next</font></b> e[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> npNode]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nmNode]] [<b><font color=#ffa500>list</font></b> ncp [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ncpNode]] [<b><font color=#ffa500>list</font></b> ncm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ncmNode]]] <font color=#f1b479>$params</font>
+    <b><font color=#ffa500>next</font></b> e[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> np]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nm]] [<b><font color=#ffa500>list</font></b> ncp [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ncp]] [<b><font color=#ffa500>list</font></b> ncm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ncm]]] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Common::Sources::Vdc'>Vdc</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources" title="::SpiceGenTcl::Common::Sources" class='ruff_cmd'>::SpiceGenTcl::Common::Sources</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -1600,13 +1600,13 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Common::Sources::Vdc::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vdc" title="::SpiceGenTcl::Common::Sources::Vdc" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::Vdc</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vdc'>Vdc</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Vdc</font></b></code> that describes simple constant voltage source.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -dc value</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name np nm -dc value</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-dc</font></code></td><td>DC voltage value.</td></tr>
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator V.</td></tr>
-<tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
+<tr><td><code>nm</code></td><td>Name of node connected to negative pin.</td></tr>
+<tr><td><code>np</code></td><td>Name of node connected to positive pin.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>VYYYYYYY n+ n- &lt;&lt;DC&gt; DC/TRAN VALUE&gt;&gt;
@@ -1622,8 +1622,8 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 
     <i><font color=#76a396># Creates object of class `Vdc` that describes simple constant voltage source.</font></i>
     <i><font color=#76a396>#  name - name of the device without first-letter designator V</font></i>
-    <i><font color=#76a396>#  npNode - name of node connected to positive pin</font></i>
-    <i><font color=#76a396>#  nmNode - name of node connected to negative pin</font></i>
+    <i><font color=#76a396>#  np - name of node connected to positive pin</font></i>
+    <i><font color=#76a396>#  nm - name of node connected to negative pin</font></i>
     <i><font color=#76a396>#  -dc - DC voltage value</font></i>
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># VYYYYYYY n+ n- &lt;&lt;DC&gt; DC/TRAN VALUE&gt;&gt;</font></i>
@@ -1632,7 +1632,7 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Common::Sources::Vdc new 1 netp netm -dc 10</font></i>
     <i><font color=#76a396># ```</font></i>
-    <i><font color=#76a396># Synopsis: name npNode nmNode -dc value</font></i>
+    <i><font color=#76a396># Synopsis: name np nm -dc value</font></i>
     <b><font color=#ffa500>next</font></b> v {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$args</font>
 }</pre></div>
 </div></details>
@@ -1662,7 +1662,7 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Common::Sources::Vexp::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vexp" title="::SpiceGenTcl::Common::Sources::Vexp" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::Vexp</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vexp'>Vexp</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Vexp</font></b></code> that describes exponential voltage source.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -i1|v1 value -i2|v2 value -td1 value -tau1 value -td2 value -tau2 value ?-phi|phase value???</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name np nm -i1|v1 value -i2|v2 value -td1 value -tau1 value -td2 value -tau2 value ?-phi|phase value???</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-ac</font></code></td><td>AC value, optional.</td></tr>
@@ -1675,8 +1675,8 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <tr><td><code><font color=#b9b96e>-v1</font></code></td><td>Initial value.</td></tr>
 <tr><td><code><font color=#b9b96e>-v2</font></code></td><td>Pulsed value.</td></tr>
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator V.</td></tr>
-<tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
+<tr><td><code>nm</code></td><td>Name of node connected to negative pin.</td></tr>
+<tr><td><code>np</code></td><td>Name of node connected to positive pin.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>VYYYYYYY n+ n- EXP(V1 V2 TD1 TAU1 TD2 TAU2)
@@ -1692,8 +1692,8 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 
     <i><font color=#76a396># Creates object of class `Vexp` that describes exponential voltage source.</font></i>
     <i><font color=#76a396>#  name - name of the device without first-letter designator V</font></i>
-    <i><font color=#76a396>#  npNode - name of node connected to positive pin</font></i>
-    <i><font color=#76a396>#  nmNode - name of node connected to negative pin</font></i>
+    <i><font color=#76a396>#  np - name of node connected to positive pin</font></i>
+    <i><font color=#76a396>#  nm - name of node connected to negative pin</font></i>
     <i><font color=#76a396>#  -v1 - initial value</font></i>
     <i><font color=#76a396>#  -v2 - pulsed value</font></i>
     <i><font color=#76a396>#  -td1 - rise delay time</font></i>
@@ -1710,7 +1710,7 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Common::Sources::Vexp new 1 net1 net2 -v1 0 -v2 1 -td1 1e-9 -tau1 1e-9 -td2 {td2 -eq} -tau2 10e-6</font></i>
     <i><font color=#76a396># ```</font></i>
-    <i><font color=#76a396># Synopsis: name npNode nmNode -i1|v1 value -i2|v2 value -td1 value -tau1 value -td2 value -tau2 value</font></i>
+    <i><font color=#76a396># Synopsis: name np nm -i1|v1 value -i2|v2 value -td1 value -tau1 value -td2 value -tau2 value</font></i>
     <i><font color=#76a396>#   ?-phi|phase value???</font></i>
     <b><font color=#ffa500>next</font></b> v {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$args</font>
 }</pre></div>
@@ -1741,7 +1741,7 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Common::Sources::Vpulse::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vpulse" title="::SpiceGenTcl::Common::Sources::Vpulse" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::Vpulse</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vpulse'>Vpulse</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Vpulse</font></b></code> that describes pulse voltage source.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -voff|ioff|low value -von|ion|high value -td value -tr value -tf value -pw|ton value ?-dc value? ?-ac value ?-acphase value??</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name np nm -voff|ioff|low value -von|ion|high value -td value -tr value -tf value -pw|ton value ?-dc value? ?-ac value ?-acphase value??</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-ac</font></code></td><td>AC value, optional.</td></tr>
@@ -1755,8 +1755,8 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <tr><td><code><font color=#b9b96e>-tper</font></code></td><td>Period time, alias -per.</td></tr>
 <tr><td><code><font color=#b9b96e>-tr</font></code></td><td>Rise time.</td></tr>
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator V.</td></tr>
-<tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
+<tr><td><code>nm</code></td><td>Name of node connected to negative pin.</td></tr>
+<tr><td><code>np</code></td><td>Name of node connected to positive pin.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>VYYYYYYY n+ n- PULSE(V1 V2 TD TR TF PW PER)
@@ -1772,8 +1772,8 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 
     <i><font color=#76a396># Creates object of class `Vpulse` that describes pulse voltage source.</font></i>
     <i><font color=#76a396>#  name - name of the device without first-letter designator V</font></i>
-    <i><font color=#76a396>#  npNode - name of node connected to positive pin</font></i>
-    <i><font color=#76a396>#  nmNode - name of node connected to negative pin</font></i>
+    <i><font color=#76a396>#  np - name of node connected to positive pin</font></i>
+    <i><font color=#76a396>#  nm - name of node connected to negative pin</font></i>
     <i><font color=#76a396>#  -low - low value, aliases: -voff, -ioff</font></i>
     <i><font color=#76a396>#  -high - high value, aliases: -von, ion</font></i>
     <i><font color=#76a396>#  -td - time delay</font></i>
@@ -1791,7 +1791,7 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Common::Sources::Vpulse new 1 net1 net2 -low 0 -high 1 -td {td -eq} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6</font></i>
     <i><font color=#76a396># ```</font></i>
-    <i><font color=#76a396># Synopsis: name npNode nmNode -voff|ioff|low value -von|ion|high value -td value -tr value -tf value</font></i>
+    <i><font color=#76a396># Synopsis: name np nm -voff|ioff|low value -von|ion|high value -td value -tr value -tf value</font></i>
     <i><font color=#76a396>#   -pw|ton value ?-dc value? ?-ac value ?-acphase value??</font></i>
     <b><font color=#ffa500>next</font></b> v {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$args</font>
 }</pre></div>
@@ -1822,7 +1822,7 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Common::Sources::Vpwl::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vpwl" title="::SpiceGenTcl::Common::Sources::Vpwl" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::Vpwl</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vpwl'>Vpwl</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Vpwl</font></b></code> that describes piece-wise voltage source.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -seq list ?-phase|phi value???</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name np nm -seq list ?-phase|phi value???</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-ac</font></code></td><td>AC value, optional.</td></tr>
@@ -1830,8 +1830,8 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <tr><td><code><font color=#b9b96e>-dc</font></code></td><td>DC value, optional.</td></tr>
 <tr><td><code><font color=#b9b96e>-seq</font></code></td><td>Sequence of pwl points in form {t0 v0 t1 v1 t2 v2 t3 v3 ...}</td></tr>
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator V.</td></tr>
-<tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
+<tr><td><code>nm</code></td><td>Name of node connected to negative pin.</td></tr>
+<tr><td><code>np</code></td><td>Name of node connected to positive pin.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>VYYYYYYY n+ n- PWL (T1 V1 &lt;T2 V2 T3 V3 T4 V4 ...&gt;)
@@ -1839,7 +1839,7 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 
 </figure><p class='ruff'>Example of class initialization:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Common::Sources::Vpwl new 1 npNode nmNode <font color=#b9b96e>-seq</font> {0 0 {t1 <font color=#b9b96e>-eq</font>} 1 2 2 3 3 4 4}
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Common::Sources::Vpwl new 1 np nm <font color=#b9b96e>-seq</font> {0 0 {t1 <font color=#b9b96e>-eq</font>} 1 2 2 3 3 4 4}
 </pre>
 
 </figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Common_Sources_Vpwl_constructor' href="javascript:toggleSource('SpiceGenTcl_Common_Sources_Vpwl_constructor')">Show source</a></p>
@@ -1847,8 +1847,8 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 
     <i><font color=#76a396># Creates object of class `Vpwl` that describes piece-wise voltage source.</font></i>
     <i><font color=#76a396>#  name - name of the device without first-letter designator V</font></i>
-    <i><font color=#76a396>#  npNode - name of node connected to positive pin</font></i>
-    <i><font color=#76a396>#  nmNode - name of node connected to negative pin</font></i>
+    <i><font color=#76a396>#  np - name of node connected to positive pin</font></i>
+    <i><font color=#76a396>#  nm - name of node connected to negative pin</font></i>
     <i><font color=#76a396>#  -seq - sequence of pwl points in form {t0 v0 t1 v1 t2 v2 t3 v3 ...}</font></i>
     <i><font color=#76a396>#  -dc - DC value, optional</font></i>
     <i><font color=#76a396>#  -ac - AC value, optional</font></i>
@@ -1858,9 +1858,9 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># Example of class initialization:</font></i>
     <i><font color=#76a396># ```</font></i>
-    <i><font color=#76a396># ::SpiceGenTcl::Common::Sources::Vpwl new 1 npNode nmNode -seq {0 0 {t1 -eq} 1 2 2 3 3 4 4}</font></i>
+    <i><font color=#76a396># ::SpiceGenTcl::Common::Sources::Vpwl new 1 np nm -seq {0 0 {t1 -eq} 1 2 2 3 3 4 4}</font></i>
     <i><font color=#76a396># ```</font></i>
-    <i><font color=#76a396># Synopsis: name npNode nmNode -seq list ?-phase|phi value???</font></i>
+    <i><font color=#76a396># Synopsis: name np nm -seq list ?-phase|phi value???</font></i>
     <b><font color=#ffa500>next</font></b> v {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$args</font>
 }</pre></div>
 </div></details>
@@ -1890,7 +1890,7 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Common::Sources::Vsffm::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vsffm" title="::SpiceGenTcl::Common::Sources::Vsffm" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::Vsffm</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vsffm'>Vsffm</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Vsffm</font></b></code> that describes single-frequency FM voltage source.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -i0|voff|ioff|v0 value -ia|vamp|iamp|va value -fc|fcar value -mdi value -fs|fsig ?-phi|phase value???</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name np nm -i0|voff|ioff|v0 value -ia|vamp|iamp|va value -fc|fcar value -mdi value -fs|fsig ?-phi|phase value???</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-ac</font></code></td><td>AC value, optional.</td></tr>
@@ -1902,8 +1902,8 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <tr><td><code><font color=#b9b96e>-v0</font></code></td><td>Initial value, aliases: -voff, -i0, -ioff.</td></tr>
 <tr><td><code><font color=#b9b96e>-va</font></code></td><td>Pulsed value, aliases: -vamp, -ia, -iamp.</td></tr>
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator V.</td></tr>
-<tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
+<tr><td><code>nm</code></td><td>Name of node connected to negative pin.</td></tr>
+<tr><td><code>np</code></td><td>Name of node connected to positive pin.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>VYYYYYYY n+ n- SFFM(VO VA FC MDI FS)
@@ -1919,8 +1919,8 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 
     <i><font color=#76a396># Creates object of class `Vsffm` that describes single-frequency FM voltage source.</font></i>
     <i><font color=#76a396>#  name - name of the device without first-letter designator V</font></i>
-    <i><font color=#76a396>#  npNode - name of node connected to positive pin</font></i>
-    <i><font color=#76a396>#  nmNode - name of node connected to negative pin</font></i>
+    <i><font color=#76a396>#  np - name of node connected to positive pin</font></i>
+    <i><font color=#76a396>#  nm - name of node connected to negative pin</font></i>
     <i><font color=#76a396>#  -v0 - initial value, aliases: -voff, -i0, -ioff</font></i>
     <i><font color=#76a396>#  -va - pulsed value, aliases: -vamp, -ia, -iamp</font></i>
     <i><font color=#76a396>#  -fc - carrier frequency, alias -fcar</font></i>
@@ -1936,7 +1936,7 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Common::Sources::Vsin new 1 net1 net2 -v0 0 -va 1 -fc {freq -eq} -mdi 0 -fs 1e3</font></i>
     <i><font color=#76a396># ```</font></i>
-    <i><font color=#76a396># Synopsis: name npNode nmNode -i0|voff|ioff|v0 value -ia|vamp|iamp|va value -fc|fcar value -mdi value</font></i>
+    <i><font color=#76a396># Synopsis: name np nm -i0|voff|ioff|v0 value -ia|vamp|iamp|va value -fc|fcar value -mdi value</font></i>
     <i><font color=#76a396>#   -fs|fsig ?-phi|phase value???</font></i>
     <b><font color=#ffa500>next</font></b> v {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$args</font>
 }</pre></div>
@@ -1967,7 +1967,7 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Common::Sources::Vsin::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vsin" title="::SpiceGenTcl::Common::Sources::Vsin" class='ruff_cmd'>::SpiceGenTcl::Common::Sources::Vsin</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vsin'>Vsin</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Vsin</font></b></code> that describes sinusoidal voltage source.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -i0|voffset|ioffset|v0 value -ia|vamp|iamp|va value -freq value ?-td value ?-theta value ?-phi|phase value???</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name np nm -i0|voffset|ioffset|v0 value -ia|vamp|iamp|va value -freq value ?-td value ?-theta value ?-phi|phase value???</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-ac</font></code></td><td>AC value, optional.</td></tr>
@@ -1980,8 +1980,8 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <tr><td><code><font color=#b9b96e>-v0</font></code></td><td>DC shift value, aliases: -voffset, -i0, -ioffset.</td></tr>
 <tr><td><code><font color=#b9b96e>-va</font></code></td><td>Amplitude value, aliases: -vamp, -ia, -iamp.</td></tr>
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator V.</td></tr>
-<tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
+<tr><td><code>nm</code></td><td>Name of node connected to negative pin.</td></tr>
+<tr><td><code>np</code></td><td>Name of node connected to positive pin.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>VYYYYYYY n+ n- SIN(VO VA FREQ TD THETA PHASE)
@@ -1997,8 +1997,8 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 
     <i><font color=#76a396># Creates object of class `Vsin` that describes sinusoidal voltage source.</font></i>
     <i><font color=#76a396>#  name - name of the device without first-letter designator V</font></i>
-    <i><font color=#76a396>#  npNode - name of node connected to positive pin</font></i>
-    <i><font color=#76a396>#  nmNode - name of node connected to negative pin</font></i>
+    <i><font color=#76a396>#  np - name of node connected to positive pin</font></i>
+    <i><font color=#76a396>#  nm - name of node connected to negative pin</font></i>
     <i><font color=#76a396>#  -v0 - DC shift value, aliases: -voffset, -i0, -ioffset</font></i>
     <i><font color=#76a396>#  -va - amplitude value, aliases: -vamp, -ia, -iamp</font></i>
     <i><font color=#76a396>#  -freq - frequency of sinusoidal signal</font></i>
@@ -2015,7 +2015,7 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Common::Sources::Vsin new 1 net1 net2 -v0 0 -va 2 -freq {freq -eq} -td 1e-6 -theta {theta -eq}</font></i>
     <i><font color=#76a396># ```</font></i>
-    <i><font color=#76a396># Synopsis: name npNode nmNode -i0|voffset|ioffset|v0 value -ia|vamp|iamp|va value -freq value</font></i>
+    <i><font color=#76a396># Synopsis: name np nm -i0|voffset|ioffset|v0 value -ia|vamp|iamp|va value -freq value</font></i>
     <i><font color=#76a396>#   ?-td value ?-theta value ?-phi|phase value???</font></i>
     <b><font color=#ffa500>next</font></b> v {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$args</font>
 }</pre></div>
@@ -2051,30 +2051,30 @@ Synopsis: name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase valu
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ltspice-Analyses.html'>SpiceGenTcl::Ltspice::Analyses</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ltspice-Simulators.html'>SpiceGenTcl::Ltspice::Simulators</a></li>
 <hr><li class='ruff-toc2'><a href='#::SpiceGenTcl::Common::Sources-Classes'>Classes</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::ac'>ac</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::ac::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;ac create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;type ?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;ac new&lt;/span&gt; &lt;span class='ruff_arg'&gt;type ?args?&lt;/span&gt;</pre></span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Cccs'>Cccs</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Cccs::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode <font color=#b9b96e>-consrc</font> value <font color=#b9b96e>-gain</font> value ?-m value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Cccs</font></b></code> that describes linear current-controlled current source.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Ccvs'>Ccvs</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Ccvs::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode <font color=#b9b96e>-consrc</font> value <font color=#b9b96e>-transr</font> value&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Ccvs</font></b></code> that describes linear current-controlled current source.
+&lt;span class='ruff_cmd'&gt;ac new&lt;/span&gt; &lt;span class='ruff_arg'&gt;type ?args?&lt;/span&gt;</pre></span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Cccs'>Cccs</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Cccs::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name np nm <font color=#b9b96e>-consrc</font> value <font color=#b9b96e>-gain</font> value ?-m value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Cccs</font></b></code> that describes linear current-controlled current source.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Ccvs'>Ccvs</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Ccvs::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name np nm <font color=#b9b96e>-consrc</font> value <font color=#b9b96e>-transr</font> value&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Ccvs</font></b></code> that describes linear current-controlled current source.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::dc'>dc</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::dc::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;dc create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;type ?args?&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;dc new&lt;/span&gt; &lt;span class='ruff_arg'&gt;type ?args?&lt;/span&gt;</pre></span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::E'>E</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::exp'>exp</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::exp::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;exp create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;type ?args?&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;exp new&lt;/span&gt; &lt;span class='ruff_arg'&gt;type ?args?&lt;/span&gt;</pre></span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::F'>F</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::G'>G</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::H'>H</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Iac'>Iac</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Iac::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Iac</font></b> create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;<b><font color=#ffa500>Iac</font></b> new&lt;/span&gt; &lt;span class='ruff_arg'&gt;?args?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Iac</font></b></code> that describes ac current source.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Idc'>Idc</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Idc::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode <font color=#b9b96e>-dc</font> value&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Idc</font></b></code> that describes simple constant current source.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Iexp'>Iexp</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Iexp::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode <font color=#b9b96e>-i1</font> value <font color=#b9b96e>-i2</font> value <font color=#b9b96e>-td1</font> value <font color=#b9b96e>-tau1</font> value <font color=#b9b96e>-td2</font> value <font color=#b9b96e>-tau2</font> value ?-phase|phi value???&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Iexp</font></b></code> that describes exponential current source.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Ipulse'>Ipulse</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Ipulse::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode <font color=#b9b96e>-voff</font>|ioff|low value <font color=#b9b96e>-von</font>|ion|high value <font color=#b9b96e>-td</font> value <font color=#b9b96e>-tr</font> value <font color=#b9b96e>-tf</font> value <font color=#b9b96e>-pw</font>|ton value ?-phase|phi value???&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Ipulse</font></b></code> that describes pulse current source.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Ipwl'>Ipwl</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Ipwl::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode <font color=#b9b96e>-seq</font> list ?-phase|phi value???&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Ipwl</font></b></code> that describes piece-wise current source.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Isffm'>Isffm</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Isffm::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode <font color=#b9b96e>-i0</font>|voff|ioff|v0 value <font color=#b9b96e>-ia</font>|vamp|iamp|va value <font color=#b9b96e>-fc</font>|fcar value <font color=#b9b96e>-mdi</font> value <font color=#b9b96e>-fs</font>|fsig value ?-phi|phase value???&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Isffm</font></b></code> that describes single-frequency FM current source.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Isin'>Isin</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Isin::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode <font color=#b9b96e>-i0</font>|ioffset value <font color=#b9b96e>-ia</font>|iamp value <font color=#b9b96e>-freq</font> value ?-td value ?-theta value ?-phase|phi value???&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Isin</font></b></code> that describes sinusoidal current source.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Idc'>Idc</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Idc::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name np nm <font color=#b9b96e>-dc</font> value&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Idc</font></b></code> that describes simple constant current source.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Iexp'>Iexp</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Iexp::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name np nm <font color=#b9b96e>-i1</font> value <font color=#b9b96e>-i2</font> value <font color=#b9b96e>-td1</font> value <font color=#b9b96e>-tau1</font> value <font color=#b9b96e>-td2</font> value <font color=#b9b96e>-tau2</font> value ?-phase|phi value???&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Iexp</font></b></code> that describes exponential current source.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Ipulse'>Ipulse</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Ipulse::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name np nm <font color=#b9b96e>-voff</font>|ioff|low value <font color=#b9b96e>-von</font>|ion|high value <font color=#b9b96e>-td</font> value <font color=#b9b96e>-tr</font> value <font color=#b9b96e>-tf</font> value <font color=#b9b96e>-pw</font>|ton value ?-phase|phi value???&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Ipulse</font></b></code> that describes pulse current source.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Ipwl'>Ipwl</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Ipwl::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name np nm <font color=#b9b96e>-seq</font> list ?-phase|phi value???&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Ipwl</font></b></code> that describes piece-wise current source.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Isffm'>Isffm</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Isffm::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name np nm <font color=#b9b96e>-i0</font>|voff|ioff|v0 value <font color=#b9b96e>-ia</font>|vamp|iamp|va value <font color=#b9b96e>-fc</font>|fcar value <font color=#b9b96e>-mdi</font> value <font color=#b9b96e>-fs</font>|fsig value ?-phi|phase value???&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Isffm</font></b></code> that describes single-frequency FM current source.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Isin'>Isin</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Isin::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name np nm <font color=#b9b96e>-i0</font>|ioffset value <font color=#b9b96e>-ia</font>|iamp value <font color=#b9b96e>-freq</font> value ?-td value ?-theta value ?-phase|phi value???&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Isin</font></b></code> that describes sinusoidal current source.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::pulse'>pulse</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::pulse::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;pulse create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;type ?args?&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;pulse new&lt;/span&gt; &lt;span class='ruff_arg'&gt;type ?args?&lt;/span&gt;</pre></span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::pwl'>pwl</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::pwl::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;pwl create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;type ?args?&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;pwl new&lt;/span&gt; &lt;span class='ruff_arg'&gt;type ?args?&lt;/span&gt;</pre></span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::sffm'>sffm</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::sffm::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;sffm create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;type ?args?&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;sffm new&lt;/span&gt; &lt;span class='ruff_arg'&gt;type ?args?&lt;/span&gt;</pre></span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::sin'>sin</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::sin::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;sin create OBJNAME&lt;/span&gt; &lt;span class='ruff_arg'&gt;type ?args?&lt;/span&gt;
-&lt;span class='ruff_cmd'&gt;sin new&lt;/span&gt; &lt;span class='ruff_arg'&gt;type ?args?&lt;/span&gt;</pre></span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vac'>Vac</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vac::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode <font color=#b9b96e>-ac</font> value ?-acphase value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Vac</font></b></code> that describes ac voltage source.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vccs'>Vccs</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vccs::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode ncpNode ncmNode <font color=#b9b96e>-trcond</font> value ?-m value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Vccs</font></b></code> that describes linear voltage-controlled current source.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vcvs'>Vcvs</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vcvs::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode ncpNode ncmNode <font color=#b9b96e>-gain</font> value&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Vcvs</font></b></code> that describes linear voltage-controlled current source.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vdc'>Vdc</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vdc::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode <font color=#b9b96e>-dc</font> value&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Vdc</font></b></code> that describes simple constant voltage source.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vexp'>Vexp</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vexp::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode <font color=#b9b96e>-i1</font>|v1 value <font color=#b9b96e>-i2</font>|v2 value <font color=#b9b96e>-td1</font> value <font color=#b9b96e>-tau1</font> value <font color=#b9b96e>-td2</font> value <font color=#b9b96e>-tau2</font> value ?-phi|phase value???&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Vexp</font></b></code> that describes exponential voltage source.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vpulse'>Vpulse</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vpulse::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode <font color=#b9b96e>-voff</font>|ioff|low value <font color=#b9b96e>-von</font>|ion|high value <font color=#b9b96e>-td</font> value <font color=#b9b96e>-tr</font> value <font color=#b9b96e>-tf</font> value <font color=#b9b96e>-pw</font>|ton value ?-dc value? ?-ac value ?-acphase value??&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Vpulse</font></b></code> that describes pulse voltage source.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vpwl'>Vpwl</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vpwl::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode <font color=#b9b96e>-seq</font> list ?-phase|phi value???&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Vpwl</font></b></code> that describes piece-wise voltage source.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vsffm'>Vsffm</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vsffm::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode <font color=#b9b96e>-i0</font>|voff|ioff|v0 value <font color=#b9b96e>-ia</font>|vamp|iamp|va value <font color=#b9b96e>-fc</font>|fcar value <font color=#b9b96e>-mdi</font> value <font color=#b9b96e>-fs</font>|fsig ?-phi|phase value???&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Vsffm</font></b></code> that describes single-frequency FM voltage source.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vsin'>Vsin</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vsin::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode <font color=#b9b96e>-i0</font>|voffset|ioffset|v0 value <font color=#b9b96e>-ia</font>|vamp|iamp|va value <font color=#b9b96e>-freq</font> value ?-td value ?-theta value ?-phi|phase value???&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Vsin</font></b></code> that describes sinusoidal voltage source.
+&lt;span class='ruff_cmd'&gt;sin new&lt;/span&gt; &lt;span class='ruff_arg'&gt;type ?args?&lt;/span&gt;</pre></span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vac'>Vac</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vac::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name np nm <font color=#b9b96e>-ac</font> value ?-acphase value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Vac</font></b></code> that describes ac voltage source.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vccs'>Vccs</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vccs::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name np nm ncp ncm <font color=#b9b96e>-trcond</font> value ?-m value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Vccs</font></b></code> that describes linear voltage-controlled current source.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vcvs'>Vcvs</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vcvs::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name np nm ncp ncm <font color=#b9b96e>-gain</font> value&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Vcvs</font></b></code> that describes linear voltage-controlled current source.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vdc'>Vdc</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vdc::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name np nm <font color=#b9b96e>-dc</font> value&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Vdc</font></b></code> that describes simple constant voltage source.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vexp'>Vexp</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vexp::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name np nm <font color=#b9b96e>-i1</font>|v1 value <font color=#b9b96e>-i2</font>|v2 value <font color=#b9b96e>-td1</font> value <font color=#b9b96e>-tau1</font> value <font color=#b9b96e>-td2</font> value <font color=#b9b96e>-tau2</font> value ?-phi|phase value???&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Vexp</font></b></code> that describes exponential voltage source.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vpulse'>Vpulse</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vpulse::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name np nm <font color=#b9b96e>-voff</font>|ioff|low value <font color=#b9b96e>-von</font>|ion|high value <font color=#b9b96e>-td</font> value <font color=#b9b96e>-tr</font> value <font color=#b9b96e>-tf</font> value <font color=#b9b96e>-pw</font>|ton value ?-dc value? ?-ac value ?-acphase value??&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Vpulse</font></b></code> that describes pulse voltage source.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vpwl'>Vpwl</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vpwl::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name np nm <font color=#b9b96e>-seq</font> list ?-phase|phi value???&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Vpwl</font></b></code> that describes piece-wise voltage source.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vsffm'>Vsffm</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vsffm::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name np nm <font color=#b9b96e>-i0</font>|voff|ioff|v0 value <font color=#b9b96e>-ia</font>|vamp|iamp|va value <font color=#b9b96e>-fc</font>|fcar value <font color=#b9b96e>-mdi</font> value <font color=#b9b96e>-fs</font>|fsig ?-phi|phase value???&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Vsffm</font></b></code> that describes single-frequency FM voltage source.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vsin'>Vsin</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Sources.html#::SpiceGenTcl::Common::Sources::Vsin::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name np nm <font color=#b9b96e>-i0</font>|voffset|ioffset|v0 value <font color=#b9b96e>-ia</font>|vamp|iamp|va value <font color=#b9b96e>-freq</font> value ?-td value ?-theta value ?-phi|phase value???&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Vsin</font></b></code> that describes sinusoidal voltage source.
 </span></li></ul></nav><footer class='ruff-layout-footer ruff-ft'><div style='float: right;'>Document generated by <a href='https://ruff.magicsplat.com'>Ruff!</a></div><div>&copy; George Yashin</div></footer>
 </div></body></html>

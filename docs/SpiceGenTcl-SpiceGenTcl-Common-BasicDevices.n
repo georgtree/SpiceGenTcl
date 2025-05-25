@@ -5,13 +5,13 @@
 .SH NAME
 SpiceGenTcl::Common::BasicDevices - Commands in namespace SpiceGenTcl::Common::BasicDevices
 .SH SYNOPSIS
-\fBOBJECT constructor\fP \fIname npNode nmNode -c value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value? ?-ic value?\fP
+\fBOBJECT constructor\fP \fIname np nm -c value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value? ?-ic value?\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -icntrl value -model value ?-on|-off?\fP
+\fBOBJECT constructor\fP \fIname np nm -icntrl value -model value ?-on|-off?\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -l value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value?\fP
+\fBOBJECT constructor\fP \fIname np nm -l value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value?\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -r value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value?\fP
+\fBOBJECT constructor\fP \fIname np nm -r value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value?\fP
 .br
 \fBOBJECT destroy\fP
 .br
@@ -21,7 +21,7 @@ SpiceGenTcl::Common::BasicDevices - Commands in namespace SpiceGenTcl::Common::B
 .br
 \fBOBJECT constructor\fP \fIsubcktObj name nodes ?-paramName paramValue ?-eq? \&.\&.\&.?\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode ncpNode ncmNode -model value ?-on|-off?\fP
+\fBOBJECT constructor\fP \fIname np nm ncp ncm -model value ?-on|-off?\fP
 .br
 .SH ::SPICEGENTCL::COMMON::BASICDEVICES
 .SH CLASSES
@@ -158,7 +158,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Capacitor that describes capacitor\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -c value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value? ?-ic value?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname np nm -c value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value? ?-ic value?\fP
 .br
 .RE
 .PP
@@ -186,10 +186,10 @@ Device temperature, optional, optional\&.
 name
 Name of the device without first-letter designator C\&.
 .TP
-nmNode
+nm
 Name of node connected to negative pin\&.
 .TP
-npNode
+np
 Name of node connected to positive pin\&.
 .RE
 .PP
@@ -283,7 +283,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class CSwitch that describes current controlled switch device\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -icntrl value -model value ?-on|-off?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname np nm -icntrl value -model value ?-on|-off?\fP
 .br
 .RE
 .PP
@@ -302,10 +302,10 @@ Initial state of switch\&.
 name
 Name of the device without first-letter designator W\&.
 .TP
-nmNode
+nm
 Name of node connected to negative pin\&.
 .TP
-npNode
+np
 Name of node connected to positive pin\&.
 .RE
 .PP
@@ -397,7 +397,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Inductor that describes inductor\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -l value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname np nm -l value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value?\fP
 .br
 .RE
 .PP
@@ -422,10 +422,10 @@ Device temperature, optional, optional\&.
 name
 Name of the device without first-letter designator L\&.
 .TP
-nmNode
+nm
 Name of node connected to negative pin\&.
 .TP
-npNode
+np
 Name of node connected to positive pin\&.
 .RE
 .PP
@@ -642,7 +642,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Resistor that describes resistor\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -r value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname np nm -r value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value?\fP
 .br
 .RE
 .PP
@@ -667,10 +667,10 @@ Device temperature, optional\&.
 name
 Name of the device without first-letter designator R\&.
 .TP
-nmNode
+nm
 Name of node connected to negative pin\&.
 .TP
-npNode
+np
 Name of node connected to positive pin\&.
 .RE
 .PP
@@ -1052,7 +1052,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class VSwitch that describes voltage controlled switch device\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode ncpNode ncmNode -model value ?-on|-off?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname np nm ncp ncm -model value ?-on|-off?\fP
 .br
 .RE
 .PP
@@ -1068,16 +1068,16 @@ Initial state of switch\&.
 name
 Name of the device without first-letter designator S\&.
 .TP
-ncmNode
+ncm
 Name of node connected to negative controlling pin\&.
 .TP
-ncpNode
+ncp
 Name of node connected to positive controlling pin\&.
 .TP
-nmNode
+nm
 Name of node connected to negative pin\&.
 .TP
-npNode
+np
 Name of node connected to positive pin\&.
 .RE
 .PP

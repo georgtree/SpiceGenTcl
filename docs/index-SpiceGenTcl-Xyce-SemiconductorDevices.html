@@ -43,7 +43,7 @@
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Xyce::SemiconductorDevices::Bjt::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Bjt" title="::SpiceGenTcl::Xyce::SemiconductorDevices::Bjt" class='ruff_cmd'>::SpiceGenTcl::Xyce::SemiconductorDevices::Bjt</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Bjt'>Bjt</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Bjt</font></b></code> that describes semiconductor bipolar junction transistor device.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name ncNode nbNode neNode -model value ?-ns value ?-tj value?? ?-area value? ?-m value? ?-temp value? ?-off? ?-ic1 value? ?-ic2 value?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name nc nb ne -model value ?-ns value ?-tj value?? ?-area value? ?-m value? ?-temp value? ?-off? ?-ic1 value? ?-ic2 value?</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-area</font></code></td><td>Scale factor, optional.</td></tr>
@@ -55,9 +55,9 @@
 <tr><td><code><font color=#b9b96e>-temp</font></code></td><td>Device temperature, optional.</td></tr>
 <tr><td><code><font color=#b9b96e>-tj</font></code></td><td>Name of node connected to thermal pin, optional, requires -ns.</td></tr>
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator Q.</td></tr>
-<tr><td><code>nbNode</code></td><td>Name of node connected to base pin.</td></tr>
-<tr><td><code>ncNode</code></td><td>Name of node connected to collector pin.</td></tr>
-<tr><td><code>neNode</code></td><td>Name of node connected to emitter pin.</td></tr>
+<tr><td><code>nb</code></td><td>Name of node connected to base pin.</td></tr>
+<tr><td><code>nc</code></td><td>Name of node connected to collector pin.</td></tr>
+<tr><td><code>ne</code></td><td>Name of node connected to emitter pin.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>QXXXXXXX nc nb ne &lt;ns&gt; &lt;tj&gt; mname &lt;area=val&gt; &lt;areac=val&gt;
@@ -75,9 +75,9 @@
 
     <i><font color=#76a396># Creates object of class `Bjt` that describes semiconductor bipolar junction transistor device.</font></i>
     <i><font color=#76a396>#  name - name of the device without first-letter designator Q</font></i>
-    <i><font color=#76a396>#  ncNode - name of node connected to collector pin</font></i>
-    <i><font color=#76a396>#  nbNode - name of node connected to base pin</font></i>
-    <i><font color=#76a396>#  neNode - name of node connected to emitter pin</font></i>
+    <i><font color=#76a396>#  nc - name of node connected to collector pin</font></i>
+    <i><font color=#76a396>#  nb - name of node connected to base pin</font></i>
+    <i><font color=#76a396>#  ne - name of node connected to emitter pin</font></i>
     <i><font color=#76a396>#  -model - name of the model</font></i>
     <i><font color=#76a396>#  -area - scale factor, optional</font></i>
     <i><font color=#76a396>#  -m - multiplier of area and perimeter, optional</font></i>
@@ -95,7 +95,7 @@
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Xyce::SemiconductorDevices::Bjt new 1 netc netb nete -model bjtmod -ns nets -area 1e-3</font></i>
     <i><font color=#76a396># ```</font></i>
-    <i><font color=#76a396># Synopsis: name ncNode nbNode neNode -model value ?-ns value ?-tj value?? ?-area value? ?-m value?</font></i>
+    <i><font color=#76a396># Synopsis: name nc nb ne -model value ?-ns value ?-tj value?? ?-area value? ?-m value?</font></i>
     <i><font color=#76a396>#   ?-temp value? ?-off? ?-ic1 value? ?-ic2 value?</font></i>
     <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> <font color=#b9b96e>-pfirst</font> <font color=#b9b96e>-help</font> {Creates object of class 'Bjt' that describes semiconductor bipolar junction transistor device} {
         {<font color=#b9b96e>-model</font>= <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {Name of the model}}
@@ -108,9 +108,9 @@
         {<font color=#b9b96e>-ns</font>= <font color=#b9b96e>-help</font> {Name of node connected to substrate pin}}
         {<font color=#b9b96e>-tj</font>= <font color=#b9b96e>-require</font> {ns} <font color=#b9b96e>-help</font> {Name of node connected to thermal pin}}
         {name <font color=#b9b96e>-help</font> {Name of the device without first-letter designator}}
-        {ncNode <font color=#b9b96e>-help</font> {Name of node connected to collector pin}}
-        {nbNode <font color=#b9b96e>-help</font> {Name of node connected to base pin}}
-        {neNode <font color=#b9b96e>-help</font> {Name of node connected to emitter pin}}
+        {nc <font color=#b9b96e>-help</font> {Name of node connected to collector pin}}
+        {nb <font color=#b9b96e>-help</font> {Name of node connected to base pin}}
+        {ne <font color=#b9b96e>-help</font> {Name of node connected to emitter pin}}
     }]
     <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> model [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> model] <font color=#b9b96e>-posnocheck</font>]
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> area]} {
@@ -122,11 +122,11 @@
         }
     }
     <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$arguments</font> {
-        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {model area off ns tj name ncNode nbNode neNode}} {
+        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {model area off ns tj name nc nb ne}} {
             <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$paramName</font> {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$value</font>]
         }
     }
-    <b><font color=#ffa500>set</font></b> pinList [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> nc [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ncNode]] [<b><font color=#ffa500>list</font></b> nb [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nbNode]] [<b><font color=#ffa500>list</font></b> ne [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> neNode]]]
+    <b><font color=#ffa500>set</font></b> pinList [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> nc [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nc]] [<b><font color=#ffa500>list</font></b> nb [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nb]] [<b><font color=#ffa500>list</font></b> ne [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ne]]]
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> ns]} {
         <b><font color=#ffa500>lappend</font></b> pinList [<b><font color=#ffa500>list</font></b> ns [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ns]]
         <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> tj]} {
@@ -253,7 +253,7 @@
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Xyce::SemiconductorDevices::Diode::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Diode" title="::SpiceGenTcl::Xyce::SemiconductorDevices::Diode" class='ruff_cmd'>::SpiceGenTcl::Xyce::SemiconductorDevices::Diode</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Diode'>Diode</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Diode</font></b></code> that describes semiconductor diode device.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name npNode nmNode -model value ?-area value? ?-pj value? ?-ic value? ?-m value? ?-temp value? ?-custparams param1 {param1Val ?-eq|-poseq|-posnocheck|-pos|-nocheck?} ...?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name np nm -model value ?-area value? ?-pj value? ?-ic value? ?-m value? ?-temp value? ?-custparams param1 {param1Val ?-eq|-poseq|-posnocheck|-pos|-nocheck?} ...?</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-area</font></code></td><td>Area scale factor, optional.</td></tr>
@@ -264,8 +264,8 @@
 <tr><td><code><font color=#b9b96e>-pj</font></code></td><td>Perimeter scale factor, optional.</td></tr>
 <tr><td><code><font color=#b9b96e>-temp</font></code></td><td>Device temperature, optional.</td></tr>
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator D.</td></tr>
-<tr><td><code>nmNode</code></td><td>Name of node connected to negative pin.</td></tr>
-<tr><td><code>npNode</code></td><td>Name of node connected to positive pin.</td></tr>
+<tr><td><code>nm</code></td><td>Name of node connected to negative pin.</td></tr>
+<tr><td><code>np</code></td><td>Name of node connected to positive pin.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>D</font></b>&lt;name&gt; &lt;(+) node&gt; &lt;(-) node&gt; &lt;model name&gt; [device parameters]
@@ -281,8 +281,8 @@
 
     <i><font color=#76a396># Creates object of class `Diode` that describes semiconductor diode device.</font></i>
     <i><font color=#76a396>#  name - name of the device without first-letter designator D</font></i>
-    <i><font color=#76a396>#  npNode - name of node connected to positive pin</font></i>
-    <i><font color=#76a396>#  nmNode - name of node connected to negative pin</font></i>
+    <i><font color=#76a396>#  np - name of node connected to positive pin</font></i>
+    <i><font color=#76a396>#  nm - name of node connected to negative pin</font></i>
     <i><font color=#76a396>#  -model - name of the model</font></i>
     <i><font color=#76a396>#  -area - area scale factor, optional</font></i>
     <i><font color=#76a396>#  -m - multiplier of area and perimeter, optional</font></i>
@@ -299,7 +299,7 @@
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Xyce::SemiconductorDevices::Diode new 1 netp netm -model diomod -area 1e-6</font></i>
     <i><font color=#76a396># ```</font></i>
-    <i><font color=#76a396># Synopsis: name npNode nmNode -model value ?-area value? ?-pj value? ?-ic value? ?-m value? ?-temp value?</font></i>
+    <i><font color=#76a396># Synopsis: name np nm -model value ?-area value? ?-pj value? ?-ic value? ?-m value? ?-temp value?</font></i>
     <i><font color=#76a396>#   ?-custparams param1 \{param1Val ?-eq|-poseq|-posnocheck|-pos|-nocheck?\} ...?</font></i>
     <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> <font color=#b9b96e>-pfirst</font> <font color=#b9b96e>-help</font> {Creates object of class `Diode` that describes semiconductor diode device} {
         {<font color=#b9b96e>-model</font>= <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {Name of the model}}
@@ -310,8 +310,8 @@
         {<font color=#b9b96e>-temp</font>= <font color=#b9b96e>-help</font> {<b><font color=#ffa500>Device</font></b> temperature}}
         {<font color=#b9b96e>-custparams</font> <font color=#b9b96e>-catchall</font> <font color=#b9b96e>-help</font> {Key that collects all arguments at the end of device definition, to provide an ability to add custom parameters in form '-custparams param1 param1Val param2 {param2eq <font color=#b9b96e>-eq</font>} param3 param3Val ...'}}
         {name <font color=#b9b96e>-help</font> {Name of the device without first-letter designator}}
-        {npNode <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
-        {nmNode <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
+        {np <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
+        {nm <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
     }]
     <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> model [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> model] <font color=#b9b96e>-posnocheck</font>]
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> area]} {
@@ -331,7 +331,7 @@
         }
     }
     <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$arguments</font> {
-        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {model custparams area pj name npNode nmNode}} {
+        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {model custparams area pj name np nm}} {
             <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$paramName</font> {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$value</font>]
         }
     }
@@ -344,7 +344,7 @@
             <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$paramName</font> {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$value</font>]
         }
     }
-    <b><font color=#ffa500>next</font></b> d[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> npNode]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nmNode]]] <font color=#f1b479>$params</font>
+    <b><font color=#ffa500>next</font></b> d[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> np [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> np]] [<b><font color=#ffa500>list</font></b> nm [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nm]]] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Xyce::SemiconductorDevices::DiodeModel'>DiodeModel</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices" title="::SpiceGenTcl::Xyce::SemiconductorDevices" class='ruff_cmd'>::SpiceGenTcl::Xyce::SemiconductorDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -442,16 +442,16 @@
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet" title="::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet" class='ruff_cmd'>::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet'>Jfet</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Jfet</font></b></code> that describes semiconductor junction FET device.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name ndNode ngNode nsNode -model value ?-area value? ?-temp value?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name nd ng ns -model value ?-area value? ?-temp value?</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-area</font></code></td><td>Scale factor, optional.</td></tr>
 <tr><td><code><font color=#b9b96e>-model</font></code></td><td>Name of the model.</td></tr>
 <tr><td><code><font color=#b9b96e>-temp</font></code></td><td>Device temperature, optional.</td></tr>
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator J.</td></tr>
-<tr><td><code>ndNode</code></td><td>Name of node connected to drain pin.</td></tr>
-<tr><td><code>ngNode</code></td><td>Name of node connected to gate pin.</td></tr>
-<tr><td><code>nsNode</code></td><td>Name of node connected to source pin.</td></tr>
+<tr><td><code>nd</code></td><td>Name of node connected to drain pin.</td></tr>
+<tr><td><code>ng</code></td><td>Name of node connected to gate pin.</td></tr>
+<tr><td><code>ns</code></td><td>Name of node connected to source pin.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>J</font></b>&lt;name&gt; &lt;drain node&gt; &lt;gate node&gt; &lt;<b><font color=#ffa500>source</font></b> node&gt; &lt;model name&gt; [area value] [device parameters]
@@ -467,9 +467,9 @@
 
     <i><font color=#76a396># Creates object of class `Jfet` that describes semiconductor junction FET device.</font></i>
     <i><font color=#76a396>#  name - name of the device without first-letter designator J</font></i>
-    <i><font color=#76a396>#  ndNode - name of node connected to drain pin</font></i>
-    <i><font color=#76a396>#  ngNode - name of node connected to gate pin</font></i>
-    <i><font color=#76a396>#  nsNode - name of node connected to source pin</font></i>
+    <i><font color=#76a396>#  nd - name of node connected to drain pin</font></i>
+    <i><font color=#76a396>#  ng - name of node connected to gate pin</font></i>
+    <i><font color=#76a396>#  ns - name of node connected to source pin</font></i>
     <i><font color=#76a396>#  -model - name of the model</font></i>
     <i><font color=#76a396>#  -area - scale factor, optional</font></i>
     <i><font color=#76a396>#  -temp - device temperature, optional</font></i>
@@ -480,15 +480,15 @@
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet new 1 netd netg nets -model jfetmod -area {area*2 -eq} -temp 25</font></i>
     <i><font color=#76a396># ```</font></i>
-    <i><font color=#76a396># Synopsis: name ndNode ngNode nsNode -model value ?-area value? ?-temp value?</font></i>
+    <i><font color=#76a396># Synopsis: name nd ng ns -model value ?-area value? ?-temp value?</font></i>
     <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> <font color=#b9b96e>-pfirst</font> <font color=#b9b96e>-help</font> {Creates object of class 'Jfet' that describes semiconductor junction FET device} {
         {<font color=#b9b96e>-model</font>= <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {Name of the model}}
         {<font color=#b9b96e>-area</font>= <font color=#b9b96e>-help</font> {Emitter scale factor}}
         {<font color=#b9b96e>-temp</font>= <font color=#b9b96e>-help</font> {<b><font color=#ffa500>Device</font></b> temperature}}
         {name <font color=#b9b96e>-help</font> {Name of the device without first-letter designator}}
-        {ndNode <font color=#b9b96e>-help</font> {Name of node connected to drain pin}}
-        {ngNode <font color=#b9b96e>-help</font> {Name of node connected to gate pin}}
-        {nsNode <font color=#b9b96e>-help</font> {Name of node connected to source pin}}
+        {nd <font color=#b9b96e>-help</font> {Name of node connected to drain pin}}
+        {ng <font color=#b9b96e>-help</font> {Name of node connected to gate pin}}
+        {ns <font color=#b9b96e>-help</font> {Name of node connected to source pin}}
     }]
     <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> model [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> model] <font color=#b9b96e>-posnocheck</font>]
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> area]} {
@@ -500,11 +500,11 @@
         }
     }
     <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$arguments</font> {
-        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {model area name ndNode ngNode nsNode}} {
+        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {model area name nd ng ns}} {
             <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$paramName</font> {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$value</font>]
         }
     }
-    <b><font color=#ffa500>next</font></b> j[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> nd [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ndNode]] [<b><font color=#ffa500>list</font></b> ng [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ngNode]] [<b><font color=#ffa500>list</font></b> ns [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nsNode]]] <font color=#f1b479>$params</font>
+    <b><font color=#ffa500>next</font></b> j[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> nd [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nd]] [<b><font color=#ffa500>list</font></b> ng [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ng]] [<b><font color=#ffa500>list</font></b> ns [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ns]]] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet1Model'>Jfet1Model</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices" title="::SpiceGenTcl::Xyce::SemiconductorDevices" class='ruff_cmd'>::SpiceGenTcl::Xyce::SemiconductorDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -654,16 +654,16 @@
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet" title="::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet" class='ruff_cmd'>::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet'>Mesfet</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Mesfet</font></b></code> that describes semiconductor MESFET device.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name ndNode ngNode nsNode -model value ?-area value? ?-temp value?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name nd ng ns -model value ?-area value? ?-temp value?</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-area</font></code></td><td>Scale factor, optional.</td></tr>
 <tr><td><code><font color=#b9b96e>-model</font></code></td><td>Name of the model.</td></tr>
 <tr><td><code><font color=#b9b96e>-temp</font></code></td><td>Device temperature, optional.</td></tr>
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator Z.</td></tr>
-<tr><td><code>ndNode</code></td><td>Name of node connected to drain pin.</td></tr>
-<tr><td><code>ngNode</code></td><td>Name of node connected to gate pin.</td></tr>
-<tr><td><code>nsNode</code></td><td>Name of node connected to source pin.</td></tr>
+<tr><td><code>nd</code></td><td>Name of node connected to drain pin.</td></tr>
+<tr><td><code>ng</code></td><td>Name of node connected to gate pin.</td></tr>
+<tr><td><code>ns</code></td><td>Name of node connected to source pin.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>Z</font></b>&lt;name&gt; &lt; drain node&gt; &lt;gate node&gt; &lt;<b><font color=#ffa500>source</font></b> node&gt; &lt;model name&gt; [area value] [device parameters]
@@ -679,9 +679,9 @@
 
     <i><font color=#76a396># Creates object of class `Mesfet` that describes semiconductor MESFET device.</font></i>
     <i><font color=#76a396>#  name - name of the device without first-letter designator Z</font></i>
-    <i><font color=#76a396>#  ndNode - name of node connected to drain pin</font></i>
-    <i><font color=#76a396>#  ngNode - name of node connected to gate pin</font></i>
-    <i><font color=#76a396>#  nsNode - name of node connected to source pin</font></i>
+    <i><font color=#76a396>#  nd - name of node connected to drain pin</font></i>
+    <i><font color=#76a396>#  ng - name of node connected to gate pin</font></i>
+    <i><font color=#76a396>#  ns - name of node connected to source pin</font></i>
     <i><font color=#76a396>#  -model - name of the model</font></i>
     <i><font color=#76a396>#  -area - scale factor, optional</font></i>
     <i><font color=#76a396>#  -temp - device temperature, optional</font></i>
@@ -692,15 +692,15 @@
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet new 1 netd netg nets -model mesfetmod -area {area*2 -eq}</font></i>
     <i><font color=#76a396># ```</font></i>
-    <i><font color=#76a396># Synopsis: name ndNode ngNode nsNode -model value ?-area value? ?-temp value?</font></i>
+    <i><font color=#76a396># Synopsis: name nd ng ns -model value ?-area value? ?-temp value?</font></i>
     <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> <font color=#b9b96e>-pfirst</font> <font color=#b9b96e>-help</font> {Creates object of class 'Mesfet' that describes semiconductor MESFET device} {
         {<font color=#b9b96e>-model</font>= <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {Name of the model}}
         {<font color=#b9b96e>-area</font>= <font color=#b9b96e>-help</font> {Scale factor}}
         {<font color=#b9b96e>-temp</font>= <font color=#b9b96e>-help</font> {<b><font color=#ffa500>Device</font></b> temperature}}
         {name <font color=#b9b96e>-help</font> {Name of the device without first-letter designator}}
-        {ndNode <font color=#b9b96e>-help</font> {Name of node connected to drain pin}}
-        {ngNode <font color=#b9b96e>-help</font> {Name of node connected to gate pin}}
-        {nsNode <font color=#b9b96e>-help</font> {Name of node connected to source pin}}
+        {nd <font color=#b9b96e>-help</font> {Name of node connected to drain pin}}
+        {ng <font color=#b9b96e>-help</font> {Name of node connected to gate pin}}
+        {ns <font color=#b9b96e>-help</font> {Name of node connected to source pin}}
     }]
     <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> model [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> model] <font color=#b9b96e>-posnocheck</font>]
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> area]} {
@@ -712,11 +712,11 @@
         }
     }
     <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$arguments</font> {
-        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {model area name ndNode ngNode nsNode}} {
+        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {model area name nd ng ns}} {
             <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$paramName</font> {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$value</font>]
         }
     }
-    <b><font color=#ffa500>next</font></b> z[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> nd [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ndNode]] [<b><font color=#ffa500>list</font></b> ng [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ngNode]] [<b><font color=#ffa500>list</font></b> ns [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nsNode]]] <font color=#f1b479>$params</font>
+    <b><font color=#ffa500>next</font></b> z[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> nd [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nd]] [<b><font color=#ffa500>list</font></b> ng [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ng]] [<b><font color=#ffa500>list</font></b> ns [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ns]]] <font color=#f1b479>$params</font>
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet1Model'>Mesfet1Model</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices" title="::SpiceGenTcl::Xyce::SemiconductorDevices" class='ruff_cmd'>::SpiceGenTcl::Xyce::SemiconductorDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -795,7 +795,7 @@
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Xyce::SemiconductorDevices::Mosfet::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Mosfet" title="::SpiceGenTcl::Xyce::SemiconductorDevices::Mosfet" class='ruff_cmd'>::SpiceGenTcl::Xyce::SemiconductorDevices::Mosfet</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Mosfet'>Mosfet</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code><b><font color=#ffa500>Mosfet</font></b></code> that describes semiconductor MOSFET device.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name ndNode ngNode nsNode -model value ?-n4 value ?-n5 value ?-n6 value ?-n7 value???? ?-m value? ?-l value? ?-w value? ?-ad value|-nrd value? ?-as value|-nrs value? ?-temp value? ?-off? ?-pd value? ?-ps value? ?-ic {value value value}? ?-custparams param1 {param1Val ?-eq|-poseq|-posnocheck|-pos|-nocheck?} ...?</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name nd ng ns -model value ?-n4 value ?-n5 value ?-n6 value ?-n7 value???? ?-m value? ?-l value? ?-w value? ?-ad value|-nrd value? ?-as value|-nrs value? ?-temp value? ?-off? ?-pd value? ?-ps value? ?-ic {value value value}? ?-custparams param1 {param1Val ?-eq|-poseq|-posnocheck|-pos|-nocheck?} ...?</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-ad</font></code></td><td>Diffusion area of drain, optional, forbid -nrd.</td></tr>
@@ -817,9 +817,9 @@
 <tr><td><code><font color=#b9b96e>-temp</font></code></td><td>Device temperature.</td></tr>
 <tr><td><code><font color=#b9b96e>-w</font></code></td><td>Width of channel, optional.</td></tr>
 <tr><td><code>name</code></td><td>Name of the device without first-letter designator M.</td></tr>
-<tr><td><code>ndNode</code></td><td>Name of node connected to drain pin.</td></tr>
-<tr><td><code>ngNode</code></td><td>Name of node connected to gate pin.</td></tr>
-<tr><td><code>nsNode</code></td><td>Name of node connected to source pin.</td></tr>
+<tr><td><code>nd</code></td><td>Name of node connected to drain pin.</td></tr>
+<tr><td><code>ng</code></td><td>Name of node connected to gate pin.</td></tr>
+<tr><td><code>ns</code></td><td>Name of node connected to source pin.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>M</font></b>&lt;name&gt; &lt;drain node&gt; &lt;gate node&gt; &lt;<b><font color=#ffa500>source</font></b> node&gt;
@@ -841,9 +841,9 @@
 
     <i><font color=#76a396># Creates object of class `Mosfet` that describes semiconductor MOSFET device.</font></i>
     <i><font color=#76a396>#  name - name of the device without first-letter designator M</font></i>
-    <i><font color=#76a396>#  ndNode - name of node connected to drain pin</font></i>
-    <i><font color=#76a396>#  ngNode - name of node connected to gate pin</font></i>
-    <i><font color=#76a396>#  nsNode - name of node connected to source pin</font></i>
+    <i><font color=#76a396>#  nd - name of node connected to drain pin</font></i>
+    <i><font color=#76a396>#  ng - name of node connected to gate pin</font></i>
+    <i><font color=#76a396>#  ns - name of node connected to source pin</font></i>
     <i><font color=#76a396>#  -model - name of the model</font></i>
     <i><font color=#76a396>#  -m - multiplier, optional</font></i>
     <i><font color=#76a396>#  -l - length of channel, optional</font></i>
@@ -877,7 +877,7 @@
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Xyce::Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5</font></i>
     <i><font color=#76a396># ```</font></i>
-    <i><font color=#76a396># Synopsis: name ndNode ngNode nsNode -model value ?-n4 value ?-n5 value ?-n6 value ?-n7 value???? ?-m value?</font></i>
+    <i><font color=#76a396># Synopsis: name nd ng ns -model value ?-n4 value ?-n5 value ?-n6 value ?-n7 value???? ?-m value?</font></i>
     <i><font color=#76a396>#   ?-l value? ?-w value? ?-ad value|-nrd value? ?-as value|-nrs value? ?-temp value? ?-off? ?-pd value?</font></i>
     <i><font color=#76a396>#   ?-ps value? ?-ic \{value value value\}?</font></i>
     <i><font color=#76a396>#   ?-custparams param1 \{param1Val ?-eq|-poseq|-posnocheck|-pos|-nocheck?\} ...?</font></i>
@@ -900,16 +900,16 @@
         {<font color=#b9b96e>-n7</font>= <font color=#b9b96e>-require</font> {n7} <font color=#b9b96e>-help</font> {Name of 7th node}}
         {<font color=#b9b96e>-custparams</font> <font color=#b9b96e>-catchall</font> <font color=#b9b96e>-help</font> {Key that collects all arguments at the end of device definition, to provide an ability to add custom parameters in form '-custparams param1 param1Val param2 {param2eq <font color=#b9b96e>-eq</font>} param3 param3Val ...'}}
         {name <font color=#b9b96e>-help</font> {Name of the device without first-letter designator}}
-        {ndNode <font color=#b9b96e>-help</font> {Name of node connected to drain pin}}
-        {ngNode <font color=#b9b96e>-help</font> {Name of node connected to gate pin}}
-        {nsNode <font color=#b9b96e>-help</font> {Name of node connected to source pin}}
+        {nd <font color=#b9b96e>-help</font> {Name of node connected to drain pin}}
+        {ng <font color=#b9b96e>-help</font> {Name of node connected to gate pin}}
+        {ns <font color=#b9b96e>-help</font> {Name of node connected to source pin}}
     }]
     <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> model [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> model] <font color=#b9b96e>-posnocheck</font>]
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> ic]} {
         <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> ic [<b><font color=#ffa500>join</font></b> [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ic] ,] <font color=#b9b96e>-nocheck</font>]
     }
     <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$arguments</font> {
-        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {model off ic n4 n5 n6 n7 custparams name ndNode ngNode nsNode}} {
+        <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {model off ic n4 n5 n6 n7 custparams name nd ng ns}} {
             <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$paramName</font> {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$value</font>]
         }
     }
@@ -922,7 +922,7 @@
             <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$paramName</font> {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$value</font>]
         }
     }
-    <b><font color=#ffa500>set</font></b> pinList [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> nd [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ndNode]] [<b><font color=#ffa500>list</font></b> ng [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ngNode]] [<b><font color=#ffa500>list</font></b> ns [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nsNode]]]
+    <b><font color=#ffa500>set</font></b> pinList [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> nd [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> nd]] [<b><font color=#ffa500>list</font></b> ng [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ng]] [<b><font color=#ffa500>list</font></b> ns [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> ns]]]
     <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> n4]} {
         <b><font color=#ffa500>lappend</font></b> pinList [<b><font color=#ffa500>list</font></b> n4 [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> n4]]
         <b><font color=#ffa500>if</font></b> {[<b><font color=#ffa500>dexist</font></b> <font color=#f1b479>$arguments</font> n5]} {
@@ -1010,16 +1010,16 @@
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ltspice-SemiconductorDevices.html'>SpiceGenTcl::Ltspice::SemiconductorDevices</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ltspice-Analyses.html'>SpiceGenTcl::Ltspice::Analyses</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ltspice-Simulators.html'>SpiceGenTcl::Ltspice::Simulators</a></li>
-<hr><li class='ruff-toc2'><a href='#::SpiceGenTcl::Xyce::SemiconductorDevices-Classes'>Classes</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Bjt'>Bjt</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Bjt::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name ncNode nbNode neNode <font color=#b9b96e>-model</font> value ?-ns value ?-tj value?? ?-area value? ?-m value? ?-temp value? ?-off? ?-ic1 value? ?-ic2 value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Bjt</font></b></code> that describes semiconductor bipolar junction transistor device.
+<hr><li class='ruff-toc2'><a href='#::SpiceGenTcl::Xyce::SemiconductorDevices-Classes'>Classes</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Bjt'>Bjt</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Bjt::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name nc nb ne <font color=#b9b96e>-model</font> value ?-ns value ?-tj value?? ?-area value? ?-m value? ?-temp value? ?-off? ?-ic1 value? ?-ic2 value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Bjt</font></b></code> that describes semiconductor bipolar junction transistor device.
 </span></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Bjt::genSPICEString'>genSPICEString</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT genSPICEString&lt;/span&gt; </pre>Modify substrate pin string in order to complain square brackets enclosure, see BJT info in reference manual of Xyce
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::BjtGPModel'>BjtGPModel</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::BjtGPModel::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name type ?-option value ...?&lt;/span&gt;</pre>Creates object of class <code>BjtGPModel</code> that describes Gummel-Poon model of semiconductor bipolar transistor.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::D'>D</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Diode'>Diode</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Diode::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode <font color=#b9b96e>-model</font> value ?-area value? ?-pj value? ?-ic value? ?-m value? ?-temp value? ?-custparams param1 {param1Val ?-eq|-poseq|-posnocheck|-pos|-nocheck?} ...?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Diode</font></b></code> that describes semiconductor diode device.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::D'>D</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Diode'>Diode</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Diode::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name np nm <font color=#b9b96e>-model</font> value ?-area value? ?-pj value? ?-ic value? ?-m value? ?-temp value? ?-custparams param1 {param1Val ?-eq|-poseq|-posnocheck|-pos|-nocheck?} ...?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Diode</font></b></code> that describes semiconductor diode device.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::DiodeModel'>DiodeModel</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::DiodeModel::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name ?-option value ...?&lt;/span&gt;</pre>Creates object of class <code>DiodeModel</code> that describes semiconductor diode model.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::J'>J</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet'>Jfet</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name ndNode ngNode nsNode <font color=#b9b96e>-model</font> value ?-area value? ?-temp value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Jfet</font></b></code> that describes semiconductor junction FET device.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::J'>J</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet'>Jfet</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name nd ng ns <font color=#b9b96e>-model</font> value ?-area value? ?-temp value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Jfet</font></b></code> that describes semiconductor junction FET device.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet1Model'>Jfet1Model</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet1Model::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name type ?-option value ...?&lt;/span&gt;</pre>Creates object of class <code>Jfet1Model</code> that describes JFET level 1 model with Parker Skellern modification.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet2Model'>Jfet2Model</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet2Model::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name type ?-option value ...?&lt;/span&gt;</pre>Creates object of class <code>Jfet2Model</code> that describes JFET level 2 model with Parker Skellern modification.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::M'>M</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet'>Mesfet</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name ndNode ngNode nsNode <font color=#b9b96e>-model</font> value ?-area value? ?-temp value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Mesfet</font></b></code> that describes semiconductor MESFET device.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::M'>M</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet'>Mesfet</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name nd ng ns <font color=#b9b96e>-model</font> value ?-area value? ?-temp value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Mesfet</font></b></code> that describes semiconductor MESFET device.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet1Model'>Mesfet1Model</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet1Model::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name type ?-option value ...?&lt;/span&gt;</pre>Creates object of class <code>Mesfet1Model</code> that describes MESFET model by Statz e.a..
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Mosfet'>Mosfet</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Mosfet::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name ndNode ngNode nsNode <font color=#b9b96e>-model</font> value ?-n4 value ?-n5 value ?-n6 value ?-n7 value???? ?-m value? ?-l value? ?-w value? ?-ad value|-nrd value? ?-as value|-nrs value? ?-temp value? ?-off? ?-pd value? ?-ps value? ?-ic {value value value}? ?-custparams param1 {param1Val ?-eq|-poseq|-posnocheck|-pos|-nocheck?} ...?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Mosfet</font></b></code> that describes semiconductor MOSFET device.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Mosfet'>Mosfet</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Mosfet::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name nd ng ns <font color=#b9b96e>-model</font> value ?-n4 value ?-n5 value ?-n6 value ?-n7 value???? ?-m value? ?-l value? ?-w value? ?-ad value|-nrd value? ?-as value|-nrs value? ?-temp value? ?-off? ?-pd value? ?-ps value? ?-ic {value value value}? ?-custparams param1 {param1Val ?-eq|-poseq|-posnocheck|-pos|-nocheck?} ...?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Mosfet</font></b></code> that describes semiconductor MOSFET device.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Q'>Q</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html#::SpiceGenTcl::Xyce::SemiconductorDevices::Z'>Z</a></li></ul></nav><footer class='ruff-layout-footer ruff-ft'><div style='float: right;'>Document generated by <a href='https://ruff.magicsplat.com'>Ruff!</a></div><div>&copy; George Yashin</div></footer>
 </div></body></html>

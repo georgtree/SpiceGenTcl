@@ -9,15 +9,15 @@ SpiceGenTcl::Ngspice::Sources - Commands in namespace SpiceGenTcl::Ngspice::Sour
 .br
 \fBam new\fP \fItype ?args?\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -i value ?-tc1 value? ?-tc2 value? ?-noisy 0|1? ?-temp value|-dtemp value?\fP
+\fBOBJECT constructor\fP \fIname np nm -i value ?-tc1 value? ?-tc2 value? ?-noisy 0|1? ?-temp value|-dtemp value?\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -v value ?-tc1 value? ?-tc2 value? ?-noisy 0|1? ?-temp value|-dtemp value?\fP
+\fBOBJECT constructor\fP \fIname np nm -v value ?-tc1 value? ?-tc2 value? ?-noisy 0|1? ?-temp value|-dtemp value?\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -i0 value -ia value -mf value -fc value ?-td value ?-phases value??\fP
+\fBOBJECT constructor\fP \fIname np nm -i0 value -ia value -mf value -fc value ?-td value ?-phases value??\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -low value -high value -td value -tr value -tf value -pw value -per value ?-np value?\fP
+\fBOBJECT constructor\fP \fIname np nm -low value -high value -td value -tr value -tf value -pw value -per value ?-np value?\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -i0|ioff value -ia|iamp value -fc|fcar value -mdi value -fs|fsig value ?-phasec value ?-phases value??\fP
+\fBOBJECT constructor\fP \fIname np nm -i0|ioff value -ia|iamp value -fc|fcar value -mdi value -fs|fsig value ?-phasec value ?-phases value??\fP
 .br
 \fBpulse create OBJNAME\fP \fItype ?args?\fP
 .br
@@ -27,13 +27,13 @@ SpiceGenTcl::Ngspice::Sources - Commands in namespace SpiceGenTcl::Ngspice::Sour
 .br
 \fBsffm new\fP \fItype ?args?\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -mf value -fc value ?-td value ?-phases value??\fP
+\fBOBJECT constructor\fP \fIname np nm -v0 value -va value -mf value -fc value ?-td value ?-phases value??\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -dc value -ac value -portnum value ?-z0 value?\fP
+\fBOBJECT constructor\fP \fIname np nm -dc value -ac value -portnum value ?-z0 value?\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -low|voff value -high|von value -td value -tr value -tf value -pw|ton value -per|tper value ?-np value?\fP
+\fBOBJECT constructor\fP \fIname np nm -low|voff value -high|von value -td value -tr value -tf value -pw|ton value -per|tper value ?-np value?\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -v0|voff value -va|vamp value -fc|fcar value -mdi value -fs|fsig value ?-phasec value ?-phases value??\fP
+\fBOBJECT constructor\fP \fIname np nm -v0|voff value -va|vamp value -fc|fcar value -mdi value -fs|fsig value ?-phasec value ?-phases value??\fP
 .br
 .SH ::SPICEGENTCL::NGSPICE::SOURCES
 .SH CLASSES
@@ -257,9 +257,9 @@ Writable: -name
 .RE
 .PP
 Creates object of class BehaviouralSource that describes behavioural source\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -i value ?-tc1 value? ?-tc2 value? ?-noisy 0|1? ?-temp value|-dtemp value?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname np nm -i value ?-tc1 value? ?-tc2 value? ?-noisy 0|1? ?-temp value|-dtemp value?\fP
 .br
-\fBOBJECT constructor\fP \fIname npNode nmNode -v value ?-tc1 value? ?-tc2 value? ?-noisy 0|1? ?-temp value|-dtemp value?\fP
+\fBOBJECT constructor\fP \fIname np nm -v value ?-tc1 value? ?-tc2 value? ?-noisy 0|1? ?-temp value|-dtemp value?\fP
 .br
 .RE
 .PP
@@ -290,10 +290,10 @@ Voltage expression\&.
 name
 Name of the device without first-letter designator B\&.
 .TP
-nmNode
+nm
 Name of node connected to negative pin\&.
 .TP
-npNode
+np
 Name of node connected to positive pin\&.
 .RE
 .PP
@@ -809,7 +809,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Iam that describes single-frequency FM current source\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -i0 value -ia value -mf value -fc value ?-td value ?-phases value??\fP
+.RS 4n\fBOBJECT constructor\fP \fIname np nm -i0 value -ia value -mf value -fc value ?-td value ?-phases value??\fP
 .br
 .RE
 .PP
@@ -837,10 +837,10 @@ Signal delay, optional\&.
 name
 Name of the device without first-letter designator I\&.
 .TP
-nmNode
+nm
 Name of node connected to negative pin\&.
 .TP
-npNode
+np
 Name of node connected to positive pin\&.
 .RE
 .PP
@@ -1048,7 +1048,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Ipulse that describes pulse current source\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -low value -high value -td value -tr value -tf value -pw value -per value ?-np value?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname np nm -low value -high value -td value -tr value -tf value -pw value -per value ?-np value?\fP
 .br
 .RE
 .PP
@@ -1070,7 +1070,7 @@ High value\&.
 -low
 Low value\&.
 .TP
--np
+-npulses
 Number of pulses, optional\&.
 .TP
 -per
@@ -1091,10 +1091,10 @@ Rise time\&.
 name
 Name of the device without first-letter designator I\&.
 .TP
-nmNode
+nm
 Name of node connected to negative pin\&.
 .TP
-npNode
+np
 Name of node connected to positive pin\&.
 .RE
 .PP
@@ -1110,7 +1110,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Ngspice::Sources::Ipulse new 1 net1 net2 -low 0 -high 1 -td {td -eq} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6 -np {np -eq}
+::SpiceGenTcl::Ngspice::Sources::Ipulse new 1 net1 net2 -low 0 -high 1 -td {td -eq} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6 -npulses {np -eq}
 .fi
 .RE
 .PP
@@ -1242,7 +1242,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Isffm that describes single-frequency FM current source\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -i0|ioff value -ia|iamp value -fc|fcar value -mdi value -fs|fsig value ?-phasec value ?-phases value??\fP
+.RS 4n\fBOBJECT constructor\fP \fIname np nm -i0|ioff value -ia|iamp value -fc|fcar value -mdi value -fs|fsig value ?-phasec value ?-phases value??\fP
 .br
 .RE
 .PP
@@ -1282,10 +1282,10 @@ Signal phase, optional, require -phasec\&.
 name
 Name of the device without first-letter designator I\&.
 .TP
-nmNode
+nm
 Name of node connected to negative pin\&.
 .TP
-npNode
+np
 Name of node connected to positive pin\&.
 .RE
 .PP
@@ -1667,7 +1667,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Vam that describes single-frequency AM voltage source\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -v0 value -va value -mf value -fc value ?-td value ?-phases value??\fP
+.RS 4n\fBOBJECT constructor\fP \fIname np nm -v0 value -va value -mf value -fc value ?-td value ?-phases value??\fP
 .br
 .RE
 .PP
@@ -1704,10 +1704,10 @@ Pulsed value\&.
 name
 Name of the device without first-letter designator V\&.
 .TP
-nmNode
+nm
 Name of node connected to negative pin\&.
 .TP
-npNode
+np
 Name of node connected to positive pin\&.
 .RE
 .PP
@@ -2043,7 +2043,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Vport that describes simple constant voltage source\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -dc value -ac value -portnum value ?-z0 value?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname np nm -dc value -ac value -portnum value ?-z0 value?\fP
 .br
 .RE
 .PP
@@ -2065,10 +2065,10 @@ Internal source impedance\&.
 name
 Name of the device without first-letter designator V\&.
 .TP
-nmNode
+nm
 Name of node connected to negative pin\&.
 .TP
-npNode
+np
 Name of node connected to positive pin\&.
 .RE
 .PP
@@ -2156,7 +2156,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Vpulse that describes pulse voltage source\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -low|voff value -high|von value -td value -tr value -tf value -pw|ton value -per|tper value ?-np value?\fP
+.RS 4n\fBOBJECT constructor\fP \fIname np nm -low|voff value -high|von value -td value -tr value -tf value -pw|ton value -per|tper value ?-np value?\fP
 .br
 .RE
 .PP
@@ -2178,7 +2178,7 @@ High value, aliases: -von, ion\&.
 -low
 Low value, aliases: -voff, -ioff\&.
 .TP
--np
+-npulses
 Number of pulses, optional\&.
 .TP
 -per
@@ -2199,10 +2199,10 @@ Rise time\&.
 name
 Name of the device without first-letter designator V\&.
 .TP
-nmNode
+nm
 Name of node connected to negative pin\&.
 .TP
-npNode
+np
 Name of node connected to positive pin\&.
 .RE
 .PP
@@ -2218,7 +2218,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Ngspice::Sources::Vpulse new 1 net1 net2 -low 0 -high 1 -td {td -eq} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6 -np {np -eq}
+::SpiceGenTcl::Ngspice::Sources::Vpulse new 1 net1 net2 -low 0 -high 1 -td {td -eq} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6 -npulses {np -eq}
 .fi
 .RE
 .PP
@@ -2350,7 +2350,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Vsffm that describes single-frequency FM voltage source\&.
-.RS 4n\fBOBJECT constructor\fP \fIname npNode nmNode -v0|voff value -va|vamp value -fc|fcar value -mdi value -fs|fsig value ?-phasec value ?-phases value??\fP
+.RS 4n\fBOBJECT constructor\fP \fIname np nm -v0|voff value -va|vamp value -fc|fcar value -mdi value -fs|fsig value ?-phasec value ?-phases value??\fP
 .br
 .RE
 .PP
@@ -2390,10 +2390,10 @@ Pulsed value, aliases: -vamp, -ia, -iamp\&.
 name
 Name of the device without first-letter designator V\&.
 .TP
-nmNode
+nm
 Name of node connected to negative pin\&.
 .TP
-npNode
+np
 Name of node connected to positive pin\&.
 .RE
 .PP
