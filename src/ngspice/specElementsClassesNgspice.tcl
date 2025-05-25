@@ -375,6 +375,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ::SpiceGenTcl::Ngspice::BasicDevices::Coupling new 1 -l1 la -l2 lb -k 0.5
             # ```
             # Synopsis: name -l1 value -l2 value -k value
+            ##nagelfar implicitvarcmd {argparse *Creates object of class `Coupling`*} name l1 l2 k
             argparse -pfirst -help {Creates object of class `Coupling` that describes inductance coupling between\
                                            inductors} {
                 {name -help {Name of the device without first-letter designator}}
@@ -382,17 +383,14 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
                 {-l2= -required -help {Second inductor name}}
                 {-k= -required -help {Coupling coefficient}}
             }
-            ##nagelfar variable k
             if {([llength $k]>1) && ([@ $k 1] eq {-eq})} {
-                ##nagelfar ignore
+                ##nagelfar ignore {Found constant "k"}
                 set k [list k [@ $k 0] -poseq]
             } else {
-                ##nagelfar ignore
+                ##nagelfar ignore {Found constant "k"}
                 set k [list k $k -pos]
             }
-            ##nagelfar variable l1
-            ##nagelfar variable l2
-            ##nagelfar ignore
+            ##nagelfar ignore {Found constant "l*"}
             next k$name {} [list [list l1 $l1 -posnocheck] [list l2 $l2 -posnocheck] $k]
         }
     }
@@ -454,6 +452,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # ::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar -eq}}
             # ```
+            ##nagelfar implicitvarcmd {argparse *Creates object of class 'SubcircuitInstance'*} name pins subName params
             argparse -pfirst -help {Creates object of class 'SubcircuitInstance' that describes subcircuit instance} {
                 {name -help {Name of the device without first-letter designator}}
                 {pins -help {List of pins {{pinName nodeName} {pinName nodeName} ...}}}
@@ -559,6 +558,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ```
             # ::SpiceGenTcl::Ngspice::BasicDevices::VerilogA new 1 {{plus net1} {minus net2}} vmod {{r 1} {c cpar -eq}}
             # ```
+            ##nagelfar implicitvarcmd {argparse *Creates object of class 'VerilogA'*} name pins modName params
             argparse -pfirst -help {Creates object of class 'VerilogA' that describes Verilog-A instance} {
                 {name -help {Name of the device without first-letter designator}}
                 {pins -help {List of pins {{pinName nodeName} {pinName nodeName} ...}}}

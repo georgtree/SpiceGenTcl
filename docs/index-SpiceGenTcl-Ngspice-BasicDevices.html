@@ -308,7 +308,7 @@
 <h4 class='ruffmethod'><a name='::SpiceGenTcl::Ngspice::BasicDevices::Coupling::constructor'>constructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::Coupling" title="::SpiceGenTcl::Ngspice::BasicDevices::Coupling" class='ruff_cmd'>::SpiceGenTcl::Ngspice::BasicDevices::Coupling</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::Coupling'>Coupling</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>
 <p class='ruff'>Creates object of class <code>Coupling</code> that describes inductance coupling between inductors.</p>
-<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name -l1 value -l2 value -k value</span></div>
+<div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name -l1 value -l2 value -k value #nagelfar implicitvarcmd argparse *Creates object of class `Coupling`* name l1 l2 k</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#b9b96e>-k</font></code></td><td>Coupling coefficient.</td></tr>
@@ -341,23 +341,21 @@
     <i><font color=#76a396># ::SpiceGenTcl::Ngspice::BasicDevices::Coupling new 1 -l1 la -l2 lb -k 0.5</font></i>
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># Synopsis: name -l1 value -l2 value -k value</font></i>
+    <i><font color=#76a396>##nagelfar implicitvarcmd {argparse *Creates object of class `Coupling`*} name l1 l2 k</font></i>
     argparse <font color=#b9b96e>-pfirst</font> <font color=#b9b96e>-help</font> {Creates object of class `Coupling` that describes inductance coupling between inductors} {
         {name <font color=#b9b96e>-help</font> {Name of the device without first-letter designator}}
         {<font color=#b9b96e>-l1</font>= <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {First inductor name}}
         {<font color=#b9b96e>-l2</font>= <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {Second inductor name}}
         {<font color=#b9b96e>-k</font>= <font color=#b9b96e>-required</font> <font color=#b9b96e>-help</font> {Coupling coefficient}}
     }
-    <i><font color=#76a396>##nagelfar variable k</font></i>
     <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$k</font>]&gt;1) && ([@ <font color=#f1b479>$k</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
-        <i><font color=#76a396>##nagelfar ignore</font></i>
+        <i><font color=#76a396>##nagelfar ignore {Found constant &quot;k&quot;}</font></i>
         <b><font color=#ffa500>set</font></b> k [<b><font color=#ffa500>list</font></b> k [@ <font color=#f1b479>$k</font> 0] <font color=#b9b96e>-poseq</font>]
     } <b><font color=#ffa500>else</font></b> {
-        <i><font color=#76a396>##nagelfar ignore</font></i>
+        <i><font color=#76a396>##nagelfar ignore {Found constant &quot;k&quot;}</font></i>
         <b><font color=#ffa500>set</font></b> k [<b><font color=#ffa500>list</font></b> k <font color=#f1b479>$k</font> <font color=#b9b96e>-pos</font>]
     }
-    <i><font color=#76a396>##nagelfar variable l1</font></i>
-    <i><font color=#76a396>##nagelfar variable l2</font></i>
-    <i><font color=#76a396>##nagelfar ignore</font></i>
+    <i><font color=#76a396>##nagelfar ignore {Found constant &quot;l*&quot;}</font></i>
     <b><font color=#ffa500>next</font></b> k<font color=#f1b479>$name</font> {} [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> l1 <font color=#f1b479>$l1</font> <font color=#b9b96e>-posnocheck</font>] [<b><font color=#ffa500>list</font></b> l2 <font color=#f1b479>$l2</font> <font color=#b9b96e>-posnocheck</font>] <font color=#f1b479>$k</font>]
 }</pre></div>
 </div></details>
@@ -1022,7 +1020,8 @@
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar <font color=#b9b96e>-eq</font>}}
 </pre>
 
-</figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Ngspice_BasicDevices_SubcircuitInstance_constructor' href="javascript:toggleSource('SpiceGenTcl_Ngspice_BasicDevices_SubcircuitInstance_constructor')">Show source</a></p>
+</figure><p class='ruff'>#nagelfar implicitvarcmd {argparse <em>Creates object of class 'SubcircuitInstance'</em>} name pins subName params</p>
+<div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Ngspice_BasicDevices_SubcircuitInstance_constructor' href="javascript:toggleSource('SpiceGenTcl_Ngspice_BasicDevices_SubcircuitInstance_constructor')">Show source</a></p>
 <div id='SpiceGenTcl_Ngspice_BasicDevices_SubcircuitInstance_constructor' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> constructor {args} {
 
     <i><font color=#76a396># Creates object of class `SubcircuitInstance` that describes subcircuit instance.</font></i>
@@ -1037,6 +1036,7 @@
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar -eq}}</font></i>
     <i><font color=#76a396># ```</font></i>
+    <i><font color=#76a396>##nagelfar implicitvarcmd {argparse *Creates object of class 'SubcircuitInstance'*} name pins subName params</font></i>
     argparse <font color=#b9b96e>-pfirst</font> <font color=#b9b96e>-help</font> {Creates object of class 'SubcircuitInstance' that describes subcircuit instance} {
         {name <font color=#b9b96e>-help</font> {Name of the device without first-letter designator}}
         {pins <font color=#b9b96e>-help</font> {List of pins {{pinName nodeName} {pinName nodeName} ...}}}
@@ -1191,7 +1191,8 @@
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Ngspice::BasicDevices::VerilogA new 1 {{plus net1} {minus net2}} vmod {{r 1} {c cpar <font color=#b9b96e>-eq</font>}}
 </pre>
 
-</figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Ngspice_BasicDevices_VerilogA_constructor' href="javascript:toggleSource('SpiceGenTcl_Ngspice_BasicDevices_VerilogA_constructor')">Show source</a></p>
+</figure><p class='ruff'>#nagelfar implicitvarcmd {argparse <em>Creates object of class 'VerilogA'</em>} name pins modName params</p>
+<div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Ngspice_BasicDevices_VerilogA_constructor' href="javascript:toggleSource('SpiceGenTcl_Ngspice_BasicDevices_VerilogA_constructor')">Show source</a></p>
 <div id='SpiceGenTcl_Ngspice_BasicDevices_VerilogA_constructor' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> constructor {args} {
 
     <i><font color=#76a396># Creates object of class `VerilogA` that describes Verilog-A instance.</font></i>
@@ -1206,6 +1207,7 @@
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># ::SpiceGenTcl::Ngspice::BasicDevices::VerilogA new 1 {{plus net1} {minus net2}} vmod {{r 1} {c cpar -eq}}</font></i>
     <i><font color=#76a396># ```</font></i>
+    <i><font color=#76a396>##nagelfar implicitvarcmd {argparse *Creates object of class 'VerilogA'*} name pins modName params</font></i>
     argparse <font color=#b9b96e>-pfirst</font> <font color=#b9b96e>-help</font> {Creates object of class 'VerilogA' that describes Verilog-A instance} {
         {name <font color=#b9b96e>-help</font> {Name of the device without first-letter designator}}
         {pins <font color=#b9b96e>-help</font> {List of pins {{pinName nodeName} {pinName nodeName} ...}}}
@@ -1383,7 +1385,7 @@
 &lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode <font color=#b9b96e>-beh</font> <font color=#b9b96e>-q</font> value ?-tc1 value? ?-tc2 value?&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode <font color=#b9b96e>-model</font> value ?-c value? ?-l value? ?-w value? ?-temp value|-dtemp value? ?-m value? ?scale value? ?-ic value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>Capacitor</font></b></code> that describes capacitor.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CModel'>CModel</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CModel::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name ?-option value ...?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>CModel</font></b></code> that describes semiconductor capacitor model.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::Coupling'>Coupling</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::Coupling::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name <font color=#b9b96e>-l1</font> value <font color=#b9b96e>-l2</font> value <font color=#b9b96e>-k</font> value&lt;/span&gt;</pre>Creates object of class <code>Coupling</code> that describes inductance coupling between inductors.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::Coupling'>Coupling</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::Coupling::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name <font color=#b9b96e>-l1</font> value <font color=#b9b96e>-l2</font> value <font color=#b9b96e>-k</font> value #nagelfar implicitvarcmd argparse *Creates object of class `Coupling`* name l1 l2 k&lt;/span&gt;</pre>Creates object of class <code>Coupling</code> that describes inductance coupling between inductors.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CSwitch'>CSwitch</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CSwitchModel'>CSwitchModel</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::CSwitchModel::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name ?-option value ...?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#ffa500>CSwitchModel</font></b></code> that describes current switch model.
 </span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::Inductor'>Inductor</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html#::SpiceGenTcl::Ngspice::BasicDevices::Inductor::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode <font color=#b9b96e>-l</font> value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value|-dtemp value? ?-scale value? ?-ic value?&lt;/span&gt;
 &lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;name npNode nmNode <font color=#b9b96e>-beh</font> <font color=#b9b96e>-l</font> value ?-tc1 value? ?-tc2 value?&lt;/span&gt;

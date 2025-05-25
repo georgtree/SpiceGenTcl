@@ -15,7 +15,7 @@ SpiceGenTcl::Ngspice::BasicDevices - Commands in namespace SpiceGenTcl::Ngspice:
 .br
 \fBOBJECT constructor\fP \fIname ?-option value \&.\&.\&.?\fP
 .br
-\fBOBJECT constructor\fP \fIname -l1 value -l2 value -k value\fP
+\fBOBJECT constructor\fP \fIname -l1 value -l2 value -k value #nagelfar implicitvarcmd argparse *Creates object of class `Coupling`* name l1 l2 k\fP
 .br
 \fBOBJECT constructor\fP \fIname ?-option value \&.\&.\&.?\fP
 .br
@@ -470,7 +470,7 @@ Writable: -name
 .RE
 .PP
 Creates object of class Coupling that describes inductance coupling between inductors\&.
-.RS 4n\fBOBJECT constructor\fP \fIname -l1 value -l2 value -k value\fP
+.RS 4n\fBOBJECT constructor\fP \fIname -l1 value -l2 value -k value #nagelfar implicitvarcmd argparse *Creates object of class `Coupling`* name l1 l2 k\fP
 .br
 .RE
 .PP
@@ -1601,6 +1601,8 @@ Example of class initialization:
 .fi
 .RE
 .PP
+#nagelfar implicitvarcmd {argparse \fICreates object of class 'SubcircuitInstance'\fP} name pins subName params
+.PP
 .RS -4n
 \fBSubcircuitInstanceAuto\fR (::SpiceGenTcl::Ngspice::BasicDevices)
 .RE
@@ -1819,6 +1821,8 @@ Example of class initialization:
 ::SpiceGenTcl::Ngspice::BasicDevices::VerilogA new 1 {{plus net1} {minus net2}} vmod {{r 1} {c cpar -eq}}
 .fi
 .RE
+.PP
+#nagelfar implicitvarcmd {argparse \fICreates object of class 'VerilogA'\fP} name pins modName params
 .PP
 .RS -4n
 \fBVSwitch\fR (::SpiceGenTcl::Ngspice::BasicDevices)

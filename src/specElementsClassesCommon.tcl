@@ -65,10 +65,6 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 {npNode -help {Name of node connected to positive pin}}
                 {nmNode -help {Name of node connected to negative pin}}
             }]
-            if {$arguments eq {}} {
-                [self] destroy
-                return
-            }
             set rVal [dget $arguments r]
             if {([llength $rVal]>1) && ([@ $rVal 1] eq {-eq})} {
                 lappend params [list r [@ $rVal 0] -poseq]
@@ -223,6 +219,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             # ```
             # ::SpiceGenTcl::Common::BasicDevices::SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar -eq}}
             # ```
+            ##nagelfar implicitvarcmd {argparse *Creates object of class 'SubcircuitInstance'*} name pins subName params
             argparse -pfirst -help {Creates object of class 'SubcircuitInstance' that describes subcircuit instance} {
                 {name -help {Name of the device without first-letter designator}}
                 {pins -help {List of pins {{pinName nodeName} {pinName nodeName} ...}}}

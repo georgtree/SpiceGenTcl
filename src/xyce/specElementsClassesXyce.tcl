@@ -417,14 +417,14 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ```
             # ::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar -eq}}
             # ```
+            ##nagelfar implicitvarcmd {argparse *Creates object of class 'SubcircuitInstance'*} name pins subName params
             argparse -pfirst -help {Creates object of class 'SubcircuitInstance' that describes subcircuit instance} {
                 {name -help {Name of the device without first-letter designator}}
                 {pins -help {List of pins {{pinName nodeName} {pinName nodeName} ...}}}
                 {subName -help {Name of subcircuit definition}}
                 {params -help {List of parameters {{paramName paramValue ?-eq?} {paramName paramValue ?-eq?}}}}
             }
-            set params [linsert $params 0 [list model $subName -posnocheck]]
-            set params [linsert $params 1 {params PARAMS: -posnocheck}]
+            set params [linsert [linsert $params 0 [list model $subName -posnocheck]] 1 {params PARAMS: -posnocheck}]
             next x$name $pins $params
         }
     }

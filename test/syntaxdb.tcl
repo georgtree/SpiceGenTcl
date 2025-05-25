@@ -22,6 +22,7 @@ set ::knownCommands {
 >=
 >>
 @
+measure::measure
 SpiceGenTcl::Analysis
 SpiceGenTcl::Axis
 SpiceGenTcl::BinaryReader
@@ -440,6 +441,7 @@ csv::writequeue
 dappend
 dcreate
 dexist
+dvalues
 dget
 dict
 dkeys

@@ -119,9 +119,8 @@ namespace eval ::SpiceGenTcl {
         }
         method NameProcess {arguments object} {
             upvar name name
-            ##nagelfar ignore
+            ##nagelfar ignore #2 {Found constant "name"}
             if {[dexist $arguments name]} {
-                ##nagelfar ignore
                 set name [dget $arguments name]
             } else {
                 set name $object
@@ -1987,6 +1986,7 @@ namespace eval ::SpiceGenTcl {
     ##nagelfar subcmd+ _obj,RawFile configure
     oo::configurable create RawFile {
         # Class represents raw file
+        ##nagelfar ignore {Wrong number of arguments}
         mixin BinaryReader Utility
         # path to raw file including it's file name
         property path
@@ -2089,7 +2089,6 @@ namespace eval ::SpiceGenTcl {
             }
 
 ####   parse variables
-
             set i [lsearch $header Variables:]
             set ivar 0
             foreach line [lrange $header [+ $i 1] end-1] {
@@ -2106,6 +2105,7 @@ namespace eval ::SpiceGenTcl {
                         set axisNumType $numType
                     }
                     my configure -axis [::SpiceGenTcl::Axis new $name $varType $npoints $axisNumType]
+                    ##nagelfar ignore #12 {Found constant "traces"}
                     dappend traces [string tolower $name] [my configure -axis]
                 } elseif {($traces2read eq {*}) || ($name in $traces2read)} {
                     if {$hasAxis} {
@@ -2276,9 +2276,8 @@ namespace eval ::SpiceGenTcl {
                 for {set i 0} {$i<[my configure -npoints]} {incr i} {
                     lappend tracesList [lmap traceValues [dict values $tracesDict] {@ $traceValues $i}]
                 }
-            ##nagelfar ignore
+            ##nagelfar ignore #12 {Found constant "traces"}
             } elseif {[dget $arguments traces] ne {}} {
-                ##nagelfar ignore
                 foreach traceName [dget $arguments traces] {
                     set traceObj [my getTrace $traceName]
                     dict append tracesDict [$traceObj configure -name] [$traceObj getDataPoints]
@@ -2484,7 +2483,7 @@ namespace eval ::SpiceGenTcl {
                                                 @definitions@ [join $definitionsLoc \n]\
                                                 @elements@ [join $elements \n]]\
                                     $SubcircuitTemplate]
-            ##nagelfar ignore
+            ##nagelfar ignore {Found constant "definition"}
             $SubcktsTree append $subcktPath definition $definition
             return
         }
@@ -2570,7 +2569,7 @@ namespace eval ::SpiceGenTcl {
                 set lineList [split $line]
                 set firstWord [@ $lineList 0]
                 set firstChar [string index $firstWord 0]
-                ##nagelfar ignore
+                ##nagelfar ignore {Found constant "end"}
                 set restChars [string range $firstWord 1 end]
                 if {$firstChar eq {.}} {
                     set restChars [string tolower $restChars]

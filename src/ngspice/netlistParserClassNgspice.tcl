@@ -195,6 +195,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
                 puts "Model type '${type}' is not in the list of supported types, custom type '${modelClassName}' was\
                         created"
                 set paramString [string map {- {}} [join [dkeys $paramsList]]]
+                ##nagelfar ignore {Found constant "type"}
                 return [list [string map [list @type@ $modelClassName @paramsList@ $paramString @hsuppress@ type] $ModelTemplate]\
                                 [list $modelClassName new {*}$paramsList]]
             } else {
@@ -235,8 +236,10 @@ namespace eval ::SpiceGenTcl::Ngspice {
                                         SpiceGenTcl supported levels, custom level model was created"
                                 set paramsList [linsert $paramsList 0 $name [string totitle $type]Model]
                                 set paramString [string map {- {}} [join [dkeys $paramsList]]]
+                                ##nagelfar ignore #3 {Found constant "type"}
                                 set modelClassName [string totitle $type]Model
-                                return [list [string map [list @type@ $modelClassName @paramsList@ $paramString @hsuppress@ type] $ModelTemplate]\
+                                return [list [string map [list @type@ $modelClassName @paramsList@\
+                                                                  $paramString @hsuppress@ type] $ModelTemplate]\
                                                 [list $modelClassName new {*}$paramsList]]
                             } else {
                                 puts "Level '${level}' of BJT model in line '${line}' is not supported, skip that line"

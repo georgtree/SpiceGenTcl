@@ -3190,7 +3190,6 @@
                 }
 
     <i><font color=#76a396>####   parse variables</font></i>
-
                 <b><font color=#ffa500>set</font></b> i [<b><font color=#ffa500>lsearch</font></b> <font color=#f1b479>$header</font> Variables:]
                 <b><font color=#ffa500>set</font></b> ivar 0
                 <b><font color=#ffa500>foreach</font></b> line [<b><font color=#ffa500>lrange</font></b> <font color=#f1b479>$header</font> [+ <font color=#f1b479>$i</font> 1] end-1] {
@@ -3207,6 +3206,7 @@
                             <b><font color=#ffa500>set</font></b> axisNumType <font color=#f1b479>$numType</font>
                         }
                         <b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-axis</font> [::SpiceGenTcl::Axis new <font color=#f1b479>$name</font> <font color=#f1b479>$varType</font> <font color=#f1b479>$npoints</font> <font color=#f1b479>$axisNumType</font>]
+                        <i><font color=#76a396>##nagelfar ignore #12 {Found constant &quot;traces&quot;}</font></i>
                         dappend traces [<b><font color=#ffa500>string</font></b> tolower <font color=#f1b479>$name</font>] [<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-axis</font>]
                     } <b><font color=#ffa500>elseif</font></b> {(<font color=#f1b479>$traces2read</font> eq {<b><font color=#ffa500>*</font></b>}) || (<font color=#f1b479>$name</font> in <font color=#f1b479>$traces2read</font>)} {
                         <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$hasAxis</font>} {
@@ -3382,9 +3382,8 @@
         <b><font color=#ffa500>for</font></b> {<b><font color=#ffa500>set</font></b> i 0} {<font color=#f1b479>$i</font>&lt;[<b><font color=#fe6efe>my</font></b> configure <font color=#b9b96e>-npoints</font>]} {<b><font color=#ffa500>incr</font></b> i} {
             <b><font color=#ffa500>lappend</font></b> tracesList [<b><font color=#ffa500>lmap</font></b> traceValues [<b><font color=#ffa500>dict</font></b> values <font color=#f1b479>$tracesDict</font>] {@ <font color=#f1b479>$traceValues</font> <font color=#f1b479>$i</font>}]
         }
-    <i><font color=#76a396>##nagelfar ignore</font></i>
+    <i><font color=#76a396>##nagelfar ignore #12 {Found constant &quot;traces&quot;}</font></i>
     } <b><font color=#ffa500>elseif</font></b> {[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> traces] ne {}} {
-        <i><font color=#76a396>##nagelfar ignore</font></i>
         <b><font color=#ffa500>foreach</font></b> traceName [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> traces] {
             <b><font color=#ffa500>set</font></b> traceObj [<b><font color=#fe6efe>my</font></b> getTrace <font color=#f1b479>$traceName</font>]
             <b><font color=#ffa500>dict</font></b> append tracesDict [<font color=#f1b479>$traceObj</font> configure <font color=#b9b96e>-name</font>] [<font color=#f1b479>$traceObj</font> getDataPoints]
