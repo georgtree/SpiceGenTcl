@@ -88,19 +88,23 @@ namespace eval Tips {
         ```tcl
         oo::class create Core {
             superclass Device
-            constructor {name pNode nNode args} {
-                set arguments [argparse -inline {
-                    {-model= -required}
-                    {-len= -default 0.1}
-                    {-area= -default 1}
+            constructor {args} {
+                set arguments [argparse -inline -pfirst -helplevel 1 -help {} {
+                    {-model= -required -help {Model of the core}}
+                    {-len= -default 0.1 -help {Length of the core}}
+                    {-area= -default 1 -help {Cross-section area of the core}}
+                    {name -help {Name of the device without first-letter designator}}
+                    {pNode -help {Name of node connected to positive pin}}
+                    {nNode -help {Name of node connected to negative pin}}
                 }]
-                lappend paramList "model [dget $arguments model] -posnocheck"
+                lappend params [list model [dget $arguments model] -posnocheck]
                 dict for {paramName value} $arguments {
-                    if {$paramName ni {model}} {
-                        lappend paramList "$paramName $value"
+                    if {$paramName ni {model name pNode nNode}} {
+                        lappend params [list $paramName $value]
                     }
                 }
-                next n$name [list "p $pNode" "n $nNode"] $paramList
+                next n[dget $arguments name] [list [list p [dget $arguments pNode]] [list n [dget $arguments nNode]]]\
+                        $params
             }
         }
         ```
@@ -120,21 +124,25 @@ namespace eval Tips {
         
         In next line we define arguments for constructor:
         ```tcl
-        constructor {name pNode nNode args}
+        constructor {args}
         ```
-        First argument is name of instance, then positive node and negative node names, `args` accepts model value
-        after `-model` key and all instance parameters of device.
         
-        In these few lines we process `args` variable with [argparse](https://wiki.tcl-lang.org/page/argparse) package:
+        In these few lines we process `args` variable with [argparse](https://github.com/georgtree/argparse) package:
         ```tcl
-        set arguments [argparse -inline "
-            {-model= -required}
-            {-len= -default 0.1}
-            {-area= -default 1}
-        "]
+        set arguments [argparse -inline -pfirst -helplevel 1 -help {} {
+            {-model= -required -help {Model of the core}}
+            {-len= -default 0.1 -help {Length of the core}}
+            {-area= -default 1 -help {Cross-section area of the core}}
+            {name -help {Name of the device without first-letter designator}}
+            {pNode -help {Name of node connected to positive pin}}
+            {nNode -help {Name of node connected to negative pin}}
+        }]
         ```
-        
-        Here we define required `-model` argument, and optional instance arguments `-len` and `-area` with default 
+        Switch `-pfirst` allows to pass required parameters (name, pNode and nNode) first, before switches. `-help`
+        switch allows to call constructor of the `Core` with argument `-help` and get interactive help message.
+        Required parameters are: `name`, positive node `pNode` and negative node `nNode`.
+
+        Next we define required `-model` argument, and optional instance arguments `-len` and `-area` with default 
         values. Due to these lines we can pass parameters to element in forms `-paramName $paramValue $paramQual`, for
         example: `-area 1e-4` or `-area l*m -eq`.
         
@@ -143,23 +151,26 @@ namespace eval Tips {
         
         In the next few lines we build parameter list that will be passed to [::SpiceGenTcl::Device] constructor:      
         ```tcl
-        lappend paramList "model [dget $arguments model] -posnocheck"
+        lappend params [list model [dget $arguments model] -posnocheck]
         dict for {paramName value} $arguments {
-            if {$paramName ni {model}} {
-                lappend paramList "$paramName $value"
+            if {$paramName ni {model name pNode nNode}} {
+                lappend params [list $paramName $value]
             }
         }
         ```
         
         The last but not the least is step of passing arguments to [::SpiceGenTcl::Device] constructor:
         ```tcl
-        next n$name [list "p $pNode" "n $nNode"] $params
+        next n[dget $arguments name] [list [list p [dget $arguments pNode]] [list n [dget $arguments nNode]]]\
+                        $params
         ```
         
-        This superclass accept arguments in form `constructor {name pins modelName instParams}`.
-        So, we pass string `n$name` as device name, `n` is reference designator for Verilog-a devices in Ngspice.
-        Secondly we pass list of nodes `[list "p $pNode" "n $nNode"]` in form of `{{Name0 NodeName} {Name1 NodeName}
-        {Name2 NodeName} ...}`.
+        This superclass accept arguments in form `constructor {name pins params}`.
+        So, we pass string `n[dget $arguments name]` as device name, `n` is reference designator for Verilog-A devices
+        in Ngspice. Secondly we pass list of nodes
+        `[list [list p [dget $arguments pNode]] [list n [dget $arguments nNode]]]` in form of 
+        `{{Name0 NodeName} {Name1 NodeName} {Name2 NodeName} ...}`.
+        
         And the last is list of parameters in form `{{model Value -posnocheck} {Name Value ?-eq?} {Name Value ?-eq?}
         {Name Value ?-eq?} ...}`.
         
@@ -178,41 +189,43 @@ namespace eval Tips {
         ```tcl
         oo::class create CoreModel {
             superclass Model
-            constructor {name args} {
-                set paramsNames [list ms a k alpha c]
-                next $name coreja [my argsPreprocess $paramsNames {*}$args]
+            constructor {args} {
+                next {*}[my argsPreprocess {ms a k alpha c} {name type} type {*}[linsert $args 1 coreja]]
             }
         }
         ```
         
-        Here we use as superclass [::SpiceGenTcl::Model] for new element. Next we define constructor for model,
-        first argument is name of model and `args` that accepts model value all instance parameters of device.
+        Here we use as superclass [::SpiceGenTcl::Model] for new element.
         To process optional arguments, we use special method [::SpiceGenTcl::Utility::argsPreprocess], that 
         process optional `args` arguments and produces string for [::SpiceGenTcl::Model] constructor.
         ```tcl
-        set paramsNames [list ms a k alpha c]
-        next $name coreja [my argsPreprocess $paramsNames {*}$args]
+        next {*}[my argsPreprocess {ms a k alpha c} {name type} type {*}[linsert $args 1 coreja]]
         ```
-        We set model parameters in list `paramsNames`, and after that we pass arguments to superclass's constructor.
-        The name `coreja` corresponds to name of Verilog-A module.
+
+        We set model parameters in list `{ms a k alpha c}` as switches, and then the list of required parameters
+        `{name type}`. Then we provide elements names which should be ignored while generating help message, and the last
+        are arguments with switches and values, including default type value `coreja`. The name `coreja` corresponds to
+        name of Verilog-A module.
 
         We use [::SpiceGenTcl::Utility::argsPreprocess] procedure here, but we can go the same way we do with
         `Core` class, and add, for example, default values, or use some complex logic of elements initialization:
         ```tcl
         oo::class create CoreModel {
             superclass Model
-            constructor {name args} {
-                set arguments [argparse -inline {
+            constructor {args} {
+                set arguments [argparse -inline -pfirst -helplevel 1 -help {} {
                     -ms=
                     {-a= -default 1000}
                     -k=
                     -alpha=
                     -c=
+                    name
+                    type
                 }]
                 dict for {paramName value} $arguments {
-                    lappend paramList "$paramName $value"
+                    lappend paramList [list $paramName $value]
                 }
-                next $name coreja $paramList
+                next $name coreja {*}$paramList
             }
         }
         ```

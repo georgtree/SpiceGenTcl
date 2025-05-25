@@ -2,7 +2,7 @@
 lappend auto_path "../../"
 package require SpiceGenTcl
 package require ticklecharts
-set ::ticklecharts::theme "dark"
+set ::ticklecharts::theme dark
 # import class names to current namespace
 namespace import ::SpiceGenTcl::*
 importNgspice
@@ -10,77 +10,94 @@ importNgspice
         
 oo::class create Core {
     superclass Device
-    constructor {name pNode nNode args} {
-        set arguments [argparse -inline "
-            {-model= -required}
-            {-len= -default 0.1}
-            {-area= -default 1}
-        "]
-        lappend paramList "model [dget $arguments model] -posnocheck"
+    constructor {args} {
+        set arguments [argparse -inline -pfirst -helplevel 1 -help {} {
+            {-model= -required -help {Model of the core}}
+            {-len= -default 0.1 -help {Length of the core}}
+            {-area= -default 1 -help {Cross-section area of the core}}
+            {name -help {Name of the device without first-letter designator}}
+            {pNode -help {Name of node connected to positive pin}}
+            {nNode -help {Name of node connected to negative pin}}
+        }]
+        lappend params [list model [dget $arguments model] -posnocheck]
         dict for {paramName value} $arguments {
-            if {$paramName ni {model}} {
-                lappend paramList "$paramName $value"
+            if {$paramName ni {model name pNode nNode}} {
+                lappend params [list $paramName $value]
             }
         }
-        next n$name [list "p $pNode" "n $nNode"] $paramList
+        next n[dget $arguments name] [list [list p [dget $arguments pNode]] [list n [dget $arguments nNode]]] $params
     }
 }
 
 oo::class create CoreModel {
     superclass Model
-    constructor {name args} {
-        set paramsNames [list ms a k alpha c]
-        next $name coreja [my argsPreprocess $paramsNames {*}$args]
+    constructor {args} {
+        next {*}[my argsPreprocess {ms a k alpha c} {name type} type {*}[linsert $args 1 coreja]]
     }
 }
 
 oo::class create Gap {
     superclass Device
-    constructor {name pNode nNode args} {
-        set arguments [argparse -inline "
-            {-model= -required}
-            {-len= -required}
-            {-area= -required}
-        "]
-        lappend paramList "model [dget $arguments model] -posnocheck"
+    constructor {args} {
+        set arguments [argparse -inline -pfirst -helplevel 1 -help {} {
+            {-model= -required -help {Model of the gap}}
+            {-len= -required -help {Length of the gap}}
+            {-area= -required -help {Cross-section area of the gap}}
+            {name -help {Name of the device without first-letter designator}}
+            {pNode -help {Name of node connected to positive pin}}
+            {nNode -help {Name of node connected to negative pin}}
+        }]
+        lappend params [list model [dget $arguments model] -posnocheck]
         dict for {paramName value} $arguments {
-            if {$paramName ni {model}} {
-                lappend paramList "$paramName $value"
+            if {$paramName ni {model name pNode nNode}} {
+                lappend params [list $paramName $value]
             }
         }
-        next n$name [list "p $pNode" "n $nNode"] $paramList
+        next n[dget $arguments name] [list [list p [dget $arguments pNode]] [list n [dget $arguments nNode]]] $params
     }
 }
 
 oo::class create GapModel {
     superclass Model
-    constructor {name} {
-        next $name gap ""
+    constructor {args} {
+        argparse -helplevel 1 -help {} {
+            {name -help {Name of the model}}
+        }
+        next $name gap
     }
 }
 
 oo::class create Winding {
     superclass Device
-    constructor {name e1Node e2Node m1Node m2Node args} {
-        set arguments [argparse -inline "
-            {-model= -required}
-            {-turns= -required}
-        "]
-        lappend paramList "model [dget $arguments model] -posnocheck"
+    constructor {args} {
+        set arguments [argparse -inline -pfirst -help {} {
+            {-model= -required -help {Model of the gap}}
+            {-turns= -required -help {Number of turns}}
+            {name -help {Name of the device without first-letter designator}}
+            {e1Node -help {Name of node connected to first electrical pin}}
+            {e2Node -help {Name of node connected to second electrical pin}}
+            {m1Node -help {Name of node connected to first magnetic pin}}
+            {m2Node -help {Name of node connected to second magnetic pin}}
+        }]
+        lappend params [list model [dget $arguments model] -posnocheck]
         dict for {paramName value} $arguments {
-            if {$paramName ni {model}} {
-                lappend paramList "$paramName $value"
+            if {$paramName ni {model name e1Node e2Node m1Node m2Node}} {
+                lappend params [list $paramName $value]
             }
         }
-        next n$name [list "e1 $e1Node" "e2 $e2Node" "m1 $m1Node" "m2 $m2Node"] $paramList
+        next n[dget $arguments name] [list [list e1 [dget $arguments e1Node]] [list e2 [dget $arguments e2Node]]\
+                                              [list m1 [dget $arguments m1Node]] [list m2 [dget $arguments m2Node]]]\
+                $params
     }
 }
 
 oo::class create WindingModel {
     superclass Model
-    constructor {name args} {
-        set paramsNames [list r]
-        next $name winding [my argsPreprocess $paramsNames {*}$args]
+    constructor {args} {
+        argparse -helplevel 1 -help {} {
+            {name -help {Name of the model}}
+        }
+        next {*}[my argsPreprocess r {name type} type {*}[linsert $args 1 winding]]
     }
 }
 set dir [file dirname [file normalize [info script]]]
@@ -105,7 +122,7 @@ set wind3b [Winding new w3b e4 0 m3b 0 -model windmodel -turns 10]
 set windModel [WindingModel new windmodel]
 set vsin [Vsin new si 0 vs -freq 1k -va 1 -v0 0.0]
 set vpwl [Vpwl new i vr 0 -seq {0 0 0.3m 15 7m 2}]
-set vin [B new in vi 0 -v "v(vs)*v(vr)"]
+set vin [B new in vi 0 -v {v(vs)*v(vr)}]
 set r1 [R new 1 vi e1 -r 2]
 set r2 [R new 2 e2 0 -r 2]
 set r3a [R new 3a e3 0 -r 2]

@@ -22,7 +22,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
 
     oo::class create RModel {
         superclass ::SpiceGenTcl::Model
-        constructor {name args} {
+        constructor {args} {
             # Creates object of class `RModel` that describes semiconductor resistor model.
             #  name - name of the model
             #  args - keyword instance parameters
@@ -31,7 +31,8 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ::SpiceGenTcl::Ngspice::BasicDevices::RModel new resmod -tc1 1 -tc2 2
             # ```
             # Synopsis: name ?-option value ...?
-            next $name r [my argsPreprocess {tc1 tc2 rsh defw narrow short tnom kf af wf lf ef r} {*}$args]
+            next {*}[my argsPreprocess {tc1 tc2 rsh defw narrow short tnom kf af wf lf ef r} {name type} type\
+                             {*}[linsert $args 1 r]]
         }
     }
 
@@ -39,7 +40,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
 
     oo::class create CModel {
         superclass ::SpiceGenTcl::Model
-        constructor {name args} {
+        constructor {args} {
             # Creates object of class `CModel` that describes semiconductor capacitor model.
             #  name - name of the model
             #  args - keyword instance parameters
@@ -48,7 +49,8 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ::SpiceGenTcl::Ngspice::BasicDevices::CModel new capmod -tc1 1 -tc2 2
             # ```
             # Synopsis: name ?-option value ...?
-            next $name c [my argsPreprocess {cap cj cjsw defw narrow short tc1 tc2 tnom di thick} {*}$args]
+            next {*}[my argsPreprocess {cap cj cjsw defw narrow short tc1 tc2 tnom di thick} {name type} type\
+                             {*}[linsert $args 1 c]]
         }
     }
 
@@ -56,7 +58,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
 
     oo::class create LModel {
         superclass ::SpiceGenTcl::Model
-        constructor {name args} {
+        constructor {args} {
             # Creates object of class `LModel` that describes inductor model.
             #  name - name of the model
             #  args - keyword instance parameters
@@ -65,14 +67,14 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ::SpiceGenTcl::Ngspice::BasicDevices::LModel new indmod -tc1 1 -tc2 2
             # ```
             # Synopsis: name ?-option value ...?
-            next $name l [my argsPreprocess {ind csect dia length tc1 tc2 tnom nt mu} {*}$args]
+            next {*}[my argsPreprocess {ind csect dia length tc1 tc2 tnom nt mu} {name type} type {*}[linsert $args 1 l]]
         }
     }
 ###  VSwitchModel class
 
     oo::class create VSwitchModel {
         superclass ::SpiceGenTcl::Model
-        constructor {name args} {
+        constructor {args} {
             # Creates object of class `VSwitchModel` that describes voltage switch model.
             #  name - name of the model
             #  args - keyword instance parameters
@@ -81,7 +83,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ::SpiceGenTcl::Ngspice::BasicDevices::VSwitchModel new swmod -vt 1 -vh 0.5 -ron 1 -roff 1e6
             # ```
             # Synopsis: name ?-option value ...?
-            next $name sw [my argsPreprocess {vt vh ron roff} {*}$args]
+            next {*}[my argsPreprocess {vt vh ron roff} {name type} type {*}[linsert $args 1 sw]]
         }
     }
 
@@ -89,7 +91,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
 
     oo::class create CSwitchModel {
         superclass ::SpiceGenTcl::Model
-        constructor {name args} {
+        constructor {args} {
             # Creates object of class `CSwitchModel` that describes current switch model.
             #  name - name of the model
             #  args - keyword instance parameters
@@ -98,7 +100,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ::SpiceGenTcl::Ngspice::BasicDevices::CSwitchModel new cswmod -it 1 -ih 0.5 -ron 1 -roff 1e6
             # ```
             # Synopsis: name ?-option value ...?
-            next $name csw [my argsPreprocess {it ih ron roff} {*}$args]
+            next {*}[my argsPreprocess {it ih ron roff} {name type} type {*}[linsert $args 1 csw]]
         }
     }
 }
@@ -111,7 +113,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
 
     oo::class create DiodeModel {
         superclass ::SpiceGenTcl::Model
-        constructor {name args} {
+        constructor {args} {
             # Creates object of class `DiodeModel` that describes semiconductor diode model.
             #  name - name of the model
             #  args - keyword model parameters, for details please see Ngspice manual, chapter 7.
@@ -124,7 +126,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
                                      php tt lm lp wm wp xom xoi xm xp eg trs2 tm1 tm2 ttt1 ttt2 xti tlev tlevc ctp tcv\
                                      {js is} {if ikf} {cjo cj0} {cjp cjsw} {m mj} {vj pb} {tref tnom} {trs1 trs}\
                                      {cta ctc}}
-            next $name d [my argsPreprocess $paramsNames {*}$args]
+            next {*}[my argsPreprocess $paramsNames {name type} type {*}[linsert $args 1 d]]
         }
     }
 
@@ -132,7 +134,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
 
     oo::class create BjtGPModel {
         superclass ::SpiceGenTcl::Model
-        constructor {name type args} {
+        constructor {args} {
             # Creates object of class `BjtGPModel` that describes Gummel-Poon model of semiconductor bipolar transistor.
             #  name - name of the model
             #  type - npn or pnp
@@ -142,14 +144,13 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             # ::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel new bjtmod npn -is 1e-15 -bf 200 -vaf 100 -cje 1e-10
             # ```
             # Synopsis: name type ?-option value ...?
-            set paramsNames {subs is ibe ibc iss bf nf {va vaf} ikf {nk nkf} ise ne br nr {vb var} ikr isc nc rb irb\
-                                     rbm re rc cje {pe vje} {me mje} tf xtf vtf itf ptf cjc {pc vjc} mjc xcjc tr cjs\
+            set paramsNames {level subs is ibe ibc iss bf nf {va vaf} ikf {nk nkf} ise ne br nr {vb var} ikr isc nc rb\
+                                     irb rbm re rc cje {pe vje} {me mje} tf xtf vtf itf ptf cjc {pc vjc} mjc xcjc tr cjs\
                                      {ps vjs} {ms mjs} xtb eg xti kf af fc {tref tnom} tlev tlevc tre1 tre2 trc1 trc2\
                                      trb1 trb2 trbm1 trbm2 tbf1 tbf2 tbr1 tbr2 tikf1 tikf2 tikr1 tikr2 tirb1 tirb2 tnc1\
                                      tnc2 tne1 tne2 tnf1 tnf2 tnr1 tnr2 tvaf1 tvaf2 tvar1 tvar2 ctc cte cts tvjc tvje\
                                      titf1 titf2 ttf1 ttf2 ttr1 ttr2 tmje1 tmje2 tmjc1 tmjc2 rco gamma qco vg cn d}
-            set params [my argsPreprocess $paramsNames {*}$args]
-            next $name $type [linsert $params 0 {level 1}]
+            next {*}[my argsPreprocess $paramsNames {name type} {} {*}[linsert $args 2 -level 1]]
         }
     }
 
@@ -157,7 +158,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
 
     oo::class create Jfet1Model {
         superclass ::SpiceGenTcl::Model
-        constructor {name type args} {
+        constructor {args} {
             # Creates object of class `Jfet1Model` that describes JFET level 1 model with Parker Skellern modification.
             #  name - name of the model
             #  type - njf or pjf
@@ -167,9 +168,9 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet1Model new jfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4 -cgd 1e-12
             # ```
             # Synopsis: name type ?-option value ...?
-            set paramsNames {vto beta lambda rd rs cgs cgd pb is b kf af nlev gdsnoi fc tnom tcv vtotc bex betatce xti\
-                                     eg}
-            next $name $type [linsert [my argsPreprocess $paramsNames {*}$args] 0 {level 1}]
+            set paramsNames {level vto beta lambda rd rs cgs cgd pb is b kf af nlev gdsnoi fc tnom tcv vtotc bex betatce\
+                                     xti eg}
+            next {*}[my argsPreprocess $paramsNames {name type} {} {*}[linsert $args 2 -level 1]]
         }
     }
 
@@ -177,7 +178,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
 
     oo::class create Jfet2Model {
         superclass ::SpiceGenTcl::Model
-        constructor {name type args} {
+        constructor {args} {
             # Creates object of class `Jfet2Model` that describes JFET level 2 model with Parker Skellern modification.
             #  name - name of the model
             #  type - njf or pjf
@@ -187,9 +188,10 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4 -vbi 1.2
             # ```
             # Synopsis: name type ?-option value ...?
-            set paramsNames {acgam beta cgd cgs delta fc hfeta hfe1 hfe2 hfgam hfg1 hfg2 ibd is lfgam lfg1 lfg2 mvst n p\
-                                     q rs rd  taud taug vbd vbi vst vto xc xi z rg lg ls ld cdss afac nfing tnom temp}
-            next $name $type [linsert [my argsPreprocess $paramsNames {*}$args] 0 {level 2}]
+            set paramsNames {level acgam beta cgd cgs delta fc hfeta hfe1 hfe2 hfgam hfg1 hfg2 ibd is lfgam lfg1 lfg2\
+                                     mvst n p q rs rd  taud taug vbd vbi vst vto xc xi z rg lg ls ld cdss afac nfing\
+                                     tnom temp}
+            next {*}[my argsPreprocess $paramsNames {name type} {} {*}[linsert $args 2 -level 2]]
         }
     }
 
@@ -197,7 +199,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
 
     oo::class create Mesfet1Model {
         superclass ::SpiceGenTcl::Model
-        constructor {name type args} {
+        constructor {args} {
             # Creates object of class `Mesfet1Model` that describes MESFET model by Statz e.a..
             #  name - name of the model
             #  type - nmf or pmf
@@ -207,8 +209,8 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4 -vbi 1.2
             # ```
             # Synopsis: name type ?-option value ...?
-            set params [my argsPreprocess {vto beta b alpha lambda rd rs cgs cgd pb kf af fc} {*}$args]
-            next $name $type [linsert $params 0 {level 1}]
+            set paramsNames {level vto beta b alpha lambda rd rs cgs cgd pb kf af fc}
+            next {*}[my argsPreprocess $paramsNames {name type} {} {*}[linsert $args 2 -level 1]]
         }
     }
 }

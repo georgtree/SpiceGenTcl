@@ -6,7 +6,7 @@
 <body>
 <div class='ruff-layout'>
 <header class='ruff-layout-header ruff-hd'>
-<a style='text-decoration:none;' href='index.html'>Tcl SpiceGenTcl package (v0.66)</a>
+<a style='text-decoration:none;' href='index.html'>Tcl SpiceGenTcl package (v0.70)</a>
 
 
             <div id="ruffButtonBar">
@@ -22,7 +22,6 @@
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::Bjt::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>allow</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::allow" title="::SpiceGenTcl::Utility.allow" class='ruff_cmd'>::SpiceGenTcl::Utility.allow</a></td></tr>
 <tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
 <tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
@@ -148,7 +147,6 @@
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::BjtGPModel::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::addParam" title="::SpiceGenTcl::Model.addParam" class='ruff_cmd'>::SpiceGenTcl::Model.addParam</a></td></tr>
-<tr><td><code>allow</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::allow" title="::SpiceGenTcl::Utility.allow" class='ruff_cmd'>::SpiceGenTcl::Utility.allow</a></td></tr>
 <tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
 <tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
@@ -169,9 +167,9 @@
 <div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name type ?-option value ...?</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
+<tr><td><code>args</code></td><td>Keyword model parameters, for details please see Ngspice manual, chapter 8.</td></tr>
 <tr><td><code>name</code></td><td>Name of the model.</td></tr>
 <tr><td><code>type</code></td><td>Npn or pnp.</td></tr>
-<tr><td><code>args</code></td><td>Keyword model parameters, for details please see Ngspice manual, chapter 8.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5><p class='ruff'>Example of class initialization:</p>
 
@@ -179,7 +177,7 @@
 </pre>
 
 </figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Ngspice_SemiconductorDevices_BjtGPModel_constructor' href="javascript:toggleSource('SpiceGenTcl_Ngspice_SemiconductorDevices_BjtGPModel_constructor')">Show source</a></p>
-<div id='SpiceGenTcl_Ngspice_SemiconductorDevices_BjtGPModel_constructor' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> constructor {name type args} {
+<div id='SpiceGenTcl_Ngspice_SemiconductorDevices_BjtGPModel_constructor' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> constructor {args} {
 
     <i><font color=#76a396># Creates object of class `BjtGPModel` that describes Gummel-Poon model of semiconductor bipolar transistor.</font></i>
     <i><font color=#76a396>#  name - name of the model</font></i>
@@ -190,16 +188,14 @@
     <i><font color=#76a396># ::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel new bjtmod npn -is 1e-15 -bf 200 -vaf 100 -cje 1e-10</font></i>
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># Synopsis: name type ?-option value ...?</font></i>
-    <b><font color=#ffa500>set</font></b> paramsNames {subs is ibe ibc iss bf nf {va vaf} ikf {nk nkf} ise ne br nr {vb var} ikr isc nc rb irb rbm re rc cje {pe vje} {me mje} tf xtf vtf itf ptf cjc {pc vjc} mjc xcjc tr cjs {ps vjs} {ms mjs} xtb eg xti kf af fc {tref tnom} tlev tlevc tre1 tre2 trc1 trc2 trb1 trb2 trbm1 trbm2 tbf1 tbf2 tbr1 tbr2 tikf1 tikf2 tikr1 tikr2 tirb1 tirb2 tnc1 tnc2 tne1 tne2 tnf1 tnf2 tnr1 tnr2 tvaf1 tvaf2 tvar1 tvar2 ctc cte cts tvjc tvje titf1 titf2 ttf1 ttf2 ttr1 ttr2 tmje1 tmje2 tmjc1 tmjc2 rco gamma qco vg cn d}
-    <b><font color=#ffa500>set</font></b> params [<b><font color=#fe6efe>my</font></b> argsPreprocess <font color=#f1b479>$paramsNames</font> {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$args</font>]
-    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$name</font> <font color=#f1b479>$type</font> [<b><font color=#ffa500>linsert</font></b> <font color=#f1b479>$params</font> 0 {level 1}]
+    <b><font color=#ffa500>set</font></b> paramsNames {level subs is ibe ibc iss bf nf {va vaf} ikf {nk nkf} ise ne br nr {vb var} ikr isc nc rb irb rbm re rc cje {pe vje} {me mje} tf xtf vtf itf ptf cjc {pc vjc} mjc xcjc tr cjs {ps vjs} {ms mjs} xtb eg xti kf af fc {tref tnom} tlev tlevc tre1 tre2 trc1 trc2 trb1 trb2 trbm1 trbm2 tbf1 tbf2 tbr1 tbr2 tikf1 tikf2 tikr1 tikr2 tirb1 tirb2 tnc1 tnc2 tne1 tne2 tnf1 tnf2 tnr1 tnr2 tvaf1 tvaf2 tvar1 tvar2 ctc cte cts tvjc tvje titf1 titf2 ttf1 ttf2 ttr1 ttr2 tmje1 tmje2 tmjc1 tmjc2 rco gamma qco vg cn d}
+    <b><font color=#ffa500>next</font></b> {<b><font color=#ffa500>*</font></b>}[<b><font color=#fe6efe>my</font></b> argsPreprocess <font color=#f1b479>$paramsNames</font> {name type} {} {<b><font color=#ffa500>*</font></b>}[<b><font color=#ffa500>linsert</font></b> <font color=#f1b479>$args</font> 2 <font color=#b9b96e>-level</font> 1]]
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::SemiconductorDevices::D'>D</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices" title="::SpiceGenTcl::Ngspice::SemiconductorDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::SemiconductorDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>allow</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::allow" title="::SpiceGenTcl::Utility.allow" class='ruff_cmd'>::SpiceGenTcl::Utility.allow</a></td></tr>
 <tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
 <tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
@@ -222,7 +218,6 @@
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::Diode::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>allow</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::allow" title="::SpiceGenTcl::Utility.allow" class='ruff_cmd'>::SpiceGenTcl::Utility.allow</a></td></tr>
 <tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
 <tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
@@ -338,7 +333,6 @@
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::addParam" title="::SpiceGenTcl::Model.addParam" class='ruff_cmd'>::SpiceGenTcl::Model.addParam</a></td></tr>
-<tr><td><code>allow</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::allow" title="::SpiceGenTcl::Utility.allow" class='ruff_cmd'>::SpiceGenTcl::Utility.allow</a></td></tr>
 <tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
 <tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
@@ -359,8 +353,8 @@
 <div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name ?-option value ...?</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
-<tr><td><code>name</code></td><td>Name of the model.</td></tr>
 <tr><td><code>args</code></td><td>Keyword model parameters, for details please see Ngspice manual, chapter 7.</td></tr>
+<tr><td><code>name</code></td><td>Name of the model.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5><p class='ruff'>Example of class initialization:</p>
 
@@ -368,7 +362,7 @@
 </pre>
 
 </figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Ngspice_SemiconductorDevices_DiodeModel_constructor' href="javascript:toggleSource('SpiceGenTcl_Ngspice_SemiconductorDevices_DiodeModel_constructor')">Show source</a></p>
-<div id='SpiceGenTcl_Ngspice_SemiconductorDevices_DiodeModel_constructor' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> constructor {name args} {
+<div id='SpiceGenTcl_Ngspice_SemiconductorDevices_DiodeModel_constructor' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> constructor {args} {
 
     <i><font color=#76a396># Creates object of class `DiodeModel` that describes semiconductor diode model.</font></i>
     <i><font color=#76a396>#  name - name of the model</font></i>
@@ -379,14 +373,13 @@
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># Synopsis: name ?-option value ...?</font></i>
     <b><font color=#ffa500>set</font></b> paramsNames {level jws n rs {vb vrb var bv} ibv nbv ikr jtun jtunsw ntun xtitun keg isr nr fc fcs mjsw php tt lm lp wm wp xom xoi xm xp eg trs2 tm1 tm2 ttt1 ttt2 xti tlev tlevc ctp tcv {js is} {<b><font color=#ffa500>if</font></b> ikf} {cjo cj0} {cjp cjsw} {m mj} {vj pb} {tref tnom} {trs1 trs} {cta ctc}}
-    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$name</font> d [<b><font color=#fe6efe>my</font></b> argsPreprocess <font color=#f1b479>$paramsNames</font> {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$args</font>]
+    <b><font color=#ffa500>next</font></b> {<b><font color=#ffa500>*</font></b>}[<b><font color=#fe6efe>my</font></b> argsPreprocess <font color=#f1b479>$paramsNames</font> {name type} type {<b><font color=#ffa500>*</font></b>}[<b><font color=#ffa500>linsert</font></b> <font color=#f1b479>$args</font> 1 d]]
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::SemiconductorDevices::J'>J</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices" title="::SpiceGenTcl::Ngspice::SemiconductorDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::SemiconductorDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>allow</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::allow" title="::SpiceGenTcl::Utility.allow" class='ruff_cmd'>::SpiceGenTcl::Utility.allow</a></td></tr>
 <tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
 <tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
@@ -409,7 +402,6 @@
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>allow</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::allow" title="::SpiceGenTcl::Utility.allow" class='ruff_cmd'>::SpiceGenTcl::Utility.allow</a></td></tr>
 <tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
 <tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
@@ -513,7 +505,6 @@
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet1Model::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::addParam" title="::SpiceGenTcl::Model.addParam" class='ruff_cmd'>::SpiceGenTcl::Model.addParam</a></td></tr>
-<tr><td><code>allow</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::allow" title="::SpiceGenTcl::Utility.allow" class='ruff_cmd'>::SpiceGenTcl::Utility.allow</a></td></tr>
 <tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
 <tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
@@ -534,9 +525,9 @@
 <div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name type ?-option value ...?</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
+<tr><td><code>args</code></td><td>Keyword model parameters, for details please see Ngspice manual, chapter 9.</td></tr>
 <tr><td><code>name</code></td><td>Name of the model.</td></tr>
 <tr><td><code>type</code></td><td>Njf or pjf.</td></tr>
-<tr><td><code>args</code></td><td>Keyword model parameters, for details please see Ngspice manual, chapter 9.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5><p class='ruff'>Example of class initialization:</p>
 
@@ -544,7 +535,7 @@
 </pre>
 
 </figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Ngspice_SemiconductorDevices_Jfet1Model_constructor' href="javascript:toggleSource('SpiceGenTcl_Ngspice_SemiconductorDevices_Jfet1Model_constructor')">Show source</a></p>
-<div id='SpiceGenTcl_Ngspice_SemiconductorDevices_Jfet1Model_constructor' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> constructor {name type args} {
+<div id='SpiceGenTcl_Ngspice_SemiconductorDevices_Jfet1Model_constructor' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> constructor {args} {
 
     <i><font color=#76a396># Creates object of class `Jfet1Model` that describes JFET level 1 model with Parker Skellern modification.</font></i>
     <i><font color=#76a396>#  name - name of the model</font></i>
@@ -555,8 +546,8 @@
     <i><font color=#76a396># ::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet1Model new jfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4 -cgd 1e-12</font></i>
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># Synopsis: name type ?-option value ...?</font></i>
-    <b><font color=#ffa500>set</font></b> paramsNames {vto beta lambda rd rs cgs cgd pb is b kf af nlev gdsnoi fc tnom tcv vtotc bex betatce xti eg}
-    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$name</font> <font color=#f1b479>$type</font> [<b><font color=#ffa500>linsert</font></b> [<b><font color=#fe6efe>my</font></b> argsPreprocess <font color=#f1b479>$paramsNames</font> {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$args</font>] 0 {level 1}]
+    <b><font color=#ffa500>set</font></b> paramsNames {level vto beta lambda rd rs cgs cgd pb is b kf af nlev gdsnoi fc tnom tcv vtotc bex betatce xti eg}
+    <b><font color=#ffa500>next</font></b> {<b><font color=#ffa500>*</font></b>}[<b><font color=#fe6efe>my</font></b> argsPreprocess <font color=#f1b479>$paramsNames</font> {name type} {} {<b><font color=#ffa500>*</font></b>}[<b><font color=#ffa500>linsert</font></b> <font color=#f1b479>$args</font> 2 <font color=#b9b96e>-level</font> 1]]
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet2Model'>Jfet2Model</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices" title="::SpiceGenTcl::Ngspice::SemiconductorDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::SemiconductorDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -564,7 +555,6 @@
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet2Model::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::addParam" title="::SpiceGenTcl::Model.addParam" class='ruff_cmd'>::SpiceGenTcl::Model.addParam</a></td></tr>
-<tr><td><code>allow</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::allow" title="::SpiceGenTcl::Utility.allow" class='ruff_cmd'>::SpiceGenTcl::Utility.allow</a></td></tr>
 <tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
 <tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
@@ -585,9 +575,9 @@
 <div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name type ?-option value ...?</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
+<tr><td><code>args</code></td><td>Keyword model parameters, for details please see Ngspice manual, chapter 9.</td></tr>
 <tr><td><code>name</code></td><td>Name of the model.</td></tr>
 <tr><td><code>type</code></td><td>Njf or pjf.</td></tr>
-<tr><td><code>args</code></td><td>Keyword model parameters, for details please see Ngspice manual, chapter 9.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5><p class='ruff'>Example of class initialization:</p>
 
@@ -595,7 +585,7 @@
 </pre>
 
 </figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Ngspice_SemiconductorDevices_Jfet2Model_constructor' href="javascript:toggleSource('SpiceGenTcl_Ngspice_SemiconductorDevices_Jfet2Model_constructor')">Show source</a></p>
-<div id='SpiceGenTcl_Ngspice_SemiconductorDevices_Jfet2Model_constructor' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> constructor {name type args} {
+<div id='SpiceGenTcl_Ngspice_SemiconductorDevices_Jfet2Model_constructor' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> constructor {args} {
 
     <i><font color=#76a396># Creates object of class `Jfet2Model` that describes JFET level 2 model with Parker Skellern modification.</font></i>
     <i><font color=#76a396>#  name - name of the model</font></i>
@@ -606,15 +596,14 @@
     <i><font color=#76a396># ::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4 -vbi 1.2</font></i>
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># Synopsis: name type ?-option value ...?</font></i>
-    <b><font color=#ffa500>set</font></b> paramsNames {acgam beta cgd cgs delta fc hfeta hfe1 hfe2 hfgam hfg1 hfg2 ibd is lfgam lfg1 lfg2 mvst n p q rs rd  taud taug vbd vbi vst vto xc xi z rg lg ls ld cdss afac nfing tnom temp}
-    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$name</font> <font color=#f1b479>$type</font> [<b><font color=#ffa500>linsert</font></b> [<b><font color=#fe6efe>my</font></b> argsPreprocess <font color=#f1b479>$paramsNames</font> {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$args</font>] 0 {level 2}]
+    <b><font color=#ffa500>set</font></b> paramsNames {level acgam beta cgd cgs delta fc hfeta hfe1 hfe2 hfgam hfg1 hfg2 ibd is lfgam lfg1 lfg2 mvst n p q rs rd  taud taug vbd vbi vst vto xc xi z rg lg ls ld cdss afac nfing tnom temp}
+    <b><font color=#ffa500>next</font></b> {<b><font color=#ffa500>*</font></b>}[<b><font color=#fe6efe>my</font></b> argsPreprocess <font color=#f1b479>$paramsNames</font> {name type} {} {<b><font color=#ffa500>*</font></b>}[<b><font color=#ffa500>linsert</font></b> <font color=#f1b479>$args</font> 2 <font color=#b9b96e>-level</font> 2]]
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::SemiconductorDevices::M'>M</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices" title="::SpiceGenTcl::Ngspice::SemiconductorDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::SemiconductorDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>allow</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::allow" title="::SpiceGenTcl::Utility.allow" class='ruff_cmd'>::SpiceGenTcl::Utility.allow</a></td></tr>
 <tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
 <tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
@@ -637,7 +626,6 @@
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>allow</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::allow" title="::SpiceGenTcl::Utility.allow" class='ruff_cmd'>::SpiceGenTcl::Utility.allow</a></td></tr>
 <tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
 <tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
@@ -733,7 +721,6 @@
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet1Model::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model::addParam" title="::SpiceGenTcl::Model.addParam" class='ruff_cmd'>::SpiceGenTcl::Model.addParam</a></td></tr>
-<tr><td><code>allow</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::allow" title="::SpiceGenTcl::Utility.allow" class='ruff_cmd'>::SpiceGenTcl::Utility.allow</a></td></tr>
 <tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
 <tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
@@ -754,9 +741,9 @@
 <div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>name type ?-option value ...?</span></div>
 <details><summary class='ruff-expand'><span>Details</span></summary>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
+<tr><td><code>args</code></td><td>Keyword model parameters, for details please see Ngspice manual, chapter 10.</td></tr>
 <tr><td><code>name</code></td><td>Name of the model.</td></tr>
 <tr><td><code>type</code></td><td>Nmf or pmf.</td></tr>
-<tr><td><code>args</code></td><td>Keyword model parameters, for details please see Ngspice manual, chapter 10.</td></tr>
 </table>
 <h5 class='ruff'>Description</h5><p class='ruff'>Example of class initialization:</p>
 
@@ -764,7 +751,7 @@
 </pre>
 
 </figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Ngspice_SemiconductorDevices_Mesfet1Model_constructor' href="javascript:toggleSource('SpiceGenTcl_Ngspice_SemiconductorDevices_Mesfet1Model_constructor')">Show source</a></p>
-<div id='SpiceGenTcl_Ngspice_SemiconductorDevices_Mesfet1Model_constructor' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> constructor {name type args} {
+<div id='SpiceGenTcl_Ngspice_SemiconductorDevices_Mesfet1Model_constructor' class='ruff_dyn_src'><pre><b><font color=#fe6efe>method</font></b> constructor {args} {
 
     <i><font color=#76a396># Creates object of class `Mesfet1Model` that describes MESFET model by Statz e.a..</font></i>
     <i><font color=#76a396>#  name - name of the model</font></i>
@@ -775,8 +762,8 @@
     <i><font color=#76a396># ::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4 -vbi 1.2</font></i>
     <i><font color=#76a396># ```</font></i>
     <i><font color=#76a396># Synopsis: name type ?-option value ...?</font></i>
-    <b><font color=#ffa500>set</font></b> params [<b><font color=#fe6efe>my</font></b> argsPreprocess {vto beta b alpha lambda rd rs cgs cgd pb kf af fc} {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$args</font>]
-    <b><font color=#ffa500>next</font></b> <font color=#f1b479>$name</font> <font color=#f1b479>$type</font> [<b><font color=#ffa500>linsert</font></b> <font color=#f1b479>$params</font> 0 {level 1}]
+    <b><font color=#ffa500>set</font></b> paramsNames {level vto beta b alpha lambda rd rs cgs cgd pb kf af fc}
+    <b><font color=#ffa500>next</font></b> {<b><font color=#ffa500>*</font></b>}[<b><font color=#fe6efe>my</font></b> argsPreprocess <font color=#f1b479>$paramsNames</font> {name type} {} {<b><font color=#ffa500>*</font></b>}[<b><font color=#ffa500>linsert</font></b> <font color=#f1b479>$args</font> 2 <font color=#b9b96e>-level</font> 1]]
 }</pre></div>
 </div></details>
 <h3 class='ruffclass'><a name='::SpiceGenTcl::Ngspice::SemiconductorDevices::Mosfet'>Mosfet</a><span class='ns_scope'> [<a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices" title="::SpiceGenTcl::Ngspice::SemiconductorDevices" class='ruff_cmd'>::SpiceGenTcl::Ngspice::SemiconductorDevices</a>]</span><span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -784,7 +771,6 @@
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Ngspice-SemiconductorDevices.html#::SpiceGenTcl::Ngspice::SemiconductorDevices::Mosfet::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>allow</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::allow" title="::SpiceGenTcl::Utility.allow" class='ruff_cmd'>::SpiceGenTcl::Utility.allow</a></td></tr>
 <tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
 <tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
@@ -949,7 +935,6 @@
 <div style='clear:both;'></div>
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>allow</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::allow" title="::SpiceGenTcl::Utility.allow" class='ruff_cmd'>::SpiceGenTcl::Utility.allow</a></td></tr>
 <tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
 <tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
@@ -971,7 +956,6 @@
 <div style='clear:both;'></div>
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::addParam" title="::SpiceGenTcl::Device.addParam" class='ruff_cmd'>::SpiceGenTcl::Device.addParam</a></td></tr>
-<tr><td><code>allow</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::allow" title="::SpiceGenTcl::Utility.allow" class='ruff_cmd'>::SpiceGenTcl::Utility.allow</a></td></tr>
 <tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
 <tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
 <tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>

@@ -1,7 +1,7 @@
 '\"
 '\" '\" Copyright (c) George Yashin
 '\"
-.TH "SpiceGenTcl" 3tcl 0\&.66 "SpiceGenTcl" "Tcl SpiceGenTcl package"
+.TH "SpiceGenTcl" 3tcl 0\&.70 "SpiceGenTcl" "Tcl SpiceGenTcl package"
 .SH NAME
 SpiceGenTcl - Commands in namespace SpiceGenTcl
 .SH SYNOPSIS
@@ -137,9 +137,9 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT genSPICEString\fP
 .br
-\fBModel create OBJNAME\fP \fIname type params\fP
+\fBModel create OBJNAME\fP \fI?args?\fP
 .br
-\fBModel new\fP \fIname type params\fP
+\fBModel new\fP \fI?args?\fP
 .br
 \fBOBJECT addParam\fP \fIparamName value ?-name value? ?-eq|-poseq|-posnocheck|-pos|-nocheck?\fP
 .br
@@ -339,9 +339,7 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBTrace new\fP \fIname type len axis ?numType?\fP
 .br
-\fBOBJECT allow\fP \fInames keysList\fP
-.br
-\fBOBJECT argsPreprocess\fP \fIparamsNames ?args?\fP
+\fBOBJECT argsPreprocess\fP \fIswitchesNames paramsNames suppHelpElems ?args?\fP
 .br
 \fBOBJECT buildArgStr\fP \fIparamsNames\fP
 .br
@@ -439,9 +437,6 @@ Constructor for the class\&.
 .TP
 addParam
 Adds new parameter to device, and throws error on dublicated names\&.
-.TP
-allow
-See \fIUtility\&.allow\fP
 .TP
 argsPreprocess
 See \fIUtility\&.argsPreprocess\fP
@@ -831,9 +826,6 @@ Constructor for the class\&.
 add
 Adds elements object to Circuit Elements dictionary\&.
 .TP
-allow
-See \fIUtility\&.allow\fP
-.TP
 argsPreprocess
 See \fIUtility\&.argsPreprocess\fP
 .TP
@@ -1204,9 +1196,6 @@ Constructor for the class\&.
 addParam
 Adds new parameter to device, and throws error on dublicated names\&.
 .TP
-allow
-See \fIUtility\&.allow\fP
-.TP
 argsPreprocess
 See \fIUtility\&.argsPreprocess\fP
 .TP
@@ -1549,9 +1538,6 @@ Constructor for the class\&.
 addNets
 Not documented\&.
 .TP
-allow
-See \fIUtility\&.allow\fP
-.TP
 argsPreprocess
 See \fIUtility\&.argsPreprocess\fP
 .TP
@@ -1670,9 +1656,6 @@ Constructor for the class\&.
 .TP
 addParam
 Adds new Parameter object to the list Params\&.
-.TP
-allow
-See \fIUtility\&.allow\fP
 .TP
 argsPreprocess
 See \fIUtility\&.argsPreprocess\fP
@@ -1972,9 +1955,6 @@ Constructor for the class\&.
 addParam
 Adds new parameter to device, and throws error on dublicated names\&.
 .TP
-allow
-See \fIUtility\&.allow\fP
-.TP
 argsPreprocess
 See \fIUtility\&.argsPreprocess\fP
 .TP
@@ -2029,26 +2009,23 @@ Writable: -name, -type
 .RE
 .PP
 Creates object of class Model\&.
-.RS 4n\fBModel create OBJNAME\fP \fIname type params\fP
+.RS 4n\fBModel create OBJNAME\fP \fI?args?\fP
 .br
-\fBModel new\fP \fIname type params\fP
+\fBModel new\fP \fI?args?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
+instParams
+List of instance parameters in form {{name value ?-pos|eq|poseq?} {name value ?-pos|eq|poseq?} {name value ?-pos|eq|poseq?} \&.\&.\&.}
+.TP
 name
 Name of the model\&.
 .TP
 type
 Type of model, for example, diode, npn, etc\&.
-.TP
-params
-Not documented\&.
-.TP
-instParams
-List of instance parameters in form {{name value ?-pos|eq|poseq?} {name value ?-pos|eq|poseq?} {name value ?-pos|eq|poseq?} \&.\&.\&.}
 .RE
 .PP
 \fBDescription\fR
@@ -2163,9 +2140,6 @@ Constructor for the class\&.
 .TP
 add
 Adds elements objects to Elements dictionary\&.
-.TP
-allow
-See \fIUtility\&.allow\fP
 .TP
 argsPreprocess
 See \fIUtility\&.argsPreprocess\fP
@@ -2323,9 +2297,6 @@ Name of element\&.
 addParam
 See \fIIc\&.addParam\fP
 .TP
-allow
-See \fIUtility\&.allow\fP
-.TP
 argsPreprocess
 See \fIUtility\&.argsPreprocess\fP
 .TP
@@ -2396,9 +2367,6 @@ Constructor for the class\&.
 .TP
 addParam
 Creates new parameter object and add it to the list Params\&.
-.TP
-allow
-See \fIUtility\&.allow\fP
 .TP
 argsPreprocess
 See \fIUtility\&.argsPreprocess\fP
@@ -3250,9 +3218,6 @@ Constructor for the class\&.
 addParam
 Adds new Parameter object to the list Params\&.
 .TP
-allow
-See \fIUtility\&.allow\fP
-.TP
 argsPreprocess
 See \fIUtility\&.argsPreprocess\fP
 .TP
@@ -3610,9 +3575,6 @@ Makes pin floating by setting nodename with empty string\&.
 constructor
 Constructor for the class\&.
 .TP
-allow
-See \fIUtility\&.allow\fP
-.TP
 argsPreprocess
 See \fIUtility\&.argsPreprocess\fP
 .TP
@@ -3912,9 +3874,6 @@ Constructor for the class\&.
 addVector
 Adds new ParameterVector object to the list Vectors\&.
 .TP
-allow
-See \fIUtility\&.allow\fP
-.TP
 argsPreprocess
 See \fIUtility\&.argsPreprocess\fP
 .TP
@@ -4155,9 +4114,6 @@ Add element object reference to Netlist, it extends add method to add check of e
 .TP
 addParam
 Adds new parameter to subcircuit, and throws error on dublicated names\&.
-.TP
-allow
-See \fIUtility\&.allow\fP
 .TP
 argsPreprocess
 See \fIUtility\&.argsPreprocess\fP
@@ -4491,9 +4447,6 @@ Numerical type of trace\&. Optional, default real\&.
 \fBMethod summary\fR
 .RS 4n
 .TP
-allow
-Not documented\&.
-.TP
 argsPreprocess
 Calls argparse and constructs list for passing to Device constructor\&.
 .TP
@@ -4515,36 +4468,25 @@ Checks if list contains duplicates and return value of first duplicate\&.
 \fIDevice\fP, \fIModel\fP, \fIOptions\fP, \fIParamStatement\fP, \fISave\fP, \fIIc\fP, \fINodeset\fP, \fIGlobal\fP, \fINetlist\fP, \fIAnalysis\fP, \fIRawFile\fP, \fI::SpiceGenTcl::Common::Sources::pulse\fP, \fI::SpiceGenTcl::Common::Sources::sin\fP, \fI::SpiceGenTcl::Common::Sources::exp\fP, \fI::SpiceGenTcl::Common::Sources::sffm\fP, \fI::SpiceGenTcl::Common::Analyses::Dc\fP, \fI::SpiceGenTcl::Common::Analyses::Ac\fP, \fI::SpiceGenTcl::Common::Analyses::Tran\fP, \fI::SpiceGenTcl::Common::Analyses::Op\fP, \fI::SpiceGenTcl::Ngspice::Sources::pulse\fP, \fI::SpiceGenTcl::Ngspice::Sources::sffm\fP, \fI::SpiceGenTcl::Ngspice::Sources::am\fP, \fI::SpiceGenTcl::Ngspice::Analyses::Sp\fP, \fI::SpiceGenTcl::Ngspice::Analyses::SensAc\fP, \fI::SpiceGenTcl::Ngspice::Analyses::SensDc\fP, \fI::SpiceGenTcl::Ngspice::Misc::OptionsNgspice\fP, \fI::SpiceGenTcl::Xyce::Analyses::Sens\fP, \fI::SpiceGenTcl::Ltspice::Sources::pulse\fP, \fI::SpiceGenTcl::Ltspice::Sources::sin\fP, \fI::SpiceGenTcl::Ltspice::Sources::exp\fP, \fI::SpiceGenTcl::Ltspice::Sources::sffm\fP
 .PP
 .RS -4n
-\fBallow\fR (::SpiceGenTcl::Utility)
-.RE
-.RS 4n\fBOBJECT allow\fP \fInames keysList\fP
-.br
-.RE
-.PP
-\fBParameters\fR
-.RS 4n
-.TP
-names
-Not documented\&.
-.TP
-keysList
-Not documented\&.
-.RE
-.PP
-.RS -4n
 \fBargsPreprocess\fR (::SpiceGenTcl::Utility)
 .RE
 .PP
 Calls argparse and constructs list for passing to Device constructor\&.
-.RS 4n\fBOBJECT argsPreprocess\fP \fIparamsNames ?args?\fP
+.RS 4n\fBOBJECT argsPreprocess\fP \fIswitchesNames paramsNames suppHelpElems ?args?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
+switchesNames
+List of switches names, define alias for switch name by using two element list {switchName aliasName}
+.TP
 paramsNames
-List of parameter names, define alias for parameter name by using two element list {paramName aliasName}
+List of parameters in order it should be parsed by argparse\&.
+.TP
+suppHelpElems
+Not documented\&.
 .TP
 args
 Argument list with key names and it's values\&.

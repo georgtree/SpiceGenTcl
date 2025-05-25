@@ -22,7 +22,7 @@ namespace eval ::SpiceGenTcl::Ltspice::BasicDevices {
 
     oo::class create VSwitchModel {
         superclass ::SpiceGenTcl::Model
-        constructor {name args} {
+        constructor {args} {
             # Creates object of class `VSwitchModel` that describes voltage switch model.
             #  name - name of the model
             #  args - keyword instance parameters
@@ -31,7 +31,7 @@ namespace eval ::SpiceGenTcl::Ltspice::BasicDevices {
             # ::SpiceGenTcl::Ltspice::BasicDevices::VSwitchModel new swmod -vt 1 -vh 0.5 -ron 1 -roff 1e6
             # ```
             # Synopsis: name ?-option value ...?
-            next $name sw [my argsPreprocess {vt vh ron roff lser vser ilimit} {*}$args]
+            next {*}[my argsPreprocess {vt vh ron roff lser vser ilimit} {name type} type {*}[linsert $args 1 sw]]
         }
     }
 
@@ -39,7 +39,7 @@ namespace eval ::SpiceGenTcl::Ltspice::BasicDevices {
 
     oo::class create CSwitchModel {
         superclass ::SpiceGenTcl::Model
-        constructor {name args} {
+        constructor {args} {
             # Creates object of class `CSwitchModel` that describes current switch model.
             #  name - name of the model
             #  args - keyword instance parameters
@@ -48,7 +48,7 @@ namespace eval ::SpiceGenTcl::Ltspice::BasicDevices {
             # ::SpiceGenTcl::Ltspice::BasicDevices::CSwitchModel new cswmod -it 1 -ih 0.5 -ron 1 -roff 1e6
             # ```
             # Synopsis: name ?-option value ...?
-            next $name csw [my argsPreprocess {it ih ron roff} {*}$args]
+            next {*}[my argsPreprocess {it ih ron roff} {name type} type {*}[linsert $args 1 csw]]
         }
     }
 }
@@ -61,7 +61,7 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
 
     oo::class create DiodeModel {
         superclass ::SpiceGenTcl::Model
-        constructor {name args} {
+        constructor {args} {
             # Creates object of class `DiodeModel` that describes semiconductor diode model.
             #  name - name of the model
             #  args - keyword model parameters, for details please see LTspice manual.
@@ -72,7 +72,7 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
             # Synopsis: name ?-option value ...?
             set paramsNames {is rs n tt cjo vj m eg xti kf af fc bv nbv ibv ibvl nbvl tnom isr nr ikf tikf trs1 trs2\
                                      tbv1 tbv2 perim isw ns rsw cjsw vjsw mjsw fcs vp}
-            next $name d [my argsPreprocess $paramsNames {*}$args]
+            next {*}[my argsPreprocess $paramsNames {name type} type {*}[linsert $args 1 d]]
         }
     }
 
@@ -80,7 +80,7 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
 
     oo::class create DiodeIdealModel {
         superclass ::SpiceGenTcl::Model
-        constructor {name args} {
+        constructor {args} {
             # Creates object of class `DiodeIdealModel` that describes semiconductor diode model.
             #  name - name of the model
             #  args - keyword model parameters, for details please see LTspice manual.
@@ -90,7 +90,7 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
             # ```
             # Synopsis: name ?-option value ...?
             set paramsNames {ron roff vfwd vrev rrev ilimit revilimit epsilon revepsilon}
-            next $name d [my argsPreprocess $paramsNames {*}$args]
+            next {*}[my argsPreprocess $paramsNames {name type} type {*}[linsert $args 1 d]]
         }
     }
 
@@ -98,7 +98,7 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
 
     oo::class create BjtGPModel {
         superclass ::SpiceGenTcl::Model
-        constructor {name type args} {
+        constructor {args} {
             # Creates object of class `BjtGPModel` that describes Gummel-Poon model of semiconductor bipolar transistor.
             #  name - name of the model
             #  type - npn or pnp
@@ -113,8 +113,7 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
                                      subs bvcbo nbvcbo bvbe ibvbe nbvbe tnom cn d gamma qco quasimod rco vg vo tre1 tre2\
                                      trb1 trb2 trc1 trc2 trm1 trm2 iss ns tvaf1 tvaf2 tvar1 tvar2 tikf1 tikf2 trbm1\
                                      trbm2 tbvcbo1 tbvcbo2}
-            set params [my argsPreprocess $paramsNames {*}$args]
-            next $name $type $params
+            next {*}[my argsPreprocess $paramsNames {name type} {} {*}$args]
         }
     }
 
@@ -122,7 +121,7 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
 
     oo::class create JfetModel {
         superclass ::SpiceGenTcl::Model
-        constructor {name type args} {
+        constructor {args} {
             # Creates object of class `JfetModel` that describes JFET level 1 model with Parker Skellern modification.
             #  name - name of the model
             #  type - njf or pjf
@@ -134,7 +133,7 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
             # Synopsis: name type ?-option value ...?
             set paramsNames {vto beta lambda rd rs cgs cgd pb m is b kf af nlev gdsnoi fc tnom vtotc n isr nr alpha vk\
                                      xti mfg}
-            next $name $type [my argsPreprocess $paramsNames {*}$args]
+            next {*}[my argsPreprocess $paramsNames {name type} {} {*}$args]
         }
     }
 
@@ -142,7 +141,7 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
 
     oo::class create MesfetModel {
         superclass ::SpiceGenTcl::Model
-        constructor {name type args} {
+        constructor {args} {
             # Creates object of class `MesfetModel` that describes MESFET model by Statz e.a..
             #  name - name of the model
             #  type - nmf or pmf
@@ -152,8 +151,8 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
             # ::SpiceGenTcl::Ltspice::SemiconductorDevices::Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4 -vbi 1.2
             # ```
             # Synopsis: name type ?-option value ...?
-            set params [my argsPreprocess {vto beta b alpha lambda rd rs cgs cgd pb kf af fc is} {*}$args]
-            next $name $type $params
+            set paramsNames {vto beta b alpha lambda rd rs cgs cgd pb kf af fc is}
+            next {*}[my argsPreprocess $paramsNames {name type} {} {*}$args]
         }
     }
 }

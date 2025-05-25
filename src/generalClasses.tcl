@@ -107,6 +107,16 @@ namespace eval ::SpiceGenTcl {
             }
             return
         }
+        method ParamsProcessM {paramsOrder arguments params} {
+            upvar $params paramsLoc
+            foreach param $paramsOrder {
+                if {[dexist $arguments $param]} {
+                    dict append argsOrdered $param [dget $arguments $param]
+                }
+            }
+            set paramsLoc [dvalues $argsOrdered]
+            return
+        }
         method NameProcess {arguments object} {
             upvar name name
             ##nagelfar ignore
@@ -141,28 +151,54 @@ namespace eval ::SpiceGenTcl {
             set paramDefStr [join $paramDefList \n]
             return $paramDefStr
         }
-        method argsPreprocess {paramsNames args} {
+        method argsPreprocess {switchesNames paramsNames suppHelpElems args} {
             # Calls argparse and constructs list for passing to Device constructor.
-            #  paramsNames - list of parameter names, define alias for parameter name by
-            #  using two element list {paramName aliasName}
+            #  switchesNames - list of switches names, define alias for switch name by
+            #  using two element list {switchName aliasName}
             #  args - argument list with key names and it's values
+            #  paramsNames - list of parameters in order it should be parsed by argparse
             # Returns: list of parameters formatted for Device/Model constructor
-            foreach paramName $paramsNames {
-                if {[llength $paramName]>1} {
-                    lappend paramDefList -[join $paramName |]=
+            foreach switchName $switchesNames {
+                if {[llength $switchName]>1} {
+                    if {[@ $switchName 0] ni $suppHelpElems} {
+                        lappend paramDefList -[join $switchName |]=
+                    } else {
+                        lappend paramDefList  "\{-[join $switchName |]= -hsuppress\}"
+                    }
                 } else {
-                    lappend paramDefList -${paramName}=
+                    if {$switchName ni $suppHelpElems} {
+                        lappend paramDefList -${switchName}=
+                    } else {
+                        lappend paramDefList "\{-${switchName}= -hsuppress\}"
+                    }
+                }
+            }
+            if {$paramsNames ne {}} {
+                foreach paramName $paramsNames {
+                    if {$paramName ni $suppHelpElems} {
+                        lappend paramDefList $paramName
+                    } else {
+                        lappend paramDefList "\{$paramName -hsuppress\}"
+                    }
                 }
             }
             set paramDefStr [join $paramDefList \n]
-            set arguments [argparse -inline -help {} "
+            set arguments [argparse -helplevel 3 -inline -help {} -pfirst "
                 $paramDefStr
-            "]
+            " $args]
+            set switches {}
             set params {}
-            dict for {paramName value} $arguments {
-                lappend params [list $paramName {*}$value]
+            dict for {name value} $arguments {
+                if {$name ni $paramsNames} {
+                    lappend switches [list $name {*}$value]
+                }
             }
-            return $params
+            foreach param $paramsNames {
+                if {[dexist $arguments $param]} {
+                    dict append argsOrdered $param [dget $arguments $param]
+                }
+            }
+            return [list {*}[dvalues $argsOrdered] $switches]
         }
         method duplListCheck {list} {
             # Checks if list contains duplicates.
@@ -825,16 +861,21 @@ namespace eval ::SpiceGenTcl {
         variable type
         # list of model parameters objects
         variable Params
-        constructor {name type params} {
+        constructor {args} {
             # Creates object of class `Model`.
             #  name - name of the model
             #  type - type of model, for example, diode, npn, etc
             #  instParams - list of instance parameters in form `{{name value ?-pos|eq|poseq?}
             #   {name value ?-pos|eq|poseq?} {name value ?-pos|eq|poseq?} ...}`
             # Class represents model card in SPICE netlist.
+            argparse -help {} -pfirst {
+                name
+                type
+                {params -optional}
+            }
             my configure -name $name -type $type
             # create Params objects
-            if {$params ne {}} {
+            if {[info exists params]} {
                 foreach param $params {
                     my addParam {*}$param
                 }
@@ -2299,9 +2340,9 @@ namespace eval ::SpiceGenTcl {
             my configure -topnetlist [::SpiceGenTcl::Netlist new [file tail $filepath]]
             set ModelTemplate {oo::class create @type@ {
                 superclass ::SpiceGenTcl::Model
-                constructor {name args} {
+                constructor {args} {
                     set paramsNames [list @paramsList@]
-                    next $name @type@ [my argsPreprocess $paramsNames {*}$args]
+                    next {*}[my argsPreprocess $paramsNames {name type} @hsuppress@ {*}$args]
                 }
             }}
             set SubcircuitTemplate {oo::class create @classname@ {

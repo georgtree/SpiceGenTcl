@@ -125,33 +125,38 @@ namespace eval FAQ {
         - value of resistance: '-r 10'
         Parameters 'tc1' and 'tc2' are provided here as optional arguments.
         
-        As a last resort, you can look directly at the source code in the documentation. Simply open the `Show source`
-        option, and you'll find an arguments description within the `constructor` method:
+        In recent versions the `-help` switch is availible for most elements and models, so to get information about
+        possible parameters, call construtor with switch `-help` in interactive tclsh terminal:
         ```tcl
-        set arguments [argparse -inline {
-            -r=
-            {-beh -forbid {model} -require {r}}
-            {-model= -forbid {beh}}
-            {-ac= -forbid {model beh}}
-            {-m= -forbid {beh}}
-            {-scale= -forbid {beh}}
-            {-temp= -forbid {beh dtemp}}
-            {-dtemp= -forbid {beh temp}}
-            {-tc1= -forbid {model}}
-            {-tc2= -forbid {model}}
-            {-noisy= -enum {0 1}}
-            {-l= -require {model}}
-            {-w= -require {model}}
-        }]
+        R new -help
         ```
-        
-        For models the parameters are defined in this list:
+
+        Result is:
+        ```text
+        Creates object of class `Resistor` that describes resistor. Can accepts
+        unambiguous prefixes instead of switches names. Allows switches to appear after
+        parameters.
+            Switches:
+                -r - Expects argument. Resistance value or equation.
+                -beh - . Requires r. Forbids model.
+                -model - Expects argument. . Forbids beh.
+                -ac - Expects argument. AC resistance value. Forbids model or beh.
+                -m - Expects argument. Multiplier value. Forbids beh.
+                -scale - Expects argument. Scaling factor. Forbids beh.
+                -temp - Expects argument. Device temperature. Forbids beh or dtemp.
+                -dtemp - Expects argument. Temperature offset. Forbids beh or temp.
+                -tc1 - Expects argument. Linear thermal coefficient. Forbids model.
+                -tc2 - Expects argument. Quadratic thermal coefficient. Forbids model.
+                -noisy - Expects argument. Selects noise behaviour. Value must be one
+                    of: 0 or 1.
+                -l - Expects argument. Length of semiconductor resistor. Requires model.
+                -w - Expects argument. Width of semiconductor resistor. Requires model.
+            Parameters:
+                name - Name of the device without first-letter designator.
+                npNode - Name of node connected to positive pin.
+                nmNode - Name of node connected to negative pin.
         ```
-        set paramsNames [list tc1 tc2 rsh defw narrow short tnom kf af wf lf ef {r res}]
-        ```
-        
-        The same applies to all elements (devices and models) in the package.
-                
+
         ## How to get raw data after simulation?
         
         After a successful simulation, an object of the [::SpiceGenTcl::RawFile] class is created and attached to the

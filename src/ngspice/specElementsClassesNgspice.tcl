@@ -92,10 +92,10 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # Synopsis: name npNode nmNode -beh -r value ?-tc1 value? ?-tc2 value?
             # Synopsis: name npNode nmNode -model value ?-r value? ?-l value? ?-w value? ?-temp value|-dtemp value?
             #   ?-m value? ?-noisy 0|1? ?-ac value? ?scale value?
-            set arguments [argparse -inline -mixed -help {Creates object of class `Resistor` that describes resistor} {
+            set arguments [argparse -inline -pfirst -help {Creates object of class `Resistor` that describes resistor} {
                 {-r= -help {Resistance value or equation}}
-                {-beh -forbid {model} -require {r} -help {}}
-                {-model= -forbid {beh} -help {}}
+                {-beh -forbid {model} -require {r} -help {Selects behavioural type of resistor}}
+                {-model= -forbid {beh} -help {Model of the resistor}}
                 {-ac= -forbid {model beh} -help {AC resistance value}}
                 {-m= -forbid {beh} -help {Multiplier value,}}
                 {-scale= -forbid {beh} -help {Scaling factor}}
@@ -209,8 +209,8 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             set arguments [argparse -inline -pfirst -help {Creates object of class 'Capacitor' that describes capacitor} {
                 {-c= -forbid {q} -help {Capacitance value or equation}}
                 {-q= -require {beh} -forbid {c model} -help {Charge equation}}
-                {-beh -forbid {model} -help {Selects behavioural type of resistor}}
-                {-model= -forbid {beh} -help {Model of the resistor,}}
+                {-beh -forbid {model} -help {Selects behavioural type of capacitor}}
+                {-model= -forbid {beh} -help {Model of the capacitor}}
                 {-m= -forbid {beh} -help {Multiplier value}}
                 {-scale= -forbid {beh} -help {Scaling factor}}
                 {-temp= -forbid {beh dtemp} -help {Device temperature}}

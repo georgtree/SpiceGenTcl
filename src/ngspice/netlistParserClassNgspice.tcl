@@ -190,53 +190,60 @@ namespace eval ::SpiceGenTcl::Ngspice {
             }
             set paramsList [my ParseParams $lineList 2]
             if {$type ni $SupModelsTypes} {
+                set paramsList [linsert $paramsList 0 $name [string totitle $type]Model]
                 set modelClassName [string totitle $type]Model
                 puts "Model type '${type}' is not in the list of supported types, custom type '${modelClassName}' was\
                         created"
                 set paramString [string map {- {}} [join [dkeys $paramsList]]]
-                return [list [string map [list @type@ $modelClassName @paramsList@ $paramString] $ModelTemplate]\
-                                [list $modelClassName new $name {*}$paramsList]]
+                return [list [string map [list @type@ $modelClassName @paramsList@ $paramString @hsuppress@ type] $ModelTemplate]\
+                                [list $modelClassName new {*}$paramsList]]
             } else {
                 switch $type {
                     r {
-                        return [list ${NamespacePath}::BasicDevices::RModel new $name {*}$paramsList]
+                        set paramsList [linsert $paramsList 0 $name]
+                        return [list ${NamespacePath}::BasicDevices::RModel new {*}$paramsList]
                     }
                     c {
-                        return [list ${NamespacePath}::BasicDevices::CModel new $name {*}$paramsList]
+                        set paramsList [linsert $paramsList 0 $name]
+                        return [list ${NamespacePath}::BasicDevices::CModel new {*}$paramsList]
                     }
                     l {
-                        return [list ${NamespacePath}::BasicDevices::LModel new $name {*}$paramsList]
+                        set paramsList [linsert $paramsList 0 $name]
+                        return [list ${NamespacePath}::BasicDevices::LModel new {*}$paramsList]
                     }
                     sw {
-                        return [list ${NamespacePath}::BasicDevices::VSwitchModel new $name {*}$paramsList]
+                        set paramsList [linsert $paramsList 0 $name]
+                        return [list ${NamespacePath}::BasicDevices::VSwitchModel new {*}$paramsList]
                     }
                     csw {
-                        return [list ${NamespacePath}::BasicDevices::CSwitchModel new $name {*}$paramsList]
+                        set paramsList [linsert $paramsList 0 $name]
+                        return [list ${NamespacePath}::BasicDevices::CSwitchModel new {*}$paramsList]
                     }
                     d {
-                        return [list ${NamespacePath}::SemiconductorDevices::DiodeModel new $name {*}$paramsList]
+                        set paramsList [linsert $paramsList 0 $name]
+                        return [list ${NamespacePath}::SemiconductorDevices::DiodeModel new {*}$paramsList]
                     }
                     npn -
                     pnp {
                         if {{-level} in [dkeys $paramsList]} {
                             set level [dget $paramsList -level]
                             if {$level==1} {
-                                set paramsList [dict remove $paramsList -level]
-                                return [list ${NamespacePath}::SemiconductorDevices::BjtGPModel new $name\
-                                                         $type {*}$paramsList]
+                                set paramsList [linsert [dict remove $paramsList -level] 0 $name $type]
+                                return [list ${NamespacePath}::SemiconductorDevices::BjtGPModel new {*}$paramsList]
                             } elseif {$level in {4 8}} {
                                 puts "Level '${level}' of type '${type}' model '${name}' is not in the list of\
                                         SpiceGenTcl supported levels, custom level model was created"
+                                set paramsList [linsert $paramsList 0 $name [string totitle $type]Model]
                                 set paramString [string map {- {}} [join [dkeys $paramsList]]]
                                 set modelClassName [string totitle $type]Model
-                                return [list [string map [list @type@ $modelClassName @paramsList@ $paramString] $ModelTemplate]\
-                                                [list $modelClassName new $name {*}$paramsList]]
+                                return [list [string map [list @type@ $modelClassName @paramsList@ $paramString @hsuppress@ type] $ModelTemplate]\
+                                                [list $modelClassName new {*}$paramsList]]
                             } else {
                                 puts "Level '${level}' of BJT model in line '${line}' is not supported, skip that line"
                             }
                         } else {
-                            return [list ${NamespacePath}::SemiconductorDevices::BjtGPModel new $name $type\
-                                            {*}$paramsList]
+                            set paramsList [linsert $paramsList 0 $name $type]
+                            return [list ${NamespacePath}::SemiconductorDevices::BjtGPModel new {*}$paramsList]
                         }
                     }
                     njf -
@@ -244,19 +251,17 @@ namespace eval ::SpiceGenTcl::Ngspice {
                         if {{-level} in [dkeys $paramsList]} {
                             set level [dget $paramsList -level]
                             if {$level==1} {
-                                set paramsList [dict remove $paramsList -level]
-                                return [list ${NamespacePath}::SemiconductorDevices::Jfet1Model new $name $type\
-                                                {*}$paramsList]
+                                set paramsList [linsert [dict remove $paramsList -level] 0 $name $type]
+                                return [list ${NamespacePath}::SemiconductorDevices::Jfet1Model new {*}$paramsList]
                             } elseif {$level==2} {
-                                set paramsList [dict remove $paramsList -level]
-                                return [list ${NamespacePath}::SemiconductorDevices::Jfet2Model new $name $type\
-                                                {*}$paramsList]
+                                set paramsList [linsert [dict remove $paramsList -level] 0 $name $type]
+                                return [list ${NamespacePath}::SemiconductorDevices::Jfet2Model new {*}$paramsList]
                             } else {
                                 puts "Level '${level}' of JFET model in line '${line}' is not supported, skip that line"
                             }
                         } else {
-                            return [list ${NamespacePath}::SemiconductorDevices::Jfet1Model new $name $type\
-                                            {*}$paramsList]
+                            set paramsList [linsert $paramsList 0 $name $type]
+                            return [list ${NamespacePath}::SemiconductorDevices::Jfet1Model new {*}$paramsList]
                         }
                     }
                     nmf -
@@ -264,15 +269,14 @@ namespace eval ::SpiceGenTcl::Ngspice {
                         if {{-level} in [dkeys $paramsList]} {
                             set level [dget $paramsList -level]
                             if {$level==1} {
-                                set paramsList [dict remove $paramsList -level]
-                                return [list ${NamespacePath}::SemiconductorDevices::Mesfet1Model new $name $type\
-                                                {*}$paramsList]
+                                set paramsList [linsert [dict remove $paramsList -level] 0 $name $type]
+                                return [list ${NamespacePath}::SemiconductorDevices::Mesfet1Model new {*}$paramsList]
                             } else {
                                 puts "Level '${level}' of MESFET in line '${line}' is not supported, skip that line"
                             }
                         } else {
-                            return [list ${NamespacePath}::SemiconductorDevices::Mesfet1Model new $name $type\
-                                            {*}$paramsList]
+                            set paramsList [linsert $paramsList 0 $name $type]
+                            return [list ${NamespacePath}::SemiconductorDevices::Mesfet1Model new {*}$paramsList]
                         }
                     }
                 }

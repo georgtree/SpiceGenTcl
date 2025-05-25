@@ -6,7 +6,7 @@
 <body>
 <div class='ruff-layout'>
 <header class='ruff-layout-header ruff-hd'>
-<a style='text-decoration:none;' href='index.html'>Tcl SpiceGenTcl package (v0.66)</a>
+<a style='text-decoration:none;' href='index.html'>Tcl SpiceGenTcl package (v0.70)</a>
 
 
             <div id="ruffButtonBar">
@@ -110,32 +110,38 @@
 <li>nets connected to pins: 'net1' and 'net2'</li>
 <li>value of resistance: '-r 10' Parameters 'tc1' and 'tc2' are provided here as optional arguments.</li>
 </ul>
-<p class='ruff'>As a last resort, you can look directly at the source code in the documentation. Simply open the <code>Show source</code> option, and you'll find an arguments description within the <code><b><font color=#fe6efe>constructor</font></b></code> method:</p>
+<p class='ruff'>In recent versions the <code><font color=#b9b96e>-help</font></code> switch is availible for most elements and models, so to get information about possible parameters, call construtor with switch <code><font color=#b9b96e>-help</font></code> in interactive tclsh terminal:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> {
-    <font color=#b9b96e>-r</font>=
-    {<font color=#b9b96e>-beh</font> <font color=#b9b96e>-forbid</font> {model} <font color=#b9b96e>-require</font> {r}}
-    {<font color=#b9b96e>-model</font>= <font color=#b9b96e>-forbid</font> {beh}}
-    {<font color=#b9b96e>-ac</font>= <font color=#b9b96e>-forbid</font> {model beh}}
-    {<font color=#b9b96e>-m</font>= <font color=#b9b96e>-forbid</font> {beh}}
-    {<font color=#b9b96e>-scale</font>= <font color=#b9b96e>-forbid</font> {beh}}
-    {<font color=#b9b96e>-temp</font>= <font color=#b9b96e>-forbid</font> {beh dtemp}}
-    {<font color=#b9b96e>-dtemp</font>= <font color=#b9b96e>-forbid</font> {beh temp}}
-    {<font color=#b9b96e>-tc1</font>= <font color=#b9b96e>-forbid</font> {model}}
-    {<font color=#b9b96e>-tc2</font>= <font color=#b9b96e>-forbid</font> {model}}
-    {<font color=#b9b96e>-noisy</font>= <font color=#b9b96e>-enum</font> {0 1}}
-    {<font color=#b9b96e>-l</font>= <font color=#b9b96e>-require</font> {model}}
-    {<font color=#b9b96e>-w</font>= <font color=#b9b96e>-require</font> {model}}
-}]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>R</font></b> new <font color=#b9b96e>-help</font>
 </pre>
 
-</figure><p class='ruff'>For models the parameters are defined in this list:</p>
+</figure><p class='ruff'>Result is:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>set</font></b> paramsNames [<b><font color=#ffa500>list</font></b> tc1 tc2 rsh defw narrow short tnom kf af wf lf ef {r res}]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>Creates object of class `Resistor` that describes resistor. Can accepts
+unambiguous prefixes instead of switches names. Allows switches to appear after
+parameters.
+    Switches:
+        <font color=#b9b96e>-r</font> - Expects argument. Resistance value or equation.
+        <font color=#b9b96e>-beh</font> - . Requires r. Forbids model.
+        <font color=#b9b96e>-model</font> - Expects argument. . Forbids beh.
+        <font color=#b9b96e>-ac</font> - Expects argument. AC resistance value. Forbids model or beh.
+        <font color=#b9b96e>-m</font> - Expects argument. Multiplier value. Forbids beh.
+        <font color=#b9b96e>-scale</font> - Expects argument. Scaling factor. Forbids beh.
+        <font color=#b9b96e>-temp</font> - Expects argument. Device temperature. Forbids beh or dtemp.
+        <font color=#b9b96e>-dtemp</font> - Expects argument. Temperature offset. Forbids beh or temp.
+        <font color=#b9b96e>-tc1</font> - Expects argument. Linear thermal coefficient. Forbids model.
+        <font color=#b9b96e>-tc2</font> - Expects argument. Quadratic thermal coefficient. Forbids model.
+        <font color=#b9b96e>-noisy</font> - Expects argument. Selects noise behaviour. Value must be one
+            of: 0 or 1.
+        <font color=#b9b96e>-l</font> - Expects argument. Length of semiconductor resistor. Requires model.
+        <font color=#b9b96e>-w</font> - Expects argument. Width of semiconductor resistor. Requires model.
+    Parameters:
+        name - Name of the device without first-letter designator.
+        npNode - Name of node connected to positive pin.
+        nmNode - Name of node connected to negative pin.
 </pre>
 
-</figure><p class='ruff'>The same applies to all elements (devices and models) in the package.</p>
-<h2 class='ruff'><a name='::FAQ-How to get raw data after simulation?'></a>How to get raw data after simulation?<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
+</figure><h2 class='ruff'><a name='::FAQ-How to get raw data after simulation?'></a>How to get raw data after simulation?<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
 <p class='ruff'>After a successful simulation, an object of the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile" title="::SpiceGenTcl::RawFile" class='ruff_cmd'>::SpiceGenTcl::RawFile</a> class is created and attached to the top-level <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> object. To retrieve the result vectors, simply call the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::getDataDict" title="::SpiceGenTcl::Circuit::getDataDict" class='ruff_cmd'>::SpiceGenTcl::Circuit::getDataDict</a> method on the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> object. This method returns the result vectors as a dictionary, with vector names as keys and the vectors themselves as values. You can then access these vectors using the <code><b><font color=#ffa500>dget</font></b></code> command.</p>
 <p class='ruff'>Example:</p>
