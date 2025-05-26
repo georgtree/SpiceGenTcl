@@ -25,11 +25,9 @@ namespace eval ::SpiceGenTcl {
     }
 }
 
-
 ###  Basic devices 
 
 namespace eval ::SpiceGenTcl::Common::BasicDevices {
-
     
 ####  Resistor class 
     oo::class create Resistor {

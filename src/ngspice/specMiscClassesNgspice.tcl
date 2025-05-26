@@ -22,7 +22,6 @@ namespace eval ::SpiceGenTcl {
 
 namespace eval ::SpiceGenTcl::Ngspice::Misc {
 
-
 ###  OptionsNgspice class
     oo::class create OptionsNgspice {
         superclass ::SpiceGenTcl::Options
@@ -44,7 +43,8 @@ namespace eval ::SpiceGenTcl::Ngspice::Misc {
                                       vntol rseries cshunt chgtol convstep convabsstep itl3 itl4 itl5 itl6 maxevtiter\
                                       maxopalter maxord method noopalter ramptime srcsteps trtol xmu defad defas defl\
                                       defw scale}
-            set arguments [argparse -inline "
+            set arguments [argparse -inline -help {Creates object of class `OptionsNgspice` that describes Ngspice\
+                                                           simulation options} "
                 [my BuildArgStr $keyValParams]
                 [my BuildSwArgStr $swParams]
             "]

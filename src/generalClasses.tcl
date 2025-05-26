@@ -73,7 +73,6 @@ namespace eval ::SpiceGenTcl {
     }
 
 ###  SPICEElement class definition
-
     oo::configurable create SPICEElement {
         self mixin -append oo::abstract
         # Abstract class of all elements of SPICE netlist
@@ -88,7 +87,6 @@ namespace eval ::SpiceGenTcl {
     }
 
 ###  Utility class definition
-
     oo::class create Utility {
         self mixin -append oo::abstract
         method ParamsProcess {paramsOrder arguments params} {
@@ -255,10 +253,10 @@ namespace eval ::SpiceGenTcl {
             return $name
         }
         variable name nodename
-        constructor {name nodeName} {
+        constructor {args} {
             # Creates object of class `Pin` with name and connected node
             #  name - name of the pin
-            #  nodeName - name of the node that connected to pin
+            #  node - name of the node that connected to pin
             # Class models electrical pin of device/subcircuit,
             # it has name and name of the node connected to it.
             # It has general interface method `genSPICEString` that returns
@@ -268,7 +266,12 @@ namespace eval ::SpiceGenTcl {
             # if is contains empty string it is floating.
             # Floating pin can't be netlisted, so it throws error when try to
             # do so. Set pin name empty by special method `unsetNodeName`.
-            my configure -name $name -nodename $nodeName
+            # Synopsis: name node
+            argparse -help {Creates object of class 'Pin' with name and connected node} {
+                {name -help {Name of the pin}}
+                {node -help {Name of the node that connected to pin}}
+            }
+            my configure -name $name -nodename $node
         }
         method unsetNodeName {} {
             # Makes pin floating by setting `nodename` with empty string.
@@ -310,13 +313,16 @@ namespace eval ::SpiceGenTcl {
             }
         }
         variable name
-        constructor {name} {
+        constructor {args} {
             # Creates object of class `ParameterSwitch` with parameter name.
             #  name - name of the parameter
             # Class models base parameter acting like a switch -
             # its presence gives us information that something it controls is on.
             # This parameter doesn't have a value, and it is the most basic class
             # in Parameter class family.
+            argparse -help {Creates object of class 'ParameterSwitch' with parameter name} {
+                {name -help {Name of the parameter}}
+            }
             my configure -name $name
         }
         method genSPICEString {} {
@@ -327,17 +333,20 @@ namespace eval ::SpiceGenTcl {
     }
 
 ###  Parameter class definition
-
     oo::configurable create Parameter {
         superclass ParameterSwitch
         property value
-        constructor {name value} {
+        constructor {args} {
             # Creates object of class `Parameter` with parameter name and value.
             #  name - name of the parameter
             #  value - value of the parameter
             # Class models parameter that has a name and a value - the most
             # common type of parameters in SPICE netlist. Its representation in netlist is
             # 'name=value', and can be called "keyword parameter".
+            argparse -help {Creates object of class 'Parameter' with parameter name and value} {
+                {name -help {Name of the parameter}}
+                {value -help {Value of the parameter}}
+            }
             my configure -name $name -value $value
         }
         method genSPICEString {} {
@@ -358,7 +367,6 @@ namespace eval ::SpiceGenTcl {
     }
 
 ###  ParameterNode class definition
-
     oo::configurable create ParameterNode {
         superclass Parameter
         property name -set {
@@ -373,10 +381,14 @@ namespace eval ::SpiceGenTcl {
             }
         }
         variable name
-        constructor {name value} {
+        constructor {args} {
             # Creates object of class `ParameterNode` with parameter name and value.
             #  name - name of the parameter
             #  value - value of the parameter
+            argparse -help {Creates object of class 'ParameterNode' with parameter name and value} {
+                {name -help {Name of the parameter}}
+                {value -help {Value of the parameter}}
+            }
             my configure -name $name -value $value
         }
         method genSPICEString {} {
@@ -387,13 +399,16 @@ namespace eval ::SpiceGenTcl {
     }
 
 ###  ParameterNodeEquation class definition
-
     oo::configurable create ParameterNodeEquation {
         superclass ParameterNode
-        constructor {name value} {
+        constructor {args} {
             # Creates object of class `ParameterNodeEquation` with parameter name and value.
             #  name - name of the parameter
             #  value - value of the parameter
+            argparse -help {Creates object of class 'ParameterNodeEquation' with parameter name and value} {
+                {name -help {Name of the parameter}}
+                {value -help {Value of the parameter}}
+            }
             my configure -name $name -value $value
         }
         method genSPICEString {} {
@@ -414,7 +429,6 @@ namespace eval ::SpiceGenTcl {
     }
 
 ###  ParameterVector class definition
-
     oo::configurable create ParameterVector {
         superclass ParameterSwitch
         property name -set {
@@ -431,15 +445,18 @@ namespace eval ::SpiceGenTcl {
     }
 
 ###  ParameterNoCheck class definition
-
     oo::configurable create ParameterNoCheck {
         superclass Parameter
         property value
-        constructor {name value} {
+        constructor {args} {
             # Creates object of class `ParameterNoCheck` with parameter name and value.
             #  name - name of the parameter
             #  value - value of the parameter
             # Class models parameter the same as described by `Parameter` but without check for value form.
+            argparse -help {Creates object of class 'ParameterNoCheck' with parameter name and value} {
+                {name -help {Name of the parameter}}
+                {value -help {Value of the parameter}}
+            }
             next $name $value
         }
     }
@@ -454,10 +471,9 @@ namespace eval ::SpiceGenTcl {
     }
 
 ###  ParameterPositional class definition
-
     oo::configurable create ParameterPositional {
         superclass Parameter
-        constructor {name value} {
+        constructor {args} {
             # Creates object of class `ParameterPositional` with parameter name and value.
             #  name - name of parameter
             #  value - value of parameter
@@ -467,6 +483,10 @@ namespace eval ::SpiceGenTcl {
             # it's position in the element's definition, for example, R1 np nm 100 tc1=1 tc2=0 - resistor
             # with positional parameter R=100, you can't put it after parameters tc1 and tc2, it must be placed
             # right after the pins definition.
+            argparse -help {Creates object of class 'ParameterPositional' with parameter name and value} {
+                {name -help {Name of the parameter}}
+                {value -help {Value of the parameter}}
+            }
             next $name $value
         }
         method genSPICEString {} {
@@ -477,15 +497,18 @@ namespace eval ::SpiceGenTcl {
     }
 
 ###  ParameterPositionalNoCheck class definition
-
     oo::configurable create ParameterPositionalNoCheck {
         superclass ParameterPositional
         property value
-        constructor {name value} {
+        constructor {args} {
             # Creates object of class `ParameterPositionalNoCheck`.
             #  name - name of parameter
             #  value - value of parameter
             # Class models parameter the same as described by `ParameterPositional` but without check for value form.
+            argparse -help {Creates object of class 'ParameterPositionalNoCheck' with parameter name and value} {
+                {name -help {Name of the parameter}}
+                {value -help {Value of the parameter}}
+            }
             next $name $value
         }
         method genSPICEString {} {
@@ -505,7 +528,6 @@ namespace eval ::SpiceGenTcl {
     }
 
 ###  ParameterDefault class definition
-
     oo::configurable create ParameterDefault {
         superclass Parameter
         property defvalue -set {
@@ -533,7 +555,7 @@ namespace eval ::SpiceGenTcl {
             }
         }
         variable defvalue
-        constructor {name value defValue} {
+        constructor {args} {
             # Creates object of class `ParameterDefault` with parameter name, value and default value.
             #  name - name of the parameter
             #  value - value of the parameter
@@ -541,6 +563,11 @@ namespace eval ::SpiceGenTcl {
             # Class models parameter that has a name and a value, but it differs from
             # parent class in sense of having default value, so it has special ability to reset its value to default
             # value by special method `resetValue`.
+            argparse -help {Creates object of class 'ParameterDefault' with parameter name and value} {
+                {name -help {Name of the parameter}}
+                {value -help {Value of the parameter}}
+                {defValue -help {Default of the parameter}}
+            }
             my configure -defvalue $defValue
             next $name $value
         }
@@ -553,16 +580,19 @@ namespace eval ::SpiceGenTcl {
     }
 
 ###  ParameterEquation class definition
-
     oo::configurable create ParameterEquation {
         superclass Parameter
         property value
-        constructor {name value} {
+        constructor {args} {
             # Creates object of class `ParameterEquation` with parameter name and value as an equation.
             #  name - name of the parameter
             #  value - value of the parameter
             # Class models parameter that has representation as an equation.
             # Example: R={R1+R2}
+            argparse -help {Creates object of class 'ParameterEquation' with parameter name and value as an equation} {
+                {name -help {Name of the parameter}}
+                {value -help {Value of the parameter}}
+            }
             next $name $value
         }
         method genSPICEString {} {
@@ -583,16 +613,20 @@ namespace eval ::SpiceGenTcl {
     }
 
 ###  ParameterPositionalEquation class definition
-
     oo::configurable create ParameterPositionalEquation {
         superclass ParameterEquation
-        constructor {name value} {
+        constructor {args} {
             # Creates object of class `ParameterPositionalEquation` with parameter name and value as an equation in
             # positional form.
             #  name - name of the parameter
             #  value - value of the parameter
             # Class models parameter that has representation as an equation, but in form of
             # positional parameter. Example: {R1+R2}
+            argparse -help {Creates object of class 'ParameterPositionalEquation' with parameter name and value as an\
+                                    equation} {
+                {name -help {Name of the parameter}}
+                {value -help {Value of the parameter}}
+            }
             next $name $value
         }
         method genSPICEString {} {
@@ -646,11 +680,12 @@ namespace eval ::SpiceGenTcl {
                 {name -help {Name of the device}}
                 {pins -help {List of pins in the order they appear in SPICE device's definition together with connected\
                                      node in form: '{{Name0 NodeName} {Name1 NodeName} {Name2 NodeName} ...}'. Nodes\
-                                     string values could be empty. Nodes list can be empty if device doesn't have pins}}
+                                     string values could be empty. Nodes list can be empty if device doesn't have pins}\
+                         -type list}
                 {params -help {List of instance parameters in form '{{Name0 Value0 ?-pos|eq|poseq|posnocheck|nocheck?}\
                                       {Name1 Value1 ?-pos|eq|poseq|posnocheck|nocheck?}\
                                       {Name2 Value2 ?-pos|eq|poseq|posnocheck|nocheck?} ...}'. Parameter list can be\
-                                      empty if device doesn't have instance parameters}}
+                                      empty if device doesn't have instance parameters} -type list}
             }
             my configure -name $name
             # create Pins objects
@@ -906,7 +941,7 @@ namespace eval ::SpiceGenTcl {
                 {params -optional -help {{List of instance parameters in form\
                                                   '{{Name0 Value0 ?-pos|eq|poseq|posnocheck|nocheck?}\
                                                   {Name1 Value1 ?-pos|eq|poseq|posnocheck|nocheck?}\
-                                                  {Name2 Value2 ?-pos|eq|poseq|posnocheck|nocheck?} ...}'}}}
+                                                  {Name2 Value2 ?-pos|eq|poseq|posnocheck|nocheck?} ...}'}} -type list}
             }
             my configure -name $name -type $type
             # create Params objects
@@ -973,7 +1008,6 @@ namespace eval ::SpiceGenTcl {
     }
 
 ###  Comment class definition
-
     oo::configurable create Comment {
         superclass RawString
         constructor {args} {
@@ -1005,7 +1039,6 @@ namespace eval ::SpiceGenTcl {
     }
 
 ###  Include class definition
-
     oo::configurable create Include {
         superclass RawString
         constructor {args} {
@@ -1035,7 +1068,6 @@ namespace eval ::SpiceGenTcl {
     }
 
 ###  Library class definition
-
     oo::configurable create Library {
         superclass RawString
         # this variable contains selected library name inside sourced file
@@ -1170,7 +1202,8 @@ namespace eval ::SpiceGenTcl {
             # Class represent .param statement.
             # Synopsis: params ?-name value?
             argparse -pfirst -help {Creates object of class 'ParamStatement'} {
-                {params -help {list of instance parameters in form '{{name value ?-eq?} {name value ?-eq?} ...}'}}
+                {params -help {list of instance parameters in form '{{name value ?-eq?} {name value ?-eq?} ...}'}\
+                         -type list}
                 {-name= -help {Name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]\
                                        object and its descendants}}
             }
@@ -1241,7 +1274,7 @@ namespace eval ::SpiceGenTcl {
             # Class represent .save statement.
             # Synopsis: vectors ?-name value?
             argparse -pfirst -help {Creates object of class 'ParamStatement'} {
-                {vectors -help {List of vectors in form '{vec0 vec1 vec2 ...}'}}
+                {vectors -help {List of vectors in form '{vec0 vec1 vec2 ...}'} -type list}
                 {-name= -help {Name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]\
                                        object and its descendants}}
             }
@@ -1320,7 +1353,8 @@ namespace eval ::SpiceGenTcl {
             # Class represent .ic statement.
             # Synopsis: params ?-name value?
             argparse -pfirst -help {Creates object of class 'Ic'} {
-                {params -help {list of instance parameters in form '{{name value ?-eq?} {name value ?-eq?} ...}'}}
+                {params -help {list of instance parameters in form '{{name value ?-eq?} {name value ?-eq?} ...}'}\
+                         -type list}
                 {-name= -help {Name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]\
                                        object and its descendants}}
             }
@@ -1374,7 +1408,6 @@ namespace eval ::SpiceGenTcl {
     }
 
 ###  Nodeset class definition
-
     oo::configurable create Nodeset {
         superclass Ic
         mixin Utility
@@ -1404,7 +1437,7 @@ namespace eval ::SpiceGenTcl {
             # Class represent .global statement.
             # Synopsis: nets ?-name value?
             argparse -pfirst -help {Creates object of class 'Global'} {
-                {nets -help {List of nets in form '{net0 net1 ...}'}}
+                {nets -help {List of nets in form '{net0 net1 ...}'} -type list}
                 {-name= -help {Name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]\
                                        object and its descendants}}
             }
@@ -1417,7 +1450,7 @@ namespace eval ::SpiceGenTcl {
         }
         method addNets {args} {
             argparse -help {Adds nets to the class} {
-                {nets -help {List of nets}}
+                {nets -help {List of nets} -type list}
             }
             if {[info exists Nets]} {
                 set netsList $Nets
@@ -1437,7 +1470,7 @@ namespace eval ::SpiceGenTcl {
         }
         method deleteNet {args} {
             argparse -help {Deletes net from the 'Nets' list} {
-                {net -help {name of the net}}
+                {net -help {Name of the net}}
             }
             set netsList $Nets
             if {[set index [lsearch -exact $netsList $net]] !=-1} {
@@ -1623,7 +1656,6 @@ namespace eval ::SpiceGenTcl {
 
 
 ###  Circuit class definition
-
     oo::configurable create Circuit {
         superclass Netlist
         # simulator object that run simulation
@@ -1763,8 +1795,9 @@ namespace eval ::SpiceGenTcl {
             argparse -help {Creates object of class 'Device'} {
                 {name -help {Name of the subcircuit}}
                 {pins -help {List of pins in the order they appear in SPICE subcircuits definition together in form:\
-                                     '{pinName0 pinName1 ...}'}}
-                {params -help {List of input parameters in form '{{name value} {name value} {name value} ...}'}}
+                                     '{pinName0 pinName1 ...}'} -type list}
+                {params -help {List of input parameters in form '{{name value} {name value} {name value} ...}'}\
+                         -type list}
             }
             # create Pins objects, nodes are set to empty line
             foreach pin $pins {
@@ -1877,7 +1910,7 @@ namespace eval ::SpiceGenTcl {
             argparse -help {Creates object of class 'Analysis'} -pfirst {
                 {type -help {Type of analysis, for example, tran, ac, dc, etc}}
                 {params -help {List of instance parameters in form '{{name value} {name -sw} {name Value -eq}\
-                                                                             {name Value -posnocheck} ...}'}}
+                                                                             {name Value -posnocheck} ...}'} -type list}
                 {-name= -help {Name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]\
                                        object and its descendants}}
             }
@@ -1912,7 +1945,6 @@ namespace eval ::SpiceGenTcl {
     }
 
 ###  Simulator class definition
-
     oo::configurable create Simulator {
         self mixin -append oo::abstract
         property name
@@ -1941,7 +1973,6 @@ namespace eval ::SpiceGenTcl {
     }
 
 ###  BinaryReader class definition
-
     oo::configurable create BinaryReader {
         self mixin -append oo::abstract
         method readFloat64 {file} {
@@ -2054,14 +2085,12 @@ namespace eval ::SpiceGenTcl {
     }
 
 ###  Axis class definition
-
     oo::configurable create Axis {
         # class that represents axis in raw file
         superclass Dataset
     }
 
 ###  Trace class definition
-
     oo::configurable create Trace {
         # class that represents trace in raw file
         superclass Dataset
@@ -2087,7 +2116,6 @@ namespace eval ::SpiceGenTcl {
     }
 
 ###  EmptyTrace class definition
-
     oo::configurable create EmptyTrace {
         # Class represents empty trace (trace that was not readed) in raw file
         superclass Dataset
