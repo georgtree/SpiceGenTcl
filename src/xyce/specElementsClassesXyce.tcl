@@ -35,7 +35,6 @@ namespace eval ::SpiceGenTcl {
 namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
 
 ####  Resistor class
-
     oo::class create Resistor {
         superclass ::SpiceGenTcl::Device
         constructor {args} {
@@ -125,14 +124,12 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
     }
 
 ####  R class
-
     # alias for Resistor class
     oo::class create R {
         superclass Resistor
     }
 
 ####  Capacitor class
-
     oo::class create Capacitor {
         superclass ::SpiceGenTcl::Device
         constructor {args} {
@@ -244,14 +241,12 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
     }
 
 ####  C class
-
     # alias for Capacitor class
     oo::class create C {
         superclass Capacitor
     }
 
 ####  Inductor class
-
     oo::class create Inductor {
         superclass ::SpiceGenTcl::Device
         constructor {args} {
@@ -319,40 +314,34 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
     }
 
 ####  L class
-
     # alias for Inductor class
     oo::class create L {
         superclass Inductor
     }
 
 ####  VSwitch class
-
     oo::class create VSwitch {
         superclass ::SpiceGenTcl::Common::BasicDevices::VSwitch
     }
 
 ####  VSw class
-
     # alias for VSwitch class
     oo::class create VSw {
         superclass VSwitch
     }
 
 ####  CSwitch class
-
     oo::class create CSwitch {
         superclass ::SpiceGenTcl::Common::BasicDevices::CSwitch
     }
 
 ####  W class
-
     # alias for CSwitch class
     oo::class create W {
         superclass CSwitch
     }
 
 ####  GenSwitch class
-
     oo::class create GenSwitch {
         superclass ::SpiceGenTcl::Device
         constructor {args} {
@@ -394,14 +383,12 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
     }
 
 ####  GenS class
-
     # alias for GenSwitch class
     oo::class create GenS {
         superclass GenSwitch
     }
 
 ####  SubcircuitInstance class
-
     oo::class create SubcircuitInstance {
         superclass ::SpiceGenTcl::Device
         constructor {args} {
@@ -430,14 +417,12 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
     }
 
 ####  X class
-
     # alias for SubcircuitInstance class
     oo::class create X {
         superclass SubcircuitInstance
     }
 
 ####  SubcircuitInstanceAuto class
-
     oo::class create SubcircuitInstanceAuto {
         superclass ::SpiceGenTcl::Device
         constructor {subcktObj name nodes args} {
@@ -503,7 +488,6 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
     }
 
 ####  XAuto class
-
     # alias for SubcircuitInstanceAuto class
     oo::class create XAuto {
         superclass SubcircuitInstanceAuto
@@ -516,143 +500,120 @@ namespace eval ::SpiceGenTcl::Xyce::Sources {
 
 
 ####  Vdc class
-
     oo::class create Vdc {
         superclass ::SpiceGenTcl::Common::Sources::Vdc
     }
 
 ####  Vac class
-
     oo::class create Vac {
         superclass ::SpiceGenTcl::Common::Sources::Vac
     }
 
 ####  Vpulse class
-
     oo::class create Vpulse {
         superclass ::SpiceGenTcl::Common::Sources::Vpulse
     }
 
 ####  Vsin class
-
     oo::class create Vsin {
         superclass ::SpiceGenTcl::Common::Sources::Vsin
     }
 
 ####  Vexp class
-
     oo::class create Vexp {
         superclass ::SpiceGenTcl::Common::Sources::Vexp
     }
 
 ####  Vpwl class
-
     oo::class create Vpwl {
         superclass ::SpiceGenTcl::Common::Sources::Vpwl
     }
 
 ####  Vsffm class
-
     oo::class create Vsffm {
         superclass ::SpiceGenTcl::Common::Sources::Vsffm
     }
 
 ####  Idc class
-
     oo::class create Idc {
         superclass ::SpiceGenTcl::Common::Sources::Idc
     }
 
 ####  Iac class
-
     oo::class create Iac {
         superclass ::SpiceGenTcl::Common::Sources::Iac
     }
 
 ####  Ipulse class
-
     oo::class create Ipulse {
         superclass ::SpiceGenTcl::Common::Sources::Ipulse
     }
 
 ####  Isin class
-
     oo::class create Isin {
         superclass ::SpiceGenTcl::Common::Sources::Isin
     }
 
 ####  Iexp class
-
     oo::class create Iexp {
         superclass ::SpiceGenTcl::Common::Sources::Iexp
     }
 
 ####  Ipwl class
-
     oo::class create Ipwl {
         superclass ::SpiceGenTcl::Common::Sources::Ipwl
     }
 
 ####  Isffm class
-
     oo::class create Isffm {
         superclass ::SpiceGenTcl::Common::Sources::Isffm
     }
 
 ####  Vccs class
-
     oo::class create Vccs {
         superclass ::SpiceGenTcl::Common::Sources::Vccs
     }
 
 ####  G class
-
     # alias for Vccs class
     oo::class create G {
         superclass Vccs
     }
 
 ####  Vcvs class
-
     oo::class create Vcvs {
         superclass ::SpiceGenTcl::Common::Sources::Vcvs
     }
 
 ####  E class
-
     # alias for Vcvs class
     oo::class create E {
         superclass Vcvs
     }
 
 ####  Cccs class
-
     oo::class create Cccs {
         superclass ::SpiceGenTcl::Common::Sources::Cccs
     }
 
 ####  F class
-
     # alias for Cccs class
     oo::class create F {
         superclass Cccs
     }
 
 ####  Ccvs class
-
     oo::class create Ccvs {
         superclass ::SpiceGenTcl::Common::Sources::Ccvs
     }
 
 ####  H class
-
     # alias for Ccvs class
     oo::class create H {
         superclass Ccvs
     }
 
 ####  BehaviouralSource class
-
     oo::class create BehaviouralSource {
         superclass ::SpiceGenTcl::Device
         constructor {args} {
@@ -703,7 +664,6 @@ namespace eval ::SpiceGenTcl::Xyce::Sources {
     }
 
 ####  B class
-
     # alias for BehaviouralSource class
     oo::class create B {
         superclass BehaviouralSource
@@ -714,7 +674,6 @@ namespace eval ::SpiceGenTcl::Xyce::Sources {
 namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
 
 ####  Diode class
-
     oo::class create Diode {
         superclass ::SpiceGenTcl::Device
         constructor {args} {
@@ -793,14 +752,12 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
     }
 
 ####  D class #
-
     # alias for Diode class
     oo::class create D {
         superclass Diode
     }
 
 ####  Bjt class
-
     oo::class create Bjt {
         superclass ::SpiceGenTcl::Device
         constructor {args} {
@@ -882,14 +839,12 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
     }
 
 ####  Q class
-
     # alias for Bjt class
     oo::class create Q {
         superclass Bjt
     }
 
 ####  Jfet class
-
     oo::class create Jfet {
         superclass ::SpiceGenTcl::Device
         constructor {args} {
@@ -939,14 +894,12 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
     }
 
 ####  J class #
-
     # alias for Jfet class
     oo::class create J {
         superclass Jfet
     }
 
 ####  Mesfet class
-
     oo::class create Mesfet {
         superclass ::SpiceGenTcl::Device
         constructor {args} {
@@ -996,14 +949,12 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
     }
 
 ####  Z class #
-
     # alias for Mesfet class
     oo::class create Z {
         superclass Mesfet
     }
 
 ####  Mosfet class
-
     oo::class create Mosfet {
         superclass ::SpiceGenTcl::Device
         constructor {args} {
@@ -1114,7 +1065,6 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
     }
 
 ####  M class #
-
     # alias for Mosfet class
     oo::class create M {
         superclass Mosfet

@@ -23,25 +23,21 @@ namespace eval ::SpiceGenTcl {
 namespace eval ::SpiceGenTcl::Ltspice::Analyses {
 
 ###  Dc class
-
     oo::class create Dc {
         superclass ::SpiceGenTcl::Common::Analyses::Dc
     }
 
 ###  Ac class
-
     oo::class create Ac {
         superclass ::SpiceGenTcl::Common::Analyses::Ac
     }
 
 ###  Tran class
-
     oo::class create Tran {
         superclass ::SpiceGenTcl::Common::Analyses::Tran
     }
 
 ###  Op class
-
     oo::class create Op {
         superclass ::SpiceGenTcl::Common::Analyses::Op
     }

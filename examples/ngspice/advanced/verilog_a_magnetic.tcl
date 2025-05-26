@@ -32,7 +32,7 @@ oo::class create Core {
 oo::class create CoreModel {
     superclass Model
     constructor {args} {
-        next {*}[my argsPreprocess {ms a k alpha c} {name type} type {*}[linsert $args 1 coreja]]
+        next {*}[my ArgsPreprocess {ms a k alpha c} {name type} type {*}[linsert $args 1 coreja]]
     }
 }
 
@@ -97,7 +97,7 @@ oo::class create WindingModel {
         argparse -helplevel 1 -help {} {
             {name -help {Name of the model}}
         }
-        next {*}[my argsPreprocess r {name type} type {*}[linsert $args 1 winding]]
+        next {*}[my ArgsPreprocess r {name type} type {*}[linsert $args 1 winding]]
     }
 }
 set dir [file dirname [file normalize [info script]]]

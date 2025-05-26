@@ -190,16 +190,16 @@ namespace eval Tips {
         oo::class create CoreModel {
             superclass Model
             constructor {args} {
-                next {*}[my argsPreprocess {ms a k alpha c} {name type} type {*}[linsert $args 1 coreja]]
+                next {*}[my ArgsPreprocess {ms a k alpha c} {name type} type {*}[linsert $args 1 coreja]]
             }
         }
         ```
         
         Here we use as superclass [::SpiceGenTcl::Model] for new element.
-        To process optional arguments, we use special method [::SpiceGenTcl::Utility::argsPreprocess], that 
+        To process optional arguments, we use special method [::SpiceGenTcl::Utility::ArgsPreprocess], that 
         process optional `args` arguments and produces string for [::SpiceGenTcl::Model] constructor.
         ```tcl
-        next {*}[my argsPreprocess {ms a k alpha c} {name type} type {*}[linsert $args 1 coreja]]
+        next {*}[my ArgsPreprocess {ms a k alpha c} {name type} type {*}[linsert $args 1 coreja]]
         ```
 
         We set model parameters in list `{ms a k alpha c}` as switches, and then the list of required parameters
@@ -207,7 +207,7 @@ namespace eval Tips {
         are arguments with switches and values, including default type value `coreja`. The name `coreja` corresponds to
         name of Verilog-A module.
 
-        We use [::SpiceGenTcl::Utility::argsPreprocess] procedure here, but we can go the same way we do with
+        We use [::SpiceGenTcl::Utility::ArgsPreprocess] procedure here, but we can go the same way we do with
         `Core` class, and add, for example, default values, or use some complex logic of elements initialization:
         ```tcl
         oo::class create CoreModel {

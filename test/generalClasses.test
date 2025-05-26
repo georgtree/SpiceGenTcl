@@ -486,6 +486,18 @@ testTemplate testDeviceClass-23 {} {Device new M1 {{d netg} {g netg} {s nets}} {
 testTemplate testDeviceClass-24 {} {Device new M1 {{d netd} {g netg} {s nets}} {}} {m1 netd netg nets}
 testTemplate testDeviceClass-25 {} {Device new M1 {} {}} {m1}
 
+testTemplate testDeviceClass-26 {} {Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}}\
+        {m1 netd netg nets vth0=0.7 u0=100 k1=1.5e-3}
+
+test testDeviceClass-22 {test creation of Device class instance and test setParamValue with multiple parameters} -setup {
+    set elemInst [Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
+} -body {
+    $elemInst setParamValue VTH0 1.0 U0 50
+    return [$elemInst genSPICEString]
+} -result {m1 netd netg nets vth0=0.7 u0=50 k1=1.5e-3} -cleanup {
+    unset elemInst
+}
+
 ###  Model class tests 
     
 test testModelClass-1 {test creation of Model class instance and getType interface} -setup {

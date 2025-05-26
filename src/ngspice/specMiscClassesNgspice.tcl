@@ -24,7 +24,6 @@ namespace eval ::SpiceGenTcl::Ngspice::Misc {
 
 
 ###  OptionsNgspice class
-
     oo::class create OptionsNgspice {
         superclass ::SpiceGenTcl::Options
         mixin ::SpiceGenTcl::Utility
@@ -46,8 +45,8 @@ namespace eval ::SpiceGenTcl::Ngspice::Misc {
                                       maxopalter maxord method noopalter ramptime srcsteps trtol xmu defad defas defl\
                                       defw scale}
             set arguments [argparse -inline "
-                [my buildArgStr $keyValParams]
-                [my buildSwArgStr $swParams]
+                [my BuildArgStr $keyValParams]
+                [my BuildSwArgStr $swParams]
             "]
             my NameProcess $arguments [self object]
             dict for {paramName value} $arguments {

@@ -23,7 +23,6 @@ namespace eval ::SpiceGenTcl {
 namespace eval ::SpiceGenTcl::Common::Analyses {
 
 ### Dc class
-
     oo::class create Dc {
         superclass ::SpiceGenTcl::Analysis
         mixin ::SpiceGenTcl::Utility
@@ -60,7 +59,6 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
     }
 
 ###  Ac class
-
     oo::class create Ac {
         superclass ::SpiceGenTcl::Analysis
         mixin ::SpiceGenTcl::Utility
@@ -96,7 +94,6 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
     }
 
 ###  Tran class
-
     oo::class create Tran {
         superclass ::SpiceGenTcl::Analysis
         mixin ::SpiceGenTcl::Utility
@@ -136,7 +133,6 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
     }
 
 ###  Op class
-
     oo::class create Op {
         superclass ::SpiceGenTcl::Analysis
         mixin ::SpiceGenTcl::Utility

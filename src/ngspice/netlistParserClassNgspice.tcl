@@ -15,9 +15,7 @@
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 
 namespace eval ::SpiceGenTcl::Ngspice {
-
     namespace export NgspiceParser
-
     oo::configurable create NgspiceParser {
         superclass ::SpiceGenTcl::Parser
         variable parsername
@@ -28,11 +26,17 @@ namespace eval ::SpiceGenTcl::Ngspice {
         variable DotsMethods
         variable SupModelsTypes
         variable topnetlist
-        variable ModelTemplate
-        variable SubcircuitTemplate
         variable NamespacePath
-
-        constructor {name filepath} {
+        initialize {
+            variable ModelTemplate {oo::class create @type@ {
+                superclass ::SpiceGenTcl::Model
+                constructor {args} {
+                    set paramsNames [list @paramsList@]
+                    next {*}[my ArgsPreprocess $paramsNames {name type} @hsuppress@ {*}$args]
+                }
+            }}
+        }
+        constructor {args} {
             # Creates object of class `Parser` that do parsing of valid Ngspice netlist.
             #   name - name of the object
             #   filepath - path to file that should be parsed
@@ -48,7 +52,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
                                      sens CreateSens sp CreateSp save CreateSave]
             set SupModelsTypes {r c l sw csw d npn pnp njf pjf nmf pmf}
             set NamespacePath ::SpiceGenTcl::Ngspice
-            next $name $filepath
+            next {*}$args
         }
         method readFile {} {
             # Reads netlist file and prepare for parsing: remove redundant white space characters, collapse continuation
@@ -182,6 +186,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             # Creates [::SpiceGenTcl::Model] object from passed line and add it to `netlistObj`
             #   line - line to parse
             # Returns: code string for model object creation
+            classvariable ModelTemplate
             set line [regsub -all {[[:space:]]+} [string trim [string map {"(" " " ")" " "} $line]] { }]
             set lineList [lrange [split $line] 1 end]
             lassign $lineList name type
