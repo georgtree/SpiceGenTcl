@@ -7,7 +7,7 @@
 # See the file "LICENSE" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 package require Tcl 8.6-
-package provide argparse 0.57
+package provide argparse 0.58
 interp alias {} @ {} lindex
 interp alias {} = {} expr
 # argparse --
@@ -398,7 +398,8 @@ proc ::argparse {args} {
                 return $str
             }}}
             if {$help ne {}} {
-                lappend description [adjust $help -length 80].
+                set providedHelp [adjust $help -length 80].
+                lappend description $providedHelp
             }
             if {[info exists exact]} {
                 lappend description {Doesn't accept prefixes instead of switches names.}
@@ -519,6 +520,8 @@ proc ::argparse {args} {
                 puts [string totitle [string map {{,;} {;} {,.} {.}}\
                                               [join [list $description [indent Parameters: {    }]\
                                                              {*}$descriptionParameters] \n]] 0 1]
+            } else {
+                puts [string totitle [string map {{,;} {;} {,.} {.}} $providedHelp] 0 1]
             }
             if {[info exists helplevel]} {
                 return -level $helplevel

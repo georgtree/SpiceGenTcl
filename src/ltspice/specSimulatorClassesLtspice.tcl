@@ -99,15 +99,17 @@ namespace eval ::SpiceGenTcl::Ltspice::Simulators {
                 }
             }
         }
-        method readLog {} {
+        method readLog {args} {
             # Reads log file of last simulation and save it's content to Log variable.
+            argparse -help {Reads log file of last simulation and save it's content to Log variable} {}
             set logFile [open [file join [my configure -runlocation] ${LastRunFileName}.log] r+]
             set log [read $logFile]
             close $logFile
             return
         }
-        method readData {} {
+        method readData {args} {
             # Reads raw data file, create RawFile object and return it's reference name.
+            argparse -help {Reads raw data file, create RawFile object and return it's reference name} {}
             my variable data
             set data [::SpiceGenTcl::RawFile new [file join [my configure -runlocation]\
                                                           ${LastRunFileName}.raw] * ltspice]

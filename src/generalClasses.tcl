@@ -273,13 +273,17 @@ namespace eval ::SpiceGenTcl {
             }
             my configure -name $name -nodename $node
         }
-        method unsetNodeName {} {
-            # Makes pin floating by setting `nodename` with empty string.
+        method unsetNodeName {args} {
+            # Makes pin floating by setting name of the node to empty string.
+            argparse -help {Makes pin floating by setting name of the node to empty string} {}
             my configure -nodename {}
+            return
         }
-        method checkFloating {} {
+        method checkFloating {args} {
             # Determines if pin is connected to the node.
             # Returns: `true` if connected and `false` if not
+            argparse -help {Determines if pin is connected to the node. Returns: 'true' if connected and 'false' if\
+                                    not} {}
             if {[my configure -nodename] eq {}} {
                 set floating true
             } else {
@@ -572,8 +576,9 @@ namespace eval ::SpiceGenTcl {
             next $name $value
         }
 
-        method resetValue {} {
+        method resetValue {args} {
             # Resets value of the parameter to it's default value.
+            argparse -help {Resets value of the parameter to it's default value} {}
             my configure -value [my configure -defvalue]
             return
         }
@@ -705,10 +710,12 @@ namespace eval ::SpiceGenTcl {
                 my addParam {*}$param
             }
         }
-        method getPins {} {
+        method getPins {args} {
             # Gets the dictionary that contains pin name as keys and
             #  connected node name as the values.
-            # Returns: parameters dictionary
+            # Returns: pins dictionary
+            argparse -help {Gets the dictionary that contains pin name as keys and connected node name as the values.\
+                                Returns: pins dictionary} {}
             return [dict map {pinName pin} $Pins {$pin configure -nodename}]
         }
         method setPinNodeName {args} {
@@ -854,9 +861,10 @@ namespace eval ::SpiceGenTcl {
             }
             return
         }
-        method checkFloatingPins {} {
+        method checkFloatingPins {args} {
             # Check if some pin device doesn't have connected nodes and return list of them.
             # Returns: list of floating pins
+            argparse -help {Check if some pin device doesn't have connected nodes and return list of them} {}
             set floatingPins {}
             dict for {pinName pin} $Pins {
                 if {[$pin checkFloating]} {
@@ -865,9 +873,11 @@ namespace eval ::SpiceGenTcl {
             }
             return $floatingPins
         }
-        method getParams {} {
+        method getParams {args} {
             # Gets the dictionary that contains parameter name as keys and parameter values as the values.
             # Returns: parameters dictionary
+            argparse -help {Gets the dictionary that contains parameter name as keys and parameter values as the\
+                                    values. Returns: parameters dictionary} {}
             return [dict map {pname param} $Params {$param configure -value}]
         }
         method genSPICEString {} {
@@ -1140,10 +1150,12 @@ namespace eval ::SpiceGenTcl {
                 }
             }
         }
-        method getParams {} {
+        method getParams {args} {
             # Gets the dictionary that contains parameter name as keys and
             #  parameter values as the values.
             # Returns: parameters dictionary
+            argparse -help {Gets the dictionary that contains parameter name as keys and parameter values as the\
+                                    values. Returns: parameters dictionary} {}
             return [dict map {paramName param} $Params\
                             {expr {[catch {$param configure -value}] ? {} : [$param configure -value]}}]
         }
@@ -1291,9 +1303,10 @@ namespace eval ::SpiceGenTcl {
                 }
             }
         }
-        method getVectors {} {
+        method getVectors {args} {
             # Gets the dictionary of vector names
             # Returns: vectors dictionary
+            argparse -help {Gets the dictionary of vector names. Returns: vectors dictionary} {}
             return $Vectors
         }
         method addVector {args} {
@@ -1636,9 +1649,10 @@ namespace eval ::SpiceGenTcl {
             }
             return $foundElem
         }
-        method getAllElemNames {} {
+        method getAllElemNames {args} {
             # Gets names of all elements in netlist.
             # Returns: list of elements names
+            argparse -help {Gets names of all elements in netlist. Returns: list of elements names} {}
             if {![info exists Elements]} {
                 return -code error "Netlist '[my configure -name]' doesn't have attached elements"
             }
@@ -1732,14 +1746,17 @@ namespace eval ::SpiceGenTcl {
             }
             return
         }
-        method detachSimulator {} {
+        method detachSimulator {args} {
             # Removes `Simulator` object reference from `Circuit`.
+            argparse -help {Removes 'Simulator' object reference from 'Circuit'} {}
             unset simulator
             return
         }
-        method getDataDict {} {
-            # Method to get dictionary with raw data vectors.
+        method getDataDict {args} {
+            # Gets dictionary with raw data vectors.
             # Returns: dict with vectors data, keys - names of vectors
+            argparse -help {Gets dictionary with raw data vectors. Returns: dict with vectors data, keys - names of\
+                                    vectors} {}
             return [[my configure -data] getTracesData]
         }
         method getDataCsv {args} {
@@ -2070,7 +2087,8 @@ namespace eval ::SpiceGenTcl {
             lappend DataPoints $dataPoint
             return
         }
-        method getDataPoints {} {
+        method getDataPoints {args} {
+            argparse -help {Gets all data points} {}
             if {[info exists DataPoints]} {
                 return $DataPoints
             } else {
@@ -2380,29 +2398,34 @@ namespace eval ::SpiceGenTcl {
             }
             return $traceFound
         }
-        method getVariablesNames {} {
+        method getVariablesNames {args} {
             # Returns list that contains names of all variables
+            argparse -help {Returns list that contains names of all variables} {}
             return [dkeys [my configure -traces]]
         }
-        method getVoltagesNames {} {
+        method getVoltagesNames {args} {
             # Returns list that contains names of all voltage variables
+            argparse -help {Returns list that contains names of all voltage variables} {}
             return [lmap trace [dvalues [my configure -traces]]\
                             {expr {[string match -nocase *voltage* [$trace configure -type]] ?\
                                            [$trace configure -name] : [continue]}}]
         }
-        method getCurrentsNames {} {
+        method getCurrentsNames {args} {
             # Returns list that contains names of all current variables
+            argparse -help {Returns list that contains names of all current variables} {}
             return [lmap trace [dvalues [my configure -traces]]\
                             {expr {[string match -nocase *current* [$trace configure -type]] ?\
                                            [$trace configure -name] : [continue]}}]
         }
-        method getTracesStr {} {
+        method getTracesStr {args} {
             # Returns information about all Traces in raw file in form of string
+            argparse -help {Returns information about all Traces in raw file in form of string} {}
             return [lmap trace [dvalues [my configure -traces]]\
                             {join [list [$trace configure -name] [$trace configure -type] [$trace configure -numtype]]}]
         }
-        method getTracesData {} {
+        method getTracesData {args} {
             # Returns dictionary that contains all data in value and name as a key
+            argparse -help {Returns dictionary that contains all data in value and name as a key} {}
             set dict {}
             dict for {traceName trace} [my configure -traces] {
                 dict append dict $traceName [$trace getDataPoints]
