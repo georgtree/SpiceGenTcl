@@ -22,13 +22,8 @@
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Ngspice-Misc.html#::SpiceGenTcl::Ngspice::Misc::OptionsNgspice::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
 <tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Options::addParam" title="::SpiceGenTcl::Options.addParam" class='ruff_cmd'>::SpiceGenTcl::Options.addParam</a></td></tr>
-<tr><td><code>argsPreprocess</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility.argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility.argsPreprocess</a></td></tr>
-<tr><td><code>buildArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildArgStr" title="::SpiceGenTcl::Utility.buildArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildArgStr</a></td></tr>
-<tr><td><code>buildSwArgStr</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::buildSwArgStr" title="::SpiceGenTcl::Utility.buildSwArgStr" class='ruff_cmd'>::SpiceGenTcl::Utility.buildSwArgStr</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
 <tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Options::deleteParam" title="::SpiceGenTcl::Options.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Options.deleteParam</a></td></tr>
-<tr><td><code>duplListCheck</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheck" title="::SpiceGenTcl::Utility.duplListCheck" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheck</a></td></tr>
-<tr><td><code>duplListCheckRet</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::duplListCheckRet" title="::SpiceGenTcl::Utility.duplListCheckRet" class='ruff_cmd'>::SpiceGenTcl::Utility.duplListCheckRet</a></td></tr>
 <tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Options::genSPICEString" title="::SpiceGenTcl::Options.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Options.genSPICEString</a></td></tr>
 <tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Options::getParams" title="::SpiceGenTcl::Options.getParams" class='ruff_cmd'>::SpiceGenTcl::Options.getParams</a></td></tr>
 <tr><td><code>setParamValue</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Options::setParamValue" title="::SpiceGenTcl::Options.setParamValue" class='ruff_cmd'>::SpiceGenTcl::Options.setParamValue</a></td></tr>
@@ -69,9 +64,9 @@
     <i><font color=#76a396># Synopsis: ?-key value ...? ?-key ...?</font></i>
     <b><font color=#ffa500>set</font></b> swParams {sparse klu acct noacct noinit list nomod nopage node norefvalue opts seedinfo savecurrents keepopinfo noopiter noopac autostop interp badmos3 trytocompact}
     <b><font color=#ffa500>set</font></b> keyValParams {seed temp tnom warn maxwarns abstol gmin gminsteps itl1 itl2 pivrel pivtol reltol rshunt vntol rseries cshunt chgtol convstep convabsstep itl3 itl4 itl5 itl6 maxevtiter maxopalter maxord method noopalter ramptime srcsteps trtol xmu defad defas defl defw scale}
-    <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> <font color=#90ee90>&quot;</font>
-<font color=#90ee90>        <font color=#f1b479>[</font>my buildArgStr <font color=#f1b479>$</font>keyValParams<font color=#f1b479>]</font></font>
-<font color=#90ee90>        <font color=#f1b479>[</font>my buildSwArgStr <font color=#f1b479>$</font>swParams<font color=#f1b479>]</font></font>
+    <b><font color=#ffa500>set</font></b> arguments [argparse <font color=#b9b96e>-inline</font> <font color=#b9b96e>-help</font> {Creates object of class `OptionsNgspice` that describes Ngspice simulation options} <font color=#90ee90>&quot;</font>
+<font color=#90ee90>        <font color=#f1b479>[</font>my BuildArgStr <font color=#f1b479>$</font>keyValParams<font color=#f1b479>]</font></font>
+<font color=#90ee90>        <font color=#f1b479>[</font>my BuildSwArgStr <font color=#f1b479>$</font>swParams<font color=#f1b479>]</font></font>
 <font color=#90ee90>    &quot;</font>]
     <b><font color=#fe6efe>my</font></b> NameProcess <font color=#f1b479>$arguments</font> [<b><font color=#fe6efe>self</font></b> object]
     <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$arguments</font> {

@@ -180,18 +180,18 @@ endmodule
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#fe6efe>oo::class</font></b> create CoreModel {
     superclass Model
     <b><font color=#fe6efe>constructor</font></b> {args} {
-        <b><font color=#ffa500>next</font></b> {<b><font color=#ffa500>*</font></b>}[<b><font color=#fe6efe>my</font></b> argsPreprocess {ms a k alpha c} {name type} type {<b><font color=#ffa500>*</font></b>}[<b><font color=#ffa500>linsert</font></b> <font color=#f1b479>$args</font> 1 coreja]]
+        <b><font color=#ffa500>next</font></b> {<b><font color=#ffa500>*</font></b>}[<b><font color=#fe6efe>my</font></b> ArgsPreprocess {ms a k alpha c} {name type} type {<b><font color=#ffa500>*</font></b>}[<b><font color=#ffa500>linsert</font></b> <font color=#f1b479>$args</font> 1 coreja]]
     }
 }
 </pre>
 
-</figure><p class='ruff'>Here we use as superclass <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model" title="::SpiceGenTcl::Model" class='ruff_cmd'>::SpiceGenTcl::Model</a> for new element. To process optional arguments, we use special method <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility::argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility::argsPreprocess</a>, that process optional <code>args</code> arguments and produces string for <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model" title="::SpiceGenTcl::Model" class='ruff_cmd'>::SpiceGenTcl::Model</a> constructor.</p>
+</figure><p class='ruff'>Here we use as superclass <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model" title="::SpiceGenTcl::Model" class='ruff_cmd'>::SpiceGenTcl::Model</a> for new element. To process optional arguments, we use special method [::SpiceGenTcl::Utility::ArgsPreprocess], that process optional <code>args</code> arguments and produces string for <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Model" title="::SpiceGenTcl::Model" class='ruff_cmd'>::SpiceGenTcl::Model</a> constructor.</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>next</font></b> {<b><font color=#ffa500>*</font></b>}[<b><font color=#fe6efe>my</font></b> argsPreprocess {ms a k alpha c} {name type} type {<b><font color=#ffa500>*</font></b>}[<b><font color=#ffa500>linsert</font></b> <font color=#f1b479>$args</font> 1 coreja]]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>next</font></b> {<b><font color=#ffa500>*</font></b>}[<b><font color=#fe6efe>my</font></b> ArgsPreprocess {ms a k alpha c} {name type} type {<b><font color=#ffa500>*</font></b>}[<b><font color=#ffa500>linsert</font></b> <font color=#f1b479>$args</font> 1 coreja]]
 </pre>
 
 </figure><p class='ruff'>We set model parameters in list <code>{ms a k alpha c}</code> as switches, and then the list of required parameters <code>{name type}</code>. Then we provide elements names which should be ignored while generating help message, and the last are arguments with switches and values, including default type value <code>coreja</code>. The name <code>coreja</code> corresponds to name of Verilog-A module.</p>
-<p class='ruff'>We use <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Utility::argsPreprocess" title="::SpiceGenTcl::Utility::argsPreprocess" class='ruff_cmd'>::SpiceGenTcl::Utility::argsPreprocess</a> procedure here, but we can go the same way we do with <code>Core</code> class, and add, for example, default values, or use some complex logic of elements initialization:</p>
+<p class='ruff'>We use [::SpiceGenTcl::Utility::ArgsPreprocess] procedure here, but we can go the same way we do with <code>Core</code> class, and add, for example, default values, or use some complex logic of elements initialization:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#fe6efe>oo::class</font></b> create CoreModel {
     superclass Model
