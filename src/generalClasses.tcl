@@ -236,11 +236,11 @@ namespace eval ::SpiceGenTcl {
     oo::configurable create Pin {
         superclass SPICEElement
         # name of the node connected to pin
-        property nodename -set {
+        property node -set {
             if {![regexp {^(?![0-9]+[a-zA-Z])[^= %\(\),\[\]<>~]*$} $value]} {
                 return -code error "Node name '$value' is not a valid name"
             }
-            set nodename [string tolower $value]
+            set node [string tolower $value]
         }
         property name -set {
             if {$value eq {}} {
@@ -252,7 +252,7 @@ namespace eval ::SpiceGenTcl {
         } -get {
             return $name
         }
-        variable name nodename
+        variable name node
         constructor {args} {
             # Creates object of class `Pin` with name and connected node
             #  name - name of the pin
@@ -267,16 +267,18 @@ namespace eval ::SpiceGenTcl {
             # Floating pin can't be netlisted, so it throws error when try to
             # do so. Set pin name empty by special method `unsetNodeName`.
             # Synopsis: name node
-            argparse -help {Creates object of class 'Pin' with name and connected node} {
+            set arguments [argparse -inline -help {Creates object of class 'Pin' with name and connected node} {
                 {name -help {Name of the pin}}
                 {node -help {Name of the node that connected to pin}}
+            }]
+            dict for {elName elValue} $arguments {
+                my configure -$elName $elValue
             }
-            my configure -name $name -nodename $node
         }
         method unsetNodeName {args} {
             # Makes pin floating by setting name of the node to empty string.
             argparse -help {Makes pin floating by setting name of the node to empty string} {}
-            my configure -nodename {}
+            my configure -node {}
             return
         }
         method checkFloating {args} {
@@ -284,7 +286,7 @@ namespace eval ::SpiceGenTcl {
             # Returns: `true` if connected and `false` if not
             argparse -help {Determines if pin is connected to the node. Returns: 'true' if connected and 'false' if\
                                     not} {}
-            if {[my configure -nodename] eq {}} {
+            if {[my configure -node] eq {}} {
                 set floating true
             } else {
                 set floating false
@@ -297,7 +299,7 @@ namespace eval ::SpiceGenTcl {
             if {[my checkFloating]} {
                 return -code error "Pin '[my configure -name]' is not connected to the node so can't be netlisted"
             }
-            return [my configure -nodename]
+            return [my configure -node]
         }
     }
 
@@ -324,10 +326,10 @@ namespace eval ::SpiceGenTcl {
             # its presence gives us information that something it controls is on.
             # This parameter doesn't have a value, and it is the most basic class
             # in Parameter class family.
-            argparse -help {Creates object of class 'ParameterSwitch' with parameter name} {
+            set arguments [argparse -inline -help {Creates object of class 'ParameterSwitch' with parameter name} {
                 {name -help {Name of the parameter}}
-            }
-            my configure -name $name
+            }]
+            my configure -name [dget $arguments name]
         }
         method genSPICEString {} {
             # Creates string for SPICE netlist.
@@ -347,11 +349,13 @@ namespace eval ::SpiceGenTcl {
             # Class models parameter that has a name and a value - the most
             # common type of parameters in SPICE netlist. Its representation in netlist is
             # 'name=value', and can be called "keyword parameter".
-            argparse -help {Creates object of class 'Parameter' with parameter name and value} {
+            set arguments [argparse -inline -help {Creates object of class 'Parameter' with parameter name and value} {
                 {name -help {Name of the parameter}}
                 {value -help {Value of the parameter}}
+            }]
+            dict for {elName elValue} $arguments {
+                my configure -$elName $elValue
             }
-            my configure -name $name -value $value
         }
         method genSPICEString {} {
             # Creates string for SPICE netlist.
@@ -389,11 +393,14 @@ namespace eval ::SpiceGenTcl {
             # Creates object of class `ParameterNode` with parameter name and value.
             #  name - name of the parameter
             #  value - value of the parameter
-            argparse -help {Creates object of class 'ParameterNode' with parameter name and value} {
+            set arguments [argparse -inline -help {Creates object of class 'ParameterNode' with parameter name and\
+                                                           value} {
                 {name -help {Name of the parameter}}
                 {value -help {Value of the parameter}}
+            }]
+            dict for {elName elValue} $arguments {
+                my configure -$elName $elValue
             }
-            my configure -name $name -value $value
         }
         method genSPICEString {} {
             # Creates string for SPICE netlist.
@@ -409,11 +416,14 @@ namespace eval ::SpiceGenTcl {
             # Creates object of class `ParameterNodeEquation` with parameter name and value.
             #  name - name of the parameter
             #  value - value of the parameter
-            argparse -help {Creates object of class 'ParameterNodeEquation' with parameter name and value} {
+            set arguments [argparse -inline -help {Creates object of class 'ParameterNodeEquation' with parameter name\
+                                                           and value} {
                 {name -help {Name of the parameter}}
                 {value -help {Value of the parameter}}
+            }]
+            dict for {elName elValue} $arguments {
+                my configure -$elName $elValue
             }
-            my configure -name $name -value $value
         }
         method genSPICEString {} {
             # Creates string for SPICE netlist.
@@ -457,11 +467,12 @@ namespace eval ::SpiceGenTcl {
             #  name - name of the parameter
             #  value - value of the parameter
             # Class models parameter the same as described by `Parameter` but without check for value form.
-            argparse -help {Creates object of class 'ParameterNoCheck' with parameter name and value} {
+            set arguments [argparse -inline -help {Creates object of class 'ParameterNoCheck' with parameter name and\
+                                                           value} {
                 {name -help {Name of the parameter}}
                 {value -help {Value of the parameter}}
-            }
-            next $name $value
+            }]
+            next {*}[dvalues $arguments]
         }
     }
     oo::define ParameterNoCheck {
@@ -487,11 +498,12 @@ namespace eval ::SpiceGenTcl {
             # it's position in the element's definition, for example, R1 np nm 100 tc1=1 tc2=0 - resistor
             # with positional parameter R=100, you can't put it after parameters tc1 and tc2, it must be placed
             # right after the pins definition.
-            argparse -help {Creates object of class 'ParameterPositional' with parameter name and value} {
+            set arguments [argparse -inline -help {Creates object of class 'ParameterPositional' with parameter name\
+                                                           and value} {
                 {name -help {Name of the parameter}}
                 {value -help {Value of the parameter}}
-            }
-            next $name $value
+            }]
+            next {*}[dvalues $arguments]
         }
         method genSPICEString {} {
             # Creates string for SPICE netlist.
@@ -509,11 +521,12 @@ namespace eval ::SpiceGenTcl {
             #  name - name of parameter
             #  value - value of parameter
             # Class models parameter the same as described by `ParameterPositional` but without check for value form.
-            argparse -help {Creates object of class 'ParameterPositionalNoCheck' with parameter name and value} {
+            set arguments [argparse -inline -help {Creates object of class 'ParameterPositionalNoCheck' with parameter\
+                                                           name and value} {
                 {name -help {Name of the parameter}}
                 {value -help {Value of the parameter}}
-            }
-            next $name $value
+            }]
+            next {*}[dvalues $arguments]
         }
         method genSPICEString {} {
             # Creates string for SPICE netlist.
@@ -567,13 +580,14 @@ namespace eval ::SpiceGenTcl {
             # Class models parameter that has a name and a value, but it differs from
             # parent class in sense of having default value, so it has special ability to reset its value to default
             # value by special method `resetValue`.
-            argparse -help {Creates object of class 'ParameterDefault' with parameter name and value} {
+            set arguments [argparse -inline -help {Creates object of class 'ParameterDefault' with parameter name and\
+                                                           value} {
                 {name -help {Name of the parameter}}
                 {value -help {Value of the parameter}}
                 {defValue -help {Default of the parameter}}
-            }
-            my configure -defvalue $defValue
-            next $name $value
+            }]
+            my configure -defvalue [dget $arguments defValue]
+            next [dget $arguments name] [dget $arguments value]
         }
 
         method resetValue {args} {
@@ -594,11 +608,12 @@ namespace eval ::SpiceGenTcl {
             #  value - value of the parameter
             # Class models parameter that has representation as an equation.
             # Example: R={R1+R2}
-            argparse -help {Creates object of class 'ParameterEquation' with parameter name and value as an equation} {
+            set arguments [argparse -inline -help {Creates object of class 'ParameterEquation' with parameter name and\
+                                                           value as an equation} {
                 {name -help {Name of the parameter}}
                 {value -help {Value of the parameter}}
-            }
-            next $name $value
+            }]
+            next {*}[dvalues $arguments]
         }
         method genSPICEString {} {
             # Creates string for SPICE netlist.
@@ -627,12 +642,12 @@ namespace eval ::SpiceGenTcl {
             #  value - value of the parameter
             # Class models parameter that has representation as an equation, but in form of
             # positional parameter. Example: {R1+R2}
-            argparse -help {Creates object of class 'ParameterPositionalEquation' with parameter name and value as an\
-                                    equation} {
+            set arguments [argparse -inline -help {Creates object of class 'ParameterPositionalEquation' with parameter\
+                                                           name and value as anequation} {
                 {name -help {Name of the parameter}}
                 {value -help {Value of the parameter}}
-            }
-            next $name $value
+            }]
+            next {*}[dvalues $arguments]
         }
         method genSPICEString {} {
             # Creates string for SPICE netlist.
@@ -655,11 +670,7 @@ namespace eval ::SpiceGenTcl {
                 return -code error "Reference name '$value' is not a valid name"
             }
         }
-        variable name
-        # list of Pin objects references
-        variable Pins
-        # list of Parameter objects references
-        variable Params
+        variable name Params Pins
         constructor {args} {
             # Creates object of class `Device`.
             #  name - name of the device
@@ -681,7 +692,7 @@ namespace eval ::SpiceGenTcl {
             #     tc2 - keyword parameter with equation
             # This class accept definition that contains elements listed above, and generates classes: Pin, Parameter,
             # PositionalParameter with compositional relationship (has a).
-            argparse -help {Creates object of class 'Device'} {
+            set arguments [argparse -inline -help {Creates object of class 'Device'} {
                 {name -help {Name of the device}}
                 {pins -help {List of pins in the order they appear in SPICE device's definition together with connected\
                                      node in form: '{{Name0 NodeName} {Name1 NodeName} {Name2 NodeName} ...}'. Nodes\
@@ -691,10 +702,10 @@ namespace eval ::SpiceGenTcl {
                                       {Name1 Value1 ?-pos|eq|poseq|posnocheck|nocheck?}\
                                       {Name2 Value2 ?-pos|eq|poseq|posnocheck|nocheck?} ...}'. Parameter list can be\
                                       empty if device doesn't have instance parameters} -type list}
-            }
-            my configure -name $name
+            }]
+            my configure -name [dget $arguments name]
             # create Pins objects
-            foreach pin $pins {
+            foreach pin [dget $arguments pins] {
                 my addPin {*}$pin
             }
             #ruff
@@ -706,7 +717,7 @@ namespace eval ::SpiceGenTcl {
             #  -poseq - combination of both flags, print only '{$equation}'
             #  -posnocheck - positional parameter without check
             #  -nocheck - normal parameter without check
-            foreach param $params {
+            foreach param [dget $arguments params] {
                 my addParam {*}$param
             }
         }
@@ -716,7 +727,7 @@ namespace eval ::SpiceGenTcl {
             # Returns: pins dictionary
             argparse -help {Gets the dictionary that contains pin name as keys and connected node name as the values.\
                                 Returns: pins dictionary} {}
-            return [dict map {pinName pin} $Pins {$pin configure -nodename}]
+            return [dict map {pinName pin} $Pins {$pin configure -node}]
         }
         method setPinNodeName {args} {
             # Sets node name of particular pin, so,
@@ -734,7 +745,7 @@ namespace eval ::SpiceGenTcl {
             } else {
                 set pinInst [dget $Pins $pin]
             }
-            $pinInst configure -nodename $node
+            $pinInst configure -node $node
             return
         }
         method setParamValue {args} {
@@ -933,11 +944,7 @@ namespace eval ::SpiceGenTcl {
                 set type [string tolower $value]
             }
         }
-        variable name
-        # type of the model
-        variable type
-        # list of model parameters objects
-        variable Params
+        variable name type Params
         constructor {args} {
             # Creates object of class `Model`.
             #  name - name of the model
@@ -945,18 +952,18 @@ namespace eval ::SpiceGenTcl {
             #  instParams - list of instance parameters in form `{{name value ?-pos|eq|poseq?}
             #   {name value ?-pos|eq|poseq?} {name value ?-pos|eq|poseq?} ...}`
             # Class represents model card in SPICE netlist.
-            argparse -help {Creates object of class 'Model'} -pfirst {
+            set arguments [argparse -inline -help {Creates object of class 'Model'} -pfirst {
                 {name -help {Name of the model}}
                 {type -help {Type of model, for example, diode, npn, etc}}
                 {params -optional -help {{List of instance parameters in form\
                                                   '{{Name0 Value0 ?-pos|eq|poseq|posnocheck|nocheck?}\
                                                   {Name1 Value1 ?-pos|eq|poseq|posnocheck|nocheck?}\
                                                   {Name2 Value2 ?-pos|eq|poseq|posnocheck|nocheck?} ...}'}} -type list}
-            }
-            my configure -name $name -type $type
+            }]
+            my configure -name [dget $arguments name] -type [dget $arguments type]
             # create Params objects
-            if {[info exists params]} {
-                foreach param $params {
+            if {[dexist $arguments params]} {
+                foreach param [dget $arguments params] {
                     my addParam {*}$param
                 }
             }
@@ -986,9 +993,7 @@ namespace eval ::SpiceGenTcl {
             set name $value
         }
         property value
-        variable name
-        # value of the raw string
-        variable value
+        variable name value
         constructor {args} {
             # Creates object of class `RawString`.
             #  value - value of the raw string
@@ -998,17 +1003,17 @@ namespace eval ::SpiceGenTcl {
             #  It can be used to pass any string directly into netlist,
             #  for example, it can add elements that doesn't have dedicated class.
             # Synopsis: value ?-name value?
-            argparse -pfirst -help {Creates object of class 'RawString'} {
+            set arguments [argparse -inline -pfirst -help {Creates object of class 'RawString'} {
                 {value -help {Value of the raw string}}
                 {-name= -help {Name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]\
                                        and its descendants object}}
-            }
-            if {[info exists name]} {
-                my configure -name $name
+            }]
+            if {[dexist $arguments name]} {
+                my configure -name [dget $arguments name]
             } else {
                 my configure -name [self object]
             }
-            my configure -value $value
+            my configure -value [dget $arguments value]
         }
         method genSPICEString {} {
             # Creates raw string for SPICE netlist.
@@ -1027,17 +1032,17 @@ namespace eval ::SpiceGenTcl {
             #    and its descendants, optional
             # Class represent comment string, it can be a multiline comment.
             # Synopsis: value ?-name value?
-            argparse -pfirst -help {Creates object of class 'Comment'} {
+            set arguments [argparse -inline -pfirst -help {Creates object of class 'Comment'} {
                 {value -help {Value of the comment}}
                 {-name= -help {Name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]\
                                        object and its descendants}}
-            }
-            if {[info exists name]} {
-                my configure -name $name
+            }]
+            if {[dexist $arguments name]} {
+                my configure -name [dget $arguments name]
             } else {
                 my configure -name [self object]
             }
-            my configure -value $value
+            my configure -value [dget $arguments value]
         }
         method genSPICEString {} {
             # Creates comment string for SPICE netlist.
@@ -1058,17 +1063,17 @@ namespace eval ::SpiceGenTcl {
             #    and its descendants, optional
             # This class represent .include statement.
             # Synopsis: value ?-name value?
-            argparse -pfirst -help {Creates object of class 'Include'} {
+            set arguments [argparse -inline -pfirst -help {Creates object of class 'Include'} {
                 {value -help {Value of the include path}}
                 {-name= -help {Name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]\
                                        object and its descendants}}
-            }
-            if {[info exists name]} {
-                my configure -name $name
+            }]
+            if {[dexist $arguments name]} {
+                my configure -name [dget $arguments name]
             } else {
                 my configure -name [self object]
             }
-            my configure -value $value
+            my configure -value [dget $arguments value]
         }
         method genSPICEString {} {
             # Creates include string for SPICE netlist.
@@ -1088,23 +1093,23 @@ namespace eval ::SpiceGenTcl {
         constructor {args} {
             # Creates object of class `Library`.
             #  value - value of the include file
-            #  libValue - value of selected library
+            #  libvalue - value of selected library
             #  -name - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist] object
             #    and its descendants, optional
             # Class represent .lib statement.
-            # Synopsis: value libValue ?-name value?
-            argparse -pfirst -help {Creates object of class 'Library'} {
+            # Synopsis: value libvalue ?-name value?
+            set arguments [argparse -inline -pfirst -help {Creates object of class 'Library'} {
                 {value -help {Value of the include path}}
-                {libValue -help {Value of selected library}}
+                {libvalue -help {Value of selected library}}
                 {-name= -help {Name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]\
                                        object and its descendants}}
-            }
-            if {[info exists name]} {
-                my configure -name $name
+            }]
+            if {[dexist $arguments name]} {
+                my configure -name [dget $arguments name]
             } else {
                 my configure -name [self object]
             }
-            my configure -value $value -libvalue $libValue
+            my configure -value [dget $arguments value] -libvalue [dget $arguments libvalue]
         }
         method genSPICEString {} {
             # Creates library string for SPICE netlist.
@@ -1121,8 +1126,7 @@ namespace eval ::SpiceGenTcl {
         property name -set {
             set name [string tolower $value]
         }
-        variable name
-        variable Params
+        variable name Params
         constructor {args} {
             # Creates object of class `Options`.
             #  params - list of instance parameters in form `{{name value ?-sw?} {name value ?-sw?}
@@ -1131,18 +1135,18 @@ namespace eval ::SpiceGenTcl {
             #    and its descendants, optional
             # This class represent .options statement.
             # Synopsis: params ?-name value?
-            argparse -pfirst -help {Creates object of class 'Options'} {
+            set arguments [argparse -inline -pfirst -help {Creates object of class 'Options'} {
                 {params -help {list of instance parameters in form '{{name value ?-sw?} {name value ?-sw?}\
                                                                              {name value ?-sw?} ...}'}}
                 {-name= -help {Name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]\
                                        object and its descendants}}
-            }
-            if {[info exists name]} {
-                my configure -name $name
+            }]
+            if {[dexist $arguments name]} {
+                my configure -name [dget $arguments name]
             } else {
                 my configure -name [self object]
             }
-            foreach param $params {
+            foreach param [dget $arguments params] {
                 if {[llength $param]<2} {
                     error "Value '$param' is not a valid value"
                 } else {
@@ -1204,8 +1208,7 @@ namespace eval ::SpiceGenTcl {
         property name -set {
             set name [string tolower $value]
         }
-        variable name
-        variable Params
+        variable name Params
         constructor {args} {
             # Creates object of class `ParamStatement`.
             #  params - list of instance parameters in form `{{name value ?-eq?} {name value ?-eq?} ...}`
@@ -1213,18 +1216,18 @@ namespace eval ::SpiceGenTcl {
             #    and its descendants, optional
             # Class represent .param statement.
             # Synopsis: params ?-name value?
-            argparse -pfirst -help {Creates object of class 'ParamStatement'} {
+            set arguments [argparse -inline -pfirst -help {Creates object of class 'ParamStatement'} {
                 {params -help {list of instance parameters in form '{{name value ?-eq?} {name value ?-eq?} ...}'}\
                          -type list}
                 {-name= -help {Name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]\
                                        object and its descendants}}
-            }
-            if {[info exists name]} {
-                my configure -name $name
+            }]
+            if {[dexist $arguments name]} {
+                my configure -name [dget $arguments name]
             } else {
                 my configure -name [self object]
             }
-            foreach param $params {
+            foreach param [dget $arguments params] {
                 if {[llength $param]<2} {
                     error "Value '$param' is not a valid value"
                 } else {
@@ -1276,8 +1279,7 @@ namespace eval ::SpiceGenTcl {
         property name -set {
             set name [string tolower $value]
         }
-        variable name
-        variable Vectors
+        variable name Vectors
         constructor {args} {
             # Creates object of class `ParamStatement`.
             #  vectors - list of vectors in form `{vec0 vec1 vec2 ...}`
@@ -1285,17 +1287,17 @@ namespace eval ::SpiceGenTcl {
             #    and its descendants, optional
             # Class represent .save statement.
             # Synopsis: vectors ?-name value?
-            argparse -pfirst -help {Creates object of class 'ParamStatement'} {
+            set arguments [argparse -inline -pfirst -help {Creates object of class 'ParamStatement'} {
                 {vectors -help {List of vectors in form '{vec0 vec1 vec2 ...}'} -type list}
                 {-name= -help {Name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]\
                                        object and its descendants}}
-            }
-            if {[info exists name]} {
-                my configure -name $name
+            }]
+            if {[dexist $arguments name]} {
+                my configure -name [dget $arguments name]
             } else {
                 my configure -name [self object]
             }
-            foreach vector $vectors {
+            foreach vector [dget $arguments vectors] {
                 if {[llength $vector]>1} {
                     error "Name '$vector' is not a valid name of the vector"
                 } else {
@@ -1356,8 +1358,7 @@ namespace eval ::SpiceGenTcl {
         property name -set {
             set name [string tolower $value]
         }
-        variable name
-        variable Params
+        variable name Params
         constructor {args} {
             # Creates object of class `Ic`.
             #  params - list of instance parameters in form `{{name value} {name value} {name equation -eq} ...}`
@@ -1365,18 +1366,18 @@ namespace eval ::SpiceGenTcl {
             #    and its descendants, optional
             # Class represent .ic statement.
             # Synopsis: params ?-name value?
-            argparse -pfirst -help {Creates object of class 'Ic'} {
+            set arguments [argparse -inline -pfirst -help {Creates object of class 'Ic'} {
                 {params -help {list of instance parameters in form '{{name value ?-eq?} {name value ?-eq?} ...}'}\
                          -type list}
                 {-name= -help {Name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]\
                                        object and its descendants}}
-            }
-            if {[info exists name]} {
-                my configure -name $name
+            }]
+            if {[dexist $arguments name]} {
+                my configure -name [dget $arguments name]
             } else {
                 my configure -name [self object]
             }
-            foreach param $params {
+            foreach param [dget $arguments params] {
                 if {[llength $param]<2} {
                     error "Value '$param' is not a valid value"
                 } else {
@@ -1440,8 +1441,7 @@ namespace eval ::SpiceGenTcl {
         property name -set {
             set name [string tolower $value]
         }
-        variable name
-        variable Nets
+        variable name Nets
         constructor {args} {
             # Creates object of class `Global`.
             #  nets - list of nets in form `{net0 net1 ...}`
@@ -1449,17 +1449,17 @@ namespace eval ::SpiceGenTcl {
             #    and its descendants, optional
             # Class represent .global statement.
             # Synopsis: nets ?-name value?
-            argparse -pfirst -help {Creates object of class 'Global'} {
+            set arguments [argparse -inline -pfirst -help {Creates object of class 'Global'} {
                 {nets -help {List of nets in form '{net0 net1 ...}'} -type list}
                 {-name= -help {Name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]\
                                        object and its descendants}}
-            }
-            if {[info exists name]} {
-                my configure -name $name
+            }]
+            if {[dexist $arguments name]} {
+                my configure -name [dget $arguments name]
             } else {
                 my configure -name [self object]
             }
-            my addNets $nets
+            my addNets [dget $arguments nets]
         }
         method addNets {args} {
             argparse -help {Adds nets to the class} {
@@ -1518,16 +1518,16 @@ namespace eval ::SpiceGenTcl {
             #  -eq - optional parameter qualificator
             # This class represent .temp statement with temperature value.
             # Synopsis: value ?-eq?
-            argparse -pfirst -help {Creates object of class 'Temp'} {
+            set arguments [argparse -inline -pfirst -help {Creates object of class 'Temp'} {
                 {value -help {Value of the temperature}}
                 {-eq -help {Optional parameter qualificator}}
-            }
+            }]
             my configure -name temp
             ##nagelfar variable eq
-            if {[info exists eq]} {
-                my AddParam temp $value -eq
+            if {[dexist $arguments eq]} {
+                my AddParam temp [dget $arguments value] -eq
             } else {
-                my AddParam temp $value
+                my AddParam temp [dget $arguments value]
             }
         }
         method AddParam {args} {
@@ -1577,17 +1577,16 @@ namespace eval ::SpiceGenTcl {
         property name -set {
             set name [string tolower $value]
         }
-        variable name
-        variable Elements
+        variable name Elements
         constructor {args} {
             # Creates object of class `Netlist`.
             #  name - name of the netlist
             # Class implements netlist as a collection of SPICE elements. Any element that has SPICEElement
             # as a parent class can be added to Netlist, except Options and Analysis.
-            argparse -help {Creates object of class 'Netlist'} {
+            set arguments [argparse -inline -help {Creates object of class 'Netlist'} {
                 {name -help {Name of the netlist}}
-            }
-            my configure -name $name
+            }]
+            my configure -name [dget $arguments name]
         }
         method add {args} {
             # Adds elements objects to Elements dictionary.
@@ -1674,25 +1673,22 @@ namespace eval ::SpiceGenTcl {
         superclass Netlist
         # simulator object that run simulation
         property simulator
-        variable simulator
         # standard output of simulation
         property log
-        variable log
         # results of simulation in form of RawData object
         property data
-        variable data
         # flag that tells about Analysis element presence in Circuit
-        variable ContainAnalysis Elements
+        variable simulator log data ContainAnalysis Elements
         constructor {args} {
             # Creates object of class `CircuitNetlist`.
             #  name - name of the tol-level circuit
             # Class implements a top level netlist which is run in SPICE. We should add [::SpiceGenTcl::Simulator]
             # object reference to make it able to run simulation.
             # Synopsis: name
-            argparse -help {Creates object of class 'CircuitNetlist'} {
+            set arguments [argparse -inline -help {Creates object of class 'CircuitNetlist'} {
                 {name -help {Name of the tol-level circuit}}
-            }
-            next $name
+            }]
+            next [dget $arguments name]
         }
         method add {args} {
             # Adds elements object to Circuit `Elements` dictionary.
@@ -1797,10 +1793,7 @@ namespace eval ::SpiceGenTcl {
     ##nagelfar subcmd+ _obj,Subcircuit addPin addParam
     oo::configurable create Subcircuit {
         superclass Netlist
-        # pins that printed on definition line of subcircuit
-        variable Pins
-        # params that printed on definition line of subcircuit
-        variable Params
+        variable Pins Params
         constructor {args} {
             # Creates object of class `Subcircuit`.
             #  name - name of the subcircuit
@@ -1809,26 +1802,26 @@ namespace eval ::SpiceGenTcl {
             #  params - list of input parameters in form `{{name value} {name value} {name value} ...}`
             # This class implements subcircuit, it is subclass of netlist because it holds list of elements
             # inside subcircuit, together with header and connection of elements inside.
-            argparse -help {Creates object of class 'Device'} {
+            set arguments [argparse -inline -help {Creates object of class 'Device'} {
                 {name -help {Name of the subcircuit}}
                 {pins -help {List of pins in the order they appear in SPICE subcircuits definition together in form:\
                                      '{pinName0 pinName1 ...}'} -type list}
                 {params -help {List of input parameters in form '{{name value} {name value} {name value} ...}'}\
                          -type list}
-            }
+            }]
             # create Pins objects, nodes are set to empty line
-            foreach pin $pins {
+            foreach pin [dget $arguments pins] {
                 my addPin [@ $pin 0] {}
             }
             # create Params objects that are input parameters of subcircuit
-            foreach param $params {
+            foreach param [dget $arguments params] {
                 if {[llength $param]<=2} {
                     my addParam {*}$param
                 } else {
-                    error "Wrong parameter '[@ $param 0]' definition in subcircuit $name"
+                    error "Wrong parameter '[@ $param 0]' definition in subcircuit '[dget $arguments name]'"
                 }
             }
-            next $name
+            next [dget $arguments name]
         }
         # copy methods of Device to manipulate header .subckt definition elements
         method addPin {*}[info class definition ::SpiceGenTcl::Device addPin]
@@ -1901,7 +1894,6 @@ namespace eval ::SpiceGenTcl {
         property name -set {
             set name [string tolower $value]
         }
-        variable name
         # type of analysis, i.e. dc, ac, tran, etc
         property type -set {
             set type [string tolower $value]
@@ -1911,9 +1903,7 @@ namespace eval ::SpiceGenTcl {
             }
             set type $value
         }
-        variable type
-        # list of Parameter objects
-        variable Params
+        variable name type Params
         constructor {args} {
             # Creates object of class `Analysis`.
             #  type - type of analysis, for example, tran, ac, dc, etc
@@ -1924,21 +1914,21 @@ namespace eval ::SpiceGenTcl {
             # Class models analysis statement.
             # Synopsis: type params ?-name value?
             my variable name
-            argparse -help {Creates object of class 'Analysis'} -pfirst {
+            set arguments [argparse -inline -help {Creates object of class 'Analysis'} -pfirst {
                 {type -help {Type of analysis, for example, tran, ac, dc, etc}}
                 {params -help {List of instance parameters in form '{{name value} {name -sw} {name Value -eq}\
                                                                              {name Value -posnocheck} ...}'} -type list}
                 {-name= -help {Name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]\
                                        object and its descendants}}
-            }
-            if {[info exists name]} {
-                my configure -name $name
+            }]
+            if {[dexist $arguments name]} {
+                my configure -name [dget $arguments name]
             } else {
                 my configure -name [self object]
             }
-            my configure -type $type
+            my configure -type [dget $arguments type]
             # create Analysis objects
-            foreach param $params {
+            foreach param [dget $arguments params] {
                 if {[llength $param]<2} {
                     error "Value '$param' is not a valid value"
                 } else {
@@ -1965,12 +1955,9 @@ namespace eval ::SpiceGenTcl {
     oo::configurable create Simulator {
         self mixin -append oo::abstract
         property name
-        variable name
-        variable Command
         property log
-        variable log
         property data
-        variable data
+        variable name Command log data
         method run {} {
             # Runs simulation.
             error {Not implemented}
@@ -2043,12 +2030,10 @@ namespace eval ::SpiceGenTcl {
         property name -set {
             set name [string tolower $value]
         }
-        variable name
         # Type of dataset, could be voltage, vurrent, time or frequency
         property type -set {
             set type [string tolower $value]
         }
-        variable type
         # Numerical type of dataset, real, double or complex
         property numtype -set {
             # method to set the numerical type of the dataset
@@ -2057,25 +2042,25 @@ namespace eval ::SpiceGenTcl {
             }
             set numtype $value
         }
-        variable numtype
         # Number of points (length of dataset)
         property len
-        variable len
-        # values at points
-        variable DataPoints
+         # values at points
+        variable name type numtype len DataPoints
         constructor {args} {
             # initialize dataset
             #  name - name of the dataset
             #  type - type of dataset
             #  len - total number of points
-            #  numType - numerical type of dataset
-            argparse -help {Initialize object 'Dataset'} {
+            #  numtype - numerical type of dataset
+            set arguments [argparse -inline -help {Initialize object 'Dataset'} {
                 {name -help {Name of the dataset}}
                 {type -help {Type of dataset}}
                 {len -help {Total number of points}}
-                {numType -optional -default real -help {Numerical type of dataset}}
+                {numtype -optional -default real -help {Numerical type of dataset}}
+            }]
+            dict for {elName elValue} $arguments {
+                my configure -$elName $elValue
             }
-            my configure -name $name -type $type -len $len -numtype $numType
         }
         method setDataPoints {dataPoints} {
             # method to set the data points
@@ -2120,16 +2105,16 @@ namespace eval ::SpiceGenTcl {
             #  type - type of trace
             #  len - total number of points
             #  axis - name of axis that is linked to trace
-            #  numType - numerical type of trace
-            argparse -help {Initialize object 'Dataset'} {
+            #  numtype - numerical type of trace
+            set arguments [argparse -inline -help {Initialize object 'Dataset'} {
                 {name -pass rest -help {Name of the trace}}
                 {type -pass rest -help {Type of trace}}
                 {len -pass rest -help {Total number of points}}
                 {axis -help {Name of axis that is linked to trace}}
-                {numType -pass rest -optional -default real -help {Numerical type of trace}}
-            }
-            my configure -axis $axis
-            next {*}$rest
+                {numtype -pass rest -optional -default real -help {Numerical type of trace}}
+            }]
+            my configure -axis [dget $arguments axis]
+            next {*}[dget $arguments rest]
         }
     }
 
@@ -2153,16 +2138,12 @@ namespace eval ::SpiceGenTcl {
         mixin BinaryReader Utility
         # path to raw file including it's file name
         property path
-        variable path
         # parameters of raw file readed from it's header
         property rawparams
-        variable rawparams
         # number of points in raw file
         property npoints
-        variable npoints
         # number of variables in raw file
         property nvariables
-        variable nvariables
         # object reference of axis in raw file
         property axis -get {
             if {[info exists axis]} {
@@ -2171,29 +2152,26 @@ namespace eval ::SpiceGenTcl {
                 return -code error "Raw file '[my configure -path]' doesn't have an axis"
             }
         }
-        variable axis
         # objects references of traces in raw file
         property traces
-        variable traces
         # binary block size in bytes that contains all variables at axis point value
-        variable BlockSize
+        variable path rawparams npoints nvariables axis traces BlockSize
         constructor {args} {
             # Creates RawFile object.
             #  path - path to raw file including it's file name
             #  traces2read - list of traces that will be readed, default value is \*,
             #   that means reading all traces
             #  simulator - simulator that produced this raw file, default is ngspice
-            argparse -help {Creates 'RawFile' object} {
+            set arguments [argparse -inline -help {Creates 'RawFile' object} {
                 {path -help {path to raw file including it's file name}}
                 {traces2read -optional -default * -help {List of traces that will be readed, default value is *,\
                                                                  that means reading all traces}}
                 {simulator -optional -default ngspice -help {Total number of points}}
-            }
-            my configure -path $path
+            }]
+            my configure -path [dget $arguments path]
             set fileSize [file size $path]
             set file [open $path r]
             fconfigure $file -translation binary
-
 ####   read header
             set ch [read $file 6]
             if {[encoding convertfrom utf-8 $ch] eq {Title:}} {
@@ -2228,9 +2206,7 @@ namespace eval ::SpiceGenTcl {
                     append line $ch
                 }
             }
-
 ####   save header parameters
-
             foreach line $header {
                 set lineList [split $line :]
                 if {[@ $lineList 0] eq {Variables}} {
@@ -2247,15 +2223,15 @@ namespace eval ::SpiceGenTcl {
             }
             set flags [split [dget [my configure -rawparams] Flags]]
             if {({complex} in $flags) || ([dget [my configure -rawparams] Plotname] eq {AC Analysis})} {
-                set numType complex
+                set numtype complex
             } else {
-                if {({double} in $flags) || ($simulator eq {ngspice}) || ($simulator eq {xyce})} {
-                    set numType double
+                if {({double} in $flags) || ([dget $arguments simulator] eq {ngspice}) ||\
+                            ([dget $arguments simulator] eq {xyce})} {
+                    set numtype double
                 } else {
-                    set numType real
+                    set numtype real
                 }
             }
-
 ####   parse variables
             set i [lsearch $header Variables:]
             set ivar 0
@@ -2263,37 +2239,36 @@ namespace eval ::SpiceGenTcl {
                 set lineList [split [string trim $line] \t]
                 lassign $lineList idx name varType
                 if {$ivar==0} {
-                    if {($simulator eq {ltspice}) && ($name eq {time})} {
+                    if {([dget $arguments simulator] eq {ltspice}) && ($name eq {time})} {
                         # workaround for bug with negative values in time axis
                         set axisIsTime true
                     }
-                    if {$numType eq {real}} {
+                    if {$numtype eq {real}} {
                         set axisNumType double
                     } else {
-                        set axisNumType $numType
+                        set axisNumType $numtype
                     }
                     my configure -axis [::SpiceGenTcl::Axis new $name $varType $npoints $axisNumType]
                     ##nagelfar ignore #12 {Found constant "traces"}
                     dappend traces [string tolower $name] [my configure -axis]
-                } elseif {($traces2read eq {*}) || ($name in $traces2read)} {
+                } elseif {([dget $arguments traces2read] eq {*}) || ($name in [dget $arguments traces2read])} {
                     if {$hasAxis} {
                         dappend traces [string tolower $name] [::SpiceGenTcl::Trace new $name $varType $npoints\
-                                                                       [[my configure -axis] configure -name] $numType]
+                                                                       [[my configure -axis] configure -name] $numtype]
                     } else {
                         dappend traces [string tolower $name]\
-                                [::SpiceGenTcl::Trace new $name $varType $npoints {} $numType]
+                                [::SpiceGenTcl::Trace new $name $varType $npoints {} $numtype]
                     }
                 } else {
                     dappend traces [string tolower $name]\
-                            [::SpiceGenTcl::EmptyTrace new $name $varType $npoints $numType]
+                            [::SpiceGenTcl::EmptyTrace new $name $varType $npoints $numtype]
                 }
                 incr ivar
             }
-            if {($traces2read eq {}) || ![llength $traces2read]} {
+            if {([dget $arguments traces2read] eq {}) || ![llength [dget $arguments traces2read]]} {
                 close $file
                 return
             }
-
 ####   read data
             if {$rawType eq {Binary:}} {
                 set BlockSize [= {($fileSize - $binaryStart)/$npoints}]
@@ -2363,13 +2338,13 @@ namespace eval ::SpiceGenTcl {
                                 close $file
                                 error {Error reading file}
                             }
-                            if {$numType eq {complex}} {
+                            if {$numtype eq {complex}} {
                                 set value [split [@ $lineList 1] ,]
                             } else {
                                 set value [@ $lineList 1]
                             }
                         } else {
-                            if {$numType eq {complex}} {
+                            if {$numtype eq {complex}} {
                                 set value [split [@ $lineList 1] ,]
                             } else {
                                 set value [@ $lineList 1]
@@ -2474,11 +2449,8 @@ namespace eval ::SpiceGenTcl {
     ##nagelfar subcmd+ _obj,Parser configure CheckEqual Unbrace ParseWithEqual CheckBraced CheckBracedWithEqual\
             ParseBracedWithEqual BuildNetlist buildTopNetlist ParseParams
     oo::configurable create Parser {
-        property parsername
-        variable parsername
+        property name
         property filepath
-        variable filepath
-        variable FileData
         # The SubcktsTree contains a tree object from the `struct::tree` library, representing a hierarchical subcircuit
         # structure with possible nested subcircuits. Each node's name corresponds to the full path of a particular 
         # subcircuit in the hierarchy. For example, `/topsubckt/middlesubckt/innersubckt` represents the subcircuit
@@ -2490,15 +2462,10 @@ namespace eval ::SpiceGenTcl {
         #     from the bottom up, meaning the definition of the top subcircuit includes the definitions of its child 
         #     subcircuits in its constructor and local namespace. Each child subcircuit's definition, in turn, includes 
         #     the definitions of its own children, continuing down the hierarchy.
-        variable SubcktsTree
-        variable ElemsMethods
-        variable DotsMethods
-        variable SupModelsTypes
         property topnetlist
-        variable topnetlist
-        variable definitions
         property definitions
-        variable NamespacePath
+        variable name filepath FileData SubcktsTree ElemsMethods DotsMethods SupModelsTypes topnetlist definitions\
+                NamespacePath
         initialize {
             variable ModelTemplate {oo::class create @type@ {
                 superclass ::SpiceGenTcl::Model
@@ -2527,7 +2494,7 @@ namespace eval ::SpiceGenTcl {
                 {name -help {Name of the object}}
                 {filepath -help {Path to file that should be parsed}}
             }]
-            my configure -parsername [dget $arguments name]
+            my configure -name [dget $arguments name]
             my configure -filepath [dget $arguments filepath]
             my configure -topnetlist [::SpiceGenTcl::Netlist new [file tail [dget $arguments filepath]]]
         }
@@ -2543,7 +2510,7 @@ namespace eval ::SpiceGenTcl {
             # Parses line by line and creates tree with each node represent subcircuit that can contain
             #   other subcircuits as it's children. As attributes we have number of start and end lines of subcircuit.
             if {![info exists FileData]} {
-                error "Parser object '[my configure -parsername]' doesn't have prepared data"
+                error "Parser object '[my configure -name]' doesn't have prepared data"
             }
             set fileData $FileData
             set tree [::struct::tree]
@@ -2597,7 +2564,7 @@ namespace eval ::SpiceGenTcl {
             #   subcktPath - subcircuit as a name of the tree node
             classvariable SubcircuitTemplate
             if {![info exists FileData]} {
-                error "Parser object '[my configure -parsername]' doesn't have prepared data"
+                error "Parser object '[my configure -name]' doesn't have prepared data"
             }
             set allLines $FileData
             set startLine [$SubcktsTree get $subcktPath startLine]
@@ -2674,7 +2641,7 @@ namespace eval ::SpiceGenTcl {
                 -noeval
             }
             if {![info exists FileData]} {
-                error "Parser object '[my configure -parsername]' doesn't have prepared data"
+                error "Parser object '[my configure -name]' doesn't have prepared data"
             }
             set allLines $FileData
             set topNetlist [my configure -topnetlist]

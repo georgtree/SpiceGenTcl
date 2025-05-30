@@ -59,7 +59,7 @@ test testPinClass-2 {test creation of Pin class instance and getName interface} 
 test testPinClass-3 {test creation of Pin class instance and getNodeName interface} -setup {
     set pinInst [Pin new drain netd]
 } -body {
-    set result [$pinInst configure -nodename]
+    set result [$pinInst configure -node]
 } -result netd -cleanup {
     unset pinInst result
 }
@@ -92,8 +92,8 @@ test testPinClass-10 {test creation of Pin class instance and handling empty str
 test testPinClass-11 {test creation of Pin class instance and setNodeName interface} -setup {
     set pinInst [Pin new drain netd]
 } -body {
-    $pinInst configure -nodename net1
-    set result [$pinInst configure -nodename]
+    $pinInst configure -node net1
+    set result [$pinInst configure -node]
 } -result net1 -cleanup {
     unset pinInst result
 }
@@ -101,7 +101,7 @@ test testPinClass-11 {test creation of Pin class instance and setNodeName interf
 test testPinClass-12 {test creation of Pin class instance and setNodeName interface with wrong node name} -setup {
     set pinInst [Pin new drain netd]
 } -body {
-    catch {$pinInst configure -nodename 123net} errorStr
+    catch {$pinInst configure -node 123net} errorStr
     return $errorStr
 } -result {Node name '123net' is not a valid name} -cleanup {
     unset pinInst errorStr
@@ -111,7 +111,7 @@ test testPinClass-13 {test creation of Pin class instance and unsetNodeName inte
     set pinInst [Pin new drain netd]
 } -body {
     $pinInst unsetNodeName
-    set result [$pinInst configure -nodename]
+    set result [$pinInst configure -node]
 } -result {} -cleanup {
     unset pinInst result
 }
@@ -1309,7 +1309,7 @@ test testSubcircuitClass-9 {test creation of Subcircuit class instance with genS
     }
     catch {RCnet new} errorStr
     return $errorStr
-} -result {Wrong parameter 'c' definition in subcircuit rcnet} -cleanup {
+} -result {Wrong parameter 'c' definition in subcircuit 'rcnet'} -cleanup {
     rename RCnet ""
     unset errorStr
 }

@@ -18,15 +18,8 @@ namespace eval ::SpiceGenTcl::Ngspice {
     namespace export NgspiceParser
     oo::configurable create NgspiceParser {
         superclass ::SpiceGenTcl::Parser
-        variable parsername
-        variable filepath
-        variable FileData
-        variable SubcktsTree
-        variable ElemsMethods
-        variable DotsMethods
-        variable SupModelsTypes
-        variable topnetlist
-        variable NamespacePath
+        variable parsername filepath FileData SubcktsTree ElemsMethods DotsMethods SupModelsTypes topnetlist\
+                NamespacePath
         initialize {
             variable ModelTemplate {oo::class create @type@ {
                 superclass ::SpiceGenTcl::Model
