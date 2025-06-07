@@ -97,10 +97,10 @@ namespace eval ::SpiceGenTcl {
                 }
             }
             dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([@ $value 1] eq {-eq})} {
-                    lappend paramsLoc [list $paramName [@ $value 0] -poseq]
+                if {([llength $value]>1) && ([@ $value 0] eq {-eq})} {
+                    lappend paramsLoc [list -poseq $paramName [@ $value 1]]
                 } else {
-                    lappend paramsLoc [list $paramName $value -pos]
+                    lappend paramsLoc [list -pos $paramName $value]
                 }
             }
             return
@@ -187,7 +187,11 @@ namespace eval ::SpiceGenTcl {
             set params {}
             dict for {name value} $arguments {
                 if {$name ni $paramsNames} {
-                    lappend switches [list $name {*}$value]
+                    if {[@ $value 0] eq {-eq}} {
+                        lappend switches [list -eq $name [@ $value 1]]
+                    } else {
+                        lappend switches [list $name $value]
+                    }
                 }
             }
             foreach param $paramsNames {
@@ -318,7 +322,8 @@ namespace eval ::SpiceGenTcl {
                 return -code error "Parameter name '$value' is not a valid name"
             }
         }
-        variable name
+        property value
+        variable name value
         constructor {args} {
             # Creates object of class `ParameterSwitch` with parameter name.
             #  name - name of the parameter
@@ -329,7 +334,7 @@ namespace eval ::SpiceGenTcl {
             set arguments [argparse -inline -help {Creates object of class 'ParameterSwitch' with parameter name} {
                 {name -help {Name of the parameter}}
             }]
-            my configure -name [dget $arguments name]
+            my configure -name [dget $arguments name] -value {}
         }
         method genSPICEString {} {
             # Creates string for SPICE netlist.
@@ -706,7 +711,7 @@ namespace eval ::SpiceGenTcl {
             my configure -name [dget $arguments name]
             # create Pins objects
             foreach pin [dget $arguments pins] {
-                my addPin {*}$pin
+                my actOnPin -add {*}$pin
             }
             #ruff
             # Each parameter definition could be modified by
@@ -718,157 +723,178 @@ namespace eval ::SpiceGenTcl {
             #  -posnocheck - positional parameter without check
             #  -nocheck - normal parameter without check
             foreach param [dget $arguments params] {
-                my addParam {*}$param
+                my actOnParam -add {*}$param
             }
         }
-        method getPins {args} {
-            # Gets the dictionary that contains pin name as keys and
-            #  connected node name as the values.
-            # Returns: pins dictionary
-            argparse -help {Gets the dictionary that contains pin name as keys and connected node name as the values.\
-                                Returns: pins dictionary} {}
-            return [dict map {pinName pin} $Pins {$pin configure -node}]
-        }
-        method setPinNodeName {args} {
-            # Sets node name of particular pin, so,
-            #  in other words, connect particular pin to particular node.
-            #  pin - name of the pin
-            #  node - name of the node that we want connect to pin
-            argparse -help {Sets node name of particular pin, so, in other words, connect particular pin to particular\
-                                    node} {
-                {pin -help {Name of the pin}}
-                {node -help {Name of the node that we want connect to pin}}
+        method actOnPin {args} {
+            argparse -help {Applied selected actions on pin of the device} {
+                {-add -key action -value add -require {pin node} -help {Add new pin to the device}}
+                {-get -key action -value get -help {Get node name connected to pin}}
+                {-set -key action -value set -require {pin node} -help {Set node name connected to pin}}
+                {-all -require get -forbid {pin node} -help {Option for getting the dictionary that contains pin name\
+                                                                     as keys and connected node name as the values}}
+                {pin -optional -help {Name of the pin}}
+                {node -optional -help {Name of the node connected to pin}}
             }
-            if {[catch {dget $Pins $pin}]} {
-                return -code error "Pin with name '$pin' was not found in device's '[my configure -name]'\
-                        list of pins '[dict keys [my getPins]]'"
-            } else {
-                set pinInst [dget $Pins $pin]
-            }
-            $pinInst configure -node $node
-            return
-        }
-        method setParamValue {args} {
-            # Sets (or change) value of particular parameters.
-            #  pname - name of the parameter
-            #  value - value of the parameter
-            #  arguments - optional pairs of name-value
-            # Synopsis: name value ?name value ...?
-            argparse -help {Sets (or change) value of particular parameters} {
-                {pname -help {Name of the parameter} -pass arguments}
-                {value -help {Value of the parameter} -pass arguments}
-                {arguments -catchall -help {Optional pairs of name-value}}
-            }
-            if {[llength $arguments]%2!=0} {
-                return -code error "Number of arguments to method '[dict get [info frame 0] method]' must be even"
-            }
-            for {set i 0} {$i<[llength $arguments]} {incr i 2} {
-                set paramName [string tolower [@ $arguments [= {$i}]]]
-                set paramValue [@ $arguments [= {$i+1}]]
-                if {[catch {dget $Params $paramName}]} {
-                    return -code error "Parameter with name '$paramName' was not found in element's\
-                            '[my configure -name]' list of parameters '[dict keys [my getParams]]'"
-                } else {
-                    set param [dget $Params $paramName]
+            switch $action {
+                add {
+                    set pin [string tolower $pin]
+                    set node [string tolower $node]
+                    if {[info exists Pins]} {
+                        set pins [dkeys $Pins]
+                    }
+                    lappend pins $pin
+                    if {[my DuplListCheck $pins]} {
+                        return -code error "Pins list '$pins' has already contains pin with name '$pin'"
+                    }
+                    dappend Pins $pin [::SpiceGenTcl::Pin new $pin $node]
                 }
-                $param configure -value $paramValue
-            }
-            return
-        }
-        method addPin {args} {
-            # Adds new Pin object to the dictionary of `Pins`.
-            #  pin - name of the pin
-            #  node - name of the node connected to pin
-            # Synopsis: pin node
-            argparse -help {Adds new Pin object to the dictionary of 'Pins'} {
-                {pin -help {Name of the pin}}
-                {node -help {Name of the node that we want connect to pin}}
-            }
-            set pin [string tolower $pin]
-            set node [string tolower $node]
-            if {[info exists Pins]} {
-                set pins [dict keys $Pins]
-            }
-            lappend pins $pin
-            if {[my DuplListCheck $pins]} {
-                return -code error "Pins list '$pins' has already contains pin with name '$pin'"
-            }
-            dict append Pins $pin [::SpiceGenTcl::Pin new $pin $node]
-            return
-        }
-        method addParam {args} {
-            # Adds new parameter to device, and throws error on dublicated names.
-            #  pname - name of parameter
-            #  value - value of parameter
-            #  -eq - parameter is of class [::SpiceGenTcl::ParameterEquation], optional, forbids other switches
-            #  -poseq - parameter is of class [::SpiceGenTcl::ParameterPositionalEquation], optional, forbids other
-            #    switches
-            #  -posnocheck - parameter is of class [::SpiceGenTcl::ParameterPositionalNoCheck], optional, forbids other
-            #    switches
-            #  -pos - parameter is of class [::SpiceGenTcl::ParameterPositional], optional, forbids other switches
-            #  -nocheck - parameter is of class [::SpiceGenTcl::ParameterNoCheck], optional, forbids other switches
-            # Synopsis: pname value ?-name value? ?-eq|poseq|posnocheck|pos|nocheck?
-            argparse -pfirst -help {Adds new parameter to device, and throws error on dublicated names} {
-                {-pos -key paramQual -value pos -help {Parameter has strict position and only '$Value' is displayed in\
-                                                               netlist}}
-                {-eq -key paramQual -value eq -help {Parameter may contain equation in terms of functions and other\
-                                                             parsmeters, printed as '$name={$equation}'}}
-                {-poseq -key paramQual -value poseq -help {Combination of both flags, print only '{$equation}'}}
-                {-posnocheck -key paramQual -value posnocheck -help {Positional parameter without check}}
-                {-nocheck -key paramQual -value nocheck -default {} -help {Normal parameter without check}}
-                {pname -help {Name of parameter}}
-                {value -help {Value of parameter}}
-            }
-            # method adds new Parameter object to the list Params
-            set pname [string tolower $pname]
-            if {[info exists Params]} {
-                set params [dict keys $Params]
-            }
-            lappend params $pname
-            if {[my DuplListCheck $params]} {
-                return -code error "Parameters list '$params' has already contains parameter with name '$pname'"
-            }
-            # select parameter object according to parameter qualificator
-            if {$value eq {-sw}} {
-                dict append Params $pname [::SpiceGenTcl::ParameterSwitch new $pname]
-            } else {
-                ##nagelfar variable paramQual
-                switch $paramQual {
-                    pos {
-                        dict append Params $pname [::SpiceGenTcl::ParameterPositional new $pname $value]
+                get {
+                    if {![info exists Pins]} {
+                        return
                     }
-                    eq {
-                        dict append Params $pname [::SpiceGenTcl::ParameterEquation new $pname $value]
+                    if {[info exists all]} {
+                        return [dict map {pinName pin} $Pins {$pin configure -node}]
+                    } elseif {[info exists pin]} {
+                        set pin [string tolower $pin]
+                        if {[dexist $Pins $pin]} {
+                            return [dget $Pins $pin]
+                        } else {
+                            return -code error "Device '$name' doesn't have pin with name '$pin'"
+                        }
+                    } else {
+                        return -code error "'-get' action requires 'pin' parameter or '-all' option"
                     }
-                    poseq {
-                        dict append Params $pname [::SpiceGenTcl::ParameterPositionalEquation new $pname $value]
+                }
+                set {
+                    set pin [string tolower $pin]
+                    set node [string tolower $node]
+                    if {![info exists Pins]} {
+                        return -code error "Device '$name' doesn't have pins"
                     }
-                    posnocheck {
-                        dict append Params $pname [::SpiceGenTcl::ParameterPositionalNoCheck new $pname $value]
-                    }
-                    nocheck {
-                        dict append Params $pname [::SpiceGenTcl::ParameterNoCheck new $pname $value]
-                    }
-                    default {
-                        dict append Params $pname [::SpiceGenTcl::Parameter new $pname $value]
+                    if {[dexist $Pins $pin]} {
+                        [dget $Pins $pin] configure -node $node
+                    } else {
+                        return -code error "Pin with name '$pin' was not found in device's '$name' list of pins\
+                                '[dkeys $Pins]'"
                     }
                 }
             }
             return
         }
-        method deleteParam {args} {
-            # Deletes existing `Parameter` object from list `Params`.
-            #  pname - name of parameter that shhould be deleted
-            # Synopsis: pname
-            argparse -help {Deletes existing 'Parameter' object from list 'Params'} {
-                {pname -help {Name of the parameter}}
+        method actOnParam {args} {
+            argparse -help {Applied selected actions on parameters of the device} {
+                # {Actions selectors}
+                {-add -key action -value add -require pname -help {Add new parameter to device}}
+                {-get -key action -value get -help {Get parameter value}}
+                {-set -key action -value set -require {pname value} -help {Sets (or change) value of particular\
+                                                                                   parameters}}
+                {-delete -key action -value delete -require pname -help {Delete existing parameter}}
+                {-all -require get -forbid {pname value} -help {Option for getting the dictionary that contains\
+                                                                        parameters names as keys and parameters values\
+                                                                        as the dictionary values}}
+                # {Param qualificators}
+                {-pos -key paramQual -value pos -require add -help {Parameter has strict position and only '$Value' is\
+                                                                            displayed in netlist}}
+                {-eq -key paramQual -value eq -require add -help {Parameter may contain equation in terms of functions\
+                                                                          and other parameters, printed as\
+                                                                          '$name={$equation}'}}
+                {-poseq -key paramQual -value poseq -require add -help {Combination of both flags, print only\
+                                                                                '{$equation}'}}
+                {-posnocheck -key paramQual -value posnocheck -require add -help {Positional parameter without check}}
+                {-nocheck -key paramQual -value nocheck -default {} -require add -help {Normal parameter without check}}
+                {-sw -key paramQual -value sw -require add -help {Switch parameter}}
+                {-node -key paramQual -value node -require add -help {Node parameter}}
+                {-nodeeq -key paramQual -value nodeeq -require add -help {Node parameter equation}}
+                # {Actual name(s) and value(s) of Param}
+                {pname -optional -help {Name of parameter}}
+                {value -optional -help {Value of parameter}}
+                {arguments -catchall -require set -help {Optional pairs of name-value for -set action}}
             }
-            set pname [string tolower $pname]
-            if {[catch {dget $Params $pname}]} {
-                return -code error "Parameter with name '$pname' was not found in device's '[my configure -name]'\
-                        list of parameters '[dict keys [my getParams]]'"
-            } else {
-                set Params [dict remove $Params $pname]
+            switch $action {
+                add {
+                    set pname [string tolower $pname]
+                    if {[info exists Params]} {
+                        set params [dict keys $Params]
+                    }
+                    lappend params $pname
+                    if {[my DuplListCheck $params]} {
+                        return -code error "Parameters list '$params' has already contains parameter with name '$pname'"
+                    }
+                    switch $paramQual {
+                        sw {
+                            dict append Params $pname [::SpiceGenTcl::ParameterSwitch new $pname]
+                        }
+                        pos {
+                            dict append Params $pname [::SpiceGenTcl::ParameterPositional new $pname $value]
+                        }
+                        eq {
+                            dict append Params $pname [::SpiceGenTcl::ParameterEquation new $pname $value]
+                        }
+                        poseq {
+                            dict append Params $pname [::SpiceGenTcl::ParameterPositionalEquation new $pname $value]
+                        }
+                        posnocheck {
+                            dict append Params $pname [::SpiceGenTcl::ParameterPositionalNoCheck new $pname $value]
+                        }
+                        nocheck {
+                            dict append Params $pname [::SpiceGenTcl::ParameterNoCheck new $pname $value]
+                        }
+                        node {
+                            dict append Params $pname [::SpiceGenTcl::ParameterNode new $pname $value]
+                        }
+                        nodeeq {
+                            dict append Params $pname [::SpiceGenTcl::ParameterNodeEquation new $pname $value]
+                        }
+                        default {
+                            dict append Params $pname [::SpiceGenTcl::Parameter new $pname $value]
+                        }
+                    }
+                }
+                get {
+                    if {![info exists Params]} {
+                        return
+                    }
+                    if {[info exists all]} {
+                        return [dict map {paramName param} $Params {$param configure -value}]
+                    } elseif {[info exists pname]} {
+                        set pname [string tolower $pname]
+                        if {[dexist $Params $pname]} {
+                            return [dget $Params $pname]
+                        } else {
+                            return -code error "Device '$name' doesn't have parameter with name '$pname'"
+                        }
+                    } else {
+                        return -code error "'-get' action requires 'pname' parameter or '-all' option"
+                    }
+                }
+                set {
+                    set arguments [list $pname $value {*}$arguments]
+                    if {[llength $arguments]%2!=0} {
+                        return -code error "Number of arguments to method '[dict get [info frame 0] method]' with '-set'\
+                                switch must be even"
+                    }
+                    for {set i 0} {$i<[llength $arguments]} {incr i 2} {
+                        set paramName [string tolower [@ $arguments $i]]
+                        set paramValue [@ $arguments [= {$i+1}]]
+                        if {[catch {dget $Params $paramName}]} {
+                            return -code error "Parameter with name '$paramName' was not found in element's\
+                                    '$name' list of parameters '[dkeys $Params]'"
+                        } else {
+                            set param [dget $Params $paramName]
+                        }
+                        $param configure -value $paramValue
+                    }
+                }
+                delete {
+                    set pname [string tolower $pname]
+                    if {[catch {dget $Params $pname}]} {
+                        return -code error "Parameter with name '$pname' was not found in device's '$name'\
+                                list of parameters '[dkeys $Params]'"
+                    } else {
+                        set Params [dict remove $Params $pname]
+                    }
+                }
             }
             return
         }
@@ -883,13 +909,6 @@ namespace eval ::SpiceGenTcl {
                 }
             }
             return $floatingPins
-        }
-        method getParams {args} {
-            # Gets the dictionary that contains parameter name as keys and parameter values as the values.
-            # Returns: parameters dictionary
-            argparse -help {Gets the dictionary that contains parameter name as keys and parameter values as the\
-                                    values. Returns: parameters dictionary} {}
-            return [dict map {pname param} $Params {$param configure -value}]
         }
         method genSPICEString {} {
             # Creates device string for SPICE netlist.
@@ -964,14 +983,11 @@ namespace eval ::SpiceGenTcl {
             # create Params objects
             if {[dexist $arguments params]} {
                 foreach param [dget $arguments params] {
-                    my addParam {*}$param
+                    my actOnParam -add {*}$param
                 }
             }
         }
-        method addParam {*}[info class definition ::SpiceGenTcl::Device addParam]
-        method deleteParam {*}[info class definition ::SpiceGenTcl::Device deleteParam]
-        method setParamValue {*}[info class definition ::SpiceGenTcl::Device setParamValue]
-        method getParams {*}[info class definition ::SpiceGenTcl::Device getParams]
+        method actOnParam {*}[info class definition ::SpiceGenTcl::Device actOnParam]
         method genSPICEString {} {
             # Creates model string for SPICE netlist.
             # Returns: SPICE netlist's string
@@ -1150,49 +1166,11 @@ namespace eval ::SpiceGenTcl {
                 if {[llength $param]<2} {
                     error "Value '$param' is not a valid value"
                 } else {
-                    my addParam {*}$param
+                    my actOnParam -add {*}$param
                 }
             }
         }
-        method getParams {args} {
-            # Gets the dictionary that contains parameter name as keys and
-            #  parameter values as the values.
-            # Returns: parameters dictionary
-            argparse -help {Gets the dictionary that contains parameter name as keys and parameter values as the\
-                                    values. Returns: parameters dictionary} {}
-            return [dict map {paramName param} $Params\
-                            {expr {[catch {$param configure -value}] ? {} : [$param configure -value]}}]
-        }
-        method addParam {args} {
-            # Creates new parameter object and add it to the list `Params`.
-            #  pname - name of parameter
-            #  value - value of parameter, could be equal to -sw
-            #  -eq - parameter qualificator defining parameter value as equation
-            # Synopsis: pname value ?-eq?
-            argparse -pfirst -help {} {
-                {pname -help {Name of parameter}}
-                {value -help {Value of parameter, could be equal to '-sw'}}
-                {-eq -help {Parameter qualificator defining parameter value as equation}}
-            }
-            set pname [string tolower $pname]
-            if {[info exists Params]} {
-                set params [dict keys $Params]
-            }
-            lappend params $pname
-            if {[my DuplListCheck $params]} {
-                return -code error "Parameters list '$params' has already contains parameter with name '$pname'"
-            }
-            if {$value eq {-sw}} {
-                dict append Params $pname [::SpiceGenTcl::ParameterSwitch new $pname]
-            } elseif {[info exists eq]} {
-                dict append Params $pname [::SpiceGenTcl::ParameterEquation new $pname $value]
-            } else {
-                dict append Params $pname [::SpiceGenTcl::ParameterNoCheck new $pname $value]
-            }
-            return
-        }
-        method deleteParam {*}[info class definition ::SpiceGenTcl::Device deleteParam]
-        method setParamValue {*}[info class definition ::SpiceGenTcl::Device setParamValue]
+        method actOnParam {*}[info class definition ::SpiceGenTcl::Device actOnParam]
         method genSPICEString {} {
             # Creates options string for SPICE netlist.
             # Returns: SPICE netlist's string
@@ -1231,39 +1209,11 @@ namespace eval ::SpiceGenTcl {
                 if {[llength $param]<2} {
                     error "Value '$param' is not a valid value"
                 } else {
-                    my addParam {*}$param
+                    my actOnParam -add {*}$param
                 }
             }
         }
-        method getParams {*}[info class definition ::SpiceGenTcl::Device getParams]
-        method addParam {args} {
-            # Adds new Parameter object to the list Params.
-            #  pname - name of parameter
-            #  value - value of parameter
-            #  -eq - optional parameter qualificator
-            # Synopsis: pname value ?-eq?
-            argparse -pfirst -help {Adds new 'Parameter' object to the list 'Params'} {
-                {pname -help {Name of parameter}}
-                {value -help {Value of parameter}}
-                {-eq -help {Parameter qualificator defining parameter value as equation}}
-            }
-            set pname [string tolower $pname]
-            if {[info exists Params]} {
-                set params [dict keys $Params]
-            }
-            lappend params $pname
-            if {[my DuplListCheck $params]} {
-                return -code error "Parameters list '$params' has already contains parameter with name '$pname'"
-            }
-            if {[info exists eq]} {
-                dict append Params $pname [::SpiceGenTcl::ParameterEquation new $pname $value]
-            } else {
-                dict append Params $pname [::SpiceGenTcl::Parameter new $pname $value]
-            }
-            return
-        }
-        method deleteParam {*}[info class definition ::SpiceGenTcl::Device deleteParam]
-        method setParamValue {*}[info class definition ::SpiceGenTcl::Device setParamValue]
+        method actOnParam {*}[info class definition ::SpiceGenTcl::Device actOnParam]
         method genSPICEString {} {
             # Creates parameter statement string for SPICE netlist.
             # Returns: SPICE netlist's string
@@ -1381,39 +1331,15 @@ namespace eval ::SpiceGenTcl {
                 if {[llength $param]<2} {
                     error "Value '$param' is not a valid value"
                 } else {
-                    my addParam {*}$param
+                    if {[@ $param 0] eq {-eq}} {
+                        my actOnParam -add -nodeeq [@ $param 1] [@ $param 2]
+                    } else {
+                        my actOnParam -add -node {*}$param
+                    }
                 }
             }
         }
-        method getParams {*}[info class definition ::SpiceGenTcl::Device getParams]
-        method addParam {args} {
-            # Adds new Parameter object to the list Params.
-            #  pname - name of parameter
-            #  value - value of parameter
-            #  -eq - optional parameter qualificator
-            # Synopsis: pname value ?-eq?
-            argparse -pfirst -help {Adds new 'Parameter' object to the dictionary 'Params'} {
-                {pname -help {Name of parameter}}
-                {value -help {Value of parameter}}
-                {-eq -help {Parameter qualificator defining parameter value as equation}}
-            }
-            set pname [string tolower $pname]
-            if {[info exists Params]} {
-                set params [dict keys $Params]
-            }
-            lappend params $pname
-            if {[my DuplListCheck $params]} {
-                return -code error "Parameters list '$params' has already contains parameter with name '$pname'"
-            }
-            if {[info exists eq]} {
-                dict append Params $pname [::SpiceGenTcl::ParameterNodeEquation new $pname $value]
-            } else {
-                dict append Params $pname [::SpiceGenTcl::ParameterNode new $pname $value]
-            }
-            return
-        }
-        method deleteParam {*}[info class definition ::SpiceGenTcl::Device deleteParam]
-        method setParamValue {*}[info class definition ::SpiceGenTcl::Device setParamValue]
+        method actOnParam {*}[info class definition ::SpiceGenTcl::Device actOnParam]
         method genSPICEString {} {
             # Creates ic statement string for SPICE netlist.
             # Returns: SPICE netlist's string
@@ -1518,14 +1444,14 @@ namespace eval ::SpiceGenTcl {
             #  -eq - optional parameter qualificator
             # This class represent .temp statement with temperature value.
             # Synopsis: value ?-eq?
-            set arguments [argparse -inline -pfirst -help {Creates object of class 'Temp'} {
+            set arguments [argparse -inline -help {Creates object of class 'Temp'} {
                 {value -help {Value of the temperature}}
                 {-eq -help {Optional parameter qualificator}}
             }]
             my configure -name temp
             ##nagelfar variable eq
             if {[dexist $arguments eq]} {
-                my AddParam temp [dget $arguments value] -eq
+                my AddParam -eq temp [dget $arguments value]
             } else {
                 my AddParam temp [dget $arguments value]
             }
@@ -1536,7 +1462,7 @@ namespace eval ::SpiceGenTcl {
             #  value - value of temperature
             #  -eq - optional parameter qualificator
             # Synopsis: pname value ?-eq?
-            set arguments [argparse -inline -pfirst -help {Adds temperature parameter} {
+            set arguments [argparse -inline -help {Adds temperature parameter} {
                 {pname -help {Name of temperature parameter}}
                 {value -help {Value of the temperature}}
                 {-eq -help {Optional parameter qualificator}}
@@ -1558,13 +1484,17 @@ namespace eval ::SpiceGenTcl {
     }
     oo::define Temp {
         method <WriteProp-value> val {
-            lassign $val value eq
-            if {$eq eq {-eq}} {
-                my AddParam temp $value -eq
-            } elseif {$eq eq {}} {
-                my AddParam temp $value
+            if {[llength $val]>1} {
+                lassign $val eq value
+                if {$eq eq {-eq}} {
+                    my AddParam -eq temp $value
+                } elseif {$eq eq {}} {
+                    my AddParam temp $value
+                } else {
+                    return -code error "Wrong value '$eq' of qualifier"
+                }
             } else {
-                return -code error "Wrong value '$eq' of qualifier"
+                my AddParam temp $val
             }
         }
     }
@@ -1809,47 +1739,23 @@ namespace eval ::SpiceGenTcl {
                 {params -help {List of input parameters in form '{{name value} {name value} {name value} ...}'}\
                          -type list}
             }]
-            # create Pins objects, nodes are set to empty line
+            # create Pins objects, nodes are set to empty string
             foreach pin [dget $arguments pins] {
-                my addPin [@ $pin 0] {}
+                my actOnPin -add [@ $pin 0] {}
             }
             # create Params objects that are input parameters of subcircuit
             foreach param [dget $arguments params] {
                 if {[llength $param]<=2} {
-                    my addParam {*}$param
+                    my actOnParam -add {*}$param
                 } else {
-                    error "Wrong parameter '[@ $param 0]' definition in subcircuit '[dget $arguments name]'"
+                    error "Wrong parameter '$param' definition in subcircuit '[dget $arguments name]'"
                 }
             }
             next [dget $arguments name]
         }
         # copy methods of Device to manipulate header .subckt definition elements
-        method addPin {*}[info class definition ::SpiceGenTcl::Device addPin]
-        method getPins {*}[info class definition ::SpiceGenTcl::Device getPins]
-        method deleteParam {*}[info class definition ::SpiceGenTcl::Device deleteParam]
-        method setParamValue {*}[info class definition ::SpiceGenTcl::Device setParamValue]
-        method getParams {*}[info class definition ::SpiceGenTcl::Device getParams]
-        method addParam {args} {
-            # Adds new parameter to subcircuit, and throws error on dublicated names.
-            #  paramName - name of parameter
-            #  value - value of parameter
-            # Synopsis: pname value
-            argparse -help {Adds new parameter to subcircuit, and throws error on dublicated names} {
-                {pname -help {Name of parameter}}
-                {value -help {Value of parameter}}
-            }
-            set pname [string tolower $pname]
-            if {[info exists Params]} {
-                set paramList [dict keys $Params]
-            }
-            lappend paramList $pname
-            if {[my DuplListCheck $paramList]} {
-                return -code error "Parameters list '$paramList' has already contains parameter with name '$pname'"
-            }
-            dict append Params $pname [::SpiceGenTcl::Parameter new $pname $value]
-            return
-        }
-
+        method actOnPin {*}[info class definition ::SpiceGenTcl::Device actOnPin]
+        method actOnParam {*}[info class definition ::SpiceGenTcl::Device actOnParam]
         method add {args} {
             # Add elements objects references to `Subcircuit`, it extends add method to add check of element class because
             # subcircuit can't contain particular elements inside, like [::SpiceGenTcl::Include],
@@ -1930,16 +1836,13 @@ namespace eval ::SpiceGenTcl {
             # create Analysis objects
             foreach param [dget $arguments params] {
                 if {[llength $param]<2} {
-                    error "Value '$param' is not a valid value"
+                    return -code error "Value '$param' is not a valid value"
                 } else {
-                    my addParam {*}$param
+                    my actOnParam -add {*}$param
                 }
             }
         }
-        method getParams {*}[info class definition ::SpiceGenTcl::Device getParams]
-        method addParam {*}[info class definition ::SpiceGenTcl::Device addParam]
-        method deleteParam {*}[info class definition ::SpiceGenTcl::Device deleteParam]
-        method setParamValue {*}[info class definition ::SpiceGenTcl::Device setParamValue]
+        method actOnParam {*}[info class definition ::SpiceGenTcl::Device actOnParam]
         method genSPICEString {} {
             # Creates analysis for SPICE netlist.
             # Returns: string SPICE netlist's string
@@ -2771,9 +2674,9 @@ namespace eval ::SpiceGenTcl {
                 } elseif {[my CheckBracedWithEqual $elem]} {
                     lassign [my ParseBracedWithEqual $elem] name value
                     if {$format eq {arg}} {
-                        set nameValue [list -$name [list $value -eq]]
+                        set nameValue [list -$name [list -eq $value]]
                     } else {
-                        set nameValue [list $name $value -eq]
+                        set nameValue [list -eq $name $value]
                     }
                 } else {
                     return -code error "Parameter '$elem' parsing failed"
@@ -2817,9 +2720,9 @@ namespace eval ::SpiceGenTcl {
                 } elseif {[my CheckBracedWithEqual $elem]} {
                     lassign [my ParseBracedWithEqual $elem] name value
                     if {$format eq {arg}} {
-                        set nameValue [list -$name [list $value -eq]]
+                        set nameValue [list -$name [list -eq $value]]
                     } else {
-                        set nameValue [list $name $value -eq]
+                        set nameValue [list -eq $name $value]
                     }
                 } elseif {[regexp {^[a-zA-Z0-9]+$} $elem]} {
                     set name $elem
@@ -2827,7 +2730,7 @@ namespace eval ::SpiceGenTcl {
                     if {$format eq {arg}} {
                         set nameValue -$name
                     } else {
-                        set nameValue [list $name -sw]
+                        set nameValue [list -sw $name]
                     }
                     set switch true
                 } else {
@@ -2870,7 +2773,7 @@ namespace eval ::SpiceGenTcl {
                 set elem [@ $list $i]
                 set name [@ $names $i]
                 if {[my CheckBraced $elem]} {
-                    set value [list [my Unbrace $elem] -eq]
+                    set value [list -eq [my Unbrace $elem]]
                     set name -$name
                 } else {
                     set name -$name

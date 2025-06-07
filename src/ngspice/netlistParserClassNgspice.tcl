@@ -431,7 +431,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             set lineList [lrange [split $line] 1 end]
             lassign $lineList value
             if {[my CheckBraced $value]} {
-                set value [list [my Unbrace $value] -eq]
+                set value [list -eq [my Unbrace $value]]
             }
             return [list ::SpiceGenTcl::Temp new {*}$value]
         }
@@ -491,7 +491,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
                 # also specified with resistance value
                 if {[my CheckBraced $rval]} {
                     # check if rval has form '{param}'
-                    set rval [list [my Unbrace $rval] -eq]
+                    set rval [list -eq [my Unbrace $rval]]
                     return [list $nmspPath new $elemName $pin1 $pin2 -r $rval -model $fourth\
                                     {*}[my ParseParams $lineList 5 $excludePars]]
                 } elseif {[my CheckNumber $rval]} {
@@ -505,7 +505,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             } else {
                 if {[my CheckBraced $rval]} {
                     # check if rval has form `{param}`
-                    set rval [list [my Unbrace $rval] -eq]
+                    set rval [list -eq [my Unbrace $rval]]
                     return [list $nmspPath new $elemName $pin1 $pin2 -r $rval\
                                     {*}[my ParseParams $lineList 4 $excludePars]]
                 } elseif {[my CheckNumber $rval]} {
@@ -548,7 +548,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
                                 {*}[my ParseParams [split $line] 0 {}]]
             } elseif {[my CheckModelName $fourth]} {
                 if {[my CheckBraced $cval]} {
-                    set cval [list [my Unbrace $cval] -eq]
+                    set cval [list -eq [my Unbrace $cval]]
                     return [list $nmspPath new $elemName $pin1 $pin2 -c $cval -model\
                                     $fourth {*}[my ParseParams $lineList 5 $excludePars]]
                 } elseif {[my CheckNumber $cval]} {
@@ -560,7 +560,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
                 }
             } else {
                 if {[my CheckBraced $cval]} {
-                    set cval [list [my Unbrace $cval] -eq]
+                    set cval [list -eq [my Unbrace $cval]]
                     return [list $nmspPath new $elemName $pin1 $pin2 -c $cval\
                                     {*}[my ParseParams $lineList 4 $excludePars]]
                 } elseif {[my CheckNumber $cval]} {
@@ -584,7 +584,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             set elemName [string range $elemName 1 end]
             set nmspPath ${NamespacePath}::BasicDevices::K
             if {[my CheckBraced $kval]} {
-                set kval [list [my Unbrace $kval] -eq]
+                set kval [list -eq [my Unbrace $kval]]
             }
             return [list $nmspPath new $elemName -l1 $l1 -l2 $l2 -k $kval]
         }
@@ -613,7 +613,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
                                 {*}[my ParseParams [split $line] 0 {}]]
             } elseif {[my CheckModelName $fourth]} {
                 if {[my CheckBraced $lval]} {
-                    set lval [list [my Unbrace $lval] -eq]
+                    set lval [list -eq [my Unbrace $lval]]
                     return [list $nmspPath new $elemName $pin1 $pin2 -l $lval -model\
                                     $fourth {*}[my ParseParams $lineList 5 $excludePars]]
                 } elseif {[my CheckNumber $lval]} {
@@ -625,7 +625,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
                 }
             } else {
                 if {[my CheckBraced $lval]} {
-                    set lval [list [my Unbrace $lval] -eq]
+                    set lval [list -eq [my Unbrace $lval]]
                     return [list $nmspPath new $elemName $pin1 $pin2 -l $lval\
                                     {*}[my ParseParams $lineList 4 $excludePars]]
                 } elseif {[my CheckNumber $lval]} {
@@ -702,7 +702,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             lassign $lineList elemName pin1 pin2 pin3 pin4 val
             set elemName [string range $elemName 1 end]
             if {[my CheckBraced $val]} {
-                set val [list [my Unbrace $val] -eq]
+                set val [list -eq [my Unbrace $val]]
                 return [list ${NamespacePath}::Sources::E new $elemName $pin1 $pin2 $pin3 $pin4 -gain $val]
             } elseif {[my CheckNumber $val]} {
                 return [list ${NamespacePath}::Sources::E new $elemName $pin1 $pin2 $pin3 $pin4 -gain $val]
@@ -718,7 +718,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             lassign $lineList elemName pin1 pin2 vnam val
             set elemName [string range $elemName 1 end]
             if {[my CheckBraced $val]} {
-                set val [list [my Unbrace $val] -eq]
+                set val [list -eq [my Unbrace $val]]
                 return [list ${NamespacePath}::Sources::F new $elemName $pin1 $pin2 -consrc $vnam -gain $val\
                                 {*}[my ParseParams $lineList 6]]
             } elseif {[my CheckNumber $val]} {
@@ -736,7 +736,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             lassign $lineList elemName pin1 pin2 pin3 pin4 val
             set elemName [string range $elemName 1 end]
             if {[my CheckBraced $val]} {
-                set val [list [my Unbrace $val] -eq]
+                set val [list -eq [my Unbrace $val]]
                 return [list ${NamespacePath}::Sources::G new $elemName $pin1 $pin2 $pin3 $pin4 -trcond $val\
                                 {*}[my ParseParams $lineList 6]]
             } elseif {[my CheckNumber $val]} {
@@ -754,7 +754,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             lassign $lineList elemName pin1 pin2 vnam val
             set elemName [string range $elemName 1 end]
             if {[my CheckBraced $val]} {
-                set val [list [my Unbrace $val] -eq]
+                set val [list -eq [my Unbrace $val]]
                 return [list ${NamespacePath}::Sources::H new $elemName $pin1 $pin2 -consrc $vnam -transr $val]
             } elseif {[my CheckNumber $val]} {
                 return [list ${NamespacePath}::Sources::H new $elemName $pin1 $pin2 -consrc $vnam -transr $val]
@@ -804,7 +804,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
                 incr i
             }
             if {[my CheckBraced [@ $lineList 0]]} {
-                lappend paramsList -area [list [my Unbrace [@ $lineList 0]] -eq]
+                lappend paramsList -area [list -eq [my Unbrace [@ $lineList 0]]]
                 set lineList [lremove $lineList 0]
             } elseif {[my CheckNumber [@ $lineList 0]]} {
                 lappend paramsList -area [@ $lineList 0]
@@ -980,7 +980,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             if {[my CheckBraced [@ $lineList 0]] || [my CheckNumber [@ $lineList 0]]} {
                 set dcVal [@ $lineList 0]
                 if {[my CheckBraced $dcVal]} {
-                    lappend paramsList -dc [list [my Unbrace $dcVal] -eq]
+                    lappend paramsList -dc [list -eq [my Unbrace $dcVal]]
                 } else {
                     lappend paramsList -dc $dcVal
                 }
@@ -990,7 +990,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             if {[set dcIndex [lsearch -exact $lineList dc]]!=-1} {
                 set dcValue [@ $lineList [= {$dcIndex+1}]]
                 if {[my CheckBraced $dcValue]} {
-                    lappend paramsList -dc [list [my Unbrace $dcValue] -eq]
+                    lappend paramsList -dc [list -eq [my Unbrace $dcValue]]
                 } else {
                     lappend paramsList -dc $dcValue
                 }
@@ -1002,13 +1002,13 @@ namespace eval ::SpiceGenTcl::Ngspice {
                 set acType true
                 set acValue [@ $lineList [= {$acIndex+1}]]
                 if {[my CheckBraced $acValue]} {
-                    set acValue [list [my Unbrace $acValue] -eq]
+                    set acValue [list -eq [my Unbrace $acValue]]
                 }
                 set possibleAcPhase [@ $lineList [= {$acIndex+2}]]
                 if {[my CheckNumber $possibleAcPhase] || [my CheckBraced $possibleAcPhase]} {
                     set acPhase $possibleAcPhase
                     if {[my CheckBraced $acPhase]} {
-                        set acPhase [list [my Unbrace $acPhase] -eq]
+                        set acPhase [list -eq [my Unbrace $acPhase]]
                     }
                     set lineList [lremove $lineList $acIndex [= {$acIndex+1}] [= {$acIndex+2}]]
                     lappend paramsList -ac $acValue -acphase $acPhase
@@ -1037,7 +1037,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
                 pwl {
                     foreach value [lrange $lineList 1 end] {
                         if {[my CheckBraced $value]} {
-                            set value [list [my Unbrace $value] -eq]
+                            set value [list -eq [my Unbrace $value]]
                         }
                         lappend seqList $value
                     }
@@ -1060,7 +1060,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
                     if {[@ $lineList 2] eq {z0}} {
                         set z0Val [@ $lineList 3]
                         if {[my CheckBraced $z0Val]} {
-                            lappend paramsList -z0 [list [my Unbrace $z0Val] -eq]
+                            lappend paramsList -z0 [list -eq [my Unbrace $z0Val]]
                         } else {
                             lappend paramsList -z0 $z0Val
                         }
@@ -1103,7 +1103,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
                 incr i
             }
             if {[my CheckBraced [@ $lineList 0]]} {
-                lappend paramsList -area [list [my Unbrace [@ $lineList 0]] -eq]
+                lappend paramsList -area [list -eq [my Unbrace [@ $lineList 0]]]
                 set lineList [lremove $lineList 0]
             } elseif {[my CheckNumber [@ $lineList 0]]} {
                 lappend paramsList -area [@ $lineList 0]

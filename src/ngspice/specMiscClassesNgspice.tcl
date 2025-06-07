@@ -51,13 +51,13 @@ namespace eval ::SpiceGenTcl::Ngspice::Misc {
             my NameProcess $arguments [self object]
             dict for {paramName value} $arguments {
                 if {$paramName in $keyValParams} {
-                    if {([llength $value]>1) && ([@ $value 1] eq {-eq})} {
-                        lappend params [list $paramName [@ $value 0] -eq]
+                    if {([llength $value]>1) && ([@ $value 0] eq {-eq})} {
+                        lappend params [list -eq $paramName [@ $value 1]]
                     } else {
                         lappend params [list $paramName $value]
                     }
                 } elseif {$paramName in $swParams} {
-                    lappend params [list $paramName -sw]
+                    lappend params [list -sw $paramName]
                 }
             }
             ##nagelfar variable name

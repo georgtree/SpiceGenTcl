@@ -360,10 +360,10 @@ test testDeviceClass-1 {test creation of Device class instance and getName inter
     unset elemInst result
 }
 
-test testDeviceClass-2 {test creation of Device class instance and getPins interface} -setup {
+test testDeviceClass-2 {} -setup {
     set elemInst [Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
 } -body {
-    set result [$elemInst getPins]
+    set result [$elemInst actOnPin -get -all]
 } -result {d netd g netg s nets} -cleanup {
     unset elemInst result
 }
@@ -371,10 +371,10 @@ test testDeviceClass-2 {test creation of Device class instance and getPins inter
 testTemplate testDeviceClass-3 {} {Device new M1 {{d netg} {g netg} {s nets} {s netg}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}}\
         {Pins list 'd g s s' has already contains pin with name 's'}
 
-test testDeviceClass-4 {test creation of Device class instance and getParams interface} -setup {
+test testDeviceClass-4 {} -setup {
     set elemInst [Device new M1 {{d netg} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
 } -body {
-    set result [$elemInst getParams]
+    set result [$elemInst actOnParam -get -all]
 } -result {vth0 0.7 u0 100 k1 1.5e-3} -cleanup {
     unset elemInst result
 }
@@ -389,8 +389,8 @@ testTemplate testDeviceClass-7 {} {Device new M1. {{d netg} {g netg} {s nets}} {
 test testDeviceClass-8 {test creation of Device class instance and addParam interface} -setup {
     set elemInst [Device new M1 {{d netg} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
 } -body {
-    $elemInst addParam K2 -1.2e-4
-    set result [$elemInst getParams]
+    $elemInst actOnParam -add K2 -1.2e-4
+    set result [$elemInst actOnParam -get -all]
 } -result {vth0 0.7 u0 100 k1 1.5e-3 k2 -1.2e-4} -cleanup {
     unset elemInst result
 }
@@ -398,8 +398,8 @@ test testDeviceClass-8 {test creation of Device class instance and addParam inte
 test testDeviceClass-9 {test creation of Device class instance and deleteParam interface} -setup {
     set elemInst [Device new M1 {{d netg} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
 } -body {
-    $elemInst deleteParam vth0
-    set result [$elemInst getParams]
+    $elemInst actOnParam -delete vth0
+    set result [$elemInst actOnParam -get -all]
 } -result {u0 100 k1 1.5e-3} -cleanup {
     unset elemInst result
 }
@@ -407,19 +407,19 @@ test testDeviceClass-9 {test creation of Device class instance and deleteParam i
 testTemplate testDeviceClass-10 {} {Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}}\
         {m1 netd netg nets vth0=0.7 u0=100 k1=1.5e-3}
 
-test testDeviceClass-11 {test creation of Device class instance and test setPinNodeName} -setup {
+test testDeviceClass-11 {} -setup {
     set elemInst [Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
-    $elemInst setPinNodeName g n123
+    $elemInst actOnPin -set g n123
 } -body {
-    set result [$elemInst getPins]
+    set result [$elemInst actOnPin -get -all]
 } -result {d netd g n123 s nets} -cleanup {
     unset elemInst result
 }
 
-test testDeviceClass-12 {test creation of Device class instance and test setPinNodeName with pin name not in the pin list of device} -setup {
+test testDeviceClass-12 {} -setup {
     set elemInst [Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
 } -body {
-    catch {$elemInst setPinNodeName p n123} errorStr
+    catch {$elemInst actOnPin -set p n123} errorStr
     return $errorStr
 } -result {Pin with name 'p' was not found in device's 'm1' list of pins 'd g s'} -cleanup {
     unset elemInst errorStr
@@ -427,9 +427,9 @@ test testDeviceClass-12 {test creation of Device class instance and test setPinN
 
 test testDeviceClass-13 {test creation of Device class instance and test setParamValue} -setup {
     set elemInst [Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
-    $elemInst setParamValue vth0 1.0
+    $elemInst actOnParam -set vth0 1.0
 } -body {
-    set result [$elemInst getParams]
+    set result [$elemInst actOnParam -get -all]
 } -result {vth0 1.0 u0 100 k1 1.5e-3} -cleanup {
     unset elemInst result
 }
@@ -437,7 +437,7 @@ test testDeviceClass-13 {test creation of Device class instance and test setPara
 test testDeviceClass-14 {test creation of Device class instance and test setParamValue with parameter name not in the parameter list of device} -setup {
     set elemInst [Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
 } -body {
-    catch {$elemInst setParamValue VTH01 1.0} errorStr
+    catch {$elemInst actOnParam -set VTH01 1.0} errorStr
     return $errorStr
 } -result {Parameter with name 'vth01' was not found in element's 'm1' list of parameters 'vth0 u0 k1'} -cleanup {
     unset elemInst errorStr
@@ -446,19 +446,19 @@ test testDeviceClass-14 {test creation of Device class instance and test setPara
 test testDeviceClass-15 {test creation of Device class instance and test deleteParam with parameter name not in the parameter list of device} -setup {
     set elemInst [Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
 } -body {
-    catch {$elemInst deleteParam VTH01} errorStr
+    catch {$elemInst actOnParam -delete VTH01} errorStr
     return $errorStr
 } -result {Parameter with name 'vth01' was not found in device's 'm1' list of parameters 'vth0 u0 k1'} -cleanup {
     unset elemInst errorStr
 }
 
-testTemplate testDeviceClass-16 {} {Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 100 -pos} {K1 1.5e-3}}}\
+testTemplate testDeviceClass-16 {} {Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {-pos U0 100} {K1 1.5e-3}}}\
         {m1 netd netg nets vth0=0.7 100 k1=1.5e-3}
-testTemplate testDeviceClass-17 {} {Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 {u1+u2} -poseq} {K1 1.5e-3}}}\
+testTemplate testDeviceClass-17 {} {Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {-poseq U0 {u1+u2}} {K1 1.5e-3}}}\
         {m1 netd netg nets vth0=0.7 {u1+u2} k1=1.5e-3}
-testTemplate testDeviceClass-18 {} {Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 {u1+u2} -eq} {K1 1.5e-3}}}\
+testTemplate testDeviceClass-18 {} {Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {-eq U0 {u1+u2}} {K1 1.5e-3}}}\
         {m1 netd netg nets vth0=0.7 u0={u1+u2} k1=1.5e-3}
-testTemplate testDeviceClass-19 {} {Device new M1 {{d netd} {g netg} {s {}}} {{VTH0 0.7} {U0 100 -pos} {K1 1.5e-3}}}\
+testTemplate testDeviceClass-19 {} {Device new M1 {{d netd} {g netg} {s {}}} {{VTH0 0.7} {-pos U0 100} {K1 1.5e-3}}}\
         {Device 'm1' can't be netlisted because 's' pin is floating}
 
 test testDeviceClass-20 {test creation of Device class instance and checkFloatingPins interface} -setup {
@@ -475,13 +475,13 @@ testTemplate testDeviceClass-21 {} {Device new M1 {{d netd} {g netg} {s nets}} {
 test testDeviceClass-22 {test creation of Device class instance and test setParamValue with multiple parameters} -setup {
     set elemInst [Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
 } -body {
-    catch {$elemInst setParamValue VTH0 1.0 U0 50 K1} errorStr
+    catch {$elemInst actOnParam -set VTH0 1.0 U0 50 K1} errorStr
     return $errorStr
-} -result {Number of arguments to method 'setParamValue' must be even} -cleanup {
+} -result {Number of arguments to method 'actOnParam' with '-set' switch must be even} -cleanup {
     unset elemInst errorStr
 }
 
-testTemplate testDeviceClass-23 {} {Device new M1 {{d netg} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 -sw}}}\
+testTemplate testDeviceClass-23 {} {Device new M1 {{d netg} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {-sw K1}}}\
         {m1 netg netg nets vth0=0.7 u0=100 k1}
 testTemplate testDeviceClass-24 {} {Device new M1 {{d netd} {g netg} {s nets}} {}} {m1 netd netg nets}
 testTemplate testDeviceClass-25 {} {Device new M1 {} {}} {m1}
@@ -489,12 +489,12 @@ testTemplate testDeviceClass-25 {} {Device new M1 {} {}} {m1}
 testTemplate testDeviceClass-26 {} {Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}}\
         {m1 netd netg nets vth0=0.7 u0=100 k1=1.5e-3}
 
-test testDeviceClass-22 {test creation of Device class instance and test setParamValue with multiple parameters} -setup {
+test testDeviceClass-26 {test creation of Device class instance and test setParamValue with multiple parameters} -setup {
     set elemInst [Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
 } -body {
-    $elemInst setParamValue VTH0 1.0 U0 50
+    $elemInst actOnParam -set VTH0 1.0 U0 50
     return [$elemInst genSPICEString]
-} -result {m1 netd netg nets vth0=0.7 u0=50 k1=1.5e-3} -cleanup {
+} -result {m1 netd netg nets vth0=1.0 u0=50 k1=1.5e-3} -cleanup {
     unset elemInst
 }
 
@@ -508,17 +508,17 @@ test testModelClass-1 {test creation of Model class instance and getType interfa
     unset modelInst result
 }
 
-test testModelClass-2 {test creation of Model class instance and getParams interface} -setup {
+test testModelClass-2 {} -setup {
     set modelInst [Model new MOD1 NMOS {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
 } -body {
-    set result [$modelInst getParams]
+    set result [$modelInst actOnParam -get -all]
 } -result {vth0 0.7 u0 100 k1 1.5e-3} -cleanup {
     unset modelInst result
 }
 
 testTemplate testModelClass-3 {} {Model new MOD1 NMOS {{VTH0 0.7} {U0 100} {K1 1.5e-3}}}\
         {.model mod1 nmos(vth0=0.7 u0=100 k1=1.5e-3)}
-testTemplate testModelClass-4 {} {Model new MOD1 NMOS {{VTH0 0.7} {U0 v2*vb/2 -eq} {K1 1.5e-3}}}\
+testTemplate testModelClass-4 {} {Model new MOD1 NMOS {{VTH0 0.7} {-eq U0 v2*vb/2} {K1 1.5e-3}}}\
         {.model mod1 nmos(vth0=0.7 u0={v2*vb/2} k1=1.5e-3)}
 testTemplate testModelClass-5 {} {Model new MOD1 NMOS {}} {.model mod1 nmos}
 
@@ -553,10 +553,10 @@ comment string3}} {*comment string1
 ###  Temp class tests 
 
 testTemplate testTempClass-1 {} {Temp new 10} {.temp 10}
-testTemplate testTempClass-2 {} {Temp new temp -eq} {.temp {temp}}
+testTemplate testTempClass-2 {} {Temp new -eq temp} {.temp {temp}}
   
 test testTempClass-3 {test creation of Temp class instance and getValue interface} -setup {
-    set temp [Temp new temp -eq]
+    set temp [Temp new -eq temp]
 } -body {
     set result [$temp configure -value]
 } -result temp -cleanup {
@@ -564,9 +564,9 @@ test testTempClass-3 {test creation of Temp class instance and getValue interfac
 }
 
 test testTempClass-4 {test creation of Temp class instance and setValue interface} -setup {
-    set temp [Temp new temp -eq]
+    set temp [Temp new -eq temp]
 } -body {
-    $temp configure -value [list temp1 -eq]
+    $temp configure -value [list -eq temp1]
     set result [$temp configure -value]
 } -result temp1 -cleanup {
     unset temp result
@@ -575,7 +575,7 @@ test testTempClass-4 {test creation of Temp class instance and setValue interfac
 test testTempClass-5 {test creation of Temp class instance and setValue interface with change of parameter type to equational} -setup {
     set temp [Temp new 10]
 } -body {
-    $temp configure -value [list temp1 -eq]
+    $temp configure -value [list -eq temp1]
     set result [$temp configure -value]
 } -result temp1 -cleanup {
     unset temp result
@@ -583,7 +583,7 @@ test testTempClass-5 {test creation of Temp class instance and setValue interfac
 
 test testTempClass-6 {test creation of Temp class instance and genSPICEString interface} -body {
     set temp [Temp new 10]
-    catch {$temp configure -value [list temp1 -e2q]} errorStr
+    catch {$temp configure -value [list -e2q temp1]} errorStr
     return $errorStr
 } -result {Wrong value '-e2q' of qualifier} -cleanup {
     unset errorStr temp
@@ -608,32 +608,32 @@ test testLibraryClass-2 {test creation of Library class instance and getLibValue
     
 ###  Options class tests 
 
-test testOptionsClass-1 {test creation of Options class instance and getParams interface} -setup {
-    set elemInst [Options new {{abstol 1e-12} {noopiter -sw} {gmin 1e-12}}]
+test testOptionsClass-1 {} -setup {
+    set elemInst [Options new {{abstol 1e-12} {-sw noopiter} {gmin 1e-12}}]
 } -body {
-    set result [$elemInst getParams]
+    set result [$elemInst actOnParam -get -all]
 } -result {abstol 1e-12 noopiter {} gmin 1e-12} -cleanup {
     unset elemInst result
 }
 
-testTemplate testOptionsClass-2 {} {Options new {{abstol 1e-12} {noopiter -sw} {gmin 1e-12}}}\
+testTemplate testOptionsClass-2 {} {Options new {{abstol 1e-12} {-sw noopiter} {gmin 1e-12}}}\
         {.options abstol=1e-12 noopiter gmin=1e-12}
 
 test testOptionsClass-3 {test creation of Options class instance and addParam interface} -setup {
-    set elemInst [Options new {{abstol 1e-12} {noopiter -sw} {gmin 1e-12}}]
-    $elemInst addParam vntol 1e-4
+    set elemInst [Options new {{abstol 1e-12} {-sw noopiter} {gmin 1e-12}}]
+    $elemInst actOnParam -add vntol 1e-4
 } -body {
     set result [$elemInst genSPICEString]
 } -result {.options abstol=1e-12 noopiter gmin=1e-12 vntol=1e-4} -cleanup {
     unset elemInst result
 }
 
-testTemplate testOptionsClass-4 {} {Options new {{abstol 1e-12} {noopiter -sw} {gmin 1e-12}}}\
+testTemplate testOptionsClass-4 {} {Options new {{abstol 1e-12} {-sw noopiter} {gmin 1e-12}}}\
         {.options abstol=1e-12 noopiter gmin=1e-12}
 
 test testOptionsClass-5 {test creation of Options class instance and addParam interface with adding switch parameter} -setup {
-    set elemInst [Options new {{abstol 1e-12} {vntol 1e-4} {gmin gminval -eq}}]
-    $elemInst addParam noopiter -sw
+    set elemInst [Options new {{abstol 1e-12} {vntol 1e-4} {-eq gmin gminval}}]
+    $elemInst actOnParam -add -sw noopiter 
 } -body {
     set result [$elemInst genSPICEString]
 } -result {.options abstol=1e-12 vntol=1e-4 gmin={gminval} noopiter} -cleanup {
@@ -641,8 +641,8 @@ test testOptionsClass-5 {test creation of Options class instance and addParam in
 }
 
 test testOptionsClass-6 {test creation of Options class instance and deleteParam interface} -setup {
-    set elemInst [Options new {{abstol 1e-12} {noopiter -sw} {gmin 1e-12}}]
-    $elemInst deleteParam gmin
+    set elemInst [Options new {{abstol 1e-12} {-sw noopiter} {gmin 1e-12}}]
+    $elemInst actOnParam -delete gmin
 } -body {
     set result [$elemInst genSPICEString]
 } -result {.options abstol=1e-12 noopiter} -cleanup {
@@ -656,11 +656,11 @@ testTemplate testOptionsClass-8 {} {Options new {{abstol 1e-12} {gmin 1e-12} {gm
 
 ###  ParamStatement class tests 
 
-testTemplate testParamStatementClass-1 {} {ParamStatement new {{U0T rf+1 -eq} {vth0 10}}} {.param u0t={rf+1} vth0=10}
+testTemplate testParamStatementClass-1 {} {ParamStatement new {{-eq U0T rf+1} {vth0 10}}} {.param u0t={rf+1} vth0=10}
 
 test testParamStatementClass-2 {test creation of ParamStatement class instance and addParam interface} -setup {
-    set elemInst [ParamStatement new {{U0T rf+1 -eq} {vth0 10}}]
-    $elemInst addParam k1 1e-4
+    set elemInst [ParamStatement new {{-eq U0T rf+1} {vth0 10}}]
+    $elemInst actOnParam -add k1 1e-4
 } -body {
     set result [$elemInst genSPICEString]
 } -result {.param u0t={rf+1} vth0=10 k1=1e-4} -cleanup {
@@ -669,9 +669,9 @@ test testParamStatementClass-2 {test creation of ParamStatement class instance a
 
 test testParamStatementClass-4 {test creation of ParamStatement class instance and addParam interface with adding equation parameter} -setup {
     set elemInst [ParamStatement new {{k1 1e-4} {vth0 10}}]
-    $elemInst addParam U0T {rf+1} -eq
+    $elemInst actOnParam -add -eq U0T {rf+1}
 } -body {
-    set result [$elemInst getParams]
+    set result [$elemInst actOnParam -get -all]
 } -result {k1 1e-4 vth0 10 u0t rf+1} -cleanup {
     unset elemInst result
 }
@@ -679,17 +679,17 @@ test testParamStatementClass-4 {test creation of ParamStatement class instance a
 testTemplate testParamStatementClass-5 {} {ParamStatement new {{U0T rf+1} {vth0 10}}} {Value 'rf+1' is not a valid value}
 
 test testParamStatementClass-6 {test creation of ParamStatement class instance and setParamValue interface} -setup {
-    set elemInst [ParamStatement new {{U0T rf+1 -eq} {vth0 10}}]
+    set elemInst [ParamStatement new {{-eq U0T rf+1} {vth0 10}}]
 } -body {
-    $elemInst setParamValue u0t 2
-    set result [$elemInst getParams]
+    $elemInst actOnParam -set u0t 2
+    set result [$elemInst actOnParam -get -all]
 } -result {u0t 2 vth0 10} -cleanup {
     unset elemInst result
 }
 
-testTemplate testParamStatementClass-7 {} {ParamStatement new {{U0T rf+1 -eq} {U0T 10}}}\
+testTemplate testParamStatementClass-7 {} {ParamStatement new {{-eq U0T rf+1} {U0T 10}}}\
         {Parameters list 'u0t u0t' has already contains parameter with name 'u0t'}
-testTemplate testParamStatementClass-8 {} {ParamStatement new {{U0T rf+1 -eq} {U0T}}} {Value 'U0T' is not a valid value}
+testTemplate testParamStatementClass-8 {} {ParamStatement new {{-eq U0T rf+1} {U0T}}} {Value 'U0T' is not a valid value}
 
 ###  Save class tests
 
@@ -736,16 +736,16 @@ test testSaveClass-5 {} -setup {
 
 ###  Ic class tests 
 
-testTemplate testIcClass-1 {} {Ic new {{v(a) v1 -eq} {v(b) 10}}} {.ic v(a)={v1} v(b)=10}
-testTemplate testIcClass-2 {} {Ic new {{a v1 -eq} {b 10}}} {.ic a={v1} b=10}
-testTemplate testIcClass-3 {} {Ic new {{a v1 -eq} {a 10}}}\
+testTemplate testIcClass-1 {} {Ic new {{-eq v(a) v1} {v(b) 10}}} {.ic v(a)={v1} v(b)=10}
+testTemplate testIcClass-2 {} {Ic new {{-eq a v1} {b 10}}} {.ic a={v1} b=10}
+testTemplate testIcClass-3 {} {Ic new {{-eq a v1} {a 10}}}\
         {Parameters list 'a a' has already contains parameter with name 'a'}
-testTemplate testIcClass-4 {} {Ic new {{a v1 -eq} {a}}} {Value 'a' is not a valid value}
+testTemplate testIcClass-4 {} {Ic new {{-eq a v1} {a}}} {Value 'a' is not a valid value}
 
 ###  Nodeset class tests 
 
-testTemplate testNodesetClass-1 {} {Nodeset new {{v(a) v1 -eq} {v(b) 10}}} {.nodeset v(a)={v1} v(b)=10}
-testTemplate testNodesetClass-2 {} {Nodeset new {{a v1 -eq} {b 10}}} {.nodeset a={v1} b=10}
+testTemplate testNodesetClass-1 {} {Nodeset new {{-eq v(a) v1} {v(b) 10}}} {.nodeset v(a)={v1} v(b)=10}
+testTemplate testNodesetClass-2 {} {Nodeset new {{-eq a v1} {b 10}}} {.nodeset a={v1} b=10}
 
 ###  Global class tests 
 
@@ -802,7 +802,7 @@ test testGlobalClass-6 {test creation of Global class instance} -setup {
 test testNetlistClass-1 {test creation of Netlist class instance with add interface and genSPICEString interface} -setup {
     set netlistInst [Netlist new newNetlist]
     $netlistInst add [R new 1 net1 net2 -r 10]
-    $netlistInst add [R new 2 net1 net2 -r {{r1+5/10} -eq}]
+    $netlistInst add [R new 2 net1 net2 -r {-eq {r1+5/10}}]
     $netlistInst add [C new 1 net2 net3 -c 1e-6]
     $netlistInst add [ParamStatement new {{r1 1} {r2 2}} -name ps1]
     $netlistInst add [Comment new {some random comment} -name com1]
@@ -826,7 +826,7 @@ v1 net1 net3 5} -cleanup {
 
 test testNetlistClass-2 {test creation of Netlist class instance with del interface and genSPICEString interface} -setup {
     set netlistInst [Netlist new newNetlist]
-    $netlistInst add [R new 1 net1 net2 -r 10] [R new 2 net1 net2 -r {{r1+5/10} -eq}]\
+    $netlistInst add [R new 1 net1 net2 -r 10] [R new 2 net1 net2 -r {-eq {r1+5/10}}]\
             [R new 5 net1 net2 -model res_sem -l 10e-6 -w 100e-6]
     $netlistInst add [RModel new rsem1mod -tc1 0.1 -tc2 0.4]
     $netlistInst add [C new 1 net2 net3 -c 1e-6]
@@ -855,7 +855,7 @@ c1 net2 net3 1e-6
 test testNetlistClass-3 {test creation of Netlist class instance with del interface with wrong name of element} -setup {
     set netlistInst [Netlist new new_netlist]
     $netlistInst add [R new 1 net1 net2 -r 10]
-    $netlistInst add [R new 2 net1 net2 -r {{r1+5/10} -eq}]
+    $netlistInst add [R new 2 net1 net2 -r {-eq {r1+5/10}}]
     $netlistInst add [C new 1 net2 net3 -c 1e-6]
     $netlistInst add [ParamStatement new {{r1 1} {r2 2}} -name ps1]
     $netlistInst add [Comment new {some random comment} -name com1]
@@ -873,7 +873,7 @@ test testNetlistClass-3 {test creation of Netlist class instance with del interf
 test testNetlistClass-4 {test creation of Netlist class instance and getElement interface} -setup {
     set netlistInst [Netlist new new_netlist]
     $netlistInst add [R new 1 net1 net2 -r 10]
-    $netlistInst add [R new 2 net1 net2 -r {{r1+5/10} -eq}]
+    $netlistInst add [R new 2 net1 net2 -r {-eq {r1+5/10}}]
     $netlistInst add [C new 1 net2 net3 -c 1e-6]
     $netlistInst add [ParamStatement new {{r1 1} {r2 2}} -name ps1]
     $netlistInst add [Comment new {some random comment} -name com1]
@@ -891,7 +891,7 @@ test testNetlistClass-4 {test creation of Netlist class instance and getElement 
 test testNetlistClass-5 {test creation of Netlist class instance with add element with same name as ones already added to netslit} -setup {
     set netlistInst [Netlist new new_netlist]
     $netlistInst add [R new 1 net1 net2 -r 10]
-    $netlistInst add [R new 2 net1 net2 -r {{r1+5/10} -eq}]
+    $netlistInst add [R new 2 net1 net2 -r {-eq {r1+5/10}}]
     $netlistInst add [C new 1 net2 net3 -c 1e-6]
     $netlistInst add [ParamStatement new {{r1 1} {r2 2}} -name ps1]
     $netlistInst add [Comment new {some random comment} -name com1]
@@ -909,7 +909,7 @@ test testNetlistClass-5 {test creation of Netlist class instance with add elemen
 test testNetlistClass-6 {test creation of Netlist class instance and modifying value of netlist element} -setup {
     set netlistInst [Netlist new new_netlist]
     $netlistInst add [R new 1 net1 net2 -r 10]
-    $netlistInst add [R new 2 net1 net2 -r {{r1+5/10} -eq}]
+    $netlistInst add [R new 2 net1 net2 -r {-eq {r1+5/10}}]
     $netlistInst add [C new 1 net2 net3 -c 1e-6]
     $netlistInst add [ParamStatement new {{r1 1} {r2 2}} -name ps1]
     $netlistInst add [Comment new {some random comment} -name com1]
@@ -919,7 +919,7 @@ test testNetlistClass-6 {test creation of Netlist class instance and modifying v
     $netlistInst add [Vdc new 1 net1 net3 -dc 5]
 } -body {
     set resistor [$netlistInst getElement r1]
-    $resistor setParamValue r 100
+    $resistor actOnParam -set r 100
     return [$netlistInst genSPICEString]
 } -result {r1 net1 net2 100
 r2 net1 net2 {r1+5/10}
@@ -944,7 +944,7 @@ test testNetlistClass-7 {test creation of Netlist class instance with add elemen
 
 test testNetlistClass-8 {test creation of Netlist class instance with del interface and genSPICEString interface} -setup {
     set netlistInst [Netlist new newNetlist]
-    $netlistInst add [R new 1 net1 net2 -r 10] [R new 2 net1 net2 -r {{r1+5/10} -eq}]\
+    $netlistInst add [R new 1 net1 net2 -r 10] [R new 2 net1 net2 -r {-eq {r1+5/10}}]\
             [R new 5 net1 net2 -model res_sem -l 10e-6 -w 100e-6]
     $netlistInst add [RModel new rsem1mod -tc1 0.1 -tc2 0.4]
     $netlistInst add [C new 1 net2 net3 -c 1e-6]
@@ -971,7 +971,7 @@ c1 net2 net3 1e-6
 
 test testNetlistClass-9 {test creation of Netlist class instance with del interface and genSPICEString interface} -setup {
     set netlistInst [Netlist new newNetlist]
-    $netlistInst add [R new 1 net1 net2 -r 10] [R new 2 net1 net2 -r {{r1+5/10} -eq}]\
+    $netlistInst add [R new 1 net1 net2 -r 10] [R new 2 net1 net2 -r {-eq {r1+5/10}}]\
             [R new 5 net1 net2 -model res_sem -l 10e-6 -w 100e-6]
     $netlistInst add [RModel new rsem1mod -tc1 0.1 -tc2 0.4]
     $netlistInst add [C new 1 net2 net3 -c 1e-6]
@@ -999,7 +999,7 @@ test testNetlistClass-10 {test creation of Netlist class instance with del inter
 
 test testNetlistClass-11 {test creation of Netlist class instance with del interface and genSPICEString interface} -setup {
     set netlistInst [Netlist new newNetlist]
-    $netlistInst add [R new 1 net1 net2 -r 10] [R new 2 net1 net2 -r {{r1+5/10} -eq}]\
+    $netlistInst add [R new 1 net1 net2 -r 10] [R new 2 net1 net2 -r {-eq {r1+5/10}}]\
             [R new 5 net1 net2 -model res_sem -l 10e-6 -w 100e-6]
     $netlistInst add [RModel new rsem1mod -tc1 0.1 -tc2 0.4]
     $netlistInst add [C new 1 net2 net3 -c 1e-6]
@@ -1027,7 +1027,7 @@ test testSubcircuitClass-1 {test creation of Subcircuit class instance with genS
             # define input parameters of subcircuit
             set params {{r 100} {c 1e-6}}
             # add elements to subcircuit definition
-            my add [R new 1 net1 net2 -r {r -eq}] [C new 1 net2 net3 -c {c -eq}]
+            my add [R new 1 net1 net2 -r {-eq r}] [C new 1 net2 net3 -c {-eq c}]
             # pass name, list of pins and list of parameters to Subcircuit constructor
             next rcnet $pins $params
         }
@@ -1053,15 +1053,15 @@ test testSubcircuitClass-2 {test creation of Subcircuit class instance with getP
             # define input parameters of subcircuit
             set params {{r 100} {c 1e-6}}
             # add elements to subcircuit definition
-            my add [R new 1 net1 net2 -r {r -eq}]
-            my add [C new 1 net2 net3 -c {c -eq}]
+            my add [R new 1 net1 net2 -r {-eq r}]
+            my add [C new 1 net2 net3 -c {-eq c}]
             # pass name, list of pins and list of parameters to Subcircuit constructor
             next rcnet $pins $params
         }
     }
     set subcircuit [RCnet new]
 } -body {
-    set result [$subcircuit getPins]
+    set result [$subcircuit actOnPin -get -all]
 } -result {plus {} minus {}} -cleanup {
     rename RCnet ""
     unset subcircuit result
@@ -1076,15 +1076,15 @@ test testSubcircuitClass-3 {test creation of Subcircuit class instance with getP
             # define input parameters of subcircuit
             set params {{r 100} {c 1e-6}}
             # add elements to subcircuit definition
-            my add [R new 1 net1 net2 -r {r -eq}]
-            my add [C new 1 net2 net3 -c {c -eq}]
+            my add [R new 1 net1 net2 -r {-eq r}]
+            my add [C new 1 net2 net3 -c {-eq c}]
             # pass name, list of pins and list of parameters to Subcircuit constructor
             next rcnet $pins $params
         }
     }
     set subcircuit [RCnet new]
 } -body {
-    set result [$subcircuit getParams]
+    set result [$subcircuit actOnParam -get -all]
 } -result {r 100 c 1e-6} -cleanup {
     rename RCnet ""
     unset subcircuit result
@@ -1099,8 +1099,8 @@ test testSubcircuitClass-4 {test creation of Subcircuit class instance with forb
             # define input parameters of subcircuit
             set params {{r 100} {c 1e-6}}
             # add elements to subcircuit definition
-            my add [R new 1 net1 net2 -r {r -eq}]
-            my add [C new 1 net2 net3 -c {c -eq}]
+            my add [R new 1 net1 net2 -r {-eq r}]
+            my add [C new 1 net2 net3 -c {-eq c}]
             my add [Include new {/fold1/fold2/file.lib} -name inc1]
             # pass name, list of pins and list of parameters to Subcircuit constructor
             next rcnet $pins $params
@@ -1124,8 +1124,8 @@ test testSubcircuitClass-5 {test creation of Subcircuit class instance with forb
             # define input parameters of subcircuit
             set params {{r 100} {c 1e-6}}
             # add elements to subcircuit definition
-            my add [R new 1 net1 net2 -r {r -eq}]
-            my add [C new 1 net2 net3 -c {c -eq}]
+            my add [R new 1 net1 net2 -r {-eq r}]
+            my add [C new 1 net2 net3 -c {-eq c}]
             my add [Op new]
             # pass name, list of pins and list of parameters to Subcircuit constructor
             next rcnet $pins $params
@@ -1149,8 +1149,8 @@ test testSubcircuitClass-6 {test creation of Subcircuit class instance with genS
             # define input parameters of subcircuit
             set params {{r 100} {c 1e-6}}
             # add elements to subcircuit definition
-            my add [R new 1 net1 net2 -r {r -eq}]
-            my add [C new 1 net2 net3 -c {c -eq}]
+            my add [R new 1 net1 net2 -r {-eq r}]
+            my add [C new 1 net2 net3 -c {-eq c}]
             my add [R new 5 net1 net2 -model res_sem -l 10e-6 -w 100e-6]
             my add [RModel new rsem1mod -tc1 0.1 -tc2 0.4]
             # pass name, list of pins and list of parameters to Subcircuit constructor
@@ -1179,8 +1179,8 @@ test testSubcircuitClass-7 {test creation of Subcircuit class instance with nest
             # define input parameters of subcircuit
             set params {{r 100} {c 1e-6}}
             # add elements to subcircuit definition
-            my add [R new 1 net1 plus -r {r -eq}]
-            my add [C new 1 net2 net3 -c {c -eq}]
+            my add [R new 1 net1 plus -r {-eq r}]
+            my add [C new 1 net2 net3 -c {-eq c}]
             my add [R new 5 minus net2 -model res_sem -l 10e-6 -w 100e-6]
             my add [RModel new rsem1mod -tc1 0.1 -tc2 0.4]
 
@@ -1189,14 +1189,14 @@ test testSubcircuitClass-7 {test creation of Subcircuit class instance with nest
                 constructor {} {
                     set pins {plus minus}
                     set params {{r 100} {c 1e-6}}
-                    my add [R new 1 net1 plus -r {r -eq}]
-                    my add [C new 1 net2 net3 -c {c -eq}]
+                    my add [R new 1 net1 plus -r {-eq r}]
+                    my add [C new 1 net2 net3 -c {-eq c}]
                     next rcnetnest $pins $params
                 }
             }
             set subcircuitNest [RCnetNest new]
             my add $subcircuitNest
-            my add [SubcircuitInstanceAuto new $subcircuitNest 2 {net1 net2} -r 1 -c {cpar -eq}]
+            my add [SubcircuitInstanceAuto new $subcircuitNest 2 {net1 net2} -r 1 -c {-eq cpar}]
             # pass name, list of pins and list of parameters to Subcircuit constructor
             next rcnet $pins $params
         }
@@ -1229,8 +1229,8 @@ test testSubcircuitClass-7.1 {test creation of Subcircuit class instance with ne
             # define input parameters of subcircuit
             set params {{r 100} {c 1e-6}}
             # add elements to subcircuit definition
-            my add [R new 1 net1 plus -r {r -eq}]
-            my add [C new 1 net2 net3 -c {c -eq}]
+            my add [R new 1 net1 plus -r {-eq r}]
+            my add [C new 1 net2 net3 -c {-eq c}]
             my add [R new 5 minus net2 -model res_sem -l 10e-6 -w 100e-6]
             my add [RModel new rsem1mod -tc1 0.1 -tc2 0.4]
             # pass name, list of pins and list of parameters to Subcircuit constructor
@@ -1244,14 +1244,14 @@ test testSubcircuitClass-7.1 {test creation of Subcircuit class instance with ne
             constructor {} {
                 set pins {plus minus}
                 set params {{r 100} {c 1e-6}}
-                my add [R new 1 net1 plus -r {r -eq}]
-                my add [C new 1 net2 net3 -c {c -eq}]
+                my add [R new 1 net1 plus -r {-eq r}]
+                my add [C new 1 net2 net3 -c {-eq c}]
                 next rcnetnest $pins $params
             }
         }
         set subcircuitNest [RCnetNest new]
         my add $subcircuitNest
-        my add [SubcircuitInstanceAuto new $subcircuitNest 2 {net1 net2} -r 1 -c {cpar -eq}]
+        my add [SubcircuitInstanceAuto new $subcircuitNest 2 {net1 net2} -r 1 -c {-eq cpar}]
     }
 
 } -body {
@@ -1281,7 +1281,7 @@ test testSubcircuitClass-8 {test creation of Subcircuit class instance with genS
             # define input parameters of subcircuit
             set params {{r 100} {r 1e-6}}
             # add elements to subcircuit definition
-            my add [R new 1 net1 net2 -r {r -eq}] [C new 1 net2 net3 -c {c -eq}]
+            my add [R new 1 net1 net2 -r {-eq r}] [C new 1 net2 net3 -c {-eq c}]
             # pass name, list of pins and list of parameters to Subcircuit constructor
             next rcnet $pins $params
         }
@@ -1300,39 +1300,39 @@ test testSubcircuitClass-9 {test creation of Subcircuit class instance with genS
             # define external pins of subcircuit
             set pins {plus minus}
             # define input parameters of subcircuit
-            set params {{r 100} {c 1e-6 -eq}}
+            set params {{r 100} {-eq c 1e-6}}
             # add elements to subcircuit definition
-            my add [R new 1 net1 net2 -r {r -eq}] [C new 1 net2 net3 -c {c -eq}]
+            my add [R new 1 net1 net2 -r {-eq r}] [C new 1 net2 net3 -c {-eq c}]
             # pass name, list of pins and list of parameters to Subcircuit constructor
             next rcnet $pins $params
         }
     }
     catch {RCnet new} errorStr
     return $errorStr
-} -result {Wrong parameter 'c' definition in subcircuit 'rcnet'} -cleanup {
+} -result {Wrong parameter '-eq c 1e-6' definition in subcircuit 'rcnet'} -cleanup {
     rename RCnet ""
     unset errorStr
 }
 
 ###  Analysis class tests 
     
-test testAnalysisClass-1 {test creation of Analysis class instance and getParams interface} -setup {
-    set anInst [Analysis new dc {{srcnam v1 -posnocheck} {vstart 0 -pos} {vstop 5 -pos} {vincr 0.1 -pos}}]
+test testAnalysisClass-1 {} -setup {
+    set anInst [Analysis new dc {{-posnocheck srcnam v1} {-pos vstart 0} {-pos vstop 5} {-pos vincr 0.1}}]
 } -body {
-    set result [$anInst getParams]
+    set result [$anInst actOnParam -get -all]
 } -result {srcnam v1 vstart 0 vstop 5 vincr 0.1} -cleanup {
     unset anInst result
 }
 
 testTemplate testAnalysisClass-2 {}\
-        {Analysis new dc {{srcnam v1 -posnocheck} {vstart 0 -pos} {vstop 5 -pos} {vincr 0.1 -pos}}} {.dc v1 0 5 0.1}
+        {Analysis new dc {{-posnocheck srcnam v1} {-pos vstart 0} {-pos vstop 5} {-pos vincr 0.1}}} {.dc v1 0 5 0.1}
 testTemplate testAnalysisClass-3 {}\
-        {Analysis new dc1 {{srcnam v1 -posnocheck} {vstart 0 -pos} {vstop 5 -pos} {vincr 0.1 -pos}}}\
+        {Analysis new dc1 {{-posnocheck srcnam v1} {-pos vstart 0} {-pos vstop 5} {-pos vincr 0.1}}}\
         {Type 'dc1' is not in supported list of analysis, should be one of 'ac dc tran op disto noise pz sens sp tf'}
 
-test testAnalysisClass-4 {test creation of Analysis class instance and setParamValue interface} -setup {
-    set anInst [Analysis new dc {{srcnam v1 -posnocheck} {vstart 0 -pos} {vstop 5 -pos} {vincr 0.1 -pos}}]
-    $anInst setParamValue vstop 10
+test testAnalysisClass-4 {} -setup {
+    set anInst [Analysis new dc {{-posnocheck srcnam v1} {-pos vstart 0} {-pos vstop 5} {-pos vincr 0.1}}]
+    $anInst actOnParam -set vstop 10
 } -body {
     return [$anInst genSPICEString]   
 } -result {.dc v1 0 10 0.1} -cleanup {
@@ -1340,11 +1340,11 @@ test testAnalysisClass-4 {test creation of Analysis class instance and setParamV
 }
 
 testTemplate testAnalysisClass-5 {}\
-        {Analysis new dc {{srcnam v1 -posnocheck} {vstart 0 -pos} {vstop x**2+1 -poseq} {vincr 0.1 -pos}}}\
+        {Analysis new dc {{-posnocheck srcnam v1} {-pos vstart 0} {-poseq vstop x**2+1} {-pos vincr 0.1}}}\
         {.dc v1 0 {x**2+1} 0.1}
-testTemplate testAnalysisClass-6 {} {Analysis new tran {{tstep 1e-6 -pos} {tstop 10e-3 -pos} {uic -sw}}}\
+testTemplate testAnalysisClass-6 {} {Analysis new tran {{-pos tstep 1e-6} {-pos tstop 10e-3} {-sw uic}}}\
         {.tran 1e-6 10e-3 uic}
-testTemplate testAnalysisClass-7 {} {Analysis new dc {{srcnam v1 -posnocheck} {vstart} {vstop 5 -pos} {vincr 0.1 -pos}}}\
+testTemplate testAnalysisClass-7 {} {Analysis new dc {{-posnocheck srcnam v1} {vstart} {-pos vstop 5} {-pos vincr 0.1}}}\
         {Value 'vstart' is not a valid value}
 
 ###  RawFile class tests 

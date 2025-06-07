@@ -28,8 +28,8 @@ importCommon
 
 testTemplate testResistorClass-1 {} {Resistor new 1 netp netm -r 1e3 -tc1 1 -temp 25} {r1 netp netm 1e3 tc1=1 temp=25}
 testTemplate testResistorClass-2 {} {Resistor new 1 netp netm -r 1e3} {r1 netp netm 1e3}
-testTemplate testResistorClass-3 {} {Resistor new 1 netp netm -r {6*x+y -eq}} {r1 netp netm {6*x+y}}
-testTemplate testResistorClass-4 {} {Resistor new 1 netp netm -r {{6*x+y} -eq} -tc1 7 -tc2 {x^2 -eq}}\
+testTemplate testResistorClass-3 {} {Resistor new 1 netp netm -r {-eq 6*x+y}} {r1 netp netm {6*x+y}}
+testTemplate testResistorClass-4 {} {Resistor new 1 netp netm -r {-eq 6*x+y} -tc1 7 -tc2 {-eq x^2}}\
         {r1 netp netm {6*x+y} tc1=7 tc2={x^2}}
 testTemplate testResistorClass-5 {} {R new 1 netp netm -r 1e3 -tc1 1 -temp 25} {r1 netp netm 1e3 tc1=1 temp=25}
 testTemplate testResistorClass-6 {} {R new 1 netp netm -r 1 -temp 25} {r1 netp netm 1 temp=25}
@@ -49,19 +49,19 @@ testTemplate testCClass-2 {} {C new 1 netp netm -c 1e-6 -tc1 1 -temp 25} {c1 net
 
 testTemplate testInductorClass-1 {} {Inductor new 1 netp netm -l 1e-6 -tc1 1 -temp 25} {l1 netp netm 1e-6 tc1=1 temp=25}
 testTemplate testInductorClass-2 {} {Inductor new 1 netp netm -l 1e-6} {l1 netp netm 1e-6}
-testTemplate testInductorClass-3 {} {Inductor new 1 netp netm -l {l1*l2 -eq} -tc1 1} {l1 netp netm {l1*l2} tc1=1}
+testTemplate testInductorClass-3 {} {Inductor new 1 netp netm -l {-eq l1*l2} -tc1 1} {l1 netp netm {l1*l2} tc1=1}
 
 ###  Subcircuits classes tests
 
 ####  SubcircuitInstance class tests 
 
 testTemplate testSubcircuitInstanceClass-1 {}\
-        {SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar -eq}}}\
+        {SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {-eq c cpar}}}\
         {x1 net1 net2 rcnet r=1 c={cpar}}
 
 ####  X class tests 
 
-testTemplate testXClass-1 {} {X new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar -eq}}}\
+testTemplate testXClass-1 {} {X new 1 {{plus net1} {minus net2}} rcnet {{r 1} {-eq c cpar}}}\
         {x1 net1 net2 rcnet r=1 c={cpar}}
 
 ####  SubcircuitInstanceAuto class tests 
@@ -75,15 +75,15 @@ test testSubcircuitInstanceAutoClass-1 {} -setup {
             # define input parameters of subcircuit
             set params {{r 100} {c 1e-6}}
             # add elements to subcircuit definition
-            my add [R new 1 net1 net2 -r {r -eq}]
-            my add [C new 1 net2 net3 -c {c -eq}]
+            my add [R new 1 net1 net2 -r {-eq r}]
+            my add [C new 1 net2 net3 -c {-eq c}]
             # pass name, list of pins and list of parameters to Subcircuit constructor
             next rcnet $pins $params
         }
     }
     set subcircuit [RCnet new]
 } -body {
-    set subInst1 [SubcircuitInstanceAuto new $subcircuit 2 {net1 net2} -r 1 -c {cpar -eq}]
+    set subInst1 [SubcircuitInstanceAuto new $subcircuit 2 {net1 net2} -r 1 -c {-eq cpar}]
     set result [$subInst1 genSPICEString]   
 } -result {x2 net1 net2 rcnet r=1 c={cpar}} -cleanup {
     rename RCnet ""
@@ -99,15 +99,15 @@ test testSubcircuitInstanceAutoClass-2 {} -setup {
             # define input parameters of subcircuit
             set params {{r 100} {c 1e-6}}
             # add elements to subcircuit definition
-            my add [R new 1 net1 net2 -r {r -eq}]
-            my add [C new 1 net2 net3 -c {c -eq}]
+            my add [R new 1 net1 net2 -r {-eq r}]
+            my add [C new 1 net2 net3 -c {-eq c}]
             # pass name, list of pins and list of parameters to Subcircuit constructor
             next rcnet $pins $params
         }
     }
     set subcircuit [RCnet new]
 } -body {
-    catch {SubcircuitInstanceAuto new $subcircuit 2 {net1 net2 net3} -r 1 -c {cpar -eq}} errorStr
+    catch {SubcircuitInstanceAuto new $subcircuit 2 {net1 net2 net3} -r 1 -c {-eq cpar}} errorStr
     return $errorStr  
 } -result {Wrong number of nodes '3' in definition, should be '2'} -cleanup {
     rename RCnet ""
@@ -123,8 +123,8 @@ test testSubcircuitInstanceAutoClass-3 {} -setup {
             # define input parameters of subcircuit
             set params {{r 100} {c 1e-6}}
             # add elements to subcircuit definition
-            my add [R new 1 net1 net2 -r {r -eq}]
-            my add [C new 1 net2 net3 -c {c -eq}]
+            my add [R new 1 net1 net2 -r {-eq r}]
+            my add [C new 1 net2 net3 -c {-eq c}]
             # pass name, list of pins and list of parameters to Subcircuit constructor
             next rcnet $pins $params
         }
@@ -132,7 +132,7 @@ test testSubcircuitInstanceAutoClass-3 {} -setup {
     set subcircuit [RCnet new]
     set res [R new 1 netp netm -r 1e3 -tc1 1 -temp 25]
 } -body {
-    catch {SubcircuitInstanceAuto new $res 2 {net1 net2 net3} -r 1 -c {cpar -eq}} errorStr
+    catch {SubcircuitInstanceAuto new $res 2 {net1 net2 net3} -r 1 -c {-eq cpar}} errorStr
     return $errorStr  
 } -result {Wrong object class '::SpiceGenTcl::Common::BasicDevices::R' is passed as subcktObj, should be\
                    '::SpiceGenTcl::Subcircuit'} -cleanup {
@@ -147,10 +147,10 @@ test testSubcircuitInstanceAutoClass-4 {} -setup {
             # define external pins of subcircuit
             set pins {plus minus}
             # add elements to subcircuit definition
-            my add [R new 1 net1 net2 -r {r -eq}]
-            my add [C new 1 net2 net3 -c {c -eq}]
+            my add [R new 1 net1 net2 -r {-eq r}]
+            my add [C new 1 net2 net3 -c {-eq c}]
             # pass name, list of pins and list of parameters to Subcircuit constructor
-            next rcnet $pins ""
+            next rcnet $pins {}
         }
     }
     set subcircuit [RCnet new]

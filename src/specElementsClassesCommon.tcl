@@ -48,7 +48,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::BasicDevices::Resistor new 1 netp netm -r 1e3 -tc1 1 -temp {temp_amb -eq}
+            # ::SpiceGenTcl::Common::BasicDevices::Resistor new 1 netp netm -r 1e3 -tc1 1 -temp {-eq temp_amb}
             # ```
             # Synopsis: name np nm -r value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value?
             set arguments [argparse -inline -pfirst -helplevel 1 -help {Creates object of class `Resistor` that describes\
@@ -63,21 +63,22 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 {nm -help {Name of node connected to negative pin}}
             }]
             set rVal [dget $arguments r]
-            if {([llength $rVal]>1) && ([@ $rVal 1] eq {-eq})} {
-                lappend params [list r [@ $rVal 0] -poseq]
+            if {([llength $rVal]>1) && ([@ $rVal 0] eq {-eq})} {
+                lappend params [list -poseq r [@ $rVal 1]]
             } else {
-                lappend params [list r $rVal -pos]
+                lappend params [list -pos r $rVal]
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {r name np nm}} {
-                    lappend params [list $paramName {*}$value]
+                    if {[@ $value 0] eq {-eq}} {
+                        lappend params [list -eq $paramName [@ $value 1]]
+                    } else {
+                        lappend params [list $paramName $value]
+                    }
                 }
             }
             next r[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
                     $params
-        }
-        destructor {
-            puts 1
         }
     }
 ####  R class 
@@ -106,7 +107,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::BasicDevices::Capacitor new 1 netp netm -c 1e3 -tc1 1 -temp {temp_amb -eq}
+            # ::SpiceGenTcl::Common::BasicDevices::Capacitor new 1 netp netm -c 1e3 -tc1 1 -temp {-eq temp_amb}
             # ```
             # Synopsis: name np nm -c value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value? ?-ic value?
             set arguments [argparse -inline -pfirst -help {Creates object of class `Capacitor` that describes capacitor.} {
@@ -121,14 +122,18 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 {nm -help {Name of node connected to negative pin}}
             }]
             set cVal [dget $arguments c]
-            if {([llength $cVal]>1) && ([@ $cVal 1] eq {-eq})} {
-                lappend params [list c [@ $cVal 0] -poseq]
+            if {([llength $cVal]>1) && ([@ $cVal 0] eq {-eq})} {
+                lappend params [list -poseq c [@ $cVal 1]]
             } else {
-                lappend params [list c $cVal -pos]
+                lappend params [list -pos c $cVal]
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {c name np nm}} {
-                    lappend params [list $paramName {*}$value]
+                    if {[@ $value 0] eq {-eq}} {
+                        lappend params [list -eq $paramName [@ $value 1]]
+                    } else {
+                        lappend params [list $paramName $value]
+                    }
                 }
             }
             next c[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
@@ -161,7 +166,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::BasicDevices::Inductor new 1 netp netm -l 1e3 -tc1 1 -temp {temp_amb -eq}
+            # ::SpiceGenTcl::Common::BasicDevices::Inductor new 1 netp netm -l 1e3 -tc1 1 -temp {-eq temp_amb}
             # ```
             # Synopsis: name np nm -l value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value?
             set arguments [argparse -inline -pfirst -help {Creates object of class `Inductor` that describes inductor} {
@@ -175,14 +180,18 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 {nm -help {Name of node connected to negative pin}}
             }]
             set lVal [dget $arguments l]
-            if {([llength $lVal]>1) && ([@ $lVal 1] eq {-eq})} {
-                lappend params [list l [@ $lVal 0] -poseq]
+            if {([llength $lVal]>1) && ([@ $lVal 0] eq {-eq})} {
+                lappend params [list -poseq l [@ $lVal 1]]
             } else {
-                lappend params [list l $lVal -pos]
+                lappend params [list -pos l $lVal]
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {l name np nm}} {
-                    lappend params [list $paramName {*}$value]
+                    if {[@ $value 0] eq {-eq}} {
+                        lappend params [list -eq $paramName [@ $value 1]]
+                    } else {
+                        lappend params [list $paramName $value]
+                    }
                 }
             }
             next l[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
@@ -219,7 +228,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 {subName -help {Name of subcircuit definition}}
                 {params -help {List of parameters {{paramName paramValue ?-eq?} {paramName paramValue ?-eq?}}}}
             }
-            set params [linsert $params 0 [list model $subName -posnocheck]]
+            set params [linsert $params 0 [list -posnocheck model $subName]]
             next x$name $pins $params
         }
     }
@@ -261,11 +270,11 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 {ncp -help {Name of node connected to positive controlling pin}}
                 {ncm -help {Name of node connected to negative controlling pin}}
             }]
-            lappend params [list model [dget $arguments model] -posnocheck]
+            lappend params [list -posnocheck model [dget $arguments model]]
             if {[dexist $arguments on]} {
-                lappend params {on -sw}
+                lappend params {-sw on}
             } elseif {[dexist $arguments off]} {
-                lappend params {off -sw}
+                lappend params {-sw off}
             }
             next s[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]\
                                  [list ncp [dget $arguments ncp]] [list ncm [dget $arguments ncm]]] $params
@@ -308,15 +317,14 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 {np -help {Name of node connected to positive pin}}
                 {nm -help {Name of node connected to negative pin}}
             }]
-            lappend params [list icntrl [dget $arguments icntrl] -posnocheck]
-            lappend params [list model [dget $arguments model] -posnocheck]
+            lappend params [list -posnocheck icntrl [dget $arguments icntrl]]
+            lappend params [list -posnocheck model [dget $arguments model] -posnocheck]
             if {[dexist $arguments on]} {
-                lappend params {on -sw}
+                lappend params {-sw on}
             } elseif {[dexist $arguments off]} {
-                lappend params {off -sw}
+                lappend params {-sw off}
             }
-            next w[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
-                    $params
+            next w[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]] $params
         }
     }
 
@@ -351,15 +359,15 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 error "Wrong object class '$objClass' is passed as subcktObj, should be '::SpiceGenTcl::Subcircuit'"
             }
             set subName [$subcktObj configure -name] 
-            set pinsNames [dict keys [$subcktObj getPins]]
+            set pinsNames [dict keys [$subcktObj actOnPin -get -all]]
             # check if number of pins in subcircuit definition matchs the number of supplied nodes
             if {[llength $pinsNames]!=[llength $nodes]} {
                 return -code error "Wrong number of nodes '[llength $nodes]' in definition, should be\
                         '[llength $pinsNames]'"
             }
             set pinsList [lmap pinName $pinsNames node $nodes {join [list $pinName $node]}]
-            if {![catch {$subcktObj getParams}]} {
-                set paramDefList [lmap paramName [dict keys [$subcktObj getParams]] {subst -${paramName}=}]
+            if {[$subcktObj actOnParam -get -all] ne {}} {
+                set paramDefList [lmap paramName [dict keys [$subcktObj actOnParam -get -all]] {subst -${paramName}=}]
             }
             if {[info exists paramDefList]} {
                 # create definition for argparse module for passing parameters as optional arguments
@@ -368,12 +376,16 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 "]
                 # create list of parameters and values from which were supplied by args
                 dict for {paramName value} $arguments {
-                    lappend params [list $paramName {*}$value]
+                    if {[@ $value 0] eq {-eq}} {
+                        lappend params [list -eq $paramName [@ $value 1]]
+                    } else {
+                        lappend params [list $paramName $value]
+                    }
                 }
             } else {
                 set params {}
             }
-            set params [linsert $params 0 [list model $subName -posnocheck]]
+            set params [linsert $params 0 [list -posnocheck model $subName]]
             next x$name $pinsList $params
         }
     }
@@ -398,21 +410,20 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             } else {
                 set typeName current
             }
-            set arguments [argparse -inline -pfirst -help "Creates object of class '[string totitle ${type}dc]' that describes simple\
-                    constant $typeName source" {
+            set arguments [argparse -inline -pfirst -help "Creates object of class '[string totitle ${type}dc]' that\
+                    describes simple constant $typeName source" {
                 {-dc= -required -help {DC value}}
                 {name -help {Name of the device without first-letter designator}}
                 {np -help {Name of node connected to positive pin}}
                 {nm -help {Name of node connected to negative pin}}
             }]
             set dcVal [dget $arguments dc]
-            if {([llength $dcVal]>1) && ([@ $dcVal 1] eq {-eq})} {
-                lappend params [list dc [@ $dcVal 0] -poseq]
+            if {([llength $dcVal]>1) && ([@ $dcVal 0] eq {-eq})} {
+                lappend params [list -poseq dc [@ $dcVal 1]]
             } else {
-                lappend params [list dc $dcVal -pos]
+                lappend params [list -pos dc $dcVal]
             }
-            next $type[dget $arguments name] [list [list np [dget $arguments np]]\
-                                                      [list nm [dget $arguments nm]]] $params
+            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]] $params
         }
     }
 
@@ -425,8 +436,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             } else {
                 set typeName current
             }
-            set arguments [argparse -inline -pfirst -help "Creates object of class '[string totitle ${type}ac]' that describes ac\
-                    $typeName source" {
+            set arguments [argparse -inline -pfirst -help "Creates object of class '[string totitle ${type}ac]' that\
+                    describes ac $typeName source" {
                 {-dc= -default 0 -help {DC voltage value}}
                 {-ac= -required -help {AC voltage value}}
                 {-acphase= -help {Phase of AC voltage}}
@@ -435,29 +446,28 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {nm -help {Name of node connected to negative pin}}
             }]
             set dcVal [dget $arguments dc]
-            if {([llength $dcVal]>1) && ([@ $dcVal 1] eq {-eq})} {
-                lappend params [list dc [@ $dcVal 0] -poseq]
+            if {([llength $dcVal]>1) && ([@ $dcVal 0] eq {-eq})} {
+                lappend params [list -poseq dc [@ $dcVal 1]]
             } else {
-                lappend params [list dc $dcVal -pos]
+                lappend params [list -pos dc $dcVal]
             }
             set acVal [dget $arguments ac]
-            lappend params {acsw ac -posnocheck}
-            if {([llength $acVal]>1) && ([@ $acVal 1] eq {-eq})} {
-                lappend params [list ac [@ $acVal 0] -poseq]
+            lappend params {-posnocheck acsw ac}
+            if {([llength $acVal]>1) && ([@ $acVal 0] eq {-eq})} {
+                lappend params [list -poseq ac [@ $acVal 1]]
             } else {
-                lappend params [list ac $acVal -pos]
+                lappend params [list -pos ac $acVal]
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {ac dc name np nm}} {
-                    if {([llength $value]>1) && ([@ $value 1] eq {-eq})} {
-                        lappend params [list $paramName [@ $value 0] -poseq]
+                    if {([llength $value]>1) && ([@ $value 0] eq {-eq})} {
+                        lappend params [list -poseq $paramName [@ $value 1]]
                     } else {
-                        lappend params [list $paramName $value -pos]
+                        lappend params [list -pos $paramName $value]
                     }
                 }
             }
-            next $type[dget $arguments name] [list [list np [dget $arguments np]]\
-                                                      [list nm [dget $arguments nm]]] $params
+            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]] $params
         }
     }   
     
@@ -488,36 +498,35 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {nm -help {Name of node connected to negative pin}}
             }]
             if {[dexist $arguments dc]} {
-                lappend params {dc -sw}
+                lappend params {-sw dc}
                 set dcVal [dget $arguments dc]
-                if {([llength $dcVal]>1) && ([@ $dcVal 1] eq {-eq})} {
-                    lappend params [list dcval [@ $dcVal 0] -poseq]
+                if {([llength $dcVal]>1) && ([@ $dcVal 0] eq {-eq})} {
+                    lappend params [list -poseq dcval [@ $dcVal 1]]
                 } else {
-                    lappend params [list dcval $dcVal -pos]
+                    lappend params [list -pos dcval $dcVal]
                 }
             }
             if {[dexist $arguments ac]} {
-                lappend params {acsw ac -posnocheck}
+                lappend params {-posnocheck acsw ac}
                 set acVal [dget $arguments ac]
-                if {([llength $acVal]>1) && ([@ $acVal 1] eq {-eq})} {
-                    lappend params [list ac [@ $acVal 0] -poseq]
+                if {([llength $acVal]>1) && ([@ $acVal 0] eq {-eq})} {
+                    lappend params [list -poseq ac [@ $acVal 1]]
                 } else {
-                    lappend params [list ac $acVal -pos]
+                    lappend params [list -pos ac $acVal]
                 }
                 if {[dexist $arguments acphase]} {
                     set acphaseVal [dget $arguments acphase]
-                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 1] eq {-eq})} {
-                        lappend params [list acphase [@ $acphaseVal 0] -poseq]
+                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 0] eq {-eq})} {
+                        lappend params [list -poseq acphase [@ $acphaseVal 1]]
                     } else {
-                        lappend params [list acphase $acphaseVal -pos]
+                        lappend params [list -pos acphase $acphaseVal]
                     }
                 }
             }
             set paramsOrder {low high td tr tf ton tper}
-            lappend params {model pulse -posnocheck}
+            lappend params {-posnocheck model pulse}
             my ParamsProcess $paramsOrder $arguments params
-            next $type[dget $arguments name] [list [list np [dget $arguments np]]\
-                                                      [list nm [dget $arguments nm]]] $params
+            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]] $params
         }
     } 
     
@@ -547,36 +556,35 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {nm -help {Name of node connected to negative pin}}
             }]
             if {[dexist $arguments dc]} {
-                lappend params {dc -sw}
+                lappend params {-sw dc}
                 set dcVal [dget $arguments dc]
-                if {([llength $dcVal]>1) && ([@ $dcVal 1] eq {-eq})} {
-                    lappend params [list dcval [@ $dcVal 0] -poseq]
+                if {([llength $dcVal]>1) && ([@ $dcVal 0] eq {-eq})} {
+                    lappend params [list -poseq dcval [@ $dcVal 1]]
                 } else {
-                    lappend params [list dcval $dcVal -pos]
+                    lappend params [list -pos dcval $dcVal]
                 }
             }
             if {[dexist $arguments ac]} {
-                lappend params {acsw ac -posnocheck}
+                lappend params {-posnocheck acsw ac}
                 set acVal [dget $arguments ac]
-                if {([llength $acVal]>1) && ([@ $acVal 1] eq {-eq})} {
-                    lappend params [list ac [@ $acVal 0] -poseq]
+                if {([llength $acVal]>1) && ([@ $acVal 0] eq {-eq})} {
+                    lappend params [list -poseq ac [@ $acVal 1]]
                 } else {
-                    lappend params [list ac $acVal -pos]
+                    lappend params [list -pos ac $acVal]
                 }
                 if {[dexist $arguments acphase]} {
                     set acphaseVal [dget $arguments acphase]
-                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 1] eq {-eq})} {
-                        lappend params [list acphase [@ $acphaseVal 0] -poseq]
+                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 0] eq {-eq})} {
+                        lappend params [list -poseq acphase [@ $acphaseVal 1]]
                     } else {
-                        lappend params [list acphase $acphaseVal -pos]
+                        lappend params [list -pos acphase $acphaseVal]
                     }
                 }
             }
             set paramsOrder {v0 va freq td theta phase}
-            lappend params {model sin -posnocheck}
+            lappend params {-posnocheck model sin}
             my ParamsProcess $paramsOrder $arguments params
-            next $type[dget $arguments name] [list [list np [dget $arguments np]]\
-                                                      [list nm [dget $arguments nm]]] $params
+            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]] $params
         }
     }  
     
@@ -606,36 +614,35 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {nm -help {Name of node connected to negative pin}}
             }]
             if {[dexist $arguments dc]} {
-                lappend params {dc -sw}
+                lappend params {-sw dc}
                 set dcVal [dget $arguments dc]
-                if {([llength $dcVal]>1) && ([@ $dcVal 1] eq {-eq})} {
-                    lappend params [list dcval [@ $dcVal 0] -poseq]
+                if {([llength $dcVal]>1) && ([@ $dcVal 0] eq {-eq})} {
+                    lappend params [list -poseq dcval [@ $dcVal 1]]
                 } else {
-                    lappend params [list dcval $dcVal -pos]
+                    lappend params [list -pos dcval $dcVal]
                 }
             }
             if {[dexist $arguments ac]} {
-                lappend params {acsw ac -posnocheck}
+                lappend params {-posnocheck acsw ac}
                 set acVal [dget $arguments ac]
-                if {([llength $acVal]>1) && ([@ $acVal 1] eq {-eq})} {
-                    lappend params [list ac [@ $acVal 0] -poseq]
+                if {([llength $acVal]>1) && ([@ $acVal 0] eq {-eq})} {
+                    lappend params [list -poseq ac [@ $acVal 1]]
                 } else {
-                    lappend params [list ac $acVal -pos]
+                    lappend params [list -pos ac $acVal]
                 }
                 if {[dexist $arguments acphase]} {
                     set acphaseVal [dget $arguments acphase]
-                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 1] eq {-eq})} {
-                        lappend params [list acphase [@ $acphaseVal 0] -poseq]
+                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 0] eq {-eq})} {
+                        lappend params [list -poseq acphase [@ $acphaseVal 1]]
                     } else {
-                        lappend params [list acphase $acphaseVal -pos]
+                        lappend params [list -pos acphase $acphaseVal]
                     }
                 }
             }
             set paramsOrder {v1 v2 td1 tau1 td2 tau2}
-            lappend params {model exp -posnocheck}
+            lappend params {-posnocheck model exp}
             my ParamsProcess $paramsOrder $arguments params
-            next $type[dget $arguments name] [list [list np [dget $arguments np]]\
-                                                      [list nm [dget $arguments nm]]] $params
+            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]] $params
         }
     }    
     
@@ -660,29 +667,29 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             }]
             set start 0
             if {[dexist $arguments dc]} {
-                lappend paramList {dc -sw}
+                lappend paramList {-sw dc}
                 set dcVal [dget $arguments dc]
-                if {([llength $dcVal]>1) && ([@ $dcVal 1] eq {-eq})} {
-                    lappend paramList [list dcval [@ $dcVal 0] -poseq]
+                if {([llength $dcVal]>1) && ([@ $dcVal 0] eq {-eq})} {
+                    lappend paramList [list -poseq dcval [@ $dcVal 1]]
                 } else {
-                    lappend paramList [list dcval $dcVal -pos]
+                    lappend paramList [list -pos dcval $dcVal]
                 }
                 incr start 2
             }
             if {[dexist $arguments ac]} {
-                lappend paramList {acsw ac -posnocheck}
+                lappend paramList {-posnocheck acsw ac}
                 set acVal [dget $arguments ac]
-                if {([llength $acVal]>1) && ([@ $acVal 1] eq {-eq})} {
-                    lappend paramList [list ac [@ $acVal 0] -poseq]
+                if {([llength $acVal]>1) && ([@ $acVal 0] eq {-eq})} {
+                    lappend paramList [list -poseq ac [@ $acVal 1]]
                 } else {
-                    lappend paramList [list ac $acVal -pos]
+                    lappend paramList [list -pos ac $acVal]
                 }
                 if {[dexist $arguments acphase]} {
                     set acphaseVal [dget $arguments acphase]
-                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 1] eq {-eq})} {
-                        lappend paramList [list acphase [@ $acphaseVal 0] -poseq]
+                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 0] eq {-eq})} {
+                        lappend paramList [list -poseq acphase [@ $acphaseVal 1]]
                     } else {
-                        lappend paramList [list acphase $acphaseVal -pos]
+                        lappend paramList [list -pos acphase $acphaseVal]
                     }
                     incr start 1
                 }
@@ -704,15 +711,15 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 lappend params [list t$i [@ $pwlSeqVal $2i]] [list $type$i [@ $pwlSeqVal $2ip1]]
             }
             foreach param $params {
-                if {([llength [@ $param 1]]>1) && ([@ [@ $param 1] 1] eq {-eq})} {
-                    lappend paramList [list [@ $param 0] [@ [@ $param 1] 0] -poseq]
+                if {([llength [@ $param 1]]>1) && ([@ [@ $param 1] 0] eq {-eq})} {
+                    lappend paramList [list -poseq [@ $param 0] [@ [@ $param 1] 1]]
                 } else {
-                    lappend paramList [list [@ $param 0] [@ $param 1] -pos]
+                    lappend paramList [list -pos [@ $param 0] [@ $param 1]]
                 }
             }
-            set paramList [linsert $paramList $start {model pwl -posnocheck}]
-            next $type[dget $arguments name] [list [list np [dget $arguments np]]\
-                                                      [list nm [dget $arguments nm]]] $paramList
+            set paramList [linsert $paramList $start {-posnocheck model pwl}]
+            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
+                    $paramList
         }
     }
 
@@ -741,36 +748,35 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {nm -help {Name of node connected to negative pin}}
             }]
             if {[dexist $arguments dc]} {
-                lappend params {dc -sw}
+                lappend params {-sw dc}
                 set dcVal [dget $arguments dc]
-                if {([llength $dcVal]>1) && ([@ $dcVal 1] eq {-eq})} {
-                    lappend params [list dcval [@ $dcVal 0] -poseq]
+                if {([llength $dcVal]>1) && ([@ $dcVal 0] eq {-eq})} {
+                    lappend params [list -poseq dcval [@ $dcVal 1]]
                 } else {
-                    lappend params [list dcval $dcVal -pos]
+                    lappend params [list -pos dcval $dcVal]
                 }
             }
             if {[dexist $arguments ac]} {
-                lappend params {acsw ac -posnocheck}
+                lappend params {-posnocheck acsw ac}
                 set acVal [dget $arguments ac]
-                if {([llength $acVal]>1) && ([@ $acVal 1] eq {-eq})} {
-                    lappend params [list ac [@ $acVal 0] -poseq]
+                if {([llength $acVal]>1) && ([@ $acVal 0] eq {-eq})} {
+                    lappend params [list -poseq ac [@ $acVal 1]]
                 } else {
-                    lappend params [list ac $acVal -pos]
+                    lappend params [list -pos ac $acVal]
                 }
                 if {[dexist $arguments acphase]} {
                     set acphaseVal [dget $arguments acphase]
-                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 1] eq {-eq})} {
-                        lappend params [list acphase [@ $acphaseVal 0] -poseq]
+                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 0] eq {-eq})} {
+                        lappend params [list -poseq acphase [@ $acphaseVal 1]]
                     } else {
-                        lappend params [list acphase $acphaseVal -pos]
+                        lappend params [list -pos acphase $acphaseVal]
                     }
                 }
             }
             set paramsOrder {v0 va fc mdi fs}
-            lappend params {model sffm -posnocheck}
+            lappend params {-posnocheck model sffm}
             my ParamsProcess $paramsOrder $arguments params
-            next $type[dget $arguments name] [list [list np [dget $arguments np]]\
-                                                      [list nm [dget $arguments nm]]] $params
+            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]] $params
         }
     }      
     
@@ -1181,19 +1187,23 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {ncm -help {Name of node connected to negative controlling pin}}
             }]
             set trcondVal [dget $arguments trcond]
-            if {([llength $trcondVal]>1) && ([@ $trcondVal 1] eq {-eq})} {
-                lappend params [list trcond [@ $trcondVal 0] -poseq]
+            if {([llength $trcondVal]>1) && ([@ $trcondVal 0] eq {-eq})} {
+                lappend params [list -poseq trcond [@ $trcondVal 1]]
             } else {
-                lappend params [list trcond $trcondVal -pos]
+                lappend params [list -pos trcond $trcondVal]
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {trcond name np nm ncp ncm}} {
-                    lappend params [list $paramName {*}$value]
+                    if {[@ $value 0] eq {-eq}} {
+                        lappend params [list -eq $paramName [@ $value 1]]
+                    } else {
+                        lappend params [list $paramName $value]
+                    }
                 }
             }
             next g[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]\
-                                                  [list ncp [dget $arguments ncp]]\
-                                                  [list ncm [dget $arguments ncm]]] $params
+                                                  [list ncp [dget $arguments ncp]] [list ncm [dget $arguments ncm]]]\
+                    $params
         }
     }
 
@@ -1232,10 +1242,10 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {ncm -help {Name of node connected to negative controlling pin}}
             }]
             set gainVal [dget $arguments gain]
-            if {([llength $gainVal]>1) && ([@ $gainVal 1] eq {-eq})} {
-                lappend params [list vgain [@ $gainVal 0] -poseq]
+            if {([llength $gainVal]>1) && ([@ $gainVal 0] eq {-eq})} {
+                lappend params [list -poseq vgain [@ $gainVal 1]]
             } else {
-                lappend params [list vgain $gainVal -pos]
+                lappend params [list -pos vgain $gainVal]
             }
             next e[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]\
                                                   [list ncp [dget $arguments ncp]]\
@@ -1278,20 +1288,23 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {nm -help {Name of node connected to negative pin}}
             }]
             set consrcVal [dget $arguments consrc]
-            lappend params [list consrc $consrcVal -posnocheck]
+            lappend params [list -posnocheck consrc $consrcVal]
             set gainVal [dget $arguments gain]
-            if {([llength $gainVal]>1) && ([@ $gainVal 1] eq {-eq})} {
-                lappend params [list igain [@ $gainVal 0] -poseq]
+            if {([llength $gainVal]>1) && ([@ $gainVal 0] eq {-eq})} {
+                lappend params [list -poseq igain [@ $gainVal 1]]
             } else {
-                lappend params [list igain $gainVal -pos]
+                lappend params [list -pos igain $gainVal]
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {consrc gain name np nm}} {
-                    lappend params [list $paramName {*}$value]
+                    if {[@ $value 0] eq {-eq}} {
+                        lappend params [list -eq $paramName [@ $value 1]]
+                    } else {
+                        lappend params [list $paramName $value]
+                    }
                 }
             }
-            next f[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
-                $params
+            next f[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]] $params
         } 
     }
 
@@ -1328,15 +1341,14 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {nm -help {Name of node connected to negative pin}}
             }]
             set consrcVal [dget $arguments consrc]
-            lappend params [list consrc $consrcVal -posnocheck]
+            lappend params [list -posnocheck consrc $consrcVal]
             set transrVal [dget $arguments transr]
-            if {([llength $transrVal]>1) && ([@ $transrVal 1] eq {-eq})} {
-                lappend params [list transr [@ $transrVal 0] -poseq]
+            if {([llength $transrVal]>1) && ([@ $transrVal 0] eq {-eq})} {
+                lappend params [list -poseq transr [@ $transrVal 1]]
             } else {
-                lappend params [list transr $transrVal -pos]
+                lappend params [list -pos transr $transrVal]
             }
-            next h[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
-                    $params
+            next h[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]] $params
         }
     }
 

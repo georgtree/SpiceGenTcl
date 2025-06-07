@@ -22,11 +22,11 @@ source [file join $currentDir .. testUtilities.tcl]
 importNgspice
 
 
-###  OptionsNgspice class tests 
+###  OptionsNgspice class tests
 
 testTemplate testOptionsNgspiceClass-1 {} {OptionsNgspice new -klu -abstol 1e-10 -maxord 6}\
         {.options klu abstol=1e-10 maxord=6}
-testTemplate testOptionsNgspiceClass-2 {} {OptionsNgspice new -klu -abstol 1e-10 -maxord {order -eq}}\
+testTemplate testOptionsNgspiceClass-2 {} {OptionsNgspice new -klu -abstol 1e-10 -maxord {-eq order}}\
         {.options klu abstol=1e-10 maxord={order}}
 
 
