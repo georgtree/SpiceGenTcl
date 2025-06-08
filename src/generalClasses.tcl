@@ -662,7 +662,7 @@ namespace eval ::SpiceGenTcl {
     }
 
 ###  Device class definition
-    ##nagelfar subcmd+ _obj,Device addPin addParam configure getParams
+    ##nagelfar subcmd+ _obj,Device actOnPin actOnParam configure
     oo::configurable create Device {
         superclass SPICEElement
         mixin Utility
@@ -682,9 +682,9 @@ namespace eval ::SpiceGenTcl {
             #  pins - list of pins in the order they appear in SPICE device's definition together
             #   with connected node in form: `{{Name0 NodeName} {Name1 NodeName} {Name2 NodeName} ...}`
             #   Nodes string values could be empty.
-            #  params - list of instance parameters in form `{{Name Value ?-pos|eq|poseq?} {Name Value ?-pos|eq|poseq?}
-            #   {Name Value ?-pos|eq|poseq?} ...}` Parameter list can be empty if device doesn't have instance
-            #   parameters.
+            #  params - list of instance parameters in form `{{Name Value ?-sw|pos|eq|poseq|posnocheck|nocheck?} 
+            #   {Name Value ?-sw|pos|eq|poseq|posnocheck|nocheck?} {Name Value ?-sw|pos|eq|poseq|posnocheck|nocheck?} ...}`
+            #   Parameter list can be empty if device doesn't have instance parameters.
             # Class models general device in SPICE, number of which
             # must be assembled (connected) to get the circuit to simulate. This class provides basic machinery
             # for creating any device that can be connected to net in circuit. It can be instantiated to create
@@ -703,10 +703,11 @@ namespace eval ::SpiceGenTcl {
                                      node in form: '{{Name0 NodeName} {Name1 NodeName} {Name2 NodeName} ...}'. Nodes\
                                      string values could be empty. Nodes list can be empty if device doesn't have pins}\
                          -type list}
-                {params -help {List of instance parameters in form '{{Name0 Value0 ?-pos|eq|poseq|posnocheck|nocheck?}\
-                                      {Name1 Value1 ?-pos|eq|poseq|posnocheck|nocheck?}\
-                                      {Name2 Value2 ?-pos|eq|poseq|posnocheck|nocheck?} ...}'. Parameter list can be\
-                                      empty if device doesn't have instance parameters} -type list}
+                {params -help {List of instance parameters in form\
+                                       '{{Name0 Value0 ?-sw|pos|eq|poseq|posnocheck|nocheck?}\
+                                                 {Name1 Value1 ?-sw|pos|eq|poseq|posnocheck|nocheck?}\
+                                                 {Name2 Value2 ?-sw|pos|eq|poseq|posnocheck|nocheck?} ...}'.\
+                                       Parameter list can be empty if device doesn't have instance parameters} -type list}
             }]
             my configure -name [dget $arguments name]
             # create Pins objects
@@ -727,7 +728,19 @@ namespace eval ::SpiceGenTcl {
             }
         }
         method actOnPin {args} {
-            argparse -help {Applied selected actions on pin of the device} {
+            # Acts on `Pin` object with selected action
+            #  -add - add new pin to the device, requires pin and node arguments
+            #  -get - get node name connected to pin, requires pin argument
+            #  -set - set node name connected to pin, requires pin and node arguments
+            #  -all - option for getting the dictionary that contains pin name as keys and connected node name as the 
+            #    values, requires -get
+            #  pin - name of the pin
+            #  node - name of the node connected to pin
+            # Synopsis: -add pin node
+            # Synopsis: -set pin node
+            # Synopsis: -get pin
+            # Synopsis: -get -all
+             argparse -help {Applied selected actions on pin of the device} {
                 {-add -key action -value add -require {pin node} -help {Add new pin to the device}}
                 {-get -key action -value get -help {Get node name connected to pin}}
                 {-set -key action -value set -require {pin node} -help {Set node name connected to pin}}
@@ -783,6 +796,30 @@ namespace eval ::SpiceGenTcl {
             return
         }
         method actOnParam {args} {
+            # Acts on `Parameter` object with selected action
+            #  -add - add new parameter to the device, requires pname argument
+            #  -get - get parameter value, requires pname argument
+            #  -set - set (or change) value of particular parameters, requires pname and value arguments
+            #  -delete - delete existing parameter
+            #  -all - option for getting the dictionary that contains parameters names as keys and parameters values\
+            #    as the dictionary values, requires -get
+            #  -pos - parameter has strict position and only '$Value' is displayed in netlist, requires -add
+            #  -eq - Parameter may contain equation in terms of functions and other parameters, printed as 
+            #    '$name={$equation}', requires -add
+            #  -poseq - combination of both flags, print only, requires -add
+            #  -posnocheck - positional parameter without check, requires -add
+            #  -nocheck - normal parameter without check, requires -add
+            #  -sw - switch parameter, requires -add
+            #  -node - node parameter, requires -add
+            #  -nodeeq - node parameter equation, requires -add
+            #  pname - name of parameter
+            #  value - value of parameter
+            #  arguments - optional pairs of name-value for -set action, requires -set
+            # Synopsis: -add ?-pos|eq|poseq|posnocheck|nocheck|sw|node|nodeeq? name value
+            # Synopsis: -set name value ?name value ...?
+            # Synopsis: -get name
+            # Synopsis: -get -all
+            # Synopsis: -delete name
             argparse -help {Applied selected actions on parameters of the device} {
                 # {Actions selectors}
                 {-add -key action -value add -require pname -help {Add new parameter to device}}

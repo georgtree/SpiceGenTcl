@@ -5,7 +5,7 @@ This package provides Tcl interface to different SPICE and SPICE-like simulator,
 It was inspired by [PySpice](https://github.com/PySpice-org/PySpice) project, object-oriented interface to
 SPICE-like simulators written in Python.
 
-![Static Badge](https://img.shields.io/badge/version-0.70-blue)
+![Static Badge](https://img.shields.io/badge/version-0.71-blue)
 
 ![Static Badge](https://img.shields.io/badge/license-MIT-blue)
 
@@ -15,7 +15,7 @@ SPICE-like simulators written in Python.
 
 ![Static Badge](https://img.shields.io/badge/Windows_11-pass-green)
 
-![Static Badge](https://img.shields.io/badge/coverage-95.48%25-green)
+![Static Badge](https://img.shields.io/badge/coverage-93.83%25-green)
 
 ## General concept
 The general concept of the package is to build a netlist using Tcl scripts. It is based on the TclOO

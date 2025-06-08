@@ -6,7 +6,7 @@
 <body>
 <div class='ruff-layout'>
 <header class='ruff-layout-header ruff-hd'>
-<a style='text-decoration:none;' href='index.html'>Tcl SpiceGenTcl package (v0.70)</a>
+<a style='text-decoration:none;' href='index.html'>Tcl SpiceGenTcl package (v0.71)</a>
 
 
             <div id="ruffButtonBar">
@@ -51,18 +51,18 @@
 </figure><p class='ruff'>This allows you to import the appropriate simulator in conditional statements, depending on a global variable that defines the simulator currently in use.</p>
 <h2 class='ruff'><a name='::FAQ-How to change parameter of existing element?'></a>How to change parameter of existing element?<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
-<p class='ruff'>For all elements with parameters you can change parameter value by its name with method <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setParamValue" title="::SpiceGenTcl::Device::setParamValue" class='ruff_cmd'>::SpiceGenTcl::Device::setParamValue</a>.</p>
+<p class='ruff'>For all elements with parameters you can change parameter value by its name with method <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::actOnParam" title="::SpiceGenTcl::Device::actOnParam" class='ruff_cmd'>::SpiceGenTcl::Device::actOnParam</a> with selected action <code><font color=#b9b96e>-set</font></code>.</p>
 <p class='ruff'>For example here we change the resistance value of basic resistor:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#f1b479>$resistor</font> setParamValue r 100
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#f1b479>$resistor</font> actOnParam <font color=#b9b96e>-set</font> r 100
 </pre>
 
 </figure><p class='ruff'>The name of the parameter can be found in the documentation <a href="[::SpiceGenTcl::Ngspice::BasicDevices::Resistor]" >here</a>. In the parameter table, the option for resistance is labeled <code><font color=#b9b96e>-r</font></code>, so the name used for resistance is 'r'.</p>
-<p class='ruff'>Another option is to call the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getParams" title="::SpiceGenTcl::Device::getParams" class='ruff_cmd'>::SpiceGenTcl::Device::getParams</a> method, which returns a list of all parameters with their values. For example:</p>
+<p class='ruff'>Another option is to call the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::actOnParam" title="::SpiceGenTcl::Device::actOnParam" class='ruff_cmd'>::SpiceGenTcl::Device::actOnParam</a> method, with action <code><font color=#b9b96e>-get</font></code> and option <code><font color=#b9b96e>-all</font></code> which define returning a dictionary of all parameters with their values. For example:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#76a396># create resistor</font></i>
 <b><font color=#ffa500>set</font></b> resistor [<b><font color=#ffa500>R</font></b> new 1 net1 net2 <font color=#b9b96e>-r</font> 10]
-<b><font color=#ffa500>puts</font></b> [<font color=#f1b479>$resistor</font> getParams]
+<b><font color=#ffa500>puts</font></b> [<font color=#f1b479>$resistor</font> actOnParam <font color=#b9b96e>-get</font> <font color=#b9b96e>-all</font>]
 </pre>
 
 </figure><p class='ruff'>It returns:</p>
@@ -76,18 +76,18 @@
 <p class='ruff'>Yes, for numerical values scaling suffixes are allowed, the full list is: f p n u m k meg g t. It must be placed after the numerical value, for example, 10u or 10Meg. Alphabetic values after the scaling suffix are also allowed.</p>
 <h2 class='ruff'><a name='::FAQ-How to change node name connected to pin of existing element?'></a>How to change node name connected to pin of existing element?<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
 <div style='clear:both;'></div>
-<p class='ruff'>For all elements with pins, you can change the connected node's name by using the pin name with the method <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::setPinNodeName" title="::SpiceGenTcl::Device::setPinNodeName" class='ruff_cmd'>::SpiceGenTcl::Device::setPinNodeName</a>.</p>
+<p class='ruff'>For all elements with pins, you can change the connected node's name by using the pin name with the method <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::actOnPin" title="::SpiceGenTcl::Device::actOnPin" class='ruff_cmd'>::SpiceGenTcl::Device::actOnPin</a> with option <code><font color=#b9b96e>-set</font></code>.</p>
 <p class='ruff'>For example, here we change the node name of the basic resistor's positive pin:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#f1b479>$resistor</font> setPinNodeName np net10
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#f1b479>$resistor</font> actOnPin <font color=#b9b96e>-set</font> np net10
 </pre>
 
 </figure><p class='ruff'>The pin name can be found in the documentation <a href="[::SpiceGenTcl::Ngspice::BasicDevices::Resistor]" >here</a>. In the parameter table, the pins are listed as <code>npNode</code> and <code>nmNode</code>, so the names used for the positive and negative pins are 'np' and 'nm', respectively. This <code>pin_nameNode</code> convention applies to all elements in the package.</p>
-<p class='ruff'>Another option is to call the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::getPins" title="::SpiceGenTcl::Device::getPins" class='ruff_cmd'>::SpiceGenTcl::Device::getPins</a> method, which returns a list of all pins with their connected node names. For example:</p>
+<p class='ruff'>Another option is to call the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Device::actOnPin" title="::SpiceGenTcl::Device::actOnPin" class='ruff_cmd'>::SpiceGenTcl::Device::actOnPin</a> method, with action <code><font color=#b9b96e>-get</font></code> and option <code><font color=#b9b96e>-all</font></code> which define returning a dictionary of all pins with their connected node names. For example:</p>
 
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><i><font color=#76a396># create resistor</font></i>
 <b><font color=#ffa500>set</font></b> resistor [<b><font color=#ffa500>R</font></b> new 1 net1 net2 <font color=#b9b96e>-r</font> 10]
-<b><font color=#ffa500>puts</font></b> [<font color=#f1b479>$resistor</font> getPins]
+<b><font color=#ffa500>puts</font></b> [<font color=#f1b479>$resistor</font> actOnPin <font color=#b9b96e>-get</font> <font color=#b9b96e>-all</font>]
 </pre>
 
 </figure><p class='ruff'>It returns:</p>

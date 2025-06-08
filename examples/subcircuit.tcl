@@ -18,11 +18,10 @@ oo::class create RCnet {
         # define input parameters of subcircuit
         set params {{r 100} {c 1e-6}}
         # add elements to subcircuit definition
-        my add [R new 1 net1 plus -r {r -eq}]
-        my add [C new 1 net2 net3 -c {c -eq}]
+        my add [R new 1 net1 plus -r {-eq r}]
+        my add [C new 1 net2 net3 -c {-eq c}]
         my add [R new 5 minus net2 -model res_sem -l 10e-6 -w 100e-6]
         my add [RModel new rsem1mod -tc1 0.1 -tc2 0.4]
-        
         # pass name, list of pins and list of parameters to Subcircuit constructor
         next rcnet $pins $params
     }
@@ -32,9 +31,9 @@ set subcircuit [RCnet new]
 # add to netslit
 $netlist add $subcircuit
 # create subcircuit instance
-set subInst [SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar -eq}}]
+set subInst [SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {-eq c cpar}}]
 # create subcircuit instance with help of already created subcircuit definition $subcircuit
-set subInst1 [SubcircuitInstanceAuto new $subcircuit 2 {net1 net2} -r 1 -c {cpar -eq}]
+set subInst1 [SubcircuitInstanceAuto new $subcircuit 2 {net1 net2} -r 1 -c {-eq cpar}]
 # add to netslit
 $netlist add $subInst 
 $netlist add $subInst1 

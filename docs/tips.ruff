@@ -14,8 +14,6 @@ namespace eval Tips {
         `include "discipline.h"
         `include "constants.h"
 
-
-
         //
         // Core Model
         //
@@ -97,14 +95,17 @@ namespace eval Tips {
                     {p -help {Name of node connected to positive pin}}
                     {n -help {Name of node connected to negative pin}}
                 }]
-                lappend params [list model [dget $arguments model] -posnocheck]
+                lappend params [list -posnocheck model [dget $arguments model]]
                 dict for {paramName value} $arguments {
                     if {$paramName ni {model name p n}} {
-                        lappend params [list $paramName $value]
+                        if {[@ $value 0] eq {-eq}} {
+                            lappend params [list -eq $paramName [@ $value 1]]
+                        } else {
+                            lappend params [list $paramName $value]
+                        }
                     }
                 }
-                next n[dget $arguments name] [list [list p [dget $arguments p]] [list n [dget $arguments n]]]\
-                        $params
+                next n[dget $arguments name] [list [list p [dget $arguments p]] [list n [dget $arguments n]]] $params
             }
         }
         ```
@@ -154,15 +155,18 @@ namespace eval Tips {
         lappend params [list model [dget $arguments model] -posnocheck]
         dict for {paramName value} $arguments {
             if {$paramName ni {model name p n}} {
-                lappend params [list $paramName $value]
+                if {[@ $value 0] eq {-eq}} {
+                    lappend params [list -eq $paramName [@ $value 1]]
+                } else {
+                    lappend params [list $paramName $value]
+                }
             }
         }
         ```
         
         The last but not the least is step of passing arguments to [::SpiceGenTcl::Device] constructor:
         ```tcl
-        next n[dget $arguments name] [list [list p [dget $arguments p]] [list n [dget $arguments n]]]\
-                        $params
+        next n[dget $arguments name] [list [list p [dget $arguments p]] [list n [dget $arguments n]]] $params
         ```
         
         This superclass accept arguments in form `constructor {name pins params}`.
@@ -223,9 +227,13 @@ namespace eval Tips {
                     type
                 }]
                 dict for {paramName value} $arguments {
-                    lappend paramList [list $paramName $value]
+                    if {[@ $value 0] eq {-eq}} {
+                        lappend params [list -eq $paramName [@ $value 1]]
+                    } else {
+                        lappend params [list $paramName $value]
+                    }
                 }
-                next $name coreja {*}$paramList
+                next $name coreja {*}$params
             }
         }
         ```

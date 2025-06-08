@@ -61,7 +61,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ```
             # Example of class initialization as a simple resistor:
             # ```
-            # ::SpiceGenTcl::Xyce::BasicDevices::Resistor new 1 netp netm -r 1e3 -tc1 1 -temp {temp_amb -eq}
+            # ::SpiceGenTcl::Xyce::BasicDevices::Resistor new 1 netp netm -r 1e3 -tc1 1 -temp {-eq temp_amb}
             # ```
             # Behavioral resistor:
             # ```
@@ -162,7 +162,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ```
             # Example of class initialization as a simple capacitor:
             # ```
-            # ::SpiceGenTcl::Xyce::BasicDevices::Capacitor new 1 netp netm 1e-6 -tc1 1 -temp {temp -eq}
+            # ::SpiceGenTcl::Xyce::BasicDevices::Capacitor new 1 netp netm 1e-6 -tc1 1 -temp {-eq temp}
             # ```
             # Behavioral capacitor with C expression:
             # ```
@@ -275,7 +275,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ```
             # Example of class initialization as a simple inductor:
             # ```
-            # ::SpiceGenTcl::Xyce::BasicDevices::Inductor new 1 netp netm -l 1e-6 -tc1 1 -temp {temp -eq}
+            # ::SpiceGenTcl::Xyce::BasicDevices::Inductor new 1 netp netm -l 1e-6 -tc1 1 -temp {-eq temp}
             # ```
             # Inductor with model card:
             # ```
@@ -405,20 +405,20 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             #  name - name of the device without first-letter designator X
             #  pins - list of pins {{pinName nodeName} {pinName nodeName} ...}
             #  subName - name of subcircuit definition
-            #  params - {{paramName paramValue ?-eq?} {paramName paramValue ?-eq?}}
+            #  params - {{?-eq? paramName paramValue} {?-eq? paramName paramValue}}
             # ```
             # X<name> [nodes] <subcircuit name> [PARAMS: [<name> = <value>] ...]
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar -eq}}
+            # ::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {-eq c cpar}}
             # ```
             ##nagelfar implicitvarcmd {argparse *Creates object of class 'SubcircuitInstance'*} name pins subName params
             argparse -pfirst -help {Creates object of class 'SubcircuitInstance' that describes subcircuit instance} {
                 {name -help {Name of the device without first-letter designator}}
                 {pins -help {List of pins {{pinName nodeName} {pinName nodeName} ...}}}
                 {subName -help {Name of subcircuit definition}}
-                {params -help {List of parameters {{paramName paramValue ?-eq?} {paramName paramValue ?-eq?}}}}
+                {params -help {List of parameters {{?-eq? paramName paramValue} {?-eq? paramName paramValue}}}}
             }
             set params [linsert [linsert $params 0 [list -posnocheck model $subName]] 1 {-posnocheck params PARAMS:}]
             next x$name $pins $params
@@ -440,15 +440,15 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             #  subcktObj - object of subcircuit that defines it's pins, subName and parameters
             #  nodes - list of nodes connected to pins in the same order as pins in subcircuit definition
             #   {nodeName1 nodeName2 ...}
-            #  args - parameters as argument in form : -paramName {paramValue ?-eq?} -paramName {paramValue ?-eq?}
+            #  args - parameters as argument in form : -paramName {?-eq? paramValue} -paramName {?-eq? paramValue}
             # ```
             # X<name> [nodes] <subcircuit name> [PARAMS: [<name> = <value>] ...]
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstanceAuto new $subcktObj 1 {net1 net2} -r 1 -c {cpar -eq}
+            # ::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstanceAuto new $subcktObj 1 {net1 net2} -r 1 -c {-eq cpar}
             # ```
-            # Synopsis: subcktObj name nodes ?-paramName {paramValue ?-eq?} ...?
+            # Synopsis: subcktObj name nodes ?-paramName {?-eq? paramValue} ...?
 
             # check that inputs object class is Subcircuit
             if {[info object class $subcktObj "::SpiceGenTcl::Subcircuit"]!=1} {
@@ -700,7 +700,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             #  -ic - initial condition, optional
             #  -temp - device temperature, optional
             #  -custparams - key that collects all arguments at the end of device definition, to provide an ability
-            #  to add custom parameters in form `-custparams param1 param1Val param2 {param2eq -eq} param3 param3Val ...`
+            #  to add custom parameters in form `-custparams param1 param1Val param2 {-eq param2eq} param3 param3Val ...`
             #  Must be specified after all others options. Optional.
             # ```
             # D<name> <(+) node> <(-) node> <model name> [device parameters]
@@ -710,7 +710,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             # ::SpiceGenTcl::Xyce::SemiconductorDevices::Diode new 1 netp netm -model diomod -area 1e-6
             # ```
             # Synopsis: name np nm -model value ?-area value? ?-pj value? ?-ic value? ?-m value? ?-temp value?
-            #   ?-custparams param1 \{param1Val ?-eq|-poseq|-posnocheck|-pos|-nocheck?\} ...?
+            #   ?-custparams param1 \{?-eq|-poseq|-posnocheck|-pos|-nocheck? param1Val\} ...?
             set arguments [argparse -inline -pfirst -help {Creates object of class `Diode` that describes semiconductor\
                                                                   diode device} {
                 {-model= -required -help {Name of the model}}
@@ -721,7 +721,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
                 {-temp= -help {Device temperature}}
                 {-custparams -catchall -help {Key that collects all arguments at the end of device definition, to\
                                                       provide an ability to add custom parameters in form\
-                                                      '-custparams param1 param1Val param2 {param2eq -eq} param3\
+                                                      '-custparams param1 param1Val param2 {-eq param2eq} param3\
                                                       param3Val ...'}}
                 {name -help {Name of the device without first-letter designator}}
                 {np -help {Name of node connected to positive pin}}
@@ -884,7 +884,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet new 1 netd netg nets -model jfetmod -area {area*2 -eq} -temp 25
+            # ::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet new 1 netd netg nets -model jfetmod -area {-eq area*2} -temp 25
             # ```
             # Synopsis: name nd ng ns -model value ?-area value? ?-temp value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'Jfet' that describes semiconductor\
@@ -943,7 +943,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet new 1 netd netg nets -model mesfetmod -area {area*2 -eq}
+            # ::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet new 1 netd netg nets -model mesfetmod -area {-eq area*2}
             # ```
             # Synopsis: name nd ng ns -model value ?-area value? ?-temp value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'Mesfet' that describes semiconductor\
@@ -1012,7 +1012,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             #  -n6 - name of 6th node, require -n5, optional
             #  -n7 - name of 7th node, require -n6, optional
             #  -custparams - key that collects all arguments at the end of device definition, to provide an ability
-            #  to add custom parameters in form `-custparams param1 param1Val param2 {param2eq -eq} param3 param3Val ...`
+            #  to add custom parameters in form `-custparams param1 param1Val param2 {-eq param2eq} param3 param3Val ...`
             #  Must be specified after all others options. Optional.
             # ```
             # M<name> <drain node> <gate node> <source node>
@@ -1030,7 +1030,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             # Synopsis: name nd ng ns -model value ?-n4 value ?-n5 value ?-n6 value ?-n7 value???? ?-m value?
             #   ?-l value? ?-w value? ?-ad value|-nrd value? ?-as value|-nrs value? ?-temp value? ?-off? ?-pd value?
             #   ?-ps value? ?-ic \{value value value\}?
-            #   ?-custparams param1 \{param1Val ?-eq|-poseq|-posnocheck|-pos|-nocheck?\} ...?
+            #   ?-custparams param1 \{?-eq|-poseq|-posnocheck|-pos|-nocheck? param1Val\} ...?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'Mosfet' that describes semiconductor\
                                                                   MOSFET device} {
                 {-model= -required -help {Name of the model}}

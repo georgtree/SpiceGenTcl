@@ -213,20 +213,20 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             #  name - name of the device without first-letter designator X
             #  pins - list of pins {{pinName nodeName} {pinName nodeName} ...}
             #  subName - name of subcircuit definition
-            #  params - {{paramName paramValue ?-eq?} {paramName paramValue ?-eq?}}
+            #  params - {{?-eq? paramName paramValue} {?-eq? paramName paramValue}}
             # ```
             # XYYYYYYY N1 <N2 N3 ...> SUBNAM
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::BasicDevices::SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar -eq}}
+            # ::SpiceGenTcl::Common::BasicDevices::SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {-eq c cpar}}
             # ```
             ##nagelfar implicitvarcmd {argparse *Creates object of class 'SubcircuitInstance'*} name pins subName params
             argparse -pfirst -help {Creates object of class 'SubcircuitInstance' that describes subcircuit instance} {
                 {name -help {Name of the device without first-letter designator}}
                 {pins -help {List of pins {{pinName nodeName} {pinName nodeName} ...}}}
                 {subName -help {Name of subcircuit definition}}
-                {params -help {List of parameters {{paramName paramValue ?-eq?} {paramName paramValue ?-eq?}}}}
+                {params -help {List of parameters {{?-eq? paramName paramValue} {?-eq? paramName paramValue}}}}
             }
             set params [linsert $params 0 [list -posnocheck model $subName]]
             next x$name $pins $params
@@ -343,15 +343,15 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             #  subcktObj - object of subcircuit that defines it's pins, subName and parameters
             #  nodes - list of nodes connected to pins in the same order as pins in subcircuit definition
             #   {nodeName1 nodeName2 ...}
-            #  args - parameters as argument in form : -paramName {paramValue ?-eq?} -paramName {paramValue ?-eq?}
+            #  args - parameters as argument in form : -paramName {?-eq? paramValue} -paramName {?-eq? paramValue}
             # ```
             # XYYYYYYY N1 <N2 N3 ...> SUBNAM
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::BasicDevices::SubcircuitInstanceAuto new $subcktObj 1 {net1 net2} -r 1 -c {cpar -eq}
+            # ::SpiceGenTcl::Common::BasicDevices::SubcircuitInstanceAuto new $subcktObj 1 {net1 net2} -r 1 -c {-eq cpar}
             # ```
-            # Synopsis: subcktObj name nodes ?-paramName {paramValue ?-eq?} ...?
+            # Synopsis: subcktObj name nodes ?-paramName {?-eq? paramValue} ...?
             
             # check that inputs object class is Subcircuit
             if {![info object class $subcktObj "::SpiceGenTcl::Subcircuit"]} {
@@ -877,7 +877,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::Sources::Vsin new 1 net1 net2 -v0 0 -va 2 -freq {freq -eq} -td 1e-6 -theta {theta -eq}
+            # ::SpiceGenTcl::Common::Sources::Vsin new 1 net1 net2 -v0 0 -va 2 -freq {-eq freq} -td 1e-6 -theta {-eq theta}
             # ```
             # Synopsis: name np nm -i0|voffset|ioffset|v0 value -ia|vamp|iamp|va value -freq value
             #   ?-td value ?-theta value ?-phi|phase value???
@@ -907,7 +907,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::Sources::Vexp new 1 net1 net2 -v1 0 -v2 1 -td1 1e-9 -tau1 1e-9 -td2 {td2 -eq} -tau2 10e-6
+            # ::SpiceGenTcl::Common::Sources::Vexp new 1 net1 net2 -v1 0 -v2 1 -td1 1e-9 -tau1 1e-9 -td2 {-eq td2} -tau2 10e-6
             # ```
             # Synopsis: name np nm -i1|v1 value -i2|v2 value -td1 value -tau1 value -td2 value -tau2 value
             #   ?-phi|phase value???
@@ -932,7 +932,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::Sources::Vpwl new 1 np nm -seq {0 0 {t1 -eq} 1 2 2 3 3 4 4}
+            # ::SpiceGenTcl::Common::Sources::Vpwl new 1 np nm -seq {0 0 {-eq t1} 1 2 2 3 3 4 4}
             # ```
             # Synopsis: name np nm -seq list ?-phase|phi value???
             next v {*}$args
@@ -960,7 +960,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::Sources::Vsin new 1 net1 net2 -v0 0 -va 1 -fc {freq -eq} -mdi 0 -fs 1e3
+            # ::SpiceGenTcl::Common::Sources::Vsin new 1 net1 net2 -v0 0 -va 1 -fc {-eq freq} -mdi 0 -fs 1e3
             # ```
             # Synopsis: name np nm -i0|voff|ioff|v0 value -ia|vamp|iamp|va value -fc|fcar value -mdi value 
             #   -fs|fsig ?-phi|phase value???
@@ -1035,7 +1035,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::Sources::Ipulse new 1 net1 net2 -low 0 -high 1 -td {td -eq} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6
+            # ::SpiceGenTcl::Common::Sources::Ipulse new 1 net1 net2 -low 0 -high 1 -td {-eq td} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6
             # ```
             # Synopsis: name np nm -voff|ioff|low value -von|ion|high value -td value -tr value -tf value
             #   -pw|ton value ?-phase|phi value???
@@ -1065,7 +1065,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::Sources::Isin new 1 net1 net2 -i0 0 -ia 2 -freq {freq -eq} -td 1e-6 -theta {theta -eq}
+            # ::SpiceGenTcl::Common::Sources::Isin new 1 net1 net2 -i0 0 -ia 2 -freq {-eq freq} -td 1e-6 -theta {-eq theta}
             # ```
             # Synopsis: name np nm -i0|ioffset value -ia|iamp value -freq value ?-td value ?-theta value
             #   ?-phase|phi value???
@@ -1095,7 +1095,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::Sources::Iexp new 1 net1 net2 -i1 0 -i2 1 -td1 1e-9 -tau1 1e-9 -td2 {td2 -eq} -tau2 10e-6
+            # ::SpiceGenTcl::Common::Sources::Iexp new 1 net1 net2 -i1 0 -i2 1 -td1 1e-9 -tau1 1e-9 -td2 {-eq td2} -tau2 10e-6
             # ```
             # Synopsis: name np nm -i1 value -i2 value -td1 value -tau1 value -td2 value -tau2 value
             #   ?-phase|phi value???
@@ -1120,7 +1120,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::Sources::Ipwl new 1 np nm -seq {0 0 {t1 -eq} 1 2 2 3 3 4 4}
+            # ::SpiceGenTcl::Common::Sources::Ipwl new 1 np nm -seq {0 0 {-eq t1} 1 2 2 3 3 4 4}
             # ```
             # Synopsis: name np nm -seq list ?-phase|phi value???
             next i {*}$args
@@ -1148,7 +1148,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::Sources::Isin new 1 net1 net2 -i0 0 -ia 1 -fc {freq -eq} -mdi 0 -fs 1e3
+            # ::SpiceGenTcl::Common::Sources::Isin new 1 net1 net2 -i0 0 -ia 1 -fc {-eq freq} -mdi 0 -fs 1e3
             # ```
             # Synopsis: name np nm -i0|voff|ioff|v0 value -ia|vamp|iamp|va value -fc|fcar value -mdi value 
             #   -fs|fsig value ?-phi|phase value???
@@ -1329,7 +1329,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::Sources::Ccvs new 1 net1 0 -consrc vc -transr {tres -eq}
+            # ::SpiceGenTcl::Common::Sources::Ccvs new 1 net1 0 -consrc vc -transr {-eq tres}
             # ```
             # Synopsis: name np nm -consrc value -transr value
             set arguments [argparse -inline -pfirst -help {Creates object of class `Ccvs` that describes linear\

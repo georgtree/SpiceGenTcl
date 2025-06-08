@@ -6,7 +6,7 @@
 <body>
 <div class='ruff-layout'>
 <header class='ruff-layout-header ruff-hd'>
-<a style='text-decoration:none;' href='index.html'>Tcl SpiceGenTcl package (v0.70)</a>
+<a style='text-decoration:none;' href='index.html'>Tcl SpiceGenTcl package (v0.71)</a>
 
 
             <div id="ruffButtonBar">
@@ -105,10 +105,14 @@ endmodule
             {p <font color=#b9b96e>-help</font> {Name of node connected to positive pin}}
             {n <font color=#b9b96e>-help</font> {Name of node connected to negative pin}}
         }]
-        <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> model [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> model] <font color=#b9b96e>-posnocheck</font>]
+        <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#b9b96e>-posnocheck</font> model [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> model]]
         <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$arguments</font> {
             <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {model name p n}} {
-                <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
+                <b><font color=#ffa500>if</font></b> {[@ <font color=#f1b479>$value</font> 0] eq {<font color=#b9b96e>-eq</font>}} {
+                    <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#b9b96e>-eq</font> <font color=#f1b479>$paramName</font> [@ <font color=#f1b479>$value</font> 1]]
+                } <b><font color=#ffa500>else</font></b> {
+                    <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
+                }
             }
         }
         <b><font color=#ffa500>next</font></b> n[<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> name] [<b><font color=#ffa500>list</font></b> [<b><font color=#ffa500>list</font></b> p [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> p]] [<b><font color=#ffa500>list</font></b> n [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> n]]] <font color=#f1b479>$params</font>
@@ -152,7 +156,11 @@ endmodule
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> model [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$arguments</font> model] <font color=#b9b96e>-posnocheck</font>]
 <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$arguments</font> {
     <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> ni {model name p n}} {
-        <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
+        <b><font color=#ffa500>if</font></b> {[@ <font color=#f1b479>$value</font> 0] eq {<font color=#b9b96e>-eq</font>}} {
+            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#b9b96e>-eq</font> <font color=#f1b479>$paramName</font> [@ <font color=#f1b479>$value</font> 1]]
+        } <b><font color=#ffa500>else</font></b> {
+            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
+        }
     }
 }
 </pre>
@@ -206,9 +214,13 @@ endmodule
             type
         }]
         <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$arguments</font> {
-            <b><font color=#ffa500>lappend</font></b> paramList [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
+            <b><font color=#ffa500>if</font></b> {[@ <font color=#f1b479>$value</font> 0] eq {<font color=#b9b96e>-eq</font>}} {
+                <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#b9b96e>-eq</font> <font color=#f1b479>$paramName</font> [@ <font color=#f1b479>$value</font> 1]]
+            } <b><font color=#ffa500>else</font></b> {
+                <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
+            }
         }
-        <b><font color=#ffa500>next</font></b> <font color=#f1b479>$name</font> coreja {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$paramList</font>
+        <b><font color=#ffa500>next</font></b> <font color=#f1b479>$name</font> coreja {<b><font color=#ffa500>*</font></b>}<font color=#f1b479>$params</font>
     }
 }
 </pre>

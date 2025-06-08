@@ -106,7 +106,7 @@ set uniformLimits [dcreate c1 [dcreate min 0.9e-9 max 1.1e-9]\
 for {set i 0} {$i<$mcRuns} {incr i} {
     #set elements values according to uniform distribution
     foreach elem [list c1 l1 c2 l2 c3 l3] {
-        $elem setParamValue [string index $elem 0] [random-uniform {*}[dict values [dget $uniformLimits $elem]] 1]
+        $elem actOnParam -set [string index $elem 0] [random-uniform {*}[dict values [dget $uniformLimits $elem]] 1]
     }
     # run simulation
     $circuit runAndRead
@@ -142,7 +142,7 @@ set normalLimits [dcreate c1 [dcreate mean 1e-9 std [/ 0.1e-9 3]]\
 for {set i 0} {$i<$mcRuns} {incr i} {
     #set elements values according to normal distribution
     foreach elem [list c1 l1 c2 l2 c3 l3] {
-        $elem setParamValue [string index $elem 0] [random-normal {*}[dict values [dget $normalLimits $elem]] 1]
+        $elem actOnParam -set [string index $elem 0] [random-normal {*}[dict values [dget $normalLimits $elem]] 1]
     }
     # run simulation
     $circuit runAndRead

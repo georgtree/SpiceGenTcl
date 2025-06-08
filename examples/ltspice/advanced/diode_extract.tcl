@@ -17,8 +17,8 @@ set fileDataPath [file normalize [file join $scriptPath raw_data]]
 
 proc diodeIVcalc {xall pdata args} {
     dict with pdata {}
-    $model setParamValue is [@ $xall 0] n [@ $xall 1] rs [@ $xall 2] ikf [@ $xall 3]
-    $vSrc setParamValue start $vMin stop $vMax incr $vStep
+    $model actOnParam -set is [@ $xall 0] n [@ $xall 1] rs [@ $xall 2] ikf [@ $xall 3]
+    $vSrc actOnParam -set start $vMin stop $vMax incr $vStep
     $circuit runAndRead
     set data [$circuit getDataDict]
     set iva [lin1d -x [dget $data va] -y [dget $data i(va)] -xi [dget $pdata v]]

@@ -26,7 +26,7 @@ namespace eval Tutorials {
         $netlist add [R new 1 net1 net2 -r 10]
         $netlist add [R new 5 net1 net2 -model res_sem -l 10e-6 -w 100e-6]
         $netlist add [RModel new rsem1mod -tc1 0.1 -tc2 0.4]
-        $netlist add [R new 2 net1 net2 -r {{r1+5/10} -eq}]
+        $netlist add [R new 2 net1 net2 -r {-eq {r1+5/10}}]
         $netlist add [C new 1 net2 net3 -c 1e-6]
         $netlist add [ParamStatement new {{r1 1} {r2 2}} -name ps1]
         $netlist add [Comment new {some random comment} -name com1]
@@ -93,15 +93,17 @@ namespace eval Tutorials {
         After it, we can change the resistance parameter of element:
         ```tcl
         # change the value of resistor in circuit
-        $resistor setParamValue r 100
+        $resistor actOnParam -set r 100
         ```
-        We apply method [::SpiceGenTcl::Device::setParamValue] with two arguments: name of parameter 'r' and its new
-        value '100'. The other action we can do is change the pin connection of element:
+        We apply method [::SpiceGenTcl::Device::actOnParam] with three arguments: `-set` option that selects action, 
+        name of parameter 'r' and its new value '100'. The other action we can do is change the pin connection of 
+        element:
         ```tcl
         # change the name of connected net to plus pin
-        $resistor setPinNodeName np net10
+        $resistor actOnPin -set np net10
         ```
-        We use method [::SpiceGenTcl::Device::setPinNodeName] with pin name and name of the net as arguments.
+        We use method [::SpiceGenTcl::Device::actOnPin] with `-set` option that selects action, pin name and name of the
+        net as arguments.
         
         Then we can again print netlist and see that value of parameter and name of connected name have been changed:
         ```
@@ -161,8 +163,8 @@ namespace eval Tutorials {
                 # define input parameters of subcircuit
                 set params {{r 100} {c 1e-6}}
                 # add elements to subcircuit definition
-                my add [R new 1 net1 plus -r {r -eq}]
-                my add [C new 1 net2 net3 -r {c -eq}]
+                my add [R new 1 net1 plus -r {-eq r}]
+                my add [C new 1 net2 net3 -c {-eq c}]
                 my add [R new 5 minus net2 -model res_sem -l 10e-6 -w 100e-6]
                 my add [RModel new rsem1mod -tc1 0.1 -tc2 0.4]
                 # pass name, list of pins and list of parameters to Subcircuit constructor
@@ -180,8 +182,8 @@ namespace eval Tutorials {
         ```
         Next step is adding elements to subcircuit:
         ```tcl
-        my add [R new 1 net1 plus -r {r -eq}]
-        my add [C new 1 net2 net3 -c {c -eq}]
+        my add [R new 1 net1 plus -r {-eq r}]
+        my add [C new 1 net2 net3 -c {-eq c}]
         my add [R new 5 minus net2 -model res_sem -l 10e-6 -w 100e-6]
         my add [RModel new rsem1mod -tc1 0.1 -tc2 0.4]
         ```
@@ -207,12 +209,12 @@ namespace eval Tutorials {
         First way is direct construction of element by providing pins and parameter lists:
         ```tcl
         # create subcircuit instance
-        set subInst [SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar -eq}}]
+        set subInst [SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {-eq c cpar}}]
         ```
         But the second way is simpler and allow to check if we have mistake in definition:
         ```tcl
         # create subcircuit instance with help of already created subcircuit definition $subcircuit
-        set subInst1 [SubcircuitInstanceAuto new $subcircuit 2 {net1 net2} -r 1 -c {cpar -eq}]
+        set subInst1 [SubcircuitInstanceAuto new $subcircuit 2 {net1 net2} -r 1 -c {-eq cpar}]
         ```
         In this approach, we pass the reference of our subcircuit as the first argument. Then, we only need to provide
         a list of nets connected to the pins, in the order defined in the subcircuit, and parameters in the form of
@@ -322,12 +324,12 @@ namespace eval Tutorials {
         The one of the differences is how we set the global temperature: in Xyce there is no .temp statement, for
         setting global temperature we use `.options` statement with class [::SpiceGenTcl::Options]:
         ```tcl
-        set tempSt [Options new {{device -sw} {temp 25}}]
+        set tempSt [Options new {{-sw device} {temp 25}}]
         ```
         
         and then modify this value in loop:
         ```tcl
-        $tempSt setParamValue temp $temp
+        $tempSt configure -value $temp
         ```
         
         ## Diode capacitance simualtion
@@ -388,7 +390,7 @@ namespace eval Tutorials {
         # loop in which we run simulation, change reverse bias and read the results
         foreach volt $voltSweep {
             #set reverse voltage bias
-            $vdc setParamValue dc $volt
+            $vdc actOnParam -set dc $volt
             # run simulation
             $circuit runAndRead
             # get data object
@@ -709,7 +711,7 @@ namespace eval Tutorials {
         set circuit [Circuit new {Four-bit adder}]
         # add elements to circuit
         $circuit add [Tran new -tstep 1e-9 -tstop 10e-6]
-        $circuit add [Options new {{noacct -sw}}]
+        $circuit add [Options new {{-sw noacct}}]
         $circuit add $nand $onebit $twobit $fourbit
         $circuit add [XAuto new $fourbit x18 {1 2 3 4 5 6 7 8 9 10 11 12 0 13 99}]
         ```

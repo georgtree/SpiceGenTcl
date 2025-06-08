@@ -13,7 +13,7 @@ set netlist [Netlist new main_netlist]
 $netlist add [R new 1 net1 net2 -r 10]
 $netlist add [R new 5 net1 net2 -model res_sem -l 10e-6 -w 100e-6]
 $netlist add [RModel new rsem1mod -tc1 0.1 -tc2 0.4]
-$netlist add [R new 2 net1 net2 -r {{r1+5/10} -eq}]
+$netlist add [R new 2 net1 net2 -r {-eq {r1+5/10}}]
 $netlist add [C new 1 net2 net3 -c 1e-6]
 $netlist add [ParamStatement new {{r1 1} {r2 2}} -name ps1]
 $netlist add [Comment new {some random comment} -name com1]
@@ -30,8 +30,8 @@ puts [$netlist genSPICEString]
 # get reference of resistor object
 set resistor [$netlist getElement r1]
 # change the value of resistor in circuit
-$resistor setParamValue r 100
-$resistor setPinNodeName np net10
+$resistor actOnParam -set r 100
+$resistor actOnPin -set np net10
 # generate SPICE netlist again with different value of resistor
 puts "\n"
 puts [$netlist genSPICEString]

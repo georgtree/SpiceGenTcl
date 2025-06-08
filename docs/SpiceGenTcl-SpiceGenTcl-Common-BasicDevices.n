@@ -1,7 +1,7 @@
 '\"
 '\" '\" Copyright (c) George Yashin
 '\"
-.TH "SpiceGenTcl::Common::BasicDevices" 3tcl 0\&.70 "SpiceGenTcl" "Tcl SpiceGenTcl package"
+.TH "SpiceGenTcl::Common::BasicDevices" 3tcl 0\&.71 "SpiceGenTcl" "Tcl SpiceGenTcl package"
 .SH NAME
 SpiceGenTcl::Common::BasicDevices - Commands in namespace SpiceGenTcl::Common::BasicDevices
 .SH SYNOPSIS
@@ -13,13 +13,11 @@ SpiceGenTcl::Common::BasicDevices - Commands in namespace SpiceGenTcl::Common::B
 .br
 \fBOBJECT constructor\fP \fIname np nm -r value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value?\fP
 .br
-\fBOBJECT destroy\fP
-.br
 \fBSubcircuitInstance create OBJNAME\fP \fI?args?\fP
 .br
 \fBSubcircuitInstance new\fP \fI?args?\fP
 .br
-\fBOBJECT constructor\fP \fIsubcktObj name nodes ?-paramName paramValue ?-eq? \&.\&.\&.?\fP
+\fBOBJECT constructor\fP \fIsubcktObj name nodes ?-paramName ?-eq? paramValue \&.\&.\&.?\fP
 .br
 \fBOBJECT constructor\fP \fIname np nm ncp ncm -model value ?-on|-off?\fP
 .br
@@ -33,11 +31,11 @@ SpiceGenTcl::Common::BasicDevices - Commands in namespace SpiceGenTcl::Common::B
 \fBMethod summary\fR
 .RS 4n
 .TP
-addParam
-See \fI::SpiceGenTcl::Device\&.addParam\fP
+actOnParam
+See \fI::SpiceGenTcl::Device\&.actOnParam\fP
 .TP
-addPin
-See \fI::SpiceGenTcl::Device\&.addPin\fP
+actOnPin
+See \fI::SpiceGenTcl::Device\&.actOnPin\fP
 .TP
 checkFloatingPins
 See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
@@ -45,23 +43,8 @@ See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
 configure
 Configure properties\&.
 .TP
-deleteParam
-See \fI::SpiceGenTcl::Device\&.deleteParam\fP
-.TP
 genSPICEString
 See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
-.TP
-getParams
-See \fI::SpiceGenTcl::Device\&.getParams\fP
-.TP
-getPins
-See \fI::SpiceGenTcl::Device\&.getPins\fP
-.TP
-setParamValue
-See \fI::SpiceGenTcl::Device\&.setParamValue\fP
-.TP
-setPinNodeName
-See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
 .RE
 .PP
 \fBProperties\fR
@@ -84,11 +67,11 @@ Writable: -name
 constructor
 Constructor for the class\&.
 .TP
-addParam
-See \fI::SpiceGenTcl::Device\&.addParam\fP
+actOnParam
+See \fI::SpiceGenTcl::Device\&.actOnParam\fP
 .TP
-addPin
-See \fI::SpiceGenTcl::Device\&.addPin\fP
+actOnPin
+See \fI::SpiceGenTcl::Device\&.actOnPin\fP
 .TP
 checkFloatingPins
 See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
@@ -96,23 +79,8 @@ See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
 configure
 Configure properties\&.
 .TP
-deleteParam
-See \fI::SpiceGenTcl::Device\&.deleteParam\fP
-.TP
 genSPICEString
 See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
-.TP
-getParams
-See \fI::SpiceGenTcl::Device\&.getParams\fP
-.TP
-getPins
-See \fI::SpiceGenTcl::Device\&.getPins\fP
-.TP
-setParamValue
-See \fI::SpiceGenTcl::Device\&.setParamValue\fP
-.TP
-setPinNodeName
-See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
 .RE
 .PP
 \fBProperties\fR
@@ -183,7 +151,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Common::BasicDevices::Capacitor new 1 netp netm -c 1e3 -tc1 1 -temp {temp_amb -eq}
+::SpiceGenTcl::Common::BasicDevices::Capacitor new 1 netp netm -c 1e3 -tc1 1 -temp {-eq temp_amb}
 .fi
 .RE
 .PP
@@ -197,11 +165,11 @@ Example of class initialization:
 constructor
 Constructor for the class\&.
 .TP
-addParam
-See \fI::SpiceGenTcl::Device\&.addParam\fP
+actOnParam
+See \fI::SpiceGenTcl::Device\&.actOnParam\fP
 .TP
-addPin
-See \fI::SpiceGenTcl::Device\&.addPin\fP
+actOnPin
+See \fI::SpiceGenTcl::Device\&.actOnPin\fP
 .TP
 checkFloatingPins
 See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
@@ -209,23 +177,8 @@ See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
 configure
 Configure properties\&.
 .TP
-deleteParam
-See \fI::SpiceGenTcl::Device\&.deleteParam\fP
-.TP
 genSPICEString
 See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
-.TP
-getParams
-See \fI::SpiceGenTcl::Device\&.getParams\fP
-.TP
-getPins
-See \fI::SpiceGenTcl::Device\&.getPins\fP
-.TP
-setParamValue
-See \fI::SpiceGenTcl::Device\&.setParamValue\fP
-.TP
-setPinNodeName
-See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
 .RE
 .PP
 \fBProperties\fR
@@ -299,11 +252,11 @@ Example of class initialization:
 constructor
 Constructor for the class\&.
 .TP
-addParam
-See \fI::SpiceGenTcl::Device\&.addParam\fP
+actOnParam
+See \fI::SpiceGenTcl::Device\&.actOnParam\fP
 .TP
-addPin
-See \fI::SpiceGenTcl::Device\&.addPin\fP
+actOnPin
+See \fI::SpiceGenTcl::Device\&.actOnPin\fP
 .TP
 checkFloatingPins
 See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
@@ -311,23 +264,8 @@ See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
 configure
 Configure properties\&.
 .TP
-deleteParam
-See \fI::SpiceGenTcl::Device\&.deleteParam\fP
-.TP
 genSPICEString
 See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
-.TP
-getParams
-See \fI::SpiceGenTcl::Device\&.getParams\fP
-.TP
-getPins
-See \fI::SpiceGenTcl::Device\&.getPins\fP
-.TP
-setParamValue
-See \fI::SpiceGenTcl::Device\&.setParamValue\fP
-.TP
-setPinNodeName
-See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
 .RE
 .PP
 \fBProperties\fR
@@ -395,7 +333,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Common::BasicDevices::Inductor new 1 netp netm -l 1e3 -tc1 1 -temp {temp_amb -eq}
+::SpiceGenTcl::Common::BasicDevices::Inductor new 1 netp netm -l 1e3 -tc1 1 -temp {-eq temp_amb}
 .fi
 .RE
 .PP
@@ -406,11 +344,11 @@ Example of class initialization:
 \fBMethod summary\fR
 .RS 4n
 .TP
-addParam
-See \fI::SpiceGenTcl::Device\&.addParam\fP
+actOnParam
+See \fI::SpiceGenTcl::Device\&.actOnParam\fP
 .TP
-addPin
-See \fI::SpiceGenTcl::Device\&.addPin\fP
+actOnPin
+See \fI::SpiceGenTcl::Device\&.actOnPin\fP
 .TP
 checkFloatingPins
 See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
@@ -418,23 +356,8 @@ See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
 configure
 Configure properties\&.
 .TP
-deleteParam
-See \fI::SpiceGenTcl::Device\&.deleteParam\fP
-.TP
 genSPICEString
 See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
-.TP
-getParams
-See \fI::SpiceGenTcl::Device\&.getParams\fP
-.TP
-getPins
-See \fI::SpiceGenTcl::Device\&.getPins\fP
-.TP
-setParamValue
-See \fI::SpiceGenTcl::Device\&.setParamValue\fP
-.TP
-setPinNodeName
-See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
 .RE
 .PP
 \fBProperties\fR
@@ -454,11 +377,11 @@ Writable: -name
 \fBMethod summary\fR
 .RS 4n
 .TP
-addParam
-See \fI::SpiceGenTcl::Device\&.addParam\fP
+actOnParam
+See \fI::SpiceGenTcl::Device\&.actOnParam\fP
 .TP
-addPin
-See \fI::SpiceGenTcl::Device\&.addPin\fP
+actOnPin
+See \fI::SpiceGenTcl::Device\&.actOnPin\fP
 .TP
 checkFloatingPins
 See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
@@ -466,23 +389,8 @@ See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
 configure
 Configure properties\&.
 .TP
-deleteParam
-See \fI::SpiceGenTcl::Device\&.deleteParam\fP
-.TP
 genSPICEString
 See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
-.TP
-getParams
-See \fI::SpiceGenTcl::Device\&.getParams\fP
-.TP
-getPins
-See \fI::SpiceGenTcl::Device\&.getPins\fP
-.TP
-setParamValue
-See \fI::SpiceGenTcl::Device\&.setParamValue\fP
-.TP
-setPinNodeName
-See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
 .RE
 .PP
 \fBProperties\fR
@@ -505,14 +413,11 @@ Writable: -name
 constructor
 Constructor for the class\&.
 .TP
-destructor
-Destructor for the class\&.
+actOnParam
+See \fI::SpiceGenTcl::Device\&.actOnParam\fP
 .TP
-addParam
-See \fI::SpiceGenTcl::Device\&.addParam\fP
-.TP
-addPin
-See \fI::SpiceGenTcl::Device\&.addPin\fP
+actOnPin
+See \fI::SpiceGenTcl::Device\&.actOnPin\fP
 .TP
 checkFloatingPins
 See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
@@ -520,23 +425,8 @@ See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
 configure
 Configure properties\&.
 .TP
-deleteParam
-See \fI::SpiceGenTcl::Device\&.deleteParam\fP
-.TP
 genSPICEString
 See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
-.TP
-getParams
-See \fI::SpiceGenTcl::Device\&.getParams\fP
-.TP
-getPins
-See \fI::SpiceGenTcl::Device\&.getPins\fP
-.TP
-setParamValue
-See \fI::SpiceGenTcl::Device\&.setParamValue\fP
-.TP
-setPinNodeName
-See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
 .RE
 .PP
 \fBProperties\fR
@@ -604,15 +494,8 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Common::BasicDevices::Resistor new 1 netp netm -r 1e3 -tc1 1 -temp {temp_amb -eq}
+::SpiceGenTcl::Common::BasicDevices::Resistor new 1 netp netm -r 1e3 -tc1 1 -temp {-eq temp_amb}
 .fi
-.RE
-.PP
-.RS -4n
-\fBdestructor\fR (::SpiceGenTcl::Common::BasicDevices::Resistor)
-.RE
-.RS 4n\fBOBJECT destroy\fP
-.br
 .RE
 .PP
 .RS -4n
@@ -625,11 +508,11 @@ Example of class initialization:
 constructor
 Constructor for the class\&.
 .TP
-addParam
-See \fI::SpiceGenTcl::Device\&.addParam\fP
+actOnParam
+See \fI::SpiceGenTcl::Device\&.actOnParam\fP
 .TP
-addPin
-See \fI::SpiceGenTcl::Device\&.addPin\fP
+actOnPin
+See \fI::SpiceGenTcl::Device\&.actOnPin\fP
 .TP
 checkFloatingPins
 See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
@@ -637,23 +520,8 @@ See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
 configure
 Configure properties\&.
 .TP
-deleteParam
-See \fI::SpiceGenTcl::Device\&.deleteParam\fP
-.TP
 genSPICEString
 See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
-.TP
-getParams
-See \fI::SpiceGenTcl::Device\&.getParams\fP
-.TP
-getPins
-See \fI::SpiceGenTcl::Device\&.getPins\fP
-.TP
-setParamValue
-See \fI::SpiceGenTcl::Device\&.setParamValue\fP
-.TP
-setPinNodeName
-See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
 .RE
 .PP
 \fBProperties\fR
@@ -688,7 +556,7 @@ name
 Name of the device without first-letter designator X\&.
 .TP
 params
-{{paramName paramValue ?-eq?} {paramName paramValue ?-eq?}}
+{{?-eq? paramName paramValue} {?-eq? paramName paramValue}}
 .TP
 pins
 List of pins {{pinName nodeName} {pinName nodeName} \&.\&.\&.}
@@ -709,7 +577,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Common::BasicDevices::SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {c cpar -eq}}
+::SpiceGenTcl::Common::BasicDevices::SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {-eq c cpar}}
 .fi
 .RE
 .PP
@@ -725,11 +593,11 @@ Example of class initialization:
 constructor
 Constructor for the class\&.
 .TP
-addParam
-See \fI::SpiceGenTcl::Device\&.addParam\fP
+actOnParam
+See \fI::SpiceGenTcl::Device\&.actOnParam\fP
 .TP
-addPin
-See \fI::SpiceGenTcl::Device\&.addPin\fP
+actOnPin
+See \fI::SpiceGenTcl::Device\&.actOnPin\fP
 .TP
 checkFloatingPins
 See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
@@ -737,23 +605,8 @@ See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
 configure
 Configure properties\&.
 .TP
-deleteParam
-See \fI::SpiceGenTcl::Device\&.deleteParam\fP
-.TP
 genSPICEString
 See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
-.TP
-getParams
-See \fI::SpiceGenTcl::Device\&.getParams\fP
-.TP
-getPins
-See \fI::SpiceGenTcl::Device\&.getPins\fP
-.TP
-setParamValue
-See \fI::SpiceGenTcl::Device\&.setParamValue\fP
-.TP
-setPinNodeName
-See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
 .RE
 .PP
 \fBProperties\fR
@@ -776,7 +629,7 @@ Writable: -name
 .PP
 Creates object of class SubcircuitInstanceAuto that describes subcircuit instance with already created
 subcircuit definition object\&.
-.RS 4n\fBOBJECT constructor\fP \fIsubcktObj name nodes ?-paramName paramValue ?-eq? \&.\&.\&.?\fP
+.RS 4n\fBOBJECT constructor\fP \fIsubcktObj name nodes ?-paramName ?-eq? paramValue \&.\&.\&.?\fP
 .br
 .RE
 .PP
@@ -793,7 +646,7 @@ nodes
 List of nodes connected to pins in the same order as pins in subcircuit definition {nodeName1 nodeName2 \&.\&.\&.}
 .TP
 args
-Parameters as argument in form : -paramName {paramValue ?-eq?} -paramName {paramValue ?-eq?}
+Parameters as argument in form : -paramName {?-eq? paramValue} -paramName {?-eq? paramValue}
 .RE
 .PP
 \fBDescription\fR
@@ -808,7 +661,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Common::BasicDevices::SubcircuitInstanceAuto new $subcktObj 1 {net1 net2} -r 1 -c {cpar -eq}
+::SpiceGenTcl::Common::BasicDevices::SubcircuitInstanceAuto new $subcktObj 1 {net1 net2} -r 1 -c {-eq cpar}
 .fi
 .RE
 .PP
@@ -819,11 +672,11 @@ Example of class initialization:
 \fBMethod summary\fR
 .RS 4n
 .TP
-addParam
-See \fI::SpiceGenTcl::Device\&.addParam\fP
+actOnParam
+See \fI::SpiceGenTcl::Device\&.actOnParam\fP
 .TP
-addPin
-See \fI::SpiceGenTcl::Device\&.addPin\fP
+actOnPin
+See \fI::SpiceGenTcl::Device\&.actOnPin\fP
 .TP
 checkFloatingPins
 See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
@@ -831,23 +684,8 @@ See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
 configure
 Configure properties\&.
 .TP
-deleteParam
-See \fI::SpiceGenTcl::Device\&.deleteParam\fP
-.TP
 genSPICEString
 See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
-.TP
-getParams
-See \fI::SpiceGenTcl::Device\&.getParams\fP
-.TP
-getPins
-See \fI::SpiceGenTcl::Device\&.getPins\fP
-.TP
-setParamValue
-See \fI::SpiceGenTcl::Device\&.setParamValue\fP
-.TP
-setPinNodeName
-See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
 .RE
 .PP
 \fBProperties\fR
@@ -870,11 +708,11 @@ Writable: -name
 constructor
 Constructor for the class\&.
 .TP
-addParam
-See \fI::SpiceGenTcl::Device\&.addParam\fP
+actOnParam
+See \fI::SpiceGenTcl::Device\&.actOnParam\fP
 .TP
-addPin
-See \fI::SpiceGenTcl::Device\&.addPin\fP
+actOnPin
+See \fI::SpiceGenTcl::Device\&.actOnPin\fP
 .TP
 checkFloatingPins
 See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
@@ -882,23 +720,8 @@ See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
 configure
 Configure properties\&.
 .TP
-deleteParam
-See \fI::SpiceGenTcl::Device\&.deleteParam\fP
-.TP
 genSPICEString
 See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
-.TP
-getParams
-See \fI::SpiceGenTcl::Device\&.getParams\fP
-.TP
-getPins
-See \fI::SpiceGenTcl::Device\&.getPins\fP
-.TP
-setParamValue
-See \fI::SpiceGenTcl::Device\&.setParamValue\fP
-.TP
-setPinNodeName
-See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
 .RE
 .PP
 \fBProperties\fR
@@ -972,11 +795,11 @@ Example of class initialization:
 \fBMethod summary\fR
 .RS 4n
 .TP
-addParam
-See \fI::SpiceGenTcl::Device\&.addParam\fP
+actOnParam
+See \fI::SpiceGenTcl::Device\&.actOnParam\fP
 .TP
-addPin
-See \fI::SpiceGenTcl::Device\&.addPin\fP
+actOnPin
+See \fI::SpiceGenTcl::Device\&.actOnPin\fP
 .TP
 checkFloatingPins
 See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
@@ -984,23 +807,8 @@ See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
 configure
 Configure properties\&.
 .TP
-deleteParam
-See \fI::SpiceGenTcl::Device\&.deleteParam\fP
-.TP
 genSPICEString
 See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
-.TP
-getParams
-See \fI::SpiceGenTcl::Device\&.getParams\fP
-.TP
-getPins
-See \fI::SpiceGenTcl::Device\&.getPins\fP
-.TP
-setParamValue
-See \fI::SpiceGenTcl::Device\&.setParamValue\fP
-.TP
-setPinNodeName
-See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
 .RE
 .PP
 \fBProperties\fR
@@ -1020,11 +828,11 @@ Writable: -name
 \fBMethod summary\fR
 .RS 4n
 .TP
-addParam
-See \fI::SpiceGenTcl::Device\&.addParam\fP
+actOnParam
+See \fI::SpiceGenTcl::Device\&.actOnParam\fP
 .TP
-addPin
-See \fI::SpiceGenTcl::Device\&.addPin\fP
+actOnPin
+See \fI::SpiceGenTcl::Device\&.actOnPin\fP
 .TP
 checkFloatingPins
 See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
@@ -1032,23 +840,8 @@ See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
 configure
 Configure properties\&.
 .TP
-deleteParam
-See \fI::SpiceGenTcl::Device\&.deleteParam\fP
-.TP
 genSPICEString
 See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
-.TP
-getParams
-See \fI::SpiceGenTcl::Device\&.getParams\fP
-.TP
-getPins
-See \fI::SpiceGenTcl::Device\&.getPins\fP
-.TP
-setParamValue
-See \fI::SpiceGenTcl::Device\&.setParamValue\fP
-.TP
-setPinNodeName
-See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
 .RE
 .PP
 \fBProperties\fR
@@ -1068,11 +861,11 @@ Writable: -name
 \fBMethod summary\fR
 .RS 4n
 .TP
-addParam
-See \fI::SpiceGenTcl::Device\&.addParam\fP
+actOnParam
+See \fI::SpiceGenTcl::Device\&.actOnParam\fP
 .TP
-addPin
-See \fI::SpiceGenTcl::Device\&.addPin\fP
+actOnPin
+See \fI::SpiceGenTcl::Device\&.actOnPin\fP
 .TP
 checkFloatingPins
 See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
@@ -1080,23 +873,8 @@ See \fI::SpiceGenTcl::Device\&.checkFloatingPins\fP
 configure
 Configure properties\&.
 .TP
-deleteParam
-See \fI::SpiceGenTcl::Device\&.deleteParam\fP
-.TP
 genSPICEString
 See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
-.TP
-getParams
-See \fI::SpiceGenTcl::Device\&.getParams\fP
-.TP
-getPins
-See \fI::SpiceGenTcl::Device\&.getPins\fP
-.TP
-setParamValue
-See \fI::SpiceGenTcl::Device\&.setParamValue\fP
-.TP
-setPinNodeName
-See \fI::SpiceGenTcl::Device\&.setPinNodeName\fP
 .RE
 .PP
 \fBProperties\fR

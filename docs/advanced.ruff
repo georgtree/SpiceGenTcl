@@ -137,8 +137,7 @@ namespace eval Advanced {
         for {set i 0} {$i<$mcRuns} {incr i} {
             #set elements values according to uniform distribution
             foreach elem [list c1 l1 c2 l2 c3 l3] {
-                $elem setParamValue [string index $elem 0]\
-                        [random-uniform {*}[dict values [dget $distLimits $elem]] 1]
+                $elem actOnParam -set [string index $elem 0] [random-uniform {*}[dict values [dget $distLimits $elem]] 1]
             }
             # run simulation
             $circuit runAndRead
@@ -210,7 +209,7 @@ namespace eval Advanced {
         for {set i 0} {$i<$mcRuns} {incr i} {
             #set elements values according to normal distribution
             foreach elem [list c1 l1 c2 l2 c3 l3] {
-                $elem setParamValue [string index $elem 0]\
+                $elem $elem actOnParam -set [string index $elem 0]\
                         [random-normal {*}[dict values [dget $normalLimits $elem]] 1]
             }
             # run simulation
@@ -313,8 +312,8 @@ namespace eval Advanced {
         ```tcl
         proc diodeIVcalc {xall pdata args} {
             dict with pdata {}
-            $model setParamValue is [@ $xall 0] n [@ $xall 1] rs [@ $xall 2] ikf [@ $xall 3]
-            $vSrc setParamValue start $vMin stop $vMax incr $vStep
+            $model actOnParam -set is [@ $xall 0] n [@ $xall 1] rs [@ $xall 2] ikf [@ $xall 3]
+            $vSrc actOnParam -set start $vMin stop $vMax incr $vStep
             $circuit runAndRead
             set data [$circuit getDataDict]
             foreach iVal $i iSim [lmap i [dget $data i(va)] {= {-$i}}] {
@@ -347,14 +346,14 @@ namespace eval Advanced {
         dict with pdata {}
         ```
 
-        Then we set parameters values of the diode model object using [::SpiceGenTcl::Model::setParamValue] method:
+        Then we set parameters values of the diode model object using [::SpiceGenTcl::Model::actOnParam] method:
         ```tcl
-        $model setParamValue is [@ $xall 0] n [@ $xall 1] rs [@ $xall 2] ikf [@ $xall 3]
+        $model actOnParam -set is [@ $xall 0] n [@ $xall 1] rs [@ $xall 2] ikf [@ $xall 3]
         ```
 
         The same we do with voltage source element:
         ```tcl
-        $vSrc setParamValue start $vMin stop $vMax incr $vStep
+        $vSrc actOnParam -set start $vMin stop $vMax incr $vStep
         ```
 
         Then we run circuit with new parameters and read data back to calculate residuals:

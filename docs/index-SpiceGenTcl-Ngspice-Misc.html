@@ -6,7 +6,7 @@
 <body>
 <div class='ruff-layout'>
 <header class='ruff-layout-header ruff-hd'>
-<a style='text-decoration:none;' href='index.html'>Tcl SpiceGenTcl package (v0.70)</a>
+<a style='text-decoration:none;' href='index.html'>Tcl SpiceGenTcl package (v0.71)</a>
 
 
             <div id="ruffButtonBar">
@@ -21,12 +21,9 @@
 <div style='clear:both;'></div>
 <h5 class='ruff'>Method summary</h5><table class='ruff_deflist'>
 <tr><td><a href="index-SpiceGenTcl-Ngspice-Misc.html#::SpiceGenTcl::Ngspice::Misc::OptionsNgspice::constructor" title="constructor" class='ruff_cmd'>constructor</a></td><td>Constructor for the class.</td></tr>
-<tr><td><code>addParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Options::addParam" title="::SpiceGenTcl::Options.addParam" class='ruff_cmd'>::SpiceGenTcl::Options.addParam</a></td></tr>
+<tr><td><code>actOnParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Options::actOnParam" title="::SpiceGenTcl::Options.actOnParam" class='ruff_cmd'>::SpiceGenTcl::Options.actOnParam</a></td></tr>
 <tr><td><code>configure</code></td><td>Configure properties.</td></tr>
-<tr><td><code>deleteParam</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Options::deleteParam" title="::SpiceGenTcl::Options.deleteParam" class='ruff_cmd'>::SpiceGenTcl::Options.deleteParam</a></td></tr>
 <tr><td><code>genSPICEString</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Options::genSPICEString" title="::SpiceGenTcl::Options.genSPICEString" class='ruff_cmd'>::SpiceGenTcl::Options.genSPICEString</a></td></tr>
-<tr><td><code>getParams</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Options::getParams" title="::SpiceGenTcl::Options.getParams" class='ruff_cmd'>::SpiceGenTcl::Options.getParams</a></td></tr>
-<tr><td><code>setParamValue</code></td><td>See <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Options::setParamValue" title="::SpiceGenTcl::Options.setParamValue" class='ruff_cmd'>::SpiceGenTcl::Options.setParamValue</a></td></tr>
 </table>
 <h5 class='ruff'>Properties</h5><p class='ruff'>Readable: <code><font color=#b9b96e>-name</font></code></p>
 <p class='ruff'>Writable: <code><font color=#b9b96e>-name</font></code></p>
@@ -71,13 +68,13 @@
     <b><font color=#fe6efe>my</font></b> NameProcess <font color=#f1b479>$arguments</font> [<b><font color=#fe6efe>self</font></b> object]
     <b><font color=#ffa500>dict</font></b> for {paramName value} <font color=#f1b479>$arguments</font> {
         <b><font color=#ffa500>if</font></b> {<font color=#f1b479>$paramName</font> in <font color=#f1b479>$keyValParams</font>} {
-            <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$value</font>]&gt;1) && ([@ <font color=#f1b479>$value</font> 1] eq {<font color=#b9b96e>-eq</font>})} {
-                <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$paramName</font> [@ <font color=#f1b479>$value</font> 0] <font color=#b9b96e>-eq</font>]
+            <b><font color=#ffa500>if</font></b> {([<b><font color=#ffa500>llength</font></b> <font color=#f1b479>$value</font>]&gt;1) && ([@ <font color=#f1b479>$value</font> 0] eq {<font color=#b9b96e>-eq</font>})} {
+                <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#b9b96e>-eq</font> <font color=#f1b479>$paramName</font> [@ <font color=#f1b479>$value</font> 1]]
             } <b><font color=#ffa500>else</font></b> {
                 <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$paramName</font> <font color=#f1b479>$value</font>]
             }
         } <b><font color=#ffa500>elseif</font></b> {<font color=#f1b479>$paramName</font> in <font color=#f1b479>$swParams</font>} {
-            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$paramName</font> <font color=#b9b96e>-sw</font>]
+            <b><font color=#ffa500>lappend</font></b> params [<b><font color=#ffa500>list</font></b> <font color=#b9b96e>-sw</font> <font color=#f1b479>$paramName</font>]
         }
     }
     <i><font color=#76a396>##nagelfar variable name</font></i>

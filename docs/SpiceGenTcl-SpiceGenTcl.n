@@ -1,7 +1,7 @@
 '\"
 '\" '\" Copyright (c) George Yashin
 '\"
-.TH "SpiceGenTcl" 3tcl 0\&.70 "SpiceGenTcl" "Tcl SpiceGenTcl package"
+.TH "SpiceGenTcl" 3tcl 0\&.71 "SpiceGenTcl" "Tcl SpiceGenTcl package"
 .SH NAME
 SpiceGenTcl - Commands in namespace SpiceGenTcl
 .SH SYNOPSIS
@@ -23,15 +23,17 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT constructor\fP \fItype params ?-name value?\fP
 .br
-\fBOBJECT addParam\fP \fIpname value ?-name value? ?-eq|poseq|posnocheck|pos|nocheck?\fP
+\fBOBJECT actOnParam\fP \fI-add ?-pos|eq|poseq|posnocheck|nocheck|sw|node|nodeeq? name value\fP
 .br
-\fBOBJECT deleteParam\fP \fIpname\fP
+\fBOBJECT actOnParam\fP \fI-set name value ?name value \&.\&.\&.?\fP
+.br
+\fBOBJECT actOnParam\fP \fI-get name\fP
+.br
+\fBOBJECT actOnParam\fP \fI-get -all\fP
+.br
+\fBOBJECT actOnParam\fP \fI-delete name\fP
 .br
 \fBOBJECT genSPICEString\fP
-.br
-\fBOBJECT getParams\fP
-.br
-\fBOBJECT setParamValue\fP \fIname value ?name value \&.\&.\&.?\fP
 .br
 \fBOBJECT readComplex\fP \fIfile\fP
 .br
@@ -51,13 +53,13 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT del\fP \fIelementName ?elementName \&.\&.\&.?\fP
 .br
-\fBOBJECT detachSimulator\fP
+\fBOBJECT detachSimulator\fP \fI?args?\fP
 .br
 \fBOBJECT genSPICEString\fP
 .br
 \fBOBJECT getDataCsv\fP \fI?-all? ?-traces list? ?-sep value?\fP
 .br
-\fBOBJECT getDataDict\fP
+\fBOBJECT getDataDict\fP \fI?args?\fP
 .br
 \fBOBJECT runAndRead\fP \fI?-nodelete?\fP
 .br
@@ -71,7 +73,7 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT appendDataPoints\fP \fIdataPoint\fP
 .br
-\fBOBJECT getDataPoints\fP
+\fBOBJECT getDataPoints\fP \fI?args?\fP
 .br
 \fBOBJECT getStr\fP
 .br
@@ -81,23 +83,27 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBDevice new\fP \fI?args?\fP
 .br
-\fBOBJECT addParam\fP \fIpname value ?-name value? ?-eq|poseq|posnocheck|pos|nocheck?\fP
+\fBOBJECT actOnParam\fP \fI-add ?-pos|eq|poseq|posnocheck|nocheck|sw|node|nodeeq? name value\fP
 .br
-\fBOBJECT addPin\fP \fIpin node\fP
+\fBOBJECT actOnParam\fP \fI-set name value ?name value \&.\&.\&.?\fP
 .br
-\fBOBJECT checkFloatingPins\fP
+\fBOBJECT actOnParam\fP \fI-get name\fP
 .br
-\fBOBJECT deleteParam\fP \fIpname\fP
+\fBOBJECT actOnParam\fP \fI-get -all\fP
+.br
+\fBOBJECT actOnParam\fP \fI-delete name\fP
+.br
+\fBOBJECT actOnPin\fP \fI-add pin node\fP
+.br
+\fBOBJECT actOnPin\fP \fI-set pin node\fP
+.br
+\fBOBJECT actOnPin\fP \fI-get pin\fP
+.br
+\fBOBJECT actOnPin\fP \fI-get -all\fP
+.br
+\fBOBJECT checkFloatingPins\fP \fI?args?\fP
 .br
 \fBOBJECT genSPICEString\fP
-.br
-\fBOBJECT getParams\fP
-.br
-\fBOBJECT getPins\fP
-.br
-\fBOBJECT setParamValue\fP \fIname value ?name value \&.\&.\&.?\fP
-.br
-\fBOBJECT setPinNodeName\fP \fI?args?\fP
 .br
 \fBOBJECT getDataPoints\fP
 .br
@@ -111,21 +117,23 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT constructor\fP \fIparams ?-name value?\fP
 .br
-\fBOBJECT addParam\fP \fIpname value ?-eq?\fP
+\fBOBJECT actOnParam\fP \fI-add ?-pos|eq|poseq|posnocheck|nocheck|sw|node|nodeeq? name value\fP
 .br
-\fBOBJECT deleteParam\fP \fIpname\fP
+\fBOBJECT actOnParam\fP \fI-set name value ?name value \&.\&.\&.?\fP
+.br
+\fBOBJECT actOnParam\fP \fI-get name\fP
+.br
+\fBOBJECT actOnParam\fP \fI-get -all\fP
+.br
+\fBOBJECT actOnParam\fP \fI-delete name\fP
 .br
 \fBOBJECT genSPICEString\fP
-.br
-\fBOBJECT getParams\fP
-.br
-\fBOBJECT setParamValue\fP \fIname value ?name value \&.\&.\&.?\fP
 .br
 \fBOBJECT constructor\fP \fIvalue ?-name value?\fP
 .br
 \fBOBJECT genSPICEString\fP
 .br
-\fBOBJECT constructor\fP \fIvalue libValue ?-name value?\fP
+\fBOBJECT constructor\fP \fIvalue libvalue ?-name value?\fP
 .br
 \fBOBJECT genSPICEString\fP
 .br
@@ -133,15 +141,17 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBModel new\fP \fI?args?\fP
 .br
-\fBOBJECT addParam\fP \fIpname value ?-name value? ?-eq|poseq|posnocheck|pos|nocheck?\fP
+\fBOBJECT actOnParam\fP \fI-add ?-pos|eq|poseq|posnocheck|nocheck|sw|node|nodeeq? name value\fP
 .br
-\fBOBJECT deleteParam\fP \fIpname\fP
+\fBOBJECT actOnParam\fP \fI-set name value ?name value \&.\&.\&.?\fP
+.br
+\fBOBJECT actOnParam\fP \fI-get name\fP
+.br
+\fBOBJECT actOnParam\fP \fI-get -all\fP
+.br
+\fBOBJECT actOnParam\fP \fI-delete name\fP
 .br
 \fBOBJECT genSPICEString\fP
-.br
-\fBOBJECT getParams\fP
-.br
-\fBOBJECT setParamValue\fP \fIname value ?name value \&.\&.\&.?\fP
 .br
 \fBNetlist create OBJNAME\fP \fI?args?\fP
 .br
@@ -153,7 +163,7 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT genSPICEString\fP
 .br
-\fBOBJECT getAllElemNames\fP
+\fBOBJECT getAllElemNames\fP \fI?args?\fP
 .br
 \fBOBJECT getElement\fP \fIelemName\fP
 .br
@@ -161,15 +171,17 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT constructor\fP \fIparams ?-name value?\fP
 .br
-\fBOBJECT addParam\fP \fIpname value ?-eq?\fP
+\fBOBJECT actOnParam\fP \fI-add ?-pos|eq|poseq|posnocheck|nocheck|sw|node|nodeeq? name value\fP
 .br
-\fBOBJECT deleteParam\fP \fIpname\fP
+\fBOBJECT actOnParam\fP \fI-set name value ?name value \&.\&.\&.?\fP
+.br
+\fBOBJECT actOnParam\fP \fI-get name\fP
+.br
+\fBOBJECT actOnParam\fP \fI-get -all\fP
+.br
+\fBOBJECT actOnParam\fP \fI-delete name\fP
 .br
 \fBOBJECT genSPICEString\fP
-.br
-\fBOBJECT getParams\fP
-.br
-\fBOBJECT setParamValue\fP \fIname value ?name value \&.\&.\&.?\fP
 .br
 \fBParameter create OBJNAME\fP \fI?args?\fP
 .br
@@ -181,7 +193,7 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBParameterDefault new\fP \fI?args?\fP
 .br
-\fBOBJECT resetValue\fP
+\fBOBJECT resetValue\fP \fI?args?\fP
 .br
 \fBParameterEquation create OBJNAME\fP \fI?args?\fP
 .br
@@ -231,15 +243,17 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT constructor\fP \fIparams ?-name value?\fP
 .br
-\fBOBJECT addParam\fP \fIpname value ?-eq?\fP
+\fBOBJECT actOnParam\fP \fI-add ?-pos|eq|poseq|posnocheck|nocheck|sw|node|nodeeq? name value\fP
 .br
-\fBOBJECT deleteParam\fP \fIpname\fP
+\fBOBJECT actOnParam\fP \fI-set name value ?name value \&.\&.\&.?\fP
+.br
+\fBOBJECT actOnParam\fP \fI-get name\fP
+.br
+\fBOBJECT actOnParam\fP \fI-get -all\fP
+.br
+\fBOBJECT actOnParam\fP \fI-delete name\fP
 .br
 \fBOBJECT genSPICEString\fP
-.br
-\fBOBJECT getParams\fP
-.br
-\fBOBJECT setParamValue\fP \fIname value ?name value \&.\&.\&.?\fP
 .br
 \fBParser create OBJNAME\fP \fI?args?\fP
 .br
@@ -253,29 +267,29 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT constructor\fP \fIname node\fP
 .br
-\fBOBJECT checkFloating\fP
+\fBOBJECT checkFloating\fP \fI?args?\fP
 .br
 \fBOBJECT genSPICEString\fP
 .br
-\fBOBJECT unsetNodeName\fP
+\fBOBJECT unsetNodeName\fP \fI?args?\fP
 .br
 \fBRawFile create OBJNAME\fP \fI?args?\fP
 .br
 \fBRawFile new\fP \fI?args?\fP
 .br
-\fBOBJECT getCurrentsNames\fP
+\fBOBJECT getCurrentsNames\fP \fI?args?\fP
 .br
 \fBOBJECT getTrace\fP \fItraceName\fP
 .br
 \fBOBJECT getTracesCsv\fP \fI?-all? ?-traces list? ?-sep value?\fP
 .br
-\fBOBJECT getTracesData\fP
+\fBOBJECT getTracesData\fP \fI?args?\fP
 .br
-\fBOBJECT getTracesStr\fP
+\fBOBJECT getTracesStr\fP \fI?args?\fP
 .br
-\fBOBJECT getVariablesNames\fP
+\fBOBJECT getVariablesNames\fP \fI?args?\fP
 .br
-\fBOBJECT getVoltagesNames\fP
+\fBOBJECT getVoltagesNames\fP \fI?args?\fP
 .br
 \fBOBJECT measure\fP \fI?args?\fP
 .br
@@ -291,7 +305,7 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT genSPICEString\fP
 .br
-\fBOBJECT getVectors\fP
+\fBOBJECT getVectors\fP \fI?args?\fP
 .br
 \fBOBJECT getLog\fP
 .br
@@ -307,21 +321,27 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBSubcircuit new\fP \fI?args?\fP
 .br
+\fBOBJECT actOnParam\fP \fI-add ?-pos|eq|poseq|posnocheck|nocheck|sw|node|nodeeq? name value\fP
+.br
+\fBOBJECT actOnParam\fP \fI-set name value ?name value \&.\&.\&.?\fP
+.br
+\fBOBJECT actOnParam\fP \fI-get name\fP
+.br
+\fBOBJECT actOnParam\fP \fI-get -all\fP
+.br
+\fBOBJECT actOnParam\fP \fI-delete name\fP
+.br
+\fBOBJECT actOnPin\fP \fI-add pin node\fP
+.br
+\fBOBJECT actOnPin\fP \fI-set pin node\fP
+.br
+\fBOBJECT actOnPin\fP \fI-get pin\fP
+.br
+\fBOBJECT actOnPin\fP \fI-get -all\fP
+.br
 \fBOBJECT add\fP \fI?args?\fP
 .br
-\fBOBJECT addParam\fP \fIpname value\fP
-.br
-\fBOBJECT addPin\fP \fIpin node\fP
-.br
-\fBOBJECT deleteParam\fP \fIpname\fP
-.br
 \fBOBJECT genSPICEString\fP
-.br
-\fBOBJECT getParams\fP
-.br
-\fBOBJECT getPins\fP
-.br
-\fBOBJECT setParamValue\fP \fIname value ?name value \&.\&.\&.?\fP
 .br
 \fBOBJECT constructor\fP \fIvalue ?-eq?\fP
 .br
@@ -417,23 +437,14 @@ Imports all ::SpiceGenTcl::Xyce commands to caller namespace
 constructor
 Constructor for the class\&.
 .TP
-addParam
-Adds new parameter to device, and throws error on dublicated names\&.
+actOnParam
+Acts on Parameter object with selected action\&.
 .TP
 configure
 Configure properties\&.
 .TP
-deleteParam
-Deletes existing Parameter object from list Params\&.
-.TP
 genSPICEString
 Creates analysis for SPICE netlist\&.
-.TP
-getParams
-Gets the dictionary that contains parameter name as keys and parameter values as the values\&.
-.TP
-setParamValue
-Sets (or change) value of particular parameters\&.
 .RE
 .PP
 \fBProperties\fR
@@ -481,53 +492,72 @@ Type of analysis, for example, tran, ac, dc, etc\&.
 Class models analysis statement\&.
 .PP
 .RS -4n
-\fBaddParam\fR (::SpiceGenTcl::Analysis)
+\fBactOnParam\fR (::SpiceGenTcl::Analysis)
 .RE
 .PP
-Adds new parameter to device, and throws error on dublicated names\&.
-.RS 4n\fBOBJECT addParam\fP \fIpname value ?-name value? ?-eq|poseq|posnocheck|pos|nocheck?\fP
+Acts on Parameter object with selected action
+.RS 4n\fBOBJECT actOnParam\fP \fI-add ?-pos|eq|poseq|posnocheck|nocheck|sw|node|nodeeq? name value\fP
+.br
+\fBOBJECT actOnParam\fP \fI-set name value ?name value \&.\&.\&.?\fP
+.br
+\fBOBJECT actOnParam\fP \fI-get name\fP
+.br
+\fBOBJECT actOnParam\fP \fI-get -all\fP
+.br
+\fBOBJECT actOnParam\fP \fI-delete name\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
+-add
+Add new parameter to the device, requires pname argument\&.
+.TP
+-all
+Option for getting the dictionary that contains parameters names as keys and parameters values #    as the dictionary values, requires -get\&.
+.TP
+-delete
+Delete existing parameter\&.
+.TP
 -eq
-Parameter is of class \fI::SpiceGenTcl::ParameterEquation\fP, optional, forbids other switches\&.
+Parameter may contain equation in terms of functions and other parameters, printed as '\fI$name\fP={\fI$equation\fP}', requires -add\&.
+.TP
+-get
+Get parameter value, requires pname argument\&.
 .TP
 -nocheck
-Parameter is of class \fI::SpiceGenTcl::ParameterNoCheck\fP, optional, forbids other switches\&.
+Normal parameter without check, requires -add\&.
+.TP
+-node
+Node parameter, requires -add\&.
+.TP
+-nodeeq
+Node parameter equation, requires -add\&.
 .TP
 -pos
-Parameter is of class \fI::SpiceGenTcl::ParameterPositional\fP, optional, forbids other switches\&.
+Parameter has strict position and only '\fI$Value\fP' is displayed in netlist, requires -add\&.
 .TP
 -poseq
-Parameter is of class \fI::SpiceGenTcl::ParameterPositionalEquation\fP, optional, forbids other switches\&.
+Combination of both flags, print only, requires -add\&.
 .TP
 -posnocheck
-Parameter is of class \fI::SpiceGenTcl::ParameterPositionalNoCheck\fP, optional, forbids other switches\&.
+Positional parameter without check, requires -add\&.
+.TP
+-set
+Set (or change) value of particular parameters, requires pname and value arguments\&.
+.TP
+-sw
+Switch parameter, requires -add\&.
+.TP
+arguments
+Optional pairs of name-value for -set action, requires -set\&.
 .TP
 pname
 Name of parameter\&.
 .TP
 value
 Value of parameter\&.
-.RE
-.PP
-.RS -4n
-\fBdeleteParam\fR (::SpiceGenTcl::Analysis)
-.RE
-.PP
-Deletes existing Parameter object from list Params\&.
-.RS 4n\fBOBJECT deleteParam\fP \fIpname\fP
-.br
-.RE
-.PP
-\fBParameters\fR
-.RS 4n
-.TP
-pname
-Name of parameter that shhould be deleted\&.
 .RE
 .PP
 .RS -4n
@@ -542,41 +572,6 @@ Creates analysis for SPICE netlist\&.
 \fBReturn value\fR
 .PP
 string SPICE netlist's string
-.PP
-.RS -4n
-\fBgetParams\fR (::SpiceGenTcl::Analysis)
-.RE
-.PP
-Gets the dictionary that contains parameter name as keys and parameter values as the values\&.
-.RS 4n\fBOBJECT getParams\fP
-.br
-.RE
-.PP
-\fBReturn value\fR
-.PP
-parameters dictionary
-.PP
-.RS -4n
-\fBsetParamValue\fR (::SpiceGenTcl::Analysis)
-.RE
-.PP
-Sets (or change) value of particular parameters\&.
-.RS 4n\fBOBJECT setParamValue\fP \fIname value ?name value \&.\&.\&.?\fP
-.br
-.RE
-.PP
-\fBParameters\fR
-.RS 4n
-.TP
-arguments
-Optional pairs of name-value\&.
-.TP
-pname
-Name of the parameter\&.
-.TP
-value
-Value of the parameter\&.
-.RE
 .PP
 .RS -4n
 \fBAxis\fR (::SpiceGenTcl)
@@ -784,7 +779,7 @@ getDataCsv
 Returns string with csv formatting containing all data\&.
 .TP
 getDataDict
-Method to get dictionary with raw data vectors\&.
+Gets dictionary with raw data vectors\&.
 .TP
 getElement
 See \fINetlist\&.getElement\fP
@@ -861,8 +856,12 @@ Elements names\&.
 .RE
 .PP
 Removes Simulator object reference from Circuit\&.
-.RS 4n\fBOBJECT detachSimulator\fP
+.RS 4n\fBOBJECT detachSimulator\fP \fI?args?\fP
 .br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
 .RE
 .PP
 .RS -4n
@@ -908,9 +907,13 @@ Returns string with csv formatting containing all data
 \fBgetDataDict\fR (::SpiceGenTcl::Circuit)
 .RE
 .PP
-Method to get dictionary with raw data vectors\&.
-.RS 4n\fBOBJECT getDataDict\fP
+Gets dictionary with raw data vectors\&.
+.RS 4n\fBOBJECT getDataDict\fP \fI?args?\fP
 .br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
 .RE
 .PP
 \fBReturn value\fR
@@ -1052,7 +1055,7 @@ Total number of points\&.
 name
 Name of the dataset\&.
 .TP
-numType
+numtype
 Numerical type of dataset\&.
 .TP
 type
@@ -1078,8 +1081,12 @@ Not documented\&.
 .RS -4n
 \fBgetDataPoints\fR (::SpiceGenTcl::Dataset)
 .RE
-.RS 4n\fBOBJECT getDataPoints\fP
+.RS 4n\fBOBJECT getDataPoints\fP \fI?args?\fP
 .br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
 .RE
 .PP
 .RS -4n
@@ -1115,11 +1122,11 @@ Not documented\&.
 constructor
 Constructor for the class\&.
 .TP
-addParam
-Adds new parameter to device, and throws error on dublicated names\&.
+actOnParam
+Acts on Parameter object with selected action\&.
 .TP
-addPin
-Adds new Pin object to the dictionary of Pins\&.
+actOnPin
+Acts on Pin object with selected action\&.
 .TP
 checkFloatingPins
 Check if some pin device doesn't have connected nodes and return list of them\&.
@@ -1127,23 +1134,8 @@ Check if some pin device doesn't have connected nodes and return list of them\&.
 configure
 Configure properties\&.
 .TP
-deleteParam
-Deletes existing Parameter object from list Params\&.
-.TP
 genSPICEString
 Creates device string for SPICE netlist\&.
-.TP
-getParams
-Gets the dictionary that contains parameter name as keys and parameter values as the values\&.
-.TP
-getPins
-Gets the dictionary that contains pin name as keys and connected node name as the values\&.
-.TP
-setParamValue
-Sets (or change) value of particular parameters\&.
-.TP
-setPinNodeName
-Sets node name of particular pin, so, in other words, connect particular pin to particular node\&.
 .RE
 .PP
 \fBProperties\fR
@@ -1182,7 +1174,7 @@ name
 Name of the device\&.
 .TP
 params
-List of instance parameters in form {{Name Value ?-pos|eq|poseq?} {Name Value ?-pos|eq|poseq?} {Name Value ?-pos|eq|poseq?} \&.\&.\&.} Parameter list can be empty if device doesn't have instance parameters\&.
+List of instance parameters in form {{Name Value ?-sw|pos|eq|poseq|posnocheck|nocheck?} {Name Value ?-sw|pos|eq|poseq|posnocheck|nocheck?} {Name Value ?-sw|pos|eq|poseq|posnocheck|nocheck?} \&.\&.\&.} Parameter list can be empty if device doesn't have instance parameters\&.
 .TP
 pins
 List of pins in the order they appear in SPICE device's definition together with connected node in form: {{Name0 NodeName} {Name1 NodeName} {Name2 NodeName} \&.\&.\&.} Nodes string values could be empty\&.
@@ -1228,31 +1220,66 @@ Normal parameter without check\&.
 .RE
 .PP
 .RS -4n
-\fBaddParam\fR (::SpiceGenTcl::Device)
+\fBactOnParam\fR (::SpiceGenTcl::Device)
 .RE
 .PP
-Adds new parameter to device, and throws error on dublicated names\&.
-.RS 4n\fBOBJECT addParam\fP \fIpname value ?-name value? ?-eq|poseq|posnocheck|pos|nocheck?\fP
+Acts on Parameter object with selected action
+.RS 4n\fBOBJECT actOnParam\fP \fI-add ?-pos|eq|poseq|posnocheck|nocheck|sw|node|nodeeq? name value\fP
+.br
+\fBOBJECT actOnParam\fP \fI-set name value ?name value \&.\&.\&.?\fP
+.br
+\fBOBJECT actOnParam\fP \fI-get name\fP
+.br
+\fBOBJECT actOnParam\fP \fI-get -all\fP
+.br
+\fBOBJECT actOnParam\fP \fI-delete name\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
+-add
+Add new parameter to the device, requires pname argument\&.
+.TP
+-all
+Option for getting the dictionary that contains parameters names as keys and parameters values #    as the dictionary values, requires -get\&.
+.TP
+-delete
+Delete existing parameter\&.
+.TP
 -eq
-Parameter is of class \fI::SpiceGenTcl::ParameterEquation\fP, optional, forbids other switches\&.
+Parameter may contain equation in terms of functions and other parameters, printed as '\fI$name\fP={\fI$equation\fP}', requires -add\&.
+.TP
+-get
+Get parameter value, requires pname argument\&.
 .TP
 -nocheck
-Parameter is of class \fI::SpiceGenTcl::ParameterNoCheck\fP, optional, forbids other switches\&.
+Normal parameter without check, requires -add\&.
+.TP
+-node
+Node parameter, requires -add\&.
+.TP
+-nodeeq
+Node parameter equation, requires -add\&.
 .TP
 -pos
-Parameter is of class \fI::SpiceGenTcl::ParameterPositional\fP, optional, forbids other switches\&.
+Parameter has strict position and only '\fI$Value\fP' is displayed in netlist, requires -add\&.
 .TP
 -poseq
-Parameter is of class \fI::SpiceGenTcl::ParameterPositionalEquation\fP, optional, forbids other switches\&.
+Combination of both flags, print only, requires -add\&.
 .TP
 -posnocheck
-Parameter is of class \fI::SpiceGenTcl::ParameterPositionalNoCheck\fP, optional, forbids other switches\&.
+Positional parameter without check, requires -add\&.
+.TP
+-set
+Set (or change) value of particular parameters, requires pname and value arguments\&.
+.TP
+-sw
+Switch parameter, requires -add\&.
+.TP
+arguments
+Optional pairs of name-value for -set action, requires -set\&.
 .TP
 pname
 Name of parameter\&.
@@ -1262,16 +1289,34 @@ Value of parameter\&.
 .RE
 .PP
 .RS -4n
-\fBaddPin\fR (::SpiceGenTcl::Device)
+\fBactOnPin\fR (::SpiceGenTcl::Device)
 .RE
 .PP
-Adds new Pin object to the dictionary of Pins\&.
-.RS 4n\fBOBJECT addPin\fP \fIpin node\fP
+Acts on Pin object with selected action
+.RS 4n\fBOBJECT actOnPin\fP \fI-add pin node\fP
+.br
+\fBOBJECT actOnPin\fP \fI-set pin node\fP
+.br
+\fBOBJECT actOnPin\fP \fI-get pin\fP
+.br
+\fBOBJECT actOnPin\fP \fI-get -all\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
+.TP
+-add
+Add new pin to the device, requires pin and node arguments\&.
+.TP
+-all
+Option for getting the dictionary that contains pin name as keys and connected node name as the values, requires -get\&.
+.TP
+-get
+Get node name connected to pin, requires pin argument\&.
+.TP
+-set
+Set node name connected to pin, requires pin and node arguments\&.
 .TP
 node
 Name of the node connected to pin\&.
@@ -1285,29 +1330,17 @@ Name of the pin\&.
 .RE
 .PP
 Check if some pin device doesn't have connected nodes and return list of them\&.
-.RS 4n\fBOBJECT checkFloatingPins\fP
-.br
-.RE
-.PP
-\fBReturn value\fR
-.PP
-list of floating pins
-.PP
-.RS -4n
-\fBdeleteParam\fR (::SpiceGenTcl::Device)
-.RE
-.PP
-Deletes existing Parameter object from list Params\&.
-.RS 4n\fBOBJECT deleteParam\fP \fIpname\fP
+.RS 4n\fBOBJECT checkFloatingPins\fP \fI?args?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
-.TP
-pname
-Name of parameter that shhould be deleted\&.
 .RE
+.PP
+\fBReturn value\fR
+.PP
+list of floating pins
 .PP
 .RS -4n
 \fBgenSPICEString\fR (::SpiceGenTcl::Device)
@@ -1321,75 +1354,6 @@ Creates device string for SPICE netlist\&.
 \fBReturn value\fR
 .PP
 SPICE netlist's string
-.PP
-.RS -4n
-\fBgetParams\fR (::SpiceGenTcl::Device)
-.RE
-.PP
-Gets the dictionary that contains parameter name as keys and parameter values as the values\&.
-.RS 4n\fBOBJECT getParams\fP
-.br
-.RE
-.PP
-\fBReturn value\fR
-.PP
-parameters dictionary
-.PP
-.RS -4n
-\fBgetPins\fR (::SpiceGenTcl::Device)
-.RE
-.PP
-Gets the dictionary that contains pin name as keys and
-connected node name as the values\&.
-.RS 4n\fBOBJECT getPins\fP
-.br
-.RE
-.PP
-\fBReturn value\fR
-.PP
-parameters dictionary
-.PP
-.RS -4n
-\fBsetParamValue\fR (::SpiceGenTcl::Device)
-.RE
-.PP
-Sets (or change) value of particular parameters\&.
-.RS 4n\fBOBJECT setParamValue\fP \fIname value ?name value \&.\&.\&.?\fP
-.br
-.RE
-.PP
-\fBParameters\fR
-.RS 4n
-.TP
-arguments
-Optional pairs of name-value\&.
-.TP
-pname
-Name of the parameter\&.
-.TP
-value
-Value of the parameter\&.
-.RE
-.PP
-.RS -4n
-\fBsetPinNodeName\fR (::SpiceGenTcl::Device)
-.RE
-.PP
-Sets node name of particular pin, so,
-in other words, connect particular pin to particular node\&.
-.RS 4n\fBOBJECT setPinNodeName\fP \fI?args?\fP
-.br
-.RE
-.PP
-\fBParameters\fR
-.RS 4n
-.TP
-node
-Name of the node that we want connect to pin\&.
-.TP
-pin
-Name of the pin\&.
-.RE
 .PP
 .RS -4n
 \fBEmptyTrace\fR (::SpiceGenTcl)
@@ -1536,23 +1500,14 @@ SPICE netlist's string
 constructor
 Constructor for the class\&.
 .TP
-addParam
-Adds new Parameter object to the list Params\&.
+actOnParam
+Acts on Parameter object with selected action\&.
 .TP
 configure
 Configure properties\&.
 .TP
-deleteParam
-Deletes existing Parameter object from list Params\&.
-.TP
 genSPICEString
 Creates ic statement string for SPICE netlist\&.
-.TP
-getParams
-Gets the dictionary that contains parameter name as keys and parameter values as the values\&.
-.TP
-setParamValue
-Sets (or change) value of particular parameters\&.
 .RE
 .PP
 \fBProperties\fR
@@ -1597,41 +1552,72 @@ List of instance parameters in form {{name value} {name value} {name equation -e
 Class represent \&.ic statement\&.
 .PP
 .RS -4n
-\fBaddParam\fR (::SpiceGenTcl::Ic)
+\fBactOnParam\fR (::SpiceGenTcl::Ic)
 .RE
 .PP
-Adds new Parameter object to the list Params\&.
-.RS 4n\fBOBJECT addParam\fP \fIpname value ?-eq?\fP
+Acts on Parameter object with selected action
+.RS 4n\fBOBJECT actOnParam\fP \fI-add ?-pos|eq|poseq|posnocheck|nocheck|sw|node|nodeeq? name value\fP
+.br
+\fBOBJECT actOnParam\fP \fI-set name value ?name value \&.\&.\&.?\fP
+.br
+\fBOBJECT actOnParam\fP \fI-get name\fP
+.br
+\fBOBJECT actOnParam\fP \fI-get -all\fP
+.br
+\fBOBJECT actOnParam\fP \fI-delete name\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
+-add
+Add new parameter to the device, requires pname argument\&.
+.TP
+-all
+Option for getting the dictionary that contains parameters names as keys and parameters values #    as the dictionary values, requires -get\&.
+.TP
+-delete
+Delete existing parameter\&.
+.TP
 -eq
-Optional parameter qualificator\&.
+Parameter may contain equation in terms of functions and other parameters, printed as '\fI$name\fP={\fI$equation\fP}', requires -add\&.
+.TP
+-get
+Get parameter value, requires pname argument\&.
+.TP
+-nocheck
+Normal parameter without check, requires -add\&.
+.TP
+-node
+Node parameter, requires -add\&.
+.TP
+-nodeeq
+Node parameter equation, requires -add\&.
+.TP
+-pos
+Parameter has strict position and only '\fI$Value\fP' is displayed in netlist, requires -add\&.
+.TP
+-poseq
+Combination of both flags, print only, requires -add\&.
+.TP
+-posnocheck
+Positional parameter without check, requires -add\&.
+.TP
+-set
+Set (or change) value of particular parameters, requires pname and value arguments\&.
+.TP
+-sw
+Switch parameter, requires -add\&.
+.TP
+arguments
+Optional pairs of name-value for -set action, requires -set\&.
 .TP
 pname
 Name of parameter\&.
 .TP
 value
 Value of parameter\&.
-.RE
-.PP
-.RS -4n
-\fBdeleteParam\fR (::SpiceGenTcl::Ic)
-.RE
-.PP
-Deletes existing Parameter object from list Params\&.
-.RS 4n\fBOBJECT deleteParam\fP \fIpname\fP
-.br
-.RE
-.PP
-\fBParameters\fR
-.RS 4n
-.TP
-pname
-Name of parameter that shhould be deleted\&.
 .RE
 .PP
 .RS -4n
@@ -1646,41 +1632,6 @@ Creates ic statement string for SPICE netlist\&.
 \fBReturn value\fR
 .PP
 SPICE netlist's string
-.PP
-.RS -4n
-\fBgetParams\fR (::SpiceGenTcl::Ic)
-.RE
-.PP
-Gets the dictionary that contains parameter name as keys and parameter values as the values\&.
-.RS 4n\fBOBJECT getParams\fP
-.br
-.RE
-.PP
-\fBReturn value\fR
-.PP
-parameters dictionary
-.PP
-.RS -4n
-\fBsetParamValue\fR (::SpiceGenTcl::Ic)
-.RE
-.PP
-Sets (or change) value of particular parameters\&.
-.RS 4n\fBOBJECT setParamValue\fP \fIname value ?name value \&.\&.\&.?\fP
-.br
-.RE
-.PP
-\fBParameters\fR
-.RS 4n
-.TP
-arguments
-Optional pairs of name-value\&.
-.TP
-pname
-Name of the parameter\&.
-.TP
-value
-Value of the parameter\&.
-.RE
 .PP
 .RS -4n
 \fBInclude\fR (::SpiceGenTcl)
@@ -1777,7 +1728,7 @@ Writable: -libvalue, -name, -value
 .RE
 .PP
 Creates object of class Library\&.
-.RS 4n\fBOBJECT constructor\fP \fIvalue libValue ?-name value?\fP
+.RS 4n\fBOBJECT constructor\fP \fIvalue libvalue ?-name value?\fP
 .br
 .RE
 .PP
@@ -1787,7 +1738,7 @@ Creates object of class Library\&.
 -name
 Name of the string that could be used to retrieve element from \fI::SpiceGenTcl::Netlist\fP object and its descendants, optional\&.
 .TP
-libValue
+libvalue
 Value of selected library\&.
 .TP
 value
@@ -1821,23 +1772,14 @@ SPICE netlist's string
 constructor
 Constructor for the class\&.
 .TP
-addParam
-Adds new parameter to device, and throws error on dublicated names\&.
+actOnParam
+Acts on Parameter object with selected action\&.
 .TP
 configure
 Configure properties\&.
 .TP
-deleteParam
-Deletes existing Parameter object from list Params\&.
-.TP
 genSPICEString
 Creates model string for SPICE netlist\&.
-.TP
-getParams
-Gets the dictionary that contains parameter name as keys and parameter values as the values\&.
-.TP
-setParamValue
-Sets (or change) value of particular parameters\&.
 .RE
 .PP
 \fBProperties\fR
@@ -1887,53 +1829,72 @@ Type of model, for example, diode, npn, etc\&.
 Class represents model card in SPICE netlist\&.
 .PP
 .RS -4n
-\fBaddParam\fR (::SpiceGenTcl::Model)
+\fBactOnParam\fR (::SpiceGenTcl::Model)
 .RE
 .PP
-Adds new parameter to device, and throws error on dublicated names\&.
-.RS 4n\fBOBJECT addParam\fP \fIpname value ?-name value? ?-eq|poseq|posnocheck|pos|nocheck?\fP
+Acts on Parameter object with selected action
+.RS 4n\fBOBJECT actOnParam\fP \fI-add ?-pos|eq|poseq|posnocheck|nocheck|sw|node|nodeeq? name value\fP
+.br
+\fBOBJECT actOnParam\fP \fI-set name value ?name value \&.\&.\&.?\fP
+.br
+\fBOBJECT actOnParam\fP \fI-get name\fP
+.br
+\fBOBJECT actOnParam\fP \fI-get -all\fP
+.br
+\fBOBJECT actOnParam\fP \fI-delete name\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
+-add
+Add new parameter to the device, requires pname argument\&.
+.TP
+-all
+Option for getting the dictionary that contains parameters names as keys and parameters values #    as the dictionary values, requires -get\&.
+.TP
+-delete
+Delete existing parameter\&.
+.TP
 -eq
-Parameter is of class \fI::SpiceGenTcl::ParameterEquation\fP, optional, forbids other switches\&.
+Parameter may contain equation in terms of functions and other parameters, printed as '\fI$name\fP={\fI$equation\fP}', requires -add\&.
+.TP
+-get
+Get parameter value, requires pname argument\&.
 .TP
 -nocheck
-Parameter is of class \fI::SpiceGenTcl::ParameterNoCheck\fP, optional, forbids other switches\&.
+Normal parameter without check, requires -add\&.
+.TP
+-node
+Node parameter, requires -add\&.
+.TP
+-nodeeq
+Node parameter equation, requires -add\&.
 .TP
 -pos
-Parameter is of class \fI::SpiceGenTcl::ParameterPositional\fP, optional, forbids other switches\&.
+Parameter has strict position and only '\fI$Value\fP' is displayed in netlist, requires -add\&.
 .TP
 -poseq
-Parameter is of class \fI::SpiceGenTcl::ParameterPositionalEquation\fP, optional, forbids other switches\&.
+Combination of both flags, print only, requires -add\&.
 .TP
 -posnocheck
-Parameter is of class \fI::SpiceGenTcl::ParameterPositionalNoCheck\fP, optional, forbids other switches\&.
+Positional parameter without check, requires -add\&.
+.TP
+-set
+Set (or change) value of particular parameters, requires pname and value arguments\&.
+.TP
+-sw
+Switch parameter, requires -add\&.
+.TP
+arguments
+Optional pairs of name-value for -set action, requires -set\&.
 .TP
 pname
 Name of parameter\&.
 .TP
 value
 Value of parameter\&.
-.RE
-.PP
-.RS -4n
-\fBdeleteParam\fR (::SpiceGenTcl::Model)
-.RE
-.PP
-Deletes existing Parameter object from list Params\&.
-.RS 4n\fBOBJECT deleteParam\fP \fIpname\fP
-.br
-.RE
-.PP
-\fBParameters\fR
-.RS 4n
-.TP
-pname
-Name of parameter that shhould be deleted\&.
 .RE
 .PP
 .RS -4n
@@ -1948,41 +1909,6 @@ Creates model string for SPICE netlist\&.
 \fBReturn value\fR
 .PP
 SPICE netlist's string
-.PP
-.RS -4n
-\fBgetParams\fR (::SpiceGenTcl::Model)
-.RE
-.PP
-Gets the dictionary that contains parameter name as keys and parameter values as the values\&.
-.RS 4n\fBOBJECT getParams\fP
-.br
-.RE
-.PP
-\fBReturn value\fR
-.PP
-parameters dictionary
-.PP
-.RS -4n
-\fBsetParamValue\fR (::SpiceGenTcl::Model)
-.RE
-.PP
-Sets (or change) value of particular parameters\&.
-.RS 4n\fBOBJECT setParamValue\fP \fIname value ?name value \&.\&.\&.?\fP
-.br
-.RE
-.PP
-\fBParameters\fR
-.RS 4n
-.TP
-arguments
-Optional pairs of name-value\&.
-.TP
-pname
-Name of the parameter\&.
-.TP
-value
-Value of the parameter\&.
-.RE
 .PP
 .RS -4n
 \fBNetlist\fR (::SpiceGenTcl)
@@ -2104,8 +2030,12 @@ SPICE netlist's string
 .RE
 .PP
 Gets names of all elements in netlist\&.
-.RS 4n\fBOBJECT getAllElemNames\fP
+.RS 4n\fBOBJECT getAllElemNames\fP \fI?args?\fP
 .br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
 .RE
 .PP
 \fBReturn value\fR
@@ -2135,23 +2065,14 @@ Name of element\&.
 \fBMethod summary\fR
 .RS 4n
 .TP
-addParam
-See \fIIc\&.addParam\fP
+actOnParam
+See \fIIc\&.actOnParam\fP
 .TP
 configure
 Configure properties\&.
 .TP
-deleteParam
-See \fIIc\&.deleteParam\fP
-.TP
 genSPICEString
 Creates nodeset statement string for SPICE netlist\&.
-.TP
-getParams
-See \fIIc\&.getParams\fP
-.TP
-setParamValue
-See \fIIc\&.setParamValue\fP
 .RE
 .PP
 \fBProperties\fR
@@ -2191,23 +2112,14 @@ SPICE netlist's string
 constructor
 Constructor for the class\&.
 .TP
-addParam
-Creates new parameter object and add it to the list Params\&.
+actOnParam
+Acts on Parameter object with selected action\&.
 .TP
 configure
 Configure properties\&.
 .TP
-deleteParam
-Deletes existing Parameter object from list Params\&.
-.TP
 genSPICEString
 Creates options string for SPICE netlist\&.
-.TP
-getParams
-Gets the dictionary that contains parameter name as keys and parameter values as the values\&.
-.TP
-setParamValue
-Sets (or change) value of particular parameters\&.
 .RE
 .PP
 \fBProperties\fR
@@ -2252,41 +2164,72 @@ List of instance parameters in form {{name value ?-sw?} {name value ?-sw?} {name
 This class represent \&.options statement\&.
 .PP
 .RS -4n
-\fBaddParam\fR (::SpiceGenTcl::Options)
+\fBactOnParam\fR (::SpiceGenTcl::Options)
 .RE
 .PP
-Creates new parameter object and add it to the list Params\&.
-.RS 4n\fBOBJECT addParam\fP \fIpname value ?-eq?\fP
+Acts on Parameter object with selected action
+.RS 4n\fBOBJECT actOnParam\fP \fI-add ?-pos|eq|poseq|posnocheck|nocheck|sw|node|nodeeq? name value\fP
+.br
+\fBOBJECT actOnParam\fP \fI-set name value ?name value \&.\&.\&.?\fP
+.br
+\fBOBJECT actOnParam\fP \fI-get name\fP
+.br
+\fBOBJECT actOnParam\fP \fI-get -all\fP
+.br
+\fBOBJECT actOnParam\fP \fI-delete name\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
+-add
+Add new parameter to the device, requires pname argument\&.
+.TP
+-all
+Option for getting the dictionary that contains parameters names as keys and parameters values #    as the dictionary values, requires -get\&.
+.TP
+-delete
+Delete existing parameter\&.
+.TP
 -eq
-Parameter qualificator defining parameter value as equation\&.
+Parameter may contain equation in terms of functions and other parameters, printed as '\fI$name\fP={\fI$equation\fP}', requires -add\&.
+.TP
+-get
+Get parameter value, requires pname argument\&.
+.TP
+-nocheck
+Normal parameter without check, requires -add\&.
+.TP
+-node
+Node parameter, requires -add\&.
+.TP
+-nodeeq
+Node parameter equation, requires -add\&.
+.TP
+-pos
+Parameter has strict position and only '\fI$Value\fP' is displayed in netlist, requires -add\&.
+.TP
+-poseq
+Combination of both flags, print only, requires -add\&.
+.TP
+-posnocheck
+Positional parameter without check, requires -add\&.
+.TP
+-set
+Set (or change) value of particular parameters, requires pname and value arguments\&.
+.TP
+-sw
+Switch parameter, requires -add\&.
+.TP
+arguments
+Optional pairs of name-value for -set action, requires -set\&.
 .TP
 pname
 Name of parameter\&.
 .TP
 value
-Value of parameter, could be equal to -sw\&.
-.RE
-.PP
-.RS -4n
-\fBdeleteParam\fR (::SpiceGenTcl::Options)
-.RE
-.PP
-Deletes existing Parameter object from list Params\&.
-.RS 4n\fBOBJECT deleteParam\fP \fIpname\fP
-.br
-.RE
-.PP
-\fBParameters\fR
-.RS 4n
-.TP
-pname
-Name of parameter that shhould be deleted\&.
+Value of parameter\&.
 .RE
 .PP
 .RS -4n
@@ -2301,42 +2244,6 @@ Creates options string for SPICE netlist\&.
 \fBReturn value\fR
 .PP
 SPICE netlist's string
-.PP
-.RS -4n
-\fBgetParams\fR (::SpiceGenTcl::Options)
-.RE
-.PP
-Gets the dictionary that contains parameter name as keys and
-parameter values as the values\&.
-.RS 4n\fBOBJECT getParams\fP
-.br
-.RE
-.PP
-\fBReturn value\fR
-.PP
-parameters dictionary
-.PP
-.RS -4n
-\fBsetParamValue\fR (::SpiceGenTcl::Options)
-.RE
-.PP
-Sets (or change) value of particular parameters\&.
-.RS 4n\fBOBJECT setParamValue\fP \fIname value ?name value \&.\&.\&.?\fP
-.br
-.RE
-.PP
-\fBParameters\fR
-.RS 4n
-.TP
-arguments
-Optional pairs of name-value\&.
-.TP
-pname
-Name of the parameter\&.
-.TP
-value
-Value of the parameter\&.
-.RE
 .PP
 .RS -4n
 \fBParameter\fR (::SpiceGenTcl)
@@ -2474,8 +2381,12 @@ value by special method resetValue\&.
 .RE
 .PP
 Resets value of the parameter to it's default value\&.
-.RS 4n\fBOBJECT resetValue\fP
+.RS 4n\fBOBJECT resetValue\fP \fI?args?\fP
 .br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
 .RE
 .PP
 .RS -4n
@@ -2948,9 +2859,9 @@ Creates string for SPICE netlist\&.
 .PP
 \fBProperties\fR
 .PP
-Readable: -name
+Readable: -name, -value
 .PP
-Writable: -name
+Writable: -name, -value
 .PP
 \fBSuperclasses\fR
 .PP
@@ -3014,9 +2925,9 @@ See \fIParameterSwitch\&.genSPICEString\fP
 .PP
 \fBProperties\fR
 .PP
-Readable: -name
+Readable: -name, -value
 .PP
-Writable: -name
+Writable: -name, -value
 .PP
 \fBSuperclasses\fR
 .PP
@@ -3032,23 +2943,14 @@ Writable: -name
 constructor
 Constructor for the class\&.
 .TP
-addParam
-Adds new Parameter object to the list Params\&.
+actOnParam
+Acts on Parameter object with selected action\&.
 .TP
 configure
 Configure properties\&.
 .TP
-deleteParam
-Deletes existing Parameter object from list Params\&.
-.TP
 genSPICEString
 Creates parameter statement string for SPICE netlist\&.
-.TP
-getParams
-Gets the dictionary that contains parameter name as keys and parameter values as the values\&.
-.TP
-setParamValue
-Sets (or change) value of particular parameters\&.
 .RE
 .PP
 \fBProperties\fR
@@ -3089,41 +2991,72 @@ List of instance parameters in form {{name value ?-eq?} {name value ?-eq?} \&.\&
 Class represent \&.param statement\&.
 .PP
 .RS -4n
-\fBaddParam\fR (::SpiceGenTcl::ParamStatement)
+\fBactOnParam\fR (::SpiceGenTcl::ParamStatement)
 .RE
 .PP
-Adds new Parameter object to the list Params\&.
-.RS 4n\fBOBJECT addParam\fP \fIpname value ?-eq?\fP
+Acts on Parameter object with selected action
+.RS 4n\fBOBJECT actOnParam\fP \fI-add ?-pos|eq|poseq|posnocheck|nocheck|sw|node|nodeeq? name value\fP
+.br
+\fBOBJECT actOnParam\fP \fI-set name value ?name value \&.\&.\&.?\fP
+.br
+\fBOBJECT actOnParam\fP \fI-get name\fP
+.br
+\fBOBJECT actOnParam\fP \fI-get -all\fP
+.br
+\fBOBJECT actOnParam\fP \fI-delete name\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
+-add
+Add new parameter to the device, requires pname argument\&.
+.TP
+-all
+Option for getting the dictionary that contains parameters names as keys and parameters values #    as the dictionary values, requires -get\&.
+.TP
+-delete
+Delete existing parameter\&.
+.TP
 -eq
-Optional parameter qualificator\&.
+Parameter may contain equation in terms of functions and other parameters, printed as '\fI$name\fP={\fI$equation\fP}', requires -add\&.
+.TP
+-get
+Get parameter value, requires pname argument\&.
+.TP
+-nocheck
+Normal parameter without check, requires -add\&.
+.TP
+-node
+Node parameter, requires -add\&.
+.TP
+-nodeeq
+Node parameter equation, requires -add\&.
+.TP
+-pos
+Parameter has strict position and only '\fI$Value\fP' is displayed in netlist, requires -add\&.
+.TP
+-poseq
+Combination of both flags, print only, requires -add\&.
+.TP
+-posnocheck
+Positional parameter without check, requires -add\&.
+.TP
+-set
+Set (or change) value of particular parameters, requires pname and value arguments\&.
+.TP
+-sw
+Switch parameter, requires -add\&.
+.TP
+arguments
+Optional pairs of name-value for -set action, requires -set\&.
 .TP
 pname
 Name of parameter\&.
 .TP
 value
 Value of parameter\&.
-.RE
-.PP
-.RS -4n
-\fBdeleteParam\fR (::SpiceGenTcl::ParamStatement)
-.RE
-.PP
-Deletes existing Parameter object from list Params\&.
-.RS 4n\fBOBJECT deleteParam\fP \fIpname\fP
-.br
-.RE
-.PP
-\fBParameters\fR
-.RS 4n
-.TP
-pname
-Name of parameter that shhould be deleted\&.
 .RE
 .PP
 .RS -4n
@@ -3138,41 +3071,6 @@ Creates parameter statement string for SPICE netlist\&.
 \fBReturn value\fR
 .PP
 SPICE netlist's string
-.PP
-.RS -4n
-\fBgetParams\fR (::SpiceGenTcl::ParamStatement)
-.RE
-.PP
-Gets the dictionary that contains parameter name as keys and parameter values as the values\&.
-.RS 4n\fBOBJECT getParams\fP
-.br
-.RE
-.PP
-\fBReturn value\fR
-.PP
-parameters dictionary
-.PP
-.RS -4n
-\fBsetParamValue\fR (::SpiceGenTcl::ParamStatement)
-.RE
-.PP
-Sets (or change) value of particular parameters\&.
-.RS 4n\fBOBJECT setParamValue\fP \fIname value ?name value \&.\&.\&.?\fP
-.br
-.RE
-.PP
-\fBParameters\fR
-.RS 4n
-.TP
-arguments
-Optional pairs of name-value\&.
-.TP
-pname
-Name of the parameter\&.
-.TP
-value
-Value of the parameter\&.
-.RE
 .PP
 .RS -4n
 \fBParser\fR (::SpiceGenTcl)
@@ -3199,9 +3097,9 @@ Not documented\&.
 .PP
 \fBProperties\fR
 .PP
-Readable: -definitions, -filepath, -parsername, -topnetlist
+Readable: -definitions, -filepath, -name, -topnetlist
 .PP
-Writable: -definitions, -filepath, -parsername, -topnetlist
+Writable: -definitions, -filepath, -name, -topnetlist
 .PP
 \fBSubclasses\fR
 .PP
@@ -3288,14 +3186,14 @@ genSPICEString
 Creates string for SPICE netlist\&.
 .TP
 unsetNodeName
-Makes pin floating by setting nodename with empty string\&.
+Makes pin floating by setting name of the node to empty string\&.
 .RE
 .PP
 \fBProperties\fR
 .PP
-Readable: -name, -nodename
+Readable: -name, -node
 .PP
-Writable: -name, -nodename
+Writable: -name, -node
 .PP
 \fBSuperclasses\fR
 .PP
@@ -3337,8 +3235,12 @@ do so\&. Set pin name empty by special method unsetNodeName\&.
 .RE
 .PP
 Determines if pin is connected to the node\&.
-.RS 4n\fBOBJECT checkFloating\fP
+.RS 4n\fBOBJECT checkFloating\fP \fI?args?\fP
 .br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
 .RE
 .PP
 \fBReturn value\fR
@@ -3362,9 +3264,13 @@ SPICE netlist's string
 \fBunsetNodeName\fR (::SpiceGenTcl::Pin)
 .RE
 .PP
-Makes pin floating by setting nodename with empty string\&.
-.RS 4n\fBOBJECT unsetNodeName\fP
+Makes pin floating by setting name of the node to empty string\&.
+.RS 4n\fBOBJECT unsetNodeName\fP \fI?args?\fP
 .br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
 .RE
 .PP
 .RS -4n
@@ -3462,8 +3368,12 @@ List of traces that will be readed, default value is *, that means reading all t
 .RE
 .PP
 Returns list that contains names of all current variables
-.RS 4n\fBOBJECT getCurrentsNames\fP
+.RS 4n\fBOBJECT getCurrentsNames\fP \fI?args?\fP
 .br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
 .RE
 .PP
 \fBReturn value\fR
@@ -3521,8 +3431,12 @@ Returns string with csv formatting containing all data
 .RE
 .PP
 Returns dictionary that contains all data in value and name as a key
-.RS 4n\fBOBJECT getTracesData\fP
+.RS 4n\fBOBJECT getTracesData\fP \fI?args?\fP
 .br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
 .RE
 .PP
 \fBReturn value\fR
@@ -3534,8 +3448,12 @@ Returns dictionary that contains all data in value and name as a key
 .RE
 .PP
 Returns information about all Traces in raw file in form of string
-.RS 4n\fBOBJECT getTracesStr\fP
+.RS 4n\fBOBJECT getTracesStr\fP \fI?args?\fP
 .br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
 .RE
 .PP
 \fBReturn value\fR
@@ -3547,8 +3465,12 @@ Returns information about all Traces in raw file in form of string
 .RE
 .PP
 Returns list that contains names of all variables
-.RS 4n\fBOBJECT getVariablesNames\fP
+.RS 4n\fBOBJECT getVariablesNames\fP \fI?args?\fP
 .br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
 .RE
 .PP
 \fBReturn value\fR
@@ -3560,8 +3482,12 @@ Returns list that contains names of all variables
 .RE
 .PP
 Returns list that contains names of all voltage variables
-.RS 4n\fBOBJECT getVoltagesNames\fP
+.RS 4n\fBOBJECT getVoltagesNames\fP \fI?args?\fP
 .br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
 .RE
 .PP
 \fBReturn value\fR
@@ -3761,8 +3687,12 @@ SPICE netlist's string
 .RE
 .PP
 Gets the dictionary of vector names
-.RS 4n\fBOBJECT getVectors\fP
+.RS 4n\fBOBJECT getVectors\fP \fI?args?\fP
 .br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
 .RE
 .PP
 \fBReturn value\fR
@@ -3881,23 +3811,20 @@ abstraction class\&.
 constructor
 Constructor for the class\&.
 .TP
+actOnParam
+Acts on Parameter object with selected action\&.
+.TP
+actOnPin
+Acts on Pin object with selected action\&.
+.TP
 add
 Add elements objects references to Subcircuit, it extends add method to add check of element class because subcircuit can't contain particular elements inside, like \fI::SpiceGenTcl::Include\fP, \fI::SpiceGenTcl::Library\fP, \fI::SpiceGenTcl::Options\fP and \fI::SpiceGenTcl::Analysis\fP\&.
-.TP
-addParam
-Adds new parameter to subcircuit, and throws error on dublicated names\&.
-.TP
-addPin
-Adds new Pin object to the dictionary of Pins\&.
 .TP
 configure
 Configure properties\&.
 .TP
 del
 See \fINetlist\&.del\fP
-.TP
-deleteParam
-Deletes existing Parameter object from list Params\&.
 .TP
 genSPICEString
 Creates subcircuit string for SPICE subcircuit\&.
@@ -3907,15 +3834,6 @@ See \fINetlist\&.getAllElemNames\fP
 .TP
 getElement
 See \fINetlist\&.getElement\fP
-.TP
-getParams
-Gets the dictionary that contains parameter name as keys and parameter values as the values\&.
-.TP
-getPins
-Gets the dictionary that contains pin name as keys and connected node name as the values\&.
-.TP
-setParamValue
-Sets (or change) value of particular parameters\&.
 .RE
 .PP
 \fBProperties\fR
@@ -3958,6 +3876,112 @@ This class implements subcircuit, it is subclass of netlist because it holds lis
 inside subcircuit, together with header and connection of elements inside\&.
 .PP
 .RS -4n
+\fBactOnParam\fR (::SpiceGenTcl::Subcircuit)
+.RE
+.PP
+Acts on Parameter object with selected action
+.RS 4n\fBOBJECT actOnParam\fP \fI-add ?-pos|eq|poseq|posnocheck|nocheck|sw|node|nodeeq? name value\fP
+.br
+\fBOBJECT actOnParam\fP \fI-set name value ?name value \&.\&.\&.?\fP
+.br
+\fBOBJECT actOnParam\fP \fI-get name\fP
+.br
+\fBOBJECT actOnParam\fP \fI-get -all\fP
+.br
+\fBOBJECT actOnParam\fP \fI-delete name\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+-add
+Add new parameter to the device, requires pname argument\&.
+.TP
+-all
+Option for getting the dictionary that contains parameters names as keys and parameters values #    as the dictionary values, requires -get\&.
+.TP
+-delete
+Delete existing parameter\&.
+.TP
+-eq
+Parameter may contain equation in terms of functions and other parameters, printed as '\fI$name\fP={\fI$equation\fP}', requires -add\&.
+.TP
+-get
+Get parameter value, requires pname argument\&.
+.TP
+-nocheck
+Normal parameter without check, requires -add\&.
+.TP
+-node
+Node parameter, requires -add\&.
+.TP
+-nodeeq
+Node parameter equation, requires -add\&.
+.TP
+-pos
+Parameter has strict position and only '\fI$Value\fP' is displayed in netlist, requires -add\&.
+.TP
+-poseq
+Combination of both flags, print only, requires -add\&.
+.TP
+-posnocheck
+Positional parameter without check, requires -add\&.
+.TP
+-set
+Set (or change) value of particular parameters, requires pname and value arguments\&.
+.TP
+-sw
+Switch parameter, requires -add\&.
+.TP
+arguments
+Optional pairs of name-value for -set action, requires -set\&.
+.TP
+pname
+Name of parameter\&.
+.TP
+value
+Value of parameter\&.
+.RE
+.PP
+.RS -4n
+\fBactOnPin\fR (::SpiceGenTcl::Subcircuit)
+.RE
+.PP
+Acts on Pin object with selected action
+.RS 4n\fBOBJECT actOnPin\fP \fI-add pin node\fP
+.br
+\fBOBJECT actOnPin\fP \fI-set pin node\fP
+.br
+\fBOBJECT actOnPin\fP \fI-get pin\fP
+.br
+\fBOBJECT actOnPin\fP \fI-get -all\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+-add
+Add new pin to the device, requires pin and node arguments\&.
+.TP
+-all
+Option for getting the dictionary that contains pin name as keys and connected node name as the values, requires -get\&.
+.TP
+-get
+Get node name connected to pin, requires pin argument\&.
+.TP
+-set
+Set node name connected to pin, requires pin and node arguments\&.
+.TP
+node
+Name of the node connected to pin\&.
+.TP
+pin
+Name of the pin\&.
+.RE
+.PP
+.RS -4n
 \fBadd\fR (::SpiceGenTcl::Subcircuit)
 .RE
 .PP
@@ -3976,60 +4000,6 @@ Elements objects references\&.
 .RE
 .PP
 .RS -4n
-\fBaddParam\fR (::SpiceGenTcl::Subcircuit)
-.RE
-.PP
-Adds new parameter to subcircuit, and throws error on dublicated names\&.
-.RS 4n\fBOBJECT addParam\fP \fIpname value\fP
-.br
-.RE
-.PP
-\fBParameters\fR
-.RS 4n
-.TP
-paramName
-Name of parameter\&.
-.TP
-value
-Value of parameter\&.
-.RE
-.PP
-.RS -4n
-\fBaddPin\fR (::SpiceGenTcl::Subcircuit)
-.RE
-.PP
-Adds new Pin object to the dictionary of Pins\&.
-.RS 4n\fBOBJECT addPin\fP \fIpin node\fP
-.br
-.RE
-.PP
-\fBParameters\fR
-.RS 4n
-.TP
-node
-Name of the node connected to pin\&.
-.TP
-pin
-Name of the pin\&.
-.RE
-.PP
-.RS -4n
-\fBdeleteParam\fR (::SpiceGenTcl::Subcircuit)
-.RE
-.PP
-Deletes existing Parameter object from list Params\&.
-.RS 4n\fBOBJECT deleteParam\fP \fIpname\fP
-.br
-.RE
-.PP
-\fBParameters\fR
-.RS 4n
-.TP
-pname
-Name of parameter that shhould be deleted\&.
-.RE
-.PP
-.RS -4n
 \fBgenSPICEString\fR (::SpiceGenTcl::Subcircuit)
 .RE
 .PP
@@ -4041,55 +4011,6 @@ Creates subcircuit string for SPICE subcircuit\&.
 \fBReturn value\fR
 .PP
 SPICE netlist's string
-.PP
-.RS -4n
-\fBgetParams\fR (::SpiceGenTcl::Subcircuit)
-.RE
-.PP
-Gets the dictionary that contains parameter name as keys and parameter values as the values\&.
-.RS 4n\fBOBJECT getParams\fP
-.br
-.RE
-.PP
-\fBReturn value\fR
-.PP
-parameters dictionary
-.PP
-.RS -4n
-\fBgetPins\fR (::SpiceGenTcl::Subcircuit)
-.RE
-.PP
-Gets the dictionary that contains pin name as keys and
-connected node name as the values\&.
-.RS 4n\fBOBJECT getPins\fP
-.br
-.RE
-.PP
-\fBReturn value\fR
-.PP
-parameters dictionary
-.PP
-.RS -4n
-\fBsetParamValue\fR (::SpiceGenTcl::Subcircuit)
-.RE
-.PP
-Sets (or change) value of particular parameters\&.
-.RS 4n\fBOBJECT setParamValue\fP \fIname value ?name value \&.\&.\&.?\fP
-.br
-.RE
-.PP
-\fBParameters\fR
-.RS 4n
-.TP
-arguments
-Optional pairs of name-value\&.
-.TP
-pname
-Name of the parameter\&.
-.TP
-value
-Value of the parameter\&.
-.RE
 .PP
 .RS -4n
 \fBTemp\fR (::SpiceGenTcl)
@@ -4213,7 +4134,7 @@ Total number of points\&.
 name
 Name of the trace\&.
 .TP
-numType
+numtype
 Numerical type of trace\&.
 .TP
 type

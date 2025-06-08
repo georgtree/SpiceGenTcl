@@ -19,10 +19,14 @@ oo::class create Core {
             {p -help {Name of node connected to positive pin}}
             {n -help {Name of node connected to negative pin}}
         }]
-        lappend params [list model [dget $arguments model] -posnocheck]
+        lappend params [list -posnocheck model [dget $arguments model]]
         dict for {paramName value} $arguments {
             if {$paramName ni {model name p n}} {
-                lappend params [list $paramName $value]
+                if {[@ $value 0] eq {-eq}} {
+                    lappend params [list -eq $paramName [@ $value 1]]
+                } else {
+                    lappend params [list $paramName $value]
+                }
             }
         }
         next n[dget $arguments name] [list [list p [dget $arguments p]] [list n [dget $arguments n]]] $params
@@ -47,10 +51,14 @@ oo::class create Gap {
             {p -help {Name of node connected to positive pin}}
             {n -help {Name of node connected to negative pin}}
         }]
-        lappend params [list model [dget $arguments model] -posnocheck]
+        lappend params [list -posnocheck model [dget $arguments model]]
         dict for {paramName value} $arguments {
             if {$paramName ni {model name p n}} {
-                lappend params [list $paramName $value]
+                if {[@ $value 0] eq {-eq}} {
+                    lappend params [list -eq $paramName [@ $value 1]]
+                } else {
+                    lappend params [list $paramName $value]
+                }
             }
         }
         next n[dget $arguments name] [list [list p [dget $arguments p]] [list n [dget $arguments n]]] $params
@@ -79,10 +87,14 @@ oo::class create Winding {
             {m1 -help {Name of node connected to first magnetic pin}}
             {m2 -help {Name of node connected to second magnetic pin}}
         }]
-        lappend params [list model [dget $arguments model] -posnocheck]
+        lappend params [list -posnocheck model [dget $arguments model]]
         dict for {paramName value} $arguments {
             if {$paramName ni {model name e1 e2 m1 m2}} {
-                lappend params [list $paramName $value]
+                if {[@ $value 0] eq {-eq}} {
+                    lappend params [list -eq $paramName [@ $value 1]]
+                } else {
+                    lappend params [list $paramName $value]
+                }
             }
         }
         next n[dget $arguments name] [list [list e1 [dget $arguments e1]] [list e2 [dget $arguments e2]]\

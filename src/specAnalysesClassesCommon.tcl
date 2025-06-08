@@ -38,7 +38,7 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::Analyses::Dc new -src v1 -start {time1 -eq} -stop 5 -incr 0.1 -name dc1
+            # ::SpiceGenTcl::Common::Analyses::Dc new -src v1 -start {-eq time1} -stop 5 -incr 0.1 -name dc1
             # ```
             # Synopsis: -src value -start value -stop value -incr value ?-name value?
             set arguments [argparse -inline -help {Creates object of class `Dc` that describes DC analysis} {

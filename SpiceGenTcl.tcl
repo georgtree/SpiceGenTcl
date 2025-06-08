@@ -21,7 +21,7 @@ package require struct::list
 package require csv
 namespace import ::tcl::mathop::*
 
-package provide SpiceGenTcl 0.70
+package provide SpiceGenTcl 0.71
 
 set dir [file dirname [file normalize [info script]]]
 set libDir [file join $dir lib]

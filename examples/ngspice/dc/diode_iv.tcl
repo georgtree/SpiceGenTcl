@@ -16,7 +16,7 @@ set tempSt [Temp new 25]
 $circuit add $tempSt
 # add temperature sweep
 set temps [list -55 25 85 125 175]
-#set simulator with default 
+#set simulator with default
 set simulator [Batch new {batch1}]
 # attach simulator object to circuit
 $circuit configure -simulator $simulator

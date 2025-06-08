@@ -12,7 +12,7 @@ $circuit add [D new 1 anode 0 -model diomod -area 1]
 $circuit add [Vdc new a anode 0 -dc 0]
 $circuit add [DiodeModel new diomod -is 1e-12 -n 1.2 -rs 0.01 -cj0 1e-9 -trs1 0.001 -xti 5]
 $circuit add [Dc new -src va -start 0 -stop 2 -incr 0.01]
-set tempSt [Options new {{device -sw} {temp 25}}]
+set tempSt [Options new {{-sw device} {temp 25}}]
 $circuit add $tempSt
 # add temperature sweep
 set temps [list -55 25 85 125 175]
@@ -22,7 +22,7 @@ set simulator [Batch new {batch1}]
 $circuit configure -simulator $simulator
 # run circuit, change temperature, read log and data
 foreach temp $temps {
-    $tempSt setParamValue temp $temp
+    $tempSt actOnParam -set temp $temp
     $circuit runAndRead
     puts [$circuit configure -log]
     set data [$circuit getDataDict]

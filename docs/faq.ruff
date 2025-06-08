@@ -45,23 +45,23 @@ namespace eval FAQ {
         ## How to change parameter of existing element?
         
         For all elements with parameters you can change parameter value by its name with method
-        [::SpiceGenTcl::Device::setParamValue].
+        [::SpiceGenTcl::Device::actOnParam] with selected action `-set`.
         
         For example here we change the resistance value of basic resistor:
         ```tcl
-        $resistor setParamValue r 100
+        $resistor actOnParam -set r 100
         ```
         
         The name of the parameter can be found in the documentation
         [here]([::SpiceGenTcl::Ngspice::BasicDevices::Resistor]).
         In the parameter table, the option for resistance is labeled `-r`, so the name used for resistance is 'r'. 
         
-        Another option is to call the [::SpiceGenTcl::Device::getParams] method, which returns a list of all parameters
-        with their values. For example:
+        Another option is to call the [::SpiceGenTcl::Device::actOnParam] method, with action `-get` and option `-all`
+        which define returning a dictionary of all parameters with their values. For example:
         ```tcl
         # create resistor
         set resistor [R new 1 net1 net2 -r 10]
-        puts [$resistor getParams]
+        puts [$resistor actOnParam -get -all]
         ```
         
         It returns:
@@ -78,11 +78,11 @@ namespace eval FAQ {
         ## How to change node name connected to pin of existing element?
         
         For all elements with pins, you can change the connected node's name by using the pin name with the method
-        [::SpiceGenTcl::Device::setPinNodeName].
+        [::SpiceGenTcl::Device::actOnPin] with option `-set`.
         
         For example, here we change the node name of the basic resistor's positive pin:
         ```tcl
-        $resistor setPinNodeName np net10
+        $resistor actOnPin -set np net10
         ```
         
         The pin name can be found in the documentation [here]([::SpiceGenTcl::Ngspice::BasicDevices::Resistor]).
@@ -90,12 +90,12 @@ namespace eval FAQ {
         negative pins are 'np' and 'nm', respectively. This `pin_nameNode` convention applies to all elements in the
         package.
         
-        Another option is to call the [::SpiceGenTcl::Device::getPins] method, which returns a list of all pins with
-        their connected node names. For example:
+        Another option is to call the [::SpiceGenTcl::Device::actOnPin] method, with action `-get` and option `-all`
+        which define returning a dictionary of all pins with their connected node names. For example:
         ```tcl
         # create resistor
         set resistor [R new 1 net1 net2 -r 10]
-        puts [$resistor getPins]
+        puts [$resistor actOnPin -get -all]
         ```
         
         It returns:
