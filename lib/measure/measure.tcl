@@ -1,4 +1,4 @@
-package require argparse 0.52
+package require argparse 0.58
 package require extexpr
 package provide measure 0.1
 
@@ -46,7 +46,7 @@ proc ::measure::FromTo {argsDict data xname} {
 }
 
 proc ::measure::measure {args} {
-    # Does different measurements of inpu data lists.
+    # Does different measurements of input data lists.
     #  -xname - name of x list in data dictionary. This list must be strictly increaing without duplicate elements.
     #  -data - dictionary that contains lists with names as the keys and lists as the values.
     #  -trig - contains conditions for trigger (see below), selects Trigger-Target measurement, requires -targ
@@ -177,7 +177,7 @@ proc ::measure::measure {args} {
     # ::measure::measure -xname x -data [dcreate x $x y1 $y1 y2 $y2] -deriv y1 -at 5
     # ```
     # Synopsis: -xname value -data value -deriv value -at value
-    #  ###### **Min|Max|PP|MinAt|MaxAt|Between**
+    #  ###### **Avg|Rms|Min|Max|PP|MinAt|MaxAt|Between**
     #  This mode is combination of many modes with the same interface.
     #   -vec - name of vector in data dictionary
     #   -from - start of the range in which search happens, default is minimum value of x.
@@ -201,24 +201,29 @@ proc ::measure::measure {args} {
     # ```
     # Synopsis: -xname value -data value -integ \{-vec value ?-td value? ?-from value? ?-to value? ?-cum?\}
     set keysList {trig targ find when at integ deriv avg min max pp rms minat maxat between}
-    argparse {
-        {-xname= -required}
-        {-data= -required}
-        {-trig= -require targ -allow {data xname targ}}
-        {-targ= -require trig -allow {data xname trig}}
-        {-find= -allow {data xname when at}}
-        {-when= -allow {data xname find deriv}}
-        {-at= -type double -allow {data xname find deriv}}
-        {-integ= -allow {data xname}}
-        {-deriv= -allow {data xname deriv when at}}
-        {-avg= -allow {data xname}}
-        {-min= -allow {data xname}}
-        {-max= -allow {data xname}}
-        {-pp= -allow {data xname}}
-        {-rms= -allow {data xname}}
-        {-minat= -allow {data xname}}
-        {-maxat= -allow {data xname}}
-        {-between= -allow {data xname}}
+    argparse -help {Does different measurements of input data lists. This procedure imitates the .meas command from\
+                            SPICE3 and Ngspice in particular. It has mutiple modes, and each mod could have different\
+                            forms: Trigger-Target, Find-When, Deriv-When, Find-At, Deriv-At,\
+                            Avg|Rms|Min|Max|PP|MinAt|MaxAt|Between and Integ. See documentation for further details} {
+        {-xname= -required -help {Name of x list in data dictionary. This list must be strictly increaing without\
+                                          duplicate elements}}
+        {-data= -required -help {Dictionary that contains lists with names as the keys and lists as the values}}
+        {-trig= -require targ -allow {data xname targ} -help {Conditions for trigger, selects Trigger-Target\
+                                                                      measurement}}
+        {-targ= -require trig -allow {data xname trig}  -help {Conditions for target}}
+        {-find= -allow {data xname when at} -help {Conditions for Find-When or Find-At mode}}
+        {-when= -allow {data xname find deriv} -help {Conditions for Find-When or Deriv-When modes}}
+        {-at= -type double -allow {data xname find deriv} -help {Time for Find-At or Deriv-At modes}}
+        {-integ= -allow {data xname} -help {Conditions for Integ mode}}
+        {-deriv= -allow {data xname deriv when at} -help {Conditions for Deriv-At mode}}
+        {-avg= -allow {data xname} -help {Conditions for finding average value across the interval}}
+        {-min= -allow {data xname} -help {Conditions for finding minimum value in the interval}}
+        {-max= -allow {data xname} -help {Conditions for finding maximum value in the interval}}
+        {-pp= -allow {data xname} -help {Conditions for finding peak to peak value in the interval}}
+        {-rms= -allow {data xname} -help {Conditions for finding root meas square value across the interval}}
+        {-minat= -allow {data xname} -help {Conditions for finding time of minimum value in the interval}}
+        {-maxat= -allow {data xname} -help {Conditions for finding time of maximum value in the interval}}
+        {-between= -allow {data xname} -help {Conditions for fetching data in the interval}}
     }
     if {[info exists at]} {
         if {![info exists find] && ![info exists deriv]} {
