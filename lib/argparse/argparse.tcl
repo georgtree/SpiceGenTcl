@@ -7,7 +7,7 @@
 # See the file "LICENSE" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 package require Tcl 8.6-
-package provide argparse 0.58
+package provide argparse 0.59
 interp alias {} @ {} lindex
 interp alias {} = {} expr
 # argparse --
@@ -397,6 +397,11 @@ proc ::argparse {args} {
                 }
                 return $str
             }}}
+            set 4spaces {    }
+            set 8spaces {        }
+            if {![info exists helplevel]} {
+                set helplevel 2
+            }
             if {$help ne {}} {
                 set providedHelp [adjust $help -length 80].
                 lappend description $providedHelp
@@ -495,39 +500,38 @@ proc ::argparse {args} {
                     } else {
                         set combined -$name
                     }
-                    lappend descriptionSwitches [indent [indent [adjust $combined -length 72] {    } 1] {        }]
+                    lappend descriptionSwitches [indent [indent [adjust $combined -length 72] $4spaces 1] $8spaces]
                 } else {
                     if {[info exists combined]} {
                         set combined "$name - [join $combined { }]"
                     } else {
                         set combined $name
                     }
-                    lappend descriptionParameters [indent [indent [adjust $combined -length 72] {    } 1] {        }]
+                    lappend descriptionParameters [indent [indent [adjust $combined -length 72] $4spaces 1] $8spaces]
                 }
                 unset -nocomplain elementDescr constraints combined
             }
+            lappend descriptionSwitches [indent [indent [adjust "-help - Help switch, when provided, forces ignoring all\
+                    other switches and parameters, prints the help message to stdout, and returns up to $helplevel\
+                    levels above the current level." -length 72] $4spaces 1] $8spaces]
             set description [adjust [join $description] -length 80]
             if {[info exists descriptionSwitches] && [info exists descriptionParameters]} {
                 puts [string totitle [string map {{,;} {;} {,.} {.}}\
-                                              [join [list $description [indent Switches: {    }]\
-                                                             {*}$descriptionSwitches [indent Parameters: {    }]\
+                                              [join [list $description [indent Switches: $4spaces]\
+                                                             {*}$descriptionSwitches [indent Parameters: $4spaces]\
                                                              {*}$descriptionParameters] \n]] 0 1]
             } elseif {[info exists descriptionSwitches]} {
                 puts [string totitle [string map {{,;} {;} {,.} {.}}\
-                                              [join [list $description [indent Switches: {    }]\
+                                              [join [list $description [indent Switches: $4spaces]\
                                                              {*}$descriptionSwitches] \n]] 0 1]
             } elseif {[info exists descriptionParameters]} {
                 puts [string totitle [string map {{,;} {;} {,.} {.}}\
-                                              [join [list $description [indent Parameters: {    }]\
+                                              [join [list $description [indent Parameters: $4spaces]\
                                                              {*}$descriptionParameters] \n]] 0 1]
             } else {
                 puts [string totitle [string map {{,;} {;} {,.} {.}} $providedHelp] 0 1]
             }
-            if {[info exists helplevel]} {
-                return -level $helplevel
-            } else {
-                return -level 2
-            }
+            return -level $helplevel
         }
     }
 ### Handle default pass-through switch by creating a dummy element.
