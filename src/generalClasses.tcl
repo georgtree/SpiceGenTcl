@@ -41,12 +41,6 @@ namespace eval ::SpiceGenTcl {
             namespace import ${nameSpc}::*
         }}
     }
-    proc importLtspice {} {
-        # Imports all ::SpiceGenTcl::Ltspice commands to caller namespace
-        uplevel 1 {foreach nameSpc [namespace children ::SpiceGenTcl::Ltspice] {
-            namespace import ${nameSpc}::*
-        }}
-    }
     proc forgetNgspice {} {
         # Forgets all ::SpiceGenTcl::Ngspice commands from caller namespace
         uplevel 1 {foreach nameSpc [namespace children ::SpiceGenTcl::Ngspice] {
@@ -63,6 +57,12 @@ namespace eval ::SpiceGenTcl {
         # Forgets all ::SpiceGenTcl::Xyce commands from caller namespace
         uplevel 1 {foreach nameSpc [namespace children ::SpiceGenTcl::Xyce] {
             namespace forget ${nameSpc}::*
+        }}
+    }
+    proc importLtspice {} {
+        # Imports all ::SpiceGenTcl::Ltspice commands to caller namespace
+        uplevel 1 {foreach nameSpc [namespace children ::SpiceGenTcl::Ltspice] {
+            namespace import ${nameSpc}::*
         }}
     }
     proc forgetLtspice {} {

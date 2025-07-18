@@ -70,16 +70,27 @@ TCLSH		= $(PKG_ENV) $(TCLSH_PROG)
 CONFIG_CLEAN_FILES = Makefile pkgIndex.tcl
 CLEANFILES	= @CLEANFILES@
 
-
+#========================================================================
+# Top recipes
+#========================================================================
 all: libraries
 
 binaries: $(BINARIES)
 
 libraries:
 
-doc:
-	$(TCLSH) $(srcdir)/docs/doc_gen.tcl
+shell: binaries libraries
+	@$(TCLSH) $(SCRIPT)
 
+#========================================================================
+# Test recipes
+#========================================================================
+test: libraries
+	$(TCLSH) `@CYGPATH@ $(srcdir)/test/all.tcl` $(TESTFLAGS)
+
+#========================================================================
+# Package installing recipes
+#========================================================================
 install: all install-libraries install-doc
 
 install-libraries:
@@ -161,14 +172,15 @@ install-doc:
 	echo "Installing $(srcdir)/docs/assets"; \
 	cp -r $(srcdir)/docs/assets "$(DESTDIR)/usr/local/share/$(PACKAGE_NAME)$(PACKAGE_VERSION)/doc";
 
-test: libraries
-	$(TCLSH) `@CYGPATH@ $(srcdir)/test/all.tcl` $(TESTFLAGS)
+#========================================================================
+# Doc generating recipes
+#========================================================================
+doc:
+	$(TCLSH) $(srcdir)/docs/doc_gen.tcl
 
-shell: binaries libraries
-	@$(TCLSH) $(SCRIPT)
-
-depend:
-
+#========================================================================
+# Distribution creation
+#========================================================================
 COMPRESS	= tar zcvf $(PKG_DIR).tar.gz $(PKG_DIR)
 COMPRESS_ZIP= zip -r $(PKG_DIR).zip $(PKG_DIR)
 DIST_ROOT	= /tmp/dist
@@ -201,6 +213,9 @@ dist: dist-clean
 	cp -r $(srcdir)/examples $(DIST_DIR)
 	(cd $(DIST_ROOT); $(COMPRESS); $(COMPRESS_ZIP))
 
+#========================================================================
+# Cleaning of building files
+#========================================================================
 clean:
 	-test -z "$(BINARIES)" || rm -f $(BINARIES)
 	-rm -f *.$(OBJEXT) core *.core
@@ -211,10 +226,9 @@ distclean: clean
 	-rm -f $(CONFIG_CLEAN_FILES)
 	-rm -f config.cache config.log config.status
 
-Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
-	cd $(top_builddir) \
-	  && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
-
+#========================================================================
+# Uninstall recipes
+#========================================================================
 uninstall-libraries:
 	list='$(PKG_TCL_SOURCES)'; for p in $$list; do \
 	  p=`basename $$p`; \
@@ -224,5 +238,15 @@ uninstall-libraries:
 uninstall:
 	rm -rf "$(DESTDIR)$(pkglibdir)"
 
+#========================================================================
+# Install binary executables
+#========================================================================
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+	  && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+#========================================================================
+# Flag PHONY recipes
+#========================================================================
 .PHONY: all clean depend distclean doc install libraries test
 .NOEXPORT:

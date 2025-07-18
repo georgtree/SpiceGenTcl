@@ -19,6 +19,7 @@ package require textutil::split
 package require struct::tree
 package require struct::list
 package require csv
+package require argparse
 namespace import ::tcl::mathop::*
 
 package provide SpiceGenTcl 0.71
@@ -28,8 +29,6 @@ set libDir [file join $dir lib]
 lappend auto_path $libDir
 set sourceDir [file join $dir src]
 
-source [file join $libDir argparse argparse.tcl]
-source [file join $libDir extexpr extexpr.tcl]
 source [file join $libDir measure measure.tcl]
 source [file join $sourceDir aliases.tcl]
 source [file join $sourceDir generalClasses.tcl]
