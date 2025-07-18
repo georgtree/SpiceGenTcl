@@ -12,6 +12,9 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 
+#========================================================================
+# Makefile variables
+#========================================================================
 PKG_TCL_SOURCES = @PKG_TCL_SOURCES@
 
 SHELL		= @SHELL@
@@ -48,11 +51,8 @@ INSTALL_LIBRARY	= @INSTALL_LIBRARY@
 PACKAGE_NAME	= @PACKAGE_NAME@
 PACKAGE_VERSION	= @PACKAGE_VERSION@
 
-#TCL_DEFS	= @TCL_DEFS@
 TCL_BIN_DIR	= @TCL_BIN_DIR@
 TCL_SRC_DIR	= @TCL_SRC_DIR@
-#TK_BIN_DIR	= @TK_BIN_DIR@
-#TK_SRC_DIR	= @TK_SRC_DIR@
 
 EXTRA_PATH	= $(top_builddir):$(TCL_BIN_DIR)
 TCLLIBPATH	= @TCLLIBPATH@
@@ -62,11 +62,6 @@ PKG_ENV		= PATH="$(EXTRA_PATH):$(PATH)" TCLLIBPATH="$(TCLLIBPATH)"
 TCLSH_PROG	= @TCLSH_PROG@
 TCLSH		= $(PKG_ENV) $(TCLSH_PROG)
 
-#WISH_ENV	= TK_LIBRARY=`@CYGPATH@ $(TK_SRC_DIR)/library`
-#WISH_PROG	= @WISH_PROG@
-#WISH		= $(TCLSH_ENV) $(WISH_ENV) $(PKG_ENV) $(WISH_PROG)
-
-# Move pkgIndex.tcl to 'BINARIES' var if it is generated in the Makefile
 CONFIG_CLEAN_FILES = Makefile pkgIndex.tcl
 CLEANFILES	= @CLEANFILES@
 
