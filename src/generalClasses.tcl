@@ -2381,7 +2381,7 @@ namespace eval ::SpiceGenTcl {
             return [::csv::joinlist $tracesList [dget $arguments sep]]
         }
         method measure {args} {
-            return [::measure::measure -xname [[my configure -axis] configure -name] -data [my getTracesData] {*}$args]
+            return [::tclmeasure::measure -xname [[my configure -axis] configure -name] -data [my getTracesData] {*}$args]
         }
     }
 

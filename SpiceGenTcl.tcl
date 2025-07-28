@@ -20,6 +20,7 @@ package require struct::tree
 package require struct::list
 package require csv
 package require argparse
+package require tclmeasure
 namespace import ::tcl::mathop::*
 
 package provide SpiceGenTcl 0.71
@@ -29,7 +30,6 @@ set libDir [file join $dir lib]
 lappend auto_path $libDir
 set sourceDir [file join $dir src]
 
-source [file join $libDir measure measure.tcl]
 source [file join $sourceDir aliases.tcl]
 source [file join $sourceDir generalClasses.tcl]
 source [file join $sourceDir specElementsClassesCommon.tcl]

@@ -8,7 +8,7 @@ package require math::constants
 namespace import ::math::statistics::*
 ::math::constants::constants radtodeg degtorad pi
 namespace import ::SpiceGenTcl::*
-namespace import ::measure::*
+namespace import ::tclmeasure::*
 importNgspice
 
 proc calcDbMag {re im} {
