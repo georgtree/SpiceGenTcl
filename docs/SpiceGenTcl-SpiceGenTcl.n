@@ -23,6 +23,8 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT constructor\fP \fItype params ?-name value?\fP
 .br
+\fBOBJECT destroy\fP
+.br
 \fBOBJECT actOnParam\fP \fI-add ?-pos|eq|poseq|posnocheck|nocheck|sw|node|nodeeq? name value\fP
 .br
 \fBOBJECT actOnParam\fP \fI-set name value ?name value \&.\&.\&.?\fP
@@ -83,6 +85,8 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBDevice new\fP \fI?args?\fP
 .br
+\fBOBJECT destroy\fP
+.br
 \fBOBJECT actOnParam\fP \fI-add ?-pos|eq|poseq|posnocheck|nocheck|sw|node|nodeeq? name value\fP
 .br
 \fBOBJECT actOnParam\fP \fI-set name value ?name value \&.\&.\&.?\fP
@@ -117,6 +121,8 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT constructor\fP \fIparams ?-name value?\fP
 .br
+\fBOBJECT destroy\fP
+.br
 \fBOBJECT actOnParam\fP \fI-add ?-pos|eq|poseq|posnocheck|nocheck|sw|node|nodeeq? name value\fP
 .br
 \fBOBJECT actOnParam\fP \fI-set name value ?name value \&.\&.\&.?\fP
@@ -140,6 +146,8 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 \fBModel create OBJNAME\fP \fI?args?\fP
 .br
 \fBModel new\fP \fI?args?\fP
+.br
+\fBOBJECT destroy\fP
 .br
 \fBOBJECT actOnParam\fP \fI-add ?-pos|eq|poseq|posnocheck|nocheck|sw|node|nodeeq? name value\fP
 .br
@@ -170,6 +178,8 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 \fBOBJECT genSPICEString\fP
 .br
 \fBOBJECT constructor\fP \fIparams ?-name value?\fP
+.br
+\fBOBJECT destroy\fP
 .br
 \fBOBJECT actOnParam\fP \fI-add ?-pos|eq|poseq|posnocheck|nocheck|sw|node|nodeeq? name value\fP
 .br
@@ -243,6 +253,8 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT constructor\fP \fIparams ?-name value?\fP
 .br
+\fBOBJECT destroy\fP
+.br
 \fBOBJECT actOnParam\fP \fI-add ?-pos|eq|poseq|posnocheck|nocheck|sw|node|nodeeq? name value\fP
 .br
 \fBOBJECT actOnParam\fP \fI-set name value ?name value \&.\&.\&.?\fP
@@ -277,6 +289,8 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBRawFile new\fP \fI?args?\fP
 .br
+\fBOBJECT destroy\fP
+.br
 \fBOBJECT getCurrentsNames\fP \fI?args?\fP
 .br
 \fBOBJECT getTrace\fP \fItraceName\fP
@@ -299,6 +313,8 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT constructor\fP \fIvectors ?-name value?\fP
 .br
+\fBOBJECT destroy\fP
+.br
 \fBOBJECT addVector\fP \fI?args?\fP
 .br
 \fBOBJECT deleteVector\fP \fI?args?\fP
@@ -320,6 +336,8 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 \fBSubcircuit create OBJNAME\fP \fI?args?\fP
 .br
 \fBSubcircuit new\fP \fI?args?\fP
+.br
+\fBOBJECT destroy\fP
 .br
 \fBOBJECT actOnParam\fP \fI-add ?-pos|eq|poseq|posnocheck|nocheck|sw|node|nodeeq? name value\fP
 .br
@@ -437,6 +455,9 @@ Imports all ::SpiceGenTcl::Xyce commands to caller namespace
 constructor
 Constructor for the class\&.
 .TP
+destructor
+Destructor for the class\&.
+.TP
 actOnParam
 Acts on Parameter object with selected action\&.
 .TP
@@ -490,6 +511,15 @@ Type of analysis, for example, tran, ac, dc, etc\&.
 \fBDescription\fR
 .PP
 Class models analysis statement\&.
+.PP
+.RS -4n
+\fBdestructor\fR (::SpiceGenTcl::Analysis)
+.RE
+.PP
+Destroy object of class Analysis, and its parameters objects\&.
+.RS 4n\fBOBJECT destroy\fP
+.br
+.RE
 .PP
 .RS -4n
 \fBactOnParam\fR (::SpiceGenTcl::Analysis)
@@ -1122,6 +1152,9 @@ Not documented\&.
 constructor
 Constructor for the class\&.
 .TP
+destructor
+Destructor for the class\&.
+.TP
 actOnParam
 Acts on Parameter object with selected action\&.
 .TP
@@ -1217,6 +1250,15 @@ Positional parameter without check\&.
 .TP
 -nocheck
 Normal parameter without check\&.
+.RE
+.PP
+.RS -4n
+\fBdestructor\fR (::SpiceGenTcl::Device)
+.RE
+.PP
+Destroy object of class Device, and its parameters and pins objects\&.
+.RS 4n\fBOBJECT destroy\fP
+.br
 .RE
 .PP
 .RS -4n
@@ -1500,6 +1542,9 @@ SPICE netlist's string
 constructor
 Constructor for the class\&.
 .TP
+destructor
+Destructor for the class\&.
+.TP
 actOnParam
 Acts on Parameter object with selected action\&.
 .TP
@@ -1550,6 +1595,15 @@ List of instance parameters in form {{name value} {name value} {name equation -e
 \fBDescription\fR
 .PP
 Class represent \&.ic statement\&.
+.PP
+.RS -4n
+\fBdestructor\fR (::SpiceGenTcl::Ic)
+.RE
+.PP
+Destroy object of class Ic, and its parameters objects\&.
+.RS 4n\fBOBJECT destroy\fP
+.br
+.RE
 .PP
 .RS -4n
 \fBactOnParam\fR (::SpiceGenTcl::Ic)
@@ -1772,6 +1826,9 @@ SPICE netlist's string
 constructor
 Constructor for the class\&.
 .TP
+destructor
+Destructor for the class\&.
+.TP
 actOnParam
 Acts on Parameter object with selected action\&.
 .TP
@@ -1827,6 +1884,15 @@ Type of model, for example, diode, npn, etc\&.
 \fBDescription\fR
 .PP
 Class represents model card in SPICE netlist\&.
+.PP
+.RS -4n
+\fBdestructor\fR (::SpiceGenTcl::Model)
+.RE
+.PP
+Destroy object of class Model, and its parameters objects\&.
+.RS 4n\fBOBJECT destroy\fP
+.br
+.RE
 .PP
 .RS -4n
 \fBactOnParam\fR (::SpiceGenTcl::Model)
@@ -2112,6 +2178,9 @@ SPICE netlist's string
 constructor
 Constructor for the class\&.
 .TP
+destructor
+Destructor for the class\&.
+.TP
 actOnParam
 Acts on Parameter object with selected action\&.
 .TP
@@ -2162,6 +2231,15 @@ List of instance parameters in form {{name value ?-sw?} {name value ?-sw?} {name
 \fBDescription\fR
 .PP
 This class represent \&.options statement\&.
+.PP
+.RS -4n
+\fBdestructor\fR (::SpiceGenTcl::Options)
+.RE
+.PP
+Destroy object of class Options, and its parameters objects\&.
+.RS 4n\fBOBJECT destroy\fP
+.br
+.RE
 .PP
 .RS -4n
 \fBactOnParam\fR (::SpiceGenTcl::Options)
@@ -2943,6 +3021,9 @@ Writable: -name, -value
 constructor
 Constructor for the class\&.
 .TP
+destructor
+Destructor for the class\&.
+.TP
 actOnParam
 Acts on Parameter object with selected action\&.
 .TP
@@ -2989,6 +3070,15 @@ List of instance parameters in form {{name value ?-eq?} {name value ?-eq?} \&.\&
 \fBDescription\fR
 .PP
 Class represent \&.param statement\&.
+.PP
+.RS -4n
+\fBdestructor\fR (::SpiceGenTcl::ParamStatement)
+.RE
+.PP
+Destroy object of class ParamStatement, and its parameters objects\&.
+.RS 4n\fBOBJECT destroy\fP
+.br
+.RE
 .PP
 .RS -4n
 \fBactOnParam\fR (::SpiceGenTcl::ParamStatement)
@@ -3283,6 +3373,9 @@ Makes pin floating by setting name of the node to empty string\&.
 constructor
 Constructor for the class\&.
 .TP
+destructor
+Destructor for the class\&.
+.TP
 configure
 Configure properties\&.
 .TP
@@ -3331,9 +3424,9 @@ See \fIBinaryReader\&.skip16bytes\fP
 .PP
 \fBProperties\fR
 .PP
-Readable: -axis, -npoints, -nvariables, -path, -rawparams, -traces
+Readable: -axis, -npoints, -nvariables, -path, -rawparams
 .PP
-Writable: -axis, -npoints, -nvariables, -path, -rawparams, -traces
+Writable: -axis, -npoints, -nvariables, -path, -rawparams
 .PP
 \fBMixins\fR
 .PP
@@ -3361,6 +3454,15 @@ Simulator that produced this raw file, default is ngspice\&.
 .TP
 traces2read
 List of traces that will be readed, default value is *, that means reading all traces\&.
+.RE
+.PP
+.RS -4n
+\fBdestructor\fR (::SpiceGenTcl::RawFile)
+.RE
+.PP
+Destroy object of class RawFile, and its traces objects\&.
+.RS 4n\fBOBJECT destroy\fP
+.br
 .RE
 .PP
 .RS -4n
@@ -3584,6 +3686,9 @@ SPICE netlists string
 constructor
 Constructor for the class\&.
 .TP
+destructor
+Destructor for the class\&.
+.TP
 addVector
 Adds new ParameterVector object to the dictionary Vectors\&.
 .TP
@@ -3636,6 +3741,15 @@ List of vectors in form {vec0 vec1 vec2 \&.\&.\&.}
 \fBDescription\fR
 .PP
 Class represent \&.save statement\&.
+.PP
+.RS -4n
+\fBdestructor\fR (::SpiceGenTcl::Save)
+.RE
+.PP
+Destroy object of class Save, and its vectors objects\&.
+.RS 4n\fBOBJECT destroy\fP
+.br
+.RE
 .PP
 .RS -4n
 \fBaddVector\fR (::SpiceGenTcl::Save)
@@ -3811,6 +3925,9 @@ abstraction class\&.
 constructor
 Constructor for the class\&.
 .TP
+destructor
+Destructor for the class\&.
+.TP
 actOnParam
 Acts on Parameter object with selected action\&.
 .TP
@@ -3874,6 +3991,15 @@ List of pins in the order they appear in SPICE subcircuits definition together i
 .PP
 This class implements subcircuit, it is subclass of netlist because it holds list of elements
 inside subcircuit, together with header and connection of elements inside\&.
+.PP
+.RS -4n
+\fBdestructor\fR (::SpiceGenTcl::Subcircuit)
+.RE
+.PP
+Destroy object of class Subcircuit, and its parameters and pins objects\&.
+.RS 4n\fBOBJECT destroy\fP
+.br
+.RE
 .PP
 .RS -4n
 \fBactOnParam\fR (::SpiceGenTcl::Subcircuit)

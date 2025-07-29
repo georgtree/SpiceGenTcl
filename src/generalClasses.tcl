@@ -707,7 +707,8 @@ namespace eval ::SpiceGenTcl {
                                        '{{Name0 Value0 ?-sw|pos|eq|poseq|posnocheck|nocheck?}\
                                                  {Name1 Value1 ?-sw|pos|eq|poseq|posnocheck|nocheck?}\
                                                  {Name2 Value2 ?-sw|pos|eq|poseq|posnocheck|nocheck?} ...}'.\
-                                       Parameter list can be empty if device doesn't have instance parameters} -type list}
+                                       Parameter list can be empty if device doesn't have instance parameters}\
+                         -type list}
             }]
             my configure -name [dget $arguments name]
             # create Pins objects
@@ -725,6 +726,19 @@ namespace eval ::SpiceGenTcl {
             #  -nocheck - normal parameter without check
             foreach param [dget $arguments params] {
                 my actOnParam -add {*}$param
+            }
+        }
+        destructor {
+            # Destroy object of class `Device`, and its parameters and pins objects.
+            if {[info exists Params]} {
+                foreach param [dict values $Params] {
+                    $param destroy
+                }
+            }
+            if {[info exists Pins]} {
+                foreach pin [dict values $Pins] {
+                    $pin destroy
+                }
             }
         }
         method actOnPin {args} {
@@ -1024,6 +1038,14 @@ namespace eval ::SpiceGenTcl {
                 }
             }
         }
+        destructor {
+            # Destroy object of class `Model`, and its parameters objects.
+            if {[info exists Params]} {
+                foreach param [dict values $Params] {
+                    $param destroy
+                }
+            }
+        }
         method actOnParam {*}[info class definition ::SpiceGenTcl::Device actOnParam]
         method genSPICEString {} {
             # Creates model string for SPICE netlist.
@@ -1207,6 +1229,14 @@ namespace eval ::SpiceGenTcl {
                 }
             }
         }
+        destructor {
+            # Destroy object of class `Options`, and its parameters objects.
+            if {[info exists Params]} {
+                foreach param [dict values $Params] {
+                    $param destroy
+                }
+            }
+        }
         method actOnParam {*}[info class definition ::SpiceGenTcl::Device actOnParam]
         method genSPICEString {} {
             # Creates options string for SPICE netlist.
@@ -1250,6 +1280,14 @@ namespace eval ::SpiceGenTcl {
                 }
             }
         }
+        destructor {
+            # Destroy object of class `ParamStatement`, and its parameters objects.
+            if {[info exists Params]} {
+                foreach param [dict values $Params] {
+                    $param destroy
+                }
+            }
+        }
         method actOnParam {*}[info class definition ::SpiceGenTcl::Device actOnParam]
         method genSPICEString {} {
             # Creates parameter statement string for SPICE netlist.
@@ -1289,6 +1327,14 @@ namespace eval ::SpiceGenTcl {
                     error "Name '$vector' is not a valid name of the vector"
                 } else {
                     my addVector {*}$vector
+                }
+            }
+        }
+        destructor {
+            # Destroy object of class `Save`, and its vectors objects.
+            if {[info exists Vectors]} {
+                foreach vector [dict values $Vectors] {
+                    $vector destroy
                 }
             }
         }
@@ -1373,6 +1419,14 @@ namespace eval ::SpiceGenTcl {
                     } else {
                         my actOnParam -add -node {*}$param
                     }
+                }
+            }
+        }
+        destructor {
+            # Destroy object of class `Ic`, and its parameters objects.
+            if {[info exists Params]} {
+                foreach param [dict values $Params] {
+                    $param destroy
                 }
             }
         }
@@ -1790,6 +1844,19 @@ namespace eval ::SpiceGenTcl {
             }
             next [dget $arguments name]
         }
+        destructor {
+            # Destroy object of class `Subcircuit`, and its parameters and pins objects.
+            if {[info exists Params]} {
+                foreach param [dict values $Params] {
+                    $param destroy
+                }
+            }
+            if {[info exists Pins]} {
+                foreach pin [dict values $Pins] {
+                    $pin destroy
+                }
+            }
+        }
         # copy methods of Device to manipulate header .subckt definition elements
         method actOnPin {*}[info class definition ::SpiceGenTcl::Device actOnPin]
         method actOnParam {*}[info class definition ::SpiceGenTcl::Device actOnParam]
@@ -1876,6 +1943,14 @@ namespace eval ::SpiceGenTcl {
                     return -code error "Value '$param' is not a valid value"
                 } else {
                     my actOnParam -add {*}$param
+                }
+            }
+        }
+        destructor {
+            # Destroy object of class `Analysis`, and its parameters objects.
+            if {[info exists Params]} {
+                foreach param [dict values $Params] {
+                    $param destroy
                 }
             }
         }
@@ -2092,10 +2167,7 @@ namespace eval ::SpiceGenTcl {
                 return -code error "Raw file '[my configure -path]' doesn't have an axis"
             }
         }
-        # objects references of traces in raw file
-        property traces
-        # binary block size in bytes that contains all variables at axis point value
-        variable path rawparams npoints nvariables axis traces BlockSize
+        variable path rawparams npoints nvariables axis Traces BlockSize
         constructor {args} {
             # Creates RawFile object.
             #  path - path to raw file including it's file name
@@ -2190,17 +2262,17 @@ namespace eval ::SpiceGenTcl {
                     }
                     my configure -axis [::SpiceGenTcl::Axis new $name $varType $npoints $axisNumType]
                     ##nagelfar ignore #12 {Found constant "traces"}
-                    dappend traces [string tolower $name] [my configure -axis]
+                    dappend Traces [string tolower $name] [my configure -axis]
                 } elseif {([dget $arguments traces2read] eq {*}) || ($name in [dget $arguments traces2read])} {
                     if {$hasAxis} {
-                        dappend traces [string tolower $name] [::SpiceGenTcl::Trace new $name $varType $npoints\
+                        dappend Traces [string tolower $name] [::SpiceGenTcl::Trace new $name $varType $npoints\
                                                                        [[my configure -axis] configure -name] $numtype]
                     } else {
-                        dappend traces [string tolower $name]\
+                        dappend Traces [string tolower $name]\
                                 [::SpiceGenTcl::Trace new $name $varType $npoints {} $numtype]
                     }
                 } else {
-                    dappend traces [string tolower $name]\
+                    dappend Traces [string tolower $name]\
                             [::SpiceGenTcl::EmptyTrace new $name $varType $npoints $numtype]
                 }
                 incr ivar
@@ -2214,7 +2286,7 @@ namespace eval ::SpiceGenTcl {
                 set BlockSize [= {($fileSize - $binaryStart)/$npoints}]
                 set scanFunctions {}
                 set calcBlockSize 0
-                foreach trace [dvalues [my configure -traces]] {
+                foreach trace [dvalues $Traces] {
                     if {[$trace configure -numtype] eq {double}} {
                         incr calcBlockSize 8
                         if {[info object class $trace ::SpiceGenTcl::EmptyTrace]} {
@@ -2248,9 +2320,9 @@ namespace eval ::SpiceGenTcl {
                             '$calcBlockSize' bytes"
                 }
                  for {set i 0} {$i<$npoints} {incr i} {
-                    for {set j 0} {$j<[dict size [my configure -traces]]} {incr j} {
+                    for {set j 0} {$j<[dict size $Traces]} {incr j} {
                         set value [eval "my [@ $scanFunctions $j]" $file]
-                        set trace [@ [dvalues [my configure -traces]] $j]
+                        set trace [@ [dvalues $Traces] $j]
                         if {$j==0} {
                             # workaround for bug with negative values in time axis
                             if {[info exists axisIsTime]} {
@@ -2265,7 +2337,7 @@ namespace eval ::SpiceGenTcl {
             } elseif {$rawType eq {Values:}} {
                 for {set i 0} {$i<$npoints} {incr i} {
                     set firstVar true
-                    for {set j 0} {$j<[dict size [my configure -traces]]} {incr j} {
+                    for {set j 0} {$j<[dict size $Traces]} {incr j} {
                         set line [gets $file]
                         if {$line eq {}} {
                             continue
@@ -2290,17 +2362,25 @@ namespace eval ::SpiceGenTcl {
                                 set value [@ $lineList 1]
                             }
                         }
-                        set trace [@ [dvalues [my configure -traces]] $j]
+                        set trace [@ [dvalues $Traces] $j]
                         $trace appendDataPoints $value
                     }
                 }
             }
             close $file
         }
+        destructor {
+            # Destroy object of class `RawFile`, and its traces objects.
+            if {[info exists Traces]} {
+                foreach trace [dict values $Traces] {
+                    $trace destroy
+                }
+            }
+        }
         method getTrace {traceName} {
             # Returns trace object reference by it's name
             set traceFoundFlag false
-            foreach trace [dvalues [my configure -traces]] {
+            foreach trace [dvalues $Traces] {
                 if {[$trace configure -name] eq $traceName} {
                     set traceFound $trace
                     set traceFoundFlag true
@@ -2316,33 +2396,33 @@ namespace eval ::SpiceGenTcl {
         method getVariablesNames {args} {
             # Returns list that contains names of all variables
             argparse -help {Returns list that contains names of all variables} {}
-            return [dkeys [my configure -traces]]
+            return [dkeys $Traces]
         }
         method getVoltagesNames {args} {
             # Returns list that contains names of all voltage variables
             argparse -help {Returns list that contains names of all voltage variables} {}
-            return [lmap trace [dvalues [my configure -traces]]\
+            return [lmap trace [dvalues $Traces]\
                             {expr {[string match -nocase *voltage* [$trace configure -type]] ?\
                                            [$trace configure -name] : [continue]}}]
         }
         method getCurrentsNames {args} {
             # Returns list that contains names of all current variables
             argparse -help {Returns list that contains names of all current variables} {}
-            return [lmap trace [dvalues [my configure -traces]]\
+            return [lmap trace [dvalues $Traces]\
                             {expr {[string match -nocase *current* [$trace configure -type]] ?\
                                            [$trace configure -name] : [continue]}}]
         }
         method getTracesStr {args} {
             # Returns information about all Traces in raw file in form of string
             argparse -help {Returns information about all Traces in raw file in form of string} {}
-            return [lmap trace [dvalues [my configure -traces]]\
+            return [lmap trace [dvalues $Traces]\
                             {join [list [$trace configure -name] [$trace configure -type] [$trace configure -numtype]]}]
         }
         method getTracesData {args} {
             # Returns dictionary that contains all data in value and name as a key
             argparse -help {Returns dictionary that contains all data in value and name as a key} {}
             set dict {}
-            dict for {traceName trace} [my configure -traces] {
+            dict for {traceName trace} $Traces {
                 dict append dict $traceName [$trace getDataPoints]
             }
             return $dict

@@ -498,6 +498,14 @@ test testDeviceClass-26 {test creation of Device class instance and test setPara
     unset elemInst
 }
 
+test testDeviceClass-27 {} -setup {
+    set elemInst [Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
+} -body {
+    $elemInst destroy
+} -result {} -cleanup {
+    unset elemInst
+}
+
 ###  Model class tests 
     
 test testModelClass-1 {test creation of Model class instance and getType interface} -setup {
@@ -522,6 +530,13 @@ testTemplate testModelClass-4 {} {Model new MOD1 NMOS {{VTH0 0.7} {-eq U0 v2*vb/
         {.model mod1 nmos(vth0=0.7 u0={v2*vb/2} k1=1.5e-3)}
 testTemplate testModelClass-5 {} {Model new MOD1 NMOS {}} {.model mod1 nmos}
 
+test testModelClass-6 {} -setup {
+    set modelInst [Model new MOD1 NMOS {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
+} -body {
+    $modelInst destroy
+} -result {} -cleanup {
+    unset modelInst
+}
 
 ###  RawString class tests 
 
@@ -654,6 +669,14 @@ testTemplate testOptionsClass-7 {} {Options new {{abstol 1e-12} {noopiter} {gmin
 testTemplate testOptionsClass-8 {} {Options new {{abstol 1e-12} {gmin 1e-12} {gmin 1e-12}}}\
         {Parameters list 'abstol gmin gmin' has already contains parameter with name 'gmin'}
 
+test testOptionsClass-9 {} -setup {
+    set elemInst [Options new {{abstol 1e-12} {-sw noopiter} {gmin 1e-12}}]
+} -body {
+    $elemInst destroy
+} -result {} -cleanup {
+    unset elemInst
+}
+
 ###  ParamStatement class tests 
 
 testTemplate testParamStatementClass-1 {} {ParamStatement new {{-eq U0T rf+1} {vth0 10}}} {.param u0t={rf+1} vth0=10}
@@ -690,6 +713,14 @@ test testParamStatementClass-6 {test creation of ParamStatement class instance a
 testTemplate testParamStatementClass-7 {} {ParamStatement new {{-eq U0T rf+1} {U0T 10}}}\
         {Parameters list 'u0t u0t' has already contains parameter with name 'u0t'}
 testTemplate testParamStatementClass-8 {} {ParamStatement new {{-eq U0T rf+1} {U0T}}} {Value 'U0T' is not a valid value}
+
+test testParamStatementClass-9 {} -setup {
+    set elemInst [ParamStatement new {{-eq U0T rf+1} {vth0 10}}]
+} -body {
+    $elemInst destroy
+} -result {} -cleanup {
+    unset elemInst
+}
 
 ###  Save class tests
 
@@ -734,6 +765,14 @@ test testSaveClass-5 {} -setup {
     unset elemInst errorStr
 }
 
+test testSaveClass-6 {} -setup {
+    set elemInst [Save new {v(node) i(vin) vsource#branch @m2[vdsat] node} -name save1]
+} -body {
+    $elemInst destroy
+} -result {} -cleanup {
+    unset elemInst
+}
+
 ###  Ic class tests 
 
 testTemplate testIcClass-1 {} {Ic new {{-eq v(a) v1} {v(b) 10}}} {.ic v(a)={v1} v(b)=10}
@@ -741,6 +780,13 @@ testTemplate testIcClass-2 {} {Ic new {{-eq a v1} {b 10}}} {.ic a={v1} b=10}
 testTemplate testIcClass-3 {} {Ic new {{-eq a v1} {a 10}}}\
         {Parameters list 'a a' has already contains parameter with name 'a'}
 testTemplate testIcClass-4 {} {Ic new {{-eq a v1} {a}}} {Value 'a' is not a valid value}
+test testSaveClass-5 {} -setup {
+    set elemInst [Ic new {{-eq v(a) v1} {v(b) 10}}]
+} -body {
+    $elemInst destroy
+} -result {} -cleanup {
+    unset elemInst
+}
 
 ###  Nodeset class tests 
 
@@ -796,6 +842,7 @@ test testGlobalClass-6 {test creation of Global class instance} -setup {
 } -result {Global statement 'glob1' doesn't have attached net with name 'gnd2'} -cleanup {
     unset elemInst errorStr
 }
+
 
 ###  Netlist class tests 
     
@@ -1314,6 +1361,31 @@ test testSubcircuitClass-9 {test creation of Subcircuit class instance with genS
     unset errorStr
 }
 
+test testSubcircuitClass-10 {} -setup {
+    oo::class create RCnet {
+        superclass Subcircuit
+        constructor {} {
+            # define external pins of subcircuit
+            set pins {plus minus}
+            # define input parameters of subcircuit
+            set params {{r 100} {c 1e-6}}
+            # add elements to subcircuit definition
+            my add [R new 1 net1 net2 -r {-eq r}]
+            my add [C new 1 net2 net3 -c {-eq c}]
+            my add [R new 5 net1 net2 -model res_sem -l 10e-6 -w 100e-6]
+            my add [RModel new rsem1mod -tc1 0.1 -tc2 0.4]
+            # pass name, list of pins and list of parameters to Subcircuit constructor
+            next rcnet $pins $params
+        }
+    }
+    set subcircuit [RCnet new]
+} -body {
+    $subcircuit destroy
+} -result {} -cleanup {
+    rename RCnet ""
+    unset subcircuit
+}
+
 ###  Analysis class tests 
     
 test testAnalysisClass-1 {} -setup {
@@ -1346,6 +1418,14 @@ testTemplate testAnalysisClass-6 {} {Analysis new tran {{-pos tstep 1e-6} {-pos 
         {.tran 1e-6 10e-3 uic}
 testTemplate testAnalysisClass-7 {} {Analysis new dc {{-posnocheck srcnam v1} {vstart} {-pos vstop 5} {-pos vincr 0.1}}}\
         {Value 'vstart' is not a valid value}
+
+test testAnalysisClass-8 {} -setup {
+    set anInst [Analysis new dc {{-posnocheck srcnam v1} {-pos vstart 0} {-pos vstop 5} {-pos vincr 0.1}}]
+} -body {
+    $anInst destroy
+} -result {} -cleanup {
+    unset anInst
+}
 
 ###  RawFile class tests 
 

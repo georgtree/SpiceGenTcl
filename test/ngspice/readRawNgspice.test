@@ -348,6 +348,14 @@ test testRawFileClass-20 {test RawFile class object construction and reading asc
     unset data
 }
 
+test testRawFileClass-21 {} -setup {
+    set data [RawFile new "${rawDataLoc}/tran.raw"]
+} -body {
+    $data destroy
+} -result {} -cleanup {
+    unset data
+}
+
 forgetNgspice
 
 cleanupTests
