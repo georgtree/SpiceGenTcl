@@ -158,7 +158,8 @@ namespace eval ::SpiceGenTcl::Ngspice {
             # Checks if string is a valid vector name string, acceptable by SPICE syntax
             #   string - input string
             # Returns: boolean value
-            if {[regexp {^([a-zA-Z0-9]+|[vi]\([a-zA-Z0-9]+\)|[a-zA-Z0-9]+#[a-zA-Z0-9]+|@[a-zA-Z0-9]+\[[a-zA-Z0-9]+\])$} $string]} {
+            if {[regexp -expanded {^([a-zA-Z0-9]+|[vi]\([a-zA-Z0-9]+\)|[a-zA-Z0-9]+#[a-zA-Z0-9]
+                                     +|@[a-zA-Z0-9]+\[[a-zA-Z0-9]+\])$} $string]} {
                 return true
             } else {
                 return false
@@ -194,8 +195,8 @@ namespace eval ::SpiceGenTcl::Ngspice {
                         created"
                 set paramString [string map {- {}} [join [dkeys $paramsList]]]
                 ##nagelfar ignore {Found constant "type"}
-                return [list [string map [list @type@ $modelClassName @paramsList@ $paramString @hsuppress@ type] $ModelTemplate]\
-                                [list $modelClassName new {*}$paramsList]]
+                return [list [string map [list @type@ $modelClassName @paramsList@ $paramString @hsuppress@ type]\
+                                      $ModelTemplate] [list $modelClassName new {*}$paramsList]]
             } else {
                 switch $type {
                     r {
@@ -778,7 +779,8 @@ namespace eval ::SpiceGenTcl::Ngspice {
                 return [list ${NamespacePath}::SemiconductorDevices::D new $elemName $pin1 $pin2 -model $modelVal\
                                 {*}$paramsList]
             } else {
-                return -code error "Creating diode object from line '${line}' failed due to wrong or incompatible syntax"
+                return -code error "Creating diode object from line '${line}' failed due to wrong or incompatible\
+                        syntax"
             }
         }
         method CreateJFET {line} {

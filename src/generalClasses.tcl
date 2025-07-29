@@ -647,8 +647,8 @@ namespace eval ::SpiceGenTcl {
             #  value - value of the parameter
             # Class models parameter that has representation as an equation, but in form of
             # positional parameter. Example: {R1+R2}
-            set arguments [argparse -inline -help {Creates object of class 'ParameterPositionalEquation' with parameter\
-                                                           name and value as anequation} {
+            set arguments [argparse -inline -help {Creates object of class 'ParameterPositionalEquation' with\
+                                                           parameter name and value as anequation} {
                 {name -help {Name of the parameter}}
                 {value -help {Value of the parameter}}
             }]
@@ -683,7 +683,8 @@ namespace eval ::SpiceGenTcl {
             #   with connected node in form: `{{Name0 NodeName} {Name1 NodeName} {Name2 NodeName} ...}`
             #   Nodes string values could be empty.
             #  params - list of instance parameters in form `{{Name Value ?-sw|pos|eq|poseq|posnocheck|nocheck?} 
-            #   {Name Value ?-sw|pos|eq|poseq|posnocheck|nocheck?} {Name Value ?-sw|pos|eq|poseq|posnocheck|nocheck?} ...}`
+            #   {Name Value ?-sw|pos|eq|poseq|posnocheck|nocheck?} {Name Value ?-sw|pos|eq|poseq|posnocheck|nocheck?}
+            #    ...}`
             #   Parameter list can be empty if device doesn't have instance parameters.
             # Class models general device in SPICE, number of which
             # must be assembled (connected) to get the circuit to simulate. This class provides basic machinery
@@ -922,8 +923,8 @@ namespace eval ::SpiceGenTcl {
                 set {
                     set arguments [list $pname $value {*}$arguments]
                     if {[llength $arguments]%2!=0} {
-                        return -code error "Number of arguments to method '[dict get [info frame 0] method]' with '-set'\
-                                switch must be even"
+                        return -code error "Number of arguments to method '[dict get [info frame 0] method]' with\
+                                '-set' switch must be even"
                     }
                     for {set i 0} {$i<[llength $arguments]} {incr i 2} {
                         set paramName [string tolower [@ $arguments $i]]
@@ -1861,8 +1862,8 @@ namespace eval ::SpiceGenTcl {
         method actOnPin {*}[info class definition ::SpiceGenTcl::Device actOnPin]
         method actOnParam {*}[info class definition ::SpiceGenTcl::Device actOnParam]
         method add {args} {
-            # Add elements objects references to `Subcircuit`, it extends add method to add check of element class because
-            # subcircuit can't contain particular elements inside, like [::SpiceGenTcl::Include],
+            # Add elements objects references to `Subcircuit`, it extends add method to add check of element class 
+            # because subcircuit can't contain particular elements inside, like [::SpiceGenTcl::Include],
             # [::SpiceGenTcl::Library], [::SpiceGenTcl::Options] and [::SpiceGenTcl::Analysis].
             #  args - elements objects references
             argparse -help {Add elements objects references to 'Subcircuit'} {
@@ -1909,7 +1910,8 @@ namespace eval ::SpiceGenTcl {
             set type [string tolower $value]
             set suppAnalysis [list ac dc tran op disto noise pz sens sp tf]
             if {$value ni $suppAnalysis} {
-                return -code error "Type '$value' is not in supported list of analysis, should be one of '$suppAnalysis'"
+                return -code error "Type '$value' is not in supported list of analysis, should be one of\
+                        '$suppAnalysis'"
             }
             set type $value
         }
@@ -2461,7 +2463,8 @@ namespace eval ::SpiceGenTcl {
             return [::csv::joinlist $tracesList [dget $arguments sep]]
         }
         method measure {args} {
-            return [::tclmeasure::measure -xname [[my configure -axis] configure -name] -data [my getTracesData] {*}$args]
+            return [::tclmeasure::measure -xname [[my configure -axis] configure -name] -data [my getTracesData]\
+                            {*}$args]
         }
     }
 

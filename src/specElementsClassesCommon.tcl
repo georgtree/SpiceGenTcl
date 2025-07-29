@@ -51,8 +51,8 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             # ::SpiceGenTcl::Common::BasicDevices::Resistor new 1 netp netm -r 1e3 -tc1 1 -temp {-eq temp_amb}
             # ```
             # Synopsis: name np nm -r value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value?
-            set arguments [argparse -inline -pfirst -helplevel 1 -help {Creates object of class `Resistor` that describes\
-                                                                               resistor} {
+            set arguments [argparse -inline -pfirst -helplevel 1 -help {Creates object of class `Resistor` that\
+                                                                                describes resistor} {
                 {-r= -required -help {Resistance value}}
                 {-m= -help {Multiplier value}}
                 {-temp= -help {Device temperature}}
@@ -110,7 +110,8 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             # ::SpiceGenTcl::Common::BasicDevices::Capacitor new 1 netp netm -c 1e3 -tc1 1 -temp {-eq temp_amb}
             # ```
             # Synopsis: name np nm -c value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value? ?-ic value?
-            set arguments [argparse -inline -pfirst -help {Creates object of class `Capacitor` that describes capacitor.} {
+            set arguments [argparse -inline -pfirst -help {Creates object of class `Capacitor` that describes\
+                                                                   capacitor} {
                 {-c= -required -help {Capacitance value}}
                 {-m= -help {Multiplier value}}
                 {-temp= -help {Device temperature}}
@@ -136,8 +137,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                     }
                 }
             }
-            next c[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
-                    $params
+            next c[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]] $params
         }
     }
 ####  C class 
@@ -194,8 +194,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                     }
                 }
             }
-            next l[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
-                    $params
+            next l[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]] $params
         }
     }
     
@@ -219,7 +218,8 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::BasicDevices::SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {-eq c cpar}}
+            # ::SpiceGenTcl::Common::BasicDevices::SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1}\
+                                    {-eq c cpar}}
             # ```
             ##nagelfar implicitvarcmd {argparse *Creates object of class 'SubcircuitInstance'*} name pins subName params
             argparse -pfirst -help {Creates object of class 'SubcircuitInstance' that describes subcircuit instance} {
@@ -423,7 +423,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             } else {
                 lappend params [list -pos dc $dcVal]
             }
-            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]] $params
+            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
+                    $params
         }
     }
 
@@ -467,7 +468,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                     }
                 }
             }
-            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]] $params
+            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
+                    $params
         }
     }   
     
@@ -526,7 +528,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             set paramsOrder {low high td tr tf ton tper}
             lappend params {-posnocheck model pulse}
             my ParamsProcess $paramsOrder $arguments params
-            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]] $params
+            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
+                    $params
         }
     } 
     
@@ -584,7 +587,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             set paramsOrder {v0 va freq td theta phase}
             lappend params {-posnocheck model sin}
             my ParamsProcess $paramsOrder $arguments params
-            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]] $params
+            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
+                    $params
         }
     }  
     
@@ -642,7 +646,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             set paramsOrder {v1 v2 td1 tau1 td2 tau2}
             lappend params {-posnocheck model exp}
             my ParamsProcess $paramsOrder $arguments params
-            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]] $params
+            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
+                    $params
         }
     }    
     
@@ -776,7 +781,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             set paramsOrder {v0 va fc mdi fs}
             lappend params {-posnocheck model sffm}
             my ParamsProcess $paramsOrder $arguments params
-            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]] $params
+            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
+                    $params
         }
     }      
     
@@ -847,7 +853,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::Sources::Vpulse new 1 net1 net2 -low 0 -high 1 -td {td -eq} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6
+            # ::SpiceGenTcl::Common::Sources::Vpulse new 1 net1 net2 -low 0 -high 1 -td {td -eq} -tr 1e-9 -tf 1e-9\
+                                    -pw 10e-6 -per 20e-6
             # ```
             # Synopsis: name np nm -voff|ioff|low value -von|ion|high value -td value -tr value -tf value 
             #   -pw|ton value ?-dc value? ?-ac value ?-acphase value??
@@ -877,7 +884,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::Sources::Vsin new 1 net1 net2 -v0 0 -va 2 -freq {-eq freq} -td 1e-6 -theta {-eq theta}
+            # ::SpiceGenTcl::Common::Sources::Vsin new 1 net1 net2 -v0 0 -va 2 -freq {-eq freq} -td 1e-6\
+                                    -theta {-eq theta}
             # ```
             # Synopsis: name np nm -i0|voffset|ioffset|v0 value -ia|vamp|iamp|va value -freq value
             #   ?-td value ?-theta value ?-phi|phase value???
@@ -907,7 +915,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::Sources::Vexp new 1 net1 net2 -v1 0 -v2 1 -td1 1e-9 -tau1 1e-9 -td2 {-eq td2} -tau2 10e-6
+            # ::SpiceGenTcl::Common::Sources::Vexp new 1 net1 net2 -v1 0 -v2 1 -td1 1e-9 -tau1 1e-9 -td2 {-eq td2}\
+                                    -tau2 10e-6
             # ```
             # Synopsis: name np nm -i1|v1 value -i2|v2 value -td1 value -tau1 value -td2 value -tau2 value
             #   ?-phi|phase value???
@@ -1035,7 +1044,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::Sources::Ipulse new 1 net1 net2 -low 0 -high 1 -td {-eq td} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6
+            # ::SpiceGenTcl::Common::Sources::Ipulse new 1 net1 net2 -low 0 -high 1 -td {-eq td} -tr 1e-9 -tf 1e-9\
+                                    -pw 10e-6 -per 20e-6
             # ```
             # Synopsis: name np nm -voff|ioff|low value -von|ion|high value -td value -tr value -tf value
             #   -pw|ton value ?-phase|phi value???
@@ -1065,7 +1075,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::Sources::Isin new 1 net1 net2 -i0 0 -ia 2 -freq {-eq freq} -td 1e-6 -theta {-eq theta}
+            # ::SpiceGenTcl::Common::Sources::Isin new 1 net1 net2 -i0 0 -ia 2 -freq {-eq freq} -td 1e-6\
+                                    -theta {-eq theta}
             # ```
             # Synopsis: name np nm -i0|ioffset value -ia|iamp value -freq value ?-td value ?-theta value
             #   ?-phase|phi value???
@@ -1095,7 +1106,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::Sources::Iexp new 1 net1 net2 -i1 0 -i2 1 -td1 1e-9 -tau1 1e-9 -td2 {-eq td2} -tau2 10e-6
+            # ::SpiceGenTcl::Common::Sources::Iexp new 1 net1 net2 -i1 0 -i2 1 -td1 1e-9 -tau1 1e-9 -td2 {-eq td2}\
+                                    -tau2 10e-6
             # ```
             # Synopsis: name np nm -i1 value -i2 value -td1 value -tau1 value -td2 value -tau2 value
             #   ?-phase|phi value???

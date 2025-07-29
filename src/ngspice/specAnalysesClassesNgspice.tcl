@@ -89,7 +89,8 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Analyses::SensAc new -outvar v(1,out) -variation dec -n 10 -fstart 1 -fstop 1e6 -name dc1
+            # ::SpiceGenTcl::Ngspice::Analyses::SensAc new -outvar v(1,out) -variation dec -n 10 -fstart 1 -fstop 1e6\
+                                    -name dc1
             # ```
             # Synopsis: -outvar value -variation value -n value -fstart value -fstop value ?-name value?
             set arguments [argparse -inline -help {Creates object of class 'SensAc' that describes SENS ac analysis} {

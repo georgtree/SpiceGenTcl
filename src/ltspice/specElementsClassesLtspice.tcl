@@ -88,7 +88,8 @@ namespace eval ::SpiceGenTcl::Ltspice::BasicDevices {
             #   ?-rpar value? ?-cpar value? ?-rlshunt value?
             # Synopsis: name np nm -q value ?-m value? ?-ic value? ?-rser value? ?-lser value? ?-rpar value?
             #   ?-cpar value? ?-rlshunt value?
-            set arguments [argparse -inline -pfirst -help {Creates object of class 'Capacitor' that describes capacitor} {
+            set arguments [argparse -inline -pfirst -help {Creates object of class 'Capacitor' that describes\
+                                                                   capacitor} {
                 {-c= -forbid q -help {Capacitance value or equation}}
                 {-q= -forbid c -help {Charge equation}}
                 {-m= -help {Multiplier value}}
@@ -292,7 +293,8 @@ namespace eval ::SpiceGenTcl::Ltspice::BasicDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::BasicDevices::SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {-eq c cpar}}
+            # ::SpiceGenTcl::Ltspice::BasicDevices::SubcircuitInstance new 1 {{plus net1} {minus net2}}\
+                                    rcnet {{r 1} {-eq c cpar}}
             # ```
             ##nagelfar implicitvarcmd {argparse *Creates object of class 'SubcircuitInstance'*} name pins subName params
             argparse -pfirst -help {Creates object of class 'SubcircuitInstance' that describes subcircuit instance} {
@@ -327,7 +329,8 @@ namespace eval ::SpiceGenTcl::Ltspice::BasicDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::BasicDevices::SubcircuitInstanceAuto new $subcktObj 1 {net1 net2} -r 1 -c {-eq cpar}
+            # ::SpiceGenTcl::Ltspice::BasicDevices::SubcircuitInstanceAuto new $subcktObj 1 {net1 net2} -r 1\
+                                                         -c {-eq cpar}
             # ```
             # Synopsis: subcktObj name nodes ?-paramName {?-eq? paramValue} ...?
 
@@ -422,7 +425,8 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
                     }
                 }
             }
-            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]] $params
+            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
+                    $params
         }
     }
 
@@ -466,7 +470,8 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
                     }
                 }
             }
-            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]] $params
+            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
+                    $params
         }
     }
 
@@ -508,7 +513,8 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
                     }
                 }
             }
-            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]] $params
+            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
+                    $params
         }
     }
 
@@ -549,7 +555,8 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
                     }
                 }
             }
-            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]] $params
+            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
+                    $params
         }
     }
 
@@ -589,7 +596,8 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
                     }
                 }
             }
-            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]] $params
+            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
+                    $params
         }
     }
 
@@ -684,7 +692,8 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
                     }
                 }
             }
-            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]] $params
+            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
+                    $params
         }
     }
 
@@ -759,7 +768,8 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::Sources::Vpulse new 1 net1 net2 -low 0 -high 1 -td {-eq td} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6 -npulses {-eq np}
+            # ::SpiceGenTcl::Ltspice::Sources::Vpulse new 1 net1 net2 -low 0 -high 1 -td {-eq td} -tr 1e-9 -tf 1e-9\
+                                    -pw 10e-6 -per 20e-6 -npulses {-eq np}
             # ```
             # Synopsis: name np nm -low|voff value -high|von value -td value -tr value -tf value -pw|ton value
             #   -per|tper value ?-np|ncycles value? ?-rser value? ?-cpar value?
@@ -789,7 +799,8 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::Sources::Vsin new 1 net1 net2 -v0 0 -va 2 -freq {-eq freq} -td 1e-6 -theta {-eq theta}
+            # ::SpiceGenTcl::Common::Sources::Vsin new 1 net1 net2 -v0 0 -va 2 -freq {-eq freq} -td 1e-6\
+                                    -theta {-eq theta}
             # ```
             # Synopsis: name np nm -v0|voffset value -va|vamp value -freq value ?-td value ?-theta value
             #   ?-phase|phi value ?-ncycles value???? ?-rser value? ?-cpar value?
@@ -818,7 +829,8 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::Sources::Vexp new 1 net1 net2 -v1 0 -v2 1 -td1 1e-9 -tau1 1e-9 -td2 {-eq td2} -tau2 10e-6
+            # ::SpiceGenTcl::Ltspice::Sources::Vexp new 1 net1 net2 -v1 0 -v2 1 -td1 1e-9 -tau1 1e-9 -td2 {-eq td2}\
+                                    -tau2 10e-6
             # ```
             # Synopsis: name np nm -v1 value -v2 value -td1 value -tau1 value -td2 value -tau2 value
             #   ?-rser value? ?-cpar value?
@@ -947,7 +959,8 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::Sources::Ipulse new 1 net1 net2 -low 0 -high 1 -td {-eq td} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6 -npulses {-eq np}
+            # ::SpiceGenTcl::Ltspice::Sources::Ipulse new 1 net1 net2 -low 0 -high 1 -td {-eq td} -tr 1e-9 -tf 1e-9\
+                                    -pw 10e-6 -per 20e-6 -npulses {-eq np}
             # ```
             # Synopsis: name np nm -low|ioff value -high|ion value -td value -tr value -tf value -pw|ton value
             #   -per|tper value ?-np|ncycles value?
@@ -978,7 +991,8 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::Sources::Isin new 1 net1 net2 -v0 0 -va 2 -freq {-eq freq} -td 1e-6 -theta {-eq theta}
+            # ::SpiceGenTcl::Ltspice::Sources::Isin new 1 net1 net2 -v0 0 -va 2 -freq {-eq freq} -td 1e-6\
+                                    -theta {-eq theta}
             # ```
             # Synopsis: name np nm -i0|ioffset value -ia|iamp value -freq value ?-td value ?-theta value
             #   ?-phase|phi value ?-ncycles value????
@@ -1008,7 +1022,8 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::Sources::Iexp new 1 net1 net2 -i1 0 -i2 1 -td1 1e-9 -tau1 1e-9 -td2 {-eq td2} -tau2 10e-6
+            # ::SpiceGenTcl::Ltspice::Sources::Iexp new 1 net1 net2 -i1 0 -i2 1 -td1 1e-9 -tau1 1e-9 -td2 {-eq td2}\
+                                    -tau2 10e-6
             # ```
             # Synopsis: name np nm -i1 value -i2 value -td1 value -tau1 value -td2 value -tau2 value
             if {({-rser} in $args) || ({-cpar} in $args)} {
@@ -1348,7 +1363,8 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet new 1 netd netg nets -model jfetmod -area {-eq area*2} -temp 25
+            # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet new 1 netd netg nets -model jfetmod -area {-eq area*2}\
+                                    -temp 25
             # ```
             # Synopsis: name nd ng ns -model value ?-area value? ?-off? ?-temp value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'Jfet' that describes semiconductor\
@@ -1414,11 +1430,12 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet new 1 netd netg nets -model mesfetmod -area {-eq area*2}
+            # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet new 1 netd netg nets -model mesfetmod\
+                                    -area {-eq area*2}
             # ```
             # Synopsis: name nd ng ns -model value ?-area value? ?-off? ?-ic \{value value\} ?
-            set arguments [argparse -inline -pfirst -help {Creates object of class 'Mesfet' that describes semiconductor\
-                                                                  junction FET device} {
+            set arguments [argparse -inline -pfirst -help {Creates object of class 'Mesfet' that describes\
+                                                                  semiconductor junction FET device} {
                 {-model= -required -help {Name of the model}}
                 {-area= -help {Scale factor}}
                 {-m= -help {Parallel device multiplier}}
@@ -1514,8 +1531,8 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
             #   ?-custparams param1 \{?-eq|-poseq|-posnocheck|-pos|-nocheck? param1Val\} ...?
             # Synopsis: name nd ng ns -model value ?-m value? ?-l value? ?-w value?
             #    ?-temp value? ?-off? ?-custparams param1 \{?-eq|-poseq|-posnocheck|-pos|-nocheck? param1Val\} ...?
-            set arguments [argparse -inline -pfirst -help {Creates object of class `Mosfet` that describes semiconductor\
-                                                                  MOSFET device} {
+            set arguments [argparse -inline -pfirst -help {Creates object of class `Mosfet` that describes\
+                                                                  semiconductor MOSFET device} {
                 {-model= -required -help {Name of the model}}
                 {-m= -help Multiplier}
                 {-l= -help {Length of channel}}

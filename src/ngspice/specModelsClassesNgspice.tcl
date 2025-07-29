@@ -64,7 +64,8 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             # ::SpiceGenTcl::Ngspice::BasicDevices::LModel new indmod -tc1 1 -tc2 2
             # ```
             # Synopsis: name ?-option value ...?
-            next {*}[my ArgsPreprocess {ind csect dia length tc1 tc2 tnom nt mu} {name type} type {*}[linsert $args 1 l]]
+            next {*}[my ArgsPreprocess {ind csect dia length tc1 tc2 tnom nt mu} {name type} type\
+                             {*}[linsert $args 1 l]]
         }
     }
 ###  VSwitchModel class
@@ -134,15 +135,16 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             #  args - keyword model parameters, for details please see Ngspice manual, chapter 8.
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel new bjtmod npn -is 1e-15 -bf 200 -vaf 100 -cje 1e-10
+            # ::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel new bjtmod npn -is 1e-15 -bf 200 -vaf 100\
+                                    -cje 1e-10
             # ```
             # Synopsis: name type ?-option value ...?
             set paramsNames {level subs is ibe ibc iss bf nf {va vaf} ikf {nk nkf} ise ne br nr {vb var} ikr isc nc rb\
-                                     irb rbm re rc cje {pe vje} {me mje} tf xtf vtf itf ptf cjc {pc vjc} mjc xcjc tr cjs\
-                                     {ps vjs} {ms mjs} xtb eg xti kf af fc {tref tnom} tlev tlevc tre1 tre2 trc1 trc2\
-                                     trb1 trb2 trbm1 trbm2 tbf1 tbf2 tbr1 tbr2 tikf1 tikf2 tikr1 tikr2 tirb1 tirb2 tnc1\
-                                     tnc2 tne1 tne2 tnf1 tnf2 tnr1 tnr2 tvaf1 tvaf2 tvar1 tvar2 ctc cte cts tvjc tvje\
-                                     titf1 titf2 ttf1 ttf2 ttr1 ttr2 tmje1 tmje2 tmjc1 tmjc2 rco gamma qco vg cn d}
+                                     irb rbm re rc cje {pe vje} {me mje} tf xtf vtf itf ptf cjc {pc vjc} mjc xcjc tr\
+                                     cjs {ps vjs} {ms mjs} xtb eg xti kf af fc {tref tnom} tlev tlevc tre1 tre2 trc1\
+                                     trc2 trb1 trb2 trbm1 trbm2 tbf1 tbf2 tbr1 tbr2 tikf1 tikf2 tikr1 tikr2 tirb1 tirb2\
+                                     tnc1 tnc2 tne1 tne2 tnf1 tnf2 tnr1 tnr2 tvaf1 tvaf2 tvar1 tvar2 ctc cte cts tvjc\
+                                     tvje titf1 titf2 ttf1 ttf2 ttr1 ttr2 tmje1 tmje2 tmjc1 tmjc2 rco gamma qco vg cn d}
             next {*}[my ArgsPreprocess $paramsNames {name type} {} {*}[linsert $args 2 -level 1]]
         }
     }
@@ -157,7 +159,8 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             #  args - keyword model parameters, for details please see Ngspice manual, chapter 9.
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet1Model new jfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4 -cgd 1e-12
+            # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet1Model new jfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4\
+                                    -cgd 1e-12
             # ```
             # Synopsis: name type ?-option value ...?
             set paramsNames {level vto beta lambda rd rs cgs cgd pb is b kf af nlev gdsnoi fc tnom tcv vtotc bex betatce\
@@ -176,7 +179,8 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             #  args - keyword model parameters, for details please see Ngspice manual, chapter 9.
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4 -vbi 1.2
+            # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4\
+                                    -vbi 1.2
             # ```
             # Synopsis: name type ?-option value ...?
             set paramsNames {level acgam beta cgd cgs delta fc hfeta hfe1 hfe2 hfgam hfg1 hfg2 ibd is lfgam lfg1 lfg2\
@@ -196,7 +200,8 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             #  args - keyword model parameters, for details please see Ngspice manual, chapter 10.
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4 -vbi 1.2
+            # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4\
+                                    -vbi 1.2
             # ```
             # Synopsis: name type ?-option value ...?
             set paramsNames {level vto beta b alpha lambda rd rs cgs cgd pb kf af fc}

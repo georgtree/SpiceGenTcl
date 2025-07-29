@@ -196,7 +196,8 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             #   ?-age value? ?-d value?
             # Synopsis: name np nm -model value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value?
             #   ?-age value? ?-d value? ?-l value? ?-w value?
-            set arguments [argparse -inline -pfirst -help {Creates object of class 'Capacitor' that describes capacitor} {
+            set arguments [argparse -inline -pfirst -help {Creates object of class 'Capacitor' that describes\
+                                                                   capacitor} {
                 {-c= -forbid q -help {Capacitance value or equation}}
                 {-q= -require beh -forbid {c model} -help {Charge equation}}
                 {-beh -forbid model -help {Selects behavioural type of capacitor}}
@@ -288,7 +289,8 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # Synopsis: name np nm -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value?
             # Synopsis: name np nm -model value -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value?
             #   ?-ic value?
-            set arguments [argparse -inline -pfirst -help {Creates object of class 'Capacitor' that describes capacitor} {
+            set arguments [argparse -inline -pfirst -help {Creates object of class 'Capacitor' that describes\
+                                                                   capacitor} {
                 {-l= -required -help {Inductance value}}
                 {-model= -help {Model of the inductor}}
                 {-m= -help {Multiplier value}}
@@ -411,7 +413,8 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {-eq c cpar}}
+            # ::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstance new 1 {{plus net1} {minus net2}}\
+                                    rcnet {{r 1} {-eq c cpar}}
             # ```
             ##nagelfar implicitvarcmd {argparse *Creates object of class 'SubcircuitInstance'*} name pins subName params
             argparse -pfirst -help {Creates object of class 'SubcircuitInstance' that describes subcircuit instance} {
@@ -884,7 +887,8 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet new 1 netd netg nets -model jfetmod -area {-eq area*2} -temp 25
+            # ::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet new 1 netd netg nets -model jfetmod -area {-eq area*2}\
+                                    -temp 25
             # ```
             # Synopsis: name nd ng ns -model value ?-area value? ?-temp value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'Jfet' that describes semiconductor\
@@ -946,8 +950,8 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             # ::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet new 1 netd netg nets -model mesfetmod -area {-eq area*2}
             # ```
             # Synopsis: name nd ng ns -model value ?-area value? ?-temp value?
-            set arguments [argparse -inline -pfirst -help {Creates object of class 'Mesfet' that describes semiconductor\
-                                                                  MESFET device} {
+            set arguments [argparse -inline -pfirst -help {Creates object of class 'Mesfet' that describes\
+                                                                  semiconductor MESFET device} {
                 {-model= -required -help {Name of the model}}
                 {-area= -help {Scale factor}}
                 {-temp= -help {Device temperature}}
@@ -1031,8 +1035,8 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             #   ?-l value? ?-w value? ?-ad value|-nrd value? ?-as value|-nrs value? ?-temp value? ?-off? ?-pd value?
             #   ?-ps value? ?-ic \{value value value\}?
             #   ?-custparams param1 \{?-eq|-poseq|-posnocheck|-pos|-nocheck? param1Val\} ...?
-            set arguments [argparse -inline -pfirst -help {Creates object of class 'Mosfet' that describes semiconductor\
-                                                                  MOSFET device} {
+            set arguments [argparse -inline -pfirst -help {Creates object of class 'Mosfet' that describes\
+                                                                  semiconductor MOSFET device} {
                 {-model= -required -help {Name of the model}}
                 {-m= -help Multiplier}
                 {-l= -help {Length of channel}}

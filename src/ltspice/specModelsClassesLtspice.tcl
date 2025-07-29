@@ -100,14 +100,15 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
             #  args - keyword model parameters, for details please see LTspice manual.
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::SemiconductorDevices::DiodeModel new bjtmod npn -is 1e-15 -bf 200 -vaf 100 -cje 1e-10
+            # ::SpiceGenTcl::Ltspice::SemiconductorDevices::DiodeModel new bjtmod npn -is 1e-15 -bf 200 -vaf 100\
+                                    -cje 1e-10
             # ```
             # Synopsis: name type ?-option value ...?
-            set paramsNames {is ibc ibe bf nf vaf ikf nk ise ne br nr var ikr isc nc rb irb rbm re rc cje vje mje tf xtf\
-                                     vtf itf ptf cjc vjc mjc xcjc xcjc2 extsub tr cjs xcjs vjs mjs xtb eg xti kf af fc\
-                                     subs bvcbo nbvcbo bvbe ibvbe nbvbe tnom cn d gamma qco quasimod rco vg vo tre1 tre2\
-                                     trb1 trb2 trc1 trc2 trm1 trm2 iss ns tvaf1 tvaf2 tvar1 tvar2 tikf1 tikf2 trbm1\
-                                     trbm2 tbvcbo1 tbvcbo2}
+            set paramsNames {is ibc ibe bf nf vaf ikf nk ise ne br nr var ikr isc nc rb irb rbm re rc cje vje mje tf\
+                                     xtf vtf itf ptf cjc vjc mjc xcjc xcjc2 extsub tr cjs xcjs vjs mjs xtb eg xti kf af\
+                                     fc subs bvcbo nbvcbo bvbe ibvbe nbvbe tnom cn d gamma qco quasimod rco vg vo tre1\
+                                     tre2 trb1 trb2 trc1 trc2 trm1 trm2 iss ns tvaf1 tvaf2 tvar1 tvar2 tikf1 tikf2\
+                                     trbm1 trbm2 tbvcbo1 tbvcbo2}
             next {*}[my ArgsPreprocess $paramsNames {name type} {} {*}$args]
         }
     }
@@ -122,7 +123,8 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
             #  args - keyword model parameters, for details please see LTspice manual.
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::SemiconductorDevices::JfetModel new jfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4 -cgd 1e-12
+            # ::SpiceGenTcl::Ltspice::SemiconductorDevices::JfetModel new jfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4\
+                                    -cgd 1e-12
             # ```
             # Synopsis: name type ?-option value ...?
             set paramsNames {vto beta lambda rd rs cgs cgd pb m is b kf af nlev gdsnoi fc tnom vtotc n isr nr alpha vk\
@@ -141,7 +143,8 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
             #  args - keyword model parameters, for details please see LTspice manual, chapter 10.
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::SemiconductorDevices::Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4 -vbi 1.2
+            # ::SpiceGenTcl::Ltspice::SemiconductorDevices::Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4\
+                                    -vbi 1.2
             # ```
             # Synopsis: name type ?-option value ...?
             set paramsNames {vto beta b alpha lambda rd rs cgs cgd pb kf af fc is}

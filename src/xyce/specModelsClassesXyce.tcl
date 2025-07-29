@@ -153,7 +153,8 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             #  args - keyword model parameters, for details please refer to Xyce reference manual, 2.3.18 section.
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet1Model new jfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4 -cgd 1e-12
+            # ::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet1Model new jfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4\
+                                    -cgd 1e-12
             # ```
             # Synopsis: name type ?-option value ...?
             set paramsNames {level af b beta cgd cgs delta fc is kf lambda pb rd rs tempmodel theta tnom vto}
@@ -171,7 +172,8 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             #  args - keyword model parameters, for details please refer to Xyce reference manual, 2.3.18 section.
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4 -vbi 1.2
+            # ::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4\
+                                    -vbi 1.2
             # ```
             # Synopsis: name type ?-option value ...?
             set paramsNames {level af b beta cgd cgs delta fc is kf lambda pb rd rs tempmodel theta tnom vto}
@@ -189,7 +191,8 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             #  args - keyword model parameters, for details please refer to Xyce reference manual, 2.3.19 section.
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4 -vbi 1.2
+            # ::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4\
+                                    -vbi 1.2
             # ```
             # Synopsis: name type ?-option value ...?
             set paramsNames {level af alpha b beta cgd cgs fc is kf lambda pb rd rs tempmodel tnom vto}
