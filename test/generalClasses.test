@@ -610,7 +610,6 @@ testTemplate testIncludeClass-1 {} {Include new {./libs/mosfets/nmos1}} {.includ
 testTemplate testIncludeClass-2 {} {Include new {./Libs/mosfets/nmos1}} {.include ./Libs/mosfets/nmos1}
 
 ###  Library class definition 
-
 testTemplate testLibraryClass-1 {} {Library new ./libs/mosfets/nmos1 slow_corner} {.lib ./libs/mosfets/nmos1 slow_corner}
 
 test testLibraryClass-2 {test creation of Library class instance and getLibValue interface} -setup {
@@ -620,6 +619,10 @@ test testLibraryClass-2 {test creation of Library class instance and getLibValue
 } -result {slow_corner} -cleanup {
     unset raw result
 }
+
+###  Function class definition 
+testTemplate testFunctionClass-1 {} {Function new mult(x,y) x*y} {.func mult(x,y) {x*y}}
+testTemplate testFunctionClass-2 {} {Function new {mult(x, y)} {x* y}} {.func mult(x, y) {x* y}}
     
 ###  Options class tests 
 

@@ -111,6 +111,10 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBOBJECT getDataPoints\fP
 .br
+\fBOBJECT constructor\fP \fIdeclaration body ?-name value?\fP
+.br
+\fBOBJECT genSPICEString\fP
+.br
 \fBOBJECT constructor\fP \fInets ?-name value?\fP
 .br
 \fBOBJECT addNets\fP \fI?args?\fP
@@ -1436,6 +1440,72 @@ Writable: -len, -name, -numtype, -type
 .RS 4n\fBOBJECT getDataPoints\fP
 .br
 .RE
+.PP
+.RS -4n
+\fBFunction\fR (::SpiceGenTcl)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+configure
+Configure properties\&.
+.TP
+genSPICEString
+Creates func string for SPICE netlist\&.
+.RE
+.PP
+\fBProperties\fR
+.PP
+Readable: -body, -declaration, -name
+.PP
+Writable: -body, -declaration, -name
+.PP
+\fBSuperclasses\fR
+.PP
+\fISPICEElement\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Function)
+.RE
+.PP
+Creates object of class Function\&.
+.RS 4n\fBOBJECT constructor\fP \fIdeclaration body ?-name value?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+-name
+Name of the string that could be used to retrieve element from \fI::SpiceGenTcl::Netlist\fP object and its descendants, optional\&.
+.TP
+body
+Body of the function\&.
+.TP
+declaration
+Function declaration\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+This class represent \&.func statement\&.
+.PP
+.RS -4n
+\fBgenSPICEString\fR (::SpiceGenTcl::Function)
+.RE
+.PP
+Creates func string for SPICE netlist\&.
+.RS 4n\fBOBJECT genSPICEString\fP
+.br
+.RE
+.PP
+\fBReturn value\fR
+.PP
+SPICE netlist's string
 .PP
 .RS -4n
 \fBGlobal\fR (::SpiceGenTcl)
@@ -3902,7 +3972,7 @@ Declaration of method common for all SPICE elements that generates representatio
 .PP
 \fBSubclasses\fR
 .PP
-\fIPin\fP, \fIParameterSwitch\fP, \fIDevice\fP, \fIModel\fP, \fIRawString\fP, \fIOptions\fP, \fIParamStatement\fP, \fISave\fP, \fIIc\fP, \fIGlobal\fP, \fITemp\fP, \fINetlist\fP, \fIAnalysis\fP
+\fIPin\fP, \fIParameterSwitch\fP, \fIDevice\fP, \fIModel\fP, \fIRawString\fP, \fIFunction\fP, \fIOptions\fP, \fIParamStatement\fP, \fISave\fP, \fIIc\fP, \fIGlobal\fP, \fITemp\fP, \fINetlist\fP, \fIAnalysis\fP
 .PP
 .RS -4n
 \fBgenSPICEString\fR (::SpiceGenTcl::SPICEElement)

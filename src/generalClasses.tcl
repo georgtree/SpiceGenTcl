@@ -19,7 +19,8 @@ namespace eval ::SpiceGenTcl {
     namespace export Pin ParameterSwitch Parameter ParameterNoCheck ParameterPositional ParameterPositionalNoCheck\
             ParameterDefault ParameterEquation ParameterPositionalEquation Device Model RawString Comment Include\
             Options ParamStatement Temp Netlist Circuit Library Subcircuit Analysis Simulator Dataset Axis Trace\
-            EmptyTrace RawFile Ic Nodeset ParameterNode ParameterNodeEquation Global Parser ParameterVector Save
+            EmptyTrace RawFile Ic Nodeset ParameterNode ParameterNodeEquation Global Parser ParameterVector Save\
+            Function
     namespace export importNgspice importXyce importCommon importLtspice forgetNgspice forgetXyce forgetCommon\
             forgetLtspice
 
@@ -1155,6 +1156,41 @@ namespace eval ::SpiceGenTcl {
             # Creates include string for SPICE netlist.
             # Returns: SPICE netlist's string
             return ".include [my configure -value]"
+        }
+    }
+
+###  Func class definition
+    oo::configurable create Function {
+        superclass SPICEElement
+        property declaration 
+        property body
+        property name
+        variable name declaration body
+        constructor {args} {
+            # Creates object of class `Function`.
+            #  declaration - function declaration
+            #  body - body of the function
+            #  -name - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist] object
+            #    and its descendants, optional
+            # This class represent .func statement.
+            # Synopsis: declaration body ?-name value?
+            set arguments [argparse -inline -pfirst -help {Creates object of class 'Function'} {
+                {declaration -help {Function declaration}}
+                {body -help {Body of the function}}
+                {-name= -help {Name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]\
+                                       object and its descendants}}
+            }]
+            if {[dexist $arguments name]} {
+                my configure -name [dget $arguments name]
+            } else {
+                my configure -name [self object]
+            }
+            my configure -declaration [dget $arguments declaration] -body [dget $arguments body]
+        }
+        method genSPICEString {} {
+            # Creates func string for SPICE netlist.
+            # Returns: SPICE netlist's string
+            return ".func [my configure -declaration] \{[my configure -body]\}"
         }
     }
 
