@@ -77,8 +77,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                     }
                 }
             }
-            next r[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
-                    $params
+            next r[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }
 ####  R class 
@@ -137,7 +136,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                     }
                 }
             }
-            next c[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]] $params
+            next c[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }
 ####  C class 
@@ -194,7 +193,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                     }
                 }
             }
-            next l[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]] $params
+            next l[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }
     
@@ -276,8 +275,8 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             } elseif {[dexist $arguments off]} {
                 lappend params {-sw off}
             }
-            next s[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]\
-                                 [list ncp [dget $arguments ncp]] [list ncm [dget $arguments ncm]]] $params
+            
+            next s[dget $arguments name] [my FormPinNodeList $arguments {np nm ncp ncm}] $params
         }
     }
 
@@ -324,7 +323,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             } elseif {[dexist $arguments off]} {
                 lappend params {-sw off}
             }
-            next w[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]] $params
+            next w[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }
 
@@ -423,8 +422,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             } else {
                 lappend params [list -pos dc $dcVal]
             }
-            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
-                    $params
+            next $type[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }
 
@@ -468,8 +466,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                     }
                 }
             }
-            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
-                    $params
+            next $type[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }   
     
@@ -528,8 +525,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             set paramsOrder {low high td tr tf ton tper}
             lappend params {-posnocheck model pulse}
             my ParamsProcess $paramsOrder $arguments params
-            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
-                    $params
+            next $type[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     } 
     
@@ -587,8 +583,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             set paramsOrder {v0 va freq td theta phase}
             lappend params {-posnocheck model sin}
             my ParamsProcess $paramsOrder $arguments params
-            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
-                    $params
+            next $type[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }  
     
@@ -646,8 +641,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             set paramsOrder {v1 v2 td1 tau1 td2 tau2}
             lappend params {-posnocheck model exp}
             my ParamsProcess $paramsOrder $arguments params
-            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
-                    $params
+            next $type[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }    
     
@@ -723,8 +717,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 }
             }
             set paramList [linsert $paramList $start {-posnocheck model pwl}]
-            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
-                    $paramList
+            next $type[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $paramList
         }
     }
 
@@ -781,8 +774,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             set paramsOrder {v0 va fc mdi fs}
             lappend params {-posnocheck model sffm}
             my ParamsProcess $paramsOrder $arguments params
-            next $type[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]]\
-                    $params
+            next $type[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }      
     
@@ -1213,9 +1205,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                     }
                 }
             }
-            next g[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]\
-                                                  [list ncp [dget $arguments ncp]] [list ncm [dget $arguments ncm]]]\
-                    $params
+            next g[dget $arguments name] [my FormPinNodeList $arguments {np nm ncp ncm}] $params
         }
     }
 
@@ -1259,9 +1249,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             } else {
                 lappend params [list -pos vgain $gainVal]
             }
-            next e[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]\
-                                                  [list ncp [dget $arguments ncp]]\
-                                                  [list ncm [dget $arguments ncm]]] $params
+            next e[dget $arguments name] [my FormPinNodeList $arguments {np nm ncp ncm}] $params
         }
     }
 
@@ -1316,7 +1304,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                     }
                 }
             }
-            next f[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]] $params
+            next f[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         } 
     }
 
@@ -1360,7 +1348,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             } else {
                 lappend params [list -pos transr $transrVal]
             }
-            next h[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]] $params
+            next h[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }
 

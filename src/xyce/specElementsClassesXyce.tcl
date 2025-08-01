@@ -769,7 +769,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
                     }
                 }
             }
-            next d[dget $arguments name] [list [list np [dget $arguments np]] [list nm [dget $arguments nm]]] $params
+            next d[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }
 
@@ -841,8 +841,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
                     }
                 }
             }
-            set pinList [list [list nc [dget $arguments nc]] [list nb [dget $arguments nb]]\
-                                 [list ne [dget $arguments ne]]]
+            set pinList [my FormPinNodeList $arguments {nc nb ne}]
             if {[dexist $arguments ns]} {
                 lappend pinList [list ns [dget $arguments ns]]
                 if {[dexist $arguments tj]} {
@@ -919,8 +918,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
                     }
                 }
             }
-            next j[dget $arguments name] [list [list nd [dget $arguments nd]] [list ng [dget $arguments ng]]\
-                                                  [list ns [dget $arguments ns]]] $params
+            next j[dget $arguments name] [my FormPinNodeList $arguments {nd ng ns}] $params
         }
     }
 
@@ -978,8 +976,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
                     }
                 }
             }
-            next z[dget $arguments name] [list [list nd [dget $arguments nd]] [list ng [dget $arguments ng]]\
-                                                  [list ns [dget $arguments ns]]] $params
+            next z[dget $arguments name] [my FormPinNodeList $arguments {nd ng ns}] $params
         }
     }
 
@@ -1089,8 +1086,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
                     }
                 }
             }
-            set pinList [list [list nd [dget $arguments nd]] [list ng [dget $arguments ng]]\
-                                 [list ns [dget $arguments ns]]]
+            set pinList [my FormPinNodeList $arguments {nd ng ns}]
             if {[dexist $arguments n4]} {
                 lappend pinList [list n4 [dget $arguments n4]]
                 if {[dexist $arguments n5]} {

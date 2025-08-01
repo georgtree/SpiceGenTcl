@@ -234,6 +234,9 @@ namespace eval ::SpiceGenTcl {
             }
             return $itemDup
         }
+        method FormPinNodeList {nodes pins} {
+            return [lmap pin $pins {list $pin [dget $nodes $pin]}]
+        }
     }
 
 ###  Pin class definition
