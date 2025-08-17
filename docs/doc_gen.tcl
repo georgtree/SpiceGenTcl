@@ -20,7 +20,7 @@ puts $packageVersion
 set title "Tcl SpiceGenTcl package"
 
 set common [list -title $title -sortnamespaces false -preamble $startPage -pagesplit namespace -recurse false\
-                    -includesource true -pagesplit namespace -autopunctuate true -compact true -includeprivate false\
+                    -includesource true -pagesplit namespace -autopunctuate true -compact false -includeprivate false\
                     -product SpiceGenTcl -diagrammer "ditaa --border-width 1" -version $packageVersion\
                     -copyright "George Yashin" {*}$::argv]
 set commonNroff [list -title $title -sortnamespaces false -preamble $startPage -pagesplit namespace -recurse false\
@@ -58,16 +58,27 @@ foreach file [glob ${docDir}/*.html] {
 
 # change default width
 proc processContentsCss {fileContents} {
-    return [string map {max-width:60rem max-width:100rem} $fileContents]
+    return [string map [list max-width:60rem max-width:100rem "overflow-wrap:break-word" "overflow-wrap:normal"]\
+                    $fileContents]
 }
 # change default theme 
 proc processContentsJs {fileContents} {
-    return [string map {init()\{currentTheme=localStorage.ruff_theme init()\{currentTheme=currentTheme="dark"}\
+    return [string map {init()\{currentTheme=localStorage.ruff_theme init()\{currentTheme=currentTheme="v1"}\
                     $fileContents]
 }
 
 fileutil::updateInPlace [file join $docDir assets ruff-min.css] processContentsCss
 fileutil::updateInPlace [file join $docDir assets ruff-min.js] processContentsJs
+
+set tableWrapping {
+    .ruff-bd table.ruff_deflist th:first-child,
+    .ruff-bd table.ruff_deflist td:first-child {
+        white-space: nowrap;      /* never wrap */
+        overflow-wrap: normal;
+        word-break: normal;
+    }
+}
+::fileutil::appendToFile [file join $docDir assets ruff-min.css] $tableWrapping
 
 # ticklechart graphs substitutions
 

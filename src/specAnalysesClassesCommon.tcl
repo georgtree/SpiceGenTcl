@@ -28,11 +28,11 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
         mixin ::SpiceGenTcl::Utility
         constructor {args} {
             # Creates object of class `Dc` that describes DC analysis.
-            #  -src - name of independent voltage or current source, a resistor, or the circuit temperature
-            #  -start - start value
-            #  -stop - stop value
-            #  -incr - incrementing value
-            #  -name - name argument, optional
+            #  -src value - name of independent voltage or current source, a resistor, or the circuit temperature
+            #  -start value - start value
+            #  -stop value - stop value
+            #  -incr value - incrementing value
+            #  -name value - name argument, optional
             # ```
             # .dc src start stop vincr
             # ```
@@ -64,11 +64,11 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
         mixin ::SpiceGenTcl::Utility
         constructor {args} {
             # Creates object of class `Ac` that describes AC analysis.
-            #  -variation - parameter that defines frequency scale, could be dec, oct or lin
-            #  -n - number of points
-            #  -fstart - start frequency
-            #  -fstop - stop frequency
-            #  -name - name argument, optional
+            #  -variation value - parameter that defines frequency scale, could be dec, oct or lin
+            #  -n value - number of points
+            #  -fstart value - start frequency
+            #  -fstop value - stop frequency
+            #  -name value - name argument, optional
             # ```
             # .ac variation n fstart fstop
             # ```
@@ -99,12 +99,12 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
         mixin ::SpiceGenTcl::Utility
         constructor {args} {
             # Creates object of class `Tran` that describes TRAN analysis.
-            #  -tstep - size of maximum time step for plotting
-            #  -tstop - stop time value
-            #  -tstart - start time of saving data, optional
-            #  -tmax - size of maximum time step in actual simulation, optional, require -tstart
+            #  -tstep value - size of maximum time step for plotting
+            #  -tstop value - stop time value
+            #  -tstart value - start time of saving data, optional
+            #  -tmax value - size of maximum time step in actual simulation, optional, require -tstart
             #  -uic - skip initial operating point solution, optional
-            #  -name - name argument, optional
+            #  -name value - name argument, optional
             # ```
             # .tran tstep tstop <tstart<tmax>> <uic>
             # ```
@@ -138,7 +138,7 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
         mixin ::SpiceGenTcl::Utility
         constructor {args} {
             # Creates object of class `Op` that describes OP analysis.
-            #  -name - name argument, optional
+            #  -name value - name argument, optional
             # ```
             # .op
             # ```

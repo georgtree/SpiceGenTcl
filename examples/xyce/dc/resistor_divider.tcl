@@ -1,7 +1,6 @@
 
 package require SpiceGenTcl
 package require ticklecharts
-set ::ticklecharts::theme "dark"
 namespace import ::SpiceGenTcl::*
 importXyce
 

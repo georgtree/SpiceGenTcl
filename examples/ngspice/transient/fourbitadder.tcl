@@ -2,7 +2,6 @@
 
 package require SpiceGenTcl
 package require ticklecharts
-set ::ticklecharts::theme "dark"
 namespace import ::tcl::mathop::*
 namespace import ::SpiceGenTcl::*
 importNgspice
@@ -135,7 +134,7 @@ set i 0
 foreach node $nodes {
     ticklecharts::chart create chartV$node
     chartV$node SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
-            -toolbox {feature {dataZoom {yAxisIndex "none"}}} -backgroundColor "#212121"
+            -toolbox {feature {dataZoom {yAxisIndex "none"}}}
     chartV$node Xaxis -name "time, s" -minorTick {show "True"} -type "value" -splitLine {show "True"}
     chartV$node Yaxis -name "v(${node}), V" -minorTick {show "True"} -type "value" -splitLine {show "True"}
     chartV$node Add "lineSeries" -data [subst $[subst timeV$node]] -showAllSymbol "nothing" -name "V(${node})"\

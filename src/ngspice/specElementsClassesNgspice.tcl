@@ -42,19 +42,19 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             #  name - name of the device without first-letter designator R
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -r - resistance value or equation
-            #  -ac - AC resistance value, optional
-            #  -m - multiplier value, optional
-            #  -scale - scaling factor, optional
-            #  -temp - device temperature, optional
-            #  -dtemp - temperature offset, optional
-            #  -tc1 - linear thermal coefficient, optional
-            #  -tc2 - quadratic thermal coefficient, optional
-            #  -model - model of the resistor, optional
+            #  -r value - resistance value or equation
+            #  -ac value - AC resistance value, optional
+            #  -m value - multiplier value, optional
+            #  -scale value - scaling factor, optional
+            #  -temp value - device temperature, optional
+            #  -dtemp value - temperature offset, optional
+            #  -tc1 value - linear thermal coefficient, optional
+            #  -tc2 value - quadratic thermal coefficient, optional
+            #  -model value - model of the resistor, optional
             #  -beh - selects behavioural type of resistor, optional
             #  -noisy - selects noise behaviour
-            #  -l - length of semiconductor resistor, optional
-            #  -w - width of semiconductor resistor, optional
+            #  -l value - length of semiconductor resistor, optional
+            #  -w value - width of semiconductor resistor, optional
             # Resistor type could be specified with additional switches: `-beh` if we
             # want to model circuit's variable dependent resistor, or `-model modelName`
             # if we want to simulate resistor with model card (semiconductor resistor).
@@ -151,19 +151,19 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             #  name - name of the device without first-letter designator C
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -c - capacitance value or equation
-            #  -q - charge equation
-            #  -m - multiplier value, optional
-            #  -scale - scaling factor, optional
-            #  -temp - device temperature, optional
-            #  -dtemp - temperature offset, optional
-            #  -tc1 - linear thermal coefficient, optional
-            #  -tc2 - quadratic thermal coefficient, optional
-            #  -model - model of the resistor, optional
+            #  -c value - capacitance value or equation
+            #  -q value - charge equation
+            #  -m value - multiplier value, optional
+            #  -scale value - scaling factor, optional
+            #  -temp value - device temperature, optional
+            #  -dtemp value - temperature offset, optional
+            #  -tc1 value - linear thermal coefficient, optional
+            #  -tc2 value - quadratic thermal coefficient, optional
+            #  -model value - model of the resistor, optional
             #  -beh - selects behavioural type of resistor, optional
-            #  -l - length of semiconductor capacitor, optional
-            #  -w - width of semiconductor capacitor, optional
-            #  -ic - initial voltage on capacitor, optional
+            #  -l value - length of semiconductor capacitor, optional
+            #  -w value - width of semiconductor capacitor, optional
+            #  -ic value - initial voltage on capacitor, optional
             # Capacitor type could be specified with additional switches: `-beh` if we
             # want to model circuit's variable dependent capacitor, or `-model modelName`
             # if we want to simulate capacitor with model card (semiconductor capacitor).
@@ -272,17 +272,17 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
             #  name - name of the device without first-letter designator L
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -l - inductance value or equation
-            #  -m - multiplier value, optional
-            #  -scale - scaling factor, optional
-            #  -temp - device temperature, optional
-            #  -dtemp - temperature offset, optional
-            #  -tc1 - linear thermal coefficient, optional
-            #  -tc2 - quadratic thermal coefficient, optional
-            #  -model - model of the inductor, optional
+            #  -l value - inductance value or equation
+            #  -m value - multiplier value, optional
+            #  -scale value - scaling factor, optional
+            #  -temp value - device temperature, optional
+            #  -dtemp value - temperature offset, optional
+            #  -tc1 value - linear thermal coefficient, optional
+            #  -tc2 value - quadratic thermal coefficient, optional
+            #  -model value - model of the inductor, optional
             #  -beh - selects behavioural type of inductor, optional
-            #  -ic - initial current through inductor, optional
-            #  -nt - number of turns, optional
+            #  -ic value - initial current through inductor, optional
+            #  -nt value - number of turns, optional
             # Inductor type could be specified with additional switches: `-beh` if we
             # want to model circuit's variable dependent inductor, or `-model modelName`
             # if we want to simulate inductor with model card.
@@ -370,9 +370,9 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
         constructor {args} {
             # Creates object of class `Coupling` that describes inductance coupling between inductors.
             #  name - name of the device without first-letter designator L
-            #  -l1 - first inductor name
-            #  -l2 - second inductor name
-            #  -k - coupling coefficient
+            #  -l1 value - first inductor name
+            #  -l2 value - second inductor name
+            #  -k value - coupling coefficient
             # ```
             # KXXXXXXX LYYYYYYY LZZZZZZZ value
             # ```
@@ -781,10 +781,10 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             #  name - name of the device without first-letter designator V
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -dc - DC voltage value
-            #  -ac - AC voltage value
-            #  -portnum - number of port
-            #  -z0 - internal source impedance
+            #  -dc value - DC voltage value
+            #  -ac value - AC voltage value
+            #  -portnum value - number of port
+            #  -z0 value - internal source impedance
             # ```
             # VYYYYYYY n+ n- DC 0 AC 1 portnum n1 <z0 n2>
             # ```
@@ -829,17 +829,17 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             #  name - name of the device without first-letter designator V
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -low - low value, aliases: -voff, -ioff
-            #  -high - high value, aliases: -von, ion
-            #  -td - time delay
-            #  -tr - rise time
-            #  -tf - fall time
-            #  -pw - width of pulse, alias -ton
-            #  -per - period time, alias -tper
-            #  -npulses - number of pulses, optional
-            #  -dc - DC value, optional
-            #  -ac - AC value, optional
-            #  -acphase - phase of AC signal, optional, requires -ac
+            #  -low value - low value, aliases: -voff, -ioff
+            #  -high value - high value, aliases: -von, ion
+            #  -td value - time delay
+            #  -tr value - rise time
+            #  -tf value - fall time
+            #  -pw value - width of pulse, alias -ton
+            #  -per value - period time, alias -tper
+            #  -npulses value - number of pulses, optional
+            #  -dc value - DC value, optional
+            #  -ac value - AC value, optional
+            #  -acphase value - phase of AC signal, optional, requires -ac
             # ```
             # VYYYYYYY n+ n- PULSE(V1 V2 TD TR TF PW PER NP)
             # ```
@@ -877,16 +877,16 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             #  name - name of the device without first-letter designator V
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -v0 - initial value, aliases: -voff, -i0, -ioff
-            #  -va - pulsed value, aliases: -vamp, -ia, -iamp
-            #  -fc - carrier frequency, alias -fcar
-            #  -mdi - modulation index
-            #  -fs - signal frequency, alias -fsig
-            #  -phasec - carrier phase, optional
-            #  -phases - signal phase, optional, require -phasec
-            #  -dc - DC value, optional
-            #  -ac - AC value, optional
-            #  -acphase - phase of AC signal, optional, requires -ac
+            #  -v0 value - initial value, aliases: -voff, -i0, -ioff
+            #  -va value - pulsed value, aliases: -vamp, -ia, -iamp
+            #  -fc value - carrier frequency, alias -fcar
+            #  -mdi value - modulation index
+            #  -fs value - signal frequency, alias -fsig
+            #  -phasec value - carrier phase, optional
+            #  -phases value - signal phase, optional, require -phasec
+            #  -dc value - DC value, optional
+            #  -ac value - AC value, optional
+            #  -acphase value - phase of AC signal, optional, requires -ac
             # ```
             # VYYYYYYY n+ n- SFFM(VO VA FC MDI FS PHASEC PHASES)
             # ```
@@ -909,15 +909,15 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             #  name - name of the device without first-letter designator V
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -v0 - initial value
-            #  -va - pulsed value
-            #  -mf - modulating frequency
-            #  -fc - carrier frequency
-            #  -td - signal delay, optional
-            #  -phases - phase, optional, require -td
-            #  -dc - DC value, optional
-            #  -ac - AC value, optional
-            #  -acphase - phase of AC signal, optional, requires -ac
+            #  -v0 value - initial value
+            #  -va value - pulsed value
+            #  -mf value - modulating frequency
+            #  -fc value - carrier frequency
+            #  -td value - signal delay, optional
+            #  -phases value - phase, optional, require -td
+            #  -dc value - DC value, optional
+            #  -ac value - AC value, optional
+            #  -acphase value - phase of AC signal, optional, requires -ac
             # ```
             # VYYYYYYY n+ n- AM(VA VO MF FC TD PHASES)
             # ```
@@ -949,17 +949,17 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             #  name - name of the device without first-letter designator I
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -low - low value
-            #  -high - high value
-            #  -td - time delay
-            #  -tr - rise time
-            #  -tf - fall time
-            #  -pw - width of pulse
-            #  -per - period time
-            #  -npulses - number of pulses, optional
-            #  -dc - DC value, optional
-            #  -ac - AC value, optional
-            #  -acphase - phase of AC signal, optional, requires -ac
+            #  -low value - low value
+            #  -high value - high value
+            #  -td value - time delay
+            #  -tr value - rise time
+            #  -tf value - fall time
+            #  -pw value - width of pulse
+            #  -per value - period time
+            #  -npulses value - number of pulses, optional
+            #  -dc value - DC value, optional
+            #  -ac value - AC value, optional
+            #  -acphase value - phase of AC signal, optional, requires -ac
             # ```
             # IYYYYYYY n+ n- PULSE(V1 V2 TD TR TF PW PER NP)
             # ```
@@ -997,16 +997,16 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             #  name - name of the device without first-letter designator I
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -i0 - initial value, aliases: -voff, -v0, -ioff
-            #  -ia - pulsed value, aliases: -vamp, -va, -iamp
-            #  -fc - carrier frequency, alias -fcar
-            #  -mdi - modulation index
-            #  -fs - signal frequency, alias -fsig
-            #  -phasec - carrier phase, optional
-            #  -phases - signal phase, optional, require -phasec
-            #  -dc - DC value, optional
-            #  -ac - AC value, optional
-            #  -acphase - phase of AC signal, optional, requires -ac
+            #  -i0 value - initial value, aliases: -voff, -v0, -ioff
+            #  -ia value - pulsed value, aliases: -vamp, -va, -iamp
+            #  -fc value - carrier frequency, alias -fcar
+            #  -mdi value - modulation index
+            #  -fs value - signal frequency, alias -fsig
+            #  -phasec value - carrier phase, optional
+            #  -phases value - signal phase, optional, require -phasec
+            #  -dc value - DC value, optional
+            #  -ac value - AC value, optional
+            #  -acphase value - phase of AC signal, optional, requires -ac
             # ```
             # IYYYYYYY n+ n- SFFM(VO VA FC MDI FS PHASEC PHASES)
             # ```
@@ -1029,12 +1029,12 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             #  name - name of the device without first-letter designator I
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -i0 - initial value
-            #  -ia - pulsed value
-            #  -mf - modulating frequency
-            #  -fc - carrier frequency
-            #  -td - signal delay, optional
-            #  -phases - phase, optional, require -td
+            #  -i0 value - initial value
+            #  -ia value - pulsed value
+            #  -mf value - modulating frequency
+            #  -fc value - carrier frequency
+            #  -td value - signal delay, optional
+            #  -phases value - phase, optional, require -td
             # ```
             # IYYYYYYY n+ n- AM(VA VO MF FC TD PHASES)
             # ```
@@ -1100,12 +1100,12 @@ namespace eval ::SpiceGenTcl::Ngspice::Sources {
             #  name - name of the device without first-letter designator B
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -i - current expression
-            #  -v - voltage expression
-            #  -temp - device temperature, optional
-            #  -dtemp - temperature offset, optional
-            #  -tc1 - linear thermal coefficient, optional
-            #  -tc2 - quadratic thermal coefficient, optional
+            #  -i value - current expression
+            #  -v value - voltage expression
+            #  -temp value - device temperature, optional
+            #  -dtemp value - temperature offset, optional
+            #  -tc1 value - linear thermal coefficient, optional
+            #  -tc2 value - quadratic thermal coefficient, optional
             #  -noisy - selects noise behaviour
             # ```
             # BXXXXXXX n+ n- <i=expr> <v=expr> <tc1=value> <tc2=value> <dtemp=value> <temp=value>
@@ -1167,17 +1167,17 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             #  name - name of the device without first-letter designator D
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -model - name of the model
-            #  -area - area scale factor, optional
-            #  -m - multiplier of area and perimeter, optional
-            #  -pj - perimeter scale factor, optional
-            #  -ic - initial condition, optional
-            #  -temp - device temperature, optional
-            #  -dtemp - temperature offset, optional
-            #  -lm - length of metal capacitor, optional
-            #  -wm - width of metal capacitor, optional
-            #  -lp - length of polysilicon capacitor, optional
-            #  -wp - width of polysilicon capacitor, optional
+            #  -model value - name of the model
+            #  -area value - area scale factor, optional
+            #  -m value - multiplier of area and perimeter, optional
+            #  -pj value - perimeter scale factor, optional
+            #  -ic value - initial condition, optional
+            #  -temp value - device temperature, optional
+            #  -dtemp value - temperature offset, optional
+            #  -lm value - length of metal capacitor, optional
+            #  -wm value - width of metal capacitor, optional
+            #  -lp value - length of polysilicon capacitor, optional
+            #  -wp value - width of polysilicon capacitor, optional
             #  -off - initial state, optional
             # ```
             # DXXXXXXX n+ n- mname <area=val> <m=val>
@@ -1239,16 +1239,16 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             #  nc - name of node connected to collector pin
             #  nb - name of node connected to base pin
             #  ne - name of node connected to emitter pin
-            #  -model - name of the model
-            #  -area - emitter scale factor, optional
-            #  -areac - collector scale factor, optional
-            #  -areab - base scale factor, optional
-            #  -m - multiplier of area and perimeter, optional
-            #  -temp - device temperature, optional
-            #  -dtemp - temperature offset, optional
-            #  -ic - initial conditions for vds and vgs, in form of two element list, optional
-            #  -ns - name of node connected to substrate pin, optional
-            #  -tj - name of node connected to thermal pin, optional, requires -ns
+            #  -model value - name of the model
+            #  -area value - emitter scale factor, optional
+            #  -areac value - collector scale factor, optional
+            #  -areab value - base scale factor, optional
+            #  -m value - multiplier of area and perimeter, optional
+            #  -temp value - device temperature, optional
+            #  -dtemp value - temperature offset, optional
+            #  -ic value - initial conditions for vds and vgs, in form of two element list, optional
+            #  -ns value - name of node connected to substrate pin, optional
+            #  -tj value - name of node connected to thermal pin, optional, requires -ns
             #  -off - initial state, optional
             # ```
             # QXXXXXXX nc nb ne <ns> <tj> mname <area=val> <areac=val>
@@ -1322,10 +1322,10 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             #  nd - name of node connected to drain pin
             #  ng - name of node connected to gate pin
             #  ns - name of node connected to source pin
-            #  -model - name of the model
-            #  -area - emitter scale factor, optional
-            #  -temp - device temperature, optional
-            #  -ic - initial conditions for vds and vgs, in form of two element list, optional
+            #  -model value - name of the model
+            #  -area value - emitter scale factor, optional
+            #  -temp value - device temperature, optional
+            #  -ic value - initial conditions for vds and vgs, in form of two element list, optional
             #  -off - initial state, optional
             # ```
             # JXXXXXXX nd ng ns mname  <area> <off> <ic=vds,vgs> <temp =t>
@@ -1388,9 +1388,9 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             #  nd - name of node connected to drain pin
             #  ng - name of node connected to gate pin
             #  ns - name of node connected to source pin
-            #  -model - name of the model
-            #  -area - scale factor, optional
-            #  -ic - initial conditions for vds and vgs, in form of two element list, optional
+            #  -model value - name of the model
+            #  -area value - scale factor, optional
+            #  -ic value - initial conditions for vds and vgs, in form of two element list, optional
             #  -off - initial state, optional
             # ```
             # ZXXXXXXX ND NG NS MNAME <AREA> <OFF> <IC=VDS,VGS>
@@ -1448,23 +1448,23 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             #  nd - name of node connected to drain pin
             #  ng - name of node connected to gate pin
             #  ns - name of node connected to source pin
-            #  -model - name of the model
-            #  -m - multiplier, optional
-            #  -l - length of channel, optional
-            #  -w - width of channel, optional
-            #  -ad - diffusion area of drain, optional, forbid -nrd
-            #  -as - diffusion area of source, optional,forbid -nrs
-            #  -pd - perimeter area of drain, optional
-            #  -ps - perimeter area of source, optional
-            #  -nrd - equivalent number of squares of the drain diffusions
-            #  -nrs - equivalent number of squares of the source diffusions
-            #  -temp - device temperature
-            #  -ic - initial conditions for vds, vgs and vbs, in form of three element list, optional, require 4th node
+            #  -model value - name of the model
+            #  -m value - multiplier, optional
+            #  -l value - length of channel, optional
+            #  -w value - width of channel, optional
+            #  -ad value - diffusion area of drain, optional, forbid -nrd
+            #  -as value - diffusion area of source, optional,forbid -nrs
+            #  -pd value - perimeter area of drain, optional
+            #  -ps value - perimeter area of source, optional
+            #  -nrd value - equivalent number of squares of the drain diffusions
+            #  -nrs value - equivalent number of squares of the source diffusions
+            #  -temp value - device temperature
+            #  -ic value - initial conditions for vds, vgs and vbs, in form of three element list, optional, require 4th node
             #  -off - initial state, optional
-            #  -n4 - name of 4th node;
-            #  -n5 - name of 5th node, require -n4, optional
-            #  -n6 - name of 6th node, require -n5, optional
-            #  -n7 - name of 7th node, require -n6, optional
+            #  -n4 value - name of 4th node;
+            #  -n5 value - name of 5th node, require -n4, optional
+            #  -n6 value - name of 6th node, require -n5, optional
+            #  -n7 value - name of 7th node, require -n6, optional
             #  -custparams - key that collects all arguments at the end of device definition, to provide an ability
             #  to add custom parameters in form `-custparams param1 param1Val param2 {-eq param2eq} param3 param3Val ...`
             #  Must be specified after all others options. Optional.

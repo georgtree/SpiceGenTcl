@@ -2,7 +2,6 @@
 
 package require SpiceGenTcl
 package require ticklecharts
-set ::ticklecharts::theme "dark"
 namespace import ::SpiceGenTcl::*
 importXyce
 
@@ -66,14 +65,14 @@ set chartVout [ticklecharts::chart new]
 $chartVout Xaxis -name "time, s" -minorTick {show "True"} -type "value"
 $chartVout Yaxis -name "Output voltage, V" -minorTick {show "True"} -type "value"
 $chartVout SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
-        -toolbox {feature {dataZoom {yAxisIndex "none"}}} -backgroundColor "#212121"
+        -toolbox {feature {dataZoom {yAxisIndex "none"}}}
 $chartVout Add "lineSeries" -data $timeVout -showAllSymbol "nothing" -symbolSize "0"
 # chart for measured current
 set chartImeas [ticklecharts::chart new]
 $chartImeas Xaxis -name "time, s" -minorTick {show "True"} -type "value"
 $chartImeas Yaxis -name "Current, I" -minorTick {show "True"} -type "value"
 $chartImeas SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
-        -toolbox {feature {dataZoom {yAxisIndex "none"}}} -backgroundColor "#212121"
+        -toolbox {feature {dataZoom {yAxisIndex "none"}}}
 $chartImeas Add "lineSeries" -data $timeImeas -showAllSymbol "nothing" -symbolSize "0"
 # create multiplot
 set layout [ticklecharts::Gridlayout new]

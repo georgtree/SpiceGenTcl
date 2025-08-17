@@ -38,11 +38,11 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
         mixin ::SpiceGenTcl::Utility
         constructor {args} {
             # Creates object of class `Sp` that describes s-parameter analysis.
-            #  -variation - parameter that defines frequency scale, could be dec, oct or lin
-            #  -n - number of points
-            #  -fstart - start frequency
-            #  -fstop - start frequency
-            #  -name - name argument, optional
+            #  -variation value - parameter that defines frequency scale, could be dec, oct or lin
+            #  -n value - number of points
+            #  -fstart value - start frequency
+            #  -fstop value - start frequency
+            #  -name value - name argument, optional
             #  -donoise - activate s-parameter noise
             # ```
             # .ac variation n fstart fstop <donoise>
@@ -78,12 +78,12 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
         mixin ::SpiceGenTcl::Utility
         constructor {args} {
             # Creates object of class `SensAc` that describes SENS ac analysis.
-            #  -outvar - output variable
-            #  -variation - parameter that defines frequency scale, could be dec, oct or lin
-            #  -n - number of points
-            #  -fstart - start frequency
-            #  -fstop - start frequency
-            #  -name - name argument, optional
+            #  -outvar value - output variable
+            #  -variation value - parameter that defines frequency scale, could be dec, oct or lin
+            #  -n value - number of points
+            #  -fstart value - start frequency
+            #  -fstop value - start frequency
+            #  -name value - name argument, optional
             # ```
             # .sens outvar ac variation n fstart fstop
             # ```
@@ -118,8 +118,8 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
         mixin ::SpiceGenTcl::Utility
         constructor {args} {
             # Creates object of class `SensDc` that describes SENS dc analysis.
-            #  -outvar - output variable
-            #  -name - name argument, optional
+            #  -outvar value - output variable
+            #  -name value - name argument, optional
             # ```
             # .senc outvar
             # ```

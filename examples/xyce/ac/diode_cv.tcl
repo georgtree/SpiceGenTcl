@@ -1,7 +1,6 @@
 
 package require SpiceGenTcl
 package require ticklecharts
-set ::ticklecharts::theme "dark"
 package require math::constants
 ::math::constants::constants radtodeg degtorad pi
 namespace import ::SpiceGenTcl::*
@@ -44,7 +43,7 @@ set chart [ticklecharts::chart new]
 $chart Xaxis -name "v(0,c), V" -minorTick {show "True"} -type "value"
 $chart Yaxis -name "Diode capacitance, nF" -minorTick {show "True"} -type "value"
 $chart SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
-        -toolbox {feature {dataZoom {yAxisIndex "none"}}} -backgroundColor "#212121"
+        -toolbox {feature {dataZoom {yAxisIndex "none"}}}
 $chart Add "lineSeries" -data $xydata -showAllSymbol "nothing"
 set fbasename [file rootname [file tail [info script]]]
 

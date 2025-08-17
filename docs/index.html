@@ -61,7 +61,7 @@
 <div style='clear:both;'></div>
 <p class='ruff'>To install the package you should extract archive with source code and add path of the package folder to <code>auto_path</code> variable:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>lappend</font></b> auto_path <font color=#90ee90>&quot;path to SpiceGenTcl package&quot;</font>
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>lappend</font></b> auto_path <font color=#035103>&quot;path to SpiceGenTcl package&quot;</font>
 </pre>
 
 </figure><h2 class='ruff'><a name='Dependencies'></a>Dependencies<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
@@ -93,7 +93,7 @@
 <p class='ruff'>I personally use Kubuntu 24.04, and I also tested package on Windows 11. On Kubuntu I use Tcl/Tk 9.0 compiled from sources, as well as Ngspice and Xyce. On Windows I use <a href="https://www.magicsplat.com/tcl-installer/" >Magicsplat</a> distribution of Tcl/Tk 9.0. For Ngspice and Xyce I use precompilled binaries.</p>
 <p class='ruff'><font color="red"><strong>Note</strong></font>: on Windows by default Ngspice save raw file into ascii format, to pass all tests (because of different numbers formatting - scientific by default) you need to set binary format by default in .spiceinit by this line:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>set</font></b> filetype=binary
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> filetype=binary
 </pre>
 
 </figure><p class='ruff'>Tcl is a cross-platform language, and because this package is written in pure Tcl, you can practically run it on any platform, including Windows, Linux (all flavors), and FreeBSD. Ngspice is available as pre-compiled binaries for Linux and Windows, but it can also be compiled on FreeBSD. Xyce is availible as pre-compiled for Windows, RHEL and MacOS, but can be compiled to any other platform.</p>
@@ -105,15 +105,15 @@
 <li><font color="red"> <strong>Important note 3</strong></font>: in this package the following aliases for commands are defined:</li>
 </ul>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>interp</font></b> alias {} <b><font color=#ffa500>dget</font></b> {} <b><font color=#ffa500>dict</font></b> get
-<b><font color=#ffa500>interp</font></b> alias {} @ {} <b><font color=#ffa500>lindex</font></b>
-<b><font color=#ffa500>interp</font></b> alias {} = {} <b><font color=#ffa500>expr</font></b>
-<b><font color=#ffa500>interp</font></b> alias {} <b><font color=#ffa500>dexist</font></b> {} <b><font color=#ffa500>dict</font></b> exists
-<b><font color=#ffa500>interp</font></b> alias {} <b><font color=#ffa500>dcreate</font></b> {} <b><font color=#ffa500>dict</font></b> create
-<b><font color=#ffa500>interp</font></b> alias {} dset {} <b><font color=#ffa500>dict</font></b> set
-<b><font color=#ffa500>interp</font></b> alias {} dappend {} <b><font color=#ffa500>dict</font></b> append
-<b><font color=#ffa500>interp</font></b> alias {} dkeys {} <b><font color=#ffa500>dict</font></b> keys
-<b><font color=#ffa500>interp</font></b> alias {} dvalues {} <b><font color=#ffa500>dict</font></b> values
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>interp</font></b> alias {} <b><font color=#923B23>dget</font></b> {} <b><font color=#923B23>dict</font></b> get
+<b><font color=#923B23>interp</font></b> alias {} @ {} <b><font color=#923B23>lindex</font></b>
+<b><font color=#923B23>interp</font></b> alias {} = {} <b><font color=#923B23>expr</font></b>
+<b><font color=#923B23>interp</font></b> alias {} <b><font color=#923B23>dexist</font></b> {} <b><font color=#923B23>dict</font></b> exists
+<b><font color=#923B23>interp</font></b> alias {} <b><font color=#923B23>dcreate</font></b> {} <b><font color=#923B23>dict</font></b> create
+<b><font color=#923B23>interp</font></b> alias {} dset {} <b><font color=#923B23>dict</font></b> set
+<b><font color=#923B23>interp</font></b> alias {} dappend {} <b><font color=#923B23>dict</font></b> append
+<b><font color=#923B23>interp</font></b> alias {} dkeys {} <b><font color=#923B23>dict</font></b> keys
+<b><font color=#923B23>interp</font></b> alias {} dvalues {} <b><font color=#923B23>dict</font></b> values
 </pre>
 
 </figure><ul class='ruff'>
@@ -123,12 +123,12 @@
 <div style='clear:both;'></div>
 <p class='ruff'>The first step is import of package:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>package</font></b> require SpiceGenTcl
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>package</font></b> require SpiceGenTcl
 </pre>
 
 </figure><p class='ruff'>Import all commands from ::SpiceGenTcl:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>namespace</font></b> import ::SpiceGenTcl::*
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>namespace</font></b> import ::SpiceGenTcl::*
 </pre>
 
 </figure><p class='ruff'>One of the commands is <a href="index-SpiceGenTcl.html#::SpiceGenTcl::importNgspice" title="::SpiceGenTcl::importNgspice" class='ruff_cmd'>::SpiceGenTcl::importNgspice</a>. By calling this command, we can import all commands related to the Ngspice simulator, eliminating the need to add the <code>::SpiceGenTcl::Ngspice</code> prefix before any command. Here's how to do it:</p>
@@ -138,7 +138,7 @@
 
 </figure><p class='ruff'>To plot results of simulation we also import package <code>ticklecharts</code>:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>package</font></b> require ticklecharts
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>package</font></b> require ticklecharts
 </pre>
 
 </figure><h3 class='ruff'><a name='Circuit definition'></a>Circuit definition<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
@@ -152,62 +152,62 @@ r2 out 0 2e3
 .dc v1 0 5 0.1
 </pre>
 
-</figure><p class='ruff'><img src="assets/img/resistor_divider_cir_black.png" alt="drawing" width="300"/></p>
+</figure><p class='ruff'><img src="assets/img/resistor_divider_cir_white.png" alt="drawing" width="300"/></p>
 <p class='ruff'>First step is creating circuit object:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>set</font></b> circuit [<b><font color=#ffa500>Circuit</font></b> new {voltage divider netlist}]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> circuit [<b><font color=#923B23>Circuit</font></b> new {voltage divider netlist}]
 </pre>
 
-</figure><p class='ruff'>The <code><b><font color=#ffa500>Circuit</font></b></code> command creates a new object of the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> class, which is imported from the <code>::SpiceGenTcl</code> namespace and represents the top-level circuit. The only argument we provide is the name of the circuit, which will be printed on the first line of the netlist.</p>
+</figure><p class='ruff'>The <code><b><font color=#923B23>Circuit</font></b></code> command creates a new object of the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> class, which is imported from the <code>::SpiceGenTcl</code> namespace and represents the top-level circuit. The only argument we provide is the name of the circuit, which will be printed on the first line of the netlist.</p>
 <p class='ruff'>The next step is building netlist by addding elements to top circuit object:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#f1b479>$circuit</font> add [<b><font color=#ffa500>Vdc</font></b> new 1 in 0 <font color=#b9b96e>-dc</font> 1]
-<font color=#f1b479>$circuit</font> add [<b><font color=#ffa500>R</font></b> new 1 in out <font color=#b9b96e>-r</font> 1e3]
-<font color=#f1b479>$circuit</font> add [<b><font color=#ffa500>R</font></b> new 2 out 0 <font color=#b9b96e>-r</font> 2e3]
-<font color=#f1b479>$circuit</font> add [<b><font color=#ffa500>Dc</font></b> new <font color=#b9b96e>-src</font> v1 <font color=#b9b96e>-start</font> 0 <font color=#b9b96e>-stop</font> 5 <font color=#b9b96e>-incr</font> 0.1]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new 1 in 0 <font color=#463e11>-dc</font> 1]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new 1 in out <font color=#463e11>-r</font> 1e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new 2 out 0 <font color=#463e11>-r</font> 2e3]
+<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Dc</font></b> new <font color=#463e11>-src</font> v1 <font color=#463e11>-start</font> 0 <font color=#463e11>-stop</font> 5 <font color=#463e11>-incr</font> 0.1]
 </pre>
 
-</figure><p class='ruff'>An instance of the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> class, referenced by the <code>circuit</code> variable, has an <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::add" title="::SpiceGenTcl::Circuit::add" class='ruff_cmd'>::SpiceGenTcl::Circuit::add</a> method that appends the references of argument objects to it. The object-creating commands <code><b><font color=#ffa500>Vdc</font></b></code>, <code><b><font color=#ffa500>R</font></b></code>, and <code><b><font color=#ffa500>Dc</font></b></code> — which represent a DC voltage source, a basic resistor, and a DC analysis, respectively — are imported from the <code>::SpiceGenTcl::Ngspice::Sources</code>, <code>::SpiceGenTcl::Ngspice::BasicElements</code>, and <code>::SpiceGenTcl::Ngspice::Analyses</code> namespaces.</p>
-<p class='ruff'>When using the <code>new</code> subcommand, you provide the basic arguments for the element. For example, in the <code><b><font color=#ffa500>R</font></b></code> command, you would supply the name '1', the name of the net connected to the positive node 'in', the name of the net connected to the negative node '0' (which is the global ground), and the resistance value '1e3'.</p>
-<p class='ruff'>The last necessary step is to create <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Simulator" title="::SpiceGenTcl::Simulator" class='ruff_cmd'>::SpiceGenTcl::Simulator</a> object with command <code><b><font color=#ffa500>Batch</font></b></code> from <code>::SpiceGenTcl::Ngspice</code> namespace and attach it to <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> object:</p>
+</figure><p class='ruff'>An instance of the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> class, referenced by the <code>circuit</code> variable, has an <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::add" title="::SpiceGenTcl::Circuit::add" class='ruff_cmd'>::SpiceGenTcl::Circuit::add</a> method that appends the references of argument objects to it. The object-creating commands <code><b><font color=#923B23>Vdc</font></b></code>, <code><b><font color=#923B23>R</font></b></code>, and <code><b><font color=#923B23>Dc</font></b></code> — which represent a DC voltage source, a basic resistor, and a DC analysis, respectively — are imported from the <code>::SpiceGenTcl::Ngspice::Sources</code>, <code>::SpiceGenTcl::Ngspice::BasicElements</code>, and <code>::SpiceGenTcl::Ngspice::Analyses</code> namespaces.</p>
+<p class='ruff'>When using the <code>new</code> subcommand, you provide the basic arguments for the element. For example, in the <code><b><font color=#923B23>R</font></b></code> command, you would supply the name '1', the name of the net connected to the positive node 'in', the name of the net connected to the negative node '0' (which is the global ground), and the resistance value '1e3'.</p>
+<p class='ruff'>The last necessary step is to create <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Simulator" title="::SpiceGenTcl::Simulator" class='ruff_cmd'>::SpiceGenTcl::Simulator</a> object with command <code><b><font color=#923B23>Batch</font></b></code> from <code>::SpiceGenTcl::Ngspice</code> namespace and attach it to <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> object:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>set</font></b> simulator [<b><font color=#ffa500>Batch</font></b> new {batch1} {/usr/local/bin/}]
-<font color=#f1b479>$circuit</font> configure <font color=#b9b96e>-Simulator</font> <font color=#f1b479>$simulator</font>
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> simulator [<b><font color=#923B23>Batch</font></b> new {batch1} {/usr/local/bin/}]
+<font color=#4A181B>$circuit</font> configure <font color=#463e11>-Simulator</font> <font color=#4A181B>$simulator</font>
 </pre>
 
 </figure><p class='ruff'>Now we are ready to run simulation:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#f1b479>$circuit</font> runAndRead
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$circuit</font> runAndRead
 </pre>
 
 </figure><p class='ruff'>After the simulation, we can read the resulting data. We use the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::getDataDict" title="::SpiceGenTcl::Circuit::getDataDict" class='ruff_cmd'>::SpiceGenTcl::Circuit::getDataDict</a> method to obtain a dictionary where the keys are the names of the result vectors:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>set</font></b> data [<font color=#f1b479>$circuit</font> getDataDict]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> data [<font color=#4A181B>$circuit</font> getDataDict]
 </pre>
 
 </figure><p class='ruff'>The we can get vectors v(in) and v(out) from dictionary <code>data</code>:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>set</font></b> axis [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$data</font> v(in)]
-<b><font color=#ffa500>set</font></b> trace [<b><font color=#ffa500>dget</font></b> <font color=#f1b479>$data</font> v(out)]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> axis [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$data</font> v(in)]
+<b><font color=#923B23>set</font></b> trace [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$data</font> v(out)]
 </pre>
 
 </figure><h3 class='ruff'><a name='Plotting data'></a>Plotting data<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
 <div style='clear:both;'></div>
 <p class='ruff'>To plot results we use <a href="https://github.com/nico-robert/ticklecharts" ><code>ticklecharts</code></a> package:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#ffa500>foreach</font></b> x <font color=#f1b479>$axis</font> y <font color=#f1b479>$trace</font> {
-    <b><font color=#ffa500>set</font></b> x [<b><font color=#ffa500>format</font></b> <font color=#90ee90>&quot;%.3f&quot;</font> <font color=#f1b479>$x</font>]
-    <b><font color=#ffa500>set</font></b> y [<b><font color=#ffa500>format</font></b> <font color=#90ee90>&quot;%.3f&quot;</font> <font color=#f1b479>$y</font>]
-    <b><font color=#ffa500>lappend</font></b> xydata [<b><font color=#ffa500>list</font></b> <font color=#f1b479>$x</font> <font color=#f1b479>$y</font>]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>foreach</font></b> x <font color=#4A181B>$axis</font> y <font color=#4A181B>$trace</font> {
+    <b><font color=#923B23>set</font></b> x [<b><font color=#923B23>format</font></b> <font color=#035103>&quot;%.3f&quot;</font> <font color=#4A181B>$x</font>]
+    <b><font color=#923B23>set</font></b> y [<b><font color=#923B23>format</font></b> <font color=#035103>&quot;%.3f&quot;</font> <font color=#4A181B>$y</font>]
+    <b><font color=#923B23>lappend</font></b> xydata [<b><font color=#923B23>list</font></b> <font color=#4A181B>$x</font> <font color=#4A181B>$y</font>]
 }
-<b><font color=#ffa500>set</font></b> chart [ticklecharts::chart new]
-<font color=#f1b479>$chart</font> Xaxis <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;v(in), V&quot;</font> <font color=#b9b96e>-minorTick</font> {show <font color=#90ee90>&quot;True&quot;</font>} <font color=#b9b96e>-min</font> 0 <font color=#b9b96e>-max</font> 5 <font color=#b9b96e>-type</font> <font color=#90ee90>&quot;value&quot;</font> <font color=#b9b96e>-splitLine</font> {show <font color=#90ee90>&quot;True&quot;</font>}
-<font color=#f1b479>$chart</font> Yaxis <font color=#b9b96e>-name</font> <font color=#90ee90>&quot;v(out), V&quot;</font> <font color=#b9b96e>-minorTick</font> {show <font color=#90ee90>&quot;True&quot;</font>} <font color=#b9b96e>-min</font> 0 <font color=#b9b96e>-max</font> 3.5 <font color=#b9b96e>-type</font> <font color=#90ee90>&quot;value&quot;</font> <font color=#b9b96e>-splitLine</font> {show <font color=#90ee90>&quot;True&quot;</font>}
-<font color=#f1b479>$chart</font> SetOptions <font color=#b9b96e>-title</font> {} <font color=#b9b96e>-tooltip</font> {trigger <font color=#90ee90>&quot;axis&quot;</font>} <font color=#b9b96e>-animation</font> <font color=#90ee90>&quot;False&quot;</font> <font color=#b9b96e>-backgroundColor</font> <font color=#90ee90>&quot;#212121&quot;</font>
-<font color=#f1b479>$chart</font> Add <font color=#90ee90>&quot;lineSeries&quot;</font> <font color=#b9b96e>-data</font> <font color=#f1b479>$xydata</font> <font color=#b9b96e>-showAllSymbol</font> <font color=#90ee90>&quot;nothing&quot;</font>
-<b><font color=#ffa500>set</font></b> fbasename [<b><font color=#ffa500>file</font></b> rootname [<b><font color=#ffa500>file</font></b> tail [<b><font color=#ffa500>info</font></b> script]]]
+<b><font color=#923B23>set</font></b> chart [ticklecharts::chart new]
+<font color=#4A181B>$chart</font> Xaxis <font color=#463e11>-name</font> <font color=#035103>&quot;v(in), V&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-min</font> 0 <font color=#463e11>-max</font> 5 <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font> <font color=#463e11>-splitLine</font> {show <font color=#035103>&quot;True&quot;</font>}
+<font color=#4A181B>$chart</font> Yaxis <font color=#463e11>-name</font> <font color=#035103>&quot;v(out), V&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-min</font> 0 <font color=#463e11>-max</font> 3.5 <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font> <font color=#463e11>-splitLine</font> {show <font color=#035103>&quot;True&quot;</font>}
+<font color=#4A181B>$chart</font> SetOptions <font color=#463e11>-title</font> {} <font color=#463e11>-tooltip</font> {trigger <font color=#035103>&quot;axis&quot;</font>} <font color=#463e11>-animation</font> <font color=#035103>&quot;False&quot;</font> <font color=#463e11>-backgroundColor</font> <font color=#035103>&quot;#212121&quot;</font>
+<font color=#4A181B>$chart</font> Add <font color=#035103>&quot;lineSeries&quot;</font> <font color=#463e11>-data</font> <font color=#4A181B>$xydata</font> <font color=#463e11>-showAllSymbol</font> <font color=#035103>&quot;nothing&quot;</font>
+<b><font color=#923B23>set</font></b> fbasename [<b><font color=#923B23>file</font></b> rootname [<b><font color=#923B23>file</font></b> tail [<b><font color=#923B23>info</font></b> script]]]
 
-<font color=#f1b479>$chart</font> Render <font color=#b9b96e>-outfile</font> [<b><font color=#ffa500>file</font></b> normalize [<b><font color=#ffa500>file</font></b> join .. html_charts <font color=#f1b479>$fbasename</font>.html]]
+<font color=#4A181B>$chart</font> Render <font color=#463e11>-outfile</font> [<b><font color=#923B23>file</font></b> normalize [<b><font color=#923B23>file</font></b> join .. html_charts <font color=#4A181B>$fbasename</font>.html]]
 </pre>
 
 </figure><p class='ruff'>To view result, we should open rendered resistor_divider.html chart in browser.</p>
@@ -219,10 +219,10 @@ r2 out 0 2e3
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
   </head>
   <body>
-    <div id="id_7fb2aa07d7cf415db561435b3b28cc54" class="chart-container" style="width:900px; height:500px;"></div>
+    <div id="id_d5f98f9e2ce545709031cd28339256e8" class="chart-container" style="width:900px; height:500px;"></div>
     <script>
-      var chart_7fb2aa07d7cf415db561435b3b28cc54 = echarts.init(document.getElementById("id_7fb2aa07d7cf415db561435b3b28cc54"), null, {renderer: "canvas"});
-      var option_7fb2aa07d7cf415db561435b3b28cc54 = {
+      var chart_d5f98f9e2ce545709031cd28339256e8 = echarts.init(document.getElementById("id_d5f98f9e2ce545709031cd28339256e8"), null, {renderer: "canvas"});
+      var option_d5f98f9e2ce545709031cd28339256e8 = {
   "xAxis": [{
       "show": true,
       "type": "value",
@@ -239,28 +239,15 @@ r2 out 0 2e3
       "scale": false,
       "silent": false,
       "triggerEvent": false,
-      "axisLine": {
-        "show": true,
-        "lineStyle": {
-          "color": "#B9B8CE",
-          "width": 1
-        }
-      },
-      "axisTick": {"show": true},
       "minorTick": {
         "show": true,
         "splitNumber": 5,
         "length": 3
       },
-      "axisLabel": {"color": "#B9B8CE"},
       "splitLine": {
         "show": true,
         "onZero": true,
-        "symbol": null,
-        "lineStyle": {
-          "color": "#484753",
-          "width": 1
-        }
+        "symbol": null
       },
       "zlevel": 0,
       "z": 0
@@ -283,44 +270,30 @@ r2 out 0 2e3
       "scale": false,
       "silent": false,
       "triggerEvent": false,
-      "axisLine": {
-        "show": true,
-        "lineStyle": {
-          "color": "#B9B8CE",
-          "width": 1
-        }
-      },
-      "axisTick": {"show": true},
       "minorTick": {
         "show": true,
         "splitNumber": 5,
         "length": 3
       },
-      "axisLabel": {"color": "#B9B8CE"},
       "splitLine": {
         "show": true,
         "onZero": true,
-        "symbol": null,
-        "lineStyle": {
-          "color": "#484753",
-          "width": 1
-        }
+        "symbol": null
       },
       "zlevel": 0,
       "z": 0
     }],
-  "darkMode": true,
-  "backgroundColor": "#212121",
+  "backgroundColor": "rgba(0,0,0,0)",
   "color": [
-    "#4992ff",
-    "#7cffb2",
-    "#fddd60",
-    "#ff6e76",
-    "#58d9f9",
-    "#05c091",
-    "#ff8a45",
-    "#8d48e3",
-    "#dd79ff"
+    "#5470c6",
+    "#91cc75",
+    "#fac858",
+    "#ee6666",
+    "#73c0de",
+    "#3ba272",
+    "#fc8452",
+    "#9a60b4",
+    "#ea7ccc"
   ],
   "animation": false,
   "animationDuration": 1000,
@@ -332,9 +305,7 @@ r2 out 0 2e3
   "title": [{
       "show": true,
       "target": "blank",
-      "textStyle": {"color": "#EEF1FA"},
       "subtarget": "blank",
-      "subtextStyle": {"color": "#B9B8CE"},
       "textAlign": null,
       "textVerticalAlign": "auto",
       "padding": 5,
@@ -364,8 +335,8 @@ r2 out 0 2e3
       "name": "lineseries_1",
       "colorBy": "series",
       "coordinateSystem": "cartesian2d",
-      "symbol": "circle",
-      "symbolSize": 4,
+      "symbol": "emptyCircle",
+      "symbolSize": 3,
       "symbolKeepAspect": true,
       "showSymbol": true,
       "legendHoverLink": true,
@@ -374,7 +345,6 @@ r2 out 0 2e3
       "clip": true,
       "triggerLineEvent": false,
       "step": false,
-      "label": {"color": "#B9B8CE"},
       "smooth": false,
       "data": [
         [
@@ -587,7 +557,7 @@ r2 out 0 2e3
       "silent": false
     }]
 };
-      chart_7fb2aa07d7cf415db561435b3b28cc54.setOption(option_7fb2aa07d7cf415db561435b3b28cc54);
+      chart_d5f98f9e2ce545709031cd28339256e8.setOption(option_d5f98f9e2ce545709031cd28339256e8);
     </script>
   </body>
 </html>

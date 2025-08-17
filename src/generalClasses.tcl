@@ -1077,8 +1077,8 @@ namespace eval ::SpiceGenTcl {
         constructor {args} {
             # Creates object of class `RawString`.
             #  value - value of the raw string
-            #  -name - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist] object
-            #    and its descendants, optional
+            #  -name value - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]
+            #    object and its descendants, optional
             # Class represent arbitary string.
             #  It can be used to pass any string directly into netlist,
             #  for example, it can add elements that doesn't have dedicated class.
@@ -1108,8 +1108,8 @@ namespace eval ::SpiceGenTcl {
         constructor {args} {
             # Creates object of class `Comment`.
             #  value - value of the comment
-            #  -name - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist] object
-            #    and its descendants, optional
+            #  -name value - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]
+            #    object and its descendants, optional
             # Class represent comment string, it can be a multiline comment.
             # Synopsis: value ?-name value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'Comment'} {
@@ -1139,8 +1139,8 @@ namespace eval ::SpiceGenTcl {
         constructor {args} {
             # Creates object of class `Include`.
             #  value - value of the include path
-            #  -name - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist] object
-            #    and its descendants, optional
+            #  -name value - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]
+            #    object and its descendants, optional
             # This class represent .include statement.
             # Synopsis: value ?-name value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'Include'} {
@@ -1173,8 +1173,8 @@ namespace eval ::SpiceGenTcl {
             # Creates object of class `Function`.
             #  declaration - function declaration
             #  body - body of the function
-            #  -name - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist] object
-            #    and its descendants, optional
+            #  -name value - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]
+            #    object and its descendants, optional
             # This class represent .func statement.
             # Synopsis: declaration body ?-name value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'Function'} {
@@ -1209,8 +1209,8 @@ namespace eval ::SpiceGenTcl {
             # Creates object of class `Library`.
             #  value - value of the include file
             #  libvalue - value of selected library
-            #  -name - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist] object
-            #    and its descendants, optional
+            #  -name value - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]
+            #    object and its descendants, optional
             # Class represent .lib statement.
             # Synopsis: value libvalue ?-name value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'Library'} {
@@ -1246,8 +1246,8 @@ namespace eval ::SpiceGenTcl {
             # Creates object of class `Options`.
             #  params - list of instance parameters in form `{{name value ?-sw?} {name value ?-sw?}
             #   {name value ?-sw?} ...}`
-            #  -name - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist] object
-            #    and its descendants, optional
+            #  -name value - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]
+            #    object and its descendants, optional
             # This class represent .options statement.
             # Synopsis: params ?-name value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'Options'} {
@@ -1297,8 +1297,8 @@ namespace eval ::SpiceGenTcl {
         constructor {args} {
             # Creates object of class `ParamStatement`.
             #  params - list of instance parameters in form `{{name value ?-eq?} {name value ?-eq?} ...}`
-            #  -name - name of the library that could be used to retrieve element from [::SpiceGenTcl::Netlist] object
-            #    and its descendants, optional
+            #  -name value - name of the library that could be used to retrieve element from [::SpiceGenTcl::Netlist]
+            #    object and its descendants, optional
             # Class represent .param statement.
             # Synopsis: params ?-name value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'ParamStatement'} {
@@ -1348,8 +1348,8 @@ namespace eval ::SpiceGenTcl {
         constructor {args} {
             # Creates object of class `ParamStatement`.
             #  vectors - list of vectors in form `{vec0 vec1 vec2 ...}`
-            #  -name - name of the library that could be used to retrieve element from [::SpiceGenTcl::Netlist] object
-            #    and its descendants, optional
+            #  -name value - name of the library that could be used to retrieve element from [::SpiceGenTcl::Netlist]
+            #    object and its descendants, optional
             # Class represent .save statement.
             # Synopsis: vectors ?-name value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'ParamStatement'} {
@@ -1435,8 +1435,8 @@ namespace eval ::SpiceGenTcl {
         constructor {args} {
             # Creates object of class `Ic`.
             #  params - list of instance parameters in form `{{name value} {name value} {name equation -eq} ...}`
-            #  -name - name of the library that could be used to retrieve element from [::SpiceGenTcl::Netlist] object
-            #    and its descendants, optional
+            #  -name value - name of the library that could be used to retrieve element from [::SpiceGenTcl::Netlist]
+            #    object and its descendants, optional
             # Class represent .ic statement.
             # Synopsis: params ?-name value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'Ic'} {
@@ -1502,8 +1502,8 @@ namespace eval ::SpiceGenTcl {
         constructor {args} {
             # Creates object of class `Global`.
             #  nets - list of nets in form `{net0 net1 ...}`
-            #  -name - name of the library that could be used to retrieve element from [::SpiceGenTcl::Netlist] object
-            #    and its descendants, optional
+            #  -name value - name of the library that could be used to retrieve element from [::SpiceGenTcl::Netlist]
+            #    object and its descendants, optional
             # Class represent .global statement.
             # Synopsis: nets ?-name value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'Global'} {
@@ -1819,8 +1819,8 @@ namespace eval ::SpiceGenTcl {
         method getDataCsv {args} {
             # Returns string with csv formatting containing all data
             #  -all - select all traces
-            #  -traces - select names of traces to return
-            #  -sep - separator of columns, default is comma
+            #  -traces list - select names of traces to return
+            #  -sep value - separator of columns, default is comma
             # Synopsis: ?-all? ?-traces list? ?-sep value?
             return [[my configure -data] getTracesCsv {*}$args]
         }
@@ -1960,8 +1960,8 @@ namespace eval ::SpiceGenTcl {
             #  type - type of analysis, for example, tran, ac, dc, etc
             #  params - list of instance parameters in form
             #   `{{name value} {name -sw} {name Value -eq} {name Value -posnocheck} ...}`
-            #  -name - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist] object
-            #    and its descendants, optional
+            #  -name value - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]
+            #    object and its descendants, optional
             # Class models analysis statement.
             # Synopsis: type params ?-name value?
             my variable name

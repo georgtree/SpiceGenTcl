@@ -6,7 +6,6 @@ package require tclinterp
 
 namespace import ::tcl::mathfunc::*
 namespace import ::tclinterp::interpolation::*
-set ::ticklecharts::theme "dark"
 
 namespace import ::tclcsv::*
 namespace import ::SpiceGenTcl::*
@@ -119,7 +118,7 @@ $chart Xaxis -name "v(anode), V" -minorTick {show "True"}  -type "value" -splitL
 $chart Yaxis -name "Idiode, A" -minorTick {show "True"}  -type "value" -splitLine {show "True"} -min "0.0"\
         -max "dataMax"
 $chart SetOptions -title {} -tooltip {trigger "axis"} -animation "False" -legend {}\
-        -toolbox {feature {dataZoom {yAxisIndex "none"}}} -grid {left "10%" right "15%"} -backgroundColor "#212121" 
+        -toolbox {feature {dataZoom {yAxisIndex "none"}}} -grid {left "10%" right "15%"}
 $chart Add "lineSeries" -data $fittedVIdiode -showAllSymbol "nothing" -name "fitted" -symbolSize "4" 
 $chart Add "lineSeries" -data $initVIdiode -showAllSymbol "nothing" -name "unfitted" -symbolSize "4"
 $chart Add "lineSeries" -data $viRaw -showAllSymbol "nothing" -name "measured" -symbolSize "4"
@@ -129,7 +128,7 @@ $chartLog Xaxis -name "v(anode), V" -minorTick {show "True"}  -type "value" -spl
 $chartLog Yaxis -name "Idiode, A" -minorTick {show "True"}  -type "log" -splitLine {show "True"} -min "dataMin"\
         -max "0.1"
 $chartLog SetOptions -title {} -tooltip {trigger "axis"} -animation "False" -legend {}\
-        -toolbox {feature {dataZoom {yAxisIndex "none"}}} -grid {left "10%" right "15%"} -backgroundColor "#212121"
+        -toolbox {feature {dataZoom {yAxisIndex "none"}}} -grid {left "10%" right "15%"}
 $chartLog Add "lineSeries" -data $fittedVIdiode -showAllSymbol "nothing" -name "fitted" -symbolSize "4"
 $chartLog Add "lineSeries" -data $initVIdiode -showAllSymbol "nothing" -name "unfitted" -symbolSize "4"
 $chartLog Add "lineSeries" -data $viRaw -showAllSymbol "nothing" -name "measured" -symbolSize "4"

@@ -2,7 +2,6 @@
 
 package require SpiceGenTcl
 package require ticklecharts
-set ::ticklecharts::theme "dark"
 namespace import ::SpiceGenTcl::*
 importNgspice
 set currentDir [file normalize [file dirname [info script]]]
@@ -26,13 +25,13 @@ set chartVout [ticklecharts::chart new]
 $chartVout Xaxis -name "time, s" -minorTick {show "True"} -type "value" -splitLine {show "True"}
 $chartVout Yaxis -name "g429 voltage, V" -minorTick {show "True"} -type "value" -splitLine {show "True"}
 $chartVout SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
-        -toolbox {feature {dataZoom {yAxisIndex "none"}}} -backgroundColor "#212121"
+        -toolbox {feature {dataZoom {yAxisIndex "none"}}}
 $chartVout Add "lineSeries" -data $timeVg429 -showAllSymbol "nothing" -symbolSize "0"
 set chartImeas [ticklecharts::chart new]
 $chartImeas Xaxis -name "time, s" -minorTick {show "True"} -type "value" -splitLine {show "True"}
 $chartImeas Yaxis -name "g430 voltage, V" -minorTick {show "True"} -type "value" -splitLine {show "True"}
 $chartImeas SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
-        -toolbox {feature {dataZoom {yAxisIndex "none"}}} -backgroundColor "#212121"
+        -toolbox {feature {dataZoom {yAxisIndex "none"}}}
 $chartImeas Add "lineSeries" -data $timeVg430 -showAllSymbol "nothing" -symbolSize "0"
 # create multiplot
 set layout [ticklecharts::Gridlayout new]

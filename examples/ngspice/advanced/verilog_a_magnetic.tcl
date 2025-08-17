@@ -2,7 +2,6 @@
 lappend auto_path "../../"
 package require SpiceGenTcl
 package require ticklecharts
-set ::ticklecharts::theme dark
 # import class names to current namespace
 namespace import ::SpiceGenTcl::*
 importNgspice
@@ -160,7 +159,7 @@ $chart Xaxis -name "H, A (A t)" -minorTick {show "True"}  -type "value" -splitLi
 $chart Yaxis -name "B, T" -minorTick {show "True"}  -type "value" -splitLine {show "True"} -min "-2"\
         -max "2"
 $chart SetOptions -title {} -tooltip {} -animation "False" -legend {} -toolbox {feature {dataZoom {yAxisIndex "none"}}}\
-        -grid {left "10%" right "15%"} -backgroundColor "#212121"
+        -grid {left "10%" right "15%"}
 $chart Add "lineSeries" -data $hb -showAllSymbol "nothing" -name "fitted" -symbolSize "4"
 set fbasename [file rootname [file tail [info script]]]
 $chart Render -outfile [file normalize [file join .. html_charts $fbasename.html]]

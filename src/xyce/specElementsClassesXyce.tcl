@@ -42,16 +42,16 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             #  name - name of the device without first-letter designator R
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -r - resistance value or equation
+            #  -r value - resistance value or equation
             #  -beh - selects behavioural type of resistor, optional
-            #  -model - model of the resistor, optional
-            #  -m - multiplier value, optional
-            #  -temp - device temperature, optional
-            #  -tc1 - linear thermal coefficient, optional
-            #  -tc2 - quadratic thermal coefficient, optional
-            #  -tce - exponential thermal coefficient, optional
-            #  -l - length of semiconductor resistor, optional
-            #  -w - width of semiconductor resistor, optional
+            #  -model value - model of the resistor, optional
+            #  -m value - multiplier value, optional
+            #  -temp value - device temperature, optional
+            #  -tc1 value - linear thermal coefficient, optional
+            #  -tc2 value - quadratic thermal coefficient, optional
+            #  -tce value - exponential thermal coefficient, optional
+            #  -l value - length of semiconductor resistor, optional
+            #  -w value - width of semiconductor resistor, optional
             # Resistor type could be specified with additional switches: `-beh` if we
             # want to model circuit's variable dependent resistor, or `-model modelName`
             # if we want to simulate resistor with model card.
@@ -140,19 +140,19 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             #  name - name of the device without first-letter designator C
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -c - capacitance value or equation
-            #  -q - charge equation
+            #  -c value - capacitance value or equation
+            #  -q value - charge equation
             #  -beh - selects behavioural type of capacitor, optional
-            #  -model - model of the capacitor, optional
-            #  -m - multiplier value, optional
-            #  -temp - device temperature, optional
-            #  -tc1 - linear thermal coefficient, optional
-            #  -tc2 - quadratic thermal coefficient, optional
-            #  -ic - initial voltage on capacitor, optional
-            #  -age - aging coefficient, optional
-            #  -d - aging coefficient, optional
-            #  -l - length of semiconductor capacitor, optional
-            #  -w - width of semiconductor capacitor, optional
+            #  -model value - model of the capacitor, optional
+            #  -m value - multiplier value, optional
+            #  -temp value - device temperature, optional
+            #  -tc1 value - linear thermal coefficient, optional
+            #  -tc2 value - quadratic thermal coefficient, optional
+            #  -ic value - initial voltage on capacitor, optional
+            #  -age value - aging coefficient, optional
+            #  -d value - aging coefficient, optional
+            #  -l value - length of semiconductor capacitor, optional
+            #  -w value - width of semiconductor capacitor, optional
             # Capacitor type could be specified with additional switches: `-beh` if we
             # want to model circuit's variable dependent capacitor, or `-model modelName`
             # if we want to simulate capacitor with model card.
@@ -261,13 +261,13 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             #  name - name of the device without first-letter designator L
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -l - inductance value
-            #  -model - model of the inductor, optional
-            #  -m - multiplier value, optional
-            #  -temp - device temperature, optional
-            #  -tc1 - linear thermal coefficient, optional
-            #  -tc2 - quadratic thermal coefficient, optional
-            #  -ic - initial current through inductor, optional
+            #  -l value - inductance value
+            #  -model value - model of the inductor, optional
+            #  -m value - multiplier value, optional
+            #  -temp value - device temperature, optional
+            #  -tc1 value - linear thermal coefficient, optional
+            #  -tc2 value - quadratic thermal coefficient, optional
+            #  -ic value - initial current through inductor, optional
             # Inductor type could be specified with additional switch `-model modelName`
             # if we want to simulate inductor with model card.
             # Simple inductor:
@@ -360,8 +360,8 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             #  name - name of the device without first-letter designator S
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -model - model name
-            #  -control - control equation
+            #  -model value - model name
+            #  -control value - control equation
             #  -on/-off - initial state of switch
             # ```
             # S<name> <(+) switch node> <(-) switch node> <model name> [ON] [OFF] <control = =ession>
@@ -637,10 +637,10 @@ namespace eval ::SpiceGenTcl::Xyce::Sources {
             #  name - name of the device without first-letter designator B
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -i - current expression
-            #  -v - voltage expression
+            #  -i value - current expression
+            #  -v value - voltage expression
             #  -smoothbsrc - enables the smooth transitions, optional, require -v
-            #  -rcconst - rc constant of the RC network, optional, require -v
+            #  -rcconst value - rc constant of the RC network, optional, require -v
             # ```
             # B<name> <(+) node> <(-) node> V={expression} [device parameters]
             # B<name> <(+) node> <(-) node> I={expression}
@@ -696,15 +696,15 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             #  name - name of the device without first-letter designator D
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -model - name of the model
-            #  -area - area scale factor, optional
-            #  -m - multiplier of area and perimeter, optional
-            #  -pj - perimeter scale factor, optional
-            #  -ic - initial condition, optional
-            #  -temp - device temperature, optional
-            #  -custparams - key that collects all arguments at the end of device definition, to provide an ability
-            #  to add custom parameters in form `-custparams param1 param1Val param2 {-eq param2eq} param3 param3Val ...`
-            #  Must be specified after all others options. Optional.
+            #  -model value - name of the model
+            #  -area value - area scale factor, optional
+            #  -m value - multiplier of area and perimeter, optional
+            #  -pj value - perimeter scale factor, optional
+            #  -ic value - initial condition, optional
+            #  -temp value - device temperature, optional
+            #  -custparams list - key that collects all arguments at the end of device definition, to provide an ability
+            #  to add custom parameters in form `-custparams param1 param1Val param2 {-eq param2eq} param3 param3Val
+            #  ...` Must be specified after all others options. Optional.
             # ```
             # D<name> <(+) node> <(-) node> <model name> [device parameters]
             # ```
@@ -788,14 +788,14 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             #  nc - name of node connected to collector pin
             #  nb - name of node connected to base pin
             #  ne - name of node connected to emitter pin
-            #  -model - name of the model
-            #  -area - scale factor, optional
-            #  -m - multiplier of area and perimeter, optional
-            #  -temp - device temperature, optional
-            #  -ic1 - initial conditions for vbe, optional
-            #  -ic2 - initial conditions for vce, optional
-            #  -ns - name of node connected to substrate pin, optional
-            #  -tj - name of node connected to thermal pin, optional, requires -ns
+            #  -model value - name of the model
+            #  -area value - scale factor, optional
+            #  -m value - multiplier of area and perimeter, optional
+            #  -temp value - device temperature, optional
+            #  -ic1 value - initial conditions for vbe, optional
+            #  -ic2 value - initial conditions for vce, optional
+            #  -ns value - name of node connected to substrate pin, optional
+            #  -tj value - name of node connected to thermal pin, optional, requires -ns
             # ```
             # QXXXXXXX nc nb ne <ns> <tj> mname <area=val> <areac=val>
             # + <areab=val> <m=val> <off> <ic=vbe,vce> <temp=val>
@@ -878,9 +878,9 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             #  nd - name of node connected to drain pin
             #  ng - name of node connected to gate pin
             #  ns - name of node connected to source pin
-            #  -model - name of the model
-            #  -area - scale factor, optional
-            #  -temp - device temperature, optional
+            #  -model value - name of the model
+            #  -area value - scale factor, optional
+            #  -temp value - device temperature, optional
             # ```
             # J<name> <drain node> <gate node> <source node> <model name> [area value] [device parameters]
             # ```
@@ -937,9 +937,9 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             #  nd - name of node connected to drain pin
             #  ng - name of node connected to gate pin
             #  ns - name of node connected to source pin
-            #  -model - name of the model
-            #  -area - scale factor, optional
-            #  -temp - device temperature, optional
+            #  -model value - name of the model
+            #  -area value - scale factor, optional
+            #  -temp value - device temperature, optional
             # ```
             # Z<name> < drain node> <gate node> <source node> <model name> [area value] [device parameters]
             # ```
@@ -995,23 +995,23 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             #  nd - name of node connected to drain pin
             #  ng - name of node connected to gate pin
             #  ns - name of node connected to source pin
-            #  -model - name of the model
-            #  -m - multiplier, optional
-            #  -l - length of channel, optional
-            #  -w - width of channel, optional
-            #  -ad - diffusion area of drain, optional, forbid -nrd
-            #  -as - diffusion area of source, optional,forbid -nrs
-            #  -pd - perimeter area of drain, optional
-            #  -ps - perimeter area of source, optional
-            #  -nrd - equivalent number of squares of the drain diffusions
-            #  -nrs - equivalent number of squares of the source diffusions
-            #  -temp - device temperature
-            #  -ic - initial conditions for vds, vgs and vbs, in form of three element list, optional, require 4th node
+            #  -model value - name of the model
+            #  -m value - multiplier, optional
+            #  -l value - length of channel, optional
+            #  -w value - width of channel, optional
+            #  -ad value - diffusion area of drain, optional, forbid -nrd
+            #  -as value - diffusion area of source, optional,forbid -nrs
+            #  -pd value - perimeter area of drain, optional
+            #  -ps value - perimeter area of source, optional
+            #  -nrd value - equivalent number of squares of the drain diffusions
+            #  -nrs value - equivalent number of squares of the source diffusions
+            #  -temp value - device temperature
+            #  -ic value - initial conditions for vds, vgs and vbs, in form of three element list, optional, require 4th node
             #  -off - initial state, optional
-            #  -n4 - name of 4th node;
-            #  -n5 - name of 5th node, require -n4, optional
-            #  -n6 - name of 6th node, require -n5, optional
-            #  -n7 - name of 7th node, require -n6, optional
+            #  -n4 value - name of 4th node;
+            #  -n5 value - name of 5th node, require -n4, optional
+            #  -n6 value - name of 6th node, require -n5, optional
+            #  -n7 value - name of 7th node, require -n6, optional
             #  -custparams - key that collects all arguments at the end of device definition, to provide an ability
             #  to add custom parameters in form `-custparams param1 param1Val param2 {-eq param2eq} param3 param3Val ...`
             #  Must be specified after all others options. Optional.

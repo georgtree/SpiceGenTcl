@@ -37,11 +37,11 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             #  name - name of the device without first-letter designator R
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -r - resistance value
-            #  -m - multiplier value, optional
-            #  -temp - device temperature, optional
-            #  -tc1 - linear thermal coefficient, optional
-            #  -tc2 - quadratic thermal coefficient, optional
+            #  -r value - resistance value
+            #  -m value - multiplier value, optional
+            #  -temp value - device temperature, optional
+            #  -tc1 value - linear thermal coefficient, optional
+            #  -tc2 value - quadratic thermal coefficient, optional
             # Simple resistor:
             # ```
             # RXXXXXXX n+ n- <value> <m=val> <temp=val> <tc1=val> <tc2=val>
@@ -94,12 +94,12 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             #  name - name of the device without first-letter designator C
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -c - capacitance value
-            #  -m - multiplier value, optional
-            #  -temp - device temperature, optional, optional
-            #  -tc1 - linear thermal coefficient, optional
-            #  -tc2 - quadratic thermal coefficient, optional
-            #  -ic - initial condition, optional
+            #  -c value - capacitance value
+            #  -m value - multiplier value, optional
+            #  -temp value - device temperature, optional, optional
+            #  -tc1 value - linear thermal coefficient, optional
+            #  -tc2 value - quadratic thermal coefficient, optional
+            #  -ic value - initial condition, optional
             # Simple capacitor:
             # ```
             # CXXXXXXX n+ n- <value> <m=val> <temp=val> <tc1=val> <tc2=val>
@@ -154,11 +154,11 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             #  name - name of the device without first-letter designator L
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -l - inductance value
-            #  -m - multiplier value, optional
-            #  -temp - device temperature, optional, optional
-            #  -tc1 - linear thermal coefficient, optional
-            #  -tc2 - quadratic thermal coefficient, optional
+            #  -l value - inductance value
+            #  -m value - multiplier value, optional
+            #  -temp value - device temperature, optional, optional
+            #  -tc1 value - linear thermal coefficient, optional
+            #  -tc2 value - quadratic thermal coefficient, optional
             # Simple inductor:
             # ```
             # LXXXXXXX n+ n- <value> <m=val> <temp=val> <tc1=val> <tc2=val>
@@ -248,7 +248,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             #  nm - name of node connected to negative pin
             #  ncp - name of node connected to positive controlling pin
             #  ncm - name of node connected to negative controlling pin
-            #  -model - model name
+            #  -model value - model name
             #  -on/-off - initial state of switch
             # ```
             # SXXXXXXX N+ N- NC+ NC- MODEL <ON> <OFF>
@@ -295,8 +295,8 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             #  name - name of the device without first-letter designator W
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -icntrl - source of control current
-            #  -model - model name
+            #  -icntrl value - source of control current
+            #  -model value - model name
             #  -on/-off - initial state of switch
             # ```
             # WYYYYYYY N+ N- VNAM MODEL <ON> <OFF>
@@ -786,7 +786,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  name - name of the device without first-letter designator V
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -dc - DC voltage value
+            #  -dc value - DC voltage value
             # ```
             # VYYYYYYY n+ n- <<DC> DC/TRAN VALUE>>
             # ```
@@ -807,8 +807,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  name - name of the device without first-letter designator V
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -ac - AC voltage value
-            #  -acphase - phase of AC voltage
+            #  -ac value - AC voltage value
+            #  -acphase value - phase of AC voltage
             # ```
             # VYYYYYYY n+ n- <AC<ACMAG<ACPHASE>>>
             # ```
@@ -830,16 +830,16 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  name - name of the device without first-letter designator V
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -low - low value, aliases: -voff, -ioff
-            #  -high - high value, aliases: -von, ion
-            #  -td - time delay
-            #  -tr - rise time
-            #  -tf - fall time
-            #  -ton - width of pulse, alias -pw
-            #  -tper - period time, alias -per
-            #  -dc - DC value, optional
-            #  -ac - AC value, optional
-            #  -acphase - phase of AC signal, optional, requires -ac
+            #  -low value - low value, aliases: -voff, -ioff
+            #  -high value - high value, aliases: -von, ion
+            #  -td value - time delay
+            #  -tr value - rise time
+            #  -tf value - fall time
+            #  -ton value - width of pulse, alias -pw
+            #  -tper value - period time, alias -per
+            #  -dc value - DC value, optional
+            #  -ac value - AC value, optional
+            #  -acphase value - phase of AC signal, optional, requires -ac
             # ```
             # VYYYYYYY n+ n- PULSE(V1 V2 TD TR TF PW PER)
             # ```
@@ -862,15 +862,15 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  name - name of the device without first-letter designator V
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -v0 - DC shift value, aliases: -voffset, -i0, -ioffset
-            #  -va - amplitude value, aliases: -vamp, -ia, -iamp
-            #  -freq - frequency of sinusoidal signal
-            #  -td - time delay, optional
-            #  -theta - damping factor, optional, require -td
-            #  -phase - phase of signal, optional, require -td and -phase, alias -phi
-            #  -dc - DC value, optional
-            #  -ac - AC value, optional
-            #  -acphase - phase of AC signal, optional, requires -ac
+            #  -v0 value - DC shift value, aliases: -voffset, -i0, -ioffset
+            #  -va value - amplitude value, aliases: -vamp, -ia, -iamp
+            #  -freq value - frequency of sinusoidal signal
+            #  -td value - time delay, optional
+            #  -theta value - damping factor, optional, require -td
+            #  -phase value - phase of signal, optional, require -td and -phase, alias -phi
+            #  -dc value - DC value, optional
+            #  -ac value - AC value, optional
+            #  -acphase value - phase of AC signal, optional, requires -ac
             # ```
             # VYYYYYYY n+ n- SIN(VO VA FREQ TD THETA PHASE)
             # ```
@@ -893,15 +893,15 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  name - name of the device without first-letter designator V
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -v1 - initial value
-            #  -v2 - pulsed value
-            #  -td1 - rise delay time
-            #  -tau1 - rise time constant
-            #  -td2 - fall delay time
-            #  -tau2 - fall time constant
-            #  -dc - DC value, optional
-            #  -ac - AC value, optional
-            #  -acphase - phase of AC signal, optional, requires -ac
+            #  -v1 value - initial value
+            #  -v2 value - pulsed value
+            #  -td1 value - rise delay time
+            #  -tau1 value - rise time constant
+            #  -td2 value - fall delay time
+            #  -tau2 value - fall time constant
+            #  -dc value - DC value, optional
+            #  -ac value - AC value, optional
+            #  -acphase value - phase of AC signal, optional, requires -ac
             # ```
             # VYYYYYYY n+ n- EXP(V1 V2 TD1 TAU1 TD2 TAU2)
             # ```
@@ -924,10 +924,10 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  name - name of the device without first-letter designator V
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -seq - sequence of pwl points in form {t0 v0 t1 v1 t2 v2 t3 v3 ...}
-            #  -dc - DC value, optional
-            #  -ac - AC value, optional
-            #  -acphase - phase of AC signal, optional, requires -ac
+            #  -seq list - sequence of pwl points in form {t0 v0 t1 v1 t2 v2 t3 v3 ...}
+            #  -dc value - DC value, optional
+            #  -ac value - AC value, optional
+            #  -acphase value - phase of AC signal, optional, requires -ac
             # ```
             # VYYYYYYY n+ n- PWL (T1 V1 <T2 V2 T3 V3 T4 V4 ...>)
             # ```
@@ -948,14 +948,14 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  name - name of the device without first-letter designator V
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -v0 - initial value, aliases: -voff, -i0, -ioff
-            #  -va - pulsed value, aliases: -vamp, -ia, -iamp
-            #  -fc - carrier frequency, alias -fcar
-            #  -mdi - modulation index
-            #  -fs - signal frequency, alias -fsig
-            #  -dc - DC value, optional
-            #  -ac - AC value, optional
-            #  -acphase - phase of AC signal, optional, requires -ac
+            #  -v0 value - initial value, aliases: -voff, -i0, -ioff
+            #  -va value - pulsed value, aliases: -vamp, -ia, -iamp
+            #  -fc value - carrier frequency, alias -fcar
+            #  -mdi value - modulation index
+            #  -fs value - signal frequency, alias -fsig
+            #  -dc value - DC value, optional
+            #  -ac value - AC value, optional
+            #  -acphase value - phase of AC signal, optional, requires -ac
             # ```
             # VYYYYYYY n+ n- SFFM(VO VA FC MDI FS)
             # ```
@@ -978,7 +978,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  name - name of the device without first-letter designator I
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -dc - DC voltage value
+            #  -dc value - DC voltage value
             # ```
             # IYYYYYYY n+ n- <<DC> DC/TRAN VALUE>>
             # ```
@@ -999,8 +999,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  name - name of the device without first-letter designator I
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -dc - AC current value
-            #  -acphase - phase of AC current
+            #  -dc value - AC current value
+            #  -acphase value - phase of AC current
             # ```
             # IYYYYYYY n+ n- <AC<ACMAG<ACPHASE>>>
             # ```
@@ -1021,16 +1021,16 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  name - name of the device without first-letter designator I
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -low - low value, aliases: -voff, -ioff
-            #  -high - high value, aliases: -von, ion
-            #  -td - time delay
-            #  -tr - rise time
-            #  -tf - fall time
-            #  -pw - width of pulse, alias -ton
-            #  -per - period time, alias -tper
-            #  -dc - DC value, optional
-            #  -ac - AC value, optional
-            #  -acphase - phase of AC signal, optional, requires -ac
+            #  -low value - low value, aliases: -voff, -ioff
+            #  -high value - high value, aliases: -von, ion
+            #  -td value - time delay
+            #  -tr value - rise time
+            #  -tf value - fall time
+            #  -pw value - width of pulse, alias -ton
+            #  -per value - period time, alias -tper
+            #  -dc value - DC value, optional
+            #  -ac value - AC value, optional
+            #  -acphase value - phase of AC signal, optional, requires -ac
             # ```
             # IYYYYYYY n+ n- PULSE(V1 V2 TD TR TF PW PER)
             # ```
@@ -1053,15 +1053,15 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  name - name of the device without first-letter designator I
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -i0 - DC shift value, aliases: -voffset, -v0, -ioffset
-            #  -ia - amplitude value, aliases: -vamp, -va, -iamp
-            #  -freq - frequency of sinusoidal signal
-            #  -td - time delay, optional
-            #  -theta - damping factor, optional, require -td
-            #  -phase - phase of signal, optional, require -td and -phase, alias -phi
-            #  -dc - DC value, optional
-            #  -ac - AC value, optional
-            #  -acphase - phase of AC signal, optional, requires -ac
+            #  -i0 value - DC shift value, aliases: -voffset, -v0, -ioffset
+            #  -ia value - amplitude value, aliases: -vamp, -va, -iamp
+            #  -freq value - frequency of sinusoidal signal
+            #  -td value - time delay, optional
+            #  -theta value - damping factor, optional, require -td
+            #  -phase value - phase of signal, optional, require -td and -phase, alias -phi
+            #  -dc value - DC value, optional
+            #  -ac value - AC value, optional
+            #  -acphase value - phase of AC signal, optional, requires -ac
             # ```
             # IYYYYYYY n+ n- SIN(VO VA FREQ TD THETA PHASE)
             # ```
@@ -1084,15 +1084,15 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  name - name of the device without first-letter designator I
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -i1 - initial value
-            #  -i2 - pulsed value
-            #  -td1 - rise delay time
-            #  -tau1 - rise time constant
-            #  -td2 - fall delay time
-            #  -tau2 - fall time constant
-            #  -dc - DC value, optional
-            #  -ac - AC value, optional
-            #  -acphase - phase of AC signal, optional, requires -ac
+            #  -i1 value - initial value
+            #  -i2 value - pulsed value
+            #  -td1 value - rise delay time
+            #  -tau1 value - rise time constant
+            #  -td2 value - fall delay time
+            #  -tau2 value - fall time constant
+            #  -dc value - DC value, optional
+            #  -ac value - AC value, optional
+            #  -acphase value - phase of AC signal, optional, requires -ac
             # ```
             # IYYYYYYY n+ n- EXP(V1 V2 TD1 TAU1 TD2 TAU2)
             # ```
@@ -1115,10 +1115,10 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  name - name of the device without first-letter designator I
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -seq - sequence of pwl points in form {t0 i0 t1 i1 t2 i2 t3 i3 ...}
-            #  -dc - DC value, optional
-            #  -ac - AC value, optional
-            #  -acphase - phase of AC signal, optional, requires -ac
+            #  -seq list - sequence of pwl points in form {t0 i0 t1 i1 t2 i2 t3 i3 ...}
+            #  -dc value - DC value, optional
+            #  -ac value - AC value, optional
+            #  -acphase value - phase of AC signal, optional, requires -ac
             # ```
             # IYYYYYYY n+ n- PWL (T1 I1 <T2 I2 T3 I3 T4 I4 ...>)
             # ```
@@ -1139,14 +1139,14 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  name - name of the device without first-letter designator I
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -i0 - initial value, aliases: -voff, -v0, -ioff
-            #  -ia - pulsed value, aliases: -vamp, -va, -iamp
-            #  -fc - carrier frequency, alias -fcar
-            #  -mdi - modulation index
-            #  -fs - signal frequency, alias -fsig
-            #  -dc - DC value, optional
-            #  -ac - AC value, optional
-            #  -acphase - phase of AC signal, optional, requires -ac
+            #  -i0 value - initial value, aliases: -voff, -v0, -ioff
+            #  -ia value - pulsed value, aliases: -vamp, -va, -iamp
+            #  -fc value - carrier frequency, alias -fcar
+            #  -mdi value - modulation index
+            #  -fs value - signal frequency, alias -fsig
+            #  -dc value - DC value, optional
+            #  -ac value - AC value, optional
+            #  -acphase value - phase of AC signal, optional, requires -ac
             # ```
             # IYYYYYYY n+ n- SFFM(VO VA FC MDI FS)
             # ```
@@ -1170,8 +1170,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  nm - name of node connected to negative pin
             #  ncp - name of node connected to positive controlling pin
             #  ncm - name of node connected to negative controlling pin
-            #  -trcond - transconductance
-            #  -m - multiplier factor, optional
+            #  -trcond value - transconductance
+            #  -m value - multiplier factor, optional
             # ```
             # GXXXXXXX N+ N- NC+ NC- VALUE <m=val>
             # ```
@@ -1225,7 +1225,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  nm - name of node connected to negative pin
             #  ncp - name of node connected to positive controlling pin
             #  ncm - name of node connected to negative controlling pin
-            #  -gain - voltage gain
+            #  -gain value - voltage gain
             # ```
             # EXXXXXXX N+ N- NC+ NC- VALUE
             # ```
@@ -1267,9 +1267,9 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  name - name of the device without first-letter designator F
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -consrc - name of controlling source
-            #  -gain - current gain 
-            #  -m - parallel source multiplicator
+            #  -consrc value - name of controlling source
+            #  -gain value - current gain 
+            #  -m value - parallel source multiplicator
             # ```
             # FXXXXXXX N+ N- VNAM VALUE <m=val>
             # ```
@@ -1322,8 +1322,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  name - name of the device without first-letter designator H
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -consrc - name of controlling source
-            #  -transr - transresistance 
+            #  -consrc value - name of controlling source
+            #  -transr value - transresistance 
             # ```
             # HXXXXXXX N+ N- VNAM VALUE
             # ```

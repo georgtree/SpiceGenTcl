@@ -39,9 +39,9 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
         mixin ::SpiceGenTcl::Utility
         constructor {args} {
             # Creates object of class `Sens` that describes SENS ac analysis.
-            #  -objfunc - output expression
-            #  -param - circuit parameter(s)
-            #  -name - name argument, optional
+            #  -objfunc value - output expression
+            #  -param value - circuit parameter(s)
+            #  -name value - name argument, optional
             # ```
             # .SENS objfunc=<output =ession(s)> param=<circuit parameter(s)>
             # ```

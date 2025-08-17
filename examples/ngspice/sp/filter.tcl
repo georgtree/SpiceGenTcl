@@ -1,7 +1,6 @@
 
 package require SpiceGenTcl
 package require ticklecharts
-set ::ticklecharts::theme "dark"
 package require math::constants
 ::math::constants::constants radtodeg degtorad pi
 namespace import ::SpiceGenTcl::*
@@ -49,7 +48,7 @@ set chart [ticklecharts::chart new]
 $chart Xaxis -name "Frequency, Hz" -minorTick {show "True"} -type "value" -splitLine {show "True"}
 $chart Yaxis -name "mag(S)" -minorTick {show "True"} -type "value" -splitLine {show "True"}
 $chart SetOptions -title {} -tooltip {trigger "axis"} -legend {} -animation "False"\
-        -toolbox {feature {dataZoom {yAxisIndex "none"}}} -backgroundColor "#212121"
+        -toolbox {feature {dataZoom {yAxisIndex "none"}}}
 $chart Add "lineSeries" -data $freq_s11Mag -showAllSymbol "nothing" -name "S11" -symbolSize "0"
 $chart Add "lineSeries" -data $freq_s21Mag -showAllSymbol "nothing" -name "S21" -symbolSize "0"
 set fbasename [file rootname [file tail [info script]]]
