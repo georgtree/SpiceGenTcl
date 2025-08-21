@@ -34,7 +34,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Misc {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Misc::OptionsNgspice new -klu -abstol 1e-10 -maxord 6
+            # OptionsNgspice new -klu -abstol 1e-10 -maxord 6
             # ```
             # Synopsis: ?-key value ...? ?-key ...?
             set swParams {sparse klu acct noacct noinit list nomod nopage node norefvalue opts seedinfo savecurrents\

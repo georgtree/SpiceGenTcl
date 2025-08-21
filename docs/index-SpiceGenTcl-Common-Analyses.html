@@ -39,7 +39,7 @@
 <tr><td><code><font color=#463e11>-fstop</font> value</code></td><td>Stop frequency.</td></tr>
 <tr><td><code><font color=#463e11>-n</font> value</code></td><td>Number of points.</td></tr>
 <tr><td><code><font color=#463e11>-name</font> value</code></td><td>Name argument, optional.</td></tr>
-<tr><td><code><font color=#463e11>-variation</font> value</code></td><td>Parameter that defines frequency scale, could be dec, oct or lin.</td></tr>
+<tr><td><code><font color=#463e11>-variation</font> value</code></td><td>Parameter that defines frequency scale, could be <code>dec</code>, <code>oct</code> or <code>lin</code></td></tr>
 </table>
 <h5 class='ruff'>Description</h5>
 <figure  class='ruff-snippet ruff-figure'><pre class='ruff'>.ac variation n fstart fstop
@@ -47,14 +47,14 @@
 
 </figure><p class='ruff'>Example of class initialization:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Common::Analyses::Ac new <font color=#463e11>-variation</font> dec <font color=#463e11>-n</font> 10 <font color=#463e11>-fstart</font> 1 <font color=#463e11>-fstop</font> 1e6 <font color=#463e11>-name</font> dc1
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>Ac</font></b> new <font color=#463e11>-variation</font> dec <font color=#463e11>-n</font> 10 <font color=#463e11>-fstart</font> 1 <font color=#463e11>-fstop</font> 1e6 <font color=#463e11>-name</font> dc1
 </pre>
 
 </figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Common_Analyses_Ac_constructor' href="javascript:toggleSource('SpiceGenTcl_Common_Analyses_Ac_constructor')">Show source</a></p>
 <div id='SpiceGenTcl_Common_Analyses_Ac_constructor' class='ruff_dyn_src'><pre><b><font color=#ca14ca>method</font></b> constructor {args} {
 
     <i><font color=#4b5d50># Creates object of class `Ac` that describes AC analysis.</font></i>
-    <i><font color=#4b5d50>#  -variation value - parameter that defines frequency scale, could be dec, oct or lin</font></i>
+    <i><font color=#4b5d50>#  -variation value - parameter that defines frequency scale, could be `dec`, `oct` or `lin`</font></i>
     <i><font color=#4b5d50>#  -n value - number of points</font></i>
     <i><font color=#4b5d50>#  -fstart value - start frequency</font></i>
     <i><font color=#4b5d50>#  -fstop value - stop frequency</font></i>
@@ -64,7 +64,7 @@
     <i><font color=#4b5d50># ```</font></i>
     <i><font color=#4b5d50># Example of class initialization:</font></i>
     <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># ::SpiceGenTcl::Common::Analyses::Ac new -variation dec -n 10 -fstart 1 -fstop 1e6 -name dc1</font></i>
+    <i><font color=#4b5d50># Ac new -variation dec -n 10 -fstart 1 -fstop 1e6 -name dc1</font></i>
     <i><font color=#4b5d50># ```</font></i>
     <i><font color=#4b5d50># Synopsis: -variation value -n value -fstart value -fstop value ?-name value?</font></i>
     <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> <font color=#463e11>-help</font> {Creates object of class `Ac` that describes AC analysis} {
@@ -111,7 +111,7 @@
 
 </figure><p class='ruff'>Example of class initialization:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Common::Analyses::Dc new <font color=#463e11>-src</font> v1 <font color=#463e11>-start</font> {<font color=#463e11>-eq</font> time1} <font color=#463e11>-stop</font> 5 <font color=#463e11>-incr</font> 0.1 <font color=#463e11>-name</font> dc1
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>Dc</font></b> new <font color=#463e11>-src</font> v1 <font color=#463e11>-start</font> {<font color=#463e11>-eq</font> time1} <font color=#463e11>-stop</font> 5 <font color=#463e11>-incr</font> 0.1 <font color=#463e11>-name</font> dc1
 </pre>
 
 </figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Common_Analyses_Dc_constructor' href="javascript:toggleSource('SpiceGenTcl_Common_Analyses_Dc_constructor')">Show source</a></p>
@@ -128,7 +128,7 @@
     <i><font color=#4b5d50># ```</font></i>
     <i><font color=#4b5d50># Example of class initialization:</font></i>
     <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># ::SpiceGenTcl::Common::Analyses::Dc new -src v1 -start {-eq time1} -stop 5 -incr 0.1 -name dc1</font></i>
+    <i><font color=#4b5d50># Dc new -src v1 -start {-eq time1} -stop 5 -incr 0.1 -name dc1</font></i>
     <i><font color=#4b5d50># ```</font></i>
     <i><font color=#4b5d50># Synopsis: -src value -start value -stop value -incr value ?-name value?</font></i>
     <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> <font color=#463e11>-help</font> {Creates object of class `Dc` that describes DC analysis} {
@@ -171,7 +171,7 @@
 
 </figure><p class='ruff'>Example of class initialization:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Common::Analyses::Op new <font color=#463e11>-name</font> op1
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>Op</font></b> new <font color=#463e11>-name</font> op1
 </pre>
 
 </figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Common_Analyses_Op_constructor' href="javascript:toggleSource('SpiceGenTcl_Common_Analyses_Op_constructor')">Show source</a></p>
@@ -184,7 +184,7 @@
     <i><font color=#4b5d50># ```</font></i>
     <i><font color=#4b5d50># Example of class initialization:</font></i>
     <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># ::SpiceGenTcl::Common::Analyses::Op new -name op1</font></i>
+    <i><font color=#4b5d50># Op new -name op1</font></i>
     <i><font color=#4b5d50># ```</font></i>
     <i><font color=#4b5d50># Synopsis: ?-name value?</font></i>
     <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> <font color=#463e11>-help</font> {Creates object of class `Op` that describes OP analysis} {
@@ -213,7 +213,7 @@
 <div class='ruff_synopsis'><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>-tstep value -tstop value ?-tstart value ?-tmax value?? ?-uic? ?-name value?</span></div>
 <h5 class='ruff'>Parameters</h5><table class='ruff_deflist'>
 <tr><td><code><font color=#463e11>-name</font> value</code></td><td>Name argument, optional.</td></tr>
-<tr><td><code><font color=#463e11>-tmax</font> value</code></td><td>Size of maximum time step in actual simulation, optional, require -tstart.</td></tr>
+<tr><td><code><font color=#463e11>-tmax</font> value</code></td><td>Size of maximum time step in actual simulation, optional, require <code><font color=#463e11>-tstart</font></code></td></tr>
 <tr><td><code><font color=#463e11>-tstart</font> value</code></td><td>Start time of saving data, optional.</td></tr>
 <tr><td><code><font color=#463e11>-tstep</font> value</code></td><td>Size of maximum time step for plotting.</td></tr>
 <tr><td><code><font color=#463e11>-tstop</font> value</code></td><td>Stop time value.</td></tr>
@@ -225,7 +225,7 @@
 
 </figure><p class='ruff'>Example of class initialization:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>::SpiceGenTcl::Common::Analyses::Tran new <font color=#463e11>-tstep</font> 1e-9 <font color=#463e11>-tstop</font> 10e-6 <font color=#463e11>-name</font> dc1
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>Tran</font></b> new <font color=#463e11>-tstep</font> 1e-9 <font color=#463e11>-tstop</font> 10e-6 <font color=#463e11>-name</font> dc1
 </pre>
 
 </figure><div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_Common_Analyses_Tran_constructor' href="javascript:toggleSource('SpiceGenTcl_Common_Analyses_Tran_constructor')">Show source</a></p>
@@ -235,7 +235,7 @@
     <i><font color=#4b5d50>#  -tstep value - size of maximum time step for plotting</font></i>
     <i><font color=#4b5d50>#  -tstop value - stop time value</font></i>
     <i><font color=#4b5d50>#  -tstart value - start time of saving data, optional</font></i>
-    <i><font color=#4b5d50>#  -tmax value - size of maximum time step in actual simulation, optional, require -tstart</font></i>
+    <i><font color=#4b5d50>#  -tmax value - size of maximum time step in actual simulation, optional, require `-tstart`</font></i>
     <i><font color=#4b5d50>#  -uic - skip initial operating point solution, optional</font></i>
     <i><font color=#4b5d50>#  -name value - name argument, optional</font></i>
     <i><font color=#4b5d50># ```</font></i>
@@ -243,7 +243,7 @@
     <i><font color=#4b5d50># ```</font></i>
     <i><font color=#4b5d50># Example of class initialization:</font></i>
     <i><font color=#4b5d50># ```</font></i>
-    <i><font color=#4b5d50># ::SpiceGenTcl::Common::Analyses::Tran new -tstep 1e-9 -tstop 10e-6 -name dc1</font></i>
+    <i><font color=#4b5d50># Tran new -tstep 1e-9 -tstop 10e-6 -name dc1</font></i>
     <i><font color=#4b5d50># ```</font></i>
     <i><font color=#4b5d50># Synopsis: -tstep value -tstop value ?-tstart value ?-tmax value?? ?-uic? ?-name value?</font></i>
     <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> <font color=#463e11>-help</font> {Creates object of class `Tran` that describes TRAN analysis} {
@@ -293,9 +293,9 @@
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ltspice-SemiconductorDevices.html'>SpiceGenTcl::Ltspice::SemiconductorDevices</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ltspice-Analyses.html'>SpiceGenTcl::Ltspice::Analyses</a></li>
 <li class='ruff-toc1'><a href='index-SpiceGenTcl-Ltspice-Simulators.html'>SpiceGenTcl::Ltspice::Simulators</a></li>
-<hr><li class='ruff-toc2'><a href='#::SpiceGenTcl::Common::Analyses-Classes'>Classes</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Analyses.html#::SpiceGenTcl::Common::Analyses::Ac'>Ac</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Analyses.html#::SpiceGenTcl::Common::Analyses::Ac::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;<font color=#463e11>-variation</font> value <font color=#463e11>-n</font> value <font color=#463e11>-fstart</font> value <font color=#463e11>-fstop</font> value ?-name value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#923B23>Ac</font></b></code> that describes AC analysis.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Analyses.html#::SpiceGenTcl::Common::Analyses::Dc'>Dc</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Analyses.html#::SpiceGenTcl::Common::Analyses::Dc::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;<font color=#463e11>-src</font> value <font color=#463e11>-start</font> value <font color=#463e11>-stop</font> value <font color=#463e11>-incr</font> value ?-name value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#923B23>Dc</font></b></code> that describes DC analysis.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Analyses.html#::SpiceGenTcl::Common::Analyses::Op'>Op</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Analyses.html#::SpiceGenTcl::Common::Analyses::Op::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;?-name value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#923B23>Op</font></b></code> that describes OP analysis.
-</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Analyses.html#::SpiceGenTcl::Common::Analyses::Tran'>Tran</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Analyses.html#::SpiceGenTcl::Common::Analyses::Tran::constructor'>constructor</a><span class='ruff-tiptext'><pre>&lt;span class='ruff_cmd'&gt;OBJECT constructor&lt;/span&gt; &lt;span class='ruff_arg'&gt;<font color=#463e11>-tstep</font> value <font color=#463e11>-tstop</font> value ?-tstart value ?-tmax value?? ?-uic? ?-name value?&lt;/span&gt;</pre>Creates object of class <code><b><font color=#923B23>Tran</font></b></code> that describes TRAN analysis.
+<hr><li class='ruff-toc2'><a href='#::SpiceGenTcl::Common::Analyses-Classes'>Classes</a></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Analyses.html#::SpiceGenTcl::Common::Analyses::Ac'>Ac</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Analyses.html#::SpiceGenTcl::Common::Analyses::Ac::constructor'>constructor</a><span class='ruff-tiptext'><pre><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>-variation value -n value -fstart value -fstop value ?-name value?</span></pre>Creates object of class <code><b><font color=#923B23>Ac</font></b></code> that describes AC analysis.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Analyses.html#::SpiceGenTcl::Common::Analyses::Dc'>Dc</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Analyses.html#::SpiceGenTcl::Common::Analyses::Dc::constructor'>constructor</a><span class='ruff-tiptext'><pre><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>-src value -start value -stop value -incr value ?-name value?</span></pre>Creates object of class <code><b><font color=#923B23>Dc</font></b></code> that describes DC analysis.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Analyses.html#::SpiceGenTcl::Common::Analyses::Op'>Op</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Analyses.html#::SpiceGenTcl::Common::Analyses::Op::constructor'>constructor</a><span class='ruff-tiptext'><pre><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>?-name value?</span></pre>Creates object of class <code><b><font color=#923B23>Op</font></b></code> that describes OP analysis.
+</span></li><li class='ruff-toc3'><a href='index-SpiceGenTcl-Common-Analyses.html#::SpiceGenTcl::Common::Analyses::Tran'>Tran</a></li><li class='ruff-toc4 ruff-tip'><a href='index-SpiceGenTcl-Common-Analyses.html#::SpiceGenTcl::Common::Analyses::Tran::constructor'>constructor</a><span class='ruff-tiptext'><pre><span class='ruff_cmd'>OBJECT constructor</span> <span class='ruff_arg'>-tstep value -tstop value ?-tstart value ?-tmax value?? ?-uic? ?-name value?</span></pre>Creates object of class <code><b><font color=#923B23>Tran</font></b></code> that describes TRAN analysis.
 </span></li></ul></nav><footer class='ruff-layout-footer ruff-ft'><div style='float: right;'>Document generated by <a href='https://ruff.magicsplat.com'>Ruff!</a></div><div>&copy; George Yashin</div></footer>
 </div></body></html>

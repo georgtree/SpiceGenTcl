@@ -52,16 +52,15 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             #  -tce value - exponential thermal coefficient, optional
             #  -l value - length of semiconductor resistor, optional
             #  -w value - width of semiconductor resistor, optional
-            # Resistor type could be specified with additional switches: `-beh` if we
-            # want to model circuit's variable dependent resistor, or `-model modelName`
-            # if we want to simulate resistor with model card.
+            # Resistor type could be specified with additional switches: `-beh` if we want to model circuit's variable
+            # dependent resistor, or `-model modelName` if we want to simulate resistor with model card.
             # Simple resistor:
             # ```
             # R<name> <(+) node> <(-) node> <value> [device parameters]
             # ```
             # Example of class initialization as a simple resistor:
             # ```
-            # ::SpiceGenTcl::Xyce::BasicDevices::Resistor new 1 netp netm -r 1e3 -tc1 1 -temp {-eq temp_amb}
+            # Resistor new 1 netp netm -r 1e3 -tc1 1 -temp {-eq temp_amb}
             # ```
             # Behavioral resistor:
             # ```
@@ -69,7 +68,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Xyce::BasicDevices::Resistor new 1 netp netm -r "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1
+            # Resistor new 1 netp netm -r "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1
             # ```
             # Resistor with model card:
             # ```
@@ -77,7 +76,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Xyce::BasicDevices::Resistor new 1 netp netm -model resm -l 1e-6 -w 10e-6
+            # Resistor new 1 netp netm -model resm -l 1e-6 -w 10e-6
             # ```
             # Synopsis: name np nm -r value ?-tc1 value? ?-tc2 value? ?-tce value? ?-m value? ?-temp value?
             # Synopsis: name np nm -r value -beh ?-tc1 value? ?-tc2 value? ?-tce value? ?-m value? ?-temp value?
@@ -153,16 +152,15 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             #  -d value - aging coefficient, optional
             #  -l value - length of semiconductor capacitor, optional
             #  -w value - width of semiconductor capacitor, optional
-            # Capacitor type could be specified with additional switches: `-beh` if we
-            # want to model circuit's variable dependent capacitor, or `-model modelName`
-            # if we want to simulate capacitor with model card.
+            # Capacitor type could be specified with additional switches: `-beh` if we want to model circuit's variable
+            # dependent capacitor, or `-model modelName` if we want to simulate capacitor with model card.
             # Simple capacitor:
             # ```
             # C<device name> <(+) node> <(-) node> <value> [device parameters]
             # ```
             # Example of class initialization as a simple capacitor:
             # ```
-            # ::SpiceGenTcl::Xyce::BasicDevices::Capacitor new 1 netp netm 1e-6 -tc1 1 -temp {-eq temp}
+            # Capacitor new 1 netp netm 1e-6 -tc1 1 -temp {-eq temp}
             # ```
             # Behavioral capacitor with C expression:
             # ```
@@ -170,7 +168,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Xyce::BasicDevices::Capacitor new 1 netp netm -c "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1
+            # Capacitor new 1 netp netm -c "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1
             # ```
             # Behavioral capacitor with Q expression:
             # ```
@@ -178,7 +176,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Xyce::BasicDevices::Capacitor new 1 netp netm -q "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1
+            # Capacitor new 1 netp netm -q "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1
             # ```
             # Capacitor with model card:
             # ```
@@ -186,7 +184,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Xyce::BasicDevices::Capacitor new 1 netp netm -model capm -l 1e-6 -w 10e-6
+            # Capacitor new 1 netp netm -model capm -l 1e-6 -w 10e-6
             # ```
             # Synopsis: name np nm -c value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value?
             #   ?-age value? ?-d value?
@@ -268,15 +266,15 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             #  -tc1 value - linear thermal coefficient, optional
             #  -tc2 value - quadratic thermal coefficient, optional
             #  -ic value - initial current through inductor, optional
-            # Inductor type could be specified with additional switch `-model modelName`
-            # if we want to simulate inductor with model card.
+            # Inductor type could be specified with additional switch `-model modelName` if we want to simulate inductor
+            # with model card.
             # Simple inductor:
             # ```
             # L<name> <(+) node> <(-) node> <value> [device parameters]
             # ```
             # Example of class initialization as a simple inductor:
             # ```
-            # ::SpiceGenTcl::Xyce::BasicDevices::Inductor new 1 netp netm -l 1e-6 -tc1 1 -temp {-eq temp}
+            # Inductor new 1 netp netm -l 1e-6 -tc1 1 -temp {-eq temp}
             # ```
             # Inductor with model card:
             # ```
@@ -284,7 +282,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Xyce::BasicDevices::Inductor new 1 netp netm -l 1e-6 -model indm
+            # Inductor new 1 netp netm -l 1e-6 -model indm
             # ```
             # Synopsis: name np nm -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value?
             # Synopsis: name np nm -model value -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value?
@@ -368,7 +366,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Xyce::BasicDevices::GenSwitch new 1 net1 0 -model sw1 -control {I(VMON)}
+            # GenSwitch new 1 net1 0 -model sw1 -control {I(VMON)}
             # ```
             # Synopsis: name np nm -model value -control value ?-on|off?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'GenSwitch' that describes generic\
@@ -405,16 +403,15 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
         constructor {args} {
             # Creates object of class `SubcircuitInstance` that describes subcircuit instance.
             #  name - name of the device without first-letter designator X
-            #  pins - list of pins {{pinName nodeName} {pinName nodeName} ...}
+            #  pins - list of pins `{{pinName nodeName} {pinName nodeName} ...}`
             #  subName - name of subcircuit definition
-            #  params - {{?-eq? paramName paramValue} {?-eq? paramName paramValue}}
+            #  params - list of parameters `{{?-eq? paramName paramValue} {?-eq? paramName paramValue}}`
             # ```
             # X<name> [nodes] <subcircuit name> [PARAMS: [<name> = <value>] ...]
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstance new 1 {{plus net1} {minus net2}}\
-                                    rcnet {{r 1} {-eq c cpar}}
+            # SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {-eq c cpar}}
             # ```
             ##nagelfar implicitvarcmd {argparse *Creates object of class 'SubcircuitInstance'*} name pins subName params
             argparse -pfirst -help {Creates object of class 'SubcircuitInstance' that describes subcircuit instance} {
@@ -441,15 +438,15 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             # Creates object of class `SubcircuitInstanceAuto` that describes subcircuit instance with already created
             # subcircuit definition object.
             #  subcktObj - object of subcircuit that defines it's pins, subName and parameters
-            #  nodes - list of nodes connected to pins in the same order as pins in subcircuit definition
-            #   {nodeName1 nodeName2 ...}
-            #  args - parameters as argument in form : -paramName {?-eq? paramValue} -paramName {?-eq? paramValue}
+            #  nodes - list of nodes connected to pins in the same order as pins in subcircuit definition `{nodeName1
+            #   nodeName2 ...}`
+            #  args - parameters as argument in form: `-paramName {?-eq? paramValue} -paramName {?-eq? paramValue}`
             # ```
             # X<name> [nodes] <subcircuit name> [PARAMS: [<name> = <value>] ...]
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstanceAuto new $subcktObj 1 {net1 net2} -r 1 -c {-eq cpar}
+            # SubcircuitInstanceAuto new $subcktObj 1 {net1 net2} -r 1 -c {-eq cpar}
             # ```
             # Synopsis: subcktObj name nodes ?-paramName {?-eq? paramValue} ...?
 
@@ -639,15 +636,15 @@ namespace eval ::SpiceGenTcl::Xyce::Sources {
             #  nm - name of node connected to negative pin
             #  -i value - current expression
             #  -v value - voltage expression
-            #  -smoothbsrc - enables the smooth transitions, optional, require -v
-            #  -rcconst value - rc constant of the RC network, optional, require -v
+            #  -smoothbsrc - enables the smooth transitions, optional, require `-v`
+            #  -rcconst value - rc constant of the RC network, optional, require `-v`
             # ```
             # B<name> <(+) node> <(-) node> V={expression} [device parameters]
             # B<name> <(+) node> <(-) node> I={expression}
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Xyce::Sources::BehaviouralSource new 1 netp netm -v "V(a)+V(b)+pow(V(c),2)"
+            # BehaviouralSource new 1 netp netm -v "V(a)+V(b)+pow(V(c),2)"
             # ```
             # Synopsis: name np nm -i value
             # Synopsis: name np nm -v value ?-smoothbsrc? ?-rcconst value?
@@ -710,7 +707,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Xyce::SemiconductorDevices::Diode new 1 netp netm -model diomod -area 1e-6
+            # Diode new 1 netp netm -model diomod -area 1e-6
             # ```
             # Synopsis: name np nm -model value ?-area value? ?-pj value? ?-ic value? ?-m value? ?-temp value?
             #   ?-custparams param1 \{?-eq|-poseq|-posnocheck|-pos|-nocheck? param1Val\} ...?
@@ -795,7 +792,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             #  -ic1 value - initial conditions for vbe, optional
             #  -ic2 value - initial conditions for vce, optional
             #  -ns value - name of node connected to substrate pin, optional
-            #  -tj value - name of node connected to thermal pin, optional, requires -ns
+            #  -tj value - name of node connected to thermal pin, optional, requires `-ns`
             # ```
             # QXXXXXXX nc nb ne <ns> <tj> mname <area=val> <areac=val>
             # + <areab=val> <m=val> <off> <ic=vbe,vce> <temp=val>
@@ -803,7 +800,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Xyce::SemiconductorDevices::Bjt new 1 netc netb nete -model bjtmod -ns nets -area 1e-3
+            # Bjt new 1 netc netb nete -model bjtmod -ns nets -area 1e-3
             # ```
             # Synopsis: name nc nb ne -model value ?-ns value ?-tj value?? ?-area value? ?-m value?
             #   ?-temp value? ?-off? ?-ic1 value? ?-ic2 value?
@@ -886,8 +883,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet new 1 netd netg nets -model jfetmod -area {-eq area*2}\
-                                    -temp 25
+            # Jfet new 1 netd netg nets -model jfetmod -area {-eq area*2} -temp 25
             # ```
             # Synopsis: name nd ng ns -model value ?-area value? ?-temp value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'Jfet' that describes semiconductor\
@@ -945,7 +941,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Xyce::SemiconductorDevices::Mesfet new 1 netd netg nets -model mesfetmod -area {-eq area*2}
+            # Mesfet new 1 netd netg nets -model mesfetmod -area {-eq area*2}
             # ```
             # Synopsis: name nd ng ns -model value ?-area value? ?-temp value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'Mesfet' that describes\
@@ -999,21 +995,22 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             #  -m value - multiplier, optional
             #  -l value - length of channel, optional
             #  -w value - width of channel, optional
-            #  -ad value - diffusion area of drain, optional, forbid -nrd
-            #  -as value - diffusion area of source, optional,forbid -nrs
+            #  -ad value - diffusion area of drain, optional, forbids `-nrd`
+            #  -as value - diffusion area of source, optional, forbids `-nrs`
             #  -pd value - perimeter area of drain, optional
             #  -ps value - perimeter area of source, optional
             #  -nrd value - equivalent number of squares of the drain diffusions
             #  -nrs value - equivalent number of squares of the source diffusions
             #  -temp value - device temperature
-            #  -ic value - initial conditions for vds, vgs and vbs, in form of three element list, optional, require 4th node
+            #  -ic value - initial conditions for vds, vgs and vbs, in form of three element list, optional, require 4th
+            #    node
             #  -off - initial state, optional
             #  -n4 value - name of 4th node;
-            #  -n5 value - name of 5th node, require -n4, optional
-            #  -n6 value - name of 6th node, require -n5, optional
-            #  -n7 value - name of 7th node, require -n6, optional
-            #  -custparams - key that collects all arguments at the end of device definition, to provide an ability
-            #  to add custom parameters in form `-custparams param1 param1Val param2 {-eq param2eq} param3 param3Val ...`
+            #  -n5 value - name of 5th node, require `-n4`, optional
+            #  -n6 value - name of 6th node, require `-n5`, optional
+            #  -n7 value - name of 7th node, require `-n6`, optional
+            #  -custparams - key that collects all arguments at the end of device definition, to provide an ability to
+            #  add custom parameters in form `-custparams param1 param1Val param2 {-eq param2eq} param3 param3Val ...`
             #  Must be specified after all others options. Optional.
             # ```
             # M<name> <drain node> <gate node> <source node>
@@ -1026,7 +1023,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Xyce::Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5
+            # Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5
             # ```
             # Synopsis: name nd ng ns -model value ?-n4 value ?-n5 value ?-n6 value ?-n7 value???? ?-m value?
             #   ?-l value? ?-w value? ?-ad value|-nrd value? ?-as value|-nrs value? ?-temp value? ?-off? ?-pd value?

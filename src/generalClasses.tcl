@@ -25,49 +25,49 @@ namespace eval ::SpiceGenTcl {
             forgetLtspice
 
     proc importCommon {} {
-        # Imports all ::SpiceGenTcl::Common commands to caller namespace
+        # Imports all `::SpiceGenTcl::Common` commands to caller namespace
         uplevel 1 {foreach nameSpc [namespace children ::SpiceGenTcl::Common] {
             namespace import ${nameSpc}::*
         }}
     }
     proc forgetCommon {} {
-        # Forgets all ::SpiceGenTcl::Common commands from caller namespace
+        # Forgets all `::SpiceGenTcl::Common` commands from caller namespace
         uplevel 1 {foreach nameSpc [namespace children ::SpiceGenTcl::Common] {
             namespace forget ${nameSpc}::*
         }}
     }
     proc importNgspice {} {
-        # Imports all ::SpiceGenTcl::Ngspice commands to caller namespace
+        # Imports all `::SpiceGenTcl::Ngspice` commands to caller namespace
         uplevel 1 {foreach nameSpc [namespace children ::SpiceGenTcl::Ngspice] {
             namespace import ${nameSpc}::*
         }}
     }
     proc forgetNgspice {} {
-        # Forgets all ::SpiceGenTcl::Ngspice commands from caller namespace
+        # Forgets all `::SpiceGenTcl::Ngspice` commands from caller namespace
         uplevel 1 {foreach nameSpc [namespace children ::SpiceGenTcl::Ngspice] {
             namespace forget ${nameSpc}::*
         }}
     }
     proc importXyce {} {
-        # Imports all ::SpiceGenTcl::Xyce commands to caller namespace
+        # Imports all `::SpiceGenTcl::Xyce` commands to caller namespace
         uplevel 1 {foreach nameSpc [namespace children ::SpiceGenTcl::Xyce] {
             namespace import ${nameSpc}::*
         }}
     }
     proc forgetXyce {} {
-        # Forgets all ::SpiceGenTcl::Xyce commands from caller namespace
+        # Forgets all `::SpiceGenTcl::Xyce` commands from caller namespace
         uplevel 1 {foreach nameSpc [namespace children ::SpiceGenTcl::Xyce] {
             namespace forget ${nameSpc}::*
         }}
     }
     proc importLtspice {} {
-        # Imports all ::SpiceGenTcl::Ltspice commands to caller namespace
+        # Imports all `::SpiceGenTcl::Ltspice` commands to caller namespace
         uplevel 1 {foreach nameSpc [namespace children ::SpiceGenTcl::Ltspice] {
             namespace import ${nameSpc}::*
         }}
     }
     proc forgetLtspice {} {
-        # Forgets all ::SpiceGenTcl::Ltspice commands from caller namespace
+        # Forgets all `::SpiceGenTcl::Ltspice` commands from caller namespace
         uplevel 1 {foreach nameSpc [namespace children ::SpiceGenTcl::Ltspice] {
             namespace forget ${nameSpc}::*
         }}
@@ -77,7 +77,7 @@ namespace eval ::SpiceGenTcl {
     oo::configurable create SPICEElement {
         self mixin -append oo::abstract
         # Abstract class of all elements of SPICE netlist
-        #  and it forces implementation of genSPICEString method for all subclasses.
+        #  and it forces implementation of `genSPICEString` method for all subclasses.
         variable name
         method genSPICEString {} {
             # Declaration of method common for all SPICE elements that generates
@@ -126,7 +126,7 @@ namespace eval ::SpiceGenTcl {
             }
         }
         method BuildArgStr {paramsNames} {
-            # Builds argument list for argparse.
+            # Builds argument list for `argparse`.
             #  paramsNames - list of parameter names
             # Returns: string in form `-paramName= ...`, or `{-paramName= -forbid {alias0 alias1 ...}}`
             foreach paramName $paramsNames {
@@ -150,12 +150,12 @@ namespace eval ::SpiceGenTcl {
             return $paramDefStr
         }
         method ArgsPreprocess {switchesNames paramsNames suppHelpElems args} {
-            # Calls argparse and constructs list for passing to Device constructor.
+            # Calls `argparse` and constructs list for passing to `Device` constructor.
             #  switchesNames - list of switches names, define alias for switch name by
-            #  using two element list {switchName aliasName}
+            #  using two element list `{switchName aliasName}`
             #  args - argument list with key names and it's values
             #  paramsNames - list of parameters in order it should be parsed by argparse
-            # Returns: list of parameters formatted for Device/Model constructor
+            # Returns: list of parameters formatted for `Device/Model` constructor
             foreach switchName $switchesNames {
                 if {[llength $switchName]>1} {
                     if {[@ $switchName 0] ni $suppHelpElems} {
@@ -265,15 +265,12 @@ namespace eval ::SpiceGenTcl {
             # Creates object of class `Pin` with name and connected node
             #  name - name of the pin
             #  node - name of the node that connected to pin
-            # Class models electrical pin of device/subcircuit,
-            # it has name and name of the node connected to it.
-            # It has general interface method `genSPICEString` that returns
-            # name of the node connected to it, this method must be called only
-            # in method with the same name in other classes. We can check if pin is
-            # floating by checking the name of connected node in method `checkFloating` -
-            # if is contains empty string it is floating.
-            # Floating pin can't be netlisted, so it throws error when try to
-            # do so. Set pin name empty by special method `unsetNodeName`.
+            # Class models electrical pin of device/subcircuit, it has name and name of the node connected to it.  It
+            # has general interface method `genSPICEString` that returns name of the node connected to it, this method
+            # must be called only in method with the same name in other classes. We can check if pin is floating by
+            # checking the name of connected node in method `checkFloating` - if is contains empty string it is
+            # floating.  Floating pin can't be netlisted, so it throws error when try to do so. Set pin name empty by
+            # special method `unsetNodeName`.
             # Synopsis: name node
             set arguments [argparse -inline -help {Creates object of class 'Pin' with name and connected node} {
                 {name -help {Name of the pin}}
@@ -331,10 +328,9 @@ namespace eval ::SpiceGenTcl {
         constructor {args} {
             # Creates object of class `ParameterSwitch` with parameter name.
             #  name - name of the parameter
-            # Class models base parameter acting like a switch -
-            # its presence gives us information that something it controls is on.
-            # This parameter doesn't have a value, and it is the most basic class
-            # in Parameter class family.
+            # Class models base parameter acting like a switch - its presence gives us information that something it
+            # controls is on. This parameter doesn't have a value, and it is the most basic class in `Parameter` class
+            # family.
             set arguments [argparse -inline -help {Creates object of class 'ParameterSwitch' with parameter name} {
                 {name -help {Name of the parameter}}
             }]
@@ -342,7 +338,7 @@ namespace eval ::SpiceGenTcl {
         }
         method genSPICEString {} {
             # Creates string for SPICE netlist.
-            # Returns: string '$name'
+            # Returns: string `$name`
             return [my configure -name]
         }
     }
@@ -355,9 +351,8 @@ namespace eval ::SpiceGenTcl {
             # Creates object of class `Parameter` with parameter name and value.
             #  name - name of the parameter
             #  value - value of the parameter
-            # Class models parameter that has a name and a value - the most
-            # common type of parameters in SPICE netlist. Its representation in netlist is
-            # 'name=value', and can be called "keyword parameter".
+            # Class models parameter that has a name and a value - the most common type of parameters in SPICE
+            # netlist. Its representation in netlist is `name=value`, and can be called "keyword parameter".
             set arguments [argparse -inline -help {Creates object of class 'Parameter' with parameter name and value} {
                 {name -help {Name of the parameter}}
                 {value -help {Value of the parameter}}
@@ -501,12 +496,11 @@ namespace eval ::SpiceGenTcl {
             # Creates object of class `ParameterPositional` with parameter name and value.
             #  name - name of parameter
             #  value - value of parameter
-            # Class models parameter that has a name and a value, but it differs from
-            # parent class in the sense of netlist representation: this parameter represents only
-            # by the value in the netlist. It's meaning for holding element is taken from
-            # it's position in the element's definition, for example, R1 np nm 100 tc1=1 tc2=0 - resistor
-            # with positional parameter R=100, you can't put it after parameters tc1 and tc2, it must be placed
-            # right after the pins definition.
+            # Class models parameter that has a name and a value, but it differs from parent class in the sense of
+            # netlist representation: this parameter represents only by the value in the netlist. It's meaning for
+            # holding element is taken from it's position in the element's definition, for example, `R1 np nm 100 tc1=1
+            # tc2=0` \- resistor with positional parameter `R=100`, you can't put it after parameters `tc1` and `tc2`, it
+            # must be placed right after the pins definition.
             set arguments [argparse -inline -help {Creates object of class 'ParameterPositional' with parameter name\
                                                            and value} {
                 {name -help {Name of the parameter}}
@@ -586,9 +580,9 @@ namespace eval ::SpiceGenTcl {
             #  name - name of the parameter
             #  value - value of the parameter
             #  defValue - default value of the parameter
-            # Class models parameter that has a name and a value, but it differs from
-            # parent class in sense of having default value, so it has special ability to reset its value to default
-            # value by special method `resetValue`.
+            # Class models parameter that has a name and a value, but it differs from parent class in sense of having
+            # default value, so it has special ability to reset its value to default value by special method
+            # `resetValue`.
             set arguments [argparse -inline -help {Creates object of class 'ParameterDefault' with parameter name and\
                                                            value} {
                 {name -help {Name of the parameter}}
@@ -616,7 +610,7 @@ namespace eval ::SpiceGenTcl {
             #  name - name of the parameter
             #  value - value of the parameter
             # Class models parameter that has representation as an equation.
-            # Example: R={R1+R2}
+            # Example: `R={R1+R2}`
             set arguments [argparse -inline -help {Creates object of class 'ParameterEquation' with parameter name and\
                                                            value as an equation} {
                 {name -help {Name of the parameter}}
@@ -649,8 +643,8 @@ namespace eval ::SpiceGenTcl {
             # positional form.
             #  name - name of the parameter
             #  value - value of the parameter
-            # Class models parameter that has representation as an equation, but in form of
-            # positional parameter. Example: {R1+R2}
+            # Class models parameter that has representation as an equation, but in form of positional parameter.
+            # Example: `{R1+R2}`
             set arguments [argparse -inline -help {Creates object of class 'ParameterPositionalEquation' with\
                                                            parameter name and value as anequation} {
                 {name -help {Name of the parameter}}
@@ -686,22 +680,21 @@ namespace eval ::SpiceGenTcl {
             #  pins - list of pins in the order they appear in SPICE device's definition together
             #   with connected node in form: `{{Name0 NodeName} {Name1 NodeName} {Name2 NodeName} ...}`
             #   Nodes string values could be empty.
-            #  params - list of instance parameters in form `{{Name Value ?-sw|pos|eq|poseq|posnocheck|nocheck?} 
-            #   {Name Value ?-sw|pos|eq|poseq|posnocheck|nocheck?} {Name Value ?-sw|pos|eq|poseq|posnocheck|nocheck?}
-            #    ...}`
+            #  params - list of instance parameters in form `{{Name Value ?-sw|pos|eq|poseq|posnocheck|nocheck?}  {Name
+            #   Value ?-sw|pos|eq|poseq|posnocheck|nocheck?} {Name Value ?-sw|pos|eq|poseq|posnocheck|nocheck?}  ...}`
             #   Parameter list can be empty if device doesn't have instance parameters.
-            # Class models general device in SPICE, number of which
-            # must be assembled (connected) to get the circuit to simulate. This class provides basic machinery
-            # for creating any device that can be connected to net in circuit. It can be instantiated to create
-            # device that contains:
-            #  - reference name, like R1, L1, M1, etc;
+            #
+            # Class models general device in SPICE, number of which must be assembled (connected) to get the circuit to
+            # simulate. This class provides basic machinery for creating any device that can be connected to net in
+            # circuit. It can be instantiated to create device that contains:
+            #  - reference name, like `R1`, `L1`, `M1`, etc;
             #  - list of pins in the order of appearence of device's definition, for example, 'drain gate source' for
             #     MOS transistor;
-            #  - list of parameters, that could be positional (+equation), keyword (+equation) parameters, like
-            #     `R1 nm np 100 tc1=1 tc2={tc0*tc12}`, where 100 - positional parameter, tc1 - keyword parameters and
-            #     tc2 - keyword parameter with equation
-            # This class accept definition that contains elements listed above, and generates classes: Pin, Parameter,
-            # PositionalParameter with compositional relationship (has a).
+            #  - list of parameters, that could be positional (+equation), keyword (+equation) parameters, like `R1 nm
+            #     np 100 tc1=1 tc2={tc0*tc12}`, where `100` - positional parameter, `tc1` - keyword parameters and `tc2`
+            #     - keyword parameter with equation
+            # This class accept definition that contains elements listed above, and generates classes: `Pin`,
+            # `Parameter`, `ParameterPositional` with compositional relationship.
             set arguments [argparse -inline -help {Creates object of class 'Device'} {
                 {name -help {Name of the device}}
                 {pins -help {List of pins in the order they appear in SPICE device's definition together with connected\
@@ -723,10 +716,10 @@ namespace eval ::SpiceGenTcl {
             #ruff
             # Each parameter definition could be modified by
             #  optional flags:
-            #  -pos - parameter has strict position and only '$Value' is displayed in netlist
+            #  -pos - parameter has strict position and only `$value` is displayed in netlist
             #  -eq - parameter may contain equation in terms of functions and other parsmeters,
-            #    printed as '$name={$equation}'
-            #  -poseq - combination of both flags, print only '{$equation}'
+            #    printed as `$name={$equation}`
+            #  -poseq - combination of both flags, print only `{$equation}`
             #  -posnocheck - positional parameter without check
             #  -nocheck - normal parameter without check
             foreach param [dget $arguments params] {
@@ -734,7 +727,7 @@ namespace eval ::SpiceGenTcl {
             }
         }
         destructor {
-            # Destroy object of class `Device`, and its parameters and pins objects.
+            # Destroy object of class `Device`, its `Parameter` and `Pin` objects.
             if {[info exists Params]} {
                 foreach param [dict values $Params] {
                     $param destroy
@@ -748,11 +741,11 @@ namespace eval ::SpiceGenTcl {
         }
         method actOnPin {args} {
             # Acts on `Pin` object with selected action
-            #  -add - add new pin to the device, requires pin and node arguments
-            #  -get - get node name connected to pin, requires pin argument
-            #  -set - set node name connected to pin, requires pin and node arguments
+            #  -add - add new pin to the device, requires `pin` and `node` arguments
+            #  -get - get node name connected to pin, requires `pin` argument
+            #  -set - set node name connected to pin, requires `pin` and `node` arguments
             #  -all - option for getting the dictionary that contains pin name as keys and connected node name as the 
-            #    values, requires -get
+            #    values, requires `-get`
             #  pin - name of the pin
             #  node - name of the node connected to pin
             # Synopsis: -add pin node
@@ -816,24 +809,24 @@ namespace eval ::SpiceGenTcl {
         }
         method actOnParam {args} {
             # Acts on `Parameter` object with selected action
-            #  -add - add new parameter to the device, requires pname argument
-            #  -get - get parameter value, requires pname argument
-            #  -set - set (or change) value of particular parameters, requires pname and value arguments
+            #  -add - add new parameter to the device, requires `pname` argument
+            #  -get - get parameter value, requires `pname` argument
+            #  -set - set (or change) value of particular parameters, requires `pname` and `value` arguments
             #  -delete - delete existing parameter
             #  -all - option for getting the dictionary that contains parameters names as keys and parameters values\
-            #    as the dictionary values, requires -get
-            #  -pos - parameter has strict position and only '$Value' is displayed in netlist, requires -add
+            #    as the dictionary values, requires `-get`
+            #  -pos - parameter has strict position and only `$value` is displayed in netlist, requires `-add`
             #  -eq - Parameter may contain equation in terms of functions and other parameters, printed as 
-            #    '$name={$equation}', requires -add
-            #  -poseq - combination of both flags, print only, requires -add
-            #  -posnocheck - positional parameter without check, requires -add
-            #  -nocheck - normal parameter without check, requires -add
-            #  -sw - switch parameter, requires -add
-            #  -node - node parameter, requires -add
-            #  -nodeeq - node parameter equation, requires -add
+            #    `$name={$equation}`, requires `-add`
+            #  -poseq - combination of both flags, print only, requires `-add`
+            #  -posnocheck - positional parameter without check, requires `-add`
+            #  -nocheck - normal parameter without check, requires `-add`
+            #  -sw - switch parameter, requires `-add`
+            #  -node - node parameter, requires `-add`
+            #  -nodeeq - node parameter equation, requires `-add`
             #  pname - name of parameter
             #  value - value of parameter
-            #  arguments - optional pairs of name-value for -set action, requires -set
+            #  arguments - optional pairs of name-value for `-set` action, requires `-set`
             # Synopsis: -add ?-pos|eq|poseq|posnocheck|nocheck|sw|node|nodeeq? name value
             # Synopsis: -set name value ?name value ...?
             # Synopsis: -get name
@@ -1023,9 +1016,9 @@ namespace eval ::SpiceGenTcl {
         constructor {args} {
             # Creates object of class `Model`.
             #  name - name of the model
-            #  type - type of model, for example, diode, npn, etc
-            #  instParams - list of instance parameters in form `{{name value ?-pos|eq|poseq?}
-            #   {name value ?-pos|eq|poseq?} {name value ?-pos|eq|poseq?} ...}`
+            #  type - type of model, for example, `diode`, `npn`, etc
+            #  instParams - list of instance parameters in form `{{name value ?-pos|eq|poseq?}  {name value
+            #   ?-pos|eq|poseq?} {name value ?-pos|eq|poseq?} ...}`
             # Class represents model card in SPICE netlist.
             set arguments [argparse -inline -help {Creates object of class 'Model'} -pfirst {
                 {name -help {Name of the model}}
@@ -1036,7 +1029,7 @@ namespace eval ::SpiceGenTcl {
                                                   {Name2 Value2 ?-pos|eq|poseq|posnocheck|nocheck?} ...}'}} -type list}
             }]
             my configure -name [dget $arguments name] -type [dget $arguments type]
-            # create Params objects
+            # create `Params` objects
             if {[dexist $arguments params]} {
                 foreach param [dget $arguments params] {
                     my actOnParam -add {*}$param
@@ -1044,7 +1037,7 @@ namespace eval ::SpiceGenTcl {
             }
         }
         destructor {
-            # Destroy object of class `Model`, and its parameters objects.
+            # Destroy object of class `Model`, and its `Parameter` objects.
             if {[info exists Params]} {
                 foreach param [dict values $Params] {
                     $param destroy
@@ -1079,9 +1072,8 @@ namespace eval ::SpiceGenTcl {
             #  value - value of the raw string
             #  -name value - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]
             #    object and its descendants, optional
-            # Class represent arbitary string.
-            #  It can be used to pass any string directly into netlist,
-            #  for example, it can add elements that doesn't have dedicated class.
+            # Class represent arbitary string.  It can be used to pass any string directly into netlist, for example, it
+            #  can add elements that doesn't have dedicated class.
             # Synopsis: value ?-name value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'RawString'} {
                 {value -help {Value of the raw string}}
@@ -1141,7 +1133,7 @@ namespace eval ::SpiceGenTcl {
             #  value - value of the include path
             #  -name value - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]
             #    object and its descendants, optional
-            # This class represent .include statement.
+            # This class represent `.include` statement.
             # Synopsis: value ?-name value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'Include'} {
                 {value -help {Value of the include path}}
@@ -1175,7 +1167,7 @@ namespace eval ::SpiceGenTcl {
             #  body - body of the function
             #  -name value - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]
             #    object and its descendants, optional
-            # This class represent .func statement.
+            # This class represent `.func` statement.
             # Synopsis: declaration body ?-name value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'Function'} {
                 {declaration -help {Function declaration}}
@@ -1211,7 +1203,7 @@ namespace eval ::SpiceGenTcl {
             #  libvalue - value of selected library
             #  -name value - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]
             #    object and its descendants, optional
-            # Class represent .lib statement.
+            # Class represent `.lib` statement.
             # Synopsis: value libvalue ?-name value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'Library'} {
                 {value -help {Value of the include path}}
@@ -1244,11 +1236,11 @@ namespace eval ::SpiceGenTcl {
         variable name Params
         constructor {args} {
             # Creates object of class `Options`.
-            #  params - list of instance parameters in form `{{name value ?-sw?} {name value ?-sw?}
-            #   {name value ?-sw?} ...}`
+            #  params - list of instance parameters in form `{{name value ?-sw?} {name value ?-sw?}  {name value ?-sw?}
+            #   ...}`
             #  -name value - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]
             #    object and its descendants, optional
-            # This class represent .options statement.
+            # This class represent `.options` statement.
             # Synopsis: params ?-name value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'Options'} {
                 {params -help {list of instance parameters in form '{{name value ?-sw?} {name value ?-sw?}\
@@ -1270,7 +1262,7 @@ namespace eval ::SpiceGenTcl {
             }
         }
         destructor {
-            # Destroy object of class `Options`, and its parameters objects.
+            # Destroy object of class `Options`, and its `Parameter` objects.
             if {[info exists Params]} {
                 foreach param [dict values $Params] {
                     $param destroy
@@ -1299,7 +1291,7 @@ namespace eval ::SpiceGenTcl {
             #  params - list of instance parameters in form `{{name value ?-eq?} {name value ?-eq?} ...}`
             #  -name value - name of the library that could be used to retrieve element from [::SpiceGenTcl::Netlist]
             #    object and its descendants, optional
-            # Class represent .param statement.
+            # Class represent `.param` statement.
             # Synopsis: params ?-name value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'ParamStatement'} {
                 {params -help {list of instance parameters in form '{{name value ?-eq?} {name value ?-eq?} ...}'}\
@@ -1321,7 +1313,7 @@ namespace eval ::SpiceGenTcl {
             }
         }
         destructor {
-            # Destroy object of class `ParamStatement`, and its parameters objects.
+            # Destroy object of class `ParamStatement`, and its `Parameter` objects.
             if {[info exists Params]} {
                 foreach param [dict values $Params] {
                     $param destroy
@@ -1350,7 +1342,7 @@ namespace eval ::SpiceGenTcl {
             #  vectors - list of vectors in form `{vec0 vec1 vec2 ...}`
             #  -name value - name of the library that could be used to retrieve element from [::SpiceGenTcl::Netlist]
             #    object and its descendants, optional
-            # Class represent .save statement.
+            # Class represent `.save` statement.
             # Synopsis: vectors ?-name value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'ParamStatement'} {
                 {vectors -help {List of vectors in form '{vec0 vec1 vec2 ...}'} -type list}
@@ -1371,7 +1363,7 @@ namespace eval ::SpiceGenTcl {
             }
         }
         destructor {
-            # Destroy object of class `Save`, and its vectors objects.
+            # Destroy object of class `Save`, and its `ParameterVector`s objects.
             if {[info exists Vectors]} {
                 foreach vector [dict values $Vectors] {
                     $vector destroy
@@ -1379,13 +1371,13 @@ namespace eval ::SpiceGenTcl {
             }
         }
         method getVectors {args} {
-            # Gets the dictionary of vector names
+            # Gets the dictionary of `ParameterVector`s
             # Returns: vectors dictionary
             argparse -help {Gets the dictionary of vector names. Returns: vectors dictionary} {}
             return $Vectors
         }
         method addVector {args} {
-            # Adds new `ParameterVector` object to the dictionary Vectors.
+            # Adds new `ParameterVector` object to the dictionary `Vectors`.
             #  vname - name of vector
             argparse -help {Adds new 'ParameterVector' object to the list 'Vectors'} {
                 {vname -help {Name of vector}}
@@ -1417,7 +1409,7 @@ namespace eval ::SpiceGenTcl {
             return
         }
         method genSPICEString {} {
-            # Creates save statement string for SPICE netlist.
+            # Creates `.save` statement string for SPICE netlist.
             # Returns: SPICE netlist's string
             return ".save [join [join [lmap vector [dict values $Vectors] {$vector genSPICEString}]]]"
         }
@@ -1437,7 +1429,7 @@ namespace eval ::SpiceGenTcl {
             #  params - list of instance parameters in form `{{name value} {name value} {name equation -eq} ...}`
             #  -name value - name of the library that could be used to retrieve element from [::SpiceGenTcl::Netlist]
             #    object and its descendants, optional
-            # Class represent .ic statement.
+            # Class represent `.ic` statement.
             # Synopsis: params ?-name value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'Ic'} {
                 {params -help {list of instance parameters in form '{{name value ?-eq?} {name value ?-eq?} ...}'}\
@@ -1463,7 +1455,7 @@ namespace eval ::SpiceGenTcl {
             }
         }
         destructor {
-            # Destroy object of class `Ic`, and its parameters objects.
+            # Destroy object of class `Ic`, and its `Parameter` objects.
             if {[info exists Params]} {
                 foreach param [dict values $Params] {
                     $param destroy
@@ -1472,7 +1464,7 @@ namespace eval ::SpiceGenTcl {
         }
         method actOnParam {*}[info class definition ::SpiceGenTcl::Device actOnParam]
         method genSPICEString {} {
-            # Creates ic statement string for SPICE netlist.
+            # Creates `.ic` statement string for SPICE netlist.
             # Returns: SPICE netlist's string
             return ".ic [join [join [lmap param [dict values $Params] {$param genSPICEString}]]]"
         }
@@ -1484,7 +1476,7 @@ namespace eval ::SpiceGenTcl {
         mixin Utility
         variable Params
         method genSPICEString {} {
-            # Creates nodeset statement string for SPICE netlist.
+            # Creates `.nodeset` statement string for SPICE netlist.
             # Returns: SPICE netlist's string
             return ".nodeset [join [join [lmap param [dict values $Params] {$param genSPICEString}]]]"
         }
@@ -1504,7 +1496,7 @@ namespace eval ::SpiceGenTcl {
             #  nets - list of nets in form `{net0 net1 ...}`
             #  -name value - name of the library that could be used to retrieve element from [::SpiceGenTcl::Netlist]
             #    object and its descendants, optional
-            # Class represent .global statement.
+            # Class represent `.global` statement.
             # Synopsis: nets ?-name value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'Global'} {
                 {nets -help {List of nets in form '{net0 net1 ...}'} -type list}
@@ -1552,7 +1544,7 @@ namespace eval ::SpiceGenTcl {
             return
         }
         method genSPICEString {} {
-            # Creates global statement string for SPICE netlist.
+            # Creates `.global` statement string for SPICE netlist.
             # Returns: SPICE netlist's string
             return ".global [join $Nets]"
         }
@@ -1573,7 +1565,7 @@ namespace eval ::SpiceGenTcl {
             # Creates object of class `Temp`.
             #  value - value of the temperature
             #  -eq - optional parameter qualificator
-            # This class represent .temp statement with temperature value.
+            # This class represent `.temp` statement with temperature value.
             # Synopsis: value ?-eq?
             set arguments [argparse -inline -help {Creates object of class 'Temp'} {
                 {value -help {Value of the temperature}}
@@ -1608,7 +1600,7 @@ namespace eval ::SpiceGenTcl {
             return
         }
         method genSPICEString {} {
-            # Creates .temp statement string for SPICE netlist.
+            # Creates `.temp` statement string for SPICE netlist.
             # Returns: SPICE netlist's string
             return ".temp [$value genSPICEString]"
         }
@@ -1642,15 +1634,15 @@ namespace eval ::SpiceGenTcl {
         constructor {args} {
             # Creates object of class `Netlist`.
             #  name - name of the netlist
-            # Class implements netlist as a collection of SPICE elements. Any element that has SPICEElement
-            # as a parent class can be added to Netlist, except Options and Analysis.
+            # Class implements netlist as a collection of SPICE elements. Any element that has SPICEElement as a parent
+            # class can be added to `Netlist`, except `Options` and `Analysis`.
             set arguments [argparse -inline -help {Creates object of class 'Netlist'} {
                 {name -help {Name of the netlist}}
             }]
             my configure -name [dget $arguments name]
         }
         method add {args} {
-            # Adds elements objects to Elements dictionary.
+            # Adds elements objects to `Elements` dictionary.
             #  elements - elements objects references
             # Synopsis: element ?element ...?
             argparse -help {Adds elements objects to 'Elements' dictionary} {
@@ -1817,7 +1809,7 @@ namespace eval ::SpiceGenTcl {
             return [[my configure -data] getTracesData]
         }
         method getDataCsv {args} {
-            # Returns string with csv formatting containing all data
+            # Returns string with CSV formatting containing all data
             #  -all - select all traces
             #  -traces list - select names of traces to return
             #  -sep value - separator of columns, default is comma
@@ -1858,10 +1850,10 @@ namespace eval ::SpiceGenTcl {
         constructor {args} {
             # Creates object of class `Subcircuit`.
             #  name - name of the subcircuit
-            #  pins - list of pins in the order they appear in SPICE subcircuits definition together
-            #   in form: `{pinName0 pinName1 pinName2 ...}`
+            #  pins - list of pins in the order they appear in SPICE subcircuits definition together in form: `{pinName0
+            #   pinName1 pinName2 ...}`
             #  params - list of input parameters in form `{{name value} {name value} {name value} ...}`
-            # This class implements subcircuit, it is subclass of netlist because it holds list of elements
+            # This class implements subcircuit, it is subclass of `Netlist` because it holds list of elements
             # inside subcircuit, together with header and connection of elements inside.
             set arguments [argparse -inline -help {Creates object of class 'Device'} {
                 {name -help {Name of the subcircuit}}
@@ -1885,7 +1877,7 @@ namespace eval ::SpiceGenTcl {
             next [dget $arguments name]
         }
         destructor {
-            # Destroy object of class `Subcircuit`, and its parameters and pins objects.
+            # Destroy object of class `Subcircuit`, and its `Parameter`s and `Pin`s objects.
             if {[info exists Params]} {
                 foreach param [dict values $Params] {
                     $param destroy
@@ -1901,8 +1893,8 @@ namespace eval ::SpiceGenTcl {
         method actOnPin {*}[info class definition ::SpiceGenTcl::Device actOnPin]
         method actOnParam {*}[info class definition ::SpiceGenTcl::Device actOnParam]
         method add {args} {
-            # Add elements objects references to `Subcircuit`, it extends add method to add check of element class 
-            # because subcircuit can't contain particular elements inside, like [::SpiceGenTcl::Include],
+            # Add elements objects references to `Subcircuit`, it extends add method to add check of element class
+            # because `Subcircuit` can't contain particular elements inside, like [::SpiceGenTcl::Include],
             # [::SpiceGenTcl::Library], [::SpiceGenTcl::Options] and [::SpiceGenTcl::Analysis].
             #  args - elements objects references
             argparse -help {Add elements objects references to 'Subcircuit'} {
@@ -1957,9 +1949,9 @@ namespace eval ::SpiceGenTcl {
         variable name type Params
         constructor {args} {
             # Creates object of class `Analysis`.
-            #  type - type of analysis, for example, tran, ac, dc, etc
-            #  params - list of instance parameters in form
-            #   `{{name value} {name -sw} {name Value -eq} {name Value -posnocheck} ...}`
+            #  type - type of analysis, for example, `tran`, `ac`, `dc`, etc
+            #  params - list of instance parameters in form `{{name value} {name -sw} {name Value -eq} {name Value
+            #   -posnocheck} ...}`
             #  -name value - name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]
             #    object and its descendants, optional
             # Class models analysis statement.
@@ -1988,7 +1980,7 @@ namespace eval ::SpiceGenTcl {
             }
         }
         destructor {
-            # Destroy object of class `Analysis`, and its parameters objects.
+            # Destroy object of class `Analysis`, and its `Parameter`s objects.
             if {[info exists Params]} {
                 foreach param [dict values $Params] {
                     $param destroy
@@ -2103,7 +2095,7 @@ namespace eval ::SpiceGenTcl {
          # values at points
         variable name type numtype len DataPoints
         constructor {args} {
-            # initialize dataset
+            # Initializes `Dataset` object.
             #  name - name of the dataset
             #  type - type of dataset
             #  len - total number of points
@@ -2119,16 +2111,19 @@ namespace eval ::SpiceGenTcl {
             }
         }
         method setDataPoints {dataPoints} {
-            # method to set the data points
+            # Sets the data points
+            #  dataPoints - data points
             set DataPoints $dataPoints
             return
         }
         method appendDataPoints {dataPoint} {
-            # method to set the data points
+            # Appends the data points to the existing ones
+            #  dataPoints - data points
             lappend DataPoints $dataPoint
             return
         }
         method getDataPoints {args} {
+            # Gets the data points
             argparse -help {Gets all data points} {}
             if {[info exists DataPoints]} {
                 return $DataPoints
@@ -2138,6 +2133,7 @@ namespace eval ::SpiceGenTcl {
             return
         }
         method getStr {} {
+            # Returns metadata of `Dataset`
             return "Name: '[my configure -name]', Type: '[my configure -type]', Length: '[my configure -len]',\
                     Numerical type: '[my configure -numtype]'"
         }
@@ -2145,18 +2141,18 @@ namespace eval ::SpiceGenTcl {
 
 ###  Axis class definition
     oo::configurable create Axis {
-        # class that represents axis in raw file
+        # Class that represents axis in raw file
         superclass Dataset
     }
 
 ###  Trace class definition
     oo::configurable create Trace {
-        # class that represents trace in raw file
+        # Class that represents trace in raw file
         superclass Dataset
         property axis
         variable axis
         constructor {args} {
-            # initialize trace
+            # Initializes `Trace` object.
             #  name - name of the trace
             #  type - type of trace
             #  len - total number of points
@@ -2210,11 +2206,10 @@ namespace eval ::SpiceGenTcl {
         }
         variable path rawparams npoints nvariables axis Traces BlockSize
         constructor {args} {
-            # Creates RawFile object.
+            # Creates `RawFile` object.
             #  path - path to raw file including it's file name
-            #  traces2read - list of traces that will be readed, default value is \*,
-            #   that means reading all traces
-            #  simulator - simulator that produced this raw file, default is ngspice
+            #  traces2read - list of traces that will be readed, default value is `*`, that means reading all traces
+            #  simulator - simulator that produced this raw file, default is `ngspice`
             set arguments [argparse -inline -help {Creates 'RawFile' object} {
                 {path -help {path to raw file including it's file name}}
                 {traces2read -optional -default * -help {List of traces that will be readed, default value is *,\
@@ -2419,7 +2414,7 @@ namespace eval ::SpiceGenTcl {
             }
         }
         method getTrace {traceName} {
-            # Returns trace object reference by it's name
+            # Returns `Trace` object reference by it's name
             set traceFoundFlag false
             foreach trace [dvalues $Traces] {
                 if {[$trace configure -name] eq $traceName} {
@@ -2454,7 +2449,7 @@ namespace eval ::SpiceGenTcl {
                                            [$trace configure -name] : [continue]}}]
         }
         method getTracesStr {args} {
-            # Returns information about all Traces in raw file in form of string
+            # Returns information about all `Trace`s in raw file in form of string
             argparse -help {Returns information about all Traces in raw file in form of string} {}
             return [lmap trace [dvalues $Traces]\
                             {join [list [$trace configure -name] [$trace configure -type] [$trace configure -numtype]]}]
@@ -2513,16 +2508,17 @@ namespace eval ::SpiceGenTcl {
     oo::configurable create Parser {
         property name
         property filepath
-        # The SubcktsTree contains a tree object from the `struct::tree` library, representing a hierarchical subcircuit
-        # structure with possible nested subcircuits. Each node's name corresponds to the full path of a particular 
-        # subcircuit in the hierarchy. For example, `/topsubckt/middlesubckt/innersubckt` represents the subcircuit
-        # `innersubckt`, defined inside `middlesubckt`, which is itself defined within `topsubckt`.
+        # The `SubcktsTree` contains a tree object from the `struct::tree` library, representing a hierarchical
+        # subcircuit structure with possible nested subcircuits. Each node's name corresponds to the full path of a
+        # particular subcircuit in the hierarchy. For example, `/topsubckt/middlesubckt/innersubckt` represents the
+        # subcircuit `innersubckt`, defined inside `middlesubckt`, which is itself defined within `topsubckt`.
+        #
         # Each node has the following attributes:
-        #   startLine - The line number in the processed netlist where the subcircuit definition (.subckt) begins.
-        #   endLine - The line number in the processed netlist where the subcircuit definition (.ends) ends.
-        #   definition - A code string containing the subcircuit's definition corresponding to the node. This is built 
-        #     from the bottom up, meaning the definition of the top subcircuit includes the definitions of its child 
-        #     subcircuits in its constructor and local namespace. Each child subcircuit's definition, in turn, includes 
+        #   startLine - The line number in the processed netlist where the subcircuit definition (`.subckt`) begins.
+        #   endLine - The line number in the processed netlist where the subcircuit definition (`.ends`) ends.
+        #   definition - A code string containing the subcircuit's definition corresponding to the node. This is built
+        #     from the bottom up, meaning the definition of the top subcircuit includes the definitions of its child
+        #     subcircuits in its constructor and local namespace. Each child subcircuit's definition, in turn, includes
         #     the definitions of its own children, continuing down the hierarchy.
         property topnetlist
         property definitions
@@ -2611,7 +2607,7 @@ namespace eval ::SpiceGenTcl {
                 }
                 incr lineNum
             }
-            # Check for unclosed .subckt statements
+            # Check for unclosed `.subckt` statements
             if {[llength $stack] > 1} {  # > 1 because root is always in stack
                 set unclosedNode [lindex $stack end]
                 set line [$tree get $unclosedNode startLine]
@@ -2682,22 +2678,18 @@ namespace eval ::SpiceGenTcl {
                     lappend elements "my add \[$element\]"
                 }
             }
-            set definition [string map [list @classname@ $subcktClassName\
-                                                @pins@ [list $pinList]\
-                                                @params@ [list $params]\
-                                                @subname@ $subName\
-                                                @definitions@ [join $definitionsLoc \n]\
-                                                @elements@ [join $elements \n]]\
-                                    $SubcircuitTemplate]
+            set definition [string map [list @classname@ $subcktClassName @pins@ [list $pinList] @params@ [list $params]\
+                                                @subname@ $subName @definitions@ [join $definitionsLoc \n]\
+                                                @elements@ [join $elements \n]] $SubcircuitTemplate]
             ##nagelfar ignore {Found constant "definition"}
             $SubcktsTree append $subcktPath definition $definition
             return
         }
         method buildTopNetlist {args} {
             # Builds top netlist corresponding to parsed netlist file.
-            # For unknowns to SpiceGenTcl models the new model class is created during the parsing and evaluated in
-            # a caller context. For each subcircuit (and nested subcircuits) the corresponding class is created
-            # and evaluated in a caller context.
+            # For unknowns to `SpiceGenTcl` models the new model class is created during the parsing and evaluated in a
+            # caller context. For each subcircuit (and nested subcircuits) the corresponding class is created and
+            # evaluated in a caller context.
             # Returns: [::SpiceGenTcl::Netlist] object with attached elements succesfully parsed in input netlist file.
             argparse {
                 -noeval
@@ -2960,13 +2952,14 @@ namespace eval ::SpiceGenTcl {
             }
         }
         method CheckQuoted {string} {
-            # Checks if string is single quoted, string inside braces must not contain `'`, `'` and `=` symbols and be empty
+            # Checks if string is single quoted, string inside braces must not contain `'`, `'` and `=` symbols and be
+            # empty
             #   string - input string
             return [regexp {^\'([^='']+)\'$} $string]
         }
         method Unquote {string} {
-            # Unquotes input string, `'value'` to `value`, value inside braces must not contain `'`, `'` and `=` symbols,
-            # and be empty
+            # Unquotes input string, `'value'` to `value`, value inside braces must not contain `'`, `'` and `=`
+            # symbols, and be empty
             #   string - input braced string
             # Returns: string without braces,
             if {[my CheckQuoted $string]} {

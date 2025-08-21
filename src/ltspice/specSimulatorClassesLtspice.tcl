@@ -37,10 +37,10 @@ namespace eval ::SpiceGenTcl::Ltspice::Simulators {
         # the name of last ran file
         variable LastRunFileName
         constructor {args} {
-            # Creates batch ngspice simulator that can be attached to top-level Circuit.
+            # Creates batch ngspice simulator that can be attached to top-level `Circuit`.
             #  name - name of simulator object
-            #  runLocation - location at which input netlist is stored and all output files will be saved,
-            #   default is current directory
+            #  runLocation - location at which input netlist is stored and all output files will be saved, default is
+            #   current directory
             argparse -help {Creates batch ngspice simulator that can be attached to top-level 'Circuit'} {
                 {name -help {Name of simulator object}}
                 {runLocation -optional -default . -help {Location at which input netlist is stored and all output files\

@@ -38,7 +38,7 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::Analyses::Dc new -src v1 -start {-eq time1} -stop 5 -incr 0.1 -name dc1
+            # Dc new -src v1 -start {-eq time1} -stop 5 -incr 0.1 -name dc1
             # ```
             # Synopsis: -src value -start value -stop value -incr value ?-name value?
             set arguments [argparse -inline -help {Creates object of class `Dc` that describes DC analysis} {
@@ -64,7 +64,7 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
         mixin ::SpiceGenTcl::Utility
         constructor {args} {
             # Creates object of class `Ac` that describes AC analysis.
-            #  -variation value - parameter that defines frequency scale, could be dec, oct or lin
+            #  -variation value - parameter that defines frequency scale, could be `dec`, `oct` or `lin`
             #  -n value - number of points
             #  -fstart value - start frequency
             #  -fstop value - stop frequency
@@ -74,7 +74,7 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::Analyses::Ac new -variation dec -n 10 -fstart 1 -fstop 1e6 -name dc1
+            # Ac new -variation dec -n 10 -fstart 1 -fstop 1e6 -name dc1
             # ```
             # Synopsis: -variation value -n value -fstart value -fstop value ?-name value?
             set arguments [argparse -inline -help {Creates object of class `Ac` that describes AC analysis} {
@@ -102,7 +102,7 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
             #  -tstep value - size of maximum time step for plotting
             #  -tstop value - stop time value
             #  -tstart value - start time of saving data, optional
-            #  -tmax value - size of maximum time step in actual simulation, optional, require -tstart
+            #  -tmax value - size of maximum time step in actual simulation, optional, require `-tstart`
             #  -uic - skip initial operating point solution, optional
             #  -name value - name argument, optional
             # ```
@@ -110,7 +110,7 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::Analyses::Tran new -tstep 1e-9 -tstop 10e-6 -name dc1
+            # Tran new -tstep 1e-9 -tstop 10e-6 -name dc1
             # ```
             # Synopsis: -tstep value -tstop value ?-tstart value ?-tmax value?? ?-uic? ?-name value?
             set arguments [argparse -inline -help {Creates object of class `Tran` that describes TRAN analysis} {
@@ -144,7 +144,7 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::Analyses::Op new -name op1
+            # Op new -name op1
             # ```
             # Synopsis: ?-name value?
             set arguments [argparse -inline -help {Creates object of class `Op` that describes OP analysis} {

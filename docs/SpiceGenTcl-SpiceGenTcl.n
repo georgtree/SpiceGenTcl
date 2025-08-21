@@ -520,7 +520,7 @@ Class models analysis statement\&.
 \fBdestructor\fR (::SpiceGenTcl::Analysis)
 .RE
 .PP
-Destroy object of class Analysis, and its parameters objects\&.
+Destroy object of class Analysis, and its Parameters objects\&.
 .RS 4n\fBOBJECT destroy\fP
 .br
 .RE
@@ -549,43 +549,43 @@ Acts on Parameter object with selected action
 Add new parameter to the device, requires pname argument\&.
 .TP
 -all
-Option for getting the dictionary that contains parameters names as keys and parameters values #    as the dictionary values, requires -get\&.
+Option for getting the dictionary that contains parameters names as keys and parameters values #    as the dictionary values, requires -get
 .TP
 -delete
 Delete existing parameter\&.
 .TP
 -eq
-Parameter may contain equation in terms of functions and other parameters, printed as '\fI$name\fP={\fI$equation\fP}', requires -add\&.
+Parameter may contain equation in terms of functions and other parameters, printed as $name={$equation}, requires -add
 .TP
 -get
 Get parameter value, requires pname argument\&.
 .TP
 -nocheck
-Normal parameter without check, requires -add\&.
+Normal parameter without check, requires -add
 .TP
 -node
-Node parameter, requires -add\&.
+Node parameter, requires -add
 .TP
 -nodeeq
-Node parameter equation, requires -add\&.
+Node parameter equation, requires -add
 .TP
 -pos
-Parameter has strict position and only '\fI$Value\fP' is displayed in netlist, requires -add\&.
+Parameter has strict position and only $value is displayed in netlist, requires -add
 .TP
 -poseq
-Combination of both flags, print only, requires -add\&.
+Combination of both flags, print only, requires -add
 .TP
 -posnocheck
-Positional parameter without check, requires -add\&.
+Positional parameter without check, requires -add
 .TP
 -set
 Set (or change) value of particular parameters, requires pname and value arguments\&.
 .TP
 -sw
-Switch parameter, requires -add\&.
+Switch parameter, requires -add
 .TP
 arguments
-Optional pairs of name-value for -set action, requires -set\&.
+Optional pairs of name-value for -set action, requires -set
 .TP
 pname
 Name of parameter\&.
@@ -810,7 +810,7 @@ getAllElemNames
 See \fINetlist\&.getAllElemNames\fP
 .TP
 getDataCsv
-Returns string with csv formatting containing all data\&.
+Returns string with CSV formatting containing all data\&.
 .TP
 getDataDict
 Gets dictionary with raw data vectors\&.
@@ -915,7 +915,7 @@ SPICE netlist's string
 \fBgetDataCsv\fR (::SpiceGenTcl::Circuit)
 .RE
 .PP
-Returns string with csv formatting containing all data
+Returns string with CSV formatting containing all data
 .RS 4n\fBOBJECT getDataCsv\fP \fI?-all? ?-traces list? ?-sep value?\fP
 .br
 .RE
@@ -935,7 +935,7 @@ Select names of traces to return\&.
 .PP
 \fBReturn value\fR
 .PP
-Returns string with csv formatting containing all data
+Returns string with CSV formatting containing all data
 .PP
 .RS -4n
 \fBgetDataDict\fR (::SpiceGenTcl::Circuit)
@@ -1044,19 +1044,19 @@ constructor
 Constructor for the class\&.
 .TP
 appendDataPoints
-Method to set the data points\&.
+Appends the data points to the existing ones\&.
 .TP
 configure
 Configure properties\&.
 .TP
 getDataPoints
-Not documented\&.
+Gets the data points\&.
 .TP
 getStr
-Not documented\&.
+Returns metadata of Dataset
 .TP
 setDataPoints
-Method to set the data points\&.
+Sets the data points\&.
 .RE
 .PP
 \fBProperties\fR
@@ -1073,7 +1073,7 @@ Writable: -len, -name, -numtype, -type
 \fBconstructor\fR (::SpiceGenTcl::Dataset)
 .RE
 .PP
-initialize dataset
+Initializes Dataset object\&.
 .RS 4n\fBDataset create OBJNAME\fP \fI?args?\fP
 .br
 \fBDataset new\fP \fI?args?\fP
@@ -1100,7 +1100,7 @@ Type of dataset\&.
 \fBappendDataPoints\fR (::SpiceGenTcl::Dataset)
 .RE
 .PP
-method to set the data points
+Appends the data points to the existing ones
 .RS 4n\fBOBJECT appendDataPoints\fP \fIdataPoint\fP
 .br
 .RE
@@ -1110,11 +1110,16 @@ method to set the data points
 .TP
 dataPoint
 Not documented\&.
+.TP
+dataPoints
+Data points\&.
 .RE
 .PP
 .RS -4n
 \fBgetDataPoints\fR (::SpiceGenTcl::Dataset)
 .RE
+.PP
+Gets the data points
 .RS 4n\fBOBJECT getDataPoints\fP \fI?args?\fP
 .br
 .RE
@@ -1126,15 +1131,21 @@ Not documented\&.
 .RS -4n
 \fBgetStr\fR (::SpiceGenTcl::Dataset)
 .RE
+.PP
+Returns metadata of Dataset
 .RS 4n\fBOBJECT getStr\fP
 .br
 .RE
+.PP
+\fBReturn value\fR
+.PP
+Returns metadata of Dataset
 .PP
 .RS -4n
 \fBsetDataPoints\fR (::SpiceGenTcl::Dataset)
 .RE
 .PP
-method to set the data points
+Sets the data points
 .RS 4n\fBOBJECT setDataPoints\fP \fIdataPoints\fP
 .br
 .RE
@@ -1143,7 +1154,7 @@ method to set the data points
 .RS 4n
 .TP
 dataPoints
-Not documented\&.
+Data points\&.
 .RE
 .PP
 .RS -4n
@@ -1211,7 +1222,7 @@ name
 Name of the device\&.
 .TP
 params
-List of instance parameters in form {{Name Value ?-sw|pos|eq|poseq|posnocheck|nocheck?} {Name Value ?-sw|pos|eq|poseq|posnocheck|nocheck?} {Name Value ?-sw|pos|eq|poseq|posnocheck|nocheck?} \&.\&.\&.} Parameter list can be empty if device doesn't have instance parameters\&.
+List of instance parameters in form {{Name Value ?-sw|pos|eq|poseq|posnocheck|nocheck?}  {Name Value ?-sw|pos|eq|poseq|posnocheck|nocheck?} {Name Value ?-sw|pos|eq|poseq|posnocheck|nocheck?}  \&.\&.\&.} Parameter list can be empty if device doesn't have instance parameters\&.
 .TP
 pins
 List of pins in the order they appear in SPICE device's definition together with connected node in form: {{Name0 NodeName} {Name1 NodeName} {Name2 NodeName} \&.\&.\&.} Nodes string values could be empty\&.
@@ -1219,10 +1230,9 @@ List of pins in the order they appear in SPICE device's definition together with
 .PP
 \fBDescription\fR
 .PP
-Class models general device in SPICE, number of which
-must be assembled (connected) to get the circuit to simulate\&. This class provides basic machinery
-for creating any device that can be connected to net in circuit\&. It can be instantiated to create
-device that contains:
+Class models general device in SPICE, number of which must be assembled (connected) to get the circuit to
+simulate\&. This class provides basic machinery for creating any device that can be connected to net in
+circuit\&. It can be instantiated to create device that contains:
 .TP
 \(bu
 reference name, like R1, L1, M1, etc;
@@ -1231,23 +1241,26 @@ reference name, like R1, L1, M1, etc;
 list of pins in the order of appearence of device's definition, for example, 'drain gate source' for MOS transistor;
 .TP
 \(bu
-list of parameters, that could be positional (+equation), keyword (+equation) parameters, like R1 nm np 100 tc1=1 tc2={tc0*tc12}, where 100 - positional parameter, tc1 - keyword parameters and tc2 - keyword parameter with equation
+list of parameters, that could be positional (+equation), keyword (+equation) parameters, like R1 nm np 100 tc1=1 tc2={tc0*tc12}, where 100 - positional parameter, tc1 - keyword parameters and tc2
+.TP
+\(bu
+keyword parameter with equation
 .PP
-This class accept definition that contains elements listed above, and generates classes: Pin, Parameter,
-PositionalParameter with compositional relationship (has a)\&.
+This class accept definition that contains elements listed above, and generates classes: Pin,
+Parameter, ParameterPositional with compositional relationship\&.
 .PP
 Each parameter definition could be modified by
 optional flags:
 .RS 4n
 .TP
 -pos
-Parameter has strict position and only '\fI$Value\fP' is displayed in netlist\&.
+Parameter has strict position and only $value is displayed in netlist\&.
 .TP
 -eq
-Parameter may contain equation in terms of functions and other parsmeters, printed as '\fI$name\fP={\fI$equation\fP}'
+Parameter may contain equation in terms of functions and other parsmeters, printed as $name={$equation}
 .TP
 -poseq
-Combination of both flags, print only '{\fI$equation\fP}'
+Combination of both flags, print only {$equation}
 .TP
 -posnocheck
 Positional parameter without check\&.
@@ -1260,7 +1273,7 @@ Normal parameter without check\&.
 \fBdestructor\fR (::SpiceGenTcl::Device)
 .RE
 .PP
-Destroy object of class Device, and its parameters and pins objects\&.
+Destroy object of class Device, its Parameter and Pin objects\&.
 .RS 4n\fBOBJECT destroy\fP
 .br
 .RE
@@ -1289,43 +1302,43 @@ Acts on Parameter object with selected action
 Add new parameter to the device, requires pname argument\&.
 .TP
 -all
-Option for getting the dictionary that contains parameters names as keys and parameters values #    as the dictionary values, requires -get\&.
+Option for getting the dictionary that contains parameters names as keys and parameters values #    as the dictionary values, requires -get
 .TP
 -delete
 Delete existing parameter\&.
 .TP
 -eq
-Parameter may contain equation in terms of functions and other parameters, printed as '\fI$name\fP={\fI$equation\fP}', requires -add\&.
+Parameter may contain equation in terms of functions and other parameters, printed as $name={$equation}, requires -add
 .TP
 -get
 Get parameter value, requires pname argument\&.
 .TP
 -nocheck
-Normal parameter without check, requires -add\&.
+Normal parameter without check, requires -add
 .TP
 -node
-Node parameter, requires -add\&.
+Node parameter, requires -add
 .TP
 -nodeeq
-Node parameter equation, requires -add\&.
+Node parameter equation, requires -add
 .TP
 -pos
-Parameter has strict position and only '\fI$Value\fP' is displayed in netlist, requires -add\&.
+Parameter has strict position and only $value is displayed in netlist, requires -add
 .TP
 -poseq
-Combination of both flags, print only, requires -add\&.
+Combination of both flags, print only, requires -add
 .TP
 -posnocheck
-Positional parameter without check, requires -add\&.
+Positional parameter without check, requires -add
 .TP
 -set
 Set (or change) value of particular parameters, requires pname and value arguments\&.
 .TP
 -sw
-Switch parameter, requires -add\&.
+Switch parameter, requires -add
 .TP
 arguments
-Optional pairs of name-value for -set action, requires -set\&.
+Optional pairs of name-value for -set action, requires -set
 .TP
 pname
 Name of parameter\&.
@@ -1356,7 +1369,7 @@ Acts on Pin object with selected action
 Add new pin to the device, requires pin and node arguments\&.
 .TP
 -all
-Option for getting the dictionary that contains pin name as keys and connected node name as the values, requires -get\&.
+Option for getting the dictionary that contains pin name as keys and connected node name as the values, requires -get
 .TP
 -get
 Get node name connected to pin, requires pin argument\&.
@@ -1527,7 +1540,7 @@ deleteNet
 Not documented\&.
 .TP
 genSPICEString
-Creates global statement string for SPICE netlist\&.
+Creates \&.global statement string for SPICE netlist\&.
 .RE
 .PP
 \fBProperties\fR
@@ -1593,7 +1606,7 @@ Class represent \&.global statement\&.
 \fBgenSPICEString\fR (::SpiceGenTcl::Global)
 .RE
 .PP
-Creates global statement string for SPICE netlist\&.
+Creates \&.global statement string for SPICE netlist\&.
 .RS 4n\fBOBJECT genSPICEString\fP
 .br
 .RE
@@ -1622,7 +1635,7 @@ configure
 Configure properties\&.
 .TP
 genSPICEString
-Creates ic statement string for SPICE netlist\&.
+Creates \&.ic statement string for SPICE netlist\&.
 .RE
 .PP
 \fBProperties\fR
@@ -1670,7 +1683,7 @@ Class represent \&.ic statement\&.
 \fBdestructor\fR (::SpiceGenTcl::Ic)
 .RE
 .PP
-Destroy object of class Ic, and its parameters objects\&.
+Destroy object of class Ic, and its Parameter objects\&.
 .RS 4n\fBOBJECT destroy\fP
 .br
 .RE
@@ -1699,43 +1712,43 @@ Acts on Parameter object with selected action
 Add new parameter to the device, requires pname argument\&.
 .TP
 -all
-Option for getting the dictionary that contains parameters names as keys and parameters values #    as the dictionary values, requires -get\&.
+Option for getting the dictionary that contains parameters names as keys and parameters values #    as the dictionary values, requires -get
 .TP
 -delete
 Delete existing parameter\&.
 .TP
 -eq
-Parameter may contain equation in terms of functions and other parameters, printed as '\fI$name\fP={\fI$equation\fP}', requires -add\&.
+Parameter may contain equation in terms of functions and other parameters, printed as $name={$equation}, requires -add
 .TP
 -get
 Get parameter value, requires pname argument\&.
 .TP
 -nocheck
-Normal parameter without check, requires -add\&.
+Normal parameter without check, requires -add
 .TP
 -node
-Node parameter, requires -add\&.
+Node parameter, requires -add
 .TP
 -nodeeq
-Node parameter equation, requires -add\&.
+Node parameter equation, requires -add
 .TP
 -pos
-Parameter has strict position and only '\fI$Value\fP' is displayed in netlist, requires -add\&.
+Parameter has strict position and only $value is displayed in netlist, requires -add
 .TP
 -poseq
-Combination of both flags, print only, requires -add\&.
+Combination of both flags, print only, requires -add
 .TP
 -posnocheck
-Positional parameter without check, requires -add\&.
+Positional parameter without check, requires -add
 .TP
 -set
 Set (or change) value of particular parameters, requires pname and value arguments\&.
 .TP
 -sw
-Switch parameter, requires -add\&.
+Switch parameter, requires -add
 .TP
 arguments
-Optional pairs of name-value for -set action, requires -set\&.
+Optional pairs of name-value for -set action, requires -set
 .TP
 pname
 Name of parameter\&.
@@ -1748,7 +1761,7 @@ Value of parameter\&.
 \fBgenSPICEString\fR (::SpiceGenTcl::Ic)
 .RE
 .PP
-Creates ic statement string for SPICE netlist\&.
+Creates \&.ic statement string for SPICE netlist\&.
 .RS 4n\fBOBJECT genSPICEString\fP
 .br
 .RE
@@ -1942,7 +1955,7 @@ Creates object of class Model\&.
 .RS 4n
 .TP
 instParams
-List of instance parameters in form {{name value ?-pos|eq|poseq?} {name value ?-pos|eq|poseq?} {name value ?-pos|eq|poseq?} \&.\&.\&.}
+List of instance parameters in form {{name value ?-pos|eq|poseq?}  {name value ?-pos|eq|poseq?} {name value ?-pos|eq|poseq?} \&.\&.\&.}
 .TP
 name
 Name of the model\&.
@@ -1959,7 +1972,7 @@ Class represents model card in SPICE netlist\&.
 \fBdestructor\fR (::SpiceGenTcl::Model)
 .RE
 .PP
-Destroy object of class Model, and its parameters objects\&.
+Destroy object of class Model, and its Parameter objects\&.
 .RS 4n\fBOBJECT destroy\fP
 .br
 .RE
@@ -1988,43 +2001,43 @@ Acts on Parameter object with selected action
 Add new parameter to the device, requires pname argument\&.
 .TP
 -all
-Option for getting the dictionary that contains parameters names as keys and parameters values #    as the dictionary values, requires -get\&.
+Option for getting the dictionary that contains parameters names as keys and parameters values #    as the dictionary values, requires -get
 .TP
 -delete
 Delete existing parameter\&.
 .TP
 -eq
-Parameter may contain equation in terms of functions and other parameters, printed as '\fI$name\fP={\fI$equation\fP}', requires -add\&.
+Parameter may contain equation in terms of functions and other parameters, printed as $name={$equation}, requires -add
 .TP
 -get
 Get parameter value, requires pname argument\&.
 .TP
 -nocheck
-Normal parameter without check, requires -add\&.
+Normal parameter without check, requires -add
 .TP
 -node
-Node parameter, requires -add\&.
+Node parameter, requires -add
 .TP
 -nodeeq
-Node parameter equation, requires -add\&.
+Node parameter equation, requires -add
 .TP
 -pos
-Parameter has strict position and only '\fI$Value\fP' is displayed in netlist, requires -add\&.
+Parameter has strict position and only $value is displayed in netlist, requires -add
 .TP
 -poseq
-Combination of both flags, print only, requires -add\&.
+Combination of both flags, print only, requires -add
 .TP
 -posnocheck
-Positional parameter without check, requires -add\&.
+Positional parameter without check, requires -add
 .TP
 -set
 Set (or change) value of particular parameters, requires pname and value arguments\&.
 .TP
 -sw
-Switch parameter, requires -add\&.
+Switch parameter, requires -add
 .TP
 arguments
-Optional pairs of name-value for -set action, requires -set\&.
+Optional pairs of name-value for -set action, requires -set
 .TP
 pname
 Name of parameter\&.
@@ -2113,8 +2126,8 @@ Name of the netlist\&.
 .PP
 \fBDescription\fR
 .PP
-Class implements netlist as a collection of SPICE elements\&. Any element that has SPICEElement
-as a parent class can be added to Netlist, except Options and Analysis\&.
+Class implements netlist as a collection of SPICE elements\&. Any element that has SPICEElement as a parent
+class can be added to Netlist, except Options and Analysis\&.
 .PP
 .RS -4n
 \fBadd\fR (::SpiceGenTcl::Netlist)
@@ -2208,7 +2221,7 @@ configure
 Configure properties\&.
 .TP
 genSPICEString
-Creates nodeset statement string for SPICE netlist\&.
+Creates \&.nodeset statement string for SPICE netlist\&.
 .RE
 .PP
 \fBProperties\fR
@@ -2229,7 +2242,7 @@ Writable: -name
 \fBgenSPICEString\fR (::SpiceGenTcl::Nodeset)
 .RE
 .PP
-Creates nodeset statement string for SPICE netlist\&.
+Creates \&.nodeset statement string for SPICE netlist\&.
 .RS 4n\fBOBJECT genSPICEString\fP
 .br
 .RE
@@ -2295,7 +2308,7 @@ Creates object of class Options\&.
 Name of the string that could be used to retrieve element from \fI::SpiceGenTcl::Netlist\fP object and its descendants, optional\&.
 .TP
 params
-List of instance parameters in form {{name value ?-sw?} {name value ?-sw?} {name value ?-sw?} \&.\&.\&.}
+List of instance parameters in form {{name value ?-sw?} {name value ?-sw?}  {name value ?-sw?} \&.\&.\&.}
 .RE
 .PP
 \fBDescription\fR
@@ -2306,7 +2319,7 @@ This class represent \&.options statement\&.
 \fBdestructor\fR (::SpiceGenTcl::Options)
 .RE
 .PP
-Destroy object of class Options, and its parameters objects\&.
+Destroy object of class Options, and its Parameter objects\&.
 .RS 4n\fBOBJECT destroy\fP
 .br
 .RE
@@ -2335,43 +2348,43 @@ Acts on Parameter object with selected action
 Add new parameter to the device, requires pname argument\&.
 .TP
 -all
-Option for getting the dictionary that contains parameters names as keys and parameters values #    as the dictionary values, requires -get\&.
+Option for getting the dictionary that contains parameters names as keys and parameters values #    as the dictionary values, requires -get
 .TP
 -delete
 Delete existing parameter\&.
 .TP
 -eq
-Parameter may contain equation in terms of functions and other parameters, printed as '\fI$name\fP={\fI$equation\fP}', requires -add\&.
+Parameter may contain equation in terms of functions and other parameters, printed as $name={$equation}, requires -add
 .TP
 -get
 Get parameter value, requires pname argument\&.
 .TP
 -nocheck
-Normal parameter without check, requires -add\&.
+Normal parameter without check, requires -add
 .TP
 -node
-Node parameter, requires -add\&.
+Node parameter, requires -add
 .TP
 -nodeeq
-Node parameter equation, requires -add\&.
+Node parameter equation, requires -add
 .TP
 -pos
-Parameter has strict position and only '\fI$Value\fP' is displayed in netlist, requires -add\&.
+Parameter has strict position and only $value is displayed in netlist, requires -add
 .TP
 -poseq
-Combination of both flags, print only, requires -add\&.
+Combination of both flags, print only, requires -add
 .TP
 -posnocheck
-Positional parameter without check, requires -add\&.
+Positional parameter without check, requires -add
 .TP
 -set
 Set (or change) value of particular parameters, requires pname and value arguments\&.
 .TP
 -sw
-Switch parameter, requires -add\&.
+Switch parameter, requires -add
 .TP
 arguments
-Optional pairs of name-value for -set action, requires -set\&.
+Optional pairs of name-value for -set action, requires -set
 .TP
 pname
 Name of parameter\&.
@@ -2447,9 +2460,8 @@ Value of the parameter\&.
 .PP
 \fBDescription\fR
 .PP
-Class models parameter that has a name and a value - the most
-common type of parameters in SPICE netlist\&. Its representation in netlist is
-\'name=value', and can be called "keyword parameter"\&.
+Class models parameter that has a name and a value - the most common type of parameters in SPICE
+netlist\&. Its representation in netlist is name=value, and can be called "keyword parameter"\&.
 .PP
 .RS -4n
 \fBgenSPICEString\fR (::SpiceGenTcl::Parameter)
@@ -2520,9 +2532,9 @@ Value of the parameter\&.
 .PP
 \fBDescription\fR
 .PP
-Class models parameter that has a name and a value, but it differs from
-parent class in sense of having default value, so it has special ability to reset its value to default
-value by special method resetValue\&.
+Class models parameter that has a name and a value, but it differs from parent class in sense of having
+default value, so it has special ability to reset its value to default value by special method
+resetValue\&.
 .PP
 .RS -4n
 \fBresetValue\fR (::SpiceGenTcl::ParameterDefault)
@@ -2839,12 +2851,11 @@ Value of parameter\&.
 .PP
 \fBDescription\fR
 .PP
-Class models parameter that has a name and a value, but it differs from
-parent class in the sense of netlist representation: this parameter represents only
-by the value in the netlist\&. It's meaning for holding element is taken from
-it's position in the element's definition, for example, R1 np nm 100 tc1=1 tc2=0 - resistor
-with positional parameter R=100, you can't put it after parameters tc1 and tc2, it must be placed
-right after the pins definition\&.
+Class models parameter that has a name and a value, but it differs from parent class in the sense of
+netlist representation: this parameter represents only by the value in the netlist\&. It's meaning for
+holding element is taken from it's position in the element's definition, for example, R1 np nm 100 tc1=1
+tc2=0 - resistor with positional parameter R=100, you can't put it after parameters tc1 and tc2, it
+must be placed right after the pins definition\&.
 .PP
 .RS -4n
 \fBgenSPICEString\fR (::SpiceGenTcl::ParameterPositional)
@@ -2910,8 +2921,8 @@ Value of the parameter\&.
 .PP
 \fBDescription\fR
 .PP
-Class models parameter that has representation as an equation, but in form of
-positional parameter\&. Example: {R1+R2}
+Class models parameter that has representation as an equation, but in form of positional parameter\&.
+Example: {R1+R2}
 .PP
 .RS -4n
 \fBgenSPICEString\fR (::SpiceGenTcl::ParameterPositionalEquation)
@@ -3039,10 +3050,9 @@ Name of the parameter\&.
 .PP
 \fBDescription\fR
 .PP
-Class models base parameter acting like a switch -
-its presence gives us information that something it controls is on\&.
-This parameter doesn't have a value, and it is the most basic class
-in Parameter class family\&.
+Class models base parameter acting like a switch - its presence gives us information that something it
+controls is on\&. This parameter doesn't have a value, and it is the most basic class in Parameter class
+family\&.
 .PP
 .RS -4n
 \fBgenSPICEString\fR (::SpiceGenTcl::ParameterSwitch)
@@ -3055,7 +3065,7 @@ Creates string for SPICE netlist\&.
 .PP
 \fBReturn value\fR
 .PP
-string '\fI$name\fP'
+string $name
 .PP
 .RS -4n
 \fBParameterVector\fR (::SpiceGenTcl)
@@ -3145,7 +3155,7 @@ Class represent \&.param statement\&.
 \fBdestructor\fR (::SpiceGenTcl::ParamStatement)
 .RE
 .PP
-Destroy object of class ParamStatement, and its parameters objects\&.
+Destroy object of class ParamStatement, and its Parameter objects\&.
 .RS 4n\fBOBJECT destroy\fP
 .br
 .RE
@@ -3174,43 +3184,43 @@ Acts on Parameter object with selected action
 Add new parameter to the device, requires pname argument\&.
 .TP
 -all
-Option for getting the dictionary that contains parameters names as keys and parameters values #    as the dictionary values, requires -get\&.
+Option for getting the dictionary that contains parameters names as keys and parameters values #    as the dictionary values, requires -get
 .TP
 -delete
 Delete existing parameter\&.
 .TP
 -eq
-Parameter may contain equation in terms of functions and other parameters, printed as '\fI$name\fP={\fI$equation\fP}', requires -add\&.
+Parameter may contain equation in terms of functions and other parameters, printed as $name={$equation}, requires -add
 .TP
 -get
 Get parameter value, requires pname argument\&.
 .TP
 -nocheck
-Normal parameter without check, requires -add\&.
+Normal parameter without check, requires -add
 .TP
 -node
-Node parameter, requires -add\&.
+Node parameter, requires -add
 .TP
 -nodeeq
-Node parameter equation, requires -add\&.
+Node parameter equation, requires -add
 .TP
 -pos
-Parameter has strict position and only '\fI$Value\fP' is displayed in netlist, requires -add\&.
+Parameter has strict position and only $value is displayed in netlist, requires -add
 .TP
 -poseq
-Combination of both flags, print only, requires -add\&.
+Combination of both flags, print only, requires -add
 .TP
 -posnocheck
-Positional parameter without check, requires -add\&.
+Positional parameter without check, requires -add
 .TP
 -set
 Set (or change) value of particular parameters, requires pname and value arguments\&.
 .TP
 -sw
-Switch parameter, requires -add\&.
+Switch parameter, requires -add
 .TP
 arguments
-Optional pairs of name-value for -set action, requires -set\&.
+Optional pairs of name-value for -set action, requires -set
 .TP
 pname
 Name of parameter\&.
@@ -3291,9 +3301,9 @@ Name of the object\&.
 .RE
 .PP
 Builds top netlist corresponding to parsed netlist file\&.
-For unknowns to SpiceGenTcl models the new model class is created during the parsing and evaluated in
-a caller context\&. For each subcircuit (and nested subcircuits) the corresponding class is created
-and evaluated in a caller context\&.
+For unknowns to SpiceGenTcl models the new model class is created during the parsing and evaluated in a
+caller context\&. For each subcircuit (and nested subcircuits) the corresponding class is created and
+evaluated in a caller context\&.
 .RS 4n\fBOBJECT buildTopNetlist\fP \fI?args?\fP
 .br
 .RE
@@ -3380,15 +3390,12 @@ Name of the node that connected to pin\&.
 .PP
 \fBDescription\fR
 .PP
-Class models electrical pin of device/subcircuit,
-it has name and name of the node connected to it\&.
-It has general interface method genSPICEString that returns
-name of the node connected to it, this method must be called only
-in method with the same name in other classes\&. We can check if pin is
-floating by checking the name of connected node in method checkFloating -
-if is contains empty string it is floating\&.
-Floating pin can't be netlisted, so it throws error when try to
-do so\&. Set pin name empty by special method unsetNodeName\&.
+Class models electrical pin of device/subcircuit, it has name and name of the node connected to it\&.  It
+has general interface method genSPICEString that returns name of the node connected to it, this method
+must be called only in method with the same name in other classes\&. We can check if pin is floating by
+checking the name of connected node in method checkFloating - if is contains empty string it is
+floating\&.  Floating pin can't be netlisted, so it throws error when try to do so\&. Set pin name empty by
+special method unsetNodeName\&.
 .PP
 .RS -4n
 \fBcheckFloating\fR (::SpiceGenTcl::Pin)
@@ -3453,7 +3460,7 @@ getCurrentsNames
 Returns list that contains names of all current variables\&.
 .TP
 getTrace
-Returns trace object reference by it's name\&.
+Returns Trace object reference by it's name\&.
 .TP
 getTracesCsv
 Returns string with csv formatting containing all data\&.
@@ -3520,7 +3527,7 @@ path
 Path to raw file including it's file name\&.
 .TP
 simulator
-Simulator that produced this raw file, default is ngspice\&.
+Simulator that produced this raw file, default is ngspice
 .TP
 traces2read
 List of traces that will be readed, default value is *, that means reading all traces\&.
@@ -3556,7 +3563,7 @@ Returns list that contains names of all current variables
 \fBgetTrace\fR (::SpiceGenTcl::RawFile)
 .RE
 .PP
-Returns trace object reference by it's name
+Returns Trace object reference by it's name
 .RS 4n\fBOBJECT getTrace\fP \fItraceName\fP
 .br
 .RE
@@ -3570,7 +3577,7 @@ Not documented\&.
 .PP
 \fBReturn value\fR
 .PP
-Returns trace object reference by it's name
+Returns Trace object reference by it's name
 .PP
 .RS -4n
 \fBgetTracesCsv\fR (::SpiceGenTcl::RawFile)
@@ -3729,9 +3736,8 @@ Value of the raw string\&.
 .PP
 \fBDescription\fR
 .PP
-Class represent arbitary string\&.
-It can be used to pass any string directly into netlist,
-for example, it can add elements that doesn't have dedicated class\&.
+Class represent arbitary string\&.  It can be used to pass any string directly into netlist, for example, it
+can add elements that doesn't have dedicated class\&.
 .PP
 .RS -4n
 \fBgenSPICEString\fR (::SpiceGenTcl::RawString)
@@ -3769,10 +3775,10 @@ deleteVector
 Deletes existing ParameterVector object from dictionary Vectors\&.
 .TP
 genSPICEString
-Creates save statement string for SPICE netlist\&.
+Creates \&.save statement string for SPICE netlist\&.
 .TP
 getVectors
-Gets the dictionary of vector names\&.
+Gets the dictionary of ParameterVectors\&.
 .RE
 .PP
 \fBProperties\fR
@@ -3816,7 +3822,7 @@ Class represent \&.save statement\&.
 \fBdestructor\fR (::SpiceGenTcl::Save)
 .RE
 .PP
-Destroy object of class Save, and its vectors objects\&.
+Destroy object of class Save, and its ParameterVectors objects\&.
 .RS 4n\fBOBJECT destroy\fP
 .br
 .RE
@@ -3857,7 +3863,7 @@ Name of parameter that will be deleted\&.
 \fBgenSPICEString\fR (::SpiceGenTcl::Save)
 .RE
 .PP
-Creates save statement string for SPICE netlist\&.
+Creates \&.save statement string for SPICE netlist\&.
 .RS 4n\fBOBJECT genSPICEString\fP
 .br
 .RE
@@ -3870,7 +3876,7 @@ SPICE netlist's string
 \fBgetVectors\fR (::SpiceGenTcl::Save)
 .RE
 .PP
-Gets the dictionary of vector names
+Gets the dictionary of ParameterVectors
 .RS 4n\fBOBJECT getVectors\fP \fI?args?\fP
 .br
 .RE
@@ -4005,7 +4011,7 @@ actOnPin
 Acts on Pin object with selected action\&.
 .TP
 add
-Add elements objects references to Subcircuit, it extends add method to add check of element class because subcircuit can't contain particular elements inside, like \fI::SpiceGenTcl::Include\fP, \fI::SpiceGenTcl::Library\fP, \fI::SpiceGenTcl::Options\fP and \fI::SpiceGenTcl::Analysis\fP\&.
+Add elements objects references to Subcircuit, it extends add method to add check of element class because Subcircuit can't contain particular elements inside, like \fI::SpiceGenTcl::Include\fP, \fI::SpiceGenTcl::Library\fP, \fI::SpiceGenTcl::Options\fP and \fI::SpiceGenTcl::Analysis\fP\&.
 .TP
 configure
 Configure properties\&.
@@ -4059,14 +4065,14 @@ List of pins in the order they appear in SPICE subcircuits definition together i
 .PP
 \fBDescription\fR
 .PP
-This class implements subcircuit, it is subclass of netlist because it holds list of elements
+This class implements subcircuit, it is subclass of Netlist because it holds list of elements
 inside subcircuit, together with header and connection of elements inside\&.
 .PP
 .RS -4n
 \fBdestructor\fR (::SpiceGenTcl::Subcircuit)
 .RE
 .PP
-Destroy object of class Subcircuit, and its parameters and pins objects\&.
+Destroy object of class Subcircuit, and its Parameters and Pins objects\&.
 .RS 4n\fBOBJECT destroy\fP
 .br
 .RE
@@ -4095,43 +4101,43 @@ Acts on Parameter object with selected action
 Add new parameter to the device, requires pname argument\&.
 .TP
 -all
-Option for getting the dictionary that contains parameters names as keys and parameters values #    as the dictionary values, requires -get\&.
+Option for getting the dictionary that contains parameters names as keys and parameters values #    as the dictionary values, requires -get
 .TP
 -delete
 Delete existing parameter\&.
 .TP
 -eq
-Parameter may contain equation in terms of functions and other parameters, printed as '\fI$name\fP={\fI$equation\fP}', requires -add\&.
+Parameter may contain equation in terms of functions and other parameters, printed as $name={$equation}, requires -add
 .TP
 -get
 Get parameter value, requires pname argument\&.
 .TP
 -nocheck
-Normal parameter without check, requires -add\&.
+Normal parameter without check, requires -add
 .TP
 -node
-Node parameter, requires -add\&.
+Node parameter, requires -add
 .TP
 -nodeeq
-Node parameter equation, requires -add\&.
+Node parameter equation, requires -add
 .TP
 -pos
-Parameter has strict position and only '\fI$Value\fP' is displayed in netlist, requires -add\&.
+Parameter has strict position and only $value is displayed in netlist, requires -add
 .TP
 -poseq
-Combination of both flags, print only, requires -add\&.
+Combination of both flags, print only, requires -add
 .TP
 -posnocheck
-Positional parameter without check, requires -add\&.
+Positional parameter without check, requires -add
 .TP
 -set
 Set (or change) value of particular parameters, requires pname and value arguments\&.
 .TP
 -sw
-Switch parameter, requires -add\&.
+Switch parameter, requires -add
 .TP
 arguments
-Optional pairs of name-value for -set action, requires -set\&.
+Optional pairs of name-value for -set action, requires -set
 .TP
 pname
 Name of parameter\&.
@@ -4162,7 +4168,7 @@ Acts on Pin object with selected action
 Add new pin to the device, requires pin and node arguments\&.
 .TP
 -all
-Option for getting the dictionary that contains pin name as keys and connected node name as the values, requires -get\&.
+Option for getting the dictionary that contains pin name as keys and connected node name as the values, requires -get
 .TP
 -get
 Get node name connected to pin, requires pin argument\&.
@@ -4182,7 +4188,7 @@ Name of the pin\&.
 .RE
 .PP
 Add elements objects references to Subcircuit, it extends add method to add check of element class
-because subcircuit can't contain particular elements inside, like \fI::SpiceGenTcl::Include\fP,
+because Subcircuit can't contain particular elements inside, like \fI::SpiceGenTcl::Include\fP,
 \fI::SpiceGenTcl::Library\fP, \fI::SpiceGenTcl::Options\fP and \fI::SpiceGenTcl::Analysis\fP\&.
 .RS 4n\fBOBJECT add\fP \fI?args?\fP
 .br
@@ -4311,7 +4317,7 @@ Writable: -axis, -len, -name, -numtype, -type
 \fBconstructor\fR (::SpiceGenTcl::Trace)
 .RE
 .PP
-initialize trace
+Initializes Trace object\&.
 .RS 4n\fBTrace create OBJNAME\fP \fI?args?\fP
 .br
 \fBTrace new\fP \fI?args?\fP

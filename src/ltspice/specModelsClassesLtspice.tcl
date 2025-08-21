@@ -27,7 +27,7 @@ namespace eval ::SpiceGenTcl::Ltspice::BasicDevices {
             #  args - keyword instance parameters
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::BasicDevices::VSwitchModel new swmod -vt 1 -vh 0.5 -ron 1 -roff 1e6
+            # VSwitchModel new swmod -vt 1 -vh 0.5 -ron 1 -roff 1e6
             # ```
             # Synopsis: name ?-option value ...?
             next {*}[my ArgsPreprocess {vt vh ron roff lser vser ilimit} {name type} type {*}[linsert $args 1 sw]]
@@ -43,7 +43,7 @@ namespace eval ::SpiceGenTcl::Ltspice::BasicDevices {
             #  args - keyword instance parameters
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::BasicDevices::CSwitchModel new cswmod -it 1 -ih 0.5 -ron 1 -roff 1e6
+            # CSwitchModel new cswmod -it 1 -ih 0.5 -ron 1 -roff 1e6
             # ```
             # Synopsis: name ?-option value ...?
             next {*}[my ArgsPreprocess {it ih ron roff} {name type} type {*}[linsert $args 1 csw]]
@@ -64,7 +64,7 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
             #  args - keyword model parameters, for details please see LTspice manual.
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::SemiconductorDevices::DiodeModel new diodemod -is 1e-14 -n 1.2 -rs 0.01 -cjo 1e-9
+            # DiodeModel new diodemod -is 1e-14 -n 1.2 -rs 0.01 -cjo 1e-9
             # ```
             # Synopsis: name ?-option value ...?
             set paramsNames {is rs n tt cjo vj m eg xti kf af fc bv nbv ibv ibvl nbvl tnom isr nr ikf tikf trs1 trs2\
@@ -82,7 +82,7 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
             #  args - keyword model parameters, for details please see LTspice manual.
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::SemiconductorDevices::DiodeIdealModel new diodemod -ron 1e-2 -roff 1e8
+            # DiodeIdealModel new diodemod -ron 1e-2 -roff 1e8
             # ```
             # Synopsis: name ?-option value ...?
             set paramsNames {ron roff vfwd vrev rrev ilimit revilimit epsilon revepsilon}
@@ -96,12 +96,11 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
         constructor {args} {
             # Creates object of class `BjtGPModel` that describes Gummel-Poon model of semiconductor bipolar transistor.
             #  name - name of the model
-            #  type - npn or pnp
+            #  type - `npn` or `pnp`
             #  args - keyword model parameters, for details please see LTspice manual.
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::SemiconductorDevices::DiodeModel new bjtmod npn -is 1e-15 -bf 200 -vaf 100\
-                                    -cje 1e-10
+            # DiodeModel new bjtmod npn -is 1e-15 -bf 200 -vaf 100 -cje 1e-10
             # ```
             # Synopsis: name type ?-option value ...?
             set paramsNames {is ibc ibe bf nf vaf ikf nk ise ne br nr var ikr isc nc rb irb rbm re rc cje vje mje tf\
@@ -119,12 +118,11 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
         constructor {args} {
             # Creates object of class `JfetModel` that describes JFET level 1 model with Parker Skellern modification.
             #  name - name of the model
-            #  type - njf or pjf
+            #  type - `njf` or `pjf`
             #  args - keyword model parameters, for details please see LTspice manual.
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::SemiconductorDevices::JfetModel new jfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4\
-                                    -cgd 1e-12
+            # JfetModel new jfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4 -cgd 1e-12
             # ```
             # Synopsis: name type ?-option value ...?
             set paramsNames {vto beta lambda rd rs cgs cgd pb m is b kf af nlev gdsnoi fc tnom vtotc n isr nr alpha vk\
@@ -139,12 +137,11 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
         constructor {args} {
             # Creates object of class `MesfetModel` that describes MESFET model by Statz e.a..
             #  name - name of the model
-            #  type - nmf or pmf
+            #  type - `nmf` or `pmf`
             #  args - keyword model parameters, for details please see LTspice manual, chapter 10.
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::SemiconductorDevices::Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4\
-                                    -vbi 1.2
+            # Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4 -vbi 1.2
             # ```
             # Synopsis: name type ?-option value ...?
             set paramsNames {vto beta b alpha lambda rd rs cgs cgd pb kf af fc is}

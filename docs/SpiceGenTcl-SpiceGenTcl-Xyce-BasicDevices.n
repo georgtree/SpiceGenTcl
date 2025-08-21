@@ -186,9 +186,8 @@ Name of node connected to positive pin\&.
 .PP
 \fBDescription\fR
 .PP
-Capacitor type could be specified with additional switches: -beh if we
-want to model circuit's variable dependent capacitor, or -model modelName
-if we want to simulate capacitor with model card\&.
+Capacitor type could be specified with additional switches: -beh if we want to model circuit's variable
+dependent capacitor, or -model modelName if we want to simulate capacitor with model card\&.
 Simple capacitor:
 .PP
 .RS 4n
@@ -201,7 +200,7 @@ Example of class initialization as a simple capacitor:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Xyce::BasicDevices::Capacitor new 1 netp netm 1e-6 -tc1 1 -temp {-eq temp}
+Capacitor new 1 netp netm 1e-6 -tc1 1 -temp {-eq temp}
 .fi
 .RE
 .PP
@@ -217,7 +216,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Xyce::BasicDevices::Capacitor new 1 netp netm -c "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1
+Capacitor new 1 netp netm -c "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1
 .fi
 .RE
 .PP
@@ -233,7 +232,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Xyce::BasicDevices::Capacitor new 1 netp netm -q "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1
+Capacitor new 1 netp netm -q "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1
 .fi
 .RE
 .PP
@@ -249,7 +248,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Xyce::BasicDevices::Capacitor new 1 netp netm -model capm -l 1e-6 -w 10e-6
+Capacitor new 1 netp netm -model capm -l 1e-6 -w 10e-6
 .fi
 .RE
 .PP
@@ -308,7 +307,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Xyce::BasicDevices::CModel new capmod -tc1 1 -tc2 2
+CModel new capmod -tc1 1 -tc2 2
 .fi
 .RE
 .PP
@@ -404,7 +403,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Ngspice::BasicDevices::CSwitchModel new cswmod -ion 1 -ioff 0\&.5 -ron 1 -roff 1e6
+CSwitchModel new cswmod -ion 1 -ioff 0\&.5 -ron 1 -roff 1e6
 .fi
 .RE
 .PP
@@ -524,7 +523,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Xyce::BasicDevices::GenSwitch new 1 net1 0 -model sw1 -control {I(VMON)}
+GenSwitch new 1 net1 0 -model sw1 -control {I(VMON)}
 .fi
 .RE
 .PP
@@ -615,8 +614,8 @@ Name of node connected to positive pin\&.
 .PP
 \fBDescription\fR
 .PP
-Inductor type could be specified with additional switch -model modelName
-if we want to simulate inductor with model card\&.
+Inductor type could be specified with additional switch -model modelName if we want to simulate inductor
+with model card\&.
 Simple inductor:
 .PP
 .RS 4n
@@ -629,7 +628,7 @@ Example of class initialization as a simple inductor:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Xyce::BasicDevices::Inductor new 1 netp netm -l 1e-6 -tc1 1 -temp {-eq temp}
+Inductor new 1 netp netm -l 1e-6 -tc1 1 -temp {-eq temp}
 .fi
 .RE
 .PP
@@ -645,7 +644,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Xyce::BasicDevices::Inductor new 1 netp netm -l 1e-6 -model indm
+Inductor new 1 netp netm -l 1e-6 -model indm
 .fi
 .RE
 .PP
@@ -737,7 +736,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Xyce::BasicDevices::LModel new indmod -tc1 1 -tc2 2
+LModel new indmod -tc1 1 -tc2 2
 .fi
 .RE
 .PP
@@ -872,9 +871,8 @@ Name of node connected to positive pin\&.
 .PP
 \fBDescription\fR
 .PP
-Resistor type could be specified with additional switches: -beh if we
-want to model circuit's variable dependent resistor, or -model modelName
-if we want to simulate resistor with model card\&.
+Resistor type could be specified with additional switches: -beh if we want to model circuit's variable
+dependent resistor, or -model modelName if we want to simulate resistor with model card\&.
 Simple resistor:
 .PP
 .RS 4n
@@ -887,7 +885,7 @@ Example of class initialization as a simple resistor:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Xyce::BasicDevices::Resistor new 1 netp netm -r 1e3 -tc1 1 -temp {-eq temp_amb}
+Resistor new 1 netp netm -r 1e3 -tc1 1 -temp {-eq temp_amb}
 .fi
 .RE
 .PP
@@ -903,7 +901,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Xyce::BasicDevices::Resistor new 1 netp netm -r "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1
+Resistor new 1 netp netm -r "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1
 .fi
 .RE
 .PP
@@ -919,7 +917,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Xyce::BasicDevices::Resistor new 1 netp netm -model resm -l 1e-6 -w 10e-6
+Resistor new 1 netp netm -model resm -l 1e-6 -w 10e-6
 .fi
 .RE
 .PP
@@ -978,7 +976,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Xyce::BasicDevices::RModel new resmod -tc1 1 -tc2 2
+RModel new resmod -tc1 1 -tc2 2
 .fi
 .RE
 .PP
@@ -1040,7 +1038,7 @@ name
 Name of the device without first-letter designator X\&.
 .TP
 params
-{{?-eq? paramName paramValue} {?-eq? paramName paramValue}}
+List of parameters {{?-eq? paramName paramValue} {?-eq? paramName paramValue}}
 .TP
 pins
 List of pins {{pinName nodeName} {pinName nodeName} \&.\&.\&.}
@@ -1061,7 +1059,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {-eq c cpar}}
+SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {-eq c cpar}}
 .fi
 .RE
 .PP
@@ -1130,7 +1128,7 @@ nodes
 List of nodes connected to pins in the same order as pins in subcircuit definition {nodeName1 nodeName2 \&.\&.\&.}
 .TP
 args
-Parameters as argument in form : -paramName {?-eq? paramValue} -paramName {?-eq? paramValue}
+Parameters as argument in form: -paramName {?-eq? paramValue} -paramName {?-eq? paramValue}
 .RE
 .PP
 \fBDescription\fR
@@ -1145,7 +1143,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstanceAuto new $subcktObj 1 {net1 net2} -r 1 -c {-eq cpar}
+SubcircuitInstanceAuto new $subcktObj 1 {net1 net2} -r 1 -c {-eq cpar}
 .fi
 .RE
 .PP
@@ -1274,7 +1272,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Ngspice::BasicDevices::VSwitchModel new swmod -von 1 -voff 0\&.5 -ron 1 -roff 1e6
+VSwitchModel new swmod -von 1 -voff 0\&.5 -ron 1 -roff 1e6
 .fi
 .RE
 .PP

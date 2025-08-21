@@ -63,8 +63,8 @@ namespace eval ::SpiceGenTcl::Ltspice::BasicDevices {
             #  -rpar value - parallel resistance, optional
             #  -cpar value - parallel capacitor, optional
             #  -rlshunt value - shunt resistance across series inductance, optional
-            # Capacitor type could be specified with additional switch `-q` if we
-            # want to model circuit's variable dependent capacitor.
+            # Capacitor type could be specified with additional switch `-q` if we want to model circuit's variable
+            # dependent capacitor.
             # Simple capacitor:
             # ```
             # Cnnn n1 n2 <capacitance> [ic=<value>]
@@ -74,7 +74,7 @@ namespace eval ::SpiceGenTcl::Ltspice::BasicDevices {
             # ```
             # Example of class initialization as a simple capacitor:
             # ```
-            # ::SpiceGenTcl::Ltspice::BasicDevices::Capacitor new 1 netp netm -r 1e-6 -temp {-eq temp}
+            # Capacitor new 1 netp netm -r 1e-6 -temp {-eq temp}
             # ```
             # Behavioral capacitor with Q expression:
             # ```
@@ -82,7 +82,7 @@ namespace eval ::SpiceGenTcl::Ltspice::BasicDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::BasicDevices::Capacitor new 1 netp netm -q "V(a)+V(b)+pow(V(c),2)"
+            # Capacitor new 1 netp netm -q "V(a)+V(b)+pow(V(c),2)"
             # ```
             # Synopsis: name np nm -c value ?-m value? ?-temp value? ?-ic value? ?-rser value? ?-lser value?
             #   ?-rpar value? ?-cpar value? ?-rlshunt value?
@@ -163,9 +163,8 @@ namespace eval ::SpiceGenTcl::Ltspice::BasicDevices {
             #  -lg value - length of gap
             #  -a value - cross sectional area
             #  -n value - number of turns
-            # Inductor type could be specified with additional switches: `-beh` if we
-            # want to model circuit's variable dependent inductor, or `-model modelName`
-            # if we want to simulate inductor with model card.
+            # Inductor type could be specified with additional switches: `-beh` if we want to model circuit's variable
+            # dependent inductor, or `-model modelName` if we want to simulate inductor with model card.
             # Simple inductor:
             # ```
             # LYYYYYYY n+ n- <value> <m=val>
@@ -174,7 +173,7 @@ namespace eval ::SpiceGenTcl::Ltspice::BasicDevices {
             # ```
             # Example of class initialization as a simple inductor:
             # ```
-            # ::SpiceGenTcl::Ngspice::BasicDevices::Inductor new 1 netp netm -l 1e-6 -tc1 1 -temp {-eq temp}
+            # Inductor new 1 netp netm -l 1e-6 -tc1 1 -temp {-eq temp}
             # ```
             # Behavioral inductor:
             # ```
@@ -182,7 +181,7 @@ namespace eval ::SpiceGenTcl::Ltspice::BasicDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::BasicDevices::Inductor new 1 netp netm -l "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1
+            # Inductor new 1 netp netm -l "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1
             # ```
             # Inductor with model card:
             # ```
@@ -192,7 +191,7 @@ namespace eval ::SpiceGenTcl::Ltspice::BasicDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::BasicDevices::Inductor new 1 netp netm -l 1e-6 -model indm
+            # Inductor new 1 netp netm -l 1e-6 -model indm
             # ```
             # Synopsis: name np nm -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value|-dtemp value?
             #   ?-scale value? ?-ic value?
@@ -285,16 +284,15 @@ namespace eval ::SpiceGenTcl::Ltspice::BasicDevices {
         constructor {args} {
             # Creates object of class `SubcircuitInstance` that describes subcircuit instance.
             #  name - name of the device without first-letter designator X
-            #  pins - list of pins {{pinName nodeName} {pinName nodeName} ...}
+            #  pins - list of pins `{{pinName nodeName} {pinName nodeName} ...}`
             #  subName - name of subcircuit definition
-            #  params - {{?-eq? paramName paramValue} {?-eq? paramName paramValue}}
+            #  params - list of parameters `{{?-eq? paramName paramValue} {?-eq? paramName paramValue}}`
             # ```
             # Xxxx n1 n2 n3... <subckt name> [<parameter>=<expression>]
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::BasicDevices::SubcircuitInstance new 1 {{plus net1} {minus net2}}\
-                                    rcnet {{r 1} {-eq c cpar}}
+            # SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {-eq c cpar}}
             # ```
             ##nagelfar implicitvarcmd {argparse *Creates object of class 'SubcircuitInstance'*} name pins subName params
             argparse -pfirst -help {Creates object of class 'SubcircuitInstance' that describes subcircuit instance} {
@@ -321,16 +319,15 @@ namespace eval ::SpiceGenTcl::Ltspice::BasicDevices {
             # Creates object of class `SubcircuitInstanceAuto` that describes subcircuit instance with already created
             # subcircuit definition object.
             #  subcktObj - object of subcircuit that defines it's pins, subName and parameters
-            #  nodes - list of nodes connected to pins in the same order as pins in subcircuit definition
-            #   {nodeName1 nodeName2 ...}
-            #  args - parameters as argument in form : -paramName {?-eq? paramValue} -paramName {?-eq? paramValue}
+            #  nodes - list of nodes connected to pins in the same order as pins in subcircuit definition `{nodeName1
+            #   nodeName2 ...}`
+            #  args - parameters as argument in form : `-paramName {?-eq? paramValue} -paramName {?-eq? paramValue}`
             # ```
             # Xxxx n1 n2 n3... <subckt name> [<parameter>=<expression>]
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::BasicDevices::SubcircuitInstanceAuto new $subcktObj 1 {net1 net2} -r 1\
-                                                         -c {-eq cpar}
+            # SubcircuitInstanceAuto new $subcktObj 1 {net1 net2} -r 1 -c {-eq cpar}
             # ```
             # Synopsis: subcktObj name nodes ?-paramName {?-eq? paramValue} ...?
 
@@ -706,7 +703,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::Sources::Vdc new 1 netp netm -dc 10 -rser 0.001
+            # Vdc new 1 netp netm -dc 10 -rser 0.001
             # ```
             # Synopsis: name np nm -dc value ?-rser value? ?-cpar value?
             next v {*}$args
@@ -730,7 +727,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::Sources::Vac new 1 netp netm -ac 10 -cpar 1e-9
+            # Vac new 1 netp netm -ac 10 -cpar 1e-9
             # ```
             # Synopsis: name np nm -ac value ?-dc value? ?-rser value? ?-cpar value?
             next v {*}$args
@@ -746,14 +743,14 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             #  name - name of the device without first-letter designator V
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -low value - low value, aliases: -voff, -ioff
-            #  -high value - high value, aliases: -von, ion
+            #  -low value - low value, aliases: `-voff`, `-ioff`
+            #  -high value - high value, aliases: `-von`, `-ion`
             #  -td value - time delay
             #  -tr value - rise time
             #  -tf value - fall time
-            #  -pw value - width of pulse, alias -ton
-            #  -per value - period time, alias -tper
-            #  -npulses value - number of pulses, optional, alias -ncycles
+            #  -pw value - width of pulse, alias `-ton`
+            #  -per value - period time, alias `-tper`
+            #  -npulses value - number of pulses, optional, alias `-ncycles`
             #  -rser value - series resistor value, optional
             #  -cpar value - parallel capacitor value, optional
             # ```
@@ -761,8 +758,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::Sources::Vpulse new 1 net1 net2 -low 0 -high 1 -td {-eq td} -tr 1e-9 -tf 1e-9\
-                                    -pw 10e-6 -per 20e-6 -npulses {-eq np}
+            # Vpulse new 1 net1 net2 -low 0 -high 1 -td {-eq td} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6 -npulses {-eq np}
             # ```
             # Synopsis: name np nm -low|voff value -high|von value -td value -tr value -tf value -pw|ton value
             #   -per|tper value ?-np|ncycles value? ?-rser value? ?-cpar value?
@@ -778,13 +774,13 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             #  name - name of the device without first-letter designator V
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -v0 value - DC shift value, aliases: -voffset, -i0, -ioffset
-            #  -va value - amplitude value, aliases: -vamp, -ia, -iamp
+            #  -v0 value - DC shift value, aliases: `-voffset`, `-i0`, `-ioffset`
+            #  -va value - amplitude value, aliases: `-vamp`, `-ia`, `-iamp`
             #  -freq value - frequency of sinusoidal signal
             #  -td value - time delay, optional
-            #  -theta value - damping factor, optional, require -td
-            #  -phase value - phase of signal, optional, require -td and -theta, alias -phi
-            #  -ncycles value - number of cycles, optional, require -td, -theta and -phase
+            #  -theta value - damping factor, optional, requires `-td`
+            #  -phase value - phase of signal, optional, requires `-td` and `-theta`, alias `-phi`
+            #  -ncycles value - number of cycles, optional, requires `-td`, `-theta` and `-phase`
             #  -rser value - series resistor value, optional
             #  -cpar value - parallel capacitor value, optional
             # ```
@@ -792,8 +788,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Common::Sources::Vsin new 1 net1 net2 -v0 0 -va 2 -freq {-eq freq} -td 1e-6\
-                                    -theta {-eq theta}
+            # Vsin new 1 net1 net2 -v0 0 -va 2 -freq {-eq freq} -td 1e-6 -theta {-eq theta}
             # ```
             # Synopsis: name np nm -v0|voffset value -va|vamp value -freq value ?-td value ?-theta value
             #   ?-phase|phi value ?-ncycles value???? ?-rser value? ?-cpar value?
@@ -822,8 +817,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::Sources::Vexp new 1 net1 net2 -v1 0 -v2 1 -td1 1e-9 -tau1 1e-9 -td2 {-eq td2}\
-                                    -tau2 10e-6
+            # Vexp new 1 net1 net2 -v1 0 -v2 1 -td1 1e-9 -tau1 1e-9 -td2 {-eq td2} -tau2 10e-6
             # ```
             # Synopsis: name np nm -v1 value -v2 value -td1 value -tau1 value -td2 value -tau2 value
             #   ?-rser value? ?-cpar value?
@@ -839,7 +833,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             #  name - name of the device without first-letter designator V
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -seq list - sequence of pwl points in form {t0 v0 t1 v1 t2 v2 t3 v3 ...}
+            #  -seq list - sequence of pwl points in form `{t0 v0 t1 v1 t2 v2 t3 v3 ...}`
             #  -rser value - series resistor value, optional
             #  -cpar value - parallel capacitor value, optional
             # ```
@@ -847,7 +841,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::Sources::Vpwl new 1 np nm -seq {0 0 {-eq t1} 1 2 2 3 3 4 4}
+            # Vpwl new 1 np nm -seq {0 0 {-eq t1} 1 2 2 3 3 4 4}
             # ```
             # Synopsis: name np nm -seq list ?-rser value? ?-cpar value?
             next v {*}$args
@@ -862,11 +856,11 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             #  name - name of the device without first-letter designator V
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -v0 value - initial value, aliases: -voff, -i0, -ioff
-            #  -va value - pulsed value, aliases: -vamp, -ia, -iamp
-            #  -fc value - carrier frequency, alias -fcar
+            #  -v0 value - initial value, aliases: `-voff`, `-i0`, `-ioff`
+            #  -va value - pulsed value, aliases: `-vamp`, `-ia`, `-iamp`
+            #  -fc value - carrier frequency, alias `-fcar`
             #  -mdi value - modulation index
-            #  -fs value - signal frequency, alias -fsig
+            #  -fs value - signal frequency, alias `-fsig`
             #  -rser value - series resistor value, optional
             #  -cpar value - parallel capacitor value, optional
             # ```
@@ -874,7 +868,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::Sources::Vsin new 1 net1 net2 -v0 0 -va 1 -fc {-eq freq} -mdi 0 -fs 1e3
+            # Vsin new 1 net1 net2 -v0 0 -va 1 -fc {-eq freq} -mdi 0 -fs 1e3
             # ```
             # Synopsis: name np nm -v0|voff value -va|vamp value -fc|fcar value -mdi value -fs|fsig value
             #   ?-rser value? ?-cpar value?
@@ -896,7 +890,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::Sources::Idc new 1 netp netm -dc 10
+            # Idc new 1 netp netm -dc 10
             # ```
             # Synopsis: name np nm -dc value
             if {({-rser} in $args) || ({-cpar} in $args)} {
@@ -921,7 +915,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::Sources::Iac new 1 netp netm -ac 10
+            # Iac new 1 netp netm -ac 10
             # ```
             # Synopsis: name np nm -ac value ?-dc value?
             if {({-rser} in $args) || ({-cpar} in $args)} {
@@ -939,21 +933,20 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             #  name - name of the device without first-letter designator I
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -low value - low value, aliases: -voff, -ioff
-            #  -high value - high value, aliases: -von, ion
+            #  -low value - low value, aliases: `-voff`, `-ioff`
+            #  -high value - high value, aliases: `-von, `-ion`
             #  -td value - time delay
             #  -tr value - rise time
             #  -tf value - fall time
-            #  -pw value - width of pulse, alias -ton
-            #  -per value - period time, alias -tper
-            #  -npulses value - number of pulses, optional, alias -ncycles
+            #  -pw value - width of pulse, alias `-ton`
+            #  -per value - period time, alias `-tper`
+            #  -npulses value - number of pulses, optional, alias `-ncycles`
             # ```
             # Ixxx n+ n- PULSE(Ioff Ion Tdelay Trise Tfall Ton Tperiod Ncycles)
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::Sources::Ipulse new 1 net1 net2 -low 0 -high 1 -td {-eq td} -tr 1e-9 -tf 1e-9\
-                                    -pw 10e-6 -per 20e-6 -npulses {-eq np}
+            # Ipulse new 1 net1 net2 -low 0 -high 1 -td {-eq td} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6 -npulses {-eq np}
             # ```
             # Synopsis: name np nm -low|ioff value -high|ion value -td value -tr value -tf value -pw|ton value
             #   -per|tper value ?-np|ncycles value?
@@ -972,20 +965,19 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             #  name - name of the device without first-letter designator I
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -v0 value - DC shift value, aliases: -voffset, -v0, -ioffset
-            #  -va value - amplitude value, aliases: -vamp, -va, -iamp
+            #  -v0 value - DC shift value, aliases: `-voffset`, `-v0`, `-ioffset`
+            #  -va value - amplitude value, aliases: `-vamp`, `-va`, `-iamp`
             #  -freq value - frequency of sinusoidal signal
             #  -td value - time delay, optional
-            #  -theta value - damping factor, optional, require -td
-            #  -phase value - phase of signal, optional, require -td and -theta, alias -phi
-            #  -ncycles value - number of cycles, optional, require -td, -theta and -phase
+            #  -theta value - damping factor, optional, requires `-td`
+            #  -phase value - phase of signal, optional, requires `-td` and `-theta`, alias `-phi`
+            #  -ncycles value - number of cycles, optional, requires `-td`, `-theta` and `-phase`
             # ```
             # Ixxx n+ n- SINE(Ioffset Iamp Freq Td Theta Phi Ncycles)
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::Sources::Isin new 1 net1 net2 -v0 0 -va 2 -freq {-eq freq} -td 1e-6\
-                                    -theta {-eq theta}
+            # Isin new 1 net1 net2 -v0 0 -va 2 -freq {-eq freq} -td 1e-6 -theta {-eq theta}
             # ```
             # Synopsis: name np nm -i0|ioffset value -ia|iamp value -freq value ?-td value ?-theta value
             #   ?-phase|phi value ?-ncycles value????
@@ -1015,8 +1007,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::Sources::Iexp new 1 net1 net2 -i1 0 -i2 1 -td1 1e-9 -tau1 1e-9 -td2 {-eq td2}\
-                                    -tau2 10e-6
+            # Iexp new 1 net1 net2 -i1 0 -i2 1 -td1 1e-9 -tau1 1e-9 -td2 {-eq td2} -tau2 10e-6
             # ```
             # Synopsis: name np nm -i1 value -i2 value -td1 value -tau1 value -td2 value -tau2 value
             if {({-rser} in $args) || ({-cpar} in $args)} {
@@ -1034,7 +1025,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             #  name - name of the device without first-letter designator I
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -seq list - sequence of pwl points in form {t0 v0 t1 v1 t2 v2 t3 v3 ...}
+            #  -seq list - sequence of pwl points in form `{t0 v0 t1 v1 t2 v2 t3 v3 ...}`
             #  -rser value - series resistor value, optional
             #  -cpar value - parallel capacitor value, optional
             # ```
@@ -1042,7 +1033,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::Sources::Ipwl new 1 np nm -seq {0 0 {-eq t1} 1 2 2 3 3 4 4}
+            # Ipwl new 1 np nm -seq {0 0 {-eq t1} 1 2 2 3 3 4 4}
             # ```
             # Synopsis: name np nm -seq list
             if {({-rser} in $args) || ({-cpar} in $args)} {
@@ -1060,17 +1051,17 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             #  name - name of the device without first-letter designator I
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
-            #  -i0 value - initial value, aliases: -voff, -v0, -ioff
-            #  -ia value - pulsed value, aliases: -vamp, -va, -iamp
-            #  -fc value - carrier frequency, alias -fcar
+            #  -i0 value - initial value, aliases: `-voff`, `-v0`, `-ioff`
+            #  -ia value - pulsed value, aliases: `-vamp`, `-va`, `-iamp`
+            #  -fc value - carrier frequency, alias `-fcar`
             #  -mdi value - modulation index
-            #  -fs value - signal frequency, alias -fsig
+            #  -fs value - signal frequency, alias `-fsig`
             # ```
             # Ixxx n+ n- SFFM(Ioff Iamp Fcar MDI Fsig)
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::Sources::Isin new 1 net1 net2 -i0 0 -ia 1 -fc {-eq freq} -mdi 0 -fs 1e3
+            # Isin new 1 net1 net2 -i0 0 -ia 1 -fc {-eq freq} -mdi 0 -fs 1e3
             # ```
             # Synopsis: name np nm -i0|ioff value -ia|iamp value -fc|fcar value -mdi value -fs|fsig value
             if {({-rser} in $args) || ({-cpar} in $args)} {
@@ -1151,7 +1142,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::Sources::BehaviouralSource new 1 netp netm -v "V(a)+V(b)+pow(V(c),2)"
+            # BehaviouralSource new 1 netp netm -v "V(a)+V(b)+pow(V(c),2)"
             # ```
             # Synopsis: name np nm -v value ?-ic value? ?-tripdv value -tripdt value? ?-laplace value
             #   ?-window value? ?-nfft value? ?-mtol value??
@@ -1221,7 +1212,7 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Diode new 1 netp netm -model diomod -area 1e-6
+            # Diode new 1 netp netm -model diomod -area 1e-6
             # ```
             # Synopsis: name np nm -model value ?-area value? ?-off? ?-m value? ?-n value? ?-temp value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'Diode' that describes diode} {
@@ -1285,7 +1276,7 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::SemiconductorDevices::Bjt new 1 netc netb nete -model bjtmod -ns nets -area 1e-3
+            # Bjt new 1 netc netb nete -model bjtmod -ns nets -area 1e-3
             # ```
             # Synopsis: name nc nb ne -model value ?-ns value? ?-area value? ?-m value?  ?-temp value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'Bjt' that describes semiconductor\
@@ -1355,8 +1346,7 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet new 1 netd netg nets -model jfetmod -area {-eq area*2}\
-                                    -temp 25
+            # Jfet new 1 netd netg nets -model jfetmod -area {-eq area*2} -temp 25
             # ```
             # Synopsis: name nd ng ns -model value ?-area value? ?-off? ?-temp value?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'Jfet' that describes semiconductor\
@@ -1421,8 +1411,7 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet new 1 netd netg nets -model mesfetmod\
-                                    -area {-eq area*2}
+            # Mesfet new 1 netd netg nets -model mesfetmod -area {-eq area*2}
             # ```
             # Synopsis: name nd ng ns -model value ?-area value? ?-off? ?-ic \{value value\} ?
             set arguments [argparse -inline -pfirst -help {Creates object of class 'Mesfet' that describes\
@@ -1483,19 +1472,20 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
             #  -l value - length of channel, optional
             #  -w value - width of channel, optional
             #  -area value - area of VDMOS device, optional
-            #  -ad value - diffusion area of drain, optional, forbid -nrd, require -n4
-            #  -as value - diffusion area of source, optional, forbid -nrs, require -n4
-            #  -pd value - perimeter area of drain, optional, require -n4
-            #  -ps value - perimeter area of source, optional, require -n4
-            #  -nrd value - equivalent number of squares of the drain diffusions, forbid -ad, require -n4
-            #  -nrs value - equivalent number of squares of the source diffusions, forbid -as, require -n4
+            #  -ad value - diffusion area of drain, optional, forbid `-nrd`, require `-n4`
+            #  -as value - diffusion area of source, optional, forbid `-nrs`, require `-n4`
+            #  -pd value - perimeter area of drain, optional, require `-n4`
+            #  -ps value - perimeter area of source, optional, require `-n4`
+            #  -nrd value - equivalent number of squares of the drain diffusions, forbid `-ad`, require `-n4`
+            #  -nrs value - equivalent number of squares of the source diffusions, forbid `-as`, require `-n4`
             #  -temp value - device temperature
-            #  -ic value - initial conditions for vds, vgs and vbs, in form of three element list, optional, require -n4
+            #  -ic value - initial conditions for vds, vgs and vbs, in form of three element list, optional, require
+            #    `-n4`
             #  -off - initial state, optional
             #  -n4 value - name of substrate node
-            #  -n5 value - name of 5th node, require -n4, optional
-            #  -n6 value - name of 6th node, require -n5, optional
-            #  -n7 value - name of 7th node, require -n6, optional
+            #  -n5 value - name of 5th node, require `-n4`, optional
+            #  -n6 value - name of 6th node, require `-n5`, optional
+            #  -n7 value - name of 7th node, require `-n6`, optional
             #  -custparams list - key that collects all arguments at the end of device definition, to provide an ability
             #  to add custom parameters in form `-custparams param1 param1Val param2 {-eq param2eq} param3 param3Val
             #  ...` Must be specified after all others options. Optional.
@@ -1513,7 +1503,7 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ltspice::Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5
+            # Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5
             # ```
             # Synopsis: name nd ng ns -model value -n4|nb value ?-n5 value ?-n6 value ?-n7 value???
             #   ?-m value? ?-l value? ?-w value? ?-ad value|-nrd value? ?-as value|-nrs value? ?-temp value? ?-off?

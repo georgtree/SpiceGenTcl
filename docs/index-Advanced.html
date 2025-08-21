@@ -3344,7 +3344,7 @@
 <p class='ruff'>Procedure returns dictionary that contains lists with residuals and diode current under the keys <code>fvec</code> and <code>fval</code>, and <code>fvec</code> key is mandatory because list under this key is used by optimization procedure.</p>
 <p class='ruff'>To run simulation we need to build circuit and define necessary objects:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> diodeModel [DiodeModel new diomod <font color=#463e11>-is</font> 1e-12 <font color=#463e11>-n</font> 1.0 <font color=#463e11>-rs</font> 30 <font color=#463e11>-cj0</font> 1e-9 <font color=#463e11>-trs1</font> 0.001 <font color=#463e11>-xti</font> 5 <font color=#463e11>-ikf</font> 1e-4]
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> diodeModel [<b><font color=#923B23>DiodeModel</font></b> new diomod <font color=#463e11>-is</font> 1e-12 <font color=#463e11>-n</font> 1.0 <font color=#463e11>-rs</font> 30 <font color=#463e11>-cj0</font> 1e-9 <font color=#463e11>-trs1</font> 0.001 <font color=#463e11>-xti</font> 5 <font color=#463e11>-ikf</font> 1e-4]
 <b><font color=#923B23>set</font></b> vSrc [<b><font color=#923B23>Dc</font></b> new <font color=#463e11>-src</font> va <font color=#463e11>-start</font> 0 <font color=#463e11>-stop</font> 2 <font color=#463e11>-incr</font> 0.02]
 <b><font color=#923B23>set</font></b> circuit [<b><font color=#923B23>Circuit</font></b> new {diode IV}]
 <font color=#4A181B>$circuit</font> add [<b><font color=#923B23>D</font></b> new 1 anode 0 <font color=#463e11>-model</font> diomod <font color=#463e11>-area</font> 1]
@@ -3444,10 +3444,10 @@
 
 </figure><p class='ruff'>We will use the same <code>pdata</code> variable containing dictionary, but change the current and voltage data and limits:</p>
 
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>dset pdata v <font color=#4A181B>$vInterp</font>
-dset pdata i <font color=#4A181B>$iInterp</font>
-dset pdata vMin <font color=#4A181B>$vMin</font>
-dset pdata vMax <font color=#4A181B>$vMax</font>
+<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>dset</font></b> pdata v <font color=#4A181B>$vInterp</font>
+<b><font color=#923B23>dset</font></b> pdata i <font color=#4A181B>$iInterp</font>
+<b><font color=#923B23>dset</font></b> pdata vMin <font color=#4A181B>$vMin</font>
+<b><font color=#923B23>dset</font></b> pdata vMax <font color=#4A181B>$vMax</font>
 </pre>
 
 </figure><p class='ruff'>We make <code>is</code> and <code>n</code> parameters fixed this time, and free the <code>rs</code> and <code>ikf</code>:</p>
@@ -3487,10 +3487,10 @@ dset pdata vMax <font color=#4A181B>$vMax</font>
 <b><font color=#923B23>set</font></b> vMax [max {<b><font color=#923B23>*</font></b>}<font color=#4A181B>$vRaw</font>]
 <b><font color=#923B23>set</font></b> vInterp [lseq <font color=#4A181B>$vMin</font> to <font color=#4A181B>$vMax</font> by <font color=#4A181B>$vStep</font>]
 <b><font color=#923B23>set</font></b> iInterp [lin1d <font color=#463e11>-x</font> <font color=#4A181B>$vRaw</font> <font color=#463e11>-y</font> <font color=#4A181B>$iRaw</font> <font color=#463e11>-xi</font> <font color=#4A181B>$vInterp</font>]
-dset pdata v <font color=#4A181B>$vInterp</font>
-dset pdata i <font color=#4A181B>$iInterp</font>
-dset pdata vMin <font color=#4A181B>$vMin</font>
-dset pdata vMax <font color=#4A181B>$vMax</font>
+<b><font color=#923B23>dset</font></b> pdata v <font color=#4A181B>$vInterp</font>
+<b><font color=#923B23>dset</font></b> pdata i <font color=#4A181B>$iInterp</font>
+<b><font color=#923B23>dset</font></b> pdata vMin <font color=#4A181B>$vMin</font>
+<b><font color=#923B23>dset</font></b> pdata vMax <font color=#4A181B>$vMax</font>
 </pre>
 
 </figure><p class='ruff'>We unfix <code>rs</code> and <code>ikf</code> parameters, and set new limits within ±10% of previous values to forbid parameters becoming too different:</p>

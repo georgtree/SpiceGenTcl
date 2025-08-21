@@ -47,7 +47,7 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Analyses::Xyce::Sens new -objfunc "0.5*(V(B)-3.0)**2.0" -param "R1:R,R2:R" -name dc1
+            # Sens new -objfunc "0.5*(V(B)-3.0)**2.0" -param "R1:R,R2:R" -name dc1
             # ```
             # Synopsis: -objfunc value -param value ?-name value?
             set arguments [argparse -inline -help {Creates object of class 'Sens' that describes SENS ac analysis} {

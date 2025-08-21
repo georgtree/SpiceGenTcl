@@ -151,7 +151,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Common::BasicDevices::Capacitor new 1 netp netm -c 1e3 -tc1 1 -temp {-eq temp_amb}
+Capacitor new 1 netp netm -c 1e3 -tc1 1 -temp {-eq temp_amb}
 .fi
 .RE
 .PP
@@ -238,7 +238,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Ngspice::BasicDevices::CSwitch new 1 net1 0 -icntrl v1 -model sw1 -on
+CSwitch new 1 net1 0 -icntrl v1 -model sw1 -on
 .fi
 .RE
 .PP
@@ -333,7 +333,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Common::BasicDevices::Inductor new 1 netp netm -l 1e3 -tc1 1 -temp {-eq temp_amb}
+Inductor new 1 netp netm -l 1e3 -tc1 1 -temp {-eq temp_amb}
 .fi
 .RE
 .PP
@@ -494,7 +494,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Common::BasicDevices::Resistor new 1 netp netm -r 1e3 -tc1 1 -temp {-eq temp_amb}
+Resistor new 1 netp netm -r 1e3 -tc1 1 -temp {-eq temp_amb}
 .fi
 .RE
 .PP
@@ -556,7 +556,7 @@ name
 Name of the device without first-letter designator X\&.
 .TP
 params
-{{?-eq? paramName paramValue} {?-eq? paramName paramValue}}
+List of parameters {{?-eq? paramName paramValue} {?-eq? paramName paramValue}}
 .TP
 pins
 List of pins {{pinName nodeName} {pinName nodeName} \&.\&.\&.}
@@ -577,7 +577,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Common::BasicDevices::SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {-eq c cpar}}
+SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {-eq c cpar}}
 .fi
 .RE
 .PP
@@ -661,7 +661,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Common::BasicDevices::SubcircuitInstanceAuto new $subcktObj 1 {net1 net2} -r 1 -c {-eq cpar}
+SubcircuitInstanceAuto new $subcktObj 1 {net1 net2} -r 1 -c {-eq cpar}
 .fi
 .RE
 .PP
@@ -784,7 +784,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Ngspice::BasicDevices::VSwitch new 1 net1 0 netc 0 -model sw1 -on
+VSwitch new 1 net1 0 netc 0 -model sw1 -on
 .fi
 .RE
 .PP

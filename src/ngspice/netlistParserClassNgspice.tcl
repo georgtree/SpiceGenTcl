@@ -528,8 +528,8 @@ namespace eval ::SpiceGenTcl::Ngspice {
             # Creates [::SpiceGenTcl::Ngspice::BasicDevices::C] object from passed line and add it to netlist
             #   line - line to parse
             # Returns: code string for object creation
-            # Supports behavioural capacitor in form `q|c={equation}`, `q|c=equation` or `q|c='equation'` and only braced
-            # form `name={value}` of parameters.
+            # Supports behavioural capacitor in form `q|c={equation}`, `q|c=equation` or `q|c='equation'` and only
+            # braced form `name={value}` of parameters.
             set origLine $line
             set lineList [split $line]
             lassign $lineList elemName pin1 pin2 cval fourth

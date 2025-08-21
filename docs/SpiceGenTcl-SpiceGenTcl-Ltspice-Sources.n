@@ -260,7 +260,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Ltspice::Sources::BehaviouralSource new 1 netp netm -v "V(a)+V(b)+pow(V(c),2)"
+BehaviouralSource new 1 netp netm -v "V(a)+V(b)+pow(V(c),2)"
 .fi
 .RE
 .PP
@@ -662,7 +662,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Ltspice::Sources::Iac new 1 netp netm -ac 10
+Iac new 1 netp netm -ac 10
 .fi
 .RE
 .PP
@@ -739,7 +739,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Ltspice::Sources::Idc new 1 netp netm -dc 10
+Idc new 1 netp netm -dc 10
 .fi
 .RE
 .PP
@@ -831,7 +831,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Ltspice::Sources::Iexp new 1 net1 net2 -i1 0 -i2 1 -td1 1e-9 -tau1 1e-9 -td2 {-eq td2} -tau2 10e-6
+Iexp new 1 net1 net2 -i1 0 -i2 1 -td1 1e-9 -tau1 1e-9 -td2 {-eq td2} -tau2 10e-6
 .fi
 .RE
 .PP
@@ -884,19 +884,19 @@ Creates object of class Ipulse that describes pulse current source\&.
 .RS 4n
 .TP
 -high value
-High value, aliases: -von, ion\&.
+High value, aliases: -von,-ion`
 .TP
 -low value
-Low value, aliases: -voff, -ioff\&.
+Low value, aliases: -voff, -ioff
 .TP
 -npulses value
-Number of pulses, optional, alias -ncycles\&.
+Number of pulses, optional, alias -ncycles
 .TP
 -per value
-Period time, alias -tper\&.
+Period time, alias -tper
 .TP
 -pw value
-Width of pulse, alias -ton\&.
+Width of pulse, alias -ton
 .TP
 -td value
 Time delay\&.
@@ -929,7 +929,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Ltspice::Sources::Ipulse new 1 net1 net2 -low 0 -high 1 -td {-eq td} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6 -npulses {-eq np}
+Ipulse new 1 net1 net2 -low 0 -high 1 -td {-eq td} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6 -npulses {-eq np}
 .fi
 .RE
 .PP
@@ -1012,7 +1012,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Ltspice::Sources::Ipwl new 1 np nm -seq {0 0 {-eq t1} 1 2 2 3 3 4 4}
+Ipwl new 1 np nm -seq {0 0 {-eq t1} 1 2 2 3 3 4 4}
 .fi
 .RE
 .PP
@@ -1065,16 +1065,16 @@ Creates object of class Isffm that describes single-frequency FM current source\
 .RS 4n
 .TP
 -fc value
-Carrier frequency, alias -fcar\&.
+Carrier frequency, alias -fcar
 .TP
 -fs value
-Signal frequency, alias -fsig\&.
+Signal frequency, alias -fsig
 .TP
 -i0 value
-Initial value, aliases: -voff, -v0, -ioff\&.
+Initial value, aliases: -voff, -v0, -ioff
 .TP
 -ia value
-Pulsed value, aliases: -vamp, -va, -iamp\&.
+Pulsed value, aliases: -vamp, -va, -iamp
 .TP
 -mdi value
 Modulation index\&.
@@ -1101,7 +1101,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Ltspice::Sources::Isin new 1 net1 net2 -i0 0 -ia 1 -fc {-eq freq} -mdi 0 -fs 1e3
+Isin new 1 net1 net2 -i0 0 -ia 1 -fc {-eq freq} -mdi 0 -fs 1e3
 .fi
 .RE
 .PP
@@ -1157,22 +1157,22 @@ Creates object of class Isin that describes sinusoidal current source\&.
 Frequency of sinusoidal signal\&.
 .TP
 -ncycles value
-Number of cycles, optional, require -td, -theta and -phase\&.
+Number of cycles, optional, requires -td, -theta and -phase
 .TP
 -phase value
-Phase of signal, optional, require -td and -theta, alias -phi\&.
+Phase of signal, optional, requires -td and -theta, alias -phi
 .TP
 -td value
 Time delay, optional\&.
 .TP
 -theta value
-Damping factor, optional, require -td\&.
+Damping factor, optional, requires -td
 .TP
 -v0 value
-DC shift value, aliases: -voffset, -v0, -ioffset\&.
+DC shift value, aliases: -voffset, -v0, -ioffset
 .TP
 -va value
-Amplitude value, aliases: -vamp, -va, -iamp\&.
+Amplitude value, aliases: -vamp, -va, -iamp
 .TP
 name
 Name of the device without first-letter designator I\&.
@@ -1196,7 +1196,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Ltspice::Sources::Isin new 1 net1 net2 -v0 0 -va 2 -freq {-eq freq} -td 1e-6 -theta {-eq theta}
+Isin new 1 net1 net2 -v0 0 -va 2 -freq {-eq freq} -td 1e-6 -theta {-eq theta}
 .fi
 .RE
 .PP
@@ -1518,7 +1518,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Common::Sources::Vac new 1 netp netm -ac 10 -cpar 1e-9
+Vac new 1 netp netm -ac 10 -cpar 1e-9
 .fi
 .RE
 .PP
@@ -1675,7 +1675,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Ltspice::Sources::Vdc new 1 netp netm -dc 10 -rser 0\&.001
+Vdc new 1 netp netm -dc 10 -rser 0\&.001
 .fi
 .RE
 .PP
@@ -1773,7 +1773,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Ltspice::Sources::Vexp new 1 net1 net2 -v1 0 -v2 1 -td1 1e-9 -tau1 1e-9 -td2 {-eq td2} -tau2 10e-6
+Vexp new 1 net1 net2 -v1 0 -v2 1 -td1 1e-9 -tau1 1e-9 -td2 {-eq td2} -tau2 10e-6
 .fi
 .RE
 .PP
@@ -1829,19 +1829,19 @@ Creates object of class Vpulse that describes pulse voltage source\&.
 Parallel capacitor value, optional\&.
 .TP
 -high value
-High value, aliases: -von, ion\&.
+High value, aliases: -von, -ion
 .TP
 -low value
-Low value, aliases: -voff, -ioff\&.
+Low value, aliases: -voff, -ioff
 .TP
 -npulses value
-Number of pulses, optional, alias -ncycles\&.
+Number of pulses, optional, alias -ncycles
 .TP
 -per value
-Period time, alias -tper\&.
+Period time, alias -tper
 .TP
 -pw value
-Width of pulse, alias -ton\&.
+Width of pulse, alias -ton
 .TP
 -rser value
 Series resistor value, optional\&.
@@ -1877,7 +1877,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Ltspice::Sources::Vpulse new 1 net1 net2 -low 0 -high 1 -td {-eq td} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6 -npulses {-eq np}
+Vpulse new 1 net1 net2 -low 0 -high 1 -td {-eq td} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6 -npulses {-eq np}
 .fi
 .RE
 .PP
@@ -1960,7 +1960,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Ltspice::Sources::Vpwl new 1 np nm -seq {0 0 {-eq t1} 1 2 2 3 3 4 4}
+Vpwl new 1 np nm -seq {0 0 {-eq t1} 1 2 2 3 3 4 4}
 .fi
 .RE
 .PP
@@ -2016,10 +2016,10 @@ Creates object of class Vsffm that describes single-frequency FM voltage source\
 Parallel capacitor value, optional\&.
 .TP
 -fc value
-Carrier frequency, alias -fcar\&.
+Carrier frequency, alias -fcar
 .TP
 -fs value
-Signal frequency, alias -fsig\&.
+Signal frequency, alias -fsig
 .TP
 -mdi value
 Modulation index\&.
@@ -2028,10 +2028,10 @@ Modulation index\&.
 Series resistor value, optional\&.
 .TP
 -v0 value
-Initial value, aliases: -voff, -i0, -ioff\&.
+Initial value, aliases: -voff, -i0, -ioff
 .TP
 -va value
-Pulsed value, aliases: -vamp, -ia, -iamp\&.
+Pulsed value, aliases: -vamp, -ia, -iamp
 .TP
 name
 Name of the device without first-letter designator V\&.
@@ -2055,7 +2055,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Ltspice::Sources::Vsin new 1 net1 net2 -v0 0 -va 1 -fc {-eq freq} -mdi 0 -fs 1e3
+Vsin new 1 net1 net2 -v0 0 -va 1 -fc {-eq freq} -mdi 0 -fs 1e3
 .fi
 .RE
 .PP
@@ -2114,10 +2114,10 @@ Parallel capacitor value, optional\&.
 Frequency of sinusoidal signal\&.
 .TP
 -ncycles value
-Number of cycles, optional, require -td, -theta and -phase\&.
+Number of cycles, optional, requires -td, -theta and -phase
 .TP
 -phase value
-Phase of signal, optional, require -td and -theta, alias -phi\&.
+Phase of signal, optional, requires -td and -theta, alias -phi
 .TP
 -rser value
 Series resistor value, optional\&.
@@ -2126,13 +2126,13 @@ Series resistor value, optional\&.
 Time delay, optional\&.
 .TP
 -theta value
-Damping factor, optional, require -td\&.
+Damping factor, optional, requires -td
 .TP
 -v0 value
-DC shift value, aliases: -voffset, -i0, -ioffset\&.
+DC shift value, aliases: -voffset, -i0, -ioffset
 .TP
 -va value
-Amplitude value, aliases: -vamp, -ia, -iamp\&.
+Amplitude value, aliases: -vamp, -ia, -iamp
 .TP
 name
 Name of the device without first-letter designator V\&.
@@ -2156,7 +2156,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Common::Sources::Vsin new 1 net1 net2 -v0 0 -va 2 -freq {-eq freq} -td 1e-6 -theta {-eq theta}
+Vsin new 1 net1 net2 -v0 0 -va 2 -freq {-eq freq} -td 1e-6 -theta {-eq theta}
 .fi
 .RE
 

@@ -38,7 +38,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
         mixin ::SpiceGenTcl::Utility
         constructor {args} {
             # Creates object of class `Sp` that describes s-parameter analysis.
-            #  -variation value - parameter that defines frequency scale, could be dec, oct or lin
+            #  -variation value - parameter that defines frequency scale, could be `dec`, `oct` or `lin`
             #  -n value - number of points
             #  -fstart value - start frequency
             #  -fstop value - start frequency
@@ -49,7 +49,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Analyses::Sp new -variation dec -n 10 -fstart 1 -fstop 1e6 -name sp1 -donoise
+            # Sp new -variation dec -n 10 -fstart 1 -fstop 1e6 -name sp1 -donoise
             # ```
             # Synopsis: -variation value -n value -fstart value -fstop value ?-name value? ?-donoise?
             set arguments [argparse -inline -help {Creates object of class 'Sp' that describes s-parameter analysis} {
@@ -79,7 +79,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
         constructor {args} {
             # Creates object of class `SensAc` that describes SENS ac analysis.
             #  -outvar value - output variable
-            #  -variation value - parameter that defines frequency scale, could be dec, oct or lin
+            #  -variation value - parameter that defines frequency scale, could be `dec`, `oct` or `lin`
             #  -n value - number of points
             #  -fstart value - start frequency
             #  -fstop value - start frequency
@@ -89,8 +89,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Analyses::SensAc new -outvar v(1,out) -variation dec -n 10 -fstart 1 -fstop 1e6\
-                                    -name dc1
+            # SensAc new -outvar v(1,out) -variation dec -n 10 -fstart 1 -fstop 1e6 -name dc1
             # ```
             # Synopsis: -outvar value -variation value -n value -fstart value -fstop value ?-name value?
             set arguments [argparse -inline -help {Creates object of class 'SensAc' that describes SENS ac analysis} {
@@ -125,7 +124,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             # ```
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::Analyses::SensDc new -outvar v(1,out) -name sensdc1
+            # SensDc new -outvar v(1,out) -name sensdc1
             # ```
             # Synopsis: -outvar value ?-name value?
             set arguments [argparse -inline -help {Creates object of class 'SensDc' that describes SENS dc analysis} {

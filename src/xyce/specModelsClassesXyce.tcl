@@ -28,7 +28,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             #  args - keyword instance parameters, for details please refer to Xyce reference manual, 2.3.7 section.
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Xyce::BasicDevices::RModel new resmod -tc1 1 -tc2 2
+            # RModel new resmod -tc1 1 -tc2 2
             # ```
             # Synopsis: name ?-option value ...?
             next {*}[my ArgsPreprocess {defw narrow r rsh tc1 tc2 tce tnom} {name type} type {*}[linsert $args 1 r]]
@@ -44,7 +44,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             #  args - keyword instance parameters, for details please refer to Xyce reference manual, 2.3.4 section.
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Xyce::BasicDevices::CModel new capmod -tc1 1 -tc2 2
+            # CModel new capmod -tc1 1 -tc2 2
             # ```
             # Synopsis: name ?-option value ...?
             next {*}[my ArgsPreprocess {c cj cjsw defw narrow tc1 tc2 tnom} {name type} type {*}[linsert $args 1 c]]
@@ -60,7 +60,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             #  args - keyword instance parameters, for details please refer to Xyce reference manual, 2.3.5 section.
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Xyce::BasicDevices::LModel new indmod -tc1 1 -tc2 2
+            # LModel new indmod -tc1 1 -tc2 2
             # ```
             # Synopsis: name ?-option value ...?
             next {*}[my ArgsPreprocess {ic l tc1 tc2 tnom} {name type} type {*}[linsert $args 1 l]]
@@ -76,7 +76,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             #  args - keyword instance parameters, for details please refer to Xyce reference manual, 2.3.22 section.
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::BasicDevices::VSwitchModel new swmod -von 1 -voff 0.5 -ron 1 -roff 1e6
+            # VSwitchModel new swmod -von 1 -voff 0.5 -ron 1 -roff 1e6
             # ```
             # Synopsis: name ?-option value ...?
             next {*}[my ArgsPreprocess {off on roff ron voff von} {name type} type {*}[linsert $args 1 vswitch]]
@@ -92,7 +92,7 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
             #  args - keyword instance parameters, for details please refer to Xyce reference manual, 2.3.22 section.
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Ngspice::BasicDevices::CSwitchModel new cswmod -ion 1 -ioff 0.5 -ron 1 -roff 1e6
+            # CSwitchModel new cswmod -ion 1 -ioff 0.5 -ron 1 -roff 1e6
             # ```
             # Synopsis: name ?-option value ...?
             next {*}[my ArgsPreprocess {ioff ion off on roff ron} {name type} type {*}[linsert $args 1 iswitch]]
@@ -113,7 +113,7 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
             #  args - keyword model parameters, for details please refer to Xyce reference manual, 2.3.8 section.
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Xyce::SemiconductorDevices::DiodeModel new diodemod -is 1e-14 -n 1.2 -rs 0.01 -cj0 1e-9
+            # DiodeModel new diodemod -is 1e-14 -n 1.2 -rs 0.01 -cj0 1e-9
             # ```
             # Synopsis: name ?-option value ...?
             set paramsNames {level af bv cj cj0 cjo cjp cjsw eg fc fcs ibv ibvl ikf is isr js jsw kf m mjsw n nbv nbvl\
@@ -128,11 +128,11 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
         constructor {args} {
             # Creates object of class `BjtGPModel` that describes Gummel-Poon model of semiconductor bipolar transistor.
             #  name - name of the model
-            #  type - npn or pnp
+            #  type - `npn` or `pnp`
             #  args - keyword model parameters, for details please refer to Xyce reference manual, 2.3.17 section.
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Xyce::SemiconductorDevices::DiodeModel new bjtmod npn -is 1e-15 -bf 200 -vaf 100 -cje 1e-10
+            # DiodeModel new bjtmod npn -is 1e-15 -bf 200 -vaf 100 -cje 1e-10
             # ```
             # Synopsis: name type ?-option value ...?
             set paramsNames {level af bf bfm br brm bv c2 c4 ccs cdis cjc cje cjs csub eg esub fc ik ikf ikr \
@@ -149,12 +149,11 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
         constructor {args} {
             # Creates object of class `Jfet1Model` that describes JFET level 1 model with Parker Skellern modification.
             #  name - name of the model
-            #  type - njf or pjf
+            #  type - `njf` or `pjf`
             #  args - keyword model parameters, for details please refer to Xyce reference manual, 2.3.18 section.
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet1Model new jfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4\
-                                    -cgd 1e-12
+            # Jfet1Model new jfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4 -cgd 1e-12
             # ```
             # Synopsis: name type ?-option value ...?
             set paramsNames {level af b beta cgd cgs delta fc is kf lambda pb rd rs tempmodel theta tnom vto}
@@ -168,12 +167,11 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
         constructor {args} {
             # Creates object of class `Jfet2Model` that describes JFET level 2 model with Parker Skellern modification.
             #  name - name of the model
-            #  type - njf or pjf
+            #  type - `njf` or `pjf`
             #  args - keyword model parameters, for details please refer to Xyce reference manual, 2.3.18 section.
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4\
-                                    -vbi 1.2
+            # Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4 -vbi 1.2
             # ```
             # Synopsis: name type ?-option value ...?
             set paramsNames {level af b beta cgd cgs delta fc is kf lambda pb rd rs tempmodel theta tnom vto}
@@ -187,12 +185,11 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
         constructor {args} {
             # Creates object of class `Mesfet1Model` that describes MESFET model by Statz e.a..
             #  name - name of the model
-            #  type - nmf or pmf
+            #  type - `nmf` or `pmf`
             #  args - keyword model parameters, for details please refer to Xyce reference manual, 2.3.19 section.
             # Example of class initialization:
             # ```
-            # ::SpiceGenTcl::Xyce::SemiconductorDevices::Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4\
-                                    -vbi 1.2
+            # Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4 -vbi 1.2
             # ```
             # Synopsis: name type ?-option value ...?
             set paramsNames {level af alpha b beta cgd cgs fc is kf lambda pb rd rs tempmodel tnom vto}

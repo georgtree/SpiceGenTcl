@@ -111,7 +111,7 @@ Initial state, optional\&.
 Device temperature, optional\&.
 .TP
 -tj value
-Name of node connected to thermal pin, optional, requires -ns\&.
+Name of node connected to thermal pin, optional, requires -ns
 .TP
 name
 Name of the device without first-letter designator Q\&.
@@ -140,7 +140,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Ngspice::SemiconductorDevices::Bjt new 1 netc netb nete -model bjtmod -ns nets -area 1e-3
+Bjt new 1 netc netb nete -model bjtmod -ns nets -area 1e-3
 .fi
 .RE
 .PP
@@ -193,7 +193,7 @@ name
 Name of the model\&.
 .TP
 type
-Npn or pnp\&.
+npn or pnp
 .RE
 .PP
 \fBDescription\fR
@@ -202,7 +202,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel new bjtmod npn -is 1e-15 -bf 200 -vaf 100 -cje 1e-10
+DiodeModel new bjtmod npn -is 1e-15 -bf 200 -vaf 100 -cje 1e-10
 .fi
 .RE
 .PP
@@ -351,7 +351,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Ngspice::SemiconductorDevices::Diode new 1 netp netm -model diomod -l 1e-6 -w 10e-6
+Diode new 1 netp netm -model diomod -l 1e-6 -w 10e-6
 .fi
 .RE
 .PP
@@ -410,7 +410,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel new diodemod -is 1e-14 -n 1\&.2 -rs 0\&.01 -cj0 1e-9
+DiodeModel new diodemod -is 1e-14 -n 1\&.2 -rs 0\&.01 -cj0 1e-9
 .fi
 .RE
 .PP
@@ -539,7 +539,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet new 1 netd netg nets -model jfetmod -area {-eq area*2} -temp 25
+Jfet new 1 netd netg nets -model jfetmod -area {-eq area*2} -temp 25
 .fi
 .RE
 .PP
@@ -592,7 +592,7 @@ name
 Name of the model\&.
 .TP
 type
-Njf or pjf\&.
+njf or pjf
 .RE
 .PP
 \fBDescription\fR
@@ -601,7 +601,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet1Model new jfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4 -cgd 1e-12
+Jfet1Model new jfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4 -cgd 1e-12
 .fi
 .RE
 .PP
@@ -654,7 +654,7 @@ name
 Name of the model\&.
 .TP
 type
-Njf or pjf\&.
+njf or pjf
 .RE
 .PP
 \fBDescription\fR
@@ -663,7 +663,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4 -vbi 1\&.2
+Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4 -vbi 1\&.2
 .fi
 .RE
 .PP
@@ -789,7 +789,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Ngspice::SemiconductorDevices::Mesfet new 1 netd netg nets -model mesfetmod -area {-eq area*2}
+Mesfet new 1 netd netg nets -model mesfetmod -area {-eq area*2}
 .fi
 .RE
 .PP
@@ -842,7 +842,7 @@ name
 Name of the model\&.
 .TP
 type
-Nmf or pmf\&.
+nmf or pmf
 .RE
 .PP
 \fBDescription\fR
@@ -851,7 +851,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Ngspice::SemiconductorDevices::Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4 -vbi 1\&.2
+Jfet2Model new jfetmod njf -vto -2 -beta 10e-4 -rs 1e-4 -vbi 1\&.2
 .fi
 .RE
 .PP
@@ -908,10 +908,10 @@ Creates object of class Mosfet that describes semiconductor MOSFET device\&.
 .RS 4n
 .TP
 -ad value
-Diffusion area of drain, optional, forbid -nrd\&.
+Diffusion area of drain, optional, forbids -nrd
 .TP
 -as value
-Diffusion area of source, optional,forbid -nrs\&.
+Diffusion area of source, optional, forbids -nrs
 .TP
 -custparams
 Key that collects all arguments at the end of device definition, to provide an ability to add custom parameters in form -custparams param1 param1Val param2 {-eq param2eq} param3 param3Val \&.\&.\&. Must be specified after all others options\&. Optional\&.
@@ -988,7 +988,7 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-::SpiceGenTcl::Ngspice::Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5
+Mosfet new 1 netd netg nets -model mosfetmod -l 1e-6 -w 10e-3 -n4 netsub -n5 net5
 .fi
 .RE
 .PP

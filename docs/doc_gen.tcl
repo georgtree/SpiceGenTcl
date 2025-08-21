@@ -3,6 +3,7 @@ set path_to_hl_tcl "/home/georgtree/tcl/hl_tcl"
 #set path_to_hl_tcl "C:/msys64/mingw64/lib/hl_tcl"
 package require ruff
 package require fileutil
+source [file join $path_to_hl_tcl hl_tcl_html.tcl]
 set docDir [file dirname [file normalize [info script]]]
 set sourceDir "${docDir}/../src"
 source [file join $docDir startPage.ruff]
@@ -45,15 +46,38 @@ set namespacesNroff [list "::List of devices" ::SpiceGenTcl ::SpiceGenTcl::Commo
                 ::SpiceGenTcl::Xyce::SemiconductorDevices ::SpiceGenTcl::Xyce::Analyses\
                 ::SpiceGenTcl::Xyce::Simulators ::SpiceGenTcl::Ltspice::BasicDevices ::SpiceGenTcl::Ltspice::Sources\
                 ::SpiceGenTcl::Ltspice::SemiconductorDevices ::SpiceGenTcl::Ltspice::Analyses\
-                ::SpiceGenTcl::Ltspice::Simulators]                
+                ::SpiceGenTcl::Ltspice::Simulators]
 
 if {[llength $argv] == 0 || "html" in $argv} {
     ruff::document $namespaces -outdir $docDir -format html -outfile index.html {*}$common
     ruff::document $namespacesNroff -outdir $docDir -format nroff -outfile SpiceGenTcl.n {*}$commonNroff
 }
 
+# add new command keywords to hl_tcl
+lappend ::hl_tcl::my::data(CMD_TCL) {*}{Pin ParameterSwitch Parameter ParameterNoCheck ParameterPositional\
+                                                ParameterPositionalNoCheck ParameterDefault ParameterEquation\
+                                                ParameterPositionalEquation Device Model RawString Comment Include\
+                                                Options ParamStatement Temp Netlist Circuit Library Subcircuit Analysis\
+                                                Simulator Dataset Axis Trace EmptyTrace RawFile Ic Nodeset\
+                                                ParameterNode ParameterNodeEquation Global Parser ParameterVector Save\
+                                                Function importNgspice importXyce importCommon importLtspice\
+                                                forgetNgspice forgetXyce forgetCommon forgetLtspice Dc Ac Tran Op\
+                                                Resistor R Capacitor C Inductor L SubcircuitInstance X\
+                                                SubcircuitInstanceAuto XAuto VSwitch VSw CSwitch W Vdc Idc Vac Iac\
+                                                Vpulse Ipulse Vsin Isin Vexp Iexp Vpwl Ipwl Vsffm Isffm Vccs G Vcvs E\
+                                                Cccs F Ccvs H dget @ = dexist dcreate dset dappend dkeys dvalues\
+                                                BehaviouralSource Diode D Bjt Q Jfet J Mesfet Z Mosfet M VSwitchModel\
+                                                CSwitchModel DiodeModel DiodeIdealModel BjtGPModel JfetModel MesfetModel\
+                                                Batch BatchLiveLog NgspiceParser SensAc SensDc Sp VerilogA N Vport\
+                                                OptionsNgspice RModel CModel LModel Sens GenSwitch GenS Vsffm Isffm\
+                                                BjtSub QSub BjtSubTj QSubTj}
+set ::hl_tcl::my::data(CMD_TCL) [lsort $::hl_tcl::my::data(CMD_TCL)]
+
 foreach file [glob ${docDir}/*.html] {
-    exec tclsh "${path_to_hl_tcl}/tcl_html.tcl" [file join ${docDir} $file]
+    ::hl_tcl_html::highlight $file no \
+        {<pre class='ruff'>} </pre> \
+        <div id='*' class='ruff_dyn_src'><pre> </pre> \
+        <code> </code>  
 }
 
 # change default width
