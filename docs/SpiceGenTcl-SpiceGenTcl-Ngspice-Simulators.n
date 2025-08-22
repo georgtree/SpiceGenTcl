@@ -9,11 +9,15 @@ SpiceGenTcl::Ngspice::Simulators - Commands in namespace SpiceGenTcl::Ngspice::S
 .br
 \fBBatch new\fP \fI?args?\fP
 .br
-\fBOBJECT readData\fP \fI?args?\fP
+\fBBATCHOBJ readData\fP \fI?args?\fP
 .br
-\fBOBJECT readLog\fP \fI?args?\fP
+\fBBATCHOBJ readLog\fP \fI?args?\fP
 .br
 \fBOBJECT runAndRead\fP \fIcircuitStr ?-nodelete?\fP
+.br
+\fBBatchLiveLog create OBJNAME\fP
+.br
+\fBBatchLiveLog new\fP
 .br
 \fBOBJECT runAndRead\fP \fIcircuitStr ?-nodelete?\fP
 .br
@@ -50,10 +54,20 @@ Runs netlist circuit file\&.
 .RE
 .PP
 \fBProperties\fR
-.PP
-Readable: -data, -log, -name, -runlocation
-.PP
-Writable: -data, -log, -name, -runlocation
+.RS 4n
+.TP
+-data
+Readable, writable\&.
+.TP
+-log
+Readable, writable\&.
+.TP
+-name
+Readable, writable\&.
+.TP
+-runlocation
+Readable, writable\&.
+.RE
 .PP
 \fBSuperclasses\fR
 .PP
@@ -68,7 +82,8 @@ Writable: -data, -log, -name, -runlocation
 .RE
 .PP
 Creates batch ngspice simulator that can be attached to top-level Circuit\&.
-.RS 4n\fBBatch create OBJNAME\fP \fI?args?\fP
+.RS 4n
+\fBBatch create OBJNAME\fP \fI?args?\fP
 .br
 \fBBatch new\fP \fI?args?\fP
 .br
@@ -89,7 +104,8 @@ Location at which input netlist is stored and all output files will be saved, de
 .RE
 .PP
 Reads raw data file, create RawFile object and return it's reference name\&.
-.RS 4n\fBOBJECT readData\fP \fI?args?\fP
+.RS 4n
+\fBBATCHOBJ readData\fP \fI?args?\fP
 .br
 .RE
 .PP
@@ -102,7 +118,8 @@ Reads raw data file, create RawFile object and return it's reference name\&.
 .RE
 .PP
 Reads log file of last simulation and save it's content to Log variable\&.
-.RS 4n\fBOBJECT readLog\fP \fI?args?\fP
+.RS 4n
+\fBBATCHOBJ readLog\fP \fI?args?\fP
 .br
 .RE
 .PP
@@ -115,7 +132,8 @@ Reads log file of last simulation and save it's content to Log variable\&.
 .RE
 .PP
 Runs netlist circuit file\&.
-.RS 4n\fBOBJECT runAndRead\fP \fIcircuitStr ?-nodelete?\fP
+.RS 4n
+\fBOBJECT runAndRead\fP \fIcircuitStr ?-nodelete?\fP
 .br
 .RE
 .PP
@@ -156,10 +174,20 @@ Runs netlist circuit file\&.
 .RE
 .PP
 \fBProperties\fR
-.PP
-Readable: -data, -log, -name, -runlocation
-.PP
-Writable: -data, -log, -name, -runlocation
+.RS 4n
+.TP
+-data
+Readable, writable\&.
+.TP
+-log
+Readable, writable\&.
+.TP
+-name
+Readable, writable\&.
+.TP
+-runlocation
+Readable, writable\&.
+.RE
 .PP
 \fBSuperclasses\fR
 .PP
@@ -170,7 +198,8 @@ Writable: -data, -log, -name, -runlocation
 .RE
 .PP
 Runs netlist circuit file\&.
-.RS 4n\fBOBJECT runAndRead\fP \fIcircuitStr ?-nodelete?\fP
+.RS 4n
+\fBOBJECT runAndRead\fP \fIcircuitStr ?-nodelete?\fP
 .br
 .RE
 .PP

@@ -5,9 +5,17 @@
 .SH NAME
 SpiceGenTcl::Ltspice::BasicDevices - Commands in namespace SpiceGenTcl::Ltspice::BasicDevices
 .SH SYNOPSIS
+\fBC create OBJNAME\fP
+.br
+\fBC new\fP
+.br
 \fBOBJECT constructor\fP \fIname np nm -c value ?-m value? ?-temp value? ?-ic value? ?-rser value? ?-lser value? ?-rpar value? ?-cpar value? ?-rlshunt value?\fP
 .br
 \fBOBJECT constructor\fP \fIname np nm -q value ?-m value? ?-ic value? ?-rser value? ?-lser value? ?-rpar value? ?-cpar value? ?-rlshunt value?\fP
+.br
+\fBCSwitch create OBJNAME\fP
+.br
+\fBCSwitch new\fP
 .br
 \fBOBJECT constructor\fP \fIname ?-option value \&.\&.\&.?\fP
 .br
@@ -17,13 +25,45 @@ SpiceGenTcl::Ltspice::BasicDevices - Commands in namespace SpiceGenTcl::Ltspice:
 .br
 \fBOBJECT constructor\fP \fIname np nm -model value ?-l value? ?-temp value|-dtemp value? ?-m value? ?scale value? ?-ic value? ?-nt value? ?-tc1 value? ?-tc2 value?\fP
 .br
+\fBL create OBJNAME\fP
+.br
+\fBL new\fP
+.br
+\fBR create OBJNAME\fP
+.br
+\fBR new\fP
+.br
+\fBResistor create OBJNAME\fP
+.br
+\fBResistor new\fP
+.br
 \fBSubcircuitInstance create OBJNAME\fP \fI?args?\fP
 .br
 \fBSubcircuitInstance new\fP \fI?args?\fP
 .br
 \fBOBJECT constructor\fP \fIsubcktObj name nodes ?-paramName ?-eq? paramValue \&.\&.\&.?\fP
 .br
+\fBVSw create OBJNAME\fP
+.br
+\fBVSw new\fP
+.br
+\fBVSwitch create OBJNAME\fP
+.br
+\fBVSwitch new\fP
+.br
 \fBOBJECT constructor\fP \fIname ?-option value \&.\&.\&.?\fP
+.br
+\fBW create OBJNAME\fP
+.br
+\fBW new\fP
+.br
+\fBX create OBJNAME\fP
+.br
+\fBX new\fP
+.br
+\fBXAuto create OBJNAME\fP
+.br
+\fBXAuto new\fP
 .br
 .SH ::SPICEGENTCL::LTSPICE::BASICDEVICES
 .SH CLASSES
@@ -52,10 +92,11 @@ See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
 .RE
 .PP
 \fBProperties\fR
-.PP
-Readable: -name
-.PP
-Writable: -name
+.RS 4n
+.TP
+-name
+Readable, writable\&.
+.RE
 .PP
 \fBSuperclasses\fR
 .PP
@@ -88,10 +129,11 @@ See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
 .RE
 .PP
 \fBProperties\fR
-.PP
-Readable: -name
-.PP
-Writable: -name
+.RS 4n
+.TP
+-name
+Readable, writable\&.
+.RE
 .PP
 \fBSuperclasses\fR
 .PP
@@ -106,7 +148,8 @@ Writable: -name
 .RE
 .PP
 Creates object of class Capacitor that describes capacitor\&.
-.RS 4n\fBOBJECT constructor\fP \fIname np nm -c value ?-m value? ?-temp value? ?-ic value? ?-rser value? ?-lser value? ?-rpar value? ?-cpar value? ?-rlshunt value?\fP
+.RS 4n
+\fBOBJECT constructor\fP \fIname np nm -c value ?-m value? ?-temp value? ?-ic value? ?-rser value? ?-lser value? ?-rpar value? ?-cpar value? ?-rlshunt value?\fP
 .br
 \fBOBJECT constructor\fP \fIname np nm -q value ?-m value? ?-ic value? ?-rser value? ?-lser value? ?-rpar value? ?-cpar value? ?-rlshunt value?\fP
 .br
@@ -218,10 +261,11 @@ See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
 .RE
 .PP
 \fBProperties\fR
-.PP
-Readable: -name
-.PP
-Writable: -name
+.RS 4n
+.TP
+-name
+Readable, writable\&.
+.RE
 .PP
 \fBSuperclasses\fR
 .PP
@@ -252,10 +296,14 @@ See \fI::SpiceGenTcl::Model\&.genSPICEString\fP
 .RE
 .PP
 \fBProperties\fR
-.PP
-Readable: -name, -type
-.PP
-Writable: -name, -type
+.RS 4n
+.TP
+-name
+Readable, writable\&.
+.TP
+-type
+Readable, writable\&.
+.RE
 .PP
 \fBSuperclasses\fR
 .PP
@@ -266,7 +314,8 @@ Writable: -name, -type
 .RE
 .PP
 Creates object of class CSwitchModel that describes current switch model\&.
-.RS 4n\fBOBJECT constructor\fP \fIname ?-option value \&.\&.\&.?\fP
+.RS 4n
+\fBOBJECT constructor\fP \fIname ?-option value \&.\&.\&.?\fP
 .br
 .RE
 .PP
@@ -317,10 +366,11 @@ See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
 .RE
 .PP
 \fBProperties\fR
-.PP
-Readable: -name
-.PP
-Writable: -name
+.RS 4n
+.TP
+-name
+Readable, writable\&.
+.RE
 .PP
 \fBSuperclasses\fR
 .PP
@@ -335,7 +385,8 @@ Writable: -name
 .RE
 .PP
 Creates object of class Inductor that describes inductor\&.
-.RS 4n\fBOBJECT constructor\fP \fIname np nm -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value|-dtemp value? ?-scale value? ?-ic value?\fP
+.RS 4n
+\fBOBJECT constructor\fP \fIname np nm -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value|-dtemp value? ?-scale value? ?-ic value?\fP
 .br
 \fBOBJECT constructor\fP \fIname np nm -beh -l value ?-tc1 value? ?-tc2 value?\fP
 .br
@@ -487,10 +538,11 @@ See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
 .RE
 .PP
 \fBProperties\fR
-.PP
-Readable: -name
-.PP
-Writable: -name
+.RS 4n
+.TP
+-name
+Readable, writable\&.
+.RE
 .PP
 \fBSuperclasses\fR
 .PP
@@ -520,10 +572,11 @@ See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
 .RE
 .PP
 \fBProperties\fR
-.PP
-Readable: -name
-.PP
-Writable: -name
+.RS 4n
+.TP
+-name
+Readable, writable\&.
+.RE
 .PP
 \fBSuperclasses\fR
 .PP
@@ -553,10 +606,11 @@ See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
 .RE
 .PP
 \fBProperties\fR
-.PP
-Readable: -name
-.PP
-Writable: -name
+.RS 4n
+.TP
+-name
+Readable, writable\&.
+.RE
 .PP
 \fBSuperclasses\fR
 .PP
@@ -593,10 +647,11 @@ See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
 .RE
 .PP
 \fBProperties\fR
-.PP
-Readable: -name
-.PP
-Writable: -name
+.RS 4n
+.TP
+-name
+Readable, writable\&.
+.RE
 .PP
 \fBSuperclasses\fR
 .PP
@@ -611,7 +666,8 @@ Writable: -name
 .RE
 .PP
 Creates object of class SubcircuitInstance that describes subcircuit instance\&.
-.RS 4n\fBSubcircuitInstance create OBJNAME\fP \fI?args?\fP
+.RS 4n
+\fBSubcircuitInstance create OBJNAME\fP \fI?args?\fP
 .br
 \fBSubcircuitInstance new\fP \fI?args?\fP
 .br
@@ -678,10 +734,11 @@ See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
 .RE
 .PP
 \fBProperties\fR
-.PP
-Readable: -name
-.PP
-Writable: -name
+.RS 4n
+.TP
+-name
+Readable, writable\&.
+.RE
 .PP
 \fBSuperclasses\fR
 .PP
@@ -697,7 +754,8 @@ Writable: -name
 .PP
 Creates object of class SubcircuitInstanceAuto that describes subcircuit instance with already created
 subcircuit definition object\&.
-.RS 4n\fBOBJECT constructor\fP \fIsubcktObj name nodes ?-paramName ?-eq? paramValue \&.\&.\&.?\fP
+.RS 4n
+\fBOBJECT constructor\fP \fIsubcktObj name nodes ?-paramName ?-eq? paramValue \&.\&.\&.?\fP
 .br
 .RE
 .PP
@@ -757,10 +815,11 @@ See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
 .RE
 .PP
 \fBProperties\fR
-.PP
-Readable: -name
-.PP
-Writable: -name
+.RS 4n
+.TP
+-name
+Readable, writable\&.
+.RE
 .PP
 \fBSuperclasses\fR
 .PP
@@ -790,10 +849,11 @@ See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
 .RE
 .PP
 \fBProperties\fR
-.PP
-Readable: -name
-.PP
-Writable: -name
+.RS 4n
+.TP
+-name
+Readable, writable\&.
+.RE
 .PP
 \fBSuperclasses\fR
 .PP
@@ -824,10 +884,14 @@ See \fI::SpiceGenTcl::Model\&.genSPICEString\fP
 .RE
 .PP
 \fBProperties\fR
-.PP
-Readable: -name, -type
-.PP
-Writable: -name, -type
+.RS 4n
+.TP
+-name
+Readable, writable\&.
+.TP
+-type
+Readable, writable\&.
+.RE
 .PP
 \fBSuperclasses\fR
 .PP
@@ -838,7 +902,8 @@ Writable: -name, -type
 .RE
 .PP
 Creates object of class VSwitchModel that describes voltage switch model\&.
-.RS 4n\fBOBJECT constructor\fP \fIname ?-option value \&.\&.\&.?\fP
+.RS 4n
+\fBOBJECT constructor\fP \fIname ?-option value \&.\&.\&.?\fP
 .br
 .RE
 .PP
@@ -886,10 +951,11 @@ See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
 .RE
 .PP
 \fBProperties\fR
-.PP
-Readable: -name
-.PP
-Writable: -name
+.RS 4n
+.TP
+-name
+Readable, writable\&.
+.RE
 .PP
 \fBSuperclasses\fR
 .PP
@@ -919,10 +985,11 @@ See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
 .RE
 .PP
 \fBProperties\fR
-.PP
-Readable: -name
-.PP
-Writable: -name
+.RS 4n
+.TP
+-name
+Readable, writable\&.
+.RE
 .PP
 \fBSuperclasses\fR
 .PP
@@ -952,10 +1019,11 @@ See \fI::SpiceGenTcl::Device\&.genSPICEString\fP
 .RE
 .PP
 \fBProperties\fR
-.PP
-Readable: -name
-.PP
-Writable: -name
+.RS 4n
+.TP
+-name
+Readable, writable\&.
+.RE
 .PP
 \fBSuperclasses\fR
 .PP

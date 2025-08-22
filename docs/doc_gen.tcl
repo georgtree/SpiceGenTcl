@@ -1,7 +1,7 @@
 
 set path_to_hl_tcl "/home/georgtree/tcl/hl_tcl"
 #set path_to_hl_tcl "C:/msys64/mingw64/lib/hl_tcl"
-package require ruff
+source /home/georgtree/tcl/ruff/src/ruff.tcl
 package require fileutil
 source [file join $path_to_hl_tcl hl_tcl_html.tcl]
 set docDir [file dirname [file normalize [info script]]]
