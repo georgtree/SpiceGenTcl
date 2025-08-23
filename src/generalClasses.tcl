@@ -73,7 +73,6 @@ namespace eval ::SpiceGenTcl {
         }}
     }
 
-###  SPICEElement class definition
     oo::configurable create SPICEElement {
         self mixin -append oo::abstract
         # Abstract class of all elements of SPICE netlist
@@ -87,7 +86,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  Utility class definition
     oo::class create Utility {
         self mixin -append oo::abstract
         method ParamsProcess {paramsOrder arguments params} {
@@ -239,7 +237,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  Pin class definition
     ##nagelfar subcmd+ _obj,Pin configure
     oo::configurable create Pin {
         superclass SPICEElement
@@ -308,7 +305,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  ParameterSwitch class definition
     ##nagelfar subcmd+ _obj,ParameterSwitch configure
     oo::configurable create ParameterSwitch {
         superclass SPICEElement
@@ -343,7 +339,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  Parameter class definition
     oo::configurable create Parameter {
         superclass ParameterSwitch
         property value
@@ -378,7 +373,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  ParameterNode class definition
     oo::configurable create ParameterNode {
         superclass Parameter
         property name -set {
@@ -413,7 +407,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  ParameterNodeEquation class definition
     oo::configurable create ParameterNodeEquation {
         superclass ParameterNode
         constructor {args} {
@@ -446,7 +439,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  ParameterVector class definition
     oo::configurable create ParameterVector {
         superclass ParameterSwitch
         property name -set {
@@ -462,7 +454,6 @@ namespace eval ::SpiceGenTcl {
         variable name
     }
 
-###  ParameterNoCheck class definition
     oo::configurable create ParameterNoCheck {
         superclass Parameter
         property value
@@ -489,7 +480,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  ParameterPositional class definition
     oo::configurable create ParameterPositional {
         superclass Parameter
         constructor {args} {
@@ -515,7 +505,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  ParameterPositionalNoCheck class definition
     oo::configurable create ParameterPositionalNoCheck {
         superclass ParameterPositional
         property value
@@ -547,7 +536,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  ParameterDefault class definition
     oo::configurable create ParameterDefault {
         superclass Parameter
         property defvalue -set {
@@ -601,7 +589,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  ParameterEquation class definition
     oo::configurable create ParameterEquation {
         superclass Parameter
         property value
@@ -635,7 +622,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  ParameterPositionalEquation class definition
     oo::configurable create ParameterPositionalEquation {
         superclass ParameterEquation
         constructor {args} {
@@ -659,7 +645,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  Device class definition
     ##nagelfar subcmd+ _obj,Device actOnPin actOnParam configure
     oo::configurable create Device {
         superclass SPICEElement
@@ -989,7 +974,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  Model class definition
     ##nagelfar subcmd+ _obj,Model configure addParam
     oo::configurable create Model {
         superclass SPICEElement
@@ -1058,7 +1042,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  RawString class definition
     ##nagelfar subcmd+ _obj,RawString configure
     oo::configurable create RawString {
         superclass SPICEElement
@@ -1094,7 +1077,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  Comment class definition
     oo::configurable create Comment {
         superclass RawString
         constructor {args} {
@@ -1125,7 +1107,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  Include class definition
     oo::configurable create Include {
         superclass RawString
         constructor {args} {
@@ -1154,7 +1135,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  Func class definition
     oo::configurable create Function {
         superclass SPICEElement
         property declaration 
@@ -1189,7 +1169,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  Library class definition
     oo::configurable create Library {
         superclass RawString
         # this variable contains selected library name inside sourced file
@@ -1225,7 +1204,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  Options class definition
     ##nagelfar subcmd+ _obj,Options configure addParam
     oo::configurable create Options {
         superclass SPICEElement
@@ -1277,7 +1255,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  ParamStatement class definition
     ##nagelfar subcmd+ _obj,ParamStatement configure addParam
     oo::configurable create ParamStatement {
         superclass SPICEElement
@@ -1328,7 +1305,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  Save class definition
     ##nagelfar subcmd+ _obj,Save configure addParam addVector
     oo::configurable create Save {
         superclass SPICEElement
@@ -1415,7 +1391,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  Ic class definition
     ##nagelfar subcmd+ _obj,Ic configure addParam
     oo::configurable create Ic {
         superclass SPICEElement
@@ -1470,7 +1445,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  Nodeset class definition
     oo::configurable create Nodeset {
         superclass Ic
         mixin Utility
@@ -1482,7 +1456,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  Global class definition
     ##nagelfar subcmd+ _obj,Global configure addNets
     oo::configurable create Global {
         superclass SPICEElement
@@ -1550,7 +1523,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  Temp class definition
     ##nagelfar subcmd+ _obj,Temp configure AddParam
     oo::configurable create Temp {
         superclass SPICEElement
@@ -1622,7 +1594,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  Netlist class definition
     ##nagelfar subcmd+ _obj,Netlist configure getAllElemNames
     oo::configurable create Netlist {
         superclass SPICEElement
@@ -1720,8 +1691,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-
-###  Circuit class definition
     oo::configurable create Circuit {
         superclass Netlist
         # simulator object that run simulation
@@ -1842,7 +1811,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  Subcircuit class definition
     ##nagelfar subcmd+ _obj,Subcircuit addPin addParam
     oo::configurable create Subcircuit {
         superclass Netlist
@@ -1928,7 +1896,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  Analysis class definition
     ##nagelfar subcmd+ _obj,Analysis configure addParam
     oo::configurable create Analysis {
         superclass SPICEElement
@@ -1999,7 +1966,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  Simulator class definition
     oo::configurable create Simulator {
         self mixin -append oo::abstract
         property name
@@ -2024,7 +1990,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  BinaryReader class definition
     oo::configurable create BinaryReader {
         self mixin -append oo::abstract
         method readFloat64 {file} {
@@ -2071,7 +2036,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  Dataset class
     ##nagelfar subcmd+ _obj,Dataset configure
     oo::configurable create Dataset {
         # This class models general raw dataset
@@ -2139,13 +2103,11 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  Axis class definition
     oo::configurable create Axis {
         # Class that represents axis in raw file
         superclass Dataset
     }
 
-###  Trace class definition
     oo::configurable create Trace {
         # Class that represents trace in raw file
         superclass Dataset
@@ -2170,7 +2132,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  EmptyTrace class definition
     oo::configurable create EmptyTrace {
         # Class represents empty trace (trace that was not readed) in raw file
         superclass Dataset
@@ -2182,7 +2143,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  RawFile class definition
     ##nagelfar subcmd+ _obj,RawFile configure
     oo::configurable create RawFile {
         # Class represents raw file
@@ -2220,7 +2180,7 @@ namespace eval ::SpiceGenTcl {
             set fileSize [file size $path]
             set file [open $path r]
             fconfigure $file -translation binary
-####   read header
+            ### read header
             set ch [read $file 6]
             if {[encoding convertfrom utf-8 $ch] eq {Title:}} {
                 set encSize 1
@@ -2254,7 +2214,7 @@ namespace eval ::SpiceGenTcl {
                     append line $ch
                 }
             }
-####   save header parameters
+            ### save header parameters
             foreach line $header {
                 set lineList [split $line :]
                 if {[@ $lineList 0] eq {Variables}} {
@@ -2280,7 +2240,7 @@ namespace eval ::SpiceGenTcl {
                     set numtype real
                 }
             }
-####   parse variables
+            ### parse variables
             set i [lsearch $header Variables:]
             set ivar 0
             foreach line [lrange $header [+ $i 1] end-1] {
@@ -2317,7 +2277,7 @@ namespace eval ::SpiceGenTcl {
                 close $file
                 return
             }
-####   read data
+            ### read data
             if {$rawType eq {Binary:}} {
                 set BlockSize [= {($fileSize - $binaryStart)/$npoints}]
                 set scanFunctions {}
@@ -2502,7 +2462,6 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
-###  Parser class definition
     ##nagelfar subcmd+ _obj,Parser configure CheckEqual Unbrace ParseWithEqual CheckBraced CheckBracedWithEqual\
             ParseBracedWithEqual BuildNetlist buildTopNetlist ParseParams
     oo::configurable create Parser {

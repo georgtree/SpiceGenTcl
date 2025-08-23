@@ -18,8 +18,6 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
 
     namespace export RModel CModel LModel VSwitchModel CSwitchModel
 
-
-###  RModel class
     oo::class create RModel {
         superclass ::SpiceGenTcl::Model
         constructor {args} {
@@ -35,7 +33,6 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
         }
     }
 
-###  CModel class
     oo::class create CModel {
         superclass ::SpiceGenTcl::Model
         constructor {args} {
@@ -51,7 +48,6 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
         }
     }
 
-###  LModel class
     oo::class create LModel {
         superclass ::SpiceGenTcl::Model
         constructor {args} {
@@ -67,7 +63,6 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
         }
     }
 
-###  VSwitchModel class
     oo::class create VSwitchModel {
         superclass ::SpiceGenTcl::Model
         constructor {args} {
@@ -83,7 +78,6 @@ namespace eval ::SpiceGenTcl::Xyce::BasicDevices {
         }
     }
 
-###  CSwitchModel class
     oo::class create CSwitchModel {
         superclass ::SpiceGenTcl::Model
         constructor {args} {
@@ -104,7 +98,6 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
 
     namespace export DiodeModel BjtGPModel Jfet1Model Jfet2Model Mesfet1Model
 
-###  DiodeModel class
     oo::class create DiodeModel {
         superclass ::SpiceGenTcl::Model
         constructor {args} {
@@ -122,7 +115,6 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
         }
     }
 
-###  BjtGPModel class
     oo::class create BjtGPModel {
         superclass ::SpiceGenTcl::Model
         constructor {args} {
@@ -143,7 +135,6 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
         }
     }
 
-###  Jfet1Model class
     oo::class create Jfet1Model {
         superclass ::SpiceGenTcl::Model
         constructor {args} {
@@ -161,7 +152,6 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
         }
     }
 
-###  Jfet2Model class
     oo::class create Jfet2Model {
         superclass ::SpiceGenTcl::Model
         constructor {args} {
@@ -179,7 +169,6 @@ namespace eval ::SpiceGenTcl::Xyce::SemiconductorDevices {
         }
     }
 
-###  Mesfet1Model class
     oo::class create Mesfet1Model {
         superclass ::SpiceGenTcl::Model
         constructor {args} {

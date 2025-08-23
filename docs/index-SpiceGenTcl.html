@@ -3384,197 +3384,197 @@
 <div class='ruff_source'><p class='ruff_source_link'><a id='l_SpiceGenTcl_RawFile_constructor' href="javascript:toggleSource('SpiceGenTcl_RawFile_constructor')">Show source</a></p>
 <div id='SpiceGenTcl_RawFile_constructor' class='ruff_dyn_src'><pre><b><font color=#ca14ca>method</font></b> constructor {args} {
 
-                <i><font color=#4b5d50># Creates `RawFile` object.</font></i>
-                <i><font color=#4b5d50>#  path - path to raw file including it's file name</font></i>
-                <i><font color=#4b5d50>#  traces2read - list of traces that will be readed, default value is `*`, that means reading all traces</font></i>
-                <i><font color=#4b5d50>#  simulator - simulator that produced this raw file, default is `ngspice`</font></i>
-                <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> <font color=#463e11>-help</font> {Creates 'RawFile' object} {
-                    {path <font color=#463e11>-help</font> {path to raw file including it's file name}}
-                    {traces2read <font color=#463e11>-optional</font> <font color=#463e11>-default</font> * <font color=#463e11>-help</font> {List of traces that will be readed, default value is *, that means reading all traces}}
-                    {simulator <font color=#463e11>-optional</font> <font color=#463e11>-default</font> ngspice <font color=#463e11>-help</font> {Total number of points}}
-                }]
-                <b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-path</font> [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$arguments</font> path]
-                <b><font color=#923B23>set</font></b> fileSize [<b><font color=#923B23>file</font></b> size <font color=#4A181B>$path</font>]
-                <b><font color=#923B23>set</font></b> file [<b><font color=#923B23>open</font></b> <font color=#4A181B>$path</font> r]
-                <b><font color=#923B23>fconfigure</font></b> <font color=#4A181B>$file</font> <font color=#463e11>-translation</font> binary
-    <i><font color=#4b5d50>####   read header</font></i>
-                <b><font color=#923B23>set</font></b> ch [<b><font color=#923B23>read</font></b> <font color=#4A181B>$file</font> 6]
-                <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>encoding</font></b> convertfrom utf-8 <font color=#4A181B>$ch</font>] eq {Title:}} {
-                    <b><font color=#923B23>set</font></b> encSize 1
-                    <b><font color=#923B23>set</font></b> encode utf-8
-                    <b><font color=#923B23>set</font></b> line Title:
-                } <b><font color=#923B23>elseif</font></b> {[<b><font color=#923B23>encoding</font></b> convertfrom utf-16le <font color=#4A181B>$ch</font>] eq {Tit}} {
-                    <b><font color=#923B23>set</font></b> encSize 2
-                    <b><font color=#923B23>set</font></b> encode utf-16le
-                    <b><font color=#923B23>set</font></b> line Tit
+    <i><font color=#4b5d50># Creates `RawFile` object.</font></i>
+    <i><font color=#4b5d50>#  path - path to raw file including it's file name</font></i>
+    <i><font color=#4b5d50>#  traces2read - list of traces that will be readed, default value is `*`, that means reading all traces</font></i>
+    <i><font color=#4b5d50>#  simulator - simulator that produced this raw file, default is `ngspice`</font></i>
+    <b><font color=#923B23>set</font></b> arguments [argparse <font color=#463e11>-inline</font> <font color=#463e11>-help</font> {Creates 'RawFile' object} {
+        {path <font color=#463e11>-help</font> {path to raw file including it's file name}}
+        {traces2read <font color=#463e11>-optional</font> <font color=#463e11>-default</font> * <font color=#463e11>-help</font> {List of traces that will be readed, default value is *, that means reading all traces}}
+        {simulator <font color=#463e11>-optional</font> <font color=#463e11>-default</font> ngspice <font color=#463e11>-help</font> {Total number of points}}
+    }]
+    <b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-path</font> [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$arguments</font> path]
+    <b><font color=#923B23>set</font></b> fileSize [<b><font color=#923B23>file</font></b> size <font color=#4A181B>$path</font>]
+    <b><font color=#923B23>set</font></b> file [<b><font color=#923B23>open</font></b> <font color=#4A181B>$path</font> r]
+    <b><font color=#923B23>fconfigure</font></b> <font color=#4A181B>$file</font> <font color=#463e11>-translation</font> binary
+    <i><font color=#4b5d50>### read header</font></i>
+    <b><font color=#923B23>set</font></b> ch [<b><font color=#923B23>read</font></b> <font color=#4A181B>$file</font> 6]
+    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>encoding</font></b> convertfrom utf-8 <font color=#4A181B>$ch</font>] eq {Title:}} {
+        <b><font color=#923B23>set</font></b> encSize 1
+        <b><font color=#923B23>set</font></b> encode utf-8
+        <b><font color=#923B23>set</font></b> line Title:
+    } <b><font color=#923B23>elseif</font></b> {[<b><font color=#923B23>encoding</font></b> convertfrom utf-16le <font color=#4A181B>$ch</font>] eq {Tit}} {
+        <b><font color=#923B23>set</font></b> encSize 2
+        <b><font color=#923B23>set</font></b> encode utf-16le
+        <b><font color=#923B23>set</font></b> line Tit
+    } <b><font color=#923B23>else</font></b> {
+        <b><font color=#923B23>close</font></b> <font color=#4A181B>$file</font>
+        <b><font color=#923B23>error</font></b> {Unknown encoding}
+    }
+    <b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-rawparams</font> [<b><font color=#923B23>dcreate</font></b> Filename <font color=#4A181B>$path</font>]
+    <b><font color=#923B23>set</font></b> header {}
+    <b><font color=#923B23>set</font></b> binaryStart 6
+    <b><font color=#923B23>while</font></b> true {
+        <b><font color=#923B23>set</font></b> ch [<b><font color=#923B23>encoding</font></b> convertfrom <font color=#4A181B>$encode</font> [<b><font color=#923B23>read</font></b> <font color=#4A181B>$file</font> <font color=#4A181B>$encSize</font>]]
+        <b><font color=#923B23>incr</font></b> binaryStart <font color=#4A181B>$encSize</font>
+        <b><font color=#923B23>if</font></b> {<font color=#4A181B>$ch</font> eq <font color=#035103>&quot;\n&quot;</font>} {
+            <b><font color=#923B23>if</font></b> {<font color=#4A181B>$encode</font> eq {utf-8}} {
+                <b><font color=#923B23>set</font></b> line [<b><font color=#923B23>string</font></b> trimright <font color=#4A181B>$line</font> \r]
+            }
+            <b><font color=#923B23>lappend</font></b> header <font color=#4A181B>$line</font>
+            <b><font color=#923B23>if</font></b> {<font color=#4A181B>$line</font> in {Binary: Values:}} {
+                <b><font color=#923B23>set</font></b> rawType <font color=#4A181B>$line</font>
+                <b><font color=#ca14ca>break</font></b>
+            }
+            <b><font color=#923B23>set</font></b> line {}
+        } <b><font color=#923B23>else</font></b> {
+            <b><font color=#923B23>append</font></b> line <font color=#4A181B>$ch</font>
+        }
+    }
+    <i><font color=#4b5d50>### save header parameters</font></i>
+    <b><font color=#923B23>foreach</font></b> line <font color=#4A181B>$header</font> {
+        <b><font color=#923B23>set</font></b> lineList [<b><font color=#923B23>split</font></b> <font color=#4A181B>$line</font> :]
+        <b><font color=#923B23>if</font></b> {[@ <font color=#4A181B>$lineList</font> 0] eq {Variables}} {
+            <b><font color=#ca14ca>break</font></b>
+        }
+        <b><font color=#923B23>dict</font></b> append rawparams [@ <font color=#4A181B>$lineList</font> 0] [<b><font color=#923B23>string</font></b> trim [@ <font color=#4A181B>$lineList</font> 1]]
+    }
+    <b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-npoints</font> [<b><font color=#923B23>dget</font></b> [<b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-rawparams</font>] {No. Points}] <font color=#463e11>-nvariables</font> [<b><font color=#923B23>dget</font></b> [<b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-rawparams</font>] {No. Variables}]
+    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dget</font></b> [<b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-rawparams</font>] Plotname] in {{Operating Point} {Transfet Function}}} {
+        <b><font color=#923B23>set</font></b> hasAxis 0
+    } <b><font color=#923B23>else</font></b> {
+        <b><font color=#923B23>set</font></b> hasAxis 1
+    }
+    <b><font color=#923B23>set</font></b> flags [<b><font color=#923B23>split</font></b> [<b><font color=#923B23>dget</font></b> [<b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-rawparams</font>] Flags]]
+    <b><font color=#923B23>if</font></b> {({complex} in <font color=#4A181B>$flags</font>) || ([<b><font color=#923B23>dget</font></b> [<b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-rawparams</font>] Plotname] eq {AC Analysis})} {
+        <b><font color=#923B23>set</font></b> numtype complex
+    } <b><font color=#923B23>else</font></b> {
+        <b><font color=#923B23>if</font></b> {({double} in <font color=#4A181B>$flags</font>) || ([<b><font color=#923B23>dget</font></b> <font color=#4A181B>$arguments</font> simulator] eq {ngspice}) || ([<b><font color=#923B23>dget</font></b> <font color=#4A181B>$arguments</font> simulator] eq {xyce})} {
+            <b><font color=#923B23>set</font></b> numtype double
+        } <b><font color=#923B23>else</font></b> {
+            <b><font color=#923B23>set</font></b> numtype real
+        }
+    }
+    <i><font color=#4b5d50>### parse variables</font></i>
+    <b><font color=#923B23>set</font></b> i [<b><font color=#923B23>lsearch</font></b> <font color=#4A181B>$header</font> Variables:]
+    <b><font color=#923B23>set</font></b> ivar 0
+    <b><font color=#923B23>foreach</font></b> line [<b><font color=#923B23>lrange</font></b> <font color=#4A181B>$header</font> [+ <font color=#4A181B>$i</font> 1] end-1] {
+        <b><font color=#923B23>set</font></b> lineList [<b><font color=#923B23>split</font></b> [<b><font color=#923B23>string</font></b> trim <font color=#4A181B>$line</font>] \t]
+        <b><font color=#923B23>lassign</font></b> <font color=#4A181B>$lineList</font> idx name varType
+        <b><font color=#923B23>if</font></b> {<font color=#4A181B>$ivar</font>==0} {
+            <b><font color=#923B23>if</font></b> {([<b><font color=#923B23>dget</font></b> <font color=#4A181B>$arguments</font> simulator] eq {ltspice}) && (<font color=#4A181B>$name</font> eq {<b><font color=#923B23>time</font></b>})} {
+                <i><font color=#4b5d50># workaround for bug with negative values in time axis</font></i>
+                <b><font color=#923B23>set</font></b> axisIsTime true
+            }
+            <b><font color=#923B23>if</font></b> {<font color=#4A181B>$numtype</font> eq {real}} {
+                <b><font color=#923B23>set</font></b> axisNumType double
+            } <b><font color=#923B23>else</font></b> {
+                <b><font color=#923B23>set</font></b> axisNumType <font color=#4A181B>$numtype</font>
+            }
+            <b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-axis</font> [::SpiceGenTcl::Axis new <font color=#4A181B>$name</font> <font color=#4A181B>$varType</font> <font color=#4A181B>$npoints</font> <font color=#4A181B>$axisNumType</font>]
+            <i><font color=#4b5d50>##nagelfar ignore #12 {Found constant &quot;traces&quot;}</font></i>
+            <b><font color=#923B23>dappend</font></b> Traces [<b><font color=#923B23>string</font></b> tolower <font color=#4A181B>$name</font>] [<b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-axis</font>]
+        } <b><font color=#923B23>elseif</font></b> {([<b><font color=#923B23>dget</font></b> <font color=#4A181B>$arguments</font> traces2read] eq {<b><font color=#923B23>*</font></b>}) || (<font color=#4A181B>$name</font> in [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$arguments</font> traces2read])} {
+            <b><font color=#923B23>if</font></b> {<font color=#4A181B>$hasAxis</font>} {
+                <b><font color=#923B23>dappend</font></b> Traces [<b><font color=#923B23>string</font></b> tolower <font color=#4A181B>$name</font>] [::SpiceGenTcl::Trace new <font color=#4A181B>$name</font> <font color=#4A181B>$varType</font> <font color=#4A181B>$npoints</font> [[<b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-axis</font>] configure <font color=#463e11>-name</font>] <font color=#4A181B>$numtype</font>]
+            } <b><font color=#923B23>else</font></b> {
+                <b><font color=#923B23>dappend</font></b> Traces [<b><font color=#923B23>string</font></b> tolower <font color=#4A181B>$name</font>] [::SpiceGenTcl::Trace new <font color=#4A181B>$name</font> <font color=#4A181B>$varType</font> <font color=#4A181B>$npoints</font> {} <font color=#4A181B>$numtype</font>]
+            }
+        } <b><font color=#923B23>else</font></b> {
+            <b><font color=#923B23>dappend</font></b> Traces [<b><font color=#923B23>string</font></b> tolower <font color=#4A181B>$name</font>] [::SpiceGenTcl::EmptyTrace new <font color=#4A181B>$name</font> <font color=#4A181B>$varType</font> <font color=#4A181B>$npoints</font> <font color=#4A181B>$numtype</font>]
+        }
+        <b><font color=#923B23>incr</font></b> ivar
+    }
+    <b><font color=#923B23>if</font></b> {([<b><font color=#923B23>dget</font></b> <font color=#4A181B>$arguments</font> traces2read] eq {}) || ![<b><font color=#923B23>llength</font></b> [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$arguments</font> traces2read]]} {
+        <b><font color=#923B23>close</font></b> <font color=#4A181B>$file</font>
+        <b><font color=#ca14ca>return</font></b>
+    }
+    <i><font color=#4b5d50>### read data</font></i>
+    <b><font color=#923B23>if</font></b> {<font color=#4A181B>$rawType</font> eq {Binary:}} {
+        <b><font color=#923B23>set</font></b> BlockSize [= {(<font color=#4A181B>$fileSize</font> - <font color=#4A181B>$binaryStart</font>)/<font color=#4A181B>$npoints</font>}]
+        <b><font color=#923B23>set</font></b> scanFunctions {}
+        <b><font color=#923B23>set</font></b> calcBlockSize 0
+        <b><font color=#923B23>foreach</font></b> trace [<b><font color=#923B23>dvalues</font></b> <font color=#4A181B>$Traces</font>] {
+            <b><font color=#923B23>if</font></b> {[<font color=#4A181B>$trace</font> configure <font color=#463e11>-numtype</font>] eq {double}} {
+                <b><font color=#923B23>incr</font></b> calcBlockSize 8
+                <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> object class <font color=#4A181B>$trace</font> ::SpiceGenTcl::EmptyTrace]} {
+                    <b><font color=#923B23>set</font></b> fun skip8bytes
                 } <b><font color=#923B23>else</font></b> {
-                    <b><font color=#923B23>close</font></b> <font color=#4A181B>$file</font>
-                    <b><font color=#923B23>error</font></b> {Unknown encoding}
+                    <b><font color=#923B23>set</font></b> fun readFloat64
                 }
-                <b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-rawparams</font> [<b><font color=#923B23>dcreate</font></b> Filename <font color=#4A181B>$path</font>]
-                <b><font color=#923B23>set</font></b> header {}
-                <b><font color=#923B23>set</font></b> binaryStart 6
-                <b><font color=#923B23>while</font></b> true {
-                    <b><font color=#923B23>set</font></b> ch [<b><font color=#923B23>encoding</font></b> convertfrom <font color=#4A181B>$encode</font> [<b><font color=#923B23>read</font></b> <font color=#4A181B>$file</font> <font color=#4A181B>$encSize</font>]]
-                    <b><font color=#923B23>incr</font></b> binaryStart <font color=#4A181B>$encSize</font>
-                    <b><font color=#923B23>if</font></b> {<font color=#4A181B>$ch</font> eq <font color=#035103>&quot;\n&quot;</font>} {
-                        <b><font color=#923B23>if</font></b> {<font color=#4A181B>$encode</font> eq {utf-8}} {
-                            <b><font color=#923B23>set</font></b> line [<b><font color=#923B23>string</font></b> trimright <font color=#4A181B>$line</font> \r]
-                        }
-                        <b><font color=#923B23>lappend</font></b> header <font color=#4A181B>$line</font>
-                        <b><font color=#923B23>if</font></b> {<font color=#4A181B>$line</font> in {Binary: Values:}} {
-                            <b><font color=#923B23>set</font></b> rawType <font color=#4A181B>$line</font>
-                            <b><font color=#ca14ca>break</font></b>
-                        }
-                        <b><font color=#923B23>set</font></b> line {}
-                    } <b><font color=#923B23>else</font></b> {
-                        <b><font color=#923B23>append</font></b> line <font color=#4A181B>$ch</font>
-                    }
-                }
-    <i><font color=#4b5d50>####   save header parameters</font></i>
-                <b><font color=#923B23>foreach</font></b> line <font color=#4A181B>$header</font> {
-                    <b><font color=#923B23>set</font></b> lineList [<b><font color=#923B23>split</font></b> <font color=#4A181B>$line</font> :]
-                    <b><font color=#923B23>if</font></b> {[@ <font color=#4A181B>$lineList</font> 0] eq {Variables}} {
-                        <b><font color=#ca14ca>break</font></b>
-                    }
-                    <b><font color=#923B23>dict</font></b> append rawparams [@ <font color=#4A181B>$lineList</font> 0] [<b><font color=#923B23>string</font></b> trim [@ <font color=#4A181B>$lineList</font> 1]]
-                }
-                <b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-npoints</font> [<b><font color=#923B23>dget</font></b> [<b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-rawparams</font>] {No. Points}] <font color=#463e11>-nvariables</font> [<b><font color=#923B23>dget</font></b> [<b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-rawparams</font>] {No. Variables}]
-                <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>dget</font></b> [<b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-rawparams</font>] Plotname] in {{Operating Point} {Transfet Function}}} {
-                    <b><font color=#923B23>set</font></b> hasAxis 0
+            } <b><font color=#923B23>elseif</font></b> {[<font color=#4A181B>$trace</font> configure <font color=#463e11>-numtype</font>] eq {complex}} {
+                <b><font color=#923B23>incr</font></b> calcBlockSize 16
+                <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> object class <font color=#4A181B>$trace</font> ::SpiceGenTcl::EmptyTrace]} {
+                    <b><font color=#923B23>set</font></b> fun skip16bytes
                 } <b><font color=#923B23>else</font></b> {
-                    <b><font color=#923B23>set</font></b> hasAxis 1
+                    <b><font color=#923B23>set</font></b> fun readComplex
                 }
-                <b><font color=#923B23>set</font></b> flags [<b><font color=#923B23>split</font></b> [<b><font color=#923B23>dget</font></b> [<b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-rawparams</font>] Flags]]
-                <b><font color=#923B23>if</font></b> {({complex} in <font color=#4A181B>$flags</font>) || ([<b><font color=#923B23>dget</font></b> [<b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-rawparams</font>] Plotname] eq {AC Analysis})} {
-                    <b><font color=#923B23>set</font></b> numtype complex
+            } <b><font color=#923B23>elseif</font></b> {[<font color=#4A181B>$trace</font> configure <font color=#463e11>-numtype</font>] eq {real}} {
+                <b><font color=#923B23>incr</font></b> calcBlockSize 4
+                <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> object class <font color=#4A181B>$trace</font> ::SpiceGenTcl::EmptyTrace]} {
+                    <b><font color=#923B23>set</font></b> fun skip4bytes
                 } <b><font color=#923B23>else</font></b> {
-                    <b><font color=#923B23>if</font></b> {({double} in <font color=#4A181B>$flags</font>) || ([<b><font color=#923B23>dget</font></b> <font color=#4A181B>$arguments</font> simulator] eq {ngspice}) || ([<b><font color=#923B23>dget</font></b> <font color=#4A181B>$arguments</font> simulator] eq {xyce})} {
-                        <b><font color=#923B23>set</font></b> numtype double
-                    } <b><font color=#923B23>else</font></b> {
-                        <b><font color=#923B23>set</font></b> numtype real
-                    }
+                    <b><font color=#923B23>set</font></b> fun readFloat32
                 }
-    <i><font color=#4b5d50>####   parse variables</font></i>
-                <b><font color=#923B23>set</font></b> i [<b><font color=#923B23>lsearch</font></b> <font color=#4A181B>$header</font> Variables:]
-                <b><font color=#923B23>set</font></b> ivar 0
-                <b><font color=#923B23>foreach</font></b> line [<b><font color=#923B23>lrange</font></b> <font color=#4A181B>$header</font> [+ <font color=#4A181B>$i</font> 1] end-1] {
-                    <b><font color=#923B23>set</font></b> lineList [<b><font color=#923B23>split</font></b> [<b><font color=#923B23>string</font></b> trim <font color=#4A181B>$line</font>] \t]
-                    <b><font color=#923B23>lassign</font></b> <font color=#4A181B>$lineList</font> idx name varType
-                    <b><font color=#923B23>if</font></b> {<font color=#4A181B>$ivar</font>==0} {
-                        <b><font color=#923B23>if</font></b> {([<b><font color=#923B23>dget</font></b> <font color=#4A181B>$arguments</font> simulator] eq {ltspice}) && (<font color=#4A181B>$name</font> eq {<b><font color=#923B23>time</font></b>})} {
-                            <i><font color=#4b5d50># workaround for bug with negative values in time axis</font></i>
-                            <b><font color=#923B23>set</font></b> axisIsTime true
-                        }
-                        <b><font color=#923B23>if</font></b> {<font color=#4A181B>$numtype</font> eq {real}} {
-                            <b><font color=#923B23>set</font></b> axisNumType double
-                        } <b><font color=#923B23>else</font></b> {
-                            <b><font color=#923B23>set</font></b> axisNumType <font color=#4A181B>$numtype</font>
-                        }
-                        <b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-axis</font> [::SpiceGenTcl::Axis new <font color=#4A181B>$name</font> <font color=#4A181B>$varType</font> <font color=#4A181B>$npoints</font> <font color=#4A181B>$axisNumType</font>]
-                        <i><font color=#4b5d50>##nagelfar ignore #12 {Found constant &quot;traces&quot;}</font></i>
-                        <b><font color=#923B23>dappend</font></b> Traces [<b><font color=#923B23>string</font></b> tolower <font color=#4A181B>$name</font>] [<b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-axis</font>]
-                    } <b><font color=#923B23>elseif</font></b> {([<b><font color=#923B23>dget</font></b> <font color=#4A181B>$arguments</font> traces2read] eq {<b><font color=#923B23>*</font></b>}) || (<font color=#4A181B>$name</font> in [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$arguments</font> traces2read])} {
-                        <b><font color=#923B23>if</font></b> {<font color=#4A181B>$hasAxis</font>} {
-                            <b><font color=#923B23>dappend</font></b> Traces [<b><font color=#923B23>string</font></b> tolower <font color=#4A181B>$name</font>] [::SpiceGenTcl::Trace new <font color=#4A181B>$name</font> <font color=#4A181B>$varType</font> <font color=#4A181B>$npoints</font> [[<b><font color=#ca14ca>my</font></b> configure <font color=#463e11>-axis</font>] configure <font color=#463e11>-name</font>] <font color=#4A181B>$numtype</font>]
-                        } <b><font color=#923B23>else</font></b> {
-                            <b><font color=#923B23>dappend</font></b> Traces [<b><font color=#923B23>string</font></b> tolower <font color=#4A181B>$name</font>] [::SpiceGenTcl::Trace new <font color=#4A181B>$name</font> <font color=#4A181B>$varType</font> <font color=#4A181B>$npoints</font> {} <font color=#4A181B>$numtype</font>]
-                        }
-                    } <b><font color=#923B23>else</font></b> {
-                        <b><font color=#923B23>dappend</font></b> Traces [<b><font color=#923B23>string</font></b> tolower <font color=#4A181B>$name</font>] [::SpiceGenTcl::EmptyTrace new <font color=#4A181B>$name</font> <font color=#4A181B>$varType</font> <font color=#4A181B>$npoints</font> <font color=#4A181B>$numtype</font>]
-                    }
-                    <b><font color=#923B23>incr</font></b> ivar
-                }
-                <b><font color=#923B23>if</font></b> {([<b><font color=#923B23>dget</font></b> <font color=#4A181B>$arguments</font> traces2read] eq {}) || ![<b><font color=#923B23>llength</font></b> [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$arguments</font> traces2read]]} {
-                    <b><font color=#923B23>close</font></b> <font color=#4A181B>$file</font>
-                    <b><font color=#ca14ca>return</font></b>
-                }
-    <i><font color=#4b5d50>####   read data</font></i>
-                <b><font color=#923B23>if</font></b> {<font color=#4A181B>$rawType</font> eq {Binary:}} {
-                    <b><font color=#923B23>set</font></b> BlockSize [= {(<font color=#4A181B>$fileSize</font> - <font color=#4A181B>$binaryStart</font>)/<font color=#4A181B>$npoints</font>}]
-                    <b><font color=#923B23>set</font></b> scanFunctions {}
-                    <b><font color=#923B23>set</font></b> calcBlockSize 0
-                    <b><font color=#923B23>foreach</font></b> trace [<b><font color=#923B23>dvalues</font></b> <font color=#4A181B>$Traces</font>] {
-                        <b><font color=#923B23>if</font></b> {[<font color=#4A181B>$trace</font> configure <font color=#463e11>-numtype</font>] eq {double}} {
-                            <b><font color=#923B23>incr</font></b> calcBlockSize 8
-                            <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> object class <font color=#4A181B>$trace</font> ::SpiceGenTcl::EmptyTrace]} {
-                                <b><font color=#923B23>set</font></b> fun skip8bytes
-                            } <b><font color=#923B23>else</font></b> {
-                                <b><font color=#923B23>set</font></b> fun readFloat64
-                            }
-                        } <b><font color=#923B23>elseif</font></b> {[<font color=#4A181B>$trace</font> configure <font color=#463e11>-numtype</font>] eq {complex}} {
-                            <b><font color=#923B23>incr</font></b> calcBlockSize 16
-                            <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> object class <font color=#4A181B>$trace</font> ::SpiceGenTcl::EmptyTrace]} {
-                                <b><font color=#923B23>set</font></b> fun skip16bytes
-                            } <b><font color=#923B23>else</font></b> {
-                                <b><font color=#923B23>set</font></b> fun readComplex
-                            }
-                        } <b><font color=#923B23>elseif</font></b> {[<font color=#4A181B>$trace</font> configure <font color=#463e11>-numtype</font>] eq {real}} {
-                            <b><font color=#923B23>incr</font></b> calcBlockSize 4
-                            <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> object class <font color=#4A181B>$trace</font> ::SpiceGenTcl::EmptyTrace]} {
-                                <b><font color=#923B23>set</font></b> fun skip4bytes
-                            } <b><font color=#923B23>else</font></b> {
-                                <b><font color=#923B23>set</font></b> fun readFloat32
-                            }
-                        } <b><font color=#923B23>else</font></b> {
-                            <b><font color=#923B23>close</font></b> <font color=#4A181B>$file</font>
-                            <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Invalid data type '<font color=#4A181B>[$</font>trace configure -numtype<font color=#4A181B>]</font>' for trace '<font color=#4A181B>[$</font>trace configure -name<font color=#4A181B>]</font>'&quot;</font>
-                        }
-                        <b><font color=#923B23>lappend</font></b> scanFunctions <font color=#4A181B>$fun</font>
-                    }
-                    <b><font color=#923B23>if</font></b> {<font color=#4A181B>$calcBlockSize</font>!=<font color=#4A181B>$BlockSize</font>} {
-                        <b><font color=#923B23>close</font></b> <font color=#4A181B>$file</font>
-                        <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Error in calculating the block size. Expected '<font color=#4A181B>$</font>BlockSize' bytes, but found '<font color=#4A181B>$</font>calcBlockSize' bytes&quot;</font>
-                    }
-                     <b><font color=#923B23>for</font></b> {<b><font color=#923B23>set</font></b> i 0} {<font color=#4A181B>$i</font>&lt;<font color=#4A181B>$npoints</font>} {<b><font color=#923B23>incr</font></b> i} {
-                        <b><font color=#923B23>for</font></b> {<b><font color=#923B23>set</font></b> j 0} {<font color=#4A181B>$j</font>&lt;[<b><font color=#923B23>dict</font></b> size <font color=#4A181B>$Traces</font>]} {<b><font color=#923B23>incr</font></b> j} {
-                            <b><font color=#923B23>set</font></b> value [<b><font color=#923B23>eval</font></b> <font color=#035103>&quot;my <font color=#4A181B>[</font>@ <font color=#4A181B>$</font>scanFunctions <font color=#4A181B>$</font>j<font color=#4A181B>]</font>&quot;</font> <font color=#4A181B>$file</font>]
-                            <b><font color=#923B23>set</font></b> trace [@ [<b><font color=#923B23>dvalues</font></b> <font color=#4A181B>$Traces</font>] <font color=#4A181B>$j</font>]
-                            <b><font color=#923B23>if</font></b> {<font color=#4A181B>$j</font>==0} {
-                                <i><font color=#4b5d50># workaround for bug with negative values in time axis</font></i>
-                                <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> exists axisIsTime]} {
-                                    <b><font color=#923B23>set</font></b> value [= {abs(<font color=#4A181B>$value</font>)}]
-                                }
-                            }
-                            <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> object class <font color=#4A181B>$trace</font>] ne {::SpiceGenTcl::EmptyTrace}} {
-                                <font color=#4A181B>$trace</font> appendDataPoints <font color=#4A181B>$value</font>
-                            }
-                        }
-                     }
-                } <b><font color=#923B23>elseif</font></b> {<font color=#4A181B>$rawType</font> eq {Values:}} {
-                    <b><font color=#923B23>for</font></b> {<b><font color=#923B23>set</font></b> i 0} {<font color=#4A181B>$i</font>&lt;<font color=#4A181B>$npoints</font>} {<b><font color=#923B23>incr</font></b> i} {
-                        <b><font color=#923B23>set</font></b> firstVar true
-                        <b><font color=#923B23>for</font></b> {<b><font color=#923B23>set</font></b> j 0} {<font color=#4A181B>$j</font>&lt;[<b><font color=#923B23>dict</font></b> size <font color=#4A181B>$Traces</font>]} {<b><font color=#923B23>incr</font></b> j} {
-                            <b><font color=#923B23>set</font></b> line [<b><font color=#923B23>gets</font></b> <font color=#4A181B>$file</font>]
-                            <b><font color=#923B23>if</font></b> {<font color=#4A181B>$line</font> eq {}} {
-                                <b><font color=#ca14ca>continue</font></b>
-                            }
-                            <b><font color=#923B23>set</font></b> lineList [textutil::split::splitx <font color=#4A181B>$line</font>]
-                            <b><font color=#923B23>if</font></b> {<font color=#4A181B>$firstVar</font>} {
-                                <b><font color=#923B23>set</font></b> firstVar false
-                                <b><font color=#923B23>set</font></b> sPoint [@ <font color=#4A181B>$lineList</font> 0]
-                                <b><font color=#923B23>if</font></b> {<font color=#4A181B>$i</font>!=int(<font color=#4A181B>$sPoint</font>)} {
-                                    <b><font color=#923B23>close</font></b> <font color=#4A181B>$file</font>
-                                    <b><font color=#923B23>error</font></b> {Error reading file}
-                                }
-                                <b><font color=#923B23>if</font></b> {<font color=#4A181B>$numtype</font> eq {complex}} {
-                                    <b><font color=#923B23>set</font></b> value [<b><font color=#923B23>split</font></b> [@ <font color=#4A181B>$lineList</font> 1] ,]
-                                } <b><font color=#923B23>else</font></b> {
-                                    <b><font color=#923B23>set</font></b> value [@ <font color=#4A181B>$lineList</font> 1]
-                                }
-                            } <b><font color=#923B23>else</font></b> {
-                                <b><font color=#923B23>if</font></b> {<font color=#4A181B>$numtype</font> eq {complex}} {
-                                    <b><font color=#923B23>set</font></b> value [<b><font color=#923B23>split</font></b> [@ <font color=#4A181B>$lineList</font> 1] ,]
-                                } <b><font color=#923B23>else</font></b> {
-                                    <b><font color=#923B23>set</font></b> value [@ <font color=#4A181B>$lineList</font> 1]
-                                }
-                            }
-                            <b><font color=#923B23>set</font></b> trace [@ [<b><font color=#923B23>dvalues</font></b> <font color=#4A181B>$Traces</font>] <font color=#4A181B>$j</font>]
-                            <font color=#4A181B>$trace</font> appendDataPoints <font color=#4A181B>$value</font>
-                        }
-                    }
-                }
+            } <b><font color=#923B23>else</font></b> {
                 <b><font color=#923B23>close</font></b> <font color=#4A181B>$file</font>
+                <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Invalid data type '<font color=#4A181B>[$</font>trace configure -numtype<font color=#4A181B>]</font>' for trace '<font color=#4A181B>[$</font>trace configure -name<font color=#4A181B>]</font>'&quot;</font>
+            }
+            <b><font color=#923B23>lappend</font></b> scanFunctions <font color=#4A181B>$fun</font>
+        }
+        <b><font color=#923B23>if</font></b> {<font color=#4A181B>$calcBlockSize</font>!=<font color=#4A181B>$BlockSize</font>} {
+            <b><font color=#923B23>close</font></b> <font color=#4A181B>$file</font>
+            <b><font color=#923B23>error</font></b> <font color=#035103>&quot;Error in calculating the block size. Expected '<font color=#4A181B>$</font>BlockSize' bytes, but found '<font color=#4A181B>$</font>calcBlockSize' bytes&quot;</font>
+        }
+         <b><font color=#923B23>for</font></b> {<b><font color=#923B23>set</font></b> i 0} {<font color=#4A181B>$i</font>&lt;<font color=#4A181B>$npoints</font>} {<b><font color=#923B23>incr</font></b> i} {
+            <b><font color=#923B23>for</font></b> {<b><font color=#923B23>set</font></b> j 0} {<font color=#4A181B>$j</font>&lt;[<b><font color=#923B23>dict</font></b> size <font color=#4A181B>$Traces</font>]} {<b><font color=#923B23>incr</font></b> j} {
+                <b><font color=#923B23>set</font></b> value [<b><font color=#923B23>eval</font></b> <font color=#035103>&quot;my <font color=#4A181B>[</font>@ <font color=#4A181B>$</font>scanFunctions <font color=#4A181B>$</font>j<font color=#4A181B>]</font>&quot;</font> <font color=#4A181B>$file</font>]
+                <b><font color=#923B23>set</font></b> trace [@ [<b><font color=#923B23>dvalues</font></b> <font color=#4A181B>$Traces</font>] <font color=#4A181B>$j</font>]
+                <b><font color=#923B23>if</font></b> {<font color=#4A181B>$j</font>==0} {
+                    <i><font color=#4b5d50># workaround for bug with negative values in time axis</font></i>
+                    <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> exists axisIsTime]} {
+                        <b><font color=#923B23>set</font></b> value [= {abs(<font color=#4A181B>$value</font>)}]
+                    }
+                }
+                <b><font color=#923B23>if</font></b> {[<b><font color=#923B23>info</font></b> object class <font color=#4A181B>$trace</font>] ne {::SpiceGenTcl::EmptyTrace}} {
+                    <font color=#4A181B>$trace</font> appendDataPoints <font color=#4A181B>$value</font>
+                }
+            }
+         }
+    } <b><font color=#923B23>elseif</font></b> {<font color=#4A181B>$rawType</font> eq {Values:}} {
+        <b><font color=#923B23>for</font></b> {<b><font color=#923B23>set</font></b> i 0} {<font color=#4A181B>$i</font>&lt;<font color=#4A181B>$npoints</font>} {<b><font color=#923B23>incr</font></b> i} {
+            <b><font color=#923B23>set</font></b> firstVar true
+            <b><font color=#923B23>for</font></b> {<b><font color=#923B23>set</font></b> j 0} {<font color=#4A181B>$j</font>&lt;[<b><font color=#923B23>dict</font></b> size <font color=#4A181B>$Traces</font>]} {<b><font color=#923B23>incr</font></b> j} {
+                <b><font color=#923B23>set</font></b> line [<b><font color=#923B23>gets</font></b> <font color=#4A181B>$file</font>]
+                <b><font color=#923B23>if</font></b> {<font color=#4A181B>$line</font> eq {}} {
+                    <b><font color=#ca14ca>continue</font></b>
+                }
+                <b><font color=#923B23>set</font></b> lineList [textutil::split::splitx <font color=#4A181B>$line</font>]
+                <b><font color=#923B23>if</font></b> {<font color=#4A181B>$firstVar</font>} {
+                    <b><font color=#923B23>set</font></b> firstVar false
+                    <b><font color=#923B23>set</font></b> sPoint [@ <font color=#4A181B>$lineList</font> 0]
+                    <b><font color=#923B23>if</font></b> {<font color=#4A181B>$i</font>!=int(<font color=#4A181B>$sPoint</font>)} {
+                        <b><font color=#923B23>close</font></b> <font color=#4A181B>$file</font>
+                        <b><font color=#923B23>error</font></b> {Error reading file}
+                    }
+                    <b><font color=#923B23>if</font></b> {<font color=#4A181B>$numtype</font> eq {complex}} {
+                        <b><font color=#923B23>set</font></b> value [<b><font color=#923B23>split</font></b> [@ <font color=#4A181B>$lineList</font> 1] ,]
+                    } <b><font color=#923B23>else</font></b> {
+                        <b><font color=#923B23>set</font></b> value [@ <font color=#4A181B>$lineList</font> 1]
+                    }
+                } <b><font color=#923B23>else</font></b> {
+                    <b><font color=#923B23>if</font></b> {<font color=#4A181B>$numtype</font> eq {complex}} {
+                        <b><font color=#923B23>set</font></b> value [<b><font color=#923B23>split</font></b> [@ <font color=#4A181B>$lineList</font> 1] ,]
+                    } <b><font color=#923B23>else</font></b> {
+                        <b><font color=#923B23>set</font></b> value [@ <font color=#4A181B>$lineList</font> 1]
+                    }
+                }
+                <b><font color=#923B23>set</font></b> trace [@ [<b><font color=#923B23>dvalues</font></b> <font color=#4A181B>$Traces</font>] <font color=#4A181B>$j</font>]
+                <font color=#4A181B>$trace</font> appendDataPoints <font color=#4A181B>$value</font>
+            }
+        }
+    }
+    <b><font color=#923B23>close</font></b> <font color=#4A181B>$file</font>
 }</pre></div>
 </div><h4 class='ruffmethod'><a name='::SpiceGenTcl::RawFile::destructor'>destructor</a><span class='ns_scope'> [<a href="index-SpiceGenTcl.html#::SpiceGenTcl::RawFile" title="::SpiceGenTcl::RawFile" class='ruff_cmd'>::SpiceGenTcl::RawFile</a>]</span><span class='ruff-uplink'><a href='index-SpiceGenTcl.html#::SpiceGenTcl::RawFile'>RawFile</a>, <a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h4>
 <div style='clear:both;'></div>

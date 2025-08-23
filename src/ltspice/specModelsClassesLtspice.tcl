@@ -18,7 +18,6 @@ namespace eval ::SpiceGenTcl::Ltspice::BasicDevices {
 
     namespace export VSwitchModel CSwitchModel
 
-###  VSwitchModel class
     oo::class create VSwitchModel {
         superclass ::SpiceGenTcl::Model
         constructor {args} {
@@ -34,7 +33,6 @@ namespace eval ::SpiceGenTcl::Ltspice::BasicDevices {
         }
     }
 
-###  CSwitchModel class
     oo::class create CSwitchModel {
         superclass ::SpiceGenTcl::Model
         constructor {args} {
@@ -55,7 +53,6 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
 
     namespace export DiodeModel DiodeIdealModel BjtGPModel JfetModel MesfetModel
 
-###  DiodeModel class
     oo::class create DiodeModel {
         superclass ::SpiceGenTcl::Model
         constructor {args} {
@@ -73,7 +70,6 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
         }
     }
 
-###  DiodeIdealModel class
     oo::class create DiodeIdealModel {
         superclass ::SpiceGenTcl::Model
         constructor {args} {
@@ -90,7 +86,6 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
         }
     }
 
-###  BjtGPModel class
     oo::class create BjtGPModel {
         superclass ::SpiceGenTcl::Model
         constructor {args} {
@@ -112,7 +107,6 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
         }
     }
 
-###  Jfet1Model class
     oo::class create JfetModel {
         superclass ::SpiceGenTcl::Model
         constructor {args} {
@@ -131,7 +125,6 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
         }
     }
 
-###  Mesfet1Model class
     oo::class create MesfetModel {
         superclass ::SpiceGenTcl::Model
         constructor {args} {

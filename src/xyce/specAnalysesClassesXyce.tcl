@@ -23,17 +23,14 @@ namespace eval ::SpiceGenTcl {
 namespace eval ::SpiceGenTcl::Xyce::Analyses {
 
 
-###  Dc class
     oo::class create Dc {
         superclass ::SpiceGenTcl::Common::Analyses::Dc
     }
 
-###  Ac class
     oo::class create Ac {
         superclass ::SpiceGenTcl::Common::Analyses::Ac
     }
 
-###  SensAc class
     oo::class create Sens {
         superclass ::SpiceGenTcl::Analysis
         mixin ::SpiceGenTcl::Utility
@@ -63,12 +60,10 @@ namespace eval ::SpiceGenTcl::Xyce::Analyses {
         }
     }
 
-###  Tran class
     oo::class create Tran {
         superclass ::SpiceGenTcl::Common::Analyses::Tran
     }
 
-###  Op class
     oo::class create Op {
         superclass ::SpiceGenTcl::Common::Analyses::Op
     }

@@ -20,9 +20,9 @@ namespace eval ::SpiceGenTcl {
     }
 }
 
+
 namespace eval ::SpiceGenTcl::Ngspice::Misc {
 
-###  OptionsNgspice class
     oo::class create OptionsNgspice {
         superclass ::SpiceGenTcl::Options
         mixin ::SpiceGenTcl::Utility
