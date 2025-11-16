@@ -180,6 +180,9 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
             my configure -name $name -liblocation $liblocation
             my configure -simhandle [ngspicetclbridge::new $liblocation]
         }
+        destructor {
+            $simhandle destroy
+        }
         method runAndRead {args} {
             # Runs circuit.
             #  circuitStr - top-level netlist string

@@ -2167,9 +2167,10 @@ namespace eval ::SpiceGenTcl {
         variable path rawparams npoints nvariables axis Traces BlockSize
         constructor {args} {
             # Creates `RawFile` object.
-            #  path - path to raw file including it's file name
+            #  path - path to raw file including it's file name (provide empty string if `-shared` option is provided)
             #  traces2read - list of traces that will be readed, default value is `*`, that means reading all traces
             #  simulator - simulator that produced this raw file, default is `ngspice`
+            #  -shared value - Handle to shared simulator instance
             set arguments [argparse -inline -help {Creates 'RawFile' object} {
                 {path -help {path to raw file including it's file name}}
                 {traces2read -optional -default * -help {List of traces that will be readed, default value is *,\
@@ -2192,21 +2193,29 @@ namespace eval ::SpiceGenTcl {
                                        Plotname [::ngspicetclbridge::getPlotName $simHandle]\
                                        Flags $numtype {No. Variables} $nvariables {No. Points} $npoints]
                 dict for {name points} $vectorsData {
-                    if {[dict get [dict get $vectorsInfo $name] type] eq {voltage}} {
-                        set nameModif "v\([string tolower $name]\)"
+                    if {[dict get [dict get $vectorsInfo $name] type] in {voltage s-param impedance admittance}} {
+                        if {[regexp -nocase {^v\(([^)]+)\)$} $name]} {
+                            set nameModif [string tolower $name]
+                        } else {
+                            set nameModif "v\([string tolower $name]\)"
+                        }
                     } elseif {[dict get [dict get $vectorsInfo $name] type] eq {current}} {
-                        set nameModif "i\([string tolower $name]\)"
+                        if {[regexp -nocase {^([^#]+)} $name -> nameParsed]} {
+                            set nameModif "i\([string tolower $nameParsed]\)"
+                        } elseif {[regexp -nocase {^i\(([^)]+)\)$} $name]} {
+                            set nameModif [string tolower $name]
+                        } else {
+                            set nameModif "i\([string tolower $name]\)"
+                        }
                     } else {
                         set nameModif [string tolower $name]
                     }
                     if {$name eq [dict get $scaleInfo name]} {
                         my configure -axis [::SpiceGenTcl::Axis new $nameModif [dict get $scaleInfo type]\
                                                     $npoints [dict get $scaleInfo ntype]]
-                        ##nagelfar ignore #12 {Found constant "traces"}
                         dappend Traces $nameModif [my configure -axis]
                         [my configure -axis] setDataPoints $points
                     } elseif {([dget $arguments traces2read] eq {*}) || ($nameModif in [dget $arguments traces2read])} {
-                        
                         set traceObj [::SpiceGenTcl::Trace new $nameModif [dict get $vectorsInfo $name] $npoints {}\
                                               $numtype]
                         $traceObj setDataPoints $points
@@ -2217,6 +2226,7 @@ namespace eval ::SpiceGenTcl {
                         $traceObj setDataPoints $points
                         dappend Traces $nameModif $traceObj
                     }
+                    
                 }
             } else {
                 my configure -path [dget $arguments path]
