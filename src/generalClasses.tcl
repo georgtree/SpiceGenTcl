@@ -2175,195 +2175,240 @@ namespace eval ::SpiceGenTcl {
                 {traces2read -optional -default * -help {List of traces that will be readed, default value is *,\
                                                                  that means reading all traces}}
                 {simulator -optional -default ngspice -help {Total number of points}}
+                {-shared= -help {Handle to shared simulator instance}}
             }]
-            my configure -path [dget $arguments path]
-            set fileSize [file size $path]
-            set file [open $path r]
-            fconfigure $file -translation binary
-            ### read header
-            set ch [read $file 6]
-            if {[encoding convertfrom utf-8 $ch] eq {Title:}} {
-                set encSize 1
-                set encode utf-8
-                set line Title:
-            } elseif {[encoding convertfrom utf-16le $ch] eq {Tit}} {
-                set encSize 2
-                set encode utf-16le
-                set line Tit
-            } else {
-                close $file
-                error {Unknown encoding}
-            }
-            my configure -rawparams [dcreate Filename $path]
-            set header {}
-            set binaryStart 6
-            while true {
-                set ch [encoding convertfrom $encode [read $file $encSize]]
-                incr binaryStart $encSize
-                if {$ch eq "\n"} {
-                    if {$encode eq {utf-8}} {
-                        set line [string trimright $line \r]
+            if {[dexist $arguments shared]} {
+                package require ngspicetclbridge
+                set simHandle [dget $arguments shared]
+                my configure -path {}
+                set vectorsInfo [::ngspicetclbridge::readVecsAsync -info $simHandle]
+                set vectorsData [::ngspicetclbridge::readVecsAsync $simHandle]
+                set scaleInfo [::ngspicetclbridge::getScaleInfo $simHandle]
+                my configure -npoints [dict get $scaleInfo length]
+                my configure -nvariables [dict size $vectorsInfo]
+                set numtype [dict get $scaleInfo ntype]
+                set rawparams [dict create Title [::ngspicetclbridge::getCircuitTitle $simHandle]\
+                                       Date [::ngspicetclbridge::getPlotDate $simHandle]\
+                                       Plotname [::ngspicetclbridge::getPlotName $simHandle]\
+                                       Flags $numtype {No. Variables} $nvariables {No. Points} $npoints]
+                dict for {name points} $vectorsData {
+                    if {[dict get [dict get $vectorsInfo $name] type] eq {voltage}} {
+                        set nameModif "v\([string tolower $name]\)"
+                    } elseif {[dict get [dict get $vectorsInfo $name] type] eq {current}} {
+                        set nameModif "i\([string tolower $name]\)"
+                    } else {
+                        set nameModif [string tolower $name]
                     }
-                    lappend header $line
-                    if {$line in {Binary: Values:}} {
-                        set rawType $line
+                    if {$name eq [dict get $scaleInfo name]} {
+                        my configure -axis [::SpiceGenTcl::Axis new $nameModif [dict get $scaleInfo type]\
+                                                    $npoints [dict get $scaleInfo ntype]]
+                        ##nagelfar ignore #12 {Found constant "traces"}
+                        dappend Traces $nameModif [my configure -axis]
+                        [my configure -axis] setDataPoints $points
+                    } elseif {([dget $arguments traces2read] eq {*}) || ($nameModif in [dget $arguments traces2read])} {
+                        
+                        set traceObj [::SpiceGenTcl::Trace new $nameModif [dict get $vectorsInfo $name] $npoints {}\
+                                              $numtype]
+                        $traceObj setDataPoints $points
+                        dappend Traces $nameModif $traceObj
+                    } else {
+                        set traceObj [::SpiceGenTcl::EmptyTrace new $nameModif [dict get $vectorsInfo $name] $npoints\
+                                              $numtype]
+                        $traceObj setDataPoints $points
+                        dappend Traces $nameModif $traceObj
+                    }
+                }
+            } else {
+                my configure -path [dget $arguments path]
+                set fileSize [file size $path]
+                set file [open $path r]
+                fconfigure $file -translation binary
+                ### read header
+                set ch [read $file 6]
+                if {[encoding convertfrom utf-8 $ch] eq {Title:}} {
+                    set encSize 1
+                    set encode utf-8
+                    set line Title:
+                } elseif {[encoding convertfrom utf-16le $ch] eq {Tit}} {
+                    set encSize 2
+                    set encode utf-16le
+                    set line Tit
+                } else {
+                    close $file
+                    error {Unknown encoding}
+                }
+                my configure -rawparams [dcreate Filename $path]
+                set header {}
+                set binaryStart 6
+                while true {
+                    set ch [encoding convertfrom $encode [read $file $encSize]]
+                    incr binaryStart $encSize
+                    if {$ch eq "\n"} {
+                        if {$encode eq {utf-8}} {
+                            set line [string trimright $line \r]
+                        }
+                        lappend header $line
+                        if {$line in {Binary: Values:}} {
+                            set rawType $line
+                            break
+                        }
+                        set line {}
+                    } else {
+                        append line $ch
+                    }
+                }
+                ### save header parameters
+                foreach line $header {
+                    set lineList [split $line :]
+                    if {[@ $lineList 0] eq {Variables}} {
                         break
                     }
-                    set line {}
+                    dict append rawparams [@ $lineList 0] [string trim [@ $lineList 1]]
+                }
+                my configure -npoints [dget [my configure -rawparams] {No. Points}] -nvariables\
+                        [dget [my configure -rawparams] {No. Variables}]
+                if {[dget [my configure -rawparams] Plotname] in {{Operating Point} {Transfet Function}}} {
+                    set hasAxis 0
                 } else {
-                    append line $ch
+                    set hasAxis 1
                 }
-            }
-            ### save header parameters
-            foreach line $header {
-                set lineList [split $line :]
-                if {[@ $lineList 0] eq {Variables}} {
-                    break
-                }
-                dict append rawparams [@ $lineList 0] [string trim [@ $lineList 1]]
-            }
-            my configure -npoints [dget [my configure -rawparams] {No. Points}] -nvariables\
-                    [dget [my configure -rawparams] {No. Variables}]
-            if {[dget [my configure -rawparams] Plotname] in {{Operating Point} {Transfet Function}}} {
-                set hasAxis 0
-            } else {
-                set hasAxis 1
-            }
-            set flags [split [dget [my configure -rawparams] Flags]]
-            if {({complex} in $flags) || ([dget [my configure -rawparams] Plotname] eq {AC Analysis})} {
-                set numtype complex
-            } else {
-                if {({double} in $flags) || ([dget $arguments simulator] eq {ngspice}) ||\
-                            ([dget $arguments simulator] eq {xyce})} {
-                    set numtype double
+                set flags [split [dget [my configure -rawparams] Flags]]
+                if {({complex} in $flags) || ([dget [my configure -rawparams] Plotname] eq {AC Analysis})} {
+                    set numtype complex
                 } else {
-                    set numtype real
-                }
-            }
-            ### parse variables
-            set i [lsearch $header Variables:]
-            set ivar 0
-            foreach line [lrange $header [+ $i 1] end-1] {
-                set lineList [split [string trim $line] \t]
-                lassign $lineList idx name varType
-                if {$ivar==0} {
-                    if {([dget $arguments simulator] eq {ltspice}) && ($name eq {time})} {
-                        # workaround for bug with negative values in time axis
-                        set axisIsTime true
-                    }
-                    if {$numtype eq {real}} {
-                        set axisNumType double
+                    if {({double} in $flags) || ([dget $arguments simulator] eq {ngspice}) ||\
+                                ([dget $arguments simulator] eq {xyce})} {
+                        set numtype double
                     } else {
-                        set axisNumType $numtype
+                        set numtype real
                     }
-                    my configure -axis [::SpiceGenTcl::Axis new $name $varType $npoints $axisNumType]
-                    ##nagelfar ignore #12 {Found constant "traces"}
-                    dappend Traces [string tolower $name] [my configure -axis]
-                } elseif {([dget $arguments traces2read] eq {*}) || ($name in [dget $arguments traces2read])} {
-                    if {$hasAxis} {
-                        dappend Traces [string tolower $name] [::SpiceGenTcl::Trace new $name $varType $npoints\
-                                                                       [[my configure -axis] configure -name] $numtype]
+                }
+                ### parse variables
+                set i [lsearch $header Variables:]
+                set ivar 0
+                foreach line [lrange $header [+ $i 1] end-1] {
+                    set lineList [split [string trim $line] \t]
+                    lassign $lineList idx name varType
+                    if {$ivar==0} {
+                        if {([dget $arguments simulator] eq {ltspice}) && ($name eq {time})} {
+                            # workaround for bug with negative values in time axis
+                            set axisIsTime true
+                        }
+                        if {$numtype eq {real}} {
+                            set axisNumType double
+                        } else {
+                            set axisNumType $numtype
+                        }
+                        my configure -axis [::SpiceGenTcl::Axis new $name $varType $npoints $axisNumType]
+                        ##nagelfar ignore #12 {Found constant "traces"}
+                        dappend Traces [string tolower $name] [my configure -axis]
+                    } elseif {([dget $arguments traces2read] eq {*}) || ($name in [dget $arguments traces2read])} {
+                        if {$hasAxis} {
+                            dappend Traces [string tolower $name] [::SpiceGenTcl::Trace new $name $varType $npoints\
+                                                                           [[my configure -axis] configure -name]\
+                                                                           $numtype]
+                        } else {
+                            dappend Traces [string tolower $name]\
+                                    [::SpiceGenTcl::Trace new $name $varType $npoints {} $numtype]
+                        }
                     } else {
                         dappend Traces [string tolower $name]\
-                                [::SpiceGenTcl::Trace new $name $varType $npoints {} $numtype]
+                                [::SpiceGenTcl::EmptyTrace new $name $varType $npoints $numtype]
                     }
-                } else {
-                    dappend Traces [string tolower $name]\
-                            [::SpiceGenTcl::EmptyTrace new $name $varType $npoints $numtype]
+                    incr ivar
                 }
-                incr ivar
-            }
-            if {([dget $arguments traces2read] eq {}) || ![llength [dget $arguments traces2read]]} {
-                close $file
-                return
-            }
-            ### read data
-            if {$rawType eq {Binary:}} {
-                set BlockSize [= {($fileSize - $binaryStart)/$npoints}]
-                set scanFunctions {}
-                set calcBlockSize 0
-                foreach trace [dvalues $Traces] {
-                    if {[$trace configure -numtype] eq {double}} {
-                        incr calcBlockSize 8
-                        if {[info object class $trace ::SpiceGenTcl::EmptyTrace]} {
-                            set fun skip8bytes
-                        } else {
-                            set fun readFloat64
-                        }
-                    } elseif {[$trace configure -numtype] eq {complex}} {
-                        incr calcBlockSize 16
-                        if {[info object class $trace ::SpiceGenTcl::EmptyTrace]} {
-                            set fun skip16bytes
-                        } else {
-                            set fun readComplex
-                        }
-                    } elseif {[$trace configure -numtype] eq {real}} {
-                        incr calcBlockSize 4
-                        if {[info object class $trace ::SpiceGenTcl::EmptyTrace]} {
-                            set fun skip4bytes
-                        } else {
-                            set fun readFloat32
-                        }
-                    } else {
-                        close $file
-                        error "Invalid data type '[$trace configure -numtype]' for trace '[$trace configure -name]'"
-                    }
-                    lappend scanFunctions $fun
-                }
-                if {$calcBlockSize!=$BlockSize} {
+                if {([dget $arguments traces2read] eq {}) || ![llength [dget $arguments traces2read]]} {
                     close $file
-                    error "Error in calculating the block size. Expected '$BlockSize' bytes, but found\
-                            '$calcBlockSize' bytes"
+                    return
                 }
-                 for {set i 0} {$i<$npoints} {incr i} {
-                    for {set j 0} {$j<[dict size $Traces]} {incr j} {
-                        set value [eval "my [@ $scanFunctions $j]" $file]
-                        set trace [@ [dvalues $Traces] $j]
-                        if {$j==0} {
-                            # workaround for bug with negative values in time axis
-                            if {[info exists axisIsTime]} {
-                                set value [= {abs($value)}]
+                ### read data
+                if {$rawType eq {Binary:}} {
+                    set BlockSize [= {($fileSize - $binaryStart)/$npoints}]
+                    set scanFunctions {}
+                    set calcBlockSize 0
+                    foreach trace [dvalues $Traces] {
+                        if {[$trace configure -numtype] eq {double}} {
+                            incr calcBlockSize 8
+                            if {[info object class $trace ::SpiceGenTcl::EmptyTrace]} {
+                                set fun skip8bytes
+                            } else {
+                                set fun readFloat64
+                            }
+                        } elseif {[$trace configure -numtype] eq {complex}} {
+                            incr calcBlockSize 16
+                            if {[info object class $trace ::SpiceGenTcl::EmptyTrace]} {
+                                set fun skip16bytes
+                            } else {
+                                set fun readComplex
+                            }
+                        } elseif {[$trace configure -numtype] eq {real}} {
+                            incr calcBlockSize 4
+                            if {[info object class $trace ::SpiceGenTcl::EmptyTrace]} {
+                                set fun skip4bytes
+                            } else {
+                                set fun readFloat32
+                            }
+                        } else {
+                            close $file
+                            error "Invalid data type '[$trace configure -numtype]' for trace '[$trace configure -name]'"
+                        }
+                        lappend scanFunctions $fun
+                    }
+                    if {$calcBlockSize!=$BlockSize} {
+                        close $file
+                        error "Error in calculating the block size. Expected '$BlockSize' bytes, but found\
+                            '$calcBlockSize' bytes"
+                    }
+                    for {set i 0} {$i<$npoints} {incr i} {
+                        for {set j 0} {$j<[dict size $Traces]} {incr j} {
+                            set value [eval "my [@ $scanFunctions $j]" $file]
+                            set trace [@ [dvalues $Traces] $j]
+                            if {$j==0} {
+                                # workaround for bug with negative values in time axis
+                                if {[info exists axisIsTime]} {
+                                    set value [= {abs($value)}]
+                                }
+                            }
+                            if {[info object class $trace] ne {::SpiceGenTcl::EmptyTrace}} {
+                                $trace appendDataPoints $value
                             }
                         }
-                        if {[info object class $trace] ne {::SpiceGenTcl::EmptyTrace}} {
+                    }
+                } elseif {$rawType eq {Values:}} {
+                    for {set i 0} {$i<$npoints} {incr i} {
+                        set firstVar true
+                        for {set j 0} {$j<[dict size $Traces]} {incr j} {
+                            set line [gets $file]
+                            if {$line eq {}} {
+                                continue
+                            }
+                            set lineList [textutil::split::splitx $line]
+                            if {$firstVar} {
+                                set firstVar false
+                                set sPoint [@ $lineList 0]
+                                if {$i!=int($sPoint)} {
+                                    close $file
+                                    error {Error reading file}
+                                }
+                                if {$numtype eq {complex}} {
+                                    set value [split [@ $lineList 1] ,]
+                                } else {
+                                    set value [@ $lineList 1]
+                                }
+                            } else {
+                                if {$numtype eq {complex}} {
+                                    set value [split [@ $lineList 1] ,]
+                                } else {
+                                    set value [@ $lineList 1]
+                                }
+                            }
+                            set trace [@ [dvalues $Traces] $j]
                             $trace appendDataPoints $value
                         }
                     }
-                 }
-            } elseif {$rawType eq {Values:}} {
-                for {set i 0} {$i<$npoints} {incr i} {
-                    set firstVar true
-                    for {set j 0} {$j<[dict size $Traces]} {incr j} {
-                        set line [gets $file]
-                        if {$line eq {}} {
-                            continue
-                        }
-                        set lineList [textutil::split::splitx $line]
-                        if {$firstVar} {
-                            set firstVar false
-                            set sPoint [@ $lineList 0]
-                            if {$i!=int($sPoint)} {
-                                close $file
-                                error {Error reading file}
-                            }
-                            if {$numtype eq {complex}} {
-                                set value [split [@ $lineList 1] ,]
-                            } else {
-                                set value [@ $lineList 1]
-                            }
-                        } else {
-                            if {$numtype eq {complex}} {
-                                set value [split [@ $lineList 1] ,]
-                            } else {
-                                set value [@ $lineList 1]
-                            }
-                        }
-                        set trace [@ [dvalues $Traces] $j]
-                        $trace appendDataPoints $value
-                    }
                 }
+                close $file
             }
-            close $file
         }
         destructor {
             # Destroy object of class `RawFile`, and its traces objects.

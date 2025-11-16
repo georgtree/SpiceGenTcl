@@ -16,7 +16,7 @@
 
 namespace eval ::SpiceGenTcl::Ngspice::Simulators {
 
-    namespace export Batch BatchLiveLog
+    namespace export Batch BatchLiveLog Shared
     ##nagelfar subcmd+ _obj,Batch configure
     oo::configurable create Batch {
         # this class represent batch simulation of ngspice
@@ -143,6 +143,69 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
                 file delete $logFileName
                 file delete $cirFileName
             }
+        }
+    }
+
+    ##nagelfar subcmd+ _obj,Shared configure
+    oo::configurable create Shared {
+        # this class represent batch simulation of ngspice in form of shared library
+        superclass ::SpiceGenTcl::Simulator
+        property log -get {
+            if {[info exists log]} {
+                return $log
+            } else {
+                return -code error "Log does not exists for simulator '[my configure -name]'"
+            }
+        }
+        variable log
+        property data
+        variable data
+        # location at which input netlist is stored and all output files will be saved
+        property liblocation
+        variable liblocation
+        property simhandle
+        variable simhandle
+        # the name of last ran file
+        variable LastRunFileName
+        constructor {args} {
+            # Creates batch ngspice simulator that can be attached to top-level Circuit.
+            #  name - name of simulator object
+            #  runLocation - location at which input netlist is stored and all output files will be saved,
+            #   default is current directory
+            package require ngspicetclbridge
+            argparse -help {Creates batch ngspice simulator that can be attached to top-level 'Circuit'} {
+                {name -help {Name of simulator object}}
+                {liblocation -optional -default /usr/local/lib/libngspice.so -help {Location of .so/.dll library}}
+            }
+            my configure -name $name -liblocation $liblocation
+            my configure -simhandle [ngspicetclbridge::new $liblocation]
+        }
+        method runAndRead {args} {
+            # Runs circuit.
+            #  circuitStr - top-level netlist string
+            # Synopsis: circuitStr
+            argparse -pfirst -help {Runs circuit} {
+                {circuitStr -help {Top-level netlist string}}
+            }
+            set circuitList [split $circuitStr \n]
+            set firstLine [@ $circuitList 0]
+            $simhandle circuit [lappend circuitList .end]
+            ngspicetclbridge::run $simhandle
+            my readLog
+            my readData
+        }
+        method readLog {args} {
+            # Gets log of last simulation and save it's content to Log variable.
+            argparse -help {Gets log of last simulation and save it's content to Log variable} {}
+            set log [$simhandle messages]
+            return
+        }
+        method readData {args} {
+            # Gets data, create RawFile object and return it's reference name.
+            argparse -help {Gets data, create RawFile object and return it's reference name} {}
+            my variable data
+            set data [::SpiceGenTcl::RawFile new -shared $simhandle {} * ngspice]
+            return
         }
     }
 }
