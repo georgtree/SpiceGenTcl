@@ -70,7 +70,7 @@ lappend ::hl_tcl::my::data(CMD_TCL) {*}{Pin ParameterSwitch Parameter ParameterN
                                                 CSwitchModel DiodeModel DiodeIdealModel BjtGPModel JfetModel MesfetModel\
                                                 Batch BatchLiveLog NgspiceParser SensAc SensDc Sp VerilogA N Vport\
                                                 OptionsNgspice RModel CModel LModel Sens GenSwitch GenS Vsffm Isffm\
-                                                BjtSub QSub BjtSubTj QSubTj}
+                                                BjtSub QSub BjtSubTj QSubTj measure}
 set ::hl_tcl::my::data(CMD_TCL) [lsort $::hl_tcl::my::data(CMD_TCL)]
 
 foreach file [glob ${docDir}/*.html] {
@@ -126,7 +126,9 @@ fileutil::updateInPlace [file join $docDir index.html] processContentsTutorial
 set chartsMap [dcreate !ticklechart_mark_monte_carlo_typ_mag_ngspice! monte_carlo_typ.html\
                        !ticklechart_mark_monte_carlo_dists_ngspice! monte_carlo.html\
                        !ticklechart_mark_monte_carlo_dists_comb_ngspice! monte_carlo_combined.html\
-                       !ticklechart_mark_diode_extract_ngspice! diode_extract.html]
+                       !ticklechart_mark_diode_extract_ngspice! diode_extract.html\
+                       !ticklechart_mark_inverter_optimization_plot_ngspice! inverter_optimization_plot.html\
+                       !ticklechart_mark_inverter_optimization_waveforms_ngspice! inverter_optimization_waveforms_plot.html]
 fileutil::updateInPlace [file join $docDir index-Advanced.html] processContentsTutorial
 set chartsMap [dcreate !ticklechart_mark_c432_test_with_parsing_ngspice! c432_test_with_parsing.html]
 fileutil::updateInPlace [file join $docDir index-Parser.html] processContentsTutorial

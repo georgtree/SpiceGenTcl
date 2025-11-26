@@ -329,7 +329,7 @@ SpiceGenTcl - Commands in namespace SpiceGenTcl
 .br
 \fBRAWFILEOBJ getVoltagesNames\fP \fI?args?\fP
 .br
-\fBRAWFILEOBJ measure\fP \fI?args?\fP
+\fBOBJECT measure\fP \fIargs\fP
 .br
 \fBOBJECT constructor\fP \fIvalue ?-name value?\fP
 .br
@@ -3748,7 +3748,7 @@ getVoltagesNames
 Returns list that contains names of all voltage variables\&.
 .TP
 measure
-Not documented\&.
+Calls measure command from tclmeasure \fIpackage\fP [URL: https://github\&.com/georgtree/tclmeasure]\&. Arguments to -xname and -data are provided automatically with data of raw file\&.
 .TP
 readComplex
 See \fIBinaryReader\&.readComplex\fP
@@ -3807,8 +3807,11 @@ Creates RawFile object\&.
 \fBParameters\fR
 .RS 4n
 .TP
+-shared value
+Handle to shared simulator instance\&.
+.TP
 path
-Path to raw file including it's file name\&.
+Path to raw file including it's file name (provide empty string if -shared option is provided)
 .TP
 simulator
 Simulator that produced this raw file, default is ngspice
@@ -3968,13 +3971,19 @@ Returns list that contains names of all voltage variables
 .RS -4n
 \fBmeasure\fR (::SpiceGenTcl::RawFile)
 .RE
+.PP
+Calls measure command from tclmeasure \fIpackage\fP [URL: https://github\&.com/georgtree/tclmeasure]\&. Arguments to
+-xname and -data are provided automatically with data of raw file\&.
 .RS 4n
-\fBRAWFILEOBJ measure\fP \fI?args?\fP
+\fBOBJECT measure\fP \fIargs\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
+.TP
+args
+Arguments to measure command\&.
 .RE
 .PP
 .RS -4n
@@ -4233,7 +4242,7 @@ Readable, writable\&.
 .PP
 \fBSubclasses\fR
 .PP
-\fI::SpiceGenTcl::Ngspice::Simulators::Batch\fP, \fI::SpiceGenTcl::Xyce::Simulators::Batch\fP, \fI::SpiceGenTcl::Ltspice::Simulators::Batch\fP
+\fI::SpiceGenTcl::Ngspice::Simulators::Batch\fP, \fI::SpiceGenTcl::Ngspice::Simulators::Shared\fP, \fI::SpiceGenTcl::Xyce::Simulators::Batch\fP, \fI::SpiceGenTcl::Ltspice::Simulators::Batch\fP
 .PP
 .RS -4n
 \fBgetLog\fR (::SpiceGenTcl::Simulator)

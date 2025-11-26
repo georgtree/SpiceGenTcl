@@ -2512,6 +2512,10 @@ namespace eval ::SpiceGenTcl {
             return [::csv::joinlist $tracesList [dget $arguments sep]]
         }
         method measure {args} {
+            # Calls `measure` command from `tclmeasure` [package](https://github.com/georgtree/tclmeasure). Arguments to
+            # `-xname` and `-data` are provided automatically with data of raw file.
+            #  args - arguments to `measure` command
+            # Synopsis: args
             return [::tclmeasure::measure -xname [[my configure -axis] configure -name] -data [my getTracesData]\
                             {*}$args]
         }

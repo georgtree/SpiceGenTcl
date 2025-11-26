@@ -45,6 +45,8 @@ for some of them:
 - [Diode parameters extraction via fitting](https://georgtree.github.io/SpiceGenTcl/index-Advanced.html#::Advanced-Parameters%20extraction%20of%20diode%20model%20parameters):
   Ngspice, Xyce and LTspice
 - Example of creating custom Verilog-A magnetic core model and simulating transformer with saturation: Ngspice
+- [Inverter power optimization](https://georgtree.github.io/SpiceGenTcl/index-Advanced.html#::Advanced-Inverter%20performance%20optimization):
+  Ngspice
 
 ## Supported simulators
 - [Ngspice](https://ngspice.sourceforge.io/download.html) - Linux and Windows
@@ -86,6 +88,7 @@ For some examples you also need these packages:
 
 - [tclinterp](https://github.com/georgtree/tclinterp)
 - [tclopt](https://github.com/georgtree/tclopt)
+- [NgspiceTclBridge](https://github.com/georgtree/NgspiceTclBridge)
 
 After simulator installation add path to executable to `PATH` environment variable.
 

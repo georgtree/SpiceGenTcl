@@ -6,7 +6,8 @@ namespace eval Advanced {
         List of availible examples:
         - [Monte-Carlo simulation] - "examples/ngspice/advanced/monte_carlo.tcl" and
           "examples/xyce/advanced/monte_carlo.tcl" file
-        - [Parameters extraction of diode model parameters] - "examples/ngspice/advanced/diode_extract.tcl" file        
+        - [Parameters extraction of diode model parameters] - "examples/ngspice/advanced/diode_extract.tcl" file
+        - [Inverter performance optimization] - "examples/ngspice/advanced/inverter_optimization.tcl" file
                 
         ## Monte-Carlo simulation
         
@@ -622,6 +623,444 @@ namespace eval Advanced {
         !ticklechart_mark_diode_extract_ngspice!
         
         On the plot we can see the initial simulated curve, the measured data and the final fitting result.
+
+
+        ## Inverter performance optimization
+
+        This example was taken from [ASCO (A SPICE Circuit Optimizer)](https://asco.sourceforge.net/) - software to make
+        optimization of different circuit performance with usage of differential evolution (DE) optimization algorithm.
+
+        Example uses next additional packages (in addition to `ticklecharts` and `tclcsv`):
+        - [Optimization package](https://github.com/georgtree/tclopt) - contains Differential Evolution optimization
+        algorithm
+        - [tclmeasure](https://github.com/georgtree/tclmeasure) - provides procedures to process data vectors similar
+        to `.measure` SPICE facilities
+        - [extexpr](https://github.com/georgtree/extexpr) - provides simple mathematical operators to work with vectors
+
+        Circuit is the simplest possible invertor with capacitive load:
+
+        <img src="assets/img/cmos_inverter.png" alt="drawing" width="600"/>
+
+        Simulation is done with pulsed input signal 4 periods long. We use three diffrerent supply voltage values to
+        make result be optimal across possible range of power levels. The goal is to find width `PWIDTH` of PMOS
+        transistor that provide minimum possible power consumption while satisfy certain constraints: low state output
+        voltage value to be no more than certain value `VLOWLIM` and high state output voltage value to be no less than
+        certain value `VHIGHLIM`.
+
+        Input parameters and constraints values are:
+        VSUPPLY - 2V, 2.1V, 2.2V
+        VLOWLIM - 0.05V
+        VHIGHLIM - 1.95V
+        INPFREQ - 850MHz
+        LMIN - 0.35um
+        NOPERIODS - 4
+
+        Width `NWIDTH` of NMOS device is 3 times lower than width `PWIDTH` of PMOS device. Lengths of bothe devices are
+        equal to `LENGTH`.  Perimeters of source and drain for both devices are defined by the equation:
+        ```
+        PD = PS = 2 ⋅ (WIDTH + LENGTH)
+        ```
+
+        Input period is:
+        ```
+                       1   
+        INPPERIOD = ───────
+                    INPFREQ
+        ```
+
+        The power consumption is defined as RMS value of instant power `I(VDD)*V(VDD,VSS)` across fourth period time
+        interval defined by `TMEASSTART` and `TMEASSTOP`:
+        ```
+        TMEASSTART = (NOPERIODS - 1) ⋅ INPPERIOD
+        TMEASSTOP = NOPERIODS ⋅ INPPERIOD
+                    ________________________________________________________________
+                   ╱                          TMEASSTOP                             
+                  ╱            1                  ⌠                           2     
+        PRMS =   ╱  ────────────────────── ⋅      ⌡     (I(VDD) ⋅ V(VDD, VSS))  ⋅ dt
+               ╲╱   TMEASSTOP - TMEASSTART   TMEASSTART                             
+
+        ```
+
+        Low and high voltages values are measured at fourth output pulse at times `TMEAS1` and `TMEAS2` correspondingly:
+        ```
+                             3.0 ⋅ INPPERIOD
+        TMEAS1 = TMEASSTOP - ───────────────
+                                   4.0      
+                             INPPERIOD
+        TMEAS2 = TMEASSTOP - ─────────
+                                4.0      
+        ```
+
+        In the next code lines we define all above mentioned constants as well as equations for `PD` and `PS`:
+        ```tcl
+        proc pdPsCalc {width length} {
+            return [= {2*$width+2*$length}]
+        }
+        # set parameters
+        set vSupply 2.0
+        set inpFreq 850e6
+        set inpPeriod [= {1.0/$inpFreq}]
+        set noPeriods 4
+        set tmeasStart [= {($noPeriods-1)*$inpPeriod}]
+        set tmeasStop [= {$noPeriods*$inpPeriod}]
+        set tmeas1 [= {$tmeasStop-3.0*$inpPeriod/4.0}]
+        set tmeas2 [= {$tmeasStop-1.0*$inpPeriod/4.0}]
+        set initialPWidth 10e-3
+        set pWidth $initialPWidth
+        set nWidth [= {$pWidth/3.0}]
+        set length 0.35e-6
+        set vLowLim 0.05
+        set vHighLim 1.95
+        set pd [pdPsCalc $pWidth $length]
+        set ps [pdPsCalc $pWidth $length]
+        set vSupplyVals {2.0 2.1 2.2}
+        ```
+
+        Next step is to define circuit with all mentioned values calculated previously, and add `.include` statement
+        for NMOS and PMOS models with class [::SpiceGenTcl::Include]:
+        ```tcl
+        # build circuit
+        set circuit [Circuit new {Inverter}]
+        set vdd [Vdc new dd vdd 0 -dc $vSupply]
+        set vss [Vdc new ss vss 0 -dc 0.0]
+        set vIn [Vpulse new 1 in vss -low $vSupply -high 0.0 -td [= {$inpPeriod/2.0}] -tr [= {$inpPeriod/1000.0}]\
+                         -tf [= {$inpPeriod/1000.0}] -pw [= {$inpPeriod/2.0}] -per $inpPeriod]
+        set capLoad [C new l out vss -c 3p]
+        set mp [M new p out in vdd -model pmos -l $length -w $pWidth -n4 vdd -pd $pd -ps $ps]
+        set mn [M new n out in vss -model nmos -l $length -w $nWidth -n4 vss -pd $pd -ps $ps]
+        $circuit add $vdd $vss $vIn $capLoad $mp $mn
+        $circuit add [Tran new -tstep [= {$inpPeriod/1000.0}] -tstop [= {$inpPeriod*$noPeriods}]]
+        $circuit add [Include new [file join $scriptPath models n.typ]]
+        $circuit add [Include new [file join $scriptPath models p.typ]]
+        ```
+
+        Also we define simulator (Ngspice) that should be used:
+        ```tcl
+        # set simulator
+        if {[catch {set simulator [Shared new batch1]}]} {
+            set simulator [Batch new batch1]
+        }
+        $circuit configure -simulator $simulator
+        ```
+
+        It is better to use [::SpiceGenTcl::Ngspice::Simulators::Shared] because of speed improvement - we read data
+        right from the memory and skipping phase of reading saving and reading raw file. But for that we need to have
+        companion package `NgspiceTclBridge` and compiled shared Ngspice for your platform. If it is not done, we
+        fallback to usual [::SpiceGenTcl::Ngspice::Simulators::Batch] version.
+
+        Next large step is to define correct cost function that taking into account the constraints voltages `VLOWLIM`
+        and `VHIGHLIM`, the power consumption `PRMS` and different values of `VSUPPLY` voltages.
+
+        The general equation for cost function is:
+        ```
+                      i = n                    ⎛P      - P    ⎞  
+                      ____                     ⎜ spec     sim ⎟  
+                      ╲                        ⎜     j       j⎟  
+        Cost = W    ⋅  ╲    P     + W    ⋅ max ⎜──────────────⎟  
+                obj    ╱     sim     con       ⎜    P         ⎟  
+                      ╱         i              ⎜     spec     ⎟  
+                      ‾‾‾‾                     ⎝         j    ⎠  
+                      i = 1                                    j∈[1,m]
+        ```
+
+        where:
+        - `P_sim_i` - performance metrics (objectives), in our case it is power consumption `PMRS`, so n=1.
+        - `W_obj` - weight for each objectives.
+        - `P_spec_j` and `P_sim_j` - constraints metrics, specified and simulated respectively. In out case these
+        constraints are voltages `VHIGHLIM` and `VLOWLIM`, so m=2. In cost function we include only the maximum
+        relative error from all constraints.
+        - `W_con` - weight for contraints.
+
+        In our case we use three supply voltages `VSUPPLY`, so cost function is calculated for each one and summed.
+
+        The tricky part is to select right weights for both objectives and constraints. When we are satisfied 
+        constraints, the value should be neglegible to objective member value, but when we are do not
+        satisfy the constraints, we should get large increase in overall cost function so we avoid going beyond these
+        constraints. Sometimes correction is necessary in case optimization does not gradually improving, or we
+        ended up with violated constraints.
+
+        In our case we have constraints:
+        - Low voltage must be equal or lower than `VLOWLIM`, so cost error function should increase if low voltage is
+        higher, and be small or zero if we are below the limit.
+        - High voltage must be equal or higher than `VHIGHLIM`, so cost function should increase if high voltage is
+        lower, and be small or zero if we are below the limit.
+
+        By default the `W_obj` is set to 10, so `W_con` should be in between 100-10000, and it's better to start from
+        the higher value, so we set it to 10000.
+
+        So, the final cost function is:
+        ```
+        set pdata [dcreate vSupplyVals $vSupplyVals nDevice $mn pDevice $mp vLowLim $vLowLim vHighLim $vLowLim length $length\
+                          vdd $vdd tmeas1 $tmeas1 tmeas2 $tmeas2 objWeight 10 constrWeight 10000 circuit $circuit]
+        proc costFunc {xall pdata args} {
+            dict with pdata {}
+            set width [@ $xall 0]
+            set pdPs [pdPsCalc $width $length]
+            $nDevice actOnParam -set l $length w [= {$width/3.0}] pd $pdPs ps $pdPs
+            $pDevice actOnParam -set l $length w $width pd $pdPs ps $pdPs
+            foreach val $vSupplyVals {
+                $vdd actOnParam -set dc $val
+                if {[catch {$circuit runAndRead}]} {
+                    # huge penalty in case of non-convergence
+                    lappend vlowList 1
+                    lappend vhighList 1
+                    lappend psupplyList 1
+                    continue
+                }
+                set data [$circuit getDataDict]
+                lappend vlowList [measure -xname time -data $data -find v(out) -at $tmeas1]
+                lappend vhighList [measure -xname time -data $data -find v(out) -at $tmeas2]
+                set instantPower [= {mul([dget $data i(vdd)], [dget $data v(vdd)])}]
+                lappend psupplyList [measure -xname time -data [dcreate time [dget $data time] instantPower $instantPower]\
+                                             -rms "-vec instantPower -from $tmeas1 -to $tmeas2"]
+            }
+            set costObj 0.0
+            set costConstr 0.0
+            foreach psupply $psupplyList vlow $vlowList vhigh $vhighList {
+                set constrVlow [= {($vlow-$vLowLim)/$vLowLim}]
+                if {$constrVlow<0} {
+                    set constrVlow 0.0
+                }
+                set constrVhigh [= {($vHighLim-$vhigh)/$vHighLim}]
+                if {$constrVhigh<0} {
+                    set constrVhigh 0.0
+                }
+                set costObj [= {$costObj+$psupply}]
+                set costConstr [= {$costConstr+max($constrVlow, $constrVhigh)}]
+            }
+            return [= {$objWeight*$costObj+$constrWeight*$costConstr}]
+        }
+        ```
+
+        Let's breakdown it line by line to clarify every step while keeping in mind the previous information.
+
+        First, we build `pdata` dictionary with information that is necessary to evaluate the cost function:
+        ```
+        set pdata [dcreate vSupplyVals $vSupplyVals nDevice $mn pDevice $mp vLowLim $vLowLim vHighLim $vLowLim length $length\
+                           vdd $vdd tmeas1 $tmeas1 tmeas2 $tmeas2 objWeight 10 constrWeight 10000 circuit $circuit]
+        ```
+
+        - `vSupplyVals` - list of power supply voltages
+        - `nDevice` - NMOS transistor object from the circuit we built, used to change parameters of the device
+        - `pDevice` - NMOS transistor object from the circuit we built, used to change parameters of the device
+        - `vLowLim` - value of lower limit constraint `VLOWLIM`
+        - `vHighLim` - value of lower limit constraint `VHIGHLIM`
+        - `length` - length of both NMOS and PMOS transistors
+        - `vdd` - power source object from the circuit we built, used to change parameters of the device
+        - `tmeas1` - start of the power measure interval
+        - `tmeas2` - end of the power measure interval
+        - `objWeight` - objective weight value
+        - `constrWeight` - constraints weight value
+        - `circuit` - circuit object we use to produce netlist
+
+        At the start we unpack the dictionary to local variables with the same name as key of the dictionary.
+        Then we extract the `WIDTH` parameter from vectors of variables. We have only one variable, so we just get
+        first and the only element:
+        ```
+        dict with pdata {}
+        set width [@ $xall 0]
+        ```
+
+        Next we calculate the `pd` and `ps` parameters from the given length and and new width, and change the
+        parameters of NMOS and PMOS devices with the new values:
+        ```
+        set pdPs [pdPsCalc $width $length]
+        $nDevice actOnParam -set l $length w [= {$width/3.0}] pd $pdPs ps $pdPs
+        $pDevice actOnParam -set l $length w $width pd $pdPs ps $pdPs
+        ```
+
+        In the next block we loop over all power supply voltages, run circuit, read the data and extract values we need:
+        ```
+        foreach val $vSupplyVals {
+            $vdd actOnParam -set dc $val
+            if {[catch {$circuit runAndRead}]} {
+                # huge penalty in case of non-convergence
+                lappend vlowList 1
+                lappend vhighList 1
+                lappend psupplyList 1
+                continue
+            }
+            set data [$circuit configure -data]
+            set dataDict [$circuit getDataDict]
+            lappend vlowList [$data measure -find v(out) -at $tmeas1]
+            lappend vhighList [$data measure -find v(out) -at $tmeas2]
+            set instantPower [= {mul([dget $dataDict i(vdd)], [dget $dataDict v(vdd)])}]
+            lappend psupplyList [measure -xname time -data [dcreate time [dget $dataDict time] instantPower $instantPower]\
+                                         -rms "-vec instantPower -from $tmeas1 -to $tmeas2"]
+        }
+        ```
+
+        An additional guard was added to prevent stepping into regions where circuit could fail due to non-convergence,
+        so we set objective and constraints metric to high values:
+        ```
+        if {[catch {$circuit runAndRead}]} {
+            # huge penalty in case of non-convergence
+            lappend vlowList 1
+            lappend vhighList 1
+            lappend psupplyList 1
+            continue
+        }
+        ```
+
+        To find values `VLOW` and `VHIGH` we use method [::SpiceGenTcl::RawFile::measure], that is wrapper
+        to `measure` command from package `tclmeasure`. Then we calculate calculate instant power by multiplying
+        current through power source to power voltage, and then directly use command `measure` from package `tclmeasure`:
+        ```tcl
+        set data [$circuit configure -data]
+        set dataDict [$circuit getDataDict]
+        lappend vlowList [$data measure -find v(out) -at $tmeas1]
+        lappend vhighList [$data measure -find v(out) -at $tmeas2]
+        set instantPower [= {mul([dget $dataDict i(vdd)], [dget $dataDict v(vdd)])}]
+        lappend psupplyList [measure -xname time -data [dcreate time [dget $dataDict time] instantPower $instantPower]\
+                                     -rms "-vec instantPower -from $tmeas1 -to $tmeas2"]
+        ```
+
+        After looping through all power voltages, we get values of objective in list `psupplyList` and constraints
+        for `VLOW` and `VHIGH` in lists `vlowList` and `vhighList` correspondingly.
+
+        In the final block we calculate value of cost function according to equations provided previously:
+        ```tcl
+        set costObj 0.0
+        set costConstr 0.0
+        foreach psupply $psupplyList vlow $vlowList vhigh $vhighList {
+            set constrVlow [= {($vlow-$vLowLim)/$vLowLim}]
+            if {$constrVlow<0} {
+                set constrVlow 0.0
+            }
+            set constrVhigh [= {($vHighLim-$vhigh)/$vHighLim}]
+            if {$constrVhigh<0} {
+                set constrVhigh 0.0
+            }
+            set costObj [= {$costObj+$psupply}]
+            set costConstr [= {$costConstr+max($constrVlow, $constrVhigh)}]
+        }
+        return [= {$objWeight*$costObj+$constrWeight*$costConstr}]
+        ```
+
+        After defining cost function, we can initialize and run optimization. As optimization engine we use
+        Differential Evolution algorithm from `tclopt` packkage:
+        ```tcl
+        set par [::tclopt::Parameter new width $pWidth -lowlim 1e-4 -uplim 10e-3]
+        set optimizer [::tclopt::DE new -funct costFunc -pdata $pdata -strategy rand-to-best/1/exp -genmax 50 -refresh 1\
+                               -np 10 -f 0.5 -cr 1 -seed 3 -debug -abstol 1e-6 -history -histfreq 1]
+        $optimizer addPars $par
+        set width [dget [$optimizer run] x]
+        ```
+
+        In first line we create parameter object and set the boundaries for the width value, from 100um to 10mm.
+        Strategy selection, values of `f`, `cr`, `np` and `genmax` are the same as in ASCO example. Then we add 
+        parameter object `par` to optimizer object `optimizer`, run it, and wait for the result. We set debug mode
+        with `-debug` switch to see progress output, and also we save history to look at the best trajectory of
+        optimum searching.
+
+        In the next block we read history information that is saved during the optimization, it was turned on by
+        `-history` switch:
+        ```tcl
+        # get results and history
+        set results [$optimizer run]
+        set width [dget $results x]
+        set trajectory [dict get $results besttraj]
+        set bestf [dict get $results history]
+        foreach genTr $trajectory genF $bestf {
+            lappend optData [list {*}[dict get $genTr x] [dict get $genF bestf]]
+            lappend functionTrajectory [list [dict get $genTr gen] [dict get $genTr x]]
+        }
+        ```
+
+        The we plot trajectory with `ticklecharts` package:
+        ```tcl
+        # plot 2D trajectory
+        set chart [ticklecharts::chart new]
+        $chart Xaxis -name "Generation" -minorTick {show "True"} -type "value" -splitLine {show "True"}
+        $chart Yaxis -name "Cost function" -minorTick {show "True"}  -splitLine {show "True"}
+        $chart SetOptions -title {} -tooltip {trigger "axis"} -animation "False" -toolbox {feature {dataZoom {yAxisIndex "none"}}}
+        $chart Add "lineSeries" -name "Best trajectory" -data $functionTrajectory -showAllSymbol "nothing"
+        set fbasename [file rootname [file tail [info script]]]
+        $chart Render -outfile [file normalize [file join .. html_charts ${fbasename}_plot.html]]
+        ```
+
+        !ticklechart_mark_inverter_optimization_plot_ngspice!
+
+        The final block of code is for calculating initial and final values of `VLOW`, `VHIGH`, `VSUPPLY` and preparing
+        waveform for plotting. We calculate it only for highest supply voltage to avoid cluttering:
+        ```tcl
+        # calculate initial waveforms the highest supply voltage
+        set pdPs [pdPsCalc $initialPWidth $length]
+        $mn actOnParam -set l $length w [= {$initialPWidth/3.0}] pd $pdPs ps $pdPs
+        $mp actOnParam -set l $length w $initialPWidth pd $pdPs ps $pdPs
+        $vdd actOnParam -set dc [@ $vSupplyVals 2]
+        $circuit runAndRead
+        set data [$circuit configure -data]
+        set dataDict [$circuit getDataDict]
+        foreach timeVal [dget $dataDict time] voutVal [dget $dataDict v(out)] {
+            lappend initialWaveform [list $timeVal $voutVal]
+        }
+        set vlowInitial [$data measure -find v(out) -at $tmeas1]
+        set vhighInitial [$data measure -find v(out) -at $tmeas2]
+        set instantPower [= {mul([dget $dataDict i(vdd)], [dget $dataDict v(vdd)])}]
+        set psupplyInitial [measure -xname time -data [dcreate time [dget $dataDict time] instantPower $instantPower]\
+                                    -rms "-vec instantPower -from $tmeas1 -to $tmeas2"]
+
+        # calculate final waveform for the highest supply voltage
+        set pdPs [pdPsCalc $width $length]
+        $mn actOnParam -set l $length w [= {$width/3.0}] pd $pdPs ps $pdPs
+        $mp actOnParam -set l $length w $width pd $pdPs ps $pdPs
+        $vdd actOnParam -set dc [@ $vSupplyVals 2]
+        $circuit runAndRead
+        set data [$circuit configure -data]
+        set dataDict [$circuit getDataDict]
+        foreach timeVal [dget $dataDict time] voutVal [dget $dataDict v(out)] {
+            lappend finalWaveform [list $timeVal $voutVal]
+        }
+        set vlowFinal [$data measure -find v(out) -at $tmeas1]
+        set vhighFinal [$data measure -find v(out) -at $tmeas2]
+        set instantPower [= {mul([dget $dataDict i(vdd)], [dget $dataDict v(vdd)])}]
+        set psupplyFinal [measure -xname time -data [dcreate time [dget $dataDict time] instantPower $instantPower]\
+                                  -rms "-vec instantPower -from $tmeas1 -to $tmeas2"]
+        ```
+
+        Plotting initial and final waveforms, and result values:
+        ```tcl
+        # plot waveforms
+        set chart [ticklecharts::chart new]
+        $chart Xaxis -name "Time, s" -minorTick {show "True"} -type "value" -splitLine {show "True"}
+        $chart Yaxis -name "v(out)" -minorTick {show "True"}  -splitLine {show "True"}
+        $chart SetOptions -title {} -legend {} -tooltip {trigger "axis"} -animation "False"\
+                -toolbox {feature {dataZoom {yAxisIndex "none"}}}
+        $chart Add "lineSeries" -name "initial, vdd=[@ $vSupplyVals 2]" -data $initialWaveform -showAllSymbol "nothing"\
+                -symbolSize "0"
+        $chart Add "lineSeries" -name "final, vdd=[@ $vSupplyVals 2]" -data $finalWaveform -showAllSymbol "nothing"\
+                -symbolSize "0"
+
+        set fbasename [file rootname [file tail [info script]]]
+        $chart Render -outfile [file normalize [file join .. html_charts ${fbasename}_waveforms_plot.html]]
+
+        # print resulted values for the highest supply voltage
+        puts "Optimization succesfully finished at generation [dget $results generation], total number of function evaluations\
+              - [dget $results nfev]"
+        puts "Convergence info: [dget $results info]"
+        puts "Best value of cost function is [format "%3e" [dget $results objfunc]]"
+        puts "Final width of PMOS is [format "%.3f" [= {$width/1e-3}]]mm, from initial value\
+                [format "%.3f" [= {$initialPWidth/1e-3}]]mm"
+        puts "For VDD=[@ $vSupplyVals 2]V,\
+                VLOW: [format "%.3f" $vlowInitial]V → [format "%.3f" $vlowFinal]V<[format "%.3f" $vLowLim]V,\
+                VHIGH: [format "%.3f" $vhighInitial]V → [format "%.3f" $vhighFinal]V>[format "%.3f" $vHighLim]V,\
+                PSUPPLY: [format "%.3f" $psupplyInitial]W → [format "%.3f" $psupplyFinal]W"
+        ```
+
+        Waveforms are:
+
+        !ticklechart_mark_inverter_optimization_waveforms_ngspice!
+
+        And final numbers:
+        ```
+        Optimization succesfully finished at generation 12, total number of function evaluations - 130
+        Convergence info: Optimization stopped due to crossing threshold 'abstol+reltol*abs(mean)=0.030176353097193406' of objective function population member standard deviation
+        Best value of cost function is 2.984087e+00
+        Final width of PMOS is 0.789mm, from initial value 10.000mm
+        For VDD=2.2V, VLOW: 0.147V → 0.046V<0.050V, VHIGH: 2.020V → 2.161V>1.950V, PSUPPLY: 1.101W → 0.107W
+        ```
+
     }
 
 }
