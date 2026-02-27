@@ -139,4 +139,4 @@ $layout Add $chartLog -bottom "5%" -height "40%" -width "80%"
 $layout Add $chart -bottom "55%" -height "40%" -width "80%"
 
 set fbasename [file rootname [file tail [info script]]]
-$layout Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -height 900px -width 700px
+$layout Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px

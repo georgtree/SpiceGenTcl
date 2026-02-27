@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Tips &#8212; SpiceGenTcl  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=514cf933" />
+    
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Advanced" href="SpiceGenTcl-Advanced.html" />
+    <link rel="prev" title="Tutorials" href="SpiceGenTcl-Tutorials.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="SpiceGenTcl-Advanced.html" title="Advanced"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="SpiceGenTcl-Tutorials.html" title="Tutorials"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">SpiceGenTcl  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Tips</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="tips">
+<span id="r-tips"></span><span id="r-3a3atips"></span><h1>Tips<a class="headerlink" href="#tips" title="Link to this heading">¶</a></h1>
+<p>This page contains different tips that help you to use SpiceGenTcl more efficiently.</p>
+<section id="define-custom-element">
+<span id="r-tips-define-custom-element"></span><span id="r-3a3atipsqzdefine20custom20element"></span><h2>Define custom element<a class="headerlink" href="#define-custom-element" title="Link to this heading">¶</a></h2>
+<p>To define custom element class we should use <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3adevice"><span class="std std-ref">::SpiceGenTcl::Device</span></a> class as a superclass. Why we need this?
+One simple example is custom Verilog-A device, that could have arbitary number of pins and parameters.
+Let’s try to define new element for next Verilog-A device:</p>
+<div class="highlight-verilog notranslate"><div class="highlight"><pre><span></span><span class="c1">// Jiles/Atherton Magnetic Core Model</span>
+<span class="c1">// Enhanced as described in &quot;Simulation and MOdeling of Nonlinear Magnetics&quot;</span>
+<span class="c1">// by Williams, Vogelsong, and Kundert, as found on www.designers-guide.org.</span>
+<span class="no">`include</span><span class="w"> </span><span class="s">&quot;discipline.h&quot;</span>
+<span class="no">`include</span><span class="w"> </span><span class="s">&quot;constants.h&quot;</span>
+
+<span class="c1">//</span>
+<span class="c1">// Core Model</span>
+<span class="c1">//</span>
+<span class="k">module</span><span class="w"> </span><span class="n">coreja</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">n</span><span class="p">);</span>
+
+<span class="n">magnetic</span><span class="w"> </span><span class="n">p</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
+<span class="k">inout</span><span class="w"> </span><span class="n">p</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
+<span class="p">(</span><span class="o">*</span><span class="w"> </span><span class="k">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;instance&quot;</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="kt">real</span><span class="w"> </span><span class="n">len</span><span class="o">=</span><span class="mf">0.1</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="p">(</span><span class="mh">0</span><span class="o">:</span><span class="mh">1000</span><span class="p">);</span><span class="w">   </span><span class="c1">// effective magnetic length of core</span>
+<span class="p">(</span><span class="o">*</span><span class="w"> </span><span class="k">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;instance&quot;</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="kt">real</span><span class="w"> </span><span class="n">area</span><span class="o">=</span><span class="mh">1</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="p">(</span><span class="mh">0</span><span class="o">:</span><span class="n">inf</span><span class="p">);</span><span class="w">     </span><span class="c1">// magnetic cross-sectional area of core</span>
+<span class="k">parameter</span><span class="w"> </span><span class="kt">real</span><span class="w"> </span><span class="n">ms</span><span class="o">=</span><span class="mf">1.6</span><span class="n">M</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="p">(</span><span class="mh">0</span><span class="o">:</span><span class="n">inf</span><span class="p">);</span><span class="w">    </span><span class="c1">// saturation magnetization</span>
+<span class="k">parameter</span><span class="w"> </span><span class="kt">real</span><span class="w"> </span><span class="n">a</span><span class="o">=</span><span class="mh">1100</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="p">(</span><span class="mh">0</span><span class="o">:</span><span class="n">inf</span><span class="p">);</span><span class="w">     </span><span class="c1">//</span>
+<span class="k">parameter</span><span class="w"> </span><span class="kt">real</span><span class="w"> </span><span class="n">k</span><span class="o">=</span><span class="mh">2000</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="p">(</span><span class="mh">0</span><span class="o">:</span><span class="n">inf</span><span class="p">);</span><span class="w">     </span><span class="c1">// bulk coupliing coefficient</span>
+<span class="k">parameter</span><span class="w"> </span><span class="kt">real</span><span class="w"> </span><span class="n">alpha</span><span class="o">=</span><span class="mf">1.6</span><span class="n">m</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="p">(</span><span class="mh">0</span><span class="o">:</span><span class="n">inf</span><span class="p">);</span><span class="w"> </span><span class="c1">// interdomain coupling coef.</span>
+<span class="k">parameter</span><span class="w"> </span><span class="kt">real</span><span class="w"> </span><span class="n">c</span><span class="o">=</span><span class="mf">0.2</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="p">[</span><span class="mh">0</span><span class="o">:</span><span class="mh">1</span><span class="p">];</span><span class="w">        </span><span class="c1">// coef. for reversable magnetization</span>
+
+<span class="n">magnetic</span><span class="w"> </span><span class="n">Hdot</span><span class="p">;</span><span class="w">          </span><span class="c1">// internal Hdot node</span>
+<span class="kt">real</span><span class="w"> </span><span class="n">H</span><span class="p">;</span><span class="w">                 </span><span class="c1">// field intensity</span>
+<span class="kt">real</span><span class="w"> </span><span class="n">B</span><span class="p">;</span><span class="w">                 </span><span class="c1">// flux density</span>
+<span class="kt">real</span><span class="w"> </span><span class="n">Manh</span><span class="p">;</span><span class="w">              </span><span class="c1">// anhysteric magnetization</span>
+<span class="kt">real</span><span class="w"> </span><span class="n">Mirr</span><span class="p">;</span><span class="w">              </span><span class="c1">// irreversible magnetization</span>
+<span class="kt">real</span><span class="w"> </span><span class="n">dMirr</span><span class="p">;</span><span class="w">             </span><span class="c1">// dMirr/dH</span>
+<span class="kt">real</span><span class="w"> </span><span class="n">M</span><span class="p">;</span><span class="w">                 </span><span class="c1">// total magnetization</span>
+<span class="kt">real</span><span class="w"> </span><span class="n">Heff</span><span class="p">;</span><span class="w">              </span><span class="c1">// effective field intensity</span>
+<span class="k">integer</span><span class="w"> </span><span class="n">delta</span><span class="p">;</span><span class="w">          </span><span class="c1">// direction of the input MMF</span>
+<span class="k">integer</span><span class="w"> </span><span class="n">migrating</span><span class="p">;</span><span class="w">      </span><span class="c1">// flag indicating that the pinning sites are moving</span>
+
+<span class="c1">// sign function</span>
+<span class="w">    </span><span class="n">analog</span><span class="w"> </span><span class="k">function</span><span class="w"> </span><span class="k">integer</span><span class="w"> </span><span class="n">sign</span><span class="p">;</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="n">arg</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">real</span><span class="w"> </span><span class="n">arg</span><span class="p">;</span>
+<span class="w">    </span><span class="n">sign</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">arg</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mf">0.0</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mh">1</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="o">-</span><span class="mh">1</span><span class="p">);</span>
+<span class="w">    </span><span class="k">endfunction</span>
+
+<span class="c1">// hyperbolic cotangent function</span>
+<span class="w">    </span><span class="n">analog</span><span class="w"> </span><span class="k">function</span><span class="w"> </span><span class="kt">real</span><span class="w"> </span><span class="n">coth</span><span class="p">;</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="n">arg</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">real</span><span class="w"> </span><span class="n">arg</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">real</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+<span class="w">    </span><span class="k">begin</span>
+<span class="w">        </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">exp</span><span class="p">(</span><span class="n">min</span><span class="p">(</span><span class="mh">80</span><span class="p">,</span><span class="n">max</span><span class="p">(</span><span class="o">-</span><span class="mh">80</span><span class="p">,</span><span class="n">arg</span><span class="p">)));</span>
+<span class="w">        </span><span class="n">coth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="mh">1</span><span class="o">/</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mh">1</span><span class="o">/</span><span class="n">x</span><span class="p">);</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">    </span><span class="k">endfunction</span>
+
+<span class="c1">// core model</span>
+<span class="w">    </span><span class="n">analog</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">    </span><span class="n">H</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MMF</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">len</span><span class="p">;</span>
+<span class="w">    </span><span class="n">MMF</span><span class="p">(</span><span class="n">Hdot</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;+</span><span class="w"> </span><span class="n">ddt</span><span class="p">(</span><span class="n">H</span><span class="p">);</span>
+<span class="w">    </span><span class="n">delta</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sign</span><span class="p">(</span><span class="n">MMF</span><span class="p">(</span><span class="n">Hdot</span><span class="p">));</span>
+<span class="w">    </span><span class="n">B</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Phi</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">n</span><span class="p">)</span><span class="o">/</span><span class="n">area</span><span class="p">;</span>
+<span class="w">    </span><span class="n">M</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">B</span><span class="o">/</span><span class="no">`P_U0</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">H</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Heff</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">H</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">alpha</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">M</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">abs</span><span class="p">(</span><span class="n">Heff</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.001</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">a</span><span class="p">)</span>
+<span class="w">        </span><span class="n">Manh</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ms</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">coth</span><span class="p">(</span><span class="n">Heff</span><span class="o">/</span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">a</span><span class="o">/</span><span class="n">Heff</span><span class="p">);</span>
+<span class="w">    </span><span class="k">else</span>
+<span class="w">        </span><span class="n">Manh</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ms</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">Heff</span><span class="o">/</span><span class="p">(</span><span class="mf">3.0</span><span class="o">*</span><span class="n">a</span><span class="p">);</span><span class="w">       </span><span class="c1">// Taylor series expansion of coth()</span>
+<span class="w">    </span><span class="n">dMirr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">Manh</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">M</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">delta</span><span class="o">*</span><span class="n">k</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">alpha</span><span class="o">*</span><span class="p">(</span><span class="n">Manh</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">M</span><span class="p">))</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">MMF</span><span class="p">(</span><span class="n">Hdot</span><span class="p">);</span>
+<span class="w">    </span><span class="n">migrating</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">delta</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mh">0</span><span class="p">)</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="p">(</span><span class="n">M</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">Manh</span><span class="p">);</span>
+<span class="w">    </span><span class="n">Mirr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">idt</span><span class="p">(</span><span class="w"> </span><span class="n">migrating</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">dMirr</span><span class="p">,</span><span class="w"> </span><span class="n">Manh</span><span class="w"> </span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">M</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mh">1</span><span class="o">-</span><span class="n">c</span><span class="p">)</span><span class="o">*</span><span class="n">Mirr</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">c</span><span class="o">*</span><span class="n">Manh</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Phi</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;+</span><span class="w"> </span><span class="n">area</span><span class="o">*</span><span class="no">`P_U0</span><span class="o">*</span><span class="p">(</span><span class="n">H</span><span class="o">+</span><span class="n">M</span><span class="p">);</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="k">endmodule</span>
+</pre></div>
+</div>
+<p>This model is taken from <a class="reference external" href="https://designers-guide.org/modeling/jilath.va">designers-guide</a>, that contains many
+Verilog-AMS models.</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">oo</span><span class="o">::</span>class<span class="w"> </span>create<span class="w"> </span>Core<span class="w"> </span><span class="k">{</span>
+<span class="w">    </span><span class="nv">superclass</span><span class="w"> </span>Device
+<span class="w">    </span><span class="nv">constructor</span><span class="w"> </span><span class="k">{</span><span class="nv">args</span><span class="k">}</span><span class="w"> </span><span class="k">{</span>
+<span class="w">        </span><span class="k">set</span><span class="w"> </span>arguments<span class="w"> </span><span class="k">[</span><span class="nv">argparse</span><span class="w"> </span><span class="o">-</span>inline<span class="w"> </span><span class="o">-</span>pfirst<span class="w"> </span><span class="o">-</span>helplevel<span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">-</span>help<span class="w"> </span><span class="k">{}</span><span class="w"> </span><span class="k">{</span>
+<span class="w">            </span><span class="k">{</span><span class="nv">-model</span><span class="o">=</span><span class="w"> </span><span class="o">-</span>required<span class="w"> </span><span class="o">-</span>help<span class="w"> </span><span class="k">{</span><span class="nv">Model</span><span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>core<span class="k">}}</span>
+<span class="w">            </span><span class="k">{</span><span class="nv">-len</span><span class="o">=</span><span class="w"> </span><span class="o">-</span>default<span class="w"> </span><span class="mf">0.1</span><span class="w"> </span><span class="o">-</span>help<span class="w"> </span><span class="k">{</span><span class="nv">Length</span><span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>core<span class="k">}}</span>
+<span class="w">            </span><span class="k">{</span><span class="nv">-area</span><span class="o">=</span><span class="w"> </span><span class="o">-</span>default<span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">-</span>help<span class="w"> </span><span class="k">{</span><span class="nv">Cross-section</span><span class="w"> </span>area<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>core<span class="k">}}</span>
+<span class="w">            </span><span class="k">{</span><span class="nv">name</span><span class="w"> </span><span class="o">-</span>help<span class="w"> </span><span class="k">{</span><span class="nv">Name</span><span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>device<span class="w"> </span>without<span class="w"> </span>first-letter<span class="w"> </span>designator<span class="k">}}</span>
+<span class="w">            </span><span class="k">{</span><span class="nv">p</span><span class="w"> </span><span class="o">-</span>help<span class="w"> </span><span class="k">{</span><span class="nv">Name</span><span class="w"> </span>of<span class="w"> </span>node<span class="w"> </span>connected<span class="w"> </span>to<span class="w"> </span>positive<span class="w"> </span>pin<span class="k">}}</span>
+<span class="w">            </span><span class="k">{</span><span class="nv">n</span><span class="w"> </span><span class="o">-</span>help<span class="w"> </span><span class="k">{</span><span class="nv">Name</span><span class="w"> </span>of<span class="w"> </span>node<span class="w"> </span>connected<span class="w"> </span>to<span class="w"> </span>negative<span class="w"> </span>pin<span class="k">}}</span>
+<span class="w">        </span><span class="k">}]</span>
+<span class="w">        </span><span class="nb">lappend</span><span class="w"> </span>params<span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="o">-</span>posnocheck<span class="w"> </span>model<span class="w"> </span><span class="k">[</span><span class="nv">dget</span><span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span>model<span class="k">]]</span>
+<span class="w">        </span><span class="nb">dict</span><span class="w"> </span>for<span class="w"> </span><span class="k">{</span><span class="nv">paramName</span><span class="w"> </span>value<span class="k">}</span><span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span><span class="k">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="k">{</span><span class="nv">$paramName</span><span class="w"> </span><span class="nv">ni</span><span class="w"> </span><span class="k">{</span><span class="nv">model</span><span class="w"> </span>name<span class="w"> </span>p<span class="w"> </span>n<span class="k">}}</span><span class="w"> </span><span class="k">{</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="k">{[</span>@<span class="w"> </span><span class="nv">$value</span><span class="w"> </span><span class="nv">0</span><span class="k">]</span><span class="w"> </span><span class="nv">eq</span><span class="w"> </span><span class="k">{</span><span class="nv">-eq</span><span class="k">}}</span><span class="w"> </span><span class="k">{</span>
+<span class="w">                    </span><span class="nb">lappend</span><span class="w"> </span>params<span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="o">-</span><span class="ow">eq</span><span class="w"> </span><span class="nv">$paramName</span><span class="w"> </span><span class="k">[</span>@<span class="w"> </span><span class="nv">$value</span><span class="w"> </span><span class="nv">1</span><span class="k">]]</span>
+<span class="w">                </span><span class="k">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">{</span>
+<span class="w">                    </span><span class="nb">lappend</span><span class="w"> </span>params<span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="nv">$paramName</span><span class="w"> </span><span class="nv">$value</span><span class="k">]</span>
+<span class="w">                </span><span class="k">}</span>
+<span class="w">            </span><span class="k">}</span>
+<span class="w">        </span><span class="k">}</span>
+<span class="w">        </span><span class="nv">next</span><span class="w"> </span>n<span class="k">[</span><span class="nv">dget</span><span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span>name<span class="k">]</span><span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span>p<span class="w"> </span><span class="k">[</span><span class="nv">dget</span><span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span>p<span class="k">]]</span><span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span>n<span class="w"> </span><span class="k">[</span><span class="nv">dget</span><span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span>n<span class="k">]]]</span><span class="w"> </span><span class="nv">$params</span>
+<span class="w">    </span><span class="k">}</span>
+<span class="k">}</span>
+</pre></div>
+</div>
+<p>In this block of code we define instance class of core. Let’s go through the each line.
+First line is class definition:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">oo</span><span class="o">::</span>class<span class="w"> </span>create<span class="w"> </span>Core
+</pre></div>
+</div>
+<p>It is good convention to start class name from capital letter.</p>
+<p>Superclass for new element is <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3adevice"><span class="std std-ref">::SpiceGenTcl::Device</span></a>:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">superclass</span><span class="w"> </span>SpiceGenTcl::Device
+</pre></div>
+</div>
+<p>In next line we define arguments for constructor:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">constructor</span><span class="w"> </span><span class="k">{</span><span class="nv">args</span><span class="k">}</span>
+</pre></div>
+</div>
+<p>In these few lines we process <code class="docutils literal notranslate"><span class="pre">args</span></code> variable with <a class="reference external" href="https://github.com/georgtree/argparse">argparse</a> package:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">set</span><span class="w"> </span>arguments<span class="w"> </span><span class="k">[</span><span class="nv">argparse</span><span class="w"> </span><span class="o">-</span>inline<span class="w"> </span><span class="o">-</span>pfirst<span class="w"> </span><span class="o">-</span>helplevel<span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">-</span>help<span class="w"> </span><span class="k">{}</span><span class="w"> </span><span class="k">{</span>
+<span class="w">    </span><span class="k">{</span><span class="nv">-model</span><span class="o">=</span><span class="w"> </span><span class="o">-</span>required<span class="w"> </span><span class="o">-</span>help<span class="w"> </span><span class="k">{</span><span class="nv">Model</span><span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>core<span class="k">}}</span>
+<span class="w">    </span><span class="k">{</span><span class="nv">-len</span><span class="o">=</span><span class="w"> </span><span class="o">-</span>default<span class="w"> </span><span class="mf">0.1</span><span class="w"> </span><span class="o">-</span>help<span class="w"> </span><span class="k">{</span><span class="nv">Length</span><span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>core<span class="k">}}</span>
+<span class="w">    </span><span class="k">{</span><span class="nv">-area</span><span class="o">=</span><span class="w"> </span><span class="o">-</span>default<span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">-</span>help<span class="w"> </span><span class="k">{</span><span class="nv">Cross-section</span><span class="w"> </span>area<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>core<span class="k">}}</span>
+<span class="w">    </span><span class="k">{</span><span class="nv">name</span><span class="w"> </span><span class="o">-</span>help<span class="w"> </span><span class="k">{</span><span class="nv">Name</span><span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>device<span class="w"> </span>without<span class="w"> </span>first-letter<span class="w"> </span>designator<span class="k">}}</span>
+<span class="w">    </span><span class="k">{</span><span class="nv">p</span><span class="w"> </span><span class="o">-</span>help<span class="w"> </span><span class="k">{</span><span class="nv">Name</span><span class="w"> </span>of<span class="w"> </span>node<span class="w"> </span>connected<span class="w"> </span>to<span class="w"> </span>positive<span class="w"> </span>pin<span class="k">}}</span>
+<span class="w">    </span><span class="k">{</span><span class="nv">n</span><span class="w"> </span><span class="o">-</span>help<span class="w"> </span><span class="k">{</span><span class="nv">Name</span><span class="w"> </span>of<span class="w"> </span>node<span class="w"> </span>connected<span class="w"> </span>to<span class="w"> </span>negative<span class="w"> </span>pin<span class="k">}}</span>
+<span class="k">}]</span>
+</pre></div>
+</div>
+<p>Switch <code class="docutils literal notranslate"><span class="pre">-pfirst</span></code> allows to pass required parameters (name, p and n) first, before switches. <code class="docutils literal notranslate"><span class="pre">-help</span></code>
+switch allows to call constructor of the <code class="docutils literal notranslate"><span class="pre">Core</span></code> with argument <code class="docutils literal notranslate"><span class="pre">-help</span></code> and get interactive help message.
+Required parameters are: <code class="docutils literal notranslate"><span class="pre">name</span></code>, positive node <code class="docutils literal notranslate"><span class="pre">p</span></code> and negative node <code class="docutils literal notranslate"><span class="pre">n</span></code>.</p>
+<p>Next we define required <code class="docutils literal notranslate"><span class="pre">-model</span></code> argument, and optional instance arguments <code class="docutils literal notranslate"><span class="pre">-len</span></code> and <code class="docutils literal notranslate"><span class="pre">-area</span></code> with default
+values. Due to these lines we can pass parameters to element in forms <code class="docutils literal notranslate"><span class="pre">-paramName</span> <span class="pre">$paramValue</span> <span class="pre">$paramQual</span></code>, for
+example: <code class="docutils literal notranslate"><span class="pre">-area</span> <span class="pre">1e-4</span></code> or <code class="docutils literal notranslate"><span class="pre">-area</span> <span class="pre">l*m</span> <span class="pre">-eq</span></code>.</p>
+<p>Possible qualificator is <code class="docutils literal notranslate"><span class="pre">-eq</span></code> - it means that parameter should be inserted into SPICE netlist as
+<code class="docutils literal notranslate"><span class="pre">paramName={expression}</span></code></p>
+<p>In the next few lines we build parameter list that will be passed to <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3adevice"><span class="std std-ref">::SpiceGenTcl::Device</span></a> constructor:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">lappend</span><span class="w"> </span>params<span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span>model<span class="w"> </span><span class="k">[</span><span class="nv">dget</span><span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span>model<span class="k">]</span><span class="w"> </span><span class="o">-</span>posnocheck<span class="k">]</span>
+<span class="nb">dict</span><span class="w"> </span>for<span class="w"> </span><span class="k">{</span><span class="nv">paramName</span><span class="w"> </span>value<span class="k">}</span><span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span><span class="k">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="k">{</span><span class="nv">$paramName</span><span class="w"> </span><span class="nv">ni</span><span class="w"> </span><span class="k">{</span><span class="nv">model</span><span class="w"> </span>name<span class="w"> </span>p<span class="w"> </span>n<span class="k">}}</span><span class="w"> </span><span class="k">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="k">{[</span>@<span class="w"> </span><span class="nv">$value</span><span class="w"> </span><span class="nv">0</span><span class="k">]</span><span class="w"> </span><span class="nv">eq</span><span class="w"> </span><span class="k">{</span><span class="nv">-eq</span><span class="k">}}</span><span class="w"> </span><span class="k">{</span>
+<span class="w">            </span><span class="nb">lappend</span><span class="w"> </span>params<span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="o">-</span><span class="ow">eq</span><span class="w"> </span><span class="nv">$paramName</span><span class="w"> </span><span class="k">[</span>@<span class="w"> </span><span class="nv">$value</span><span class="w"> </span><span class="nv">1</span><span class="k">]]</span>
+<span class="w">        </span><span class="k">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">{</span>
+<span class="w">            </span><span class="nb">lappend</span><span class="w"> </span>params<span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="nv">$paramName</span><span class="w"> </span><span class="nv">$value</span><span class="k">]</span>
+<span class="w">        </span><span class="k">}</span>
+<span class="w">    </span><span class="k">}</span>
+<span class="k">}</span>
+</pre></div>
+</div>
+<p>The last but not the least is step of passing arguments to <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3adevice"><span class="std std-ref">::SpiceGenTcl::Device</span></a> constructor:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">next</span><span class="w"> </span>n<span class="k">[</span><span class="nv">dget</span><span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span>name<span class="k">]</span><span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span>p<span class="w"> </span><span class="k">[</span><span class="nv">dget</span><span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span>p<span class="k">]]</span><span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span>n<span class="w"> </span><span class="k">[</span><span class="nv">dget</span><span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span>n<span class="k">]]]</span><span class="w"> </span><span class="nv">$params</span>
+</pre></div>
+</div>
+<p>This superclass accept arguments in form <code class="docutils literal notranslate"><span class="pre">constructor</span> <span class="pre">{name</span> <span class="pre">pins</span> <span class="pre">params}</span></code>.
+So, we pass string <code class="docutils literal notranslate"><span class="pre">n[dget</span> <span class="pre">$arguments</span> <span class="pre">name]</span></code> as device name, <code class="docutils literal notranslate"><span class="pre">n</span></code> is reference designator for Verilog-A devices
+in Ngspice. Secondly we pass list of nodes
+<code class="docutils literal notranslate"><span class="pre">[list</span> <span class="pre">[list</span> <span class="pre">p</span> <span class="pre">[dget</span> <span class="pre">$arguments</span> <span class="pre">p]]</span> <span class="pre">[list</span> <span class="pre">n</span> <span class="pre">[dget</span> <span class="pre">$arguments</span> <span class="pre">n]]]</span></code> in form of
+<code class="docutils literal notranslate"><span class="pre">{{Name0</span> <span class="pre">NodeName}</span> <span class="pre">{Name1</span> <span class="pre">NodeName}</span> <span class="pre">{Name2</span> <span class="pre">NodeName}</span> <span class="pre">...}</span></code>.</p>
+<p>And the last is list of parameters in form <code class="docutils literal notranslate"><span class="pre">{{model</span> <span class="pre">Value</span> <span class="pre">-posnocheck}</span> <span class="pre">{Name</span> <span class="pre">Value</span> <span class="pre">?-eq?}</span> <span class="pre">{Name</span> <span class="pre">Value</span> <span class="pre">?-eq?}</span>
+<span class="pre">{Name</span> <span class="pre">Value</span> <span class="pre">?-eq?}</span> <span class="pre">...}</span></code>.</p>
+<p>So, after that we can create a new instance of newly created class:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">set</span><span class="w"> </span>coreInst<span class="w"> </span><span class="k">[</span><span class="nv">Core</span><span class="w"> </span>new<span class="w"> </span><span class="mi">1</span><span class="w"> </span>p<span class="w"> </span>n<span class="w"> </span><span class="o">-</span>model<span class="w"> </span>coreModel<span class="w"> </span><span class="o">-</span>area<span class="w"> </span><span class="mi">1</span>e-4<span class="w"> </span><span class="o">-</span>len<span class="w"> </span><span class="k">{</span><span class="nv">l</span><span class="o">*</span><span class="mi">5</span><span class="w"> </span><span class="o">-</span><span class="ow">eq</span><span class="k">}]</span>
+<span class="nb">puts</span><span class="w"> </span><span class="k">[</span><span class="nv">$coreInst</span><span class="w"> </span><span class="nv">genSPICEString</span><span class="k">]</span>
+</pre></div>
+</div>
+<p>Resulted SPICE string is:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>n1 p n coremodel area=1e-4 len={l*5}
+</pre></div>
+</div>
+<p>Verilog-A devices in Ngspice demand corresponding model being instantiated in the netlist. For that purpose we
+create <code class="docutils literal notranslate"><span class="pre">CoreModel</span></code> class:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">oo</span><span class="o">::</span>class<span class="w"> </span>create<span class="w"> </span>CoreModel<span class="w"> </span><span class="k">{</span>
+<span class="w">    </span><span class="nv">superclass</span><span class="w"> </span>Model
+<span class="w">    </span><span class="nv">constructor</span><span class="w"> </span><span class="k">{</span><span class="nv">args</span><span class="k">}</span><span class="w"> </span><span class="k">{</span>
+<span class="w">        </span><span class="nv">next</span><span class="w"> </span><span class="k">{</span><span class="o">*</span><span class="k">}[</span><span class="nv">my</span><span class="w"> </span>ArgsPreprocess<span class="w"> </span><span class="k">{</span><span class="nv">ms</span><span class="w"> </span>a<span class="w"> </span>k<span class="w"> </span>alpha<span class="w"> </span>c<span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">name</span><span class="w"> </span>type<span class="k">}</span><span class="w"> </span>type<span class="w"> </span><span class="k">{</span><span class="o">*</span><span class="k">}[</span><span class="nb">linsert</span><span class="w"> </span><span class="nv">$args</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span>coreja<span class="k">]]</span>
+<span class="w">    </span><span class="k">}</span>
+<span class="k">}</span>
+</pre></div>
+</div>
+<p>Here we use as superclass <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3amodel"><span class="std std-ref">::SpiceGenTcl::Model</span></a> for new element.
+To process optional arguments, we use special method [::SpiceGenTcl::Utility::ArgsPreprocess], that
+process optional <code class="docutils literal notranslate"><span class="pre">args</span></code> arguments and produces string for <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3amodel"><span class="std std-ref">::SpiceGenTcl::Model</span></a> constructor.</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">next</span><span class="w"> </span><span class="k">{</span><span class="o">*</span><span class="k">}[</span><span class="nv">my</span><span class="w"> </span>ArgsPreprocess<span class="w"> </span><span class="k">{</span><span class="nv">ms</span><span class="w"> </span>a<span class="w"> </span>k<span class="w"> </span>alpha<span class="w"> </span>c<span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">name</span><span class="w"> </span>type<span class="k">}</span><span class="w"> </span>type<span class="w"> </span><span class="k">{</span><span class="o">*</span><span class="k">}[</span><span class="nb">linsert</span><span class="w"> </span><span class="nv">$args</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span>coreja<span class="k">]]</span>
+</pre></div>
+</div>
+<p>We set model parameters in list <code class="docutils literal notranslate"><span class="pre">{ms</span> <span class="pre">a</span> <span class="pre">k</span> <span class="pre">alpha</span> <span class="pre">c}</span></code> as switches, and then the list of required parameters
+<code class="docutils literal notranslate"><span class="pre">{name</span> <span class="pre">type}</span></code>. Then we provide elements names which should be ignored while generating help message, and the last
+are arguments with switches and values, including default type value <code class="docutils literal notranslate"><span class="pre">coreja</span></code>. The name <code class="docutils literal notranslate"><span class="pre">coreja</span></code> corresponds to
+name of Verilog-A module.</p>
+<p>We use [::SpiceGenTcl::Utility::ArgsPreprocess] procedure here, but we can go the same way we do with
+<code class="docutils literal notranslate"><span class="pre">Core</span></code> class, and add, for example, default values, or use some complex logic of elements initialization:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">oo</span><span class="o">::</span>class<span class="w"> </span>create<span class="w"> </span>CoreModel<span class="w"> </span><span class="k">{</span>
+<span class="w">    </span><span class="nv">superclass</span><span class="w"> </span>Model
+<span class="w">    </span><span class="nv">constructor</span><span class="w"> </span><span class="k">{</span><span class="nv">args</span><span class="k">}</span><span class="w"> </span><span class="k">{</span>
+<span class="w">        </span><span class="k">set</span><span class="w"> </span>arguments<span class="w"> </span><span class="k">[</span><span class="nv">argparse</span><span class="w"> </span><span class="o">-</span>inline<span class="w"> </span><span class="o">-</span>pfirst<span class="w"> </span><span class="o">-</span>helplevel<span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">-</span>help<span class="w"> </span><span class="k">{}</span><span class="w"> </span><span class="k">{</span>
+<span class="w">            </span><span class="nv">-ms</span><span class="o">=</span>
+<span class="w">            </span><span class="k">{</span><span class="nv">-a</span><span class="o">=</span><span class="w"> </span><span class="o">-</span>default<span class="w"> </span><span class="mi">1000</span><span class="k">}</span>
+<span class="w">            </span><span class="nv">-k</span><span class="o">=</span>
+<span class="w">            </span><span class="nv">-alpha</span><span class="o">=</span>
+<span class="w">            </span><span class="nv">-c</span><span class="o">=</span>
+<span class="w">            </span><span class="nv">name</span>
+<span class="w">            </span><span class="nv">type</span>
+<span class="w">        </span><span class="k">}]</span>
+<span class="w">        </span><span class="nb">dict</span><span class="w"> </span>for<span class="w"> </span><span class="k">{</span><span class="nv">paramName</span><span class="w"> </span>value<span class="k">}</span><span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span><span class="k">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="k">{[</span>@<span class="w"> </span><span class="nv">$value</span><span class="w"> </span><span class="nv">0</span><span class="k">]</span><span class="w"> </span><span class="nv">eq</span><span class="w"> </span><span class="k">{</span><span class="nv">-eq</span><span class="k">}}</span><span class="w"> </span><span class="k">{</span>
+<span class="w">                </span><span class="nb">lappend</span><span class="w"> </span>params<span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="o">-</span><span class="ow">eq</span><span class="w"> </span><span class="nv">$paramName</span><span class="w"> </span><span class="k">[</span>@<span class="w"> </span><span class="nv">$value</span><span class="w"> </span><span class="nv">1</span><span class="k">]]</span>
+<span class="w">            </span><span class="k">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">{</span>
+<span class="w">                </span><span class="nb">lappend</span><span class="w"> </span>params<span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="nv">$paramName</span><span class="w"> </span><span class="nv">$value</span><span class="k">]</span>
+<span class="w">            </span><span class="k">}</span>
+<span class="w">        </span><span class="k">}</span>
+<span class="w">        </span><span class="nv">next</span><span class="w"> </span><span class="nv">$name</span><span class="w"> </span>coreja<span class="w"> </span><span class="k">{</span><span class="o">*</span><span class="k">}</span><span class="nv">$params</span>
+<span class="w">    </span><span class="k">}</span>
+<span class="k">}</span>
+</pre></div>
+</div>
+<p>Finally, we initialize model instance and print SPICE string:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">set</span><span class="w"> </span>coreModel<span class="w"> </span><span class="k">[</span><span class="nv">CoreModel</span><span class="w"> </span>new<span class="w"> </span>coremodel<span class="w"> </span><span class="o">-</span>ms<span class="w"> </span><span class="mf">1.7</span>meg<span class="w"> </span><span class="o">-</span>a<span class="w"> </span><span class="mi">1100</span><span class="w"> </span><span class="o">-</span>k<span class="w"> </span><span class="mi">2000</span><span class="w"> </span><span class="o">-</span>alpha<span class="w"> </span><span class="mf">1.6</span>m<span class="w"> </span><span class="o">-</span>c<span class="w"> </span><span class="mf">0.2</span><span class="k">]</span>
+<span class="nb">puts</span><span class="w"> </span><span class="k">[</span><span class="nv">$coreModel</span><span class="w"> </span><span class="nv">genSPICEString</span><span class="k">]</span>
+</pre></div>
+</div>
+<p>The result is:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>.model coremodel coreja(ms=1.7meg a=1100 k=2000 alpha=1.6m c=0.2)
+</pre></div>
+</div>
+<p>If you want to see the simulation example with that model, please look at
+/examples/ngspice/advanced/verilog_a_magnetic.tcl.</p>
+<hr class="docutils" />
+<p class="centered">
+<strong>Copyright (c) George Yashin</strong></p></section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Tips</a><ul>
+<li><a class="reference internal" href="#define-custom-element">Define custom element</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="SpiceGenTcl-Tutorials.html"
+                          title="previous chapter">Tutorials</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="SpiceGenTcl-Advanced.html"
+                          title="next chapter">Advanced</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/SpiceGenTcl-Tips.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="SpiceGenTcl-Advanced.html" title="Advanced"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="SpiceGenTcl-Tutorials.html" title="Tutorials"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">SpiceGenTcl  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Tips</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright George Yashin.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    </div>
+  </body>
+</html>

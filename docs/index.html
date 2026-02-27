@@ -1,597 +1,1279 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"/>
-<title>Tcl SpiceGenTcl package</title>
-<link rel='stylesheet' type='text/css' href='assets/ruff-min.css' />
-<script type='text/javascript' src='assets/ruff-min.js'></script>
-</head>
-<body>
-<div class='ruff-layout'>
-<header class='ruff-layout-header ruff-hd'>
-<a style='text-decoration:none;' href='index.html'>Tcl SpiceGenTcl package (v0.71)</a>
+<!DOCTYPE html>
 
-
-            <div id="ruffButtonBar">
-            <button id="ruffNavMove" onclick="ruffMoveNavPane()"></button>
-            <button id="ruffToggleTheme" onclick="ruffNextTheme()"></button>
-            </div>
-        </header><main class='ruff-layout-main ruff-bd'><p class='ruff'><img src="assets/img/spicegentcl_logo.svg" alt="drawing" width="700"/></p>
-<p class='ruff'>This package provides Tcl interface to different SPICE and SPICE-like simulator, Ngspice, Xyce. It was inspired by <a href="https://github.com/PySpice-org/PySpice" >PySpice</a> project, object-oriented interface to SPICE-like simulators written in Python.</p>
-<h2 class='ruff'><a name='General concept'></a>General concept<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
-<div style='clear:both;'></div>
-<p class='ruff'>The general concept of the package is to build a netlist using Tcl scripts. It is based on the TclOO object-oriented system, where everything is represented by objects, including elements, models, analyses, waveforms, and netlists. After defining the netlist, you can run the simulation, read the resulting data, and then process or display the data using the Tcl scripting language.</p>
-<p class='ruff'>This approach differs from the <a href="https://ngspice.sourceforge.io/tclspice.html" >Tclspice</a> extension, which comes bundled with Ngspice and is tightly bound to the simulator's internal structures. SpiceGenTcl offers a more flexible approach that can be extended to work with different simulators that use netlists with similar syntax.</p>
-<h2 class='ruff'><a name='Usage examples'></a>Usage examples<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
-<div style='clear:both;'></div>
-<p class='ruff'>SpiceGenTcl can be used if you need:</p>
-<ul class='ruff'>
-<li>automate some repetitive simulation tasks, and you don't like <a href="https://ngspice.sourceforge.io/ngspice-control-language-tutorial.html" >Nutmeg</a> syntax (SPICE standard scripting language)</li>
-<li>postprocess output waveforms and data</li>
-<li>change netlist structure on the fly</li>
-<li>simulate different models in the same circuit setup</li>
-<li>run circuit optimization with parameters variations as well as variations in circuit topology</li>
-<li>parse existing netlist and gain control over all circuit elements with Tcl</li>
-</ul>
-<p class='ruff'>Currently, there are range of examples for common analyses (DC, AC, transient) for all simulators, and advanced examples for some of them:</p>
-<ul class='ruff'>
-<li><a href="https://georgtree.github.io/SpiceGenTcl/index-Advanced.html#::Advanced-Monte-Carlo%20simulation" >Monte-Carlo example</a>: Ngspice, Xyce and LTspice</li>
-<li><a href="https://georgtree.github.io/SpiceGenTcl/index-Advanced.html#::Advanced-Parameters%20extraction%20of%20diode%20model%20parameters" >Diode parameters extraction via fitting</a>: Ngspice, Xyce and LTspice</li>
-<li>Example of creating custom Verilog-A magnetic core model and simulating transformer with saturation: Ngspice</li>
-<li><a href="https://georgtree.github.io/SpiceGenTcl/index-Advanced.html#::Advanced-Inverter%20performance%20optimization" >Inverter power optimization</a>: Ngspice</li>
-</ul>
-<h2 class='ruff'><a name='Supported simulators'></a>Supported simulators<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
-<div style='clear:both;'></div>
-<ul class='ruff'>
-<li><a href="https://ngspice.sourceforge.io/download.html" >Ngspice</a> - Linux and Windows</li>
-<li><a href="https://xyce.sandia.gov/downloads/executables/" >Xyce</a> - Linux and Windows</li>
-<li><a href="https://www.analog.com/en/resources/design-tools-and-calculators/ltspice-simulator.html" >LTspice</a> - Windows and Linux (wine)</li>
-</ul>
-<h2 class='ruff'><a name='Installing'></a>Installing<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
-<div style='clear:both;'></div>
-<p class='ruff'>You have two ways: install from git repo (convinient for Linux users) or from archive package release.</p>
-<h3 class='ruff'><a name='From git repo'></a>From git repo<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
-<div style='clear:both;'></div>
-<p class='ruff'>Run following commands:</p>
-<ul class='ruff'>
-<li><code>git clone https://github.com/georgtree/SpiceGenTcl.git</code></li>
-<li><code>./configure</code></li>
-<li><code>sudo make install</code></li>
-</ul>
-<p class='ruff'>During installing it installs manpages, and local html documentation in <code>/usr/local/share/SpiceGenTcl/doc</code>.</p>
-<p class='ruff'>For test package in place run <code>make test</code>.</p>
-<p class='ruff'>For package uninstall run <code>sudo make uninstall</code>.</p>
-<h3 class='ruff'><a name='From archive'></a>From archive<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
-<div style='clear:both;'></div>
-<p class='ruff'>To install the package you should extract archive with source code and add path of the package folder to <code>auto_path</code> variable:</p>
-
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>lappend</font></b> auto_path <font color=#035103>&quot;path to SpiceGenTcl package&quot;</font>
-</pre>
-
-</figure><h2 class='ruff'><a name='Dependencies'></a>Dependencies<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
-<div style='clear:both;'></div>
-<p class='ruff'>Package is written in pure Tcl with relying on multiple libraries, tcl version is 9.0.</p>
-<ul class='ruff'>
-<li><a href="https://www.tcl.tk/software/tcllib/" >Tcllib</a></li>
-<li><a href="https://github.com/georgtree/argparse" >argparse</a></li>
-<li><a href="https://github.com/nico-robert/ticklecharts" >ticklecharts</a></li>
-<li><a href="https://github.com/georgtree/tclmeasure" >tclmeasure</a></li>
-</ul>
-<p class='ruff'>For some examples you also need these packages:</p>
-<ul class='ruff'>
-<li><a href="https://github.com/georgtree/tclinterp" >tclinterp</a></li>
-<li><a href="https://github.com/georgtree/tclopt" >tclopt</a></li>
-</ul>
-<p class='ruff'>After simulator installation add path to executable to <code>PATH</code> environment variable.</p>
-<p class='ruff'>For code coverage test <a href="https://nagelfar.sourceforge.net/" >nagelfar</a> is used, commit 845924 of master branch.</p>
-<p class='ruff'>For view test coverage diffs <a href="http://eskil.tcl.tk/index.html/doc/trunk/htdocs/index.html" >eskil</a> is used.</p>
-<h2 class='ruff'><a name='Documentation and tutorials'></a>Documentation and tutorials<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
-<div style='clear:both;'></div>
-<p class='ruff'>Documentation could be found <a href="https://georgtree.github.io/SpiceGenTcl/" >here</a>.</p>
-<p class='ruff'>Tutorials describing different examples could be found <a href="https://georgtree.github.io/SpiceGenTcl/index-Tutorials.html" >here</a>.</p>
-<p class='ruff'>Good tutorial for Tcl language could be found <a href="http://tcl.tk/man/tcltutorial/html/tcltutorial.html" >here</a></p>
-<p class='ruff'>Documentation was generated with <a href="https://ruff.magicsplat.com/" >ruff!</a>.</p>
-<p class='ruff'>Tcl syntax highlightning was done with <a href="https://github.com/aplsimple/hl_tcl" >hl_tcl</a>.</p>
-<h2 class='ruff'><a name='Supported platforms'></a>Supported platforms<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
-<div style='clear:both;'></div>
-<p class='ruff'>I personally use Kubuntu 24.04, and I also tested package on Windows 11. On Kubuntu I use Tcl/Tk 9.0 compiled from sources, as well as Ngspice and Xyce. On Windows I use <a href="https://www.magicsplat.com/tcl-installer/" >Magicsplat</a> distribution of Tcl/Tk 9.0. For Ngspice and Xyce I use precompilled binaries.</p>
-<p class='ruff'><font color="red"><strong>Note</strong></font>: on Windows by default Ngspice save raw file into ascii format, to pass all tests (because of different numbers formatting - scientific by default) you need to set binary format by default in .spiceinit by this line:</p>
-
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> filetype=binary
-</pre>
-
-</figure><p class='ruff'>Tcl is a cross-platform language, and because this package is written in pure Tcl, you can practically run it on any platform, including Windows, Linux (all flavors), and FreeBSD. Ngspice is available as pre-compiled binaries for Linux and Windows, but it can also be compiled on FreeBSD. Xyce is availible as pre-compiled for Windows, RHEL and MacOS, but can be compiled to any other platform.</p>
-<h2 class='ruff'><a name='Quick start'></a>Quick start<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h2>
-<div style='clear:both;'></div>
-<ul class='ruff'>
-<li><font color="red"> <strong>Important note 1</strong></font>: internally, all device names, parameters, nodes, types, reference names, and data vector's names are converted to lowercase after object instantiation. While you can enter them in any case, they can only be accessed by their lowercase names. This approach aligns with the fact that most SPICE simulators are case-insensitive. To prevent ambiguity in Tcl code, where the simulator treats mixed-case names as identical, we convert everything to lowercase. This ensures that we can detect and resolve any duplicate names in the top-level circuit before generating the netlist.</li>
-<li><font color="red"> <strong>Important note 2</strong></font>: this package is not designed to be used with the <code>.control</code> section in Ngspice, the .step statement in LTspice, or multiple DC sweeps, and it does not support reading parametric sweeps from raw data. The idea of the package is to handle all such tasks within a Tcl script, eliminating the need to use the simulator's internal scripting capabilities, and dependence on each simulator unique ways of handling parametric sweeps, that compromises compatibility. But it is could be done easily in principle to realize special objects and reading of raw files with parametric sweeps.</li>
-<li><font color="red"> <strong>Important note 3</strong></font>: in this package the following aliases for commands are defined:</li>
-</ul>
-
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>interp</font></b> alias {} <b><font color=#923B23>dget</font></b> {} <b><font color=#923B23>dict</font></b> get
-<b><font color=#923B23>interp</font></b> alias {} @ {} <b><font color=#923B23>lindex</font></b>
-<b><font color=#923B23>interp</font></b> alias {} = {} <b><font color=#923B23>expr</font></b>
-<b><font color=#923B23>interp</font></b> alias {} <b><font color=#923B23>dexist</font></b> {} <b><font color=#923B23>dict</font></b> exists
-<b><font color=#923B23>interp</font></b> alias {} <b><font color=#923B23>dcreate</font></b> {} <b><font color=#923B23>dict</font></b> create
-<b><font color=#923B23>interp</font></b> alias {} <b><font color=#923B23>dset</font></b> {} <b><font color=#923B23>dict</font></b> set
-<b><font color=#923B23>interp</font></b> alias {} <b><font color=#923B23>dappend</font></b> {} <b><font color=#923B23>dict</font></b> append
-<b><font color=#923B23>interp</font></b> alias {} <b><font color=#923B23>dkeys</font></b> {} <b><font color=#923B23>dict</font></b> keys
-<b><font color=#923B23>interp</font></b> alias {} <b><font color=#923B23>dvalues</font></b> {} <b><font color=#923B23>dict</font></b> values
-</pre>
-
-</figure><ul class='ruff'>
-<li><font color="red"> <strong>Important note 4</strong></font>: source code follows the pattern, if method or variable name of the class starts from capital letter, it is intended to be private and not directly accessible from outside the object.</li>
-</ul>
-<h3 class='ruff'><a name='Packages imports'></a>Packages imports<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
-<div style='clear:both;'></div>
-<p class='ruff'>The first step is import of package:</p>
-
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>package</font></b> require SpiceGenTcl
-</pre>
-
-</figure><p class='ruff'>Import all commands from ::SpiceGenTcl:</p>
-
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>namespace</font></b> import ::SpiceGenTcl::*
-</pre>
-
-</figure><p class='ruff'>One of the commands is <a href="index-SpiceGenTcl.html#::SpiceGenTcl::importNgspice" title="::SpiceGenTcl::importNgspice" class='ruff_cmd'>::SpiceGenTcl::importNgspice</a>. By calling this command, we can import all commands related to the Ngspice simulator, eliminating the need to add the <code>::SpiceGenTcl::Ngspice</code> prefix before any command. Here's how to do it:</p>
-
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>importNgspice</font></b>
-</pre>
-
-</figure><p class='ruff'>To plot results of simulation we also import package <code>ticklecharts</code>:</p>
-
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>package</font></b> require ticklecharts
-</pre>
-
-</figure><h3 class='ruff'><a name='Circuit definition'></a>Circuit definition<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
-<div style='clear:both;'></div>
-<p class='ruff'>Let's try to define simple resistor divider circuit with following netlist:</p>
-
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'>voltage divider netlist
-v1 in 0 1
-r1 in out 1e3
-r2 out 0 2e3
-.dc v1 0 5 0.1
-</pre>
-
-</figure><p class='ruff'><img src="assets/img/resistor_divider_cir_white.png" alt="drawing" width="300"/></p>
-<p class='ruff'>First step is creating circuit object:</p>
-
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> circuit [<b><font color=#923B23>Circuit</font></b> new {voltage divider netlist}]
-</pre>
-
-</figure><p class='ruff'>The <code><b><font color=#923B23>Circuit</font></b></code> command creates a new object of the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> class, which is imported from the <code>::SpiceGenTcl</code> namespace and represents the top-level circuit. The only argument we provide is the name of the circuit, which will be printed on the first line of the netlist.</p>
-<p class='ruff'>The next step is building netlist by addding elements to top circuit object:</p>
-
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Vdc</font></b> new 1 in 0 <font color=#463e11>-dc</font> 1]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new 1 in out <font color=#463e11>-r</font> 1e3]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>R</font></b> new 2 out 0 <font color=#463e11>-r</font> 2e3]
-<font color=#4A181B>$circuit</font> add [<b><font color=#923B23>Dc</font></b> new <font color=#463e11>-src</font> v1 <font color=#463e11>-start</font> 0 <font color=#463e11>-stop</font> 5 <font color=#463e11>-incr</font> 0.1]
-</pre>
-
-</figure><p class='ruff'>An instance of the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> class, referenced by the <code>circuit</code> variable, has an <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::add" title="::SpiceGenTcl::Circuit::add" class='ruff_cmd'>::SpiceGenTcl::Circuit::add</a> method that appends the references of argument objects to it. The object-creating commands <code><b><font color=#923B23>Vdc</font></b></code>, <code><b><font color=#923B23>R</font></b></code>, and <code><b><font color=#923B23>Dc</font></b></code> — which represent a DC voltage source, a basic resistor, and a DC analysis, respectively — are imported from the <code>::SpiceGenTcl::Ngspice::Sources</code>, <code>::SpiceGenTcl::Ngspice::BasicElements</code>, and <code>::SpiceGenTcl::Ngspice::Analyses</code> namespaces.</p>
-<p class='ruff'>When using the <code>new</code> subcommand, you provide the basic arguments for the element. For example, in the <code><b><font color=#923B23>R</font></b></code> command, you would supply the name '1', the name of the net connected to the positive node 'in', the name of the net connected to the negative node '0' (which is the global ground), and the resistance value '1e3'.</p>
-<p class='ruff'>The last necessary step is to create <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Simulator" title="::SpiceGenTcl::Simulator" class='ruff_cmd'>::SpiceGenTcl::Simulator</a> object with command <code><b><font color=#923B23>Batch</font></b></code> from <code>::SpiceGenTcl::Ngspice</code> namespace and attach it to <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit" title="::SpiceGenTcl::Circuit" class='ruff_cmd'>::SpiceGenTcl::Circuit</a> object:</p>
-
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> simulator [<b><font color=#923B23>Batch</font></b> new {batch1} {/usr/local/bin/}]
-<font color=#4A181B>$circuit</font> configure <font color=#463e11>-Simulator</font> <font color=#4A181B>$simulator</font>
-</pre>
-
-</figure><p class='ruff'>Now we are ready to run simulation:</p>
-
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><font color=#4A181B>$circuit</font> runAndRead
-</pre>
-
-</figure><p class='ruff'>After the simulation, we can read the resulting data. We use the <a href="index-SpiceGenTcl.html#::SpiceGenTcl::Circuit::getDataDict" title="::SpiceGenTcl::Circuit::getDataDict" class='ruff_cmd'>::SpiceGenTcl::Circuit::getDataDict</a> method to obtain a dictionary where the keys are the names of the result vectors:</p>
-
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> data [<font color=#4A181B>$circuit</font> getDataDict]
-</pre>
-
-</figure><p class='ruff'>The we can get vectors v(in) and v(out) from dictionary <code>data</code>:</p>
-
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>set</font></b> axis [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$data</font> v(in)]
-<b><font color=#923B23>set</font></b> trace [<b><font color=#923B23>dget</font></b> <font color=#4A181B>$data</font> v(out)]
-</pre>
-
-</figure><h3 class='ruff'><a name='Plotting data'></a>Plotting data<span class='ruff-uplink'><a href='#top'>Top</a>, <a href='index.html'>Main</a>, <a href='index-docindex.html#'>Index</a></span></h3>
-<div style='clear:both;'></div>
-<p class='ruff'>To plot results we use <a href="https://github.com/nico-robert/ticklecharts" ><code>ticklecharts</code></a> package:</p>
-
-<figure  class='ruff-snippet ruff-figure'><pre class='ruff'><b><font color=#923B23>foreach</font></b> x <font color=#4A181B>$axis</font> y <font color=#4A181B>$trace</font> {
-    <b><font color=#923B23>set</font></b> x [<b><font color=#923B23>format</font></b> <font color=#035103>&quot;%.3f&quot;</font> <font color=#4A181B>$x</font>]
-    <b><font color=#923B23>set</font></b> y [<b><font color=#923B23>format</font></b> <font color=#035103>&quot;%.3f&quot;</font> <font color=#4A181B>$y</font>]
-    <b><font color=#923B23>lappend</font></b> xydata [<b><font color=#923B23>list</font></b> <font color=#4A181B>$x</font> <font color=#4A181B>$y</font>]
-}
-<b><font color=#923B23>set</font></b> chart [ticklecharts::chart new]
-<font color=#4A181B>$chart</font> Xaxis <font color=#463e11>-name</font> <font color=#035103>&quot;v(in), V&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-min</font> 0 <font color=#463e11>-max</font> 5 <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font> <font color=#463e11>-splitLine</font> {show <font color=#035103>&quot;True&quot;</font>}
-<font color=#4A181B>$chart</font> Yaxis <font color=#463e11>-name</font> <font color=#035103>&quot;v(out), V&quot;</font> <font color=#463e11>-minorTick</font> {show <font color=#035103>&quot;True&quot;</font>} <font color=#463e11>-min</font> 0 <font color=#463e11>-max</font> 3.5 <font color=#463e11>-type</font> <font color=#035103>&quot;value&quot;</font> <font color=#463e11>-splitLine</font> {show <font color=#035103>&quot;True&quot;</font>}
-<font color=#4A181B>$chart</font> SetOptions <font color=#463e11>-title</font> {} <font color=#463e11>-tooltip</font> {trigger <font color=#035103>&quot;axis&quot;</font>} <font color=#463e11>-animation</font> <font color=#035103>&quot;False&quot;</font> <font color=#463e11>-backgroundColor</font> <font color=#035103>&quot;#212121&quot;</font>
-<font color=#4A181B>$chart</font> Add <font color=#035103>&quot;lineSeries&quot;</font> <font color=#463e11>-data</font> <font color=#4A181B>$xydata</font> <font color=#463e11>-showAllSymbol</font> <font color=#035103>&quot;nothing&quot;</font>
-<b><font color=#923B23>set</font></b> fbasename [<b><font color=#923B23>file</font></b> rootname [<b><font color=#923B23>file</font></b> tail [<b><font color=#923B23>info</font></b> script]]]
-
-<font color=#4A181B>$chart</font> Render <font color=#463e11>-outfile</font> [<b><font color=#923B23>file</font></b> normalize [<b><font color=#923B23>file</font></b> join .. html_charts <font color=#4A181B>$fbasename</font>.html]]
-</pre>
-
-</figure><p class='ruff'>To view result, we should open rendered resistor_divider.html chart in browser.</p>
-<p class='ruff'><!DOCTYPE html>
-<html>
+<html lang="en" data-content_root="./">
   <head>
-    <meta charset="UTF-8">
-    <title>ticklEcharts !!!</title>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
-  </head>
-  <body>
-    <div id="id_d5f98f9e2ce545709031cd28339256e8" class="chart-container" style="width:900px; height:500px;"></div>
-    <script>
-      var chart_d5f98f9e2ce545709031cd28339256e8 = echarts.init(document.getElementById("id_d5f98f9e2ce545709031cd28339256e8"), null, {renderer: "canvas"});
-      var option_d5f98f9e2ce545709031cd28339256e8 = {
-  "xAxis": [{
-      "show": true,
-      "type": "value",
-      "gridIndex": 0,
-      "position": "bottom",
-      "name": "v(in), V",
-      "nameLocation": "end",
-      "nameGap": 15,
-      "nameRotate": 0,
-      "inverse": false,
-      "boundaryGap": true,
-      "min": 0,
-      "max": 5,
-      "scale": false,
-      "silent": false,
-      "triggerEvent": false,
-      "minorTick": {
-        "show": true,
-        "splitNumber": 5,
-        "length": 3
-      },
-      "splitLine": {
-        "show": true,
-        "onZero": true,
-        "symbol": null
-      },
-      "zlevel": 0,
-      "z": 0
-    }],
-  "yAxis": [{
-      "show": true,
-      "gridIndex": 0,
-      "position": "left",
-      "realtimeSort": true,
-      "sortSeriesIndex": 0,
-      "type": "value",
-      "name": "v(out), V",
-      "nameLocation": "end",
-      "nameGap": 15,
-      "nameRotate": 0,
-      "inverse": false,
-      "boundaryGap": false,
-      "min": 0,
-      "max": 3.5,
-      "scale": false,
-      "silent": false,
-      "triggerEvent": false,
-      "minorTick": {
-        "show": true,
-        "splitNumber": 5,
-        "length": 3
-      },
-      "splitLine": {
-        "show": true,
-        "onZero": true,
-        "symbol": null
-      },
-      "zlevel": 0,
-      "z": 0
-    }],
-  "backgroundColor": "rgba(0,0,0,0)",
-  "color": [
-    "#5470c6",
-    "#91cc75",
-    "#fac858",
-    "#ee6666",
-    "#73c0de",
-    "#3ba272",
-    "#fc8452",
-    "#9a60b4",
-    "#ea7ccc"
-  ],
-  "animation": false,
-  "animationDuration": 1000,
-  "animationDurationUpdate": 500,
-  "animationEasing": "cubicInOut",
-  "animationEasingUpdate": "cubicInOut",
-  "animationThreshold": 2000,
-  "progressiveThreshold": 3000,
-  "title": [{
-      "show": true,
-      "target": "blank",
-      "subtarget": "blank",
-      "textAlign": null,
-      "textVerticalAlign": "auto",
-      "padding": 5,
-      "itemGap": 10,
-      "z": 2,
-      "left": "auto",
-      "top": "auto",
-      "right": "auto",
-      "bottom": "auto",
-      "backgroundColor": "transparent",
-      "borderColor": "transparent",
-      "borderWidth": 1,
-      "borderRadius": 0
-    }],
-  "tooltip": [{
-      "show": true,
-      "trigger": "axis",
-      "showContent": true,
-      "alwaysShowContent": false,
-      "triggerOn": "mousemove|click",
-      "transitionDuration": 0.4,
-      "padding": 5,
-      "order": "seriesAsc"
-    }],
-  "series": [{
-      "type": "line",
-      "name": "lineseries_1",
-      "colorBy": "series",
-      "coordinateSystem": "cartesian2d",
-      "symbol": "emptyCircle",
-      "symbolSize": 3,
-      "symbolKeepAspect": true,
-      "showSymbol": true,
-      "legendHoverLink": true,
-      "cursor": "pointer",
-      "connectNulls": false,
-      "clip": true,
-      "triggerLineEvent": false,
-      "step": false,
-      "smooth": false,
-      "data": [
-        [
-          0.000,
-          0.000
-        ],
-        [
-          0.100,
-          0.067
-        ],
-        [
-          0.200,
-          0.133
-        ],
-        [
-          0.300,
-          0.200
-        ],
-        [
-          0.400,
-          0.267
-        ],
-        [
-          0.500,
-          0.333
-        ],
-        [
-          0.600,
-          0.400
-        ],
-        [
-          0.700,
-          0.467
-        ],
-        [
-          0.800,
-          0.533
-        ],
-        [
-          0.900,
-          0.600
-        ],
-        [
-          1.000,
-          0.667
-        ],
-        [
-          1.100,
-          0.733
-        ],
-        [
-          1.200,
-          0.800
-        ],
-        [
-          1.300,
-          0.867
-        ],
-        [
-          1.400,
-          0.933
-        ],
-        [
-          1.500,
-          1.000
-        ],
-        [
-          1.600,
-          1.067
-        ],
-        [
-          1.700,
-          1.133
-        ],
-        [
-          1.800,
-          1.200
-        ],
-        [
-          1.900,
-          1.267
-        ],
-        [
-          2.000,
-          1.333
-        ],
-        [
-          2.100,
-          1.400
-        ],
-        [
-          2.200,
-          1.467
-        ],
-        [
-          2.300,
-          1.533
-        ],
-        [
-          2.400,
-          1.600
-        ],
-        [
-          2.500,
-          1.667
-        ],
-        [
-          2.600,
-          1.733
-        ],
-        [
-          2.700,
-          1.800
-        ],
-        [
-          2.800,
-          1.867
-        ],
-        [
-          2.900,
-          1.933
-        ],
-        [
-          3.000,
-          2.000
-        ],
-        [
-          3.100,
-          2.067
-        ],
-        [
-          3.200,
-          2.133
-        ],
-        [
-          3.300,
-          2.200
-        ],
-        [
-          3.400,
-          2.267
-        ],
-        [
-          3.500,
-          2.333
-        ],
-        [
-          3.600,
-          2.400
-        ],
-        [
-          3.700,
-          2.467
-        ],
-        [
-          3.800,
-          2.533
-        ],
-        [
-          3.900,
-          2.600
-        ],
-        [
-          4.000,
-          2.667
-        ],
-        [
-          4.100,
-          2.733
-        ],
-        [
-          4.200,
-          2.800
-        ],
-        [
-          4.300,
-          2.867
-        ],
-        [
-          4.400,
-          2.933
-        ],
-        [
-          4.500,
-          3.000
-        ],
-        [
-          4.600,
-          3.067
-        ],
-        [
-          4.700,
-          3.133
-        ],
-        [
-          4.800,
-          3.200
-        ],
-        [
-          4.900,
-          3.267
-        ],
-        [
-          5.000,
-          3.333
-        ]
-      ],
-      "zlevel": 0,
-      "z": 2,
-      "silent": false
-    }]
-};
-      chart_d5f98f9e2ce545709031cd28339256e8.setOption(option_d5f98f9e2ce545709031cd28339256e8);
-    </script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>&lt;no title&gt; &#8212; SpiceGenTcl  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=514cf933" />
+    
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="General concept" href="SpiceGenTcl.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="SpiceGenTcl.html" title="General concept"
+             accesskey="N">next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">SpiceGenTcl  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">&lt;no title&gt;</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl.html">General concept</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl.html#usage-examples">Usage examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl.html#supported-simulators">Supported simulators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl.html#installing">Installing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl.html#from-git-repo">From git repo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl.html#from-archive">From archive</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl.html#dependencies">Dependencies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl.html#documentation-and-tutorials">Documentation and tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl.html#supported-platforms">Supported platforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl.html#quick-start">Quick start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl.html#packages-imports">Packages imports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl.html#circuit-definition">Circuit definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl.html#plotting-data">Plotting data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html">List of devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#availible-devices-and-it-s-corresponding-classes">Availible devices and it’s corresponding classes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#basic-devices">Basic devices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#resistor">Resistor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#capacitor">Capacitor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#inductor">Inductor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#subcircuit-instance">Subcircuit instance</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#sources">Sources</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#constant-voltage-source">Constant voltage source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#rf-voltage-source">RF voltage source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#ac-voltage-source">AC voltage source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#pulse-voltage-source">Pulse voltage source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#sinusoidal-voltage-source">Sinusoidal voltage source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#exponential-voltage-source">Exponential voltage source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#piece-wise-linear-pwl-voltage-source">Piece-wise linear (PWL) voltage source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#frequency-modulated-voltage-source">Frequency modulated voltage source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#amplitude-modulated-voltage-source">Amplitude modulated voltage source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#constant-current-source">Constant current source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#ac-current-source">AC current source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#pulse-current-source">Pulse current source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#sinusoidal-current-source">Sinusoidal current source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#exponential-current-source">Exponential current source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#piece-wise-linear-pwl-current-source">Piece-wise linear (PWL) current source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#frequency-modulated-current-source">Frequency modulated current source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#amplitude-modulated-current-source">Amplitude modulated current source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#voltage-controlled-current-source">Voltage-controlled current source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#voltage-controlled-voltage-source">Voltage-controlled voltage source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#current-controlled-current-source">Current-controlled current source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#current-controlled-voltage-source">Current-controlled voltage source</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#semiconductor-devices">Semiconductor devices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#diode">Diode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#bipolar-junction-transistor">Bipolar junction transistor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#junction-field-effect-transistor">Junction field-effect transistor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#metal-semiconductor-fet">Metal-semiconductor FET</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-List-of-devices.html#mos-field-effect-transistor">MOS field effect transistor</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl-FAQ.html">FAQ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-FAQ.html#where-to-find-list-of-availible-arguments-for-devices-models-and-analyses">Where to find list of availible arguments for devices, models and analyses?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-FAQ.html#how-to-use-different-simulators-for-the-same-circuit-managing-namespaces">How to use different simulators for the same circuit (managing namespaces)?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-FAQ.html#how-to-change-parameter-of-existing-element">How to change parameter of existing element?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-FAQ.html#is-scaling-suffixes-allowed">Is scaling suffixes allowed?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-FAQ.html#how-to-change-node-name-connected-to-pin-of-existing-element">How to change node name connected to pin of existing element?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-FAQ.html#how-to-find-the-list-of-optional-parameters-for-elements">How to find the list of optional parameters for elements?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-FAQ.html#how-to-get-raw-data-after-simulation">How to get raw data after simulation?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-FAQ.html#how-to-get-the-names-of-all-vectors-in-raw-file">How to get the names of all vectors in raw file?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-FAQ.html#how-to-get-log-file-after-simulation">How to get log file after simulation?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-FAQ.html#how-to-save-result-traces-in-comma-separated-file-format-csv">How to save result traces in comma-separated file format (csv)?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl-Tutorials.html">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-Tutorials.html#netlist-manipulations">Netlist manipulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-Tutorials.html#delete-element">Delete element</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-Tutorials.html#get-element">Get element</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-Tutorials.html#print-list-of-all-elements">Print list of all elements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-Tutorials.html#temporarly-remove-of-element">Temporarly remove of element</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-Tutorials.html#subcircuit-definition">Subcircuit definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-Tutorials.html#diode-current-simualtion">Diode current simualtion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-Tutorials.html#diode-capacitance-simualtion">Diode capacitance simualtion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-Tutorials.html#sensitive-analysis-of-differential-pair">Sensitive analysis of differential pair</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-Tutorials.html#transient-simulation-of-ring-oscillator">Transient simulation of ring oscillator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-Tutorials.html#transient-simulation-of-four-bit-adder">Transient simulation of four-bit adder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-Tutorials.html#s-parameter-simulation-of-pass-band-filter">S-parameter simulation of pass-band filter</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl-Tips.html">Tips</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-Tips.html#define-custom-element">Define custom element</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl-Advanced.html">Advanced</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-Advanced.html#monte-carlo-simulation">Monte-Carlo simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-Advanced.html#parameters-extraction-of-diode-model-parameters">Parameters extraction of diode model parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-Advanced.html#fitting-in-first-region">Fitting in first region</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-Advanced.html#fitting-in-second-region">Fitting in second region</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-Advanced.html#fitting-the-whole-curve">Fitting the whole curve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-Advanced.html#plotting-resulted-data">Plotting resulted data</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-Advanced.html#inverter-performance-optimization">Inverter performance optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl-Parser.html">Parser</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-Parser.html#simple-netlist-parsing">Simple netlist parsing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-Parser.html#parse-of-large-circuit">Parse of large circuit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-Parser.html#parse-of-nested-subcircuits">Parse of nested subcircuits</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html">::SpiceGenTcl</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#commands">Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#forgetcommon"><code class="docutils literal notranslate"><span class="pre">forgetCommon</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#forgetltspice"><code class="docutils literal notranslate"><span class="pre">forgetLtspice</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#forgetngspice"><code class="docutils literal notranslate"><span class="pre">forgetNgspice</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#forgetxyce"><code class="docutils literal notranslate"><span class="pre">forgetXyce</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#importcommon"><code class="docutils literal notranslate"><span class="pre">importCommon</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#importltspice"><code class="docutils literal notranslate"><span class="pre">importLtspice</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#importngspice"><code class="docutils literal notranslate"><span class="pre">importNgspice</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#importxyce"><code class="docutils literal notranslate"><span class="pre">importXyce</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#classes">Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#analysis"><code class="docutils literal notranslate"><span class="pre">Analysis</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#constructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#destructor"><code class="docutils literal notranslate"><span class="pre">destructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#actonparam"><code class="docutils literal notranslate"><span class="pre">actOnParam</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#genspicestring"><code class="docutils literal notranslate"><span class="pre">genSPICEString</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#axis"><code class="docutils literal notranslate"><span class="pre">Axis</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#binaryreader"><code class="docutils literal notranslate"><span class="pre">BinaryReader</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#readcomplex"><code class="docutils literal notranslate"><span class="pre">readComplex</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#readfloat32"><code class="docutils literal notranslate"><span class="pre">readFloat32</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#readfloat64"><code class="docutils literal notranslate"><span class="pre">readFloat64</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#skip4bytes"><code class="docutils literal notranslate"><span class="pre">skip4bytes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#skip8bytes"><code class="docutils literal notranslate"><span class="pre">skip8bytes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#skip16bytes"><code class="docutils literal notranslate"><span class="pre">skip16bytes</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#circuit"><code class="docutils literal notranslate"><span class="pre">Circuit</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3acircuit3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#add"><code class="docutils literal notranslate"><span class="pre">add</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#del"><code class="docutils literal notranslate"><span class="pre">del</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#detachsimulator"><code class="docutils literal notranslate"><span class="pre">detachSimulator</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3acircuit3a3agenspicestring"><code class="docutils literal notranslate"><span class="pre">genSPICEString</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#getdatacsv"><code class="docutils literal notranslate"><span class="pre">getDataCsv</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#getdatadict"><code class="docutils literal notranslate"><span class="pre">getDataDict</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#runandread"><code class="docutils literal notranslate"><span class="pre">runAndRead</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#comment"><code class="docutils literal notranslate"><span class="pre">Comment</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3acomment3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3acomment3a3agenspicestring"><code class="docutils literal notranslate"><span class="pre">genSPICEString</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#dataset"><code class="docutils literal notranslate"><span class="pre">Dataset</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3adataset3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#appenddatapoints"><code class="docutils literal notranslate"><span class="pre">appendDataPoints</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#getdatapoints"><code class="docutils literal notranslate"><span class="pre">getDataPoints</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#getstr"><code class="docutils literal notranslate"><span class="pre">getStr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#setdatapoints"><code class="docutils literal notranslate"><span class="pre">setDataPoints</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#device"><code class="docutils literal notranslate"><span class="pre">Device</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3adevice3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3adevice3a3adestructor"><code class="docutils literal notranslate"><span class="pre">destructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3adevice3a3aactonparam"><code class="docutils literal notranslate"><span class="pre">actOnParam</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#actonpin"><code class="docutils literal notranslate"><span class="pre">actOnPin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#checkfloatingpins"><code class="docutils literal notranslate"><span class="pre">checkFloatingPins</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3adevice3a3agenspicestring"><code class="docutils literal notranslate"><span class="pre">genSPICEString</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#emptytrace"><code class="docutils literal notranslate"><span class="pre">EmptyTrace</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aemptytrace3a3agetdatapoints"><code class="docutils literal notranslate"><span class="pre">getDataPoints</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#function"><code class="docutils literal notranslate"><span class="pre">Function</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3afunction3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3afunction3a3agenspicestring"><code class="docutils literal notranslate"><span class="pre">genSPICEString</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#global"><code class="docutils literal notranslate"><span class="pre">Global</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aglobal3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#addnets"><code class="docutils literal notranslate"><span class="pre">addNets</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#deletenet"><code class="docutils literal notranslate"><span class="pre">deleteNet</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aglobal3a3agenspicestring"><code class="docutils literal notranslate"><span class="pre">genSPICEString</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#ic"><code class="docutils literal notranslate"><span class="pre">Ic</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aic3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aic3a3adestructor"><code class="docutils literal notranslate"><span class="pre">destructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aic3a3aactonparam"><code class="docutils literal notranslate"><span class="pre">actOnParam</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aic3a3agenspicestring"><code class="docutils literal notranslate"><span class="pre">genSPICEString</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#include"><code class="docutils literal notranslate"><span class="pre">Include</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3ainclude3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3ainclude3a3agenspicestring"><code class="docutils literal notranslate"><span class="pre">genSPICEString</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#library"><code class="docutils literal notranslate"><span class="pre">Library</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3alibrary3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3alibrary3a3agenspicestring"><code class="docutils literal notranslate"><span class="pre">genSPICEString</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#model"><code class="docutils literal notranslate"><span class="pre">Model</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3amodel3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3amodel3a3adestructor"><code class="docutils literal notranslate"><span class="pre">destructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3amodel3a3aactonparam"><code class="docutils literal notranslate"><span class="pre">actOnParam</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3amodel3a3agenspicestring"><code class="docutils literal notranslate"><span class="pre">genSPICEString</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#netlist"><code class="docutils literal notranslate"><span class="pre">Netlist</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3anetlist3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3anetlist3a3aadd"><code class="docutils literal notranslate"><span class="pre">add</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3anetlist3a3adel"><code class="docutils literal notranslate"><span class="pre">del</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3anetlist3a3agenspicestring"><code class="docutils literal notranslate"><span class="pre">genSPICEString</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#getallelemnames"><code class="docutils literal notranslate"><span class="pre">getAllElemNames</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#getelement"><code class="docutils literal notranslate"><span class="pre">getElement</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#nodeset"><code class="docutils literal notranslate"><span class="pre">Nodeset</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3anodeset3a3agenspicestring"><code class="docutils literal notranslate"><span class="pre">genSPICEString</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#options"><code class="docutils literal notranslate"><span class="pre">Options</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aoptions3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aoptions3a3adestructor"><code class="docutils literal notranslate"><span class="pre">destructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aoptions3a3aactonparam"><code class="docutils literal notranslate"><span class="pre">actOnParam</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aoptions3a3agenspicestring"><code class="docutils literal notranslate"><span class="pre">genSPICEString</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#parameter"><code class="docutils literal notranslate"><span class="pre">Parameter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aparameter3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aparameter3a3agenspicestring"><code class="docutils literal notranslate"><span class="pre">genSPICEString</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#parameterdefault"><code class="docutils literal notranslate"><span class="pre">ParameterDefault</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aparameterdefault3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#resetvalue"><code class="docutils literal notranslate"><span class="pre">resetValue</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#parameterequation"><code class="docutils literal notranslate"><span class="pre">ParameterEquation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aparameterequation3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aparameterequation3a3agenspicestring"><code class="docutils literal notranslate"><span class="pre">genSPICEString</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#parameternocheck"><code class="docutils literal notranslate"><span class="pre">ParameterNoCheck</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aparameternocheck3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#parameternode"><code class="docutils literal notranslate"><span class="pre">ParameterNode</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aparameternode3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aparameternode3a3agenspicestring"><code class="docutils literal notranslate"><span class="pre">genSPICEString</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#parameternodeequation"><code class="docutils literal notranslate"><span class="pre">ParameterNodeEquation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aparameternodeequation3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aparameternodeequation3a3agenspicestring"><code class="docutils literal notranslate"><span class="pre">genSPICEString</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#parameterpositional"><code class="docutils literal notranslate"><span class="pre">ParameterPositional</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aparameterpositional3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aparameterpositional3a3agenspicestring"><code class="docutils literal notranslate"><span class="pre">genSPICEString</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#parameterpositionalequation"><code class="docutils literal notranslate"><span class="pre">ParameterPositionalEquation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aparameterpositionalequation3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aparameterpositionalequation3a3agenspicestring"><code class="docutils literal notranslate"><span class="pre">genSPICEString</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#parameterpositionalnocheck"><code class="docutils literal notranslate"><span class="pre">ParameterPositionalNoCheck</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aparameterpositionalnocheck3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aparameterpositionalnocheck3a3agenspicestring"><code class="docutils literal notranslate"><span class="pre">genSPICEString</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#parameterswitch"><code class="docutils literal notranslate"><span class="pre">ParameterSwitch</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aparameterswitch3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aparameterswitch3a3agenspicestring"><code class="docutils literal notranslate"><span class="pre">genSPICEString</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#parametervector"><code class="docutils literal notranslate"><span class="pre">ParameterVector</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#paramstatement"><code class="docutils literal notranslate"><span class="pre">ParamStatement</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aparamstatement3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aparamstatement3a3adestructor"><code class="docutils literal notranslate"><span class="pre">destructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aparamstatement3a3aactonparam"><code class="docutils literal notranslate"><span class="pre">actOnParam</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aparamstatement3a3agenspicestring"><code class="docutils literal notranslate"><span class="pre">genSPICEString</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#parser"><code class="docutils literal notranslate"><span class="pre">Parser</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aparser3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#buildtopnetlist"><code class="docutils literal notranslate"><span class="pre">buildTopNetlist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#readandparse"><code class="docutils literal notranslate"><span class="pre">readAndParse</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#readfile"><code class="docutils literal notranslate"><span class="pre">readFile</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#pin"><code class="docutils literal notranslate"><span class="pre">Pin</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3apin3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#checkfloating"><code class="docutils literal notranslate"><span class="pre">checkFloating</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3apin3a3agenspicestring"><code class="docutils literal notranslate"><span class="pre">genSPICEString</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#unsetnodename"><code class="docutils literal notranslate"><span class="pre">unsetNodeName</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#rawfile"><code class="docutils literal notranslate"><span class="pre">RawFile</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3arawfile3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3arawfile3a3adestructor"><code class="docutils literal notranslate"><span class="pre">destructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#getcurrentsnames"><code class="docutils literal notranslate"><span class="pre">getCurrentsNames</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#gettrace"><code class="docutils literal notranslate"><span class="pre">getTrace</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#gettracescsv"><code class="docutils literal notranslate"><span class="pre">getTracesCsv</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#gettracesdata"><code class="docutils literal notranslate"><span class="pre">getTracesData</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#gettracesstr"><code class="docutils literal notranslate"><span class="pre">getTracesStr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#getvariablesnames"><code class="docutils literal notranslate"><span class="pre">getVariablesNames</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#getvoltagesnames"><code class="docutils literal notranslate"><span class="pre">getVoltagesNames</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#measure"><code class="docutils literal notranslate"><span class="pre">measure</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#rawstring"><code class="docutils literal notranslate"><span class="pre">RawString</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3arawstring3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3arawstring3a3agenspicestring"><code class="docutils literal notranslate"><span class="pre">genSPICEString</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#save"><code class="docutils literal notranslate"><span class="pre">Save</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3asave3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3asave3a3adestructor"><code class="docutils literal notranslate"><span class="pre">destructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#addvector"><code class="docutils literal notranslate"><span class="pre">addVector</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#deletevector"><code class="docutils literal notranslate"><span class="pre">deleteVector</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3asave3a3agenspicestring"><code class="docutils literal notranslate"><span class="pre">genSPICEString</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#getvectors"><code class="docutils literal notranslate"><span class="pre">getVectors</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#simulator"><code class="docutils literal notranslate"><span class="pre">Simulator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#getlog"><code class="docutils literal notranslate"><span class="pre">getLog</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#readdata"><code class="docutils literal notranslate"><span class="pre">readData</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#readlog"><code class="docutils literal notranslate"><span class="pre">readLog</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#run"><code class="docutils literal notranslate"><span class="pre">run</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#spiceelement"><code class="docutils literal notranslate"><span class="pre">SPICEElement</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aspiceelement3a3agenspicestring"><code class="docutils literal notranslate"><span class="pre">genSPICEString</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#subcircuit"><code class="docutils literal notranslate"><span class="pre">Subcircuit</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3asubcircuit3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3asubcircuit3a3adestructor"><code class="docutils literal notranslate"><span class="pre">destructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3asubcircuit3a3aactonparam"><code class="docutils literal notranslate"><span class="pre">actOnParam</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3asubcircuit3a3aactonpin"><code class="docutils literal notranslate"><span class="pre">actOnPin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3asubcircuit3a3aadd"><code class="docutils literal notranslate"><span class="pre">add</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3asubcircuit3a3agenspicestring"><code class="docutils literal notranslate"><span class="pre">genSPICEString</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#temp"><code class="docutils literal notranslate"><span class="pre">Temp</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3atemp3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3atemp3a3agenspicestring"><code class="docutils literal notranslate"><span class="pre">genSPICEString</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#trace"><code class="docutils literal notranslate"><span class="pre">Trace</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3atrace3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#utility"><code class="docutils literal notranslate"><span class="pre">Utility</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-BasicDevices.html">::SpiceGenTcl::Common::BasicDevices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-BasicDevices.html#classes">Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-BasicDevices.html#c"><code class="docutils literal notranslate"><span class="pre">C</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-BasicDevices.html#capacitor"><code class="docutils literal notranslate"><span class="pre">Capacitor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-BasicDevices.html#constructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-BasicDevices.html#cswitch"><code class="docutils literal notranslate"><span class="pre">CSwitch</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-BasicDevices.html#r-3a3aspicegentcl3a3acommon3a3abasicdevices3a3acswitch3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-BasicDevices.html#inductor"><code class="docutils literal notranslate"><span class="pre">Inductor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-BasicDevices.html#r-3a3aspicegentcl3a3acommon3a3abasicdevices3a3ainductor3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-BasicDevices.html#l"><code class="docutils literal notranslate"><span class="pre">L</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-BasicDevices.html#r"><code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-BasicDevices.html#resistor"><code class="docutils literal notranslate"><span class="pre">Resistor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-BasicDevices.html#r-3a3aspicegentcl3a3acommon3a3abasicdevices3a3aresistor3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-BasicDevices.html#subcircuitinstance"><code class="docutils literal notranslate"><span class="pre">SubcircuitInstance</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-BasicDevices.html#r-3a3aspicegentcl3a3acommon3a3abasicdevices3a3asubcircuitinstance3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-BasicDevices.html#subcircuitinstanceauto"><code class="docutils literal notranslate"><span class="pre">SubcircuitInstanceAuto</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-BasicDevices.html#r-3a3aspicegentcl3a3acommon3a3abasicdevices3a3asubcircuitinstanceauto3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-BasicDevices.html#vsw"><code class="docutils literal notranslate"><span class="pre">VSw</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-BasicDevices.html#vswitch"><code class="docutils literal notranslate"><span class="pre">VSwitch</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-BasicDevices.html#r-3a3aspicegentcl3a3acommon3a3abasicdevices3a3avswitch3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-BasicDevices.html#w"><code class="docutils literal notranslate"><span class="pre">W</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-BasicDevices.html#x"><code class="docutils literal notranslate"><span class="pre">X</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-BasicDevices.html#xauto"><code class="docutils literal notranslate"><span class="pre">XAuto</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Analyses.html">::SpiceGenTcl::Common::Analyses</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Analyses.html#classes">Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Analyses.html#ac"><code class="docutils literal notranslate"><span class="pre">Ac</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Analyses.html#constructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Analyses.html#dc"><code class="docutils literal notranslate"><span class="pre">Dc</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Analyses.html#r-3a3aspicegentcl3a3acommon3a3aanalyses3a3adc3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Analyses.html#op"><code class="docutils literal notranslate"><span class="pre">Op</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Analyses.html#r-3a3aspicegentcl3a3acommon3a3aanalyses3a3aop3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Analyses.html#tran"><code class="docutils literal notranslate"><span class="pre">Tran</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Analyses.html#r-3a3aspicegentcl3a3acommon3a3aanalyses3a3atran3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html">::SpiceGenTcl::Common::Sources</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#classes">Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#ac"><code class="docutils literal notranslate"><span class="pre">ac</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#constructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#cccs"><code class="docutils literal notranslate"><span class="pre">Cccs</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#r-3a3aspicegentcl3a3acommon3a3asources3a3acccs3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#ccvs"><code class="docutils literal notranslate"><span class="pre">Ccvs</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#r-3a3aspicegentcl3a3acommon3a3asources3a3accvs3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#dc"><code class="docutils literal notranslate"><span class="pre">dc</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#r-3a3aspicegentcl3a3acommon3a3asources3a3adc3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#e"><code class="docutils literal notranslate"><span class="pre">E</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#exp"><code class="docutils literal notranslate"><span class="pre">exp</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#r-3a3aspicegentcl3a3acommon3a3asources3a3aexp3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#f"><code class="docutils literal notranslate"><span class="pre">F</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#g"><code class="docutils literal notranslate"><span class="pre">G</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#h"><code class="docutils literal notranslate"><span class="pre">H</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#iac"><code class="docutils literal notranslate"><span class="pre">Iac</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#r-3a3aspicegentcl3a3acommon3a3asources3a3aiac3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#r-3a3aspicegentcl3a3acommon3a3asources3a3aidc"><code class="docutils literal notranslate"><span class="pre">Idc</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#r-3a3aspicegentcl3a3acommon3a3asources3a3aidc3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#iexp"><code class="docutils literal notranslate"><span class="pre">Iexp</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#r-3a3aspicegentcl3a3acommon3a3asources3a3aiexp3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#ipulse"><code class="docutils literal notranslate"><span class="pre">Ipulse</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#r-3a3aspicegentcl3a3acommon3a3asources3a3aipulse3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#ipwl"><code class="docutils literal notranslate"><span class="pre">Ipwl</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#r-3a3aspicegentcl3a3acommon3a3asources3a3aipwl3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#isffm"><code class="docutils literal notranslate"><span class="pre">Isffm</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#r-3a3aspicegentcl3a3acommon3a3asources3a3aisffm3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#isin"><code class="docutils literal notranslate"><span class="pre">Isin</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#r-3a3aspicegentcl3a3acommon3a3asources3a3aisin3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#pulse"><code class="docutils literal notranslate"><span class="pre">pulse</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#r-3a3aspicegentcl3a3acommon3a3asources3a3apulse3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#pwl"><code class="docutils literal notranslate"><span class="pre">pwl</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#r-3a3aspicegentcl3a3acommon3a3asources3a3apwl3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#sffm"><code class="docutils literal notranslate"><span class="pre">sffm</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#r-3a3aspicegentcl3a3acommon3a3asources3a3asffm3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#sin"><code class="docutils literal notranslate"><span class="pre">sin</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#r-3a3aspicegentcl3a3acommon3a3asources3a3asin3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#vac"><code class="docutils literal notranslate"><span class="pre">Vac</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#r-3a3aspicegentcl3a3acommon3a3asources3a3avac3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#vccs"><code class="docutils literal notranslate"><span class="pre">Vccs</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#r-3a3aspicegentcl3a3acommon3a3asources3a3avccs3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#vcvs"><code class="docutils literal notranslate"><span class="pre">Vcvs</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#r-3a3aspicegentcl3a3acommon3a3asources3a3avcvs3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#vdc"><code class="docutils literal notranslate"><span class="pre">Vdc</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#r-3a3aspicegentcl3a3acommon3a3asources3a3avdc3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#vexp"><code class="docutils literal notranslate"><span class="pre">Vexp</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#r-3a3aspicegentcl3a3acommon3a3asources3a3avexp3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#vpulse"><code class="docutils literal notranslate"><span class="pre">Vpulse</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#r-3a3aspicegentcl3a3acommon3a3asources3a3avpulse3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#vpwl"><code class="docutils literal notranslate"><span class="pre">Vpwl</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#r-3a3aspicegentcl3a3acommon3a3asources3a3avpwl3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#vsffm"><code class="docutils literal notranslate"><span class="pre">Vsffm</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#r-3a3aspicegentcl3a3acommon3a3asources3a3avsffm3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#vsin"><code class="docutils literal notranslate"><span class="pre">Vsin</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Common-Sources.html#r-3a3aspicegentcl3a3acommon3a3asources3a3avsin3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice.html">::SpiceGenTcl::Ngspice</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice.html#classes">Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice.html#ngspiceparser"><code class="docutils literal notranslate"><span class="pre">NgspiceParser</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice.html#constructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice.html#readfile"><code class="docutils literal notranslate"><span class="pre">readFile</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html">::SpiceGenTcl::Ngspice::BasicDevices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#classes">Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#c"><code class="docutils literal notranslate"><span class="pre">C</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#capacitor"><code class="docutils literal notranslate"><span class="pre">Capacitor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#constructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#cmodel"><code class="docutils literal notranslate"><span class="pre">CModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#r-3a3aspicegentcl3a3angspice3a3abasicdevices3a3acmodel3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#coupling"><code class="docutils literal notranslate"><span class="pre">Coupling</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#r-3a3aspicegentcl3a3angspice3a3abasicdevices3a3acoupling3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#cswitch"><code class="docutils literal notranslate"><span class="pre">CSwitch</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#cswitchmodel"><code class="docutils literal notranslate"><span class="pre">CSwitchModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#r-3a3aspicegentcl3a3angspice3a3abasicdevices3a3acswitchmodel3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#inductor"><code class="docutils literal notranslate"><span class="pre">Inductor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#r-3a3aspicegentcl3a3angspice3a3abasicdevices3a3ainductor3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#k"><code class="docutils literal notranslate"><span class="pre">K</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#l"><code class="docutils literal notranslate"><span class="pre">L</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#lmodel"><code class="docutils literal notranslate"><span class="pre">LModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#r-3a3aspicegentcl3a3angspice3a3abasicdevices3a3almodel3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#n"><code class="docutils literal notranslate"><span class="pre">N</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#r"><code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#resistor"><code class="docutils literal notranslate"><span class="pre">Resistor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#r-3a3aspicegentcl3a3angspice3a3abasicdevices3a3aresistor3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#rmodel"><code class="docutils literal notranslate"><span class="pre">RModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#r-3a3aspicegentcl3a3angspice3a3abasicdevices3a3armodel3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#s"><code class="docutils literal notranslate"><span class="pre">S</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#subcircuitinstance"><code class="docutils literal notranslate"><span class="pre">SubcircuitInstance</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#r-3a3aspicegentcl3a3angspice3a3abasicdevices3a3asubcircuitinstance3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#subcircuitinstanceauto"><code class="docutils literal notranslate"><span class="pre">SubcircuitInstanceAuto</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#r-3a3aspicegentcl3a3angspice3a3abasicdevices3a3asubcircuitinstanceauto3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#veriloga"><code class="docutils literal notranslate"><span class="pre">VerilogA</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#r-3a3aspicegentcl3a3angspice3a3abasicdevices3a3averiloga3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#vswitch"><code class="docutils literal notranslate"><span class="pre">VSwitch</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#vswitchmodel"><code class="docutils literal notranslate"><span class="pre">VSwitchModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#r-3a3aspicegentcl3a3angspice3a3abasicdevices3a3avswitchmodel3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#w"><code class="docutils literal notranslate"><span class="pre">W</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#x"><code class="docutils literal notranslate"><span class="pre">X</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#xauto"><code class="docutils literal notranslate"><span class="pre">XAuto</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html">::SpiceGenTcl::Ngspice::Sources</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#classes">Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#am"><code class="docutils literal notranslate"><span class="pre">am</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#constructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#b"><code class="docutils literal notranslate"><span class="pre">B</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#behaviouralsource"><code class="docutils literal notranslate"><span class="pre">BehaviouralSource</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#r-3a3aspicegentcl3a3angspice3a3asources3a3abehaviouralsource3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#cccs"><code class="docutils literal notranslate"><span class="pre">Cccs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#ccvs"><code class="docutils literal notranslate"><span class="pre">Ccvs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#e"><code class="docutils literal notranslate"><span class="pre">E</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#f"><code class="docutils literal notranslate"><span class="pre">F</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#g"><code class="docutils literal notranslate"><span class="pre">G</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#h"><code class="docutils literal notranslate"><span class="pre">H</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#iac"><code class="docutils literal notranslate"><span class="pre">Iac</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#iam"><code class="docutils literal notranslate"><span class="pre">Iam</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#r-3a3aspicegentcl3a3angspice3a3asources3a3aiam3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#r-3a3aspicegentcl3a3angspice3a3asources3a3aidc"><code class="docutils literal notranslate"><span class="pre">Idc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#iexp"><code class="docutils literal notranslate"><span class="pre">Iexp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#ipulse"><code class="docutils literal notranslate"><span class="pre">Ipulse</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#r-3a3aspicegentcl3a3angspice3a3asources3a3aipulse3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#ipwl"><code class="docutils literal notranslate"><span class="pre">Ipwl</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#isffm"><code class="docutils literal notranslate"><span class="pre">Isffm</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#r-3a3aspicegentcl3a3angspice3a3asources3a3aisffm3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#isin"><code class="docutils literal notranslate"><span class="pre">Isin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#pulse"><code class="docutils literal notranslate"><span class="pre">pulse</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#r-3a3aspicegentcl3a3angspice3a3asources3a3apulse3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#sffm"><code class="docutils literal notranslate"><span class="pre">sffm</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#r-3a3aspicegentcl3a3angspice3a3asources3a3asffm3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#vac"><code class="docutils literal notranslate"><span class="pre">Vac</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#vam"><code class="docutils literal notranslate"><span class="pre">Vam</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#r-3a3aspicegentcl3a3angspice3a3asources3a3avam3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#vccs"><code class="docutils literal notranslate"><span class="pre">Vccs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#vcvs"><code class="docutils literal notranslate"><span class="pre">Vcvs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#vdc"><code class="docutils literal notranslate"><span class="pre">Vdc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#vexp"><code class="docutils literal notranslate"><span class="pre">Vexp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#vport"><code class="docutils literal notranslate"><span class="pre">Vport</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#r-3a3aspicegentcl3a3angspice3a3asources3a3avport3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#vpulse"><code class="docutils literal notranslate"><span class="pre">Vpulse</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#r-3a3aspicegentcl3a3angspice3a3asources3a3avpulse3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#vpwl"><code class="docutils literal notranslate"><span class="pre">Vpwl</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#vsffm"><code class="docutils literal notranslate"><span class="pre">Vsffm</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#r-3a3aspicegentcl3a3angspice3a3asources3a3avsffm3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#vsin"><code class="docutils literal notranslate"><span class="pre">Vsin</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-SemiconductorDevices.html">::SpiceGenTcl::Ngspice::SemiconductorDevices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-SemiconductorDevices.html#classes">Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-SemiconductorDevices.html#bjt"><code class="docutils literal notranslate"><span class="pre">Bjt</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-SemiconductorDevices.html#constructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-SemiconductorDevices.html#bjtgpmodel"><code class="docutils literal notranslate"><span class="pre">BjtGPModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-SemiconductorDevices.html#r-3a3aspicegentcl3a3angspice3a3asemiconductordevices3a3abjtgpmodel3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-SemiconductorDevices.html#d"><code class="docutils literal notranslate"><span class="pre">D</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-SemiconductorDevices.html#diode"><code class="docutils literal notranslate"><span class="pre">Diode</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-SemiconductorDevices.html#r-3a3aspicegentcl3a3angspice3a3asemiconductordevices3a3adiode3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-SemiconductorDevices.html#diodemodel"><code class="docutils literal notranslate"><span class="pre">DiodeModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-SemiconductorDevices.html#r-3a3aspicegentcl3a3angspice3a3asemiconductordevices3a3adiodemodel3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-SemiconductorDevices.html#j"><code class="docutils literal notranslate"><span class="pre">J</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-SemiconductorDevices.html#jfet"><code class="docutils literal notranslate"><span class="pre">Jfet</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-SemiconductorDevices.html#r-3a3aspicegentcl3a3angspice3a3asemiconductordevices3a3ajfet3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-SemiconductorDevices.html#jfet1model"><code class="docutils literal notranslate"><span class="pre">Jfet1Model</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-SemiconductorDevices.html#r-3a3aspicegentcl3a3angspice3a3asemiconductordevices3a3ajfet1model3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-SemiconductorDevices.html#jfet2model"><code class="docutils literal notranslate"><span class="pre">Jfet2Model</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-SemiconductorDevices.html#r-3a3aspicegentcl3a3angspice3a3asemiconductordevices3a3ajfet2model3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-SemiconductorDevices.html#m"><code class="docutils literal notranslate"><span class="pre">M</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-SemiconductorDevices.html#mesfet"><code class="docutils literal notranslate"><span class="pre">Mesfet</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-SemiconductorDevices.html#r-3a3aspicegentcl3a3angspice3a3asemiconductordevices3a3amesfet3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-SemiconductorDevices.html#mesfet1model"><code class="docutils literal notranslate"><span class="pre">Mesfet1Model</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-SemiconductorDevices.html#r-3a3aspicegentcl3a3angspice3a3asemiconductordevices3a3amesfet1model3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-SemiconductorDevices.html#mosfet"><code class="docutils literal notranslate"><span class="pre">Mosfet</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-SemiconductorDevices.html#r-3a3aspicegentcl3a3angspice3a3asemiconductordevices3a3amosfet3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-SemiconductorDevices.html#q"><code class="docutils literal notranslate"><span class="pre">Q</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-SemiconductorDevices.html#z"><code class="docutils literal notranslate"><span class="pre">Z</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Analyses.html">::SpiceGenTcl::Ngspice::Analyses</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Analyses.html#classes">Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Analyses.html#ac"><code class="docutils literal notranslate"><span class="pre">Ac</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Analyses.html#dc"><code class="docutils literal notranslate"><span class="pre">Dc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Analyses.html#op"><code class="docutils literal notranslate"><span class="pre">Op</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Analyses.html#sensac"><code class="docutils literal notranslate"><span class="pre">SensAc</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Analyses.html#constructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Analyses.html#sensdc"><code class="docutils literal notranslate"><span class="pre">SensDc</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Analyses.html#r-3a3aspicegentcl3a3angspice3a3aanalyses3a3asensdc3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Analyses.html#sp"><code class="docutils literal notranslate"><span class="pre">Sp</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Analyses.html#r-3a3aspicegentcl3a3angspice3a3aanalyses3a3asp3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Analyses.html#tran"><code class="docutils literal notranslate"><span class="pre">Tran</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Simulators.html">::SpiceGenTcl::Ngspice::Simulators</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Simulators.html#classes">Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Simulators.html#batch"><code class="docutils literal notranslate"><span class="pre">Batch</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Simulators.html#constructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Simulators.html#readdata"><code class="docutils literal notranslate"><span class="pre">readData</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Simulators.html#readlog"><code class="docutils literal notranslate"><span class="pre">readLog</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Simulators.html#runandread"><code class="docutils literal notranslate"><span class="pre">runAndRead</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Simulators.html#batchlivelog"><code class="docutils literal notranslate"><span class="pre">BatchLiveLog</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Simulators.html#r-3a3aspicegentcl3a3angspice3a3asimulators3a3abatchlivelog3a3arunandread"><code class="docutils literal notranslate"><span class="pre">runAndRead</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Simulators.html#shared"><code class="docutils literal notranslate"><span class="pre">Shared</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Simulators.html#r-3a3aspicegentcl3a3angspice3a3asimulators3a3ashared3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Simulators.html#destructor"><code class="docutils literal notranslate"><span class="pre">destructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Simulators.html#r-3a3aspicegentcl3a3angspice3a3asimulators3a3ashared3a3areaddata"><code class="docutils literal notranslate"><span class="pre">readData</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Simulators.html#r-3a3aspicegentcl3a3angspice3a3asimulators3a3ashared3a3areadlog"><code class="docutils literal notranslate"><span class="pre">readLog</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Simulators.html#r-3a3aspicegentcl3a3angspice3a3asimulators3a3ashared3a3arunandread"><code class="docutils literal notranslate"><span class="pre">runAndRead</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Misc.html">::SpiceGenTcl::Ngspice::Misc</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Misc.html#classes">Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Misc.html#optionsngspice"><code class="docutils literal notranslate"><span class="pre">OptionsNgspice</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Misc.html#constructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html">::SpiceGenTcl::Xyce::BasicDevices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#classes">Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#c"><code class="docutils literal notranslate"><span class="pre">C</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#capacitor"><code class="docutils literal notranslate"><span class="pre">Capacitor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#constructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#cmodel"><code class="docutils literal notranslate"><span class="pre">CModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#r-3a3aspicegentcl3a3axyce3a3abasicdevices3a3acmodel3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#cswitch"><code class="docutils literal notranslate"><span class="pre">CSwitch</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#cswitchmodel"><code class="docutils literal notranslate"><span class="pre">CSwitchModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#r-3a3aspicegentcl3a3axyce3a3abasicdevices3a3acswitchmodel3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#gens"><code class="docutils literal notranslate"><span class="pre">GenS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#genswitch"><code class="docutils literal notranslate"><span class="pre">GenSwitch</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#r-3a3aspicegentcl3a3axyce3a3abasicdevices3a3agenswitch3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#inductor"><code class="docutils literal notranslate"><span class="pre">Inductor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#r-3a3aspicegentcl3a3axyce3a3abasicdevices3a3ainductor3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#l"><code class="docutils literal notranslate"><span class="pre">L</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#lmodel"><code class="docutils literal notranslate"><span class="pre">LModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#r-3a3aspicegentcl3a3axyce3a3abasicdevices3a3almodel3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#r"><code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#resistor"><code class="docutils literal notranslate"><span class="pre">Resistor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#r-3a3aspicegentcl3a3axyce3a3abasicdevices3a3aresistor3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#rmodel"><code class="docutils literal notranslate"><span class="pre">RModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#r-3a3aspicegentcl3a3axyce3a3abasicdevices3a3armodel3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#subcircuitinstance"><code class="docutils literal notranslate"><span class="pre">SubcircuitInstance</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#r-3a3aspicegentcl3a3axyce3a3abasicdevices3a3asubcircuitinstance3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#subcircuitinstanceauto"><code class="docutils literal notranslate"><span class="pre">SubcircuitInstanceAuto</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#r-3a3aspicegentcl3a3axyce3a3abasicdevices3a3asubcircuitinstanceauto3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#vsw"><code class="docutils literal notranslate"><span class="pre">VSw</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#vswitch"><code class="docutils literal notranslate"><span class="pre">VSwitch</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#vswitchmodel"><code class="docutils literal notranslate"><span class="pre">VSwitchModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#r-3a3aspicegentcl3a3axyce3a3abasicdevices3a3avswitchmodel3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#w"><code class="docutils literal notranslate"><span class="pre">W</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#x"><code class="docutils literal notranslate"><span class="pre">X</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-BasicDevices.html#xauto"><code class="docutils literal notranslate"><span class="pre">XAuto</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Sources.html">::SpiceGenTcl::Xyce::Sources</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Sources.html#classes">Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Sources.html#b"><code class="docutils literal notranslate"><span class="pre">B</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Sources.html#behaviouralsource"><code class="docutils literal notranslate"><span class="pre">BehaviouralSource</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Sources.html#constructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Sources.html#cccs"><code class="docutils literal notranslate"><span class="pre">Cccs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Sources.html#ccvs"><code class="docutils literal notranslate"><span class="pre">Ccvs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Sources.html#e"><code class="docutils literal notranslate"><span class="pre">E</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Sources.html#f"><code class="docutils literal notranslate"><span class="pre">F</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Sources.html#g"><code class="docutils literal notranslate"><span class="pre">G</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Sources.html#h"><code class="docutils literal notranslate"><span class="pre">H</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Sources.html#iac"><code class="docutils literal notranslate"><span class="pre">Iac</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Sources.html#r-3a3aspicegentcl3a3axyce3a3asources3a3aidc"><code class="docutils literal notranslate"><span class="pre">Idc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Sources.html#iexp"><code class="docutils literal notranslate"><span class="pre">Iexp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Sources.html#ipulse"><code class="docutils literal notranslate"><span class="pre">Ipulse</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Sources.html#ipwl"><code class="docutils literal notranslate"><span class="pre">Ipwl</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Sources.html#isffm"><code class="docutils literal notranslate"><span class="pre">Isffm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Sources.html#isin"><code class="docutils literal notranslate"><span class="pre">Isin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Sources.html#vac"><code class="docutils literal notranslate"><span class="pre">Vac</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Sources.html#vccs"><code class="docutils literal notranslate"><span class="pre">Vccs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Sources.html#vcvs"><code class="docutils literal notranslate"><span class="pre">Vcvs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Sources.html#vdc"><code class="docutils literal notranslate"><span class="pre">Vdc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Sources.html#vexp"><code class="docutils literal notranslate"><span class="pre">Vexp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Sources.html#vpulse"><code class="docutils literal notranslate"><span class="pre">Vpulse</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Sources.html#vpwl"><code class="docutils literal notranslate"><span class="pre">Vpwl</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Sources.html#vsffm"><code class="docutils literal notranslate"><span class="pre">Vsffm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Sources.html#vsin"><code class="docutils literal notranslate"><span class="pre">Vsin</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-SemiconductorDevices.html">::SpiceGenTcl::Xyce::SemiconductorDevices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-SemiconductorDevices.html#classes">Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-SemiconductorDevices.html#bjt"><code class="docutils literal notranslate"><span class="pre">Bjt</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-SemiconductorDevices.html#constructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-SemiconductorDevices.html#genspicestring"><code class="docutils literal notranslate"><span class="pre">genSPICEString</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-SemiconductorDevices.html#bjtgpmodel"><code class="docutils literal notranslate"><span class="pre">BjtGPModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-SemiconductorDevices.html#r-3a3aspicegentcl3a3axyce3a3asemiconductordevices3a3abjtgpmodel3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-SemiconductorDevices.html#d"><code class="docutils literal notranslate"><span class="pre">D</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-SemiconductorDevices.html#diode"><code class="docutils literal notranslate"><span class="pre">Diode</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-SemiconductorDevices.html#r-3a3aspicegentcl3a3axyce3a3asemiconductordevices3a3adiode3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-SemiconductorDevices.html#diodemodel"><code class="docutils literal notranslate"><span class="pre">DiodeModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-SemiconductorDevices.html#r-3a3aspicegentcl3a3axyce3a3asemiconductordevices3a3adiodemodel3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-SemiconductorDevices.html#j"><code class="docutils literal notranslate"><span class="pre">J</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-SemiconductorDevices.html#jfet"><code class="docutils literal notranslate"><span class="pre">Jfet</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-SemiconductorDevices.html#r-3a3aspicegentcl3a3axyce3a3asemiconductordevices3a3ajfet3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-SemiconductorDevices.html#jfet1model"><code class="docutils literal notranslate"><span class="pre">Jfet1Model</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-SemiconductorDevices.html#r-3a3aspicegentcl3a3axyce3a3asemiconductordevices3a3ajfet1model3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-SemiconductorDevices.html#jfet2model"><code class="docutils literal notranslate"><span class="pre">Jfet2Model</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-SemiconductorDevices.html#r-3a3aspicegentcl3a3axyce3a3asemiconductordevices3a3ajfet2model3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-SemiconductorDevices.html#m"><code class="docutils literal notranslate"><span class="pre">M</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-SemiconductorDevices.html#mesfet"><code class="docutils literal notranslate"><span class="pre">Mesfet</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-SemiconductorDevices.html#r-3a3aspicegentcl3a3axyce3a3asemiconductordevices3a3amesfet3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-SemiconductorDevices.html#mesfet1model"><code class="docutils literal notranslate"><span class="pre">Mesfet1Model</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-SemiconductorDevices.html#r-3a3aspicegentcl3a3axyce3a3asemiconductordevices3a3amesfet1model3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-SemiconductorDevices.html#mosfet"><code class="docutils literal notranslate"><span class="pre">Mosfet</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-SemiconductorDevices.html#r-3a3aspicegentcl3a3axyce3a3asemiconductordevices3a3amosfet3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-SemiconductorDevices.html#q"><code class="docutils literal notranslate"><span class="pre">Q</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-SemiconductorDevices.html#z"><code class="docutils literal notranslate"><span class="pre">Z</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Analyses.html">::SpiceGenTcl::Xyce::Analyses</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Analyses.html#classes">Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Analyses.html#ac"><code class="docutils literal notranslate"><span class="pre">Ac</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Analyses.html#dc"><code class="docutils literal notranslate"><span class="pre">Dc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Analyses.html#op"><code class="docutils literal notranslate"><span class="pre">Op</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Analyses.html#sens"><code class="docutils literal notranslate"><span class="pre">Sens</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Analyses.html#constructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Analyses.html#tran"><code class="docutils literal notranslate"><span class="pre">Tran</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Simulators.html">::SpiceGenTcl::Xyce::Simulators</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Simulators.html#classes">Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Simulators.html#batch"><code class="docutils literal notranslate"><span class="pre">Batch</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Simulators.html#constructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Simulators.html#readdata"><code class="docutils literal notranslate"><span class="pre">readData</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Simulators.html#readlog"><code class="docutils literal notranslate"><span class="pre">readLog</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Xyce-Simulators.html#runandread"><code class="docutils literal notranslate"><span class="pre">runAndRead</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-BasicDevices.html">::SpiceGenTcl::Ltspice::BasicDevices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-BasicDevices.html#classes">Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-BasicDevices.html#c"><code class="docutils literal notranslate"><span class="pre">C</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-BasicDevices.html#capacitor"><code class="docutils literal notranslate"><span class="pre">Capacitor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-BasicDevices.html#constructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-BasicDevices.html#cswitch"><code class="docutils literal notranslate"><span class="pre">CSwitch</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-BasicDevices.html#cswitchmodel"><code class="docutils literal notranslate"><span class="pre">CSwitchModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-BasicDevices.html#r-3a3aspicegentcl3a3altspice3a3abasicdevices3a3acswitchmodel3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-BasicDevices.html#inductor"><code class="docutils literal notranslate"><span class="pre">Inductor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-BasicDevices.html#r-3a3aspicegentcl3a3altspice3a3abasicdevices3a3ainductor3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-BasicDevices.html#l"><code class="docutils literal notranslate"><span class="pre">L</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-BasicDevices.html#r"><code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-BasicDevices.html#resistor"><code class="docutils literal notranslate"><span class="pre">Resistor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-BasicDevices.html#subcircuitinstance"><code class="docutils literal notranslate"><span class="pre">SubcircuitInstance</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-BasicDevices.html#r-3a3aspicegentcl3a3altspice3a3abasicdevices3a3asubcircuitinstance3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-BasicDevices.html#subcircuitinstanceauto"><code class="docutils literal notranslate"><span class="pre">SubcircuitInstanceAuto</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-BasicDevices.html#r-3a3aspicegentcl3a3altspice3a3abasicdevices3a3asubcircuitinstanceauto3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-BasicDevices.html#vsw"><code class="docutils literal notranslate"><span class="pre">VSw</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-BasicDevices.html#vswitch"><code class="docutils literal notranslate"><span class="pre">VSwitch</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-BasicDevices.html#vswitchmodel"><code class="docutils literal notranslate"><span class="pre">VSwitchModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-BasicDevices.html#r-3a3aspicegentcl3a3altspice3a3abasicdevices3a3avswitchmodel3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-BasicDevices.html#w"><code class="docutils literal notranslate"><span class="pre">W</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-BasicDevices.html#x"><code class="docutils literal notranslate"><span class="pre">X</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-BasicDevices.html#xauto"><code class="docutils literal notranslate"><span class="pre">XAuto</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html">::SpiceGenTcl::Ltspice::Sources</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#classes">Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#ac"><code class="docutils literal notranslate"><span class="pre">ac</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#constructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#b"><code class="docutils literal notranslate"><span class="pre">B</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#behaviouralsource"><code class="docutils literal notranslate"><span class="pre">BehaviouralSource</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#r-3a3aspicegentcl3a3altspice3a3asources3a3abehaviouralsource3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#cccs"><code class="docutils literal notranslate"><span class="pre">Cccs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#ccvs"><code class="docutils literal notranslate"><span class="pre">Ccvs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#dc"><code class="docutils literal notranslate"><span class="pre">dc</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#r-3a3aspicegentcl3a3altspice3a3asources3a3adc3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#e"><code class="docutils literal notranslate"><span class="pre">E</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#exp"><code class="docutils literal notranslate"><span class="pre">exp</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#r-3a3aspicegentcl3a3altspice3a3asources3a3aexp3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#f"><code class="docutils literal notranslate"><span class="pre">F</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#g"><code class="docutils literal notranslate"><span class="pre">G</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#h"><code class="docutils literal notranslate"><span class="pre">H</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#iac"><code class="docutils literal notranslate"><span class="pre">Iac</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#r-3a3aspicegentcl3a3altspice3a3asources3a3aiac3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#r-3a3aspicegentcl3a3altspice3a3asources3a3aidc"><code class="docutils literal notranslate"><span class="pre">Idc</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#r-3a3aspicegentcl3a3altspice3a3asources3a3aidc3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#iexp"><code class="docutils literal notranslate"><span class="pre">Iexp</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#r-3a3aspicegentcl3a3altspice3a3asources3a3aiexp3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#ipulse"><code class="docutils literal notranslate"><span class="pre">Ipulse</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#r-3a3aspicegentcl3a3altspice3a3asources3a3aipulse3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#ipwl"><code class="docutils literal notranslate"><span class="pre">Ipwl</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#r-3a3aspicegentcl3a3altspice3a3asources3a3aipwl3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#isffm"><code class="docutils literal notranslate"><span class="pre">Isffm</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#r-3a3aspicegentcl3a3altspice3a3asources3a3aisffm3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#isin"><code class="docutils literal notranslate"><span class="pre">Isin</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#r-3a3aspicegentcl3a3altspice3a3asources3a3aisin3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#pulse"><code class="docutils literal notranslate"><span class="pre">pulse</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#r-3a3aspicegentcl3a3altspice3a3asources3a3apulse3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#pwl"><code class="docutils literal notranslate"><span class="pre">pwl</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#r-3a3aspicegentcl3a3altspice3a3asources3a3apwl3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#sffm"><code class="docutils literal notranslate"><span class="pre">sffm</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#r-3a3aspicegentcl3a3altspice3a3asources3a3asffm3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#sin"><code class="docutils literal notranslate"><span class="pre">sin</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#r-3a3aspicegentcl3a3altspice3a3asources3a3asin3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#vac"><code class="docutils literal notranslate"><span class="pre">Vac</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#r-3a3aspicegentcl3a3altspice3a3asources3a3avac3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#vccs"><code class="docutils literal notranslate"><span class="pre">Vccs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#vcvs"><code class="docutils literal notranslate"><span class="pre">Vcvs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#vdc"><code class="docutils literal notranslate"><span class="pre">Vdc</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#r-3a3aspicegentcl3a3altspice3a3asources3a3avdc3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#vexp"><code class="docutils literal notranslate"><span class="pre">Vexp</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#r-3a3aspicegentcl3a3altspice3a3asources3a3avexp3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#vpulse"><code class="docutils literal notranslate"><span class="pre">Vpulse</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#r-3a3aspicegentcl3a3altspice3a3asources3a3avpulse3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#vpwl"><code class="docutils literal notranslate"><span class="pre">Vpwl</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#r-3a3aspicegentcl3a3altspice3a3asources3a3avpwl3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#vsffm"><code class="docutils literal notranslate"><span class="pre">Vsffm</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#r-3a3aspicegentcl3a3altspice3a3asources3a3avsffm3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#vsin"><code class="docutils literal notranslate"><span class="pre">Vsin</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Sources.html#r-3a3aspicegentcl3a3altspice3a3asources3a3avsin3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-SemiconductorDevices.html">::SpiceGenTcl::Ltspice::SemiconductorDevices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-SemiconductorDevices.html#classes">Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-SemiconductorDevices.html#bjt"><code class="docutils literal notranslate"><span class="pre">Bjt</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-SemiconductorDevices.html#constructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-SemiconductorDevices.html#bjtgpmodel"><code class="docutils literal notranslate"><span class="pre">BjtGPModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-SemiconductorDevices.html#r-3a3aspicegentcl3a3altspice3a3asemiconductordevices3a3abjtgpmodel3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-SemiconductorDevices.html#d"><code class="docutils literal notranslate"><span class="pre">D</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-SemiconductorDevices.html#diode"><code class="docutils literal notranslate"><span class="pre">Diode</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-SemiconductorDevices.html#r-3a3aspicegentcl3a3altspice3a3asemiconductordevices3a3adiode3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-SemiconductorDevices.html#diodeidealmodel"><code class="docutils literal notranslate"><span class="pre">DiodeIdealModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-SemiconductorDevices.html#r-3a3aspicegentcl3a3altspice3a3asemiconductordevices3a3adiodeidealmodel3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-SemiconductorDevices.html#diodemodel"><code class="docutils literal notranslate"><span class="pre">DiodeModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-SemiconductorDevices.html#r-3a3aspicegentcl3a3altspice3a3asemiconductordevices3a3adiodemodel3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-SemiconductorDevices.html#j"><code class="docutils literal notranslate"><span class="pre">J</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-SemiconductorDevices.html#jfet"><code class="docutils literal notranslate"><span class="pre">Jfet</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-SemiconductorDevices.html#r-3a3aspicegentcl3a3altspice3a3asemiconductordevices3a3ajfet3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-SemiconductorDevices.html#jfetmodel"><code class="docutils literal notranslate"><span class="pre">JfetModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-SemiconductorDevices.html#r-3a3aspicegentcl3a3altspice3a3asemiconductordevices3a3ajfetmodel3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-SemiconductorDevices.html#m"><code class="docutils literal notranslate"><span class="pre">M</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-SemiconductorDevices.html#mesfet"><code class="docutils literal notranslate"><span class="pre">Mesfet</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-SemiconductorDevices.html#r-3a3aspicegentcl3a3altspice3a3asemiconductordevices3a3amesfet3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-SemiconductorDevices.html#mesfetmodel"><code class="docutils literal notranslate"><span class="pre">MesfetModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-SemiconductorDevices.html#r-3a3aspicegentcl3a3altspice3a3asemiconductordevices3a3amesfetmodel3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-SemiconductorDevices.html#mosfet"><code class="docutils literal notranslate"><span class="pre">Mosfet</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-SemiconductorDevices.html#r-3a3aspicegentcl3a3altspice3a3asemiconductordevices3a3amosfet3a3aconstructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-SemiconductorDevices.html#q"><code class="docutils literal notranslate"><span class="pre">Q</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-SemiconductorDevices.html#z"><code class="docutils literal notranslate"><span class="pre">Z</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Analyses.html">::SpiceGenTcl::Ltspice::Analyses</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Analyses.html#classes">Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Analyses.html#ac"><code class="docutils literal notranslate"><span class="pre">Ac</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Analyses.html#dc"><code class="docutils literal notranslate"><span class="pre">Dc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Analyses.html#op"><code class="docutils literal notranslate"><span class="pre">Op</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Analyses.html#tran"><code class="docutils literal notranslate"><span class="pre">Tran</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Simulators.html">::SpiceGenTcl::Ltspice::Simulators</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Simulators.html#classes">Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Simulators.html#batch"><code class="docutils literal notranslate"><span class="pre">Batch</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Simulators.html#constructor"><code class="docutils literal notranslate"><span class="pre">constructor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Simulators.html#readdata"><code class="docutils literal notranslate"><span class="pre">readData</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Simulators.html#readlog"><code class="docutils literal notranslate"><span class="pre">readLog</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ltspice-Simulators.html#runandread"><code class="docutils literal notranslate"><span class="pre">runAndRead</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+</ul>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="SpiceGenTcl.html"
+                          title="next chapter">General concept</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="SpiceGenTcl.html" title="General concept"
+             >next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">SpiceGenTcl  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">&lt;no title&gt;</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright George Yashin.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    </div>
   </body>
 </html>
-</p>
-</main><nav class='ruff-nav'><ul ><li class='ruff-toc1'><a class='ruff-highlight' style='padding-top:2px;' href='index.html'>Start page</a></li>
-<li class='ruff-toc1'><a href='index-docindex.html' accesskey='i'>Index</a></li>
-<hr>
-<li class='ruff-toc1'><a href='index-List-of-devices.html'>List of devices</a></li>
-<li class='ruff-toc1'><a href='index-FAQ.html'>FAQ</a></li>
-<li class='ruff-toc1'><a href='index-Tutorials.html'>Tutorials</a></li>
-<li class='ruff-toc1'><a href='index-Tips.html'>Tips</a></li>
-<li class='ruff-toc1'><a href='index-Advanced.html'>Advanced</a></li>
-<li class='ruff-toc1'><a href='index-Parser.html'>Parser</a></li>
-<li class='ruff-toc1'><a href='index-SpiceGenTcl.html'>SpiceGenTcl</a></li>
-<li class='ruff-toc1'><a href='index-SpiceGenTcl-Common-BasicDevices.html'>SpiceGenTcl::Common::BasicDevices</a></li>
-<li class='ruff-toc1'><a href='index-SpiceGenTcl-Common-Analyses.html'>SpiceGenTcl::Common::Analyses</a></li>
-<li class='ruff-toc1'><a href='index-SpiceGenTcl-Common-Sources.html'>SpiceGenTcl::Common::Sources</a></li>
-<li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice.html'>SpiceGenTcl::Ngspice</a></li>
-<li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-BasicDevices.html'>SpiceGenTcl::Ngspice::BasicDevices</a></li>
-<li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-Sources.html'>SpiceGenTcl::Ngspice::Sources</a></li>
-<li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-SemiconductorDevices.html'>SpiceGenTcl::Ngspice::SemiconductorDevices</a></li>
-<li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-Analyses.html'>SpiceGenTcl::Ngspice::Analyses</a></li>
-<li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-Simulators.html'>SpiceGenTcl::Ngspice::Simulators</a></li>
-<li class='ruff-toc1'><a href='index-SpiceGenTcl-Ngspice-Misc.html'>SpiceGenTcl::Ngspice::Misc</a></li>
-<li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-BasicDevices.html'>SpiceGenTcl::Xyce::BasicDevices</a></li>
-<li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-Sources.html'>SpiceGenTcl::Xyce::Sources</a></li>
-<li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-SemiconductorDevices.html'>SpiceGenTcl::Xyce::SemiconductorDevices</a></li>
-<li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-Analyses.html'>SpiceGenTcl::Xyce::Analyses</a></li>
-<li class='ruff-toc1'><a href='index-SpiceGenTcl-Xyce-Simulators.html'>SpiceGenTcl::Xyce::Simulators</a></li>
-<li class='ruff-toc1'><a href='index-SpiceGenTcl-Ltspice-BasicDevices.html'>SpiceGenTcl::Ltspice::BasicDevices</a></li>
-<li class='ruff-toc1'><a href='index-SpiceGenTcl-Ltspice-Sources.html'>SpiceGenTcl::Ltspice::Sources</a></li>
-<li class='ruff-toc1'><a href='index-SpiceGenTcl-Ltspice-SemiconductorDevices.html'>SpiceGenTcl::Ltspice::SemiconductorDevices</a></li>
-<li class='ruff-toc1'><a href='index-SpiceGenTcl-Ltspice-Analyses.html'>SpiceGenTcl::Ltspice::Analyses</a></li>
-<li class='ruff-toc1'><a href='index-SpiceGenTcl-Ltspice-Simulators.html'>SpiceGenTcl::Ltspice::Simulators</a></li>
-<hr><li class='ruff-toc2'><a href='#General concept'>General concept</a></li><li class='ruff-toc2'><a href='#Usage examples'>Usage examples</a></li><li class='ruff-toc2'><a href='#Supported simulators'>Supported simulators</a></li><li class='ruff-toc2'><a href='#Installing'>Installing</a></li><li class='ruff-toc3'><a href='#From git repo'>From git repo</a></li><li class='ruff-toc3'><a href='#From archive'>From archive</a></li><li class='ruff-toc2'><a href='#Dependencies'>Dependencies</a></li><li class='ruff-toc2'><a href='#Documentation and tutorials'>Documentation and tutorials</a></li><li class='ruff-toc2'><a href='#Supported platforms'>Supported platforms</a></li><li class='ruff-toc2'><a href='#Quick start'>Quick start</a></li><li class='ruff-toc3'><a href='#Packages imports'>Packages imports</a></li><li class='ruff-toc3'><a href='#Circuit definition'>Circuit definition</a></li><li class='ruff-toc3'><a href='#Plotting data'>Plotting data</a></li></ul></nav><footer class='ruff-layout-footer ruff-ft'><div style='float: right;'>Document generated by <a href='https://ruff.magicsplat.com'>Ruff!</a></div><div>&copy; George Yashin</div></footer>
-</div></body></html>

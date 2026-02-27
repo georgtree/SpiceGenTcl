@@ -125,7 +125,7 @@ $chart Yaxis -name "Width" -minorTick {show "True"}  -splitLine {show "True"}
 $chart SetOptions -title {} -tooltip {trigger "axis"} -animation "False" -toolbox {feature {dataZoom {yAxisIndex "none"}}}
 $chart Add "lineSeries" -name "Best trajectory" -data $functionTrajectory -showAllSymbol "nothing"
 set fbasename [file rootname [file tail [info script]]]
-$chart Render -outfile [file normalize [file join .. html_charts ${fbasename}_plot.html]]
+$chart Render -outfile [file normalize [file join .. html_charts ${fbasename}_plot.html]] -width 800px -height 500px
 
 # calculate initial waveforms the highest supply voltage
 set pdPs [pdPsCalc $initialPWidth $length]
@@ -174,7 +174,8 @@ $chart Add "lineSeries" -name "final, vdd=[@ $vSupplyVals 2]" -data $finalWavefo
 
 
 set fbasename [file rootname [file tail [info script]]]
-$chart Render -outfile [file normalize [file join .. html_charts ${fbasename}_waveforms_plot.html]]
+$chart Render -outfile [file normalize [file join .. html_charts ${fbasename}_waveforms_plot.html]] -width 800px\
+        -height 500px
 
 # print resulted values for the highest supply voltage
 puts "Optimization succesfully finished at generation [dget $results generation], total number of function evaluations\

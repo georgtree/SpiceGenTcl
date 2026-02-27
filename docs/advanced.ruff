@@ -1,4 +1,7 @@
 namespace eval Advanced {
+    variable _ruff_ns_opts {
+        -heading {Advanced}
+    }
     variable _ruff_preamble {
         This section provides advanced examples from the `examples` folder in the root directory of *SpiceGenTcl*. 
         Rather than focusing on basic operations, we highlight advanced use cases that showcase the full 
@@ -15,7 +18,7 @@ namespace eval Advanced {
         statistical distribution of frequency bandwidths. The original circuit source is from the ngspice source
         distribution. The target filter circuit is:
         
-        <img src="assets/img/monte_carlo_cir.png" alt="drawing" width="700"/>
+        ![drawing](assets/img/monte_carlo_cir.png)
         
         The filter is a 3rd-order Chebyshev bandpass. The first step is to build the circuit and obtain the magnitude 
         of the transfer characteristic:
@@ -411,7 +414,7 @@ namespace eval Advanced {
 
         The loaded data is (with selected regions of fitting):
 
-        <img src="assets/img/iv_diode_extraction_plots.png" alt="drawing" width="900"/>
+        ![drawing](assets/img/iv_diode_extraction_plots.png)
 
         ### Fitting in first region
 
@@ -639,7 +642,7 @@ namespace eval Advanced {
 
         Circuit is the simplest possible invertor with capacitive load:
 
-        <img src="assets/img/cmos_inverter.png" alt="drawing" width="600"/>
+        ![drawing](assets/img/cmos_inverter.png)
 
         Simulation is done with pulsed input signal 4 periods long. We use three diffrerent supply voltage values to
         make result be optimal across possible range of power levels. The goal is to find width `PWIDTH` of PMOS
@@ -789,7 +792,7 @@ namespace eval Advanced {
         the higher value, so we set it to 10000.
 
         So, the final cost function is:
-        ```
+        ```tcl
         set pdata [dcreate vSupplyVals $vSupplyVals nDevice $mn pDevice $mp vLowLim $vLowLim vHighLim $vLowLim length $length\
                           vdd $vdd tmeas1 $tmeas1 tmeas2 $tmeas2 objWeight 10 constrWeight 10000 circuit $circuit]
         proc costFunc {xall pdata args} {
@@ -835,7 +838,7 @@ namespace eval Advanced {
         Let's breakdown it line by line to clarify every step while keeping in mind the previous information.
 
         First, we build `pdata` dictionary with information that is necessary to evaluate the cost function:
-        ```
+        ```tcl
         set pdata [dcreate vSupplyVals $vSupplyVals nDevice $mn pDevice $mp vLowLim $vLowLim vHighLim $vLowLim length $length\
                            vdd $vdd tmeas1 $tmeas1 tmeas2 $tmeas2 objWeight 10 constrWeight 10000 circuit $circuit]
         ```
@@ -856,21 +859,21 @@ namespace eval Advanced {
         At the start we unpack the dictionary to local variables with the same name as key of the dictionary.
         Then we extract the `WIDTH` parameter from vectors of variables. We have only one variable, so we just get
         first and the only element:
-        ```
+        ```tcl
         dict with pdata {}
         set width [@ $xall 0]
         ```
 
         Next we calculate the `pd` and `ps` parameters from the given length and and new width, and change the
         parameters of NMOS and PMOS devices with the new values:
-        ```
+        ```tcl
         set pdPs [pdPsCalc $width $length]
         $nDevice actOnParam -set l $length w [= {$width/3.0}] pd $pdPs ps $pdPs
         $pDevice actOnParam -set l $length w $width pd $pdPs ps $pdPs
         ```
 
         In the next block we loop over all power supply voltages, run circuit, read the data and extract values we need:
-        ```
+        ```tcl
         foreach val $vSupplyVals {
             $vdd actOnParam -set dc $val
             if {[catch {$circuit runAndRead}]} {
@@ -892,7 +895,7 @@ namespace eval Advanced {
 
         An additional guard was added to prevent stepping into regions where circuit could fail due to non-convergence,
         so we set objective and constraints metric to high values:
-        ```
+        ```tcl
         if {[catch {$circuit runAndRead}]} {
             # huge penalty in case of non-convergence
             lappend vlowList 1

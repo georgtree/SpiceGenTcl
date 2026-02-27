@@ -143,4 +143,4 @@ foreach node $nodes {
 }
 
 set fbasename [file rootname [file tail [info script]]]
-$layout Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -height 800px
+$layout Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px

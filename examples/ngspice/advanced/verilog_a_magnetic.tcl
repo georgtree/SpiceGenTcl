@@ -162,4 +162,4 @@ $chart SetOptions -title {} -tooltip {} -animation "False" -legend {} -toolbox {
         -grid {left "10%" right "15%"}
 $chart Add "lineSeries" -data $hb -showAllSymbol "nothing" -name "fitted" -symbolSize "4"
 set fbasename [file rootname [file tail [info script]]]
-$chart Render -outfile [file normalize [file join .. html_charts $fbasename.html]]
+$chart Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px

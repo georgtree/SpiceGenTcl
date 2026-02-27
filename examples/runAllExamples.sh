@@ -13,6 +13,7 @@ cd ../advanced
 tclsh ./monte_carlo.tcl
 tclsh ./diode_extract.tcl
 tclsh ./verilog_a_magnetic.tcl
+tclsh ./inverter_optimization.tcl
 # xyce
 cd ../../xyce/dc
 tclsh ./resistor_divider.tcl

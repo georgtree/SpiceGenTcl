@@ -47,5 +47,5 @@ $chart SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
 $chart Add "lineSeries" -data $xydata -showAllSymbol "nothing" 
 set fbasename [file rootname [file tail [info script]]]
 
-$chart Render -outfile [file normalize [file join .. html_charts $fbasename.html]]
+$chart Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px
 

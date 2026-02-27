@@ -20,8 +20,8 @@ set packageVersion [package versions SpiceGenTcl]
 puts $packageVersion
 set title "Tcl SpiceGenTcl package"
 
-set common [list -title $title -sortnamespaces false -preamble $startPage -pagesplit namespace -recurse false\
-                    -includesource true -pagesplit namespace -autopunctuate true -compact false -includeprivate false\
+set commonSphinx [list -title $title -sortnamespaces false -preamble $startPage -pagesplit namespace -recurse false\
+                    -includesource false -pagesplit namespace -autopunctuate true -compact false -includeprivate false\
                     -product SpiceGenTcl -diagrammer "ditaa --border-width 1" -version $packageVersion\
                     -copyright "George Yashin" {*}$::argv]
 set commonNroff [list -title $title -sortnamespaces false -preamble $startPage -pagesplit namespace -recurse false\
@@ -49,60 +49,34 @@ set namespacesNroff [list "::List of devices" ::SpiceGenTcl ::SpiceGenTcl::Commo
                 ::SpiceGenTcl::Ltspice::Simulators]
 
 if {[llength $argv] == 0 || "html" in $argv} {
-    ruff::document $namespaces -outdir $docDir -format html -outfile index.html {*}$common
-    ruff::document $namespacesNroff -outdir $docDir -format nroff -outfile SpiceGenTcl.n {*}$commonNroff
+    ruff::document $namespaces -outdir $docDir -format sphinx -outfile SpiceGenTcl.rst -outdir [file join $docDir sphinx] {*}$commonSphinx
+    #ruff::document $namespacesNroff -outdir $docDir -format nroff -outfile SpiceGenTcl.n {*}$commonNroff
 }
 
-# add new command keywords to hl_tcl
-lappend ::hl_tcl::my::data(CMD_TCL) {*}{Pin ParameterSwitch Parameter ParameterNoCheck ParameterPositional\
-                                                ParameterPositionalNoCheck ParameterDefault ParameterEquation\
-                                                ParameterPositionalEquation Device Model RawString Comment Include\
-                                                Options ParamStatement Temp Netlist Circuit Library Subcircuit Analysis\
-                                                Simulator Dataset Axis Trace EmptyTrace RawFile Ic Nodeset\
-                                                ParameterNode ParameterNodeEquation Global Parser ParameterVector Save\
-                                                Function importNgspice importXyce importCommon importLtspice\
-                                                forgetNgspice forgetXyce forgetCommon forgetLtspice Dc Ac Tran Op\
-                                                Resistor R Capacitor C Inductor L SubcircuitInstance X\
-                                                SubcircuitInstanceAuto XAuto VSwitch VSw CSwitch W Vdc Idc Vac Iac\
-                                                Vpulse Ipulse Vsin Isin Vexp Iexp Vpwl Ipwl Vsffm Isffm Vccs G Vcvs E\
-                                                Cccs F Ccvs H dget @ = dexist dcreate dset dappend dkeys dvalues\
-                                                BehaviouralSource Diode D Bjt Q Jfet J Mesfet Z Mosfet M VSwitchModel\
-                                                CSwitchModel DiodeModel DiodeIdealModel BjtGPModel JfetModel MesfetModel\
-                                                Batch BatchLiveLog NgspiceParser SensAc SensDc Sp VerilogA N Vport\
-                                                OptionsNgspice RModel CModel LModel Sens GenSwitch GenS Vsffm Isffm\
-                                                BjtSub QSub BjtSubTj QSubTj measure}
-set ::hl_tcl::my::data(CMD_TCL) [lsort $::hl_tcl::my::data(CMD_TCL)]
+::fileutil::appendToFile [file join $docDir sphinx conf.py] {html_theme = "classic"
+extensions = [
+    "sphinx.ext.githubpages",
+]
+suppress_warnings = [
+    "image.not_readable",
+]
+from pygments.lexers.tcl import TclLexer
+from pygments.token import Operator
 
-foreach file [glob ${docDir}/*.html] {
-    ::hl_tcl_html::highlight $file no \
-        {<pre class='ruff'>} </pre> \
-        <div id='*' class='ruff_dyn_src'><pre> </pre> \
-        <code> </code>  
-}
+class MyTclLexer(TclLexer):
+    def get_tokens_unprocessed(self, text):
+        for i, t, v in super().get_tokens_unprocessed(text):
+            if v == "=":
+                yield i, Operator, v   # or Name.Builtin
+            else:
+                yield i, t, v
 
-# change default width
-proc processContentsCss {fileContents} {
-    return [string map [list max-width:60rem max-width:100rem "overflow-wrap:break-word" "overflow-wrap:normal"]\
-                    $fileContents]
+def setup(app):
+    from sphinx.highlighting import lexers
+    lexers["tcl"] = MyTclLexer()
 }
-# change default theme 
-proc processContentsJs {fileContents} {
-    return [string map {init()\{currentTheme=localStorage.ruff_theme init()\{currentTheme=currentTheme="v1"}\
-                    $fileContents]
-}
-
-fileutil::updateInPlace [file join $docDir assets ruff-min.css] processContentsCss
-fileutil::updateInPlace [file join $docDir assets ruff-min.js] processContentsJs
-
-set tableWrapping {
-    .ruff-bd table.ruff_deflist th:first-child,
-    .ruff-bd table.ruff_deflist td:first-child {
-        white-space: nowrap;      /* never wrap */
-        overflow-wrap: normal;
-        word-break: normal;
-    }
-}
-::fileutil::appendToFile [file join $docDir assets ruff-min.css] $tableWrapping
+catch {exec sphinx-build -b html [file join $docDir sphinx] [file join $docDir]} errorStr
+puts $errorStr
 
 # ticklechart graphs substitutions
 
@@ -120,15 +94,15 @@ set chartsMap [dcreate !ticklechart_mark_diode_iv_ngspice! diode_iv.html !tickle
                        !ticklechart_mark_four_bit_adder_ngspice! fourbitadder.html !ticklechart_mark_filter_ngspice!\
                        filter.html]
 set path [file join $docDir .. examples ngspice html_charts]
-fileutil::updateInPlace [file join $docDir index-Tutorials.html] processContentsTutorial
+fileutil::updateInPlace [file join $docDir SpiceGenTcl-Tutorials.html] processContentsTutorial
 set chartsMap [dcreate !ticklechart_mark_resistor_divider_ngspice! resistor_divider.html]
-fileutil::updateInPlace [file join $docDir index.html] processContentsTutorial
+fileutil::updateInPlace [file join $docDir SpiceGenTcl.html] processContentsTutorial
 set chartsMap [dcreate !ticklechart_mark_monte_carlo_typ_mag_ngspice! monte_carlo_typ.html\
                        !ticklechart_mark_monte_carlo_dists_ngspice! monte_carlo.html\
                        !ticklechart_mark_monte_carlo_dists_comb_ngspice! monte_carlo_combined.html\
                        !ticklechart_mark_diode_extract_ngspice! diode_extract.html\
                        !ticklechart_mark_inverter_optimization_plot_ngspice! inverter_optimization_plot.html\
                        !ticklechart_mark_inverter_optimization_waveforms_ngspice! inverter_optimization_waveforms_plot.html]
-fileutil::updateInPlace [file join $docDir index-Advanced.html] processContentsTutorial
+fileutil::updateInPlace [file join $docDir SpiceGenTcl-Advanced.html] processContentsTutorial
 set chartsMap [dcreate !ticklechart_mark_c432_test_with_parsing_ngspice! c432_test_with_parsing.html]
-fileutil::updateInPlace [file join $docDir index-Parser.html] processContentsTutorial
+fileutil::updateInPlace [file join $docDir SpiceGenTcl-Parser.html] processContentsTutorial

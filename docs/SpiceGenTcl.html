@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>General concept &#8212; SpiceGenTcl  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=514cf933" />
+    
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="List of devices" href="SpiceGenTcl-List-of-devices.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="SpiceGenTcl-List-of-devices.html" title="List of devices"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="&lt;no title&gt;"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">SpiceGenTcl  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">General concept</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p>This package provides Tcl interface to different SPICE and SPICE-like simulator, Ngspice, Xyce.
+It was inspired by <a class="reference external" href="https://github.com/PySpice-org/PySpice">PySpice</a> project, object-oriented interface to
+SPICE-like simulators written in Python.</p>
+<section id="general-concept">
+<span id="r-general-concept"></span><span id="r-general20concept"></span><h1>General concept<a class="headerlink" href="#general-concept" title="Link to this heading">¶</a></h1>
+<p>The general concept of the package is to build a netlist using Tcl scripts. It is based on the TclOO
+object-oriented system, where everything is represented by objects, including elements, models, analyses,
+waveforms, and netlists. After defining the netlist, you can run the simulation, read the resulting data, and then
+process or display the data using the Tcl scripting language.</p>
+<p>This approach differs from the <a class="reference external" href="https://ngspice.sourceforge.io/tclspice.html">Tclspice</a> extension, which comes
+bundled with Ngspice and is tightly bound to the simulator’s internal structures. SpiceGenTcl offers a more
+flexible approach that can be extended to work with different simulators that use netlists with similar syntax.</p>
+</section>
+<section id="usage-examples">
+<span id="r-usage-examples"></span><span id="r-usage20examples"></span><h1>Usage examples<a class="headerlink" href="#usage-examples" title="Link to this heading">¶</a></h1>
+<p>SpiceGenTcl can be used if you need:</p>
+<ul class="simple">
+<li><p>automate some repetitive simulation tasks, and you don’t like <a class="reference external" href="https://ngspice.sourceforge.io/ngspice-control-language-tutorial.html">Nutmeg</a> syntax (SPICE standard scripting language)</p></li>
+<li><p>postprocess output waveforms and data</p></li>
+<li><p>change netlist structure on the fly</p></li>
+<li><p>simulate different models in the same circuit setup</p></li>
+<li><p>run circuit optimization with parameters variations as well as variations in circuit topology</p></li>
+<li><p>parse existing netlist and gain control over all circuit elements with Tcl</p></li>
+</ul>
+<p>Currently, there are range of examples for common analyses (DC, AC, transient) for all simulators, and advanced examples
+for some of them:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://georgtree.github.io/SpiceGenTcl/index-Advanced.html#::Advanced-Monte-Carlo%20simulation">Monte-Carlo example</a>: Ngspice, Xyce and LTspice</p></li>
+<li><p><a class="reference external" href="https://georgtree.github.io/SpiceGenTcl/index-Advanced.html#::Advanced-Parameters%20extraction%20of%20diode%20model%20parameters">Diode parameters extraction via fitting</a>: Ngspice, Xyce and LTspice</p></li>
+<li><p>Example of creating custom Verilog-A magnetic core model and simulating transformer with saturation: Ngspice</p></li>
+<li><p><a class="reference external" href="https://georgtree.github.io/SpiceGenTcl/index-Advanced.html#::Advanced-Inverter%20performance%20optimization">Inverter power optimization</a>: Ngspice</p></li>
+</ul>
+</section>
+<section id="supported-simulators">
+<span id="r-supported-simulators"></span><span id="r-supported20simulators"></span><h1>Supported simulators<a class="headerlink" href="#supported-simulators" title="Link to this heading">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference external" href="https://ngspice.sourceforge.io/download.html">Ngspice</a> - Linux and Windows</p></li>
+<li><p><a class="reference external" href="https://xyce.sandia.gov/downloads/executables/">Xyce</a> - Linux and Windows</p></li>
+<li><p><a class="reference external" href="https://www.analog.com/en/resources/design-tools-and-calculators/ltspice-simulator.html">LTspice</a> - Windows and Linux (wine)</p></li>
+</ul>
+</section>
+<section id="installing">
+<span id="r-installing"></span><h1>Installing<a class="headerlink" href="#installing" title="Link to this heading">¶</a></h1>
+<p>You have two ways: install from git repo (convinient for Linux users) or from archive package release.</p>
+<section id="from-git-repo">
+<span id="r-from-git-repo"></span><span id="r-from20git20repo"></span><h2>From git repo<a class="headerlink" href="#from-git-repo" title="Link to this heading">¶</a></h2>
+<p>Run following commands:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/georgtree/SpiceGenTcl.git</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">./configure</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">make</span> <span class="pre">install</span></code></p></li>
+</ul>
+<p>During installing it installs manpages, and local html documentation in <code class="docutils literal notranslate"><span class="pre">/usr/local/share/SpiceGenTcl/doc</span></code>.</p>
+<p>For test package in place run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">test</span></code>.</p>
+<p>For package uninstall run <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">make</span> <span class="pre">uninstall</span></code>.</p>
+</section>
+<section id="from-archive">
+<span id="r-from-archive"></span><span id="r-from20archive"></span><h2>From archive<a class="headerlink" href="#from-archive" title="Link to this heading">¶</a></h2>
+<p>To install the package you should extract archive with source code and add path of the package folder to <code class="docutils literal notranslate"><span class="pre">auto_path</span></code>
+variable:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">lappend</span><span class="w"> </span>auto_path<span class="w"> </span><span class="s2">&quot;path to SpiceGenTcl package&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="dependencies">
+<span id="r-dependencies"></span><h1>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading">¶</a></h1>
+<p>Package is written in pure Tcl with relying on multiple libraries, tcl version is 9.0.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.tcl.tk/software/tcllib/">Tcllib</a></p></li>
+<li><p><a class="reference external" href="https://github.com/georgtree/argparse">argparse</a></p></li>
+<li><p><a class="reference external" href="https://github.com/nico-robert/ticklecharts">ticklecharts</a></p></li>
+<li><p><a class="reference external" href="https://github.com/georgtree/tclmeasure">tclmeasure</a></p></li>
+</ul>
+<p>For some examples you also need these packages:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/georgtree/tclinterp">tclinterp</a></p></li>
+<li><p><a class="reference external" href="https://github.com/georgtree/tclopt">tclopt</a></p></li>
+<li><p><a class="reference external" href="https://github.com/georgtree/NgspiceTclBridge">NgspiceTclBridge</a></p></li>
+</ul>
+<p>After simulator installation add path to executable to <code class="docutils literal notranslate"><span class="pre">PATH</span></code> environment variable.</p>
+<p>For code coverage test <a class="reference external" href="https://nagelfar.sourceforge.net/">nagelfar</a> is used, commit 845924 of master branch.</p>
+<p>For view test coverage diffs <a class="reference external" href="http://eskil.tcl.tk/index.html/doc/trunk/htdocs/index.html">eskil</a> is used.</p>
+</section>
+<section id="documentation-and-tutorials">
+<span id="r-documentation-and-tutorials"></span><span id="r-documentation20and20tutorials"></span><h1>Documentation and tutorials<a class="headerlink" href="#documentation-and-tutorials" title="Link to this heading">¶</a></h1>
+<p>Documentation could be found <a class="reference external" href="https://georgtree.github.io/SpiceGenTcl/">here</a>.</p>
+<p>Tutorials describing different examples could be found
+<a class="reference external" href="https://georgtree.github.io/SpiceGenTcl/index-Tutorials.html">here</a>.</p>
+<p>Good tutorial for Tcl language could be found <a class="reference external" href="http://tcl.tk/man/tcltutorial/html/tcltutorial.html">here</a></p>
+<p>Documentation was generated with <a class="reference external" href="https://ruff.magicsplat.com/">ruff!</a>.</p>
+<p>Tcl syntax highlightning was done with <a class="reference external" href="https://github.com/aplsimple/hl_tcl">hl_tcl</a>.</p>
+</section>
+<section id="supported-platforms">
+<span id="r-supported-platforms"></span><span id="r-supported20platforms"></span><h1>Supported platforms<a class="headerlink" href="#supported-platforms" title="Link to this heading">¶</a></h1>
+<p>I personally use Kubuntu 24.04, and I also tested package on Windows 11.
+On Kubuntu I use Tcl/Tk 9.0 compiled from sources, as well as Ngspice and Xyce.
+On Windows I use <a class="reference external" href="https://www.magicsplat.com/tcl-installer/">Magicsplat</a> distribution of Tcl/Tk 9.0. For
+Ngspice and Xyce I use precompilled binaries.</p>
+<p><strong>Note</strong>: on Windows by default Ngspice save raw file into ascii format, to pass all tests
+(because of different numbers formatting - scientific by default) you need to set binary format by default in .spiceinit
+by this line:</p>
+<div class="highlight-spice notranslate"><div class="highlight"><pre><span></span><span class="nx">set</span><span class="w"> </span><span class="nx">filetype</span><span class="p">=</span><span class="nx">binary</span>
+</pre></div>
+</div>
+<p>Tcl is a cross-platform language, and because this package is written in pure Tcl,
+you can practically run it on any platform, including Windows, Linux (all flavors), and FreeBSD.
+Ngspice is available as pre-compiled binaries for Linux and Windows, but it can also be compiled on FreeBSD.
+Xyce is availible as pre-compiled for Windows, RHEL and MacOS, but can be compiled to any other platform.</p>
+</section>
+<section id="quick-start">
+<span id="r-quick-start"></span><span id="r-quick20start"></span><h1>Quick start<a class="headerlink" href="#quick-start" title="Link to this heading">¶</a></h1>
+<ul class="simple">
+<li><p><strong>Important note 1</strong>: internally, all device names, parameters, nodes, types, reference names, and data vector’s names are converted to lowercase after object instantiation. While you can enter them in any case, they can only be accessed by their lowercase names. This approach aligns with the fact that most SPICE simulators are case-insensitive. To prevent ambiguity in Tcl code, where the simulator treats mixed-case names as identical, we convert everything to lowercase. This ensures that we can detect and resolve any duplicate names in the top-level circuit before generating the netlist.</p></li>
+<li><p><strong>Important note 2</strong>: this package is not designed to be used with the <code class="docutils literal notranslate"><span class="pre">.control</span></code> section in Ngspice, the .step statement in LTspice, or multiple DC sweeps, and it does not support reading parametric sweeps from raw data. The idea of the package is to handle all such tasks within a Tcl script, eliminating the need to use the simulator’s internal scripting capabilities, and dependence on each simulator unique ways of handling parametric sweeps, that compromises compatibility. But it is could be done easily in principle to realize special objects and reading of raw files with parametric sweeps.</p></li>
+<li><p><strong>Important note 3</strong>: in this package the following aliases for commands are defined:</p></li>
+</ul>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">interp</span><span class="w"> </span>alias<span class="w"> </span><span class="k">{}</span><span class="w"> </span>dget<span class="w"> </span><span class="k">{}</span><span class="w"> </span>dict<span class="w"> </span>get
+<span class="nb">interp</span><span class="w"> </span>alias<span class="w"> </span><span class="k">{}</span><span class="w"> </span>@<span class="w"> </span><span class="k">{}</span><span class="w"> </span>lindex
+<span class="nb">interp</span><span class="w"> </span>alias<span class="w"> </span><span class="k">{}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">{}</span><span class="w"> </span>expr
+<span class="nb">interp</span><span class="w"> </span>alias<span class="w"> </span><span class="k">{}</span><span class="w"> </span>dexist<span class="w"> </span><span class="k">{}</span><span class="w"> </span>dict<span class="w"> </span>exists
+<span class="nb">interp</span><span class="w"> </span>alias<span class="w"> </span><span class="k">{}</span><span class="w"> </span>dcreate<span class="w"> </span><span class="k">{}</span><span class="w"> </span>dict<span class="w"> </span>create
+<span class="nb">interp</span><span class="w"> </span>alias<span class="w"> </span><span class="k">{}</span><span class="w"> </span>dset<span class="w"> </span><span class="k">{}</span><span class="w"> </span>dict<span class="w"> </span>set
+<span class="nb">interp</span><span class="w"> </span>alias<span class="w"> </span><span class="k">{}</span><span class="w"> </span>dappend<span class="w"> </span><span class="k">{}</span><span class="w"> </span>dict<span class="w"> </span>append
+<span class="nb">interp</span><span class="w"> </span>alias<span class="w"> </span><span class="k">{}</span><span class="w"> </span>dkeys<span class="w"> </span><span class="k">{}</span><span class="w"> </span>dict<span class="w"> </span>keys
+<span class="nb">interp</span><span class="w"> </span>alias<span class="w"> </span><span class="k">{}</span><span class="w"> </span>dvalues<span class="w"> </span><span class="k">{}</span><span class="w"> </span>dict<span class="w"> </span>values
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>Important note 4</strong>: source code follows the pattern, if method or variable name of the class starts from capital letter, it is intended to be private and not directly accessible from outside the object.</p></li>
+</ul>
+<section id="packages-imports">
+<span id="r-packages-imports"></span><span id="r-packages20imports"></span><h2>Packages imports<a class="headerlink" href="#packages-imports" title="Link to this heading">¶</a></h2>
+<p>The first step is import of package:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">package</span><span class="w"> </span>require<span class="w"> </span>SpiceGenTcl
+</pre></div>
+</div>
+<p>Import all commands from ::SpiceGenTcl:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">namespace</span><span class="w"> </span>import<span class="w"> </span><span class="o">::</span>SpiceGenTcl::<span class="o">*</span>
+</pre></div>
+</div>
+<p>One of the commands is <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aimportngspice"><span class="std std-ref">::SpiceGenTcl::importNgspice</span></a>. By calling this command, we can import all commands related
+to the Ngspice simulator, eliminating the need to add the <code class="docutils literal notranslate"><span class="pre">::SpiceGenTcl::Ngspice</span></code> prefix before any command.
+Here’s how to do it:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">importNgspice</span>
+</pre></div>
+</div>
+<p>To plot results of simulation we also import package <code class="docutils literal notranslate"><span class="pre">ticklecharts</span></code>:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">package</span><span class="w"> </span>require<span class="w"> </span>ticklecharts
+</pre></div>
+</div>
+</section>
+<section id="circuit-definition">
+<span id="r-circuit-definition"></span><span id="r-circuit20definition"></span><h2>Circuit definition<a class="headerlink" href="#circuit-definition" title="Link to this heading">¶</a></h2>
+<p>Let’s try to define simple resistor divider circuit with following netlist:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>voltage divider netlist
+v1 in 0 1
+r1 in out 1e3
+r2 out 0 2e3
+.dc v1 0 5 0.1
+</pre></div>
+</div>
+<p><img alt="drawing" src="assets/img/resistor_divider_cir_white.png" /></p>
+<p>First step is creating circuit object:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">set</span><span class="w"> </span>circuit<span class="w"> </span><span class="k">[</span><span class="nv">Circuit</span><span class="w"> </span>new<span class="w"> </span><span class="k">{</span><span class="nv">voltage</span><span class="w"> </span>divider<span class="w"> </span>netlist<span class="k">}]</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">Circuit</span></code> command creates a new object of the <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3acircuit"><span class="std std-ref">::SpiceGenTcl::Circuit</span></a> class, which is imported from the
+<code class="docutils literal notranslate"><span class="pre">::SpiceGenTcl</span></code> namespace and represents the top-level circuit.
+The only argument we provide is the name of the circuit, which will be printed on the first line of the netlist.</p>
+<p>The next step is building netlist by addding elements to top circuit object:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">$circuit</span><span class="w"> </span><span class="nv">add</span><span class="w"> </span><span class="k">[</span><span class="nv">Vdc</span><span class="w"> </span>new<span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">-</span>dc<span class="w"> </span><span class="mi">1</span><span class="k">]</span>
+<span class="nv">$circuit</span><span class="w"> </span><span class="nv">add</span><span class="w"> </span><span class="k">[</span><span class="nv">R</span><span class="w"> </span>new<span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span>out<span class="w"> </span><span class="o">-</span>r<span class="w"> </span><span class="mi">1</span>e3<span class="k">]</span>
+<span class="nv">$circuit</span><span class="w"> </span><span class="nv">add</span><span class="w"> </span><span class="k">[</span><span class="nv">R</span><span class="w"> </span>new<span class="w"> </span><span class="mi">2</span><span class="w"> </span>out<span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">-</span>r<span class="w"> </span><span class="mi">2</span>e3<span class="k">]</span>
+<span class="nv">$circuit</span><span class="w"> </span><span class="nv">add</span><span class="w"> </span><span class="k">[</span><span class="nv">Dc</span><span class="w"> </span>new<span class="w"> </span><span class="o">-</span>src<span class="w"> </span>v1<span class="w"> </span><span class="o">-</span>start<span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">-</span>stop<span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="o">-</span>incr<span class="w"> </span><span class="mf">0.1</span><span class="k">]</span>
+</pre></div>
+</div>
+<p>An instance of the <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3acircuit"><span class="std std-ref">::SpiceGenTcl::Circuit</span></a> class, referenced by the <code class="docutils literal notranslate"><span class="pre">circuit</span></code> variable, has an
+<a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3acircuit3a3aadd"><span class="std std-ref">::SpiceGenTcl::Circuit::add</span></a> method that appends the references of argument objects to it. The object-creating
+commands <code class="docutils literal notranslate"><span class="pre">Vdc</span></code>, <code class="docutils literal notranslate"><span class="pre">R</span></code>, and <code class="docutils literal notranslate"><span class="pre">Dc</span></code> — which represent a DC voltage source, a basic resistor, and a DC analysis,
+respectively — are imported from the <code class="docutils literal notranslate"><span class="pre">::SpiceGenTcl::Ngspice::Sources</span></code>, <code class="docutils literal notranslate"><span class="pre">::SpiceGenTcl::Ngspice::BasicElements</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">::SpiceGenTcl::Ngspice::Analyses</span></code> namespaces.</p>
+<p>When using the <code class="docutils literal notranslate"><span class="pre">new</span></code> subcommand, you provide the basic arguments for the element. For example, in the <code class="docutils literal notranslate"><span class="pre">R</span></code> command,
+you would supply the name ‘1’, the name of the net connected to the positive node ‘in’, the name of the net
+connected to the negative node ‘0’ (which is the global ground), and the resistance value ‘1e3’.</p>
+<p>The last necessary step is to create <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3asimulator"><span class="std std-ref">::SpiceGenTcl::Simulator</span></a> object with command <code class="docutils literal notranslate"><span class="pre">Batch</span></code> from
+<code class="docutils literal notranslate"><span class="pre">::SpiceGenTcl::Ngspice</span></code> namespace and attach it to <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3acircuit"><span class="std std-ref">::SpiceGenTcl::Circuit</span></a> object:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">set</span><span class="w"> </span>simulator<span class="w"> </span><span class="k">[</span><span class="nv">Batch</span><span class="w"> </span>new<span class="w"> </span><span class="k">{</span><span class="nv">batch1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="o">/</span><span class="nv">usr</span><span class="o">/</span>local<span class="o">/</span>bin<span class="o">/</span><span class="k">}]</span>
+<span class="nv">$circuit</span><span class="w"> </span><span class="nv">configure</span><span class="w"> </span><span class="o">-</span>Simulator<span class="w"> </span><span class="nv">$simulator</span>
+</pre></div>
+</div>
+<p>Now we are ready to run simulation:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">$circuit</span><span class="w"> </span><span class="nv">runAndRead</span>
+</pre></div>
+</div>
+<p>After the simulation, we can read the resulting data. We use the <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3acircuit3a3agetdatadict"><span class="std std-ref">::SpiceGenTcl::Circuit::getDataDict</span></a> method to
+obtain a dictionary where the keys are the names of the result vectors:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">set</span><span class="w"> </span>data<span class="w"> </span><span class="k">[</span><span class="nv">$circuit</span><span class="w"> </span><span class="nv">getDataDict</span><span class="k">]</span>
+</pre></div>
+</div>
+<p>The we can get vectors v(in) and v(out) from dictionary <code class="docutils literal notranslate"><span class="pre">data</span></code>:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">set</span><span class="w"> </span>axis<span class="w"> </span><span class="k">[</span><span class="nv">dget</span><span class="w"> </span><span class="nv">$data</span><span class="w"> </span>v<span class="k">(</span><span class="nv">in</span><span class="k">)]</span>
+<span class="k">set</span><span class="w"> </span>trace<span class="w"> </span><span class="k">[</span><span class="nv">dget</span><span class="w"> </span><span class="nv">$data</span><span class="w"> </span>v<span class="k">(</span><span class="nv">out</span><span class="k">)]</span>
+</pre></div>
+</div>
+</section>
+<section id="plotting-data">
+<span id="r-plotting-data"></span><span id="r-plotting20data"></span><h2>Plotting data<a class="headerlink" href="#plotting-data" title="Link to this heading">¶</a></h2>
+<p>To plot results we use <a class="reference external" href="https://github.com/nico-robert/ticklecharts">ticklecharts</a> package:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">foreach</span><span class="w"> </span>x<span class="w"> </span><span class="nv">$axis</span><span class="w"> </span>y<span class="w"> </span><span class="nv">$trace</span><span class="w"> </span><span class="k">{</span>
+<span class="w">    </span><span class="k">set</span><span class="w"> </span>x<span class="w"> </span><span class="k">[</span><span class="nb">format</span><span class="w"> </span><span class="s2">&quot;%.3f&quot;</span><span class="w"> </span><span class="nv">$x</span><span class="k">]</span>
+<span class="w">    </span><span class="k">set</span><span class="w"> </span>y<span class="w"> </span><span class="k">[</span><span class="nb">format</span><span class="w"> </span><span class="s2">&quot;%.3f&quot;</span><span class="w"> </span><span class="nv">$y</span><span class="k">]</span>
+<span class="w">    </span><span class="nb">lappend</span><span class="w"> </span>xydata<span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="nv">$x</span><span class="w"> </span><span class="nv">$y</span><span class="k">]</span>
+<span class="k">}</span>
+<span class="k">set</span><span class="w"> </span>chart<span class="w"> </span><span class="k">[</span><span class="nv">ticklecharts</span><span class="o">::</span>chart<span class="w"> </span>new<span class="k">]</span>
+<span class="nv">$chart</span><span class="w"> </span><span class="nv">Xaxis</span><span class="w"> </span><span class="o">-</span>name<span class="w"> </span><span class="s2">&quot;v(in), V&quot;</span><span class="w"> </span><span class="o">-</span>minorTick<span class="w"> </span><span class="k">{</span><span class="nv">show</span><span class="w"> </span><span class="s2">&quot;True&quot;</span><span class="k">}</span><span class="w"> </span><span class="o">-</span>min<span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">-</span>max<span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="o">-</span>type<span class="w"> </span><span class="s2">&quot;value&quot;</span><span class="w"> </span><span class="o">-</span>splitLine<span class="w"> </span><span class="k">{</span><span class="nv">show</span><span class="w"> </span><span class="s2">&quot;True&quot;</span><span class="k">}</span>
+<span class="nv">$chart</span><span class="w"> </span><span class="nv">Yaxis</span><span class="w"> </span><span class="o">-</span>name<span class="w"> </span><span class="s2">&quot;v(out), V&quot;</span><span class="w"> </span><span class="o">-</span>minorTick<span class="w"> </span><span class="k">{</span><span class="nv">show</span><span class="w"> </span><span class="s2">&quot;True&quot;</span><span class="k">}</span><span class="w"> </span><span class="o">-</span>min<span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">-</span>max<span class="w"> </span><span class="mf">3.5</span><span class="w"> </span><span class="o">-</span>type<span class="w"> </span><span class="s2">&quot;value&quot;</span><span class="w"> </span><span class="o">-</span>splitLine<span class="w"> </span><span class="k">{</span><span class="nv">show</span><span class="w"> </span><span class="s2">&quot;True&quot;</span><span class="k">}</span>
+<span class="nv">$chart</span><span class="w"> </span><span class="nv">SetOptions</span><span class="w"> </span><span class="o">-</span>title<span class="w"> </span><span class="k">{}</span><span class="w"> </span><span class="o">-</span>tooltip<span class="w"> </span><span class="k">{</span><span class="nv">trigger</span><span class="w"> </span><span class="s2">&quot;axis&quot;</span><span class="k">}</span><span class="w"> </span><span class="o">-</span>animation<span class="w"> </span><span class="s2">&quot;False&quot;</span><span class="w"> </span><span class="o">-</span>backgroundColor<span class="w"> </span><span class="s2">&quot;#212121&quot;</span>
+<span class="nv">$chart</span><span class="w"> </span><span class="nv">Add</span><span class="w"> </span><span class="s2">&quot;lineSeries&quot;</span><span class="w"> </span><span class="o">-</span>data<span class="w"> </span><span class="nv">$xydata</span><span class="w"> </span><span class="o">-</span>showAllSymbol<span class="w"> </span><span class="s2">&quot;nothing&quot;</span>
+<span class="k">set</span><span class="w"> </span>fbasename<span class="w"> </span><span class="k">[</span><span class="nb">file</span><span class="w"> </span>rootname<span class="w"> </span><span class="k">[</span><span class="nb">file</span><span class="w"> </span>tail<span class="w"> </span><span class="k">[</span><span class="nb">info</span><span class="w"> </span>script<span class="k">]]]</span>
+
+<span class="nv">$chart</span><span class="w"> </span><span class="nv">Render</span><span class="w"> </span><span class="o">-</span>outfile<span class="w"> </span><span class="k">[</span><span class="nb">file</span><span class="w"> </span>normalize<span class="w"> </span><span class="k">[</span><span class="nb">file</span><span class="w"> </span>join<span class="w"> </span>..<span class="w"> </span>html_charts<span class="w"> </span><span class="nv">$fbasename.html</span><span class="k">]]</span>
+</pre></div>
+</div>
+<p>To view result, we should open rendered resistor_divider.html chart in browser.</p>
+<p><!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>ticklEcharts !!!</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+  </head>
+  <body>
+    <div id="id_60adde9b61f84d799d78a86d6b8fe27f" class="chart-container" style="width:800px; height:500px;"></div>
+    <script>
+      var chart_60adde9b61f84d799d78a86d6b8fe27f = echarts.init(document.getElementById("id_60adde9b61f84d799d78a86d6b8fe27f"), null, {renderer: "canvas"});
+      var option_60adde9b61f84d799d78a86d6b8fe27f = {
+  "xAxis": [{
+      "show": true,
+      "type": "value",
+      "gridIndex": 0,
+      "position": "bottom",
+      "name": "v(in), V",
+      "nameLocation": "end",
+      "nameGap": 15,
+      "nameRotate": 0,
+      "inverse": false,
+      "boundaryGap": true,
+      "min": 0,
+      "max": 5,
+      "scale": false,
+      "silent": false,
+      "triggerEvent": false,
+      "minorTick": {
+        "show": true,
+        "splitNumber": 5,
+        "length": 3
+      },
+      "splitLine": {
+        "show": true,
+        "onZero": true,
+        "symbol": null
+      },
+      "zlevel": 0,
+      "z": 0
+    }],
+  "yAxis": [{
+      "show": true,
+      "gridIndex": 0,
+      "position": "left",
+      "realtimeSort": true,
+      "sortSeriesIndex": 0,
+      "type": "value",
+      "name": "v(out), V",
+      "nameLocation": "end",
+      "nameGap": 15,
+      "nameRotate": 0,
+      "inverse": false,
+      "boundaryGap": false,
+      "min": 0,
+      "max": 3.5,
+      "scale": false,
+      "silent": false,
+      "triggerEvent": false,
+      "minorTick": {
+        "show": true,
+        "splitNumber": 5,
+        "length": 3
+      },
+      "splitLine": {
+        "show": true,
+        "onZero": true,
+        "symbol": null
+      },
+      "zlevel": 0,
+      "z": 0
+    }],
+  "backgroundColor": "rgba(0,0,0,0)",
+  "color": [
+    "#5470c6",
+    "#91cc75",
+    "#fac858",
+    "#ee6666",
+    "#73c0de",
+    "#3ba272",
+    "#fc8452",
+    "#9a60b4",
+    "#ea7ccc"
+  ],
+  "animation": false,
+  "animationDuration": 1000,
+  "animationDurationUpdate": 500,
+  "animationEasing": "cubicInOut",
+  "animationEasingUpdate": "cubicInOut",
+  "animationThreshold": 2000,
+  "progressiveThreshold": 3000,
+  "title": [{
+      "show": true,
+      "target": "blank",
+      "subtarget": "blank",
+      "textAlign": null,
+      "textVerticalAlign": "auto",
+      "padding": 5,
+      "itemGap": 10,
+      "z": 2,
+      "left": "auto",
+      "top": "auto",
+      "right": "auto",
+      "bottom": "auto",
+      "backgroundColor": "transparent",
+      "borderColor": "transparent",
+      "borderWidth": 1,
+      "borderRadius": 0
+    }],
+  "tooltip": [{
+      "show": true,
+      "trigger": "axis",
+      "showContent": true,
+      "alwaysShowContent": false,
+      "triggerOn": "mousemove|click",
+      "transitionDuration": 0.4,
+      "padding": 5,
+      "order": "seriesAsc"
+    }],
+  "series": [{
+      "type": "line",
+      "name": "lineseries_1",
+      "colorBy": "series",
+      "coordinateSystem": "cartesian2d",
+      "symbol": "emptyCircle",
+      "symbolSize": 3,
+      "symbolKeepAspect": true,
+      "showSymbol": true,
+      "legendHoverLink": true,
+      "cursor": "pointer",
+      "connectNulls": false,
+      "clip": true,
+      "triggerLineEvent": false,
+      "step": false,
+      "smooth": false,
+      "data": [
+        [
+          0.000,
+          0.000
+        ],
+        [
+          0.100,
+          0.067
+        ],
+        [
+          0.200,
+          0.133
+        ],
+        [
+          0.300,
+          0.200
+        ],
+        [
+          0.400,
+          0.267
+        ],
+        [
+          0.500,
+          0.333
+        ],
+        [
+          0.600,
+          0.400
+        ],
+        [
+          0.700,
+          0.467
+        ],
+        [
+          0.800,
+          0.533
+        ],
+        [
+          0.900,
+          0.600
+        ],
+        [
+          1.000,
+          0.667
+        ],
+        [
+          1.100,
+          0.733
+        ],
+        [
+          1.200,
+          0.800
+        ],
+        [
+          1.300,
+          0.867
+        ],
+        [
+          1.400,
+          0.933
+        ],
+        [
+          1.500,
+          1.000
+        ],
+        [
+          1.600,
+          1.067
+        ],
+        [
+          1.700,
+          1.133
+        ],
+        [
+          1.800,
+          1.200
+        ],
+        [
+          1.900,
+          1.267
+        ],
+        [
+          2.000,
+          1.333
+        ],
+        [
+          2.100,
+          1.400
+        ],
+        [
+          2.200,
+          1.467
+        ],
+        [
+          2.300,
+          1.533
+        ],
+        [
+          2.400,
+          1.600
+        ],
+        [
+          2.500,
+          1.667
+        ],
+        [
+          2.600,
+          1.733
+        ],
+        [
+          2.700,
+          1.800
+        ],
+        [
+          2.800,
+          1.867
+        ],
+        [
+          2.900,
+          1.933
+        ],
+        [
+          3.000,
+          2.000
+        ],
+        [
+          3.100,
+          2.067
+        ],
+        [
+          3.200,
+          2.133
+        ],
+        [
+          3.300,
+          2.200
+        ],
+        [
+          3.400,
+          2.267
+        ],
+        [
+          3.500,
+          2.333
+        ],
+        [
+          3.600,
+          2.400
+        ],
+        [
+          3.700,
+          2.467
+        ],
+        [
+          3.800,
+          2.533
+        ],
+        [
+          3.900,
+          2.600
+        ],
+        [
+          4.000,
+          2.667
+        ],
+        [
+          4.100,
+          2.733
+        ],
+        [
+          4.200,
+          2.800
+        ],
+        [
+          4.300,
+          2.867
+        ],
+        [
+          4.400,
+          2.933
+        ],
+        [
+          4.500,
+          3.000
+        ],
+        [
+          4.600,
+          3.067
+        ],
+        [
+          4.700,
+          3.133
+        ],
+        [
+          4.800,
+          3.200
+        ],
+        [
+          4.900,
+          3.267
+        ],
+        [
+          5.000,
+          3.333
+        ]
+      ],
+      "zlevel": 0,
+      "z": 2,
+      "silent": false
+    }]
+};
+      chart_60adde9b61f84d799d78a86d6b8fe27f.setOption(option_60adde9b61f84d799d78a86d6b8fe27f);
+    </script>
+  </body>
+</html>
+</p>
+<hr class="docutils" />
+<p class="centered">
+<strong>Copyright (c) George Yashin</strong></p></section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">General concept</a></li>
+<li><a class="reference internal" href="#usage-examples">Usage examples</a></li>
+<li><a class="reference internal" href="#supported-simulators">Supported simulators</a></li>
+<li><a class="reference internal" href="#installing">Installing</a><ul>
+<li><a class="reference internal" href="#from-git-repo">From git repo</a></li>
+<li><a class="reference internal" href="#from-archive">From archive</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dependencies">Dependencies</a></li>
+<li><a class="reference internal" href="#documentation-and-tutorials">Documentation and tutorials</a></li>
+<li><a class="reference internal" href="#supported-platforms">Supported platforms</a></li>
+<li><a class="reference internal" href="#quick-start">Quick start</a><ul>
+<li><a class="reference internal" href="#packages-imports">Packages imports</a></li>
+<li><a class="reference internal" href="#circuit-definition">Circuit definition</a></li>
+<li><a class="reference internal" href="#plotting-data">Plotting data</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter">&lt;no title&gt;</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="SpiceGenTcl-List-of-devices.html"
+                          title="next chapter">List of devices</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/SpiceGenTcl.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="SpiceGenTcl-List-of-devices.html" title="List of devices"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="&lt;no title&gt;"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">SpiceGenTcl  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">General concept</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright George Yashin.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    </div>
+  </body>
+</html>

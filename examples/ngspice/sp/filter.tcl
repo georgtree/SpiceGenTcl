@@ -53,5 +53,5 @@ $chart Add "lineSeries" -data $freq_s11Mag -showAllSymbol "nothing" -name "S11" 
 $chart Add "lineSeries" -data $freq_s21Mag -showAllSymbol "nothing" -name "S21" -symbolSize "0"
 set fbasename [file rootname [file tail [info script]]]
 
-$chart Render -outfile [file normalize [file join .. html_charts $fbasename.html]]
+$chart Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px
 
