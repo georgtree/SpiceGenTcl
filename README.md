@@ -40,12 +40,12 @@ SpiceGenTcl can be used if you need:
 
 Currently, there are range of examples for common analyses (DC, AC, transient) for all simulators, and advanced examples
 for some of them:
-- [Monte-Carlo example](https://georgtree.github.io/SpiceGenTcl/index-Advanced.html#::Advanced-Monte-Carlo%20simulation):
+- [Monte-Carlo example](https://georgtree.github.io/SpiceGenTcl/SpiceGenTcl-Advanced.html#monte-carlo-simulation):
   Ngspice, Xyce and LTspice
-- [Diode parameters extraction via fitting](https://georgtree.github.io/SpiceGenTcl/index-Advanced.html#::Advanced-Parameters%20extraction%20of%20diode%20model%20parameters):
+- [Diode parameters extraction via fitting](https://georgtree.github.io/SpiceGenTcl/SpiceGenTcl-Advanced.html#parameters-extraction-of-diode-model-parameters):
   Ngspice, Xyce and LTspice
 - Example of creating custom Verilog-A magnetic core model and simulating transformer with saturation: Ngspice
-- [Inverter power optimization](https://georgtree.github.io/SpiceGenTcl/index-Advanced.html#::Advanced-Inverter%20performance%20optimization):
+- [Inverter power optimization](https://georgtree.github.io/SpiceGenTcl/SpiceGenTcl-Advanced.html#inverter-performance-optimization):
   Ngspice
 
 ## Supported simulators
@@ -98,15 +98,13 @@ For view test coverage diffs [eskil](http://eskil.tcl.tk/index.html/doc/trunk/ht
 
 ## Documentation and tutorials
 
-Documentation could be found [here](https://georgtree.github.io/SpiceGenTcl/). 
+Documentation could be found [here](https://georgtree.github.io/SpiceGenTcl/index.html). 
 
-Tutorials describing different examples could be found [here](https://georgtree.github.io/SpiceGenTcl/index-Tutorials.html).
+Tutorials describing different examples could be found [here](https://georgtree.github.io/SpiceGenTcl/SpiceGenTcl-Tutorials.html).
 
 Good tutorial for Tcl language could be found [here](http://tcl.tk/man/tcltutorial/html/tcltutorial.html)
 
 Documentation was generated with [ruff!](https://ruff.magicsplat.com/).
-
-Tcl syntax highlighting was done with [hl_tcl](https://github.com/aplsimple/hl_tcl).
 
 ## Supported platforms
 
