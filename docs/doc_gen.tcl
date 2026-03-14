@@ -48,10 +48,10 @@ set namespacesNroff [list "::List of devices" ::SpiceGenTcl ::SpiceGenTcl::Commo
                 ::SpiceGenTcl::Ltspice::SemiconductorDevices ::SpiceGenTcl::Ltspice::Analyses\
                 ::SpiceGenTcl::Ltspice::Simulators]
 
-if {[llength $argv] == 0 || "html" in $argv} {
-    ruff::document $namespaces -outdir $docDir -format sphinx -outfile SpiceGenTcl.rst -outdir [file join $docDir sphinx] {*}$commonSphinx
-    #ruff::document $namespacesNroff -outdir $docDir -format nroff -outfile SpiceGenTcl.n {*}$commonNroff
-}
+
+ruff::document $namespaces -outdir $docDir -format sphinx -outfile SpiceGenTcl.rst -outdir [file join $docDir sphinx] {*}$commonSphinx
+ruff::document $namespacesNroff -outdir $docDir -format nroff -outfile SpiceGenTcl.n {*}$commonNroff
+
 
 ::fileutil::appendToFile [file join $docDir sphinx conf.py] {html_theme = "classic"
 extensions = [
