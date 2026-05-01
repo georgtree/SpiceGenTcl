@@ -5,8 +5,8 @@ package require SpiceGenTcl
 # import class names to current namespace
 namespace import ::SpiceGenTcl::*
 importNgspice
-        
-        
+
+
 oo::class create Core {
     superclass Device
     constructor {name pNode nNode args} {

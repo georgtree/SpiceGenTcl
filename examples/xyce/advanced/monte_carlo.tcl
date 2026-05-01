@@ -63,7 +63,7 @@ foreach elem [list c1 l1 c2 l2 c3 l3] {
     $circuit add $elem
 }
 $circuit add [Ac new -variation oct -n 100 -fstart 250e3 -fstop 10e6]
-#set simulator with default 
+#set simulator with default
 set simulator [Batch new {batch1}]
 # attach simulator object to circuit
 $circuit configure -simulator $simulator
@@ -103,6 +103,7 @@ set uniformLimits [dcreate c1 [dcreate min 0.9e-9 max 1.1e-9]\
         l3 [dcreate min 36e-6 max 44e-6]]
 
 # loop in which we run simulation with uniform distribution
+set freqRes [list]
 for {set i 0} {$i<$mcRuns} {incr i} {
     #set elements values according to uniform distribution
     foreach elem [list c1 l1 c2 l2 c3 l3] {
@@ -124,7 +125,7 @@ for {set i 0} {$i<$mcRuns} {incr i} {
     # calculate bandwidths values
     lappend bwsUni [findBW $freqRes [@ $traceListUni end] -10]
 }
-unset freqRes
+
 # get distribution of bandwidths with uniform parameters distribution
 set uniIntervals [createIntervals $bwsUni $numOfIntervals]
 set uniDist [createDist $bwsUni [dget $uniIntervals intervals]]
@@ -139,6 +140,7 @@ set normalLimits [dcreate c1 [dcreate mean 1e-9 std [/ 0.1e-9 3]]\
         l3 [dcreate mean 40e-6 std [/ 4e-6 3]]]
 
 ## loop in which we run simulation with normal distribution
+set freqRes [list]
 for {set i 0} {$i<$mcRuns} {incr i} {
     #set elements values according to normal distribution
     foreach elem [list c1 l1 c2 l2 c3 l3] {
@@ -190,7 +192,7 @@ $layout Add $chartUni -bottom "60%" -height "35%" -width "75%"
 set fbasename [file rootname [file tail [info script]]]
 $layout Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px
 
-# find distribution of normal distributed values in uniform intervals       
+# find distribution of normal distributed values in uniform intervals
 set normDistWithUniIntervals [createDist $bwsNorm [dget $uniIntervals intervals]]
 
 set chartCombined [ticklecharts::chart new]

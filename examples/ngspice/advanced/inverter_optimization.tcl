@@ -14,7 +14,6 @@ namespace import ::SpiceGenTcl::*
 importNgspice
 
 set scriptPath [file dirname [file normalize [info script]]]
-set fileDataPath [file normalize [file join $scriptPath raw_data]]
 
 proc pdPsCalc {width length} {
     return [= {2*$width+2*$length}]
@@ -60,8 +59,8 @@ if {[catch {set simulator [Shared new batch1]}]} {
 $circuit configure -simulator $simulator
 
 # define cost function
-set pdata [dcreate vSupplyVals $vSupplyVals nDevice $mn pDevice $mp vLowLim $vLowLim vHighLim $vHighLim length $length vdd $vdd\
-                  tmeas1 $tmeas1 tmeas2 $tmeas2 objWeight 10 constrWeight 10000 circuit $circuit]
+set pdata [dcreate vSupplyVals $vSupplyVals nDevice $mn pDevice $mp vLowLim $vLowLim vHighLim $vHighLim length\
+                   $length vdd $vdd tmeas1 $tmeas1 tmeas2 $tmeas2 objWeight 10 constrWeight 10000 circuit $circuit]
 proc costFunc {xall pdata args} {
     dict with pdata {}
     set width [@ $xall 0]
@@ -122,7 +121,8 @@ foreach genTr $trajectory genF $bestf {
 set chart [ticklecharts::chart new]
 $chart Xaxis -name "Generation" -minorTick {show "True"} -type "value" -splitLine {show "True"}
 $chart Yaxis -name "Width" -minorTick {show "True"}  -splitLine {show "True"}
-$chart SetOptions -title {} -tooltip {trigger "axis"} -animation "False" -toolbox {feature {dataZoom {yAxisIndex "none"}}}
+$chart SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
+        -toolbox {feature {dataZoom {yAxisIndex "none"}}}
 $chart Add "lineSeries" -name "Best trajectory" -data $functionTrajectory -showAllSymbol "nothing"
 set fbasename [file rootname [file tail [info script]]]
 $chart Render -outfile [file normalize [file join .. html_charts ${fbasename}_plot.html]] -width 800px -height 500px

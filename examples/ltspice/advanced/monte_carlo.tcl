@@ -86,7 +86,8 @@ $chartTransMag SetOptions -title {} -tooltip {trigger "axis"} -animation "False"
         -toolbox {feature {dataZoom {yAxisIndex "none"}}} -grid {left "10%" right "15%"}
 $chartTransMag Add "lineSeries" -data $xydata -showAllSymbol "nothing" -symbolSize "1"
 set fbasename [file rootname [file tail [info script]]]
-$chartTransMag Render -outfile [file normalize [file join .. html_charts ${fbasename}_typ.html]] -width 800px -height 500px
+$chartTransMag Render -outfile [file normalize [file join .. html_charts ${fbasename}_typ.html]] -width 800px\
+        -height 500px
 
 # set number of simulations
 set mcRuns 1000

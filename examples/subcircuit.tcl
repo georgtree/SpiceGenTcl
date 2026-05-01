@@ -6,7 +6,7 @@ package require SpiceGenTcl
 namespace import ::SpiceGenTcl::*
 importNgspice
 
-# create netlist 
+# create netlist
 set netlist [Netlist new main_netlist]
 
 # create class that represents RC subcircuit
@@ -35,8 +35,8 @@ set subInst [SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {-
 # create subcircuit instance with help of already created subcircuit definition $subcircuit
 set subInst1 [SubcircuitInstanceAuto new $subcircuit 2 {net1 net2} -r 1 -c {-eq cpar}]
 # add to netslit
-$netlist add $subInst 
-$netlist add $subInst1 
+$netlist add $subInst
+$netlist add $subInst1
 # create SPICE netlist string from main netlist
 puts [$netlist genSPICEString]
 

@@ -75,7 +75,7 @@ oo::class create FOURBIT {
         set params {}
         # add elements to subcircuit definition
         global variable twobit
-        my add [XAuto new $twobit x1 "1 2 3 4 9 10 13 16 15"] [XAuto new $twobit x2 "5 6 7 8 11 12 16 14 15"] 
+        my add [XAuto new $twobit x1 "1 2 3 4 9 10 13 16 15"] [XAuto new $twobit x2 "5 6 7 8 11 12 16 14 15"]
         # pass name, list of pins and list of parameters to Subcircuit constructor
         next fourbit $pins $params
     }

@@ -119,7 +119,7 @@ $chart Yaxis -name "Idiode, A" -minorTick {show "True"}  -type "value" -splitLin
         -max "dataMax"
 $chart SetOptions -title {} -tooltip {trigger "axis"} -animation "False" -legend {}\
         -toolbox {feature {dataZoom {yAxisIndex "none"}}} -grid {left "10%" right "15%"}
-$chart Add "lineSeries" -data $fittedVIdiode -showAllSymbol "nothing" -name "fitted" -symbolSize "4" 
+$chart Add "lineSeries" -data $fittedVIdiode -showAllSymbol "nothing" -name "fitted" -symbolSize "4"
 $chart Add "lineSeries" -data $initVIdiode -showAllSymbol "nothing" -name "unfitted" -symbolSize "4"
 $chart Add "lineSeries" -data $viRaw -showAllSymbol "nothing" -name "measured" -symbolSize "4"
 set chartLog [ticklecharts::chart new]

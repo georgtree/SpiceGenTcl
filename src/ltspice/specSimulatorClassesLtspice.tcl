@@ -91,11 +91,11 @@ namespace eval ::SpiceGenTcl::Ltspice::Simulators {
             my readLog
             my readData
             if {![info exists nodelete]} {
-                file delete $rawFileName
-                file delete $logFileName
-                file delete $cirFileName
+                file delete -- $rawFileName
+                file delete -- $logFileName
+                file delete -- $cirFileName
                 if {[file exists [file join $runLocation ${firstLine}.op.raw]]} {
-                    file delete [file join $runLocation ${firstLine}.op.raw]
+                    file delete -- [file join $runLocation ${firstLine}.op.raw]
                 }
             }
         }

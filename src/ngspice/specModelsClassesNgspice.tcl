@@ -154,8 +154,8 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
             # Jfet1Model new jfetmod njf -vto 2 -beta 1e-3 -lambda 1e-4 -cgd 1e-12
             # ```
             # Synopsis: name type ?-option value ...?
-            set paramsNames {level vto beta lambda rd rs cgs cgd pb is b kf af nlev gdsnoi fc tnom tcv vtotc bex betatce\
-                                     xti eg}
+            set paramsNames {level vto beta lambda rd rs cgs cgd pb is b kf af nlev gdsnoi fc tnom tcv vtotc bex\
+                                     betatce xti eg}
             next {*}[my ArgsPreprocess $paramsNames {name type} {} {*}[linsert $args 2 -level 1]]
         }
     }

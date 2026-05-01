@@ -198,7 +198,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
                 return [list [string map [list @type@ $modelClassName @paramsList@ $paramString @hsuppress@ type]\
                                       $ModelTemplate] [list $modelClassName new {*}$paramsList]]
             } else {
-                switch $type {
+                switch -- $type {
                     r {
                         set paramsList [linsert $paramsList 0 $name]
                         return [list ${NamespacePath}::BasicDevices::RModel new {*}$paramsList]
@@ -478,7 +478,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             set nmspPath ${NamespacePath}::BasicDevices::R
             set pattern {(r=([^\r\n=]+(?:\s*[\+\-\*\/]\s*[^\r\n=]+)*))\s*(?:\s+\S+\s*=\s*\S+)*?\s*$}
             set line [join [lrange $lineList 3 end]]
-            if {[regexp $pattern $line match expr value]} {
+            if {[regexp -- $pattern $line match expr value]} {
                 if {[my CheckBraced $value]} {
                     set value [my Unbrace $value]
                 } elseif {[my CheckQuoted $value]} {
@@ -538,7 +538,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             set nmspPath ${NamespacePath}::BasicDevices::C
             set pattern {((q|c)=([^\r\n=]+(?:\s*[\+\-\*\/]\s*[^\r\n=]+)*))\s*(?:\s+\S+\s*=\s*\S+)*?\s*$}
             set line [join [lrange $lineList 3 end]]
-            if {[regexp $pattern $line match expr type value]} {
+            if {[regexp -- $pattern $line match expr type value]} {
                 if {[my CheckBraced $value]} {
                     set value [my Unbrace $value]
                 } elseif {[my CheckQuoted $value]} {
@@ -603,7 +603,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             set nmspPath ${NamespacePath}::BasicDevices::L
             set pattern {(l=([^\r\n=]+(?:\s*[\+\-\*\/]\s*[^\r\n=]+)*))\s*(?:\s+\S+\s*=\s*\S+)*?\s*$}
             set line [join [lrange $lineList 3 end]]
-            if {[regexp $pattern $line match expr value]} {
+            if {[regexp -- $pattern $line match expr value]} {
                 if {[my CheckBraced $value]} {
                     set value [my Unbrace $value]
                 } elseif {[my CheckQuoted $value]} {
@@ -681,7 +681,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             lassign $lineList elemName pin1 pin2
             set elemName [string range $elemName 1 end]
             set line [join [lrange $lineList 3 end]]
-            if {[regexp $pattern $line match expr type value]} {
+            if {[regexp -- $pattern $line match expr type value]} {
                 if {[my CheckBraced $value]} {
                     set value [my Unbrace $value]
                 } elseif {[my CheckQuoted $value]} {
@@ -854,7 +854,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             if {![info exists paramsStartIndex]} {
                 set paramsStartIndex [llength $lineList]
             }
-            switch $paramsStartIndex {
+            switch -- $paramsStartIndex {
                 1 {
                     set modelVal [@ $lineList 0]
                 }
@@ -945,7 +945,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             if {![info exists paramsStartIndex]} {
                 set paramsStartIndex [llength $lineList]
             }
-            switch $paramsStartIndex {
+            switch -- $paramsStartIndex {
                 1 {
                     set modelVal [@ $lineList 0]
                 }
@@ -1023,7 +1023,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
                                     exp {v1 v2 td1 tau1 td2 tau2} pwl {seq} sffm {v0 va fc mdi fs phasec phases}\
                                     am {v0 va mf fc td phases}]
             set nmspPath ${NamespacePath}::Sources
-            switch [@ $lineList 0] {
+            switch -- [@ $lineList 0] {
                 pulse {
                     lappend paramsList {*}[my ParsePosParams [lrange $lineList 1 end] [dget $functsDict pulse]]
                     return [list ${nmspPath}::[string toupper ${type}]pulse new $elemName $pin1 $pin2 {*}$paramsList]

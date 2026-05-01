@@ -20,11 +20,11 @@ set packageVersion [package versions SpiceGenTcl]
 puts $packageVersion
 set title "Tcl SpiceGenTcl package"
 
-set commonSphinx [list -title $title -sortnamespaces false -preamble $startPage -pagesplit namespace -recurse false\
+set commonSphinx [list -title $title -sortnamespaces false -pagesplit namespace -recurse false\
                     -includesource false -pagesplit namespace -autopunctuate true -compact false -includeprivate false\
                     -product SpiceGenTcl -diagrammer "ditaa --border-width 1" -version $packageVersion\
                     -copyright "George Yashin" {*}$::argv]
-set commonNroff [list -title $title -sortnamespaces false -preamble $startPage -pagesplit namespace -recurse false\
+set commonNroff [list -title $title -sortnamespaces false -pagesplit namespace -recurse false\
                          -pagesplit namespace -autopunctuate true -compact false -includeprivate false\
                          -product SpiceGenTcl -diagrammer "ditaa --border-width 1" -version $packageVersion\
                          -copyright "George Yashin" {*}$::argv]
@@ -49,7 +49,8 @@ set namespacesNroff [list "::List of devices" ::SpiceGenTcl ::SpiceGenTcl::Commo
                 ::SpiceGenTcl::Ltspice::Simulators]
 
 
-ruff::document $namespaces -outdir $docDir -format sphinx -outfile SpiceGenTcl.rst -outdir [file join $docDir sphinx] {*}$commonSphinx
+ruff::document $namespaces -outdir $docDir -format sphinx -outfile SpiceGenTcl.rst -outdir [file join $docDir sphinx]\
+        {*}$commonSphinx
 ruff::document $namespacesNroff -outdir $docDir -format nroff -outfile SpiceGenTcl.n {*}$commonNroff
 
 
@@ -102,7 +103,8 @@ set chartsMap [dcreate !ticklechart_mark_monte_carlo_typ_mag_ngspice! monte_carl
                        !ticklechart_mark_monte_carlo_dists_comb_ngspice! monte_carlo_combined.html\
                        !ticklechart_mark_diode_extract_ngspice! diode_extract.html\
                        !ticklechart_mark_inverter_optimization_plot_ngspice! inverter_optimization_plot.html\
-                       !ticklechart_mark_inverter_optimization_waveforms_ngspice! inverter_optimization_waveforms_plot.html]
+                       !ticklechart_mark_inverter_optimization_waveforms_ngspice!\
+                       inverter_optimization_waveforms_plot.html]
 fileutil::updateInPlace [file join $docDir SpiceGenTcl-Advanced.html] processContentsTutorial
 set chartsMap [dcreate !ticklechart_mark_c432_test_with_parsing_ngspice! c432_test_with_parsing.html]
 fileutil::updateInPlace [file join $docDir SpiceGenTcl-Parser.html] processContentsTutorial

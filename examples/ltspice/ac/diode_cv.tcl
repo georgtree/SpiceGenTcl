@@ -18,7 +18,7 @@ $circuit add [DiodeModel new diomod -is 1e-12 -n 1.2 -rs 0.01 -cjo 1e-9 -trs1 0.
 $circuit add [Ac new -variation lin -n 1 -fstart 1e5 -fstop 1e5]
 # add voltage sweep
 set voltSweep [lseq 0 20.0 0.1]
-#set simulator with default 
+#set simulator with default
 set simulator [Batch new {batch1}]
 # attach simulator object to circuit
 $circuit configure -simulator $simulator
@@ -44,7 +44,7 @@ $chart Xaxis -name "v(0,c), V" -minorTick {show "True"} -type "value" -splitLine
 $chart Yaxis -name "Diode capacitance, nF" -minorTick {show "True"} -type "value" -splitLine {show "True"}
 $chart SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
         -toolbox {feature {dataZoom {yAxisIndex "none"}}}
-$chart Add "lineSeries" -data $xydata -showAllSymbol "nothing" 
+$chart Add "lineSeries" -data $xydata -showAllSymbol "nothing"
 set fbasename [file rootname [file tail [info script]]]
 
 $chart Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px

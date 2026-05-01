@@ -74,9 +74,9 @@ namespace eval ::SpiceGenTcl::Xyce::Simulators {
             my readLog
             my readData
             if {![info exists nodelete]} {
-                file delete $rawFileName
-                file delete $logFileName
-                file delete $cirFileName
+                file delete -- $rawFileName
+                file delete -- $logFileName
+                file delete -- $cirFileName
             }
         }
         method readLog {args} {

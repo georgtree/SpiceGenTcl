@@ -5,8 +5,8 @@ package require ticklecharts
 # import class names to current namespace
 namespace import ::SpiceGenTcl::*
 importNgspice
-        
-        
+
+
 oo::class create Core {
     superclass Device
     constructor {args} {

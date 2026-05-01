@@ -26,13 +26,13 @@ foreach temp $temps {
     $circuit runAndRead
     puts [$circuit configure -log]
     set data [$circuit getDataDict]
+    set xydata [list]
     foreach x [dget $data v(anode)] y [dget $data i(va)] {
         set xf [format "%.3f" $x]
         set yf [format "%.3f" [= {-$y}]]
         lappend xydata [list $xf $yf]
-    }    
+    }
     lappend dataList $xydata
-    unset xydata
 }
 
 # plot results with ticklecharts

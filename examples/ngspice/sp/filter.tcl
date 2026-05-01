@@ -23,7 +23,7 @@ $circuit add [C new 1 7 8 -c 45.64p] [L new 2 8 0 -l 0.0653u] [C new 3 8 9 -c 20
         [C new 5 9 10 -c 20.8p] [L new 6 10 0 -l 0.0653u] [C new 7 10 out -c 45.64p]
 $circuit add [Vport new l out 0 -dc 0 -ac 0 -portnum 2]
 $circuit add [Sp new -variation lin -n 500 -fstart 10meg -fstop 200meg]
-#set simulator with default 
+#set simulator with default
 set simulator [BatchLiveLog new {batch1}]
 # attach simulator object to circuit
 $circuit configure -simulator $simulator

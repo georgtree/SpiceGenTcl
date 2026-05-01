@@ -1,10 +1,10 @@
 #  .|'''.|            ||                   ..|'''.|                   |''||''|         '||'
-#  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||  
-#   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||  
-# .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||  
-# |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||. 
-#            ||                                                                             
-#           ''''                                                                            
+#  ||..  '  ... ...  ...    ....    ....  .|'     '    ....  .. ...      ||      ....   ||
+#   ''|||.   ||'  ||  ||  .|   '' .|...|| ||    .... .|...||  ||  ||     ||    .|   ''  ||
+# .     '||  ||    |  ||  ||      ||      '|.    ||  ||       ||  ||     ||    ||       ||
+# |'....|'   ||...'  .||.  '|...'  '|...'  ''|...'|   '|...' .||. ||.   .||.    '|...' .||.
+#            ||
+#           ''''
 # specElementsClassesCommon.tcl
 # Describes common elements classes
 #
@@ -26,7 +26,7 @@ namespace eval ::SpiceGenTcl {
 }
 
 namespace eval ::SpiceGenTcl::Common::BasicDevices {
-    
+
     oo::class create Resistor {
         superclass ::SpiceGenTcl::Device
         constructor {args} {
@@ -190,12 +190,12 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             next l[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }
-    
+
     # alias for Inductor class
     oo::class create L {
         superclass Inductor
-    }    
-    
+    }
+
     oo::class create SubcircuitInstance {
         superclass ::SpiceGenTcl::Device
         constructor {args} {
@@ -227,7 +227,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
     oo::class create X {
         superclass SubcircuitInstance
     }
-    
+
     oo::class create VSwitch {
         superclass ::SpiceGenTcl::Device
         constructor {args} {
@@ -264,7 +264,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             } elseif {[dexist $arguments off]} {
                 lappend params {-sw off}
             }
-            
+
             next s[dget $arguments name] [my FormPinNodeList $arguments {np nm ncp ncm}] $params
         }
     }
@@ -272,8 +272,8 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
     # alias for VSwitch class
     oo::class create VSw {
         superclass VSwitch
-    }    
-    
+    }
+
     oo::class create CSwitch {
         superclass ::SpiceGenTcl::Device
         # special positional parameter that is placed before model name
@@ -318,7 +318,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
     oo::class create W {
         superclass CSwitch
     }
-    
+
     oo::class create SubcircuitInstanceAuto {
         superclass ::SpiceGenTcl::Device
         constructor {subcktObj name nodes args} {
@@ -336,13 +336,13 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             # SubcircuitInstanceAuto new $subcktObj 1 {net1 net2} -r 1 -c {-eq cpar}
             # ```
             # Synopsis: subcktObj name nodes ?-paramName {?-eq? paramValue} ...?
-            
+
             # check that inputs object class is Subcircuit
             if {![info object class $subcktObj "::SpiceGenTcl::Subcircuit"]} {
                 set objClass [info object class $subcktObj]
                 error "Wrong object class '$objClass' is passed as subcktObj, should be '::SpiceGenTcl::Subcircuit'"
             }
-            set subName [$subcktObj configure -name] 
+            set subName [$subcktObj configure -name]
             set pinsNames [dict keys [$subcktObj actOnPin -get -all]]
             # check if number of pins in subcircuit definition matchs the number of supplied nodes
             if {[llength $pinsNames]!=[llength $nodes]} {
@@ -448,8 +448,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             }
             next $type[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
-    }   
-    
+    }
+
     oo::abstract create pulse {
         superclass ::SpiceGenTcl::Device
         mixin ::SpiceGenTcl::Utility
@@ -506,8 +506,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             my ParamsProcess $paramsOrder $arguments params
             next $type[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
-    } 
-    
+    }
+
     oo::abstract create sin {
         superclass ::SpiceGenTcl::Device
         mixin ::SpiceGenTcl::Utility
@@ -563,8 +563,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             my ParamsProcess $paramsOrder $arguments params
             next $type[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
-    }  
-    
+    }
+
     oo::abstract create exp {
         superclass ::SpiceGenTcl::Device
         mixin ::SpiceGenTcl::Utility
@@ -620,8 +620,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             my ParamsProcess $paramsOrder $arguments params
             next $type[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
-    }    
-    
+    }
+
     oo::abstract create pwl {
         superclass ::SpiceGenTcl::Device
         constructor {type args} {
@@ -751,8 +751,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             my ParamsProcess $paramsOrder $arguments params
             next $type[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
-    }      
-    
+    }
+
     oo::class create Vdc {
         superclass ::SpiceGenTcl::Common::Sources::dc
         constructor {args} {
@@ -794,7 +794,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
 
         }
     }
-    
+
     oo::class create Vpulse {
         superclass ::SpiceGenTcl::Common::Sources::pulse
         constructor {args} {
@@ -819,12 +819,12 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # Vpulse new 1 net1 net2 -low 0 -high 1 -td {td -eq} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6
             # ```
-            # Synopsis: name np nm -voff|ioff|low value -von|ion|high value -td value -tr value -tf value 
+            # Synopsis: name np nm -voff|ioff|low value -von|ion|high value -td value -tr value -tf value
             #   -pw|ton value ?-dc value? ?-ac value ?-acphase value??
             next v {*}$args
         }
-    }  
-    
+    }
+
     oo::class create Vsin {
         superclass ::SpiceGenTcl::Common::Sources::sin
         constructor {args} {
@@ -853,7 +853,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             next v {*}$args
         }
     }
-    
+
     oo::class create Vexp {
         superclass ::SpiceGenTcl::Common::Sources::exp
         constructor {args} {
@@ -882,7 +882,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             next v {*}$args
         }
     }
-    
+
     oo::class create Vpwl {
         superclass ::SpiceGenTcl::Common::Sources::pwl
         constructor {args} {
@@ -904,8 +904,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # Synopsis: name np nm -seq list ?-phase|phi value???
             next v {*}$args
         }
-    }    
-    
+    }
+
     oo::class create Vsffm {
         superclass ::SpiceGenTcl::Common::Sources::sffm
         constructor {args} {
@@ -928,12 +928,12 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # Vsin new 1 net1 net2 -v0 0 -va 1 -fc {-eq freq} -mdi 0 -fs 1e3
             # ```
-            # Synopsis: name np nm -i0|voff|ioff|v0 value -ia|vamp|iamp|va value -fc|fcar value -mdi value 
+            # Synopsis: name np nm -i0|voff|ioff|v0 value -ia|vamp|iamp|va value -fc|fcar value -mdi value
             #   -fs|fsig ?-phi|phase value???
             next v {*}$args
         }
     }
-       
+
     oo::class create Idc {
         superclass ::SpiceGenTcl::Common::Sources::dc
         constructor {args} {
@@ -974,7 +974,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             next i {*}$args
         }
     }
-    
+
     oo::class create Ipulse {
         superclass ::SpiceGenTcl::Common::Sources::pulse
         constructor {args} {
@@ -1004,7 +1004,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             next i {*}$args
         }
     }
-    
+
     oo::class create Isin {
         superclass ::SpiceGenTcl::Common::Sources::sin
         constructor {args} {
@@ -1033,7 +1033,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             next i {*}$args
         }
     }
-    
+
     oo::class create Iexp {
         superclass ::SpiceGenTcl::Common::Sources::exp
         constructor {args} {
@@ -1084,8 +1084,8 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # Synopsis: name np nm -seq list ?-phase|phi value???
             next i {*}$args
         }
-    }   
-    
+    }
+
     oo::class create Isffm {
         superclass ::SpiceGenTcl::Common::Sources::sffm
         constructor {args} {
@@ -1108,7 +1108,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             # ```
             # Isin new 1 net1 net2 -i0 0 -ia 1 -fc {-eq freq} -mdi 0 -fs 1e3
             # ```
-            # Synopsis: name np nm -i0|voff|ioff|v0 value -ia|vamp|iamp|va value -fc|fcar value -mdi value 
+            # Synopsis: name np nm -i0|voff|ioff|v0 value -ia|vamp|iamp|va value -fc|fcar value -mdi value
             #   -fs|fsig value ?-phi|phase value???
             next i {*}$args
         }
@@ -1165,7 +1165,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
     # alias for Vccs class
     oo::class create G {
         superclass Vccs
-    }    
+    }
 
     oo::class create Vcvs {
         superclass ::SpiceGenTcl::Device
@@ -1207,17 +1207,17 @@ namespace eval ::SpiceGenTcl::Common::Sources {
     # alias for Vcvs class
     oo::class create E {
         superclass Vcvs
-    } 
-    
+    }
+
     oo::class create Cccs {
         superclass ::SpiceGenTcl::Device
         constructor {args} {
-            # Creates object of class `Cccs` that describes linear current-controlled current source. 
+            # Creates object of class `Cccs` that describes linear current-controlled current source.
             #  name - name of the device without first-letter designator F
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
             #  -consrc value - name of controlling source
-            #  -gain value - current gain 
+            #  -gain value - current gain
             #  -m value - parallel source multiplicator
             # ```
             # FXXXXXXX N+ N- VNAM VALUE <m=val>
@@ -1254,14 +1254,14 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 }
             }
             next f[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
-        } 
+        }
     }
 
     # alias for Cccs class
     oo::class create F {
         superclass Cccs
-    } 
-        
+    }
+
     oo::class create Ccvs {
         superclass ::SpiceGenTcl::Device
         constructor {args} {
@@ -1270,7 +1270,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             #  np - name of node connected to positive pin
             #  nm - name of node connected to negative pin
             #  -consrc value - name of controlling source
-            #  -transr value - transresistance 
+            #  -transr value - transresistance
             # ```
             # HXXXXXXX N+ N- VNAM VALUE
             # ```
@@ -1302,9 +1302,6 @@ namespace eval ::SpiceGenTcl::Common::Sources {
     # alias for Ccvs class
     oo::class create H {
         superclass Ccvs
-    } 
-    
+    }
+
 }
-
-
-

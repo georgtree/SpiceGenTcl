@@ -6,7 +6,7 @@ package require SpiceGenTcl
 namespace import ::SpiceGenTcl::*
 importNgspice
 
-# create netlist 
+# create netlist
 set netlist [Netlist new main_netlist]
 
 # create class that represents RC subcircuit

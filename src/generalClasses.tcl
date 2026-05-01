@@ -489,8 +489,8 @@ namespace eval ::SpiceGenTcl {
             # Class models parameter that has a name and a value, but it differs from parent class in the sense of
             # netlist representation: this parameter represents only by the value in the netlist. It's meaning for
             # holding element is taken from it's position in the element's definition, for example, `R1 np nm 100 tc1=1
-            # tc2=0` \- resistor with positional parameter `R=100`, you can't put it after parameters `tc1` and `tc2`, it
-            # must be placed right after the pins definition.
+            # tc2=0` \- resistor with positional parameter `R=100`, you can't put it after parameters `tc1` and `tc2`,
+            # it must be placed right after the pins definition.
             set arguments [argparse -inline -help {Creates object of class 'ParameterPositional' with parameter name\
                                                            and value} {
                 {name -help {Name of the parameter}}
@@ -729,7 +729,7 @@ namespace eval ::SpiceGenTcl {
             #  -add - add new pin to the device, requires `pin` and `node` arguments
             #  -get - get node name connected to pin, requires `pin` argument
             #  -set - set node name connected to pin, requires `pin` and `node` arguments
-            #  -all - option for getting the dictionary that contains pin name as keys and connected node name as the 
+            #  -all - option for getting the dictionary that contains pin name as keys and connected node name as the
             #    values, requires `-get`
             #  pin - name of the pin
             #  node - name of the node connected to pin
@@ -746,7 +746,7 @@ namespace eval ::SpiceGenTcl {
                 {pin -optional -help {Name of the pin}}
                 {node -optional -help {Name of the node connected to pin}}
             }
-            switch $action {
+            switch -- $action {
                 add {
                     set pin [string tolower $pin]
                     set node [string tolower $node]
@@ -798,10 +798,10 @@ namespace eval ::SpiceGenTcl {
             #  -get - get parameter value, requires `pname` argument
             #  -set - set (or change) value of particular parameters, requires `pname` and `value` arguments
             #  -delete - delete existing parameter
-            #  -all - option for getting the dictionary that contains parameters names as keys and parameters values\
+            #  -all - option for getting the dictionary that contains parameters names as keys and parameters values
             #    as the dictionary values, requires `-get`
             #  -pos - parameter has strict position and only `$value` is displayed in netlist, requires `-add`
-            #  -eq - Parameter may contain equation in terms of functions and other parameters, printed as 
+            #  -eq - Parameter may contain equation in terms of functions and other parameters, printed as
             #    `$name={$equation}`, requires `-add`
             #  -poseq - combination of both flags, print only, requires `-add`
             #  -posnocheck - positional parameter without check, requires `-add`
@@ -845,7 +845,7 @@ namespace eval ::SpiceGenTcl {
                 {value -optional -help {Value of parameter}}
                 {arguments -catchall -require set -help {Optional pairs of name-value for -set action}}
             }
-            switch $action {
+            switch -- $action {
                 add {
                     set pname [string tolower $pname]
                     if {[info exists Params]} {
@@ -855,7 +855,7 @@ namespace eval ::SpiceGenTcl {
                     if {[my DuplListCheck $params]} {
                         return -code error "Parameters list '$params' has already contains parameter with name '$pname'"
                     }
-                    switch $paramQual {
+                    switch -- $paramQual {
                         sw {
                             dict append Params $pname [::SpiceGenTcl::ParameterSwitch new $pname]
                         }
@@ -1137,7 +1137,7 @@ namespace eval ::SpiceGenTcl {
 
     oo::configurable create Function {
         superclass SPICEElement
-        property declaration 
+        property declaration
         property body
         property name
         variable name declaration body
@@ -1530,6 +1530,7 @@ namespace eval ::SpiceGenTcl {
             set name [string tolower $value]
         }
         property value -get {
+            # noqa: W307
             return [$value configure -value]
         }
         variable name value
@@ -2194,7 +2195,8 @@ namespace eval ::SpiceGenTcl {
                                        Flags $numtype {No. Variables} $nvariables {No. Points} $npoints]
                 dict for {name points} $vectorsData {
                     if {[dict get [dict get $vectorsInfo $name] type] in {voltage s-param impedance admittance}} {
-                        if {[regexp -nocase {^v\(([^)]+)\)$} $name]} {
+                        # noqa: W306
+                        if {[regexp -nocase "^v\\((\[^)]+)\\)$" $name]} {
                             set nameModif [string tolower $name]
                         } else {
                             set nameModif "v\([string tolower $name]\)"
@@ -2202,7 +2204,8 @@ namespace eval ::SpiceGenTcl {
                     } elseif {[dict get [dict get $vectorsInfo $name] type] eq {current}} {
                         if {[regexp -nocase {^([^#]+)} $name -> nameParsed]} {
                             set nameModif "i\([string tolower $nameParsed]\)"
-                        } elseif {[regexp -nocase {^i\(([^)]+)\)$} $name]} {
+                        # noqa: W306
+                        } elseif {[regexp -nocase "^i\\((\[^)]+)\\)$" $name]} {
                             set nameModif [string tolower $name]
                         } else {
                             set nameModif "i\([string tolower $name]\)"
@@ -2226,12 +2229,16 @@ namespace eval ::SpiceGenTcl {
                         $traceObj setDataPoints $points
                         dappend Traces $nameModif $traceObj
                     }
-                    
                 }
             } else {
                 my configure -path [dget $arguments path]
                 set fileSize [file size $path]
-                set file [open $path r]
+                if {[regexp {^\|} $path]} {
+                    return -code error "Filename '$path' starts with |"
+                } else {
+                    # noqa: W103
+                    set file [open $path r]
+                }
                 fconfigure $file -translation binary
                 ### read header
                 set ch [read $file 6]
@@ -2371,7 +2378,7 @@ namespace eval ::SpiceGenTcl {
                     }
                     for {set i 0} {$i<$npoints} {incr i} {
                         for {set j 0} {$j<[dict size $Traces]} {incr j} {
-                            set value [eval "my [@ $scanFunctions $j]" $file]
+                            set value [{*}[list my [@ $scanFunctions $j] $file]]
                             set trace [@ [dvalues $Traces] $j]
                             if {$j==0} {
                                 # workaround for bug with negative values in time axis
@@ -2520,7 +2527,7 @@ namespace eval ::SpiceGenTcl {
                             {*}$args]
         }
     }
-
+    # noqa: W115
     ##nagelfar subcmd+ _obj,Parser configure CheckEqual Unbrace ParseWithEqual CheckBraced CheckBracedWithEqual\
             ParseBracedWithEqual BuildNetlist buildTopNetlist ParseParams
     oo::configurable create Parser {
@@ -2696,9 +2703,10 @@ namespace eval ::SpiceGenTcl {
                     lappend elements "my add \[$element\]"
                 }
             }
-            set definition [string map [list @classname@ $subcktClassName @pins@ [list $pinList] @params@ [list $params]\
-                                                @subname@ $subName @definitions@ [join $definitionsLoc \n]\
-                                                @elements@ [join $elements \n]] $SubcircuitTemplate]
+            set definition [string map [list @classname@ $subcktClassName @pins@ [list $pinList]\
+                                                @params@ [list $params] @subname@ $subName @definitions@\
+                                                [join $definitionsLoc \n] @elements@ [join $elements \n]]\
+                                    $SubcircuitTemplate]
             ##nagelfar ignore {Found constant "definition"}
             $SubcktsTree append $subcktPath definition $definition
             return
@@ -2754,9 +2762,10 @@ namespace eval ::SpiceGenTcl {
                         continue
                     }
                     if {[regexp {^oo::class\s+(\S+)} $element]} {
+                        # noqa: W301
                         uplevel 1 $element
                     } else {
-                        $topNetlist add [eval $element]
+                        $topNetlist add [{*}$element]
                     }
                 }
             }
@@ -2851,14 +2860,14 @@ namespace eval ::SpiceGenTcl {
                     return -code error "Parameter '$elem' parsing failed"
                 }
                 if {$format eq {arg}} {
-                    if {$name ni [lmap nameExc $exclude {subst $nameExc}]} {
+                    if {$name ni [lmap nameExc $exclude {format %s $nameExc}]} {
                         if {$value eq {}} {
                             return -code error "Parameter '$elem' parsing failed: value is empty"
                         }
                         lappend results {*}$nameValue
                     }
                 } elseif {$format eq {list}} {
-                    if {$name ni [lmap nameExc $exclude {subst $nameExc}]} {
+                    if {$name ni [lmap nameExc $exclude {format %s $nameExc}]} {
                         if {$value eq {}} {
                             return -code error "Parameter '$elem' parsing failed: value is empty"
                         }
@@ -2869,7 +2878,8 @@ namespace eval ::SpiceGenTcl {
             return $results
         }
         method ParseMixedParams {list start {exclude {}} {format arg}} {
-            # Parses parameters from the list starts from `start` that is in form `name=value`, `name={value}` or `name`.
+            # Parses parameters from the list starts from `start` that is in form `name=value`, `name={value}` or
+            # `name`.
             #   list - input list
             #   start - start index
             #   exclude - list of parameters names that should be omitted from output
@@ -2906,14 +2916,14 @@ namespace eval ::SpiceGenTcl {
                     return -code error "Parameter '$elem' parsing failed"
                 }
                 if {$format eq {arg}} {
-                    if {$name ni [lmap nameExc $exclude {subst -$nameExc}]} {
+                    if {$name ni [lmap nameExc $exclude {format -%s $nameExc}]} {
                         if {$value eq {} && !$switch} {
                             return -code error "Parameter '$elem' parsing failed: value is empty"
                         }
                         lappend results {*}$nameValue
                     }
                 } else {
-                    if {$name ni [lmap nameExc $exclude {subst $nameExc}]} {
+                    if {$name ni [lmap nameExc $exclude {format %s $nameExc}]} {
                         if {$value eq {} && !$switch} {
                             return -code error "Parameter '$elem' parsing failed: value is empty"
                         }
@@ -2958,8 +2968,8 @@ namespace eval ::SpiceGenTcl {
             return [regexp {^\{([^={}]+)\}$} $string]
         }
         method Unbrace {string} {
-            # Unbraces input string, `{value}` to `value`, value inside braces must not contain `{`, `}` and `=` symbols,
-            # and be empty
+            # Unbraces input string, `{value}` to `value`, value inside braces must not contain `{`, `}` and `=`,
+            # symbols and be empty
             #   string - input braced string
             # Returns: string without braces
             if {[my CheckBraced $string]} {

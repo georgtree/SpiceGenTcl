@@ -79,9 +79,9 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
             my readLog
             my readData
             if {![info exists nodelete]} {
-                file delete $rawFileName
-                file delete $logFileName
-                file delete $cirFileName
+                file delete -- $rawFileName
+                file delete -- $logFileName
+                file delete -- $cirFileName
             }
         }
         method readLog {args} {
@@ -139,9 +139,9 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
             my configure -log $logData
             my readData
             if {![info exists nodelete]} {
-                file delete $rawFileName
-                file delete $logFileName
-                file delete $cirFileName
+                file delete -- $rawFileName
+                file delete -- $logFileName
+                file delete -- $cirFileName
             }
         }
     }

@@ -18,7 +18,7 @@ $circuit add [DiodeModel new diomod -is 1e-12 -n 1.2 -rs 0.01 -cj0 1e-9 -trs1 0.
 $circuit add [Ac new -variation lin -n 1 -fstart 1e5 -fstop 1e5]
 # add voltage sweep
 set voltSweep [lseq 0 20.0 0.1]
-#set simulator with default 
+#set simulator with default
 set simulator [Batch new {batch1}]
 # attach simulator object to circuit
 $circuit configure -simulator $simulator

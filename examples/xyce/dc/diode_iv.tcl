@@ -15,7 +15,7 @@ set tempSt [Options new {{-sw device} {temp 25}}]
 $circuit add $tempSt
 # add temperature sweep
 set temps [list -55 25 85 125 175]
-#set simulator with default 
+#set simulator with default
 set simulator [Batch new {batch1}]
 # attach simulator object to circuit
 $circuit configure -simulator $simulator
@@ -25,13 +25,13 @@ foreach temp $temps {
     $circuit runAndRead
     puts [$circuit configure -log]
     set data [$circuit getDataDict]
+    set xydata [list]
     foreach x [dget $data anode] y [dget $data va#branch] {
         set xf [format "%.3f" $x]
         set yf [format "%.3f" [= {-$y}]]
         lappend xydata [list $xf $yf]
     }
     lappend dataList $xydata
-    unset xydata
 }
 
 
