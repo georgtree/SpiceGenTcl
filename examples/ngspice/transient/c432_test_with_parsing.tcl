@@ -14,8 +14,8 @@ $circuit add $netlist
 $circuit configure -simulator $simulator
 $circuit runAndRead
 set data [$circuit getDataDict]
-set time [dget $data time]
-foreach time [dget $data time] vg429 [dget $data v(g429)] vg430 [dget $data v(g430)] {
+set time [dict get $data time]
+foreach time [dict get $data time] vg429 [dict get $data v(g429)] vg430 [dict get $data v(g430)] {
     lappend timeVg429 [list $time $vg429]
     lappend timeVg430 [list $time $vg430]
 }

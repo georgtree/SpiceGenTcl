@@ -128,8 +128,8 @@ namespace eval Parser {
         $circuit configure -simulator $simulator
         $circuit runAndRead
         set data [$circuit getDataDict]
-        set vrc1 [dget $data v(rc1)]
-        set vrc2 [dget $data v(rc2)]
+        set vrc1 [dict get $data v(rc1)]
+        set vrc2 [dict get $data v(rc2)]
         puts [format "vrc1=%.3e vrc2=%.3e" $vrc1 $vrc2]
         ```
         
@@ -188,8 +188,8 @@ namespace eval Parser {
         $circuit configure -simulator $simulator
         $circuit runAndRead
         set data [$circuit getDataDict]
-        set time [dget $data time]
-        foreach time [dget $data time] vg429 [dget $data v(g429)] vg430 [dget $data v(g430)] {
+        set time [dict get $data time]
+        foreach time [dict get $data time] vg429 [dict get $data v(g429)] vg430 [dict get $data v(g430)] {
             lappend timeVg429 [list $time $vg429]
             lappend timeVg430 [list $time $vg430]
         }

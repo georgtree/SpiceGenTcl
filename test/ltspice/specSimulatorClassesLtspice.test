@@ -31,8 +31,8 @@ proc matchList {expected actual} {
     set match 1
     set len [llength $expected]
     for {set i 0} {$i<$len} {incr i} {
-        set exp [@ $expected $i]
-        set act [@ $actual $i]
+        set exp [lindex $expected $i]
+        set act [lindex $actual $i]
         if {(abs($act-$exp) > $epsilon) || (abs($act-$exp) > $epsilon)} {
             set match 0
             break
@@ -52,7 +52,7 @@ test testSimulations-1 {test creation of circuit, run it with LtspiceBatch and r
     $circuit runAndRead -nodelete
     set data [[$circuit configure -data] getTracesData]
 } -body {
-    lappend result [lmap voutVal [dget $data v(out)] {format "%.3e" $voutVal}]
+    lappend result [lmap voutVal [dict get $data v(out)] {format "%.3e" $voutVal}]
     return $result
 } -result "{0.000e+00 6.667e-01 1.333e+00 2.000e+00 2.667e+00 3.333e+00}" -cleanup {
     file delete {./voltage divider netlist.cir}
@@ -81,9 +81,9 @@ test testSimulations-2 {test diode IV simulation} -setup {
         $tempSt configure -value $temp
         $circuit runAndRead
         set data [$circuit getDataDict]
-        foreach x [dget $data v(anode)] y [dget $data i(va)] {
+        foreach x [dict get $data v(anode)] y [dict get $data i(va)] {
             set xf [format "%.3f" $x]
-            set yf [format "%.3f" [= {-$y}]]
+            set yf [format "%.3f" [expr {-$y}]]
             lappend xydata [list $xf $yf]
         }    
         lappend dataList $xydata
@@ -136,9 +136,9 @@ test testSimulations-3 {test diode CV simulation} -setup {
         set data [$circuit getDataDict]
         set x $volt
         # get imaginary part of current
-        set y [@ [dget $data i(va)] 0 1]
+        set y [lindex [dict get $data i(va)] 0 1]
         set xf [format "%.3e" $x]
-        set yf [format "%.2e" [= {-$y/(2*$pi*1e5*1e-9)}]]
+        set yf [format "%.2e" [expr {-$y/(2*$pi*1e5*1e-9)}]]
         lappend xydata [list $xf $yf]
     }
 } -body {

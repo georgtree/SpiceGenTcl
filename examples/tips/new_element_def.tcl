@@ -15,11 +15,11 @@ oo::class create Core {
             {-len= -default 0.1}
             {-area= -default 1}
         }]
-        lappend paramList "model [dget $arguments model] -posnocheck"
+        lappend paramList "model [dict get $arguments model] -posnocheck"
         dict for {paramName value} $arguments {
             if {$paramName ni {model}} {
-                if {[@ $value 0] eq {-eq}} {
-                    lappend params [list -eq $paramName [@ $value 1]]
+                if {[lindex $value 0] eq {-eq}} {
+                    lappend params [list -eq $paramName [lindex $value 1]]
                 } else {
                     lappend params [list $paramName $value]
                 }
@@ -48,8 +48,8 @@ oo::class create CoreModel1 {
             -c=
         }]
         dict for {paramName value} $arguments {
-            if {[@ $value 0] eq {-eq}} {
-                lappend params [list -eq $paramName [@ $value 1]]
+            if {[lindex $value 0] eq {-eq}} {
+                lappend params [list -eq $paramName [lindex $value 1]]
             } else {
                 lappend params [list $paramName $value]
             }

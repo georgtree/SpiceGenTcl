@@ -58,14 +58,14 @@ namespace eval Advanced {
         procedure:
         ```tcl
         proc calcDbMag {re im} {
-            set mag [= {sqrt($re*$re+$im*$im)}]
-            set db [= {10*log($mag)}]
+            set mag [expr {sqrt($re*$re+$im*$im)}]
+            set db [expr {10*log($mag)}]
             return $db
         }
 
         proc calcDbMagVec {vector} {
             foreach value $vector {
-                lappend db [calcDbMag [@ $value 0] [@ $value 1]]
+                lappend db [calcDbMag [lindex $value 0] [lindex $value 1]]
             }
             return $db
         }
@@ -78,12 +78,12 @@ namespace eval Advanced {
         $circuit runAndRead
         # get data dictionary
         set data [$circuit getDataDict]
-        set trace [calcDbMagVec [dget $data v(out)]]
-        set freqs [dget $data frequency]
+        set trace [calcDbMagVec [dict get $data v(out)]]
+        set freqs [dict get $data frequency]
         foreach x $freqs y $trace {
-            lappend xydata [list [@ $x 0] $y]
+            lappend xydata [list [lindex $x 0] $y]
         }
-        puts [findBW [lmap freq $freqs {@ $freq 0}] $trace -10]
+        puts [findBW [lmap freq $freqs {lindex $freq 0}] $trace -10]
         set chartTransMag [ticklecharts::chart new]
         $chartTransMag Xaxis -name "Frequency, Hz" -minorTick {show "True"} -type "log" -splitLine {show "True"}
         $chartTransMag Yaxis -name "Magnitude, dB" -minorTick {show "True"} -type "value" -splitLine {show "True"}
@@ -100,14 +100,14 @@ namespace eval Advanced {
         ```tcl
         proc findBW {freqs vals trigVal} {
             # calculate bandwidth of results
-            set bw [dget [measure -xname freqs -data [dcreate freqs $freqs vals $vals] -trig "-vec vals -val $trigVal -rise 1"\
+            set bw [dict get [measure -xname freqs -data [dict create freqs $freqs vals $vals] -trig "-vec vals -val $trigVal -rise 1"\
                                   -targ "-vec vals -val $trigVal -fall 1"] xdelta]
             return $bw
         }
         ```
         Find bandwidth:
         ```tcl
-        puts [findBW [lmap freq $freqs {@ $freq 0}] $trace -10]
+        puts [findBW [lmap freq $freqs {lindex $freq 0}] $trace -10]
         ```
         The value is 1.086255 Mhz.
         
@@ -118,12 +118,12 @@ namespace eval Advanced {
         `::math::statistics::random-normal mean stdev number`. For uniform distribution, we define the following min
         and max limits for each C and L element:
         ```tcl
-        set distLimits [dcreate c1 [dcreate min 0.9e-9 max 1.1e-9]\
-                l1 [dcreate min 9e-6 max 11e-6]\
-                c2 [dcreate min 0.9e-9 max 1.1e-9]\
-                l2 [dcreate min 9e-6 max 11e-6]\
-                c3 [dcreate min 225e-12 max 275e-12]\
-                l3 [dcreate min 36e-6 max 44e-6]]
+        set distLimits [dict create c1 [dict create min 0.9e-9 max 1.1e-9]\
+                l1 [dict create min 9e-6 max 11e-6]\
+                c2 [dict create min 0.9e-9 max 1.1e-9]\
+                l2 [dict create min 9e-6 max 11e-6]\
+                c3 [dict create min 225e-12 max 275e-12]\
+                l3 [dict create min 36e-6 max 44e-6]]
         ```
         
         We can specify different numbers of simulations; the more runs we perform, the more accurate the representation
@@ -141,7 +141,7 @@ namespace eval Advanced {
         for {set i 0} {$i<$mcRuns} {incr i} {
             #set elements values according to uniform distribution
             foreach elem [list c1 l1 c2 l2 c3 l3] {
-                $elem actOnParam -set [string index $elem 0] [random-uniform {*}[dict values [dget $distLimits $elem]] 1]
+                $elem actOnParam -set [string index $elem 0] [random-uniform {*}[dict values [dict get $distLimits $elem]] 1]
             }
             # run simulation
             $circuit runAndRead
@@ -149,15 +149,15 @@ namespace eval Advanced {
             set data [$circuit getDataDict]
             # get results
             if {$i==0} {
-                set freqs [dget $data frequency]
+                set freqs [dict get $data frequency]
                 foreach freq $freqs {
-                    lappend freqRes [@ $freq 0]
+                    lappend freqRes [lindex $freq 0]
                 }
             }
             # get vout frequency curve
-            lappend traceListUni [calcDbMagVec [dget $data v(out)]]
+            lappend traceListUni [calcDbMagVec [dict get $data v(out)]]
             # calculate bandwidths values
-            lappend bwsUni [findBW $freqRes [@ $traceListUni end] -10]
+            lappend bwsUni [findBW $freqRes [lindex $traceListUni end] -10]
         }
         ```
         
@@ -167,11 +167,11 @@ namespace eval Advanced {
         proc createIntervals {data numOfIntervals} {
             set intervals [::math::statistics::minmax-histogram-limits [tcl::mathfunc::min {*}$data] \
                     [tcl::mathfunc::max {*}$data] $numOfIntervals]
-            lappend intervalsStrings [format "<=%.2e" [@ $intervals 0]]
+            lappend intervalsStrings [format "<=%.2e" [lindex $intervals 0]]
             for {set i 0} {$i<[- [llength $intervals] 1]} {incr i} {
-                lappend intervalsStrings [format "%.2e-%.2e" [@ $intervals $i] [@ $intervals [+ $i 1]]]
+                lappend intervalsStrings [format "%.2e-%.2e" [lindex $intervals $i] [lindex $intervals [+ $i 1]]]
             }
-            return [dcreate intervals $intervals intervalsStr $intervalsStrings]
+            return [dict create intervals $intervals intervalsStr $intervalsStrings]
         }
         ```
         
@@ -195,26 +195,26 @@ namespace eval Advanced {
         Call the `createDist` procedure to calculate the histogram y-axis values, which correspond to the number of
         bandwidths within each interval:
         ```tcl
-        set normDist [createDist $bwsNorm [dget $normIntervals intervals]]
+        set normDist [createDist $bwsNorm [dict get $normIntervals intervals]]
         ```
         
         The same sequence of steps is applied for the normal distribution. We assume that `std = (xmax - xmin) / 6`, 
         where `xmax` and `xmin` are the limits of the uniform distribution.
         ```tcl
         # set parameter's normal distributions limits
-        set normalLimits [dcreate c1 [dcreate mean 1e-9 std [/ 0.1e-9 3]]\
-                l1 [dcreate mean 10e-6 std [/ 1e-6 3]]\
-                c2 [dcreate mean 1e-9 std [/ 0.1e-9 3]]\
-                l2 [dcreate mean 10e-6 std [/ 1e-6 3]]\
-                c3 [dcreate mean 250e-12 std [/ 25e-12 3]]\
-                l3 [dcreate mean 40e-6 std [/ 4e-6 3]]]
+        set normalLimits [dict create c1 [dict create mean 1e-9 std [/ 0.1e-9 3]]\
+                l1 [dict create mean 10e-6 std [/ 1e-6 3]]\
+                c2 [dict create mean 1e-9 std [/ 0.1e-9 3]]\
+                l2 [dict create mean 10e-6 std [/ 1e-6 3]]\
+                c3 [dict create mean 250e-12 std [/ 25e-12 3]]\
+                l3 [dict create mean 40e-6 std [/ 4e-6 3]]]
 
         ## loop in which we run simulation with normal distribution
         for {set i 0} {$i<$mcRuns} {incr i} {
             #set elements values according to normal distribution
             foreach elem [list c1 l1 c2 l2 c3 l3] {
                 $elem $elem actOnParam -set [string index $elem 0]\
-                        [random-normal {*}[dict values [dget $normalLimits $elem]] 1]
+                        [random-normal {*}[dict values [dict get $normalLimits $elem]] 1]
             }
             # run simulation
             $circuit runAndRead
@@ -222,19 +222,19 @@ namespace eval Advanced {
             set data [$circuit getDataDict]
             # get results
             if {$i==0} {
-                set freqs [dget $data frequency]
+                set freqs [dict get $data frequency]
                 foreach freq $freqs {
-                    lappend freqRes [@ $freq 0]
+                    lappend freqRes [lindex $freq 0]
                 }
             }
             # get vout frequency curve
-            lappend traceListNorm [calcDbMagVec [dget $data v(out)]]
+            lappend traceListNorm [calcDbMagVec [dict get $data v(out)]]
             # calculate bandwidths values
-            lappend bwsNorm [findBW $freqRes [@ $traceListNorm end] -10]
+            lappend bwsNorm [findBW $freqRes [lindex $traceListNorm end] -10]
         }
         # get distribution of bandwidths with normal parameters distribution
         set normIntervals [createIntervals $bwsNorm $numOfIntervals]
-        set normDist [createDist $bwsNorm [dget $normIntervals intervals]]
+        set normDist [createDist $bwsNorm [dict get $normIntervals intervals]]
         ```
         
         Finally, we plot resulted distributions:
@@ -242,7 +242,7 @@ namespace eval Advanced {
         # plot results with ticklecharts
         # chart for uniformly distributed parameters
         set chartUni [ticklecharts::chart new]
-        $chartUni Xaxis -name "Frequency intervals, Hz" -data [list [dget $uniIntervals intervalsStr]]\
+        $chartUni Xaxis -name "Frequency intervals, Hz" -data [list [dict get $uniIntervals intervalsStr]]\
                 -axisTick {show "True" alignWithLabel "True"} -axisLabel {interval "0" rotate "45" fontSize "8"}
         $chartUni Yaxis -name "Bandwidths per interval" -minorTick {show "True"} -type "value"
         $chartUni SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
@@ -250,7 +250,7 @@ namespace eval Advanced {
         $chartUni Add "barSeries" -data [list $uniDist]
         # chart for normally distributed parameters
         set chartNorm [ticklecharts::chart new]
-        $chartNorm Xaxis -name "Frequency intervals, Hz" -data [list [dget $normIntervals intervalsStr]]\
+        $chartNorm Xaxis -name "Frequency intervals, Hz" -data [list [dict get $normIntervals intervalsStr]]\
                 -axisTick {show "True" alignWithLabel "True"} -axisLabel {interval "0" rotate "45" fontSize "8"}
         $chartNorm Yaxis -name "Bandwidths per interval" -minorTick {show "True"} -type "value"
         $chartNorm SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
@@ -274,9 +274,9 @@ namespace eval Advanced {
         We can also take the uniform intervals and calculate the normal distribution values at these intervals:
         ```tcl
         # find distribution of normal distributed values in uniform intervals       
-        set normDistWithUniIntervals [createDist $bwsNorm [dget $uniIntervals intervals]]
+        set normDistWithUniIntervals [createDist $bwsNorm [dict get $uniIntervals intervals]]
         set chartCombined [ticklecharts::chart new]
-        $chartCombined Xaxis -name "Frequency intervals, Hz" -data [list [dget $uniIntervals intervalsStr]]\
+        $chartCombined Xaxis -name "Frequency intervals, Hz" -data [list [dict get $uniIntervals intervalsStr]]\
                 -axisTick {show "True" alignWithLabel "True"} -axisLabel {interval "0" rotate "45" fontSize "8"}
         $chartCombined Yaxis -name "Bandwidths per interval" -minorTick {show "True"} -type "value"
         $chartCombined SetOptions -title {} -legend {} -tooltip {trigger "axis"} -animation "False"\
@@ -316,15 +316,15 @@ namespace eval Advanced {
         ```tcl
         proc diodeIVcalc {xall pdata args} {
             dict with pdata {}
-            $model actOnParam -set is [@ $xall 0] n [@ $xall 1] rs [@ $xall 2] ikf [@ $xall 3]
+            $model actOnParam -set is [lindex $xall 0] n [lindex $xall 1] rs [lindex $xall 2] ikf [lindex $xall 3]
             $vSrc actOnParam -set start $vMin stop $vMax incr $vStep
             $circuit runAndRead
             set data [$circuit getDataDict]
-            foreach iVal $i iSim [lmap i [dget $data i(va)] {= {-$i}}] {
-                lappend fvec [= {log(abs($iVal))-log(abs($iSim))}]
+            foreach iVal $i iSim [lmap i [dict get $data i(va)] {expr {-$i}}] {
+                lappend fvec [expr {log(abs($iVal))-log(abs($iSim))}]
                 lappend fval $iSim
             }
-            return [dcreate fvec $fvec fval $fval]
+            return [dict create fvec $fvec fval $fval]
         }
         ```
 
@@ -352,7 +352,7 @@ namespace eval Advanced {
 
         Then we set parameters values of the diode model object using [::SpiceGenTcl::Model::actOnParam] method:
         ```tcl
-        $model actOnParam -set is [@ $xall 0] n [@ $xall 1] rs [@ $xall 2] ikf [@ $xall 3]
+        $model actOnParam -set is [lindex $xall 0] n [lindex $xall 1] rs [lindex $xall 2] ikf [lindex $xall 3]
         ```
 
         The same we do with voltage source element:
@@ -368,8 +368,8 @@ namespace eval Advanced {
 
         Calculating residuals and save simulated data in the loop:
         ```tcl
-        foreach iVal $i iSim [lmap i [dget $data i(va)] {= {-$i}}] {
-            lappend fvec [= {log(abs($iVal))-log(abs($iSim))}]
+        foreach iVal $i iSim [lmap i [dict get $data i(va)] {expr {-$i}}] {
+            lappend fvec [expr {log(abs($iVal))-log(abs($iSim))}]
             lappend fval $iSim
         }
         ```
@@ -408,8 +408,8 @@ namespace eval Advanced {
         set file [open [file join $fileDataPath iv25.csv]]
         set ivTemp25 [csv_read -startline 1 $file]
         close $file
-        set vRaw [lmap elem $ivTemp25 {@ $elem 0}]
-        set iRaw [lmap elem $ivTemp25 {@ $elem 1}]
+        set vRaw [lmap elem $ivTemp25 {lindex $elem 0}]
+        set iRaw [lmap elem $ivTemp25 {lindex $elem 1}]
         ```
 
         The loaded data is (with selected regions of fitting):
@@ -432,7 +432,7 @@ namespace eval Advanced {
         ```tcl
         set vInterp [lseq $vMin to $vMax by $vStep]
         set iInterp [lin1d -x $vRaw -y $iRaw -xi $vInterp]
-        set pdata [dcreate v $vInterp i $iInterp circuit $circuit model $diodeModel vMin $vMin vMax $vMax vStep $vStep\
+        set pdata [dict create v $vInterp i $iInterp circuit $circuit model $diodeModel vMin $vMin vMax $vMax vStep $vStep\
                    vSrc $vSrc]
         ```
         
@@ -451,10 +451,10 @@ namespace eval Advanced {
         define initial values and lower/upper limits:
         ```tcl
         set iniPars [list 1e-14 1.0 30 1e-4]
-        set par0 [::tclopt::ParameterMpfit new is [@ $iniPars 0] -lowlim 1e-17 -uplim 1e-12]
-        set par1 [::tclopt::ParameterMpfit new n [@ $iniPars 1] -lowlim 0.5 -uplim 2]
-        set par2 [::tclopt::ParameterMpfit new rs [@ $iniPars 2] -fixed -lowlim 1e-10 -uplim 100]
-        set par3 [::tclopt::ParameterMpfit new ikf [@ $iniPars 3] -fixed -lowlim 1e-12 -uplim 0.1]
+        set par0 [::tclopt::ParameterMpfit new is [lindex $iniPars 0] -lowlim 1e-17 -uplim 1e-12]
+        set par1 [::tclopt::ParameterMpfit new n [lindex $iniPars 1] -lowlim 0.5 -uplim 2]
+        set par2 [::tclopt::ParameterMpfit new rs [lindex $iniPars 2] -fixed -lowlim 1e-10 -uplim 100]
+        set par3 [::tclopt::ParameterMpfit new ikf [lindex $iniPars 3] -fixed -lowlim 1e-12 -uplim 0.1]
         ```
 
         For `rs` and `ikf` parameters we specify option `-fixed` to make them constant during the first region fitting.
@@ -479,8 +479,8 @@ namespace eval Advanced {
         Then we can run the simulation, read the resulted list of parameters `x` and print formatted values:
         ```tcl
         set result [$optimizer run]
-        set resPars [dget $result x]
-        puts [format "is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e" {*}[dget $result x]]
+        set resPars [dict get $result x]
+        puts [format "is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e" {*}[dict get $result x]]
         ```
 
         The result is:
@@ -504,16 +504,16 @@ namespace eval Advanced {
 
         We will use the same `pdata` variable containing dictionary, but change the current and voltage data and limits:
         ```tcl
-        dset pdata v $vInterp
-        dset pdata i $iInterp
-        dset pdata vMin $vMin
-        dset pdata vMax $vMax
+        dict set pdata v $vInterp
+        dict set pdata i $iInterp
+        dict set pdata vMin $vMin
+        dict set pdata vMax $vMax
         ```
 
         We make `is` and `n` parameters fixed this time, and free the `rs` and `ikf`:
         ```tcl
-        $par0 configure -fixed 1 -initval [@ $resPars 0]
-        $par1 configure -fixed 1 -initval [@ $resPars 1]
+        $par0 configure -fixed 1 -initval [lindex $resPars 0]
+        $par1 configure -fixed 1 -initval [lindex $resPars 1]
         $par2 configure -fixed 0
         $par3 configure -fixed 0
         ```
@@ -528,9 +528,9 @@ namespace eval Advanced {
         Run, read result and print new parameters values:
         ```tcl
         set result [$optimizer run]
-        set fittedIdiode [dget [diodeIVcalc [dget $result x] $pdata] fval]
-        set resPars [dget $result x]
-        puts [format "is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e" {*}[dget $result x]]
+        set fittedIdiode [dict get [diodeIVcalc [dict get $result x] $pdata] fval]
+        set resPars [dict get $result x]
+        puts [format "is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e" {*}[dict get $result x]]
         ```
 
         The result is:
@@ -550,26 +550,26 @@ namespace eval Advanced {
         set vMax [max {*}$vRaw]
         set vInterp [lseq $vMin to $vMax by $vStep]
         set iInterp [lin1d -x $vRaw -y $iRaw -xi $vInterp]
-        dset pdata v $vInterp
-        dset pdata i $iInterp
-        dset pdata vMin $vMin
-        dset pdata vMax $vMax
+        dict set pdata v $vInterp
+        dict set pdata i $iInterp
+        dict set pdata vMin $vMin
+        dict set pdata vMax $vMax
         ```
 
         We unfix `rs` and `ikf` parameters, and set new limits within ±10% of previous values to forbid parameters
         becoming too different:
         ```tcl
-        $par0 configure -fixed 0 -initval [@ $resPars 0] -lowlim [= {[@ $resPars 0]*0.9}] -uplim [= {[@ $resPars 0]*1.1}]
-        $par1 configure -fixed 0 -initval [@ $resPars 1] -lowlim [= {[@ $resPars 1]*0.9}] -uplim [= {[@ $resPars 1]*1.1}]
-        $par2 configure -initval [@ $resPars 2] -lowlim [= {[@ $resPars 2]*0.9}] -uplim [= {[@ $resPars 2]*1.1}]
-        $par3 configure -initval [@ $resPars 3] -lowlim [= {[@ $resPars 3]*0.9}] -uplim [= {[@ $resPars 3]*1.1}]
+        $par0 configure -fixed 0 -initval [lindex $resPars 0] -lowlim [expr {[lindex $resPars 0]*0.9}] -uplim [expr {[lindex $resPars 0]*1.1}]
+        $par1 configure -fixed 0 -initval [lindex $resPars 1] -lowlim [expr {[lindex $resPars 1]*0.9}] -uplim [expr {[lindex $resPars 1]*1.1}]
+        $par2 configure -initval [lindex $resPars 2] -lowlim [expr {[lindex $resPars 2]*0.9}] -uplim [expr {[lindex $resPars 2]*1.1}]
+        $par3 configure -initval [lindex $resPars 3] -lowlim [expr {[lindex $resPars 3]*0.9}] -uplim [expr {[lindex $resPars 3]*1.1}]
         ```
 
         The set new data in optimizer object, run and print results:
         ```tcl
         $optimizer configure -m [llength $vInterp] -pdata $pdata
         set result [$optimizer run]
-        puts [format "is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e" {*}[dget $result x]]
+        puts [format "is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e" {*}[dict get $result x]]
         ```
         
         The result is:
@@ -584,7 +584,7 @@ namespace eval Advanced {
         Now we are ready to see the result of the fitting, we need to calculate curves with initial values and final
         values of parameters:
         ```tcl
-        set initIdiode [dget [diodeIVcalc $iniPars $pdata] fval]
+        set initIdiode [dict get [diodeIVcalc $iniPars $pdata] fval]
         set fittedVIdiode [lmap vVal $vInterp iVal $fittedIdiode {list $vVal $iVal}]
         set initVIdiode [lmap vVal $vInterp iVal $initIdiode {list $vVal $iVal}]
         set viRaw [lmap vVal $vRaw iVal $iRaw {list $vVal $iVal}]
@@ -697,20 +697,20 @@ namespace eval Advanced {
         In the next code lines we define all above mentioned constants as well as equations for `PD` and `PS`:
         ```tcl
         proc pdPsCalc {width length} {
-            return [= {2*$width+2*$length}]
+            return [expr {2*$width+2*$length}]
         }
         # set parameters
         set vSupply 2.0
         set inpFreq 850e6
-        set inpPeriod [= {1.0/$inpFreq}]
+        set inpPeriod [expr {1.0/$inpFreq}]
         set noPeriods 4
-        set tmeasStart [= {($noPeriods-1)*$inpPeriod}]
-        set tmeasStop [= {$noPeriods*$inpPeriod}]
-        set tmeas1 [= {$tmeasStop-3.0*$inpPeriod/4.0}]
-        set tmeas2 [= {$tmeasStop-1.0*$inpPeriod/4.0}]
+        set tmeasStart [expr {($noPeriods-1)*$inpPeriod}]
+        set tmeasStop [expr {$noPeriods*$inpPeriod}]
+        set tmeas1 [expr {$tmeasStop-3.0*$inpPeriod/4.0}]
+        set tmeas2 [expr {$tmeasStop-1.0*$inpPeriod/4.0}]
         set initialPWidth 10e-3
         set pWidth $initialPWidth
-        set nWidth [= {$pWidth/3.0}]
+        set nWidth [expr {$pWidth/3.0}]
         set length 0.35e-6
         set vLowLim 0.05
         set vHighLim 1.95
@@ -726,13 +726,13 @@ namespace eval Advanced {
         set circuit [Circuit new {Inverter}]
         set vdd [Vdc new dd vdd 0 -dc $vSupply]
         set vss [Vdc new ss vss 0 -dc 0.0]
-        set vIn [Vpulse new 1 in vss -low $vSupply -high 0.0 -td [= {$inpPeriod/2.0}] -tr [= {$inpPeriod/1000.0}]\
-                         -tf [= {$inpPeriod/1000.0}] -pw [= {$inpPeriod/2.0}] -per $inpPeriod]
+        set vIn [Vpulse new 1 in vss -low $vSupply -high 0.0 -td [expr {$inpPeriod/2.0}] -tr [expr {$inpPeriod/1000.0}]\
+                         -tf [expr {$inpPeriod/1000.0}] -pw [expr {$inpPeriod/2.0}] -per $inpPeriod]
         set capLoad [C new l out vss -c 3p]
         set mp [M new p out in vdd -model pmos -l $length -w $pWidth -n4 vdd -pd $pd -ps $ps]
         set mn [M new n out in vss -model nmos -l $length -w $nWidth -n4 vss -pd $pd -ps $ps]
         $circuit add $vdd $vss $vIn $capLoad $mp $mn
-        $circuit add [Tran new -tstep [= {$inpPeriod/1000.0}] -tstop [= {$inpPeriod*$noPeriods}]]
+        $circuit add [Tran new -tstep [expr {$inpPeriod/1000.0}] -tstop [expr {$inpPeriod*$noPeriods}]]
         $circuit add [Include new [file join $scriptPath models n.typ]]
         $circuit add [Include new [file join $scriptPath models p.typ]]
         ```
@@ -793,13 +793,13 @@ namespace eval Advanced {
 
         So, the final cost function is:
         ```tcl
-        set pdata [dcreate vSupplyVals $vSupplyVals nDevice $mn pDevice $mp vLowLim $vLowLim vHighLim $vLowLim length $length\
+        set pdata [dict create vSupplyVals $vSupplyVals nDevice $mn pDevice $mp vLowLim $vLowLim vHighLim $vLowLim length $length\
                           vdd $vdd tmeas1 $tmeas1 tmeas2 $tmeas2 objWeight 10 constrWeight 10000 circuit $circuit]
         proc costFunc {xall pdata args} {
             dict with pdata {}
-            set width [@ $xall 0]
+            set width [lindex $xall 0]
             set pdPs [pdPsCalc $width $length]
-            $nDevice actOnParam -set l $length w [= {$width/3.0}] pd $pdPs ps $pdPs
+            $nDevice actOnParam -set l $length w [expr {$width/3.0}] pd $pdPs ps $pdPs
             $pDevice actOnParam -set l $length w $width pd $pdPs ps $pdPs
             foreach val $vSupplyVals {
                 $vdd actOnParam -set dc $val
@@ -813,25 +813,25 @@ namespace eval Advanced {
                 set data [$circuit getDataDict]
                 lappend vlowList [measure -xname time -data $data -find v(out) -at $tmeas1]
                 lappend vhighList [measure -xname time -data $data -find v(out) -at $tmeas2]
-                set instantPower [= {mul([dget $data i(vdd)], [dget $data v(vdd)])}]
-                lappend psupplyList [measure -xname time -data [dcreate time [dget $data time] instantPower $instantPower]\
+                set instantPower [expr {mul([dict get $data i(vdd)], [dict get $data v(vdd)])}]
+                lappend psupplyList [measure -xname time -data [dict create time [dict get $data time] instantPower $instantPower]\
                                              -rms "-vec instantPower -from $tmeas1 -to $tmeas2"]
             }
             set costObj 0.0
             set costConstr 0.0
             foreach psupply $psupplyList vlow $vlowList vhigh $vhighList {
-                set constrVlow [= {($vlow-$vLowLim)/$vLowLim}]
+                set constrVlow [expr {($vlow-$vLowLim)/$vLowLim}]
                 if {$constrVlow<0} {
                     set constrVlow 0.0
                 }
-                set constrVhigh [= {($vHighLim-$vhigh)/$vHighLim}]
+                set constrVhigh [expr {($vHighLim-$vhigh)/$vHighLim}]
                 if {$constrVhigh<0} {
                     set constrVhigh 0.0
                 }
-                set costObj [= {$costObj+$psupply}]
-                set costConstr [= {$costConstr+max($constrVlow, $constrVhigh)}]
+                set costObj [expr {$costObj+$psupply}]
+                set costConstr [expr {$costConstr+max($constrVlow, $constrVhigh)}]
             }
-            return [= {$objWeight*$costObj+$constrWeight*$costConstr}]
+            return [expr {$objWeight*$costObj+$constrWeight*$costConstr}]
         }
         ```
 
@@ -839,7 +839,7 @@ namespace eval Advanced {
 
         First, we build `pdata` dictionary with information that is necessary to evaluate the cost function:
         ```tcl
-        set pdata [dcreate vSupplyVals $vSupplyVals nDevice $mn pDevice $mp vLowLim $vLowLim vHighLim $vLowLim length $length\
+        set pdata [dict create vSupplyVals $vSupplyVals nDevice $mn pDevice $mp vLowLim $vLowLim vHighLim $vLowLim length $length\
                            vdd $vdd tmeas1 $tmeas1 tmeas2 $tmeas2 objWeight 10 constrWeight 10000 circuit $circuit]
         ```
 
@@ -861,14 +861,14 @@ namespace eval Advanced {
         first and the only element:
         ```tcl
         dict with pdata {}
-        set width [@ $xall 0]
+        set width [lindex $xall 0]
         ```
 
         Next we calculate the `pd` and `ps` parameters from the given length and and new width, and change the
         parameters of NMOS and PMOS devices with the new values:
         ```tcl
         set pdPs [pdPsCalc $width $length]
-        $nDevice actOnParam -set l $length w [= {$width/3.0}] pd $pdPs ps $pdPs
+        $nDevice actOnParam -set l $length w [expr {$width/3.0}] pd $pdPs ps $pdPs
         $pDevice actOnParam -set l $length w $width pd $pdPs ps $pdPs
         ```
 
@@ -887,8 +887,8 @@ namespace eval Advanced {
             set dataDict [$circuit getDataDict]
             lappend vlowList [$data measure -find v(out) -at $tmeas1]
             lappend vhighList [$data measure -find v(out) -at $tmeas2]
-            set instantPower [= {mul([dget $dataDict i(vdd)], [dget $dataDict v(vdd)])}]
-            lappend psupplyList [measure -xname time -data [dcreate time [dget $dataDict time] instantPower $instantPower]\
+            set instantPower [expr {mul([dict get $dataDict i(vdd)], [dict get $dataDict v(vdd)])}]
+            lappend psupplyList [measure -xname time -data [dict create time [dict get $dataDict time] instantPower $instantPower]\
                                          -rms "-vec instantPower -from $tmeas1 -to $tmeas2"]
         }
         ```
@@ -913,8 +913,8 @@ namespace eval Advanced {
         set dataDict [$circuit getDataDict]
         lappend vlowList [$data measure -find v(out) -at $tmeas1]
         lappend vhighList [$data measure -find v(out) -at $tmeas2]
-        set instantPower [= {mul([dget $dataDict i(vdd)], [dget $dataDict v(vdd)])}]
-        lappend psupplyList [measure -xname time -data [dcreate time [dget $dataDict time] instantPower $instantPower]\
+        set instantPower [expr {mul([dict get $dataDict i(vdd)], [dict get $dataDict v(vdd)])}]
+        lappend psupplyList [measure -xname time -data [dict create time [dict get $dataDict time] instantPower $instantPower]\
                                      -rms "-vec instantPower -from $tmeas1 -to $tmeas2"]
         ```
 
@@ -926,18 +926,18 @@ namespace eval Advanced {
         set costObj 0.0
         set costConstr 0.0
         foreach psupply $psupplyList vlow $vlowList vhigh $vhighList {
-            set constrVlow [= {($vlow-$vLowLim)/$vLowLim}]
+            set constrVlow [expr {($vlow-$vLowLim)/$vLowLim}]
             if {$constrVlow<0} {
                 set constrVlow 0.0
             }
-            set constrVhigh [= {($vHighLim-$vhigh)/$vHighLim}]
+            set constrVhigh [expr {($vHighLim-$vhigh)/$vHighLim}]
             if {$constrVhigh<0} {
                 set constrVhigh 0.0
             }
-            set costObj [= {$costObj+$psupply}]
-            set costConstr [= {$costConstr+max($constrVlow, $constrVhigh)}]
+            set costObj [expr {$costObj+$psupply}]
+            set costConstr [expr {$costConstr+max($constrVlow, $constrVhigh)}]
         }
-        return [= {$objWeight*$costObj+$constrWeight*$costConstr}]
+        return [expr {$objWeight*$costObj+$constrWeight*$costConstr}]
         ```
 
         After defining cost function, we can initialize and run optimization. As optimization engine we use
@@ -947,7 +947,7 @@ namespace eval Advanced {
         set optimizer [::tclopt::DE new -funct costFunc -pdata $pdata -strategy rand-to-best/1/exp -genmax 50 -refresh 1\
                                -np 10 -f 0.5 -cr 1 -seed 3 -debug -abstol 1e-6 -history -histfreq 1]
         $optimizer addPars $par
-        set width [dget [$optimizer run] x]
+        set width [dict get [$optimizer run] x]
         ```
 
         In first line we create parameter object and set the boundaries for the width value, from 100um to 10mm.
@@ -961,7 +961,7 @@ namespace eval Advanced {
         ```tcl
         # get results and history
         set results [$optimizer run]
-        set width [dget $results x]
+        set width [dict get $results x]
         set trajectory [dict get $results besttraj]
         set bestf [dict get $results history]
         foreach genTr $trajectory genF $bestf {
@@ -989,36 +989,36 @@ namespace eval Advanced {
         ```tcl
         # calculate initial waveforms the highest supply voltage
         set pdPs [pdPsCalc $initialPWidth $length]
-        $mn actOnParam -set l $length w [= {$initialPWidth/3.0}] pd $pdPs ps $pdPs
+        $mn actOnParam -set l $length w [expr {$initialPWidth/3.0}] pd $pdPs ps $pdPs
         $mp actOnParam -set l $length w $initialPWidth pd $pdPs ps $pdPs
-        $vdd actOnParam -set dc [@ $vSupplyVals 2]
+        $vdd actOnParam -set dc [lindex $vSupplyVals 2]
         $circuit runAndRead
         set data [$circuit configure -data]
         set dataDict [$circuit getDataDict]
-        foreach timeVal [dget $dataDict time] voutVal [dget $dataDict v(out)] {
+        foreach timeVal [dict get $dataDict time] voutVal [dict get $dataDict v(out)] {
             lappend initialWaveform [list $timeVal $voutVal]
         }
         set vlowInitial [$data measure -find v(out) -at $tmeas1]
         set vhighInitial [$data measure -find v(out) -at $tmeas2]
-        set instantPower [= {mul([dget $dataDict i(vdd)], [dget $dataDict v(vdd)])}]
-        set psupplyInitial [measure -xname time -data [dcreate time [dget $dataDict time] instantPower $instantPower]\
+        set instantPower [expr {mul([dict get $dataDict i(vdd)], [dict get $dataDict v(vdd)])}]
+        set psupplyInitial [measure -xname time -data [dict create time [dict get $dataDict time] instantPower $instantPower]\
                                     -rms "-vec instantPower -from $tmeas1 -to $tmeas2"]
 
         # calculate final waveform for the highest supply voltage
         set pdPs [pdPsCalc $width $length]
-        $mn actOnParam -set l $length w [= {$width/3.0}] pd $pdPs ps $pdPs
+        $mn actOnParam -set l $length w [expr {$width/3.0}] pd $pdPs ps $pdPs
         $mp actOnParam -set l $length w $width pd $pdPs ps $pdPs
-        $vdd actOnParam -set dc [@ $vSupplyVals 2]
+        $vdd actOnParam -set dc [lindex $vSupplyVals 2]
         $circuit runAndRead
         set data [$circuit configure -data]
         set dataDict [$circuit getDataDict]
-        foreach timeVal [dget $dataDict time] voutVal [dget $dataDict v(out)] {
+        foreach timeVal [dict get $dataDict time] voutVal [dict get $dataDict v(out)] {
             lappend finalWaveform [list $timeVal $voutVal]
         }
         set vlowFinal [$data measure -find v(out) -at $tmeas1]
         set vhighFinal [$data measure -find v(out) -at $tmeas2]
-        set instantPower [= {mul([dget $dataDict i(vdd)], [dget $dataDict v(vdd)])}]
-        set psupplyFinal [measure -xname time -data [dcreate time [dget $dataDict time] instantPower $instantPower]\
+        set instantPower [expr {mul([dict get $dataDict i(vdd)], [dict get $dataDict v(vdd)])}]
+        set psupplyFinal [measure -xname time -data [dict create time [dict get $dataDict time] instantPower $instantPower]\
                                   -rms "-vec instantPower -from $tmeas1 -to $tmeas2"]
         ```
 
@@ -1030,22 +1030,22 @@ namespace eval Advanced {
         $chart Yaxis -name "v(out)" -minorTick {show "True"}  -splitLine {show "True"}
         $chart SetOptions -title {} -legend {} -tooltip {trigger "axis"} -animation "False"\
                 -toolbox {feature {dataZoom {yAxisIndex "none"}}}
-        $chart Add "lineSeries" -name "initial, vdd=[@ $vSupplyVals 2]" -data $initialWaveform -showAllSymbol "nothing"\
+        $chart Add "lineSeries" -name "initial, vdd=[lindex $vSupplyVals 2]" -data $initialWaveform -showAllSymbol "nothing"\
                 -symbolSize "0"
-        $chart Add "lineSeries" -name "final, vdd=[@ $vSupplyVals 2]" -data $finalWaveform -showAllSymbol "nothing"\
+        $chart Add "lineSeries" -name "final, vdd=[lindex $vSupplyVals 2]" -data $finalWaveform -showAllSymbol "nothing"\
                 -symbolSize "0"
 
         set fbasename [file rootname [file tail [info script]]]
         $chart Render -outfile [file normalize [file join .. html_charts ${fbasename}_waveforms_plot.html]]
 
         # print resulted values for the highest supply voltage
-        puts "Optimization succesfully finished at generation [dget $results generation], total number of function evaluations\
-              - [dget $results nfev]"
-        puts "Convergence info: [dget $results info]"
-        puts "Best value of cost function is [format "%3e" [dget $results objfunc]]"
-        puts "Final width of PMOS is [format "%.3f" [= {$width/1e-3}]]mm, from initial value\
-                [format "%.3f" [= {$initialPWidth/1e-3}]]mm"
-        puts "For VDD=[@ $vSupplyVals 2]V,\
+        puts "Optimization succesfully finished at generation [dict get $results generation], total number of function evaluations\
+              - [dict get $results nfev]"
+        puts "Convergence info: [dict get $results info]"
+        puts "Best value of cost function is [format "%3e" [dict get $results objfunc]]"
+        puts "Final width of PMOS is [format "%.3f" [expr {$width/1e-3}]]mm, from initial value\
+                [format "%.3f" [expr {$initialPWidth/1e-3}]]mm"
+        puts "For VDD=[lindex $vSupplyVals 2]V,\
                 VLOW: [format "%.3f" $vlowInitial]V → [format "%.3f" $vlowFinal]V<[format "%.3f" $vLowLim]V,\
                 VHIGH: [format "%.3f" $vhighInitial]V → [format "%.3f" $vhighFinal]V>[format "%.3f" $vHighLim]V,\
                 PSUPPLY: [format "%.3f" $psupplyInitial]W → [format "%.3f" $psupplyFinal]W"

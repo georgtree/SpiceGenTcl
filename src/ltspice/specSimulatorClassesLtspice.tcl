@@ -68,7 +68,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Simulators {
             }
             my variable Command
             global tcl_platform
-            set firstLine [@ [split $circuitStr \n] 0]
+            set firstLine [lindex [split $circuitStr \n] 0]
             set runLocation [my configure -runlocation]
             set cirFile [open [file join $runLocation ${firstLine}.cir] w+]
             puts $cirFile $circuitStr

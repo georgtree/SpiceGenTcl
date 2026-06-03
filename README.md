@@ -1,5 +1,5 @@
 
-<img src="docs/assets/img/spicegentcl_logo.svg" alt="drawing" width="700"/>
+![drawing](assets/img/spicegentcl_logo.svg)
 
 This package provides Tcl interface to different SPICE and SPICE-like simulator, Ngspice, Xyce.
 It was inspired by [PySpice](https://github.com/PySpice-org/PySpice) project, object-oriented interface to
@@ -139,19 +139,7 @@ parametric sweeps from raw data. The idea of the package is to handle all such t
 eliminating the need to use the simulator's internal scripting capabilities, and dependence on each simulator
 unique ways of handling parametric sweeps, that compromises compatibility. But it is could be done easily in
 principle to realize special objects and reading of raw files with parametric sweeps.
-- <font color="red"> **Important note 3**</font>: in this package the following aliases for commands are defined:
-```tcl
-interp alias {} dget {} dict get
-interp alias {} @ {} lindex
-interp alias {} = {} expr
-interp alias {} dexist {} dict exists
-interp alias {} dcreate {} dict create
-interp alias {} dset {} dict set
-interp alias {} dappend {} dict append
-interp alias {} dkeys {} dict keys
-interp alias {} dvalues {} dict values
-```
-- <font color="red"> **Important note 4**</font>: source code follows the pattern, if method or variable name
+- <font color="red"> **Important note 3**</font>: source code follows the pattern, if method or variable name
 of the class starts from capital letter, it is intended to be private and not directly accessible from outside the 
 object. Even if variable defined as a `property` (you can access it with `configure` method) and start from capital 
 letter, it is better to not try to access it directly.

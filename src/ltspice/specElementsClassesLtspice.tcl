@@ -98,30 +98,30 @@ namespace eval ::SpiceGenTcl::Ltspice::BasicDevices {
                 {nm -help {Name of node connected to negative pin}}
             }]
             set params {}
-            if {[dexist $arguments c]} {
-                set cVal [dget $arguments c]
-                if {([llength $cVal]>1) && ([@ $cVal 0] eq {-eq})} {
-                    lappend params [list -poseq c [@ $cVal 1]]
+            if {[dict exists $arguments c]} {
+                set cVal [dict get $arguments c]
+                if {([llength $cVal]>1) && ([lindex $cVal 0] eq {-eq})} {
+                    lappend params [list -poseq c [lindex $cVal 1]]
                 } else {
                     lappend params [list -pos c $cVal]
                 }
-            } elseif {![dexist $arguments q]} {
+            } elseif {![dict exists $arguments q]} {
                 return -code error {Capacitor value must be specified with '-c value'}
             }
-            if {[dexist $arguments q]} {
-                set qVal [dget $arguments q]
+            if {[dict exists $arguments q]} {
+                set qVal [dict get $arguments q]
                 lappend params [list -eq q $qVal]
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {c q name np nm}} {
-                    if {[@ $value 0] eq {-eq}} {
-                        lappend params [list -eq $paramName [@ $value 1]]
+                    if {[lindex $value 0] eq {-eq}} {
+                        lappend params [list -eq $paramName [lindex $value 1]]
                     } else {
                         lappend params [list $paramName $value]
                     }
                 }
             }
-            next c[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
+            next c[dict get $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }
 
@@ -215,30 +215,30 @@ namespace eval ::SpiceGenTcl::Ltspice::BasicDevices {
                 {nm -help {Name of node connected to negative pin}}
             }]
             set params {}
-            if {[dexist $arguments l]} {
-                set lVal [dget $arguments l]
-                if {([llength $lVal]>1) && ([@ $lVal 0] eq {-eq})} {
-                    lappend params [list -poseq l [@ $lVal 1]]
+            if {[dict exists $arguments l]} {
+                set lVal [dict get $arguments l]
+                if {([llength $lVal]>1) && ([lindex $lVal 0] eq {-eq})} {
+                    lappend params [list -poseq l [lindex $lVal 1]]
                 } else {
                     lappend params [list -pos l $lVal]
                 }
-            } elseif {![dexist $arguments flux] && ![dexist $arguments hyst]} {
+            } elseif {![dict exists $arguments flux] && ![dict exists $arguments hyst]} {
                 return -code error {Inductor value must be specified with '-l value'}
             }
-            if {[dexist $arguments flux]} {
-                set fluxVal [dget $arguments flux]
-                lappend params [list -eq flux [dget $arguments flux]]
+            if {[dict exists $arguments flux]} {
+                set fluxVal [dict get $arguments flux]
+                lappend params [list -eq flux [dict get $arguments flux]]
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {l flux hyst name np nm}} {
-                    if {[@ $value 0] eq {-eq}} {
-                        lappend params [list -eq $paramName [@ $value 1]]
+                    if {[lindex $value 0] eq {-eq}} {
+                        lappend params [list -eq $paramName [lindex $value 1]]
                     } else {
                         lappend params [list $paramName $value]
                     }
                 }
             }
-            next l[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
+            next l[dict get $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }
 
@@ -348,8 +348,8 @@ namespace eval ::SpiceGenTcl::Ltspice::BasicDevices {
                 "]
                 # create list of parameters and values from which were supplied by args
                 dict for {paramName value} $arguments {
-                    if {[@ $value 0] eq {-eq}} {
-                        lappend params [list -eq $paramName [@ $value 1]]
+                    if {[lindex $value 0] eq {-eq}} {
+                        lappend params [list -eq $paramName [lindex $value 1]]
                     } else {
                         lappend params [list $paramName $value]
                     }
@@ -387,22 +387,22 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
                 {np -help {Name of node connected to positive pin}}
                 {nm -help {Name of node connected to negative pin}}
             }]
-            set dcVal [dget $arguments dc]
-            if {([llength $dcVal]>1) && ([@ $dcVal 0] eq {-eq})} {
-                lappend params [list -poseq dc [@ $dcVal 1]]
+            set dcVal [dict get $arguments dc]
+            if {([llength $dcVal]>1) && ([lindex $dcVal 0] eq {-eq})} {
+                lappend params [list -poseq dc [lindex $dcVal 1]]
             } else {
                 lappend params [list -pos dc $dcVal]
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {dc name np nm}} {
-                    if {([llength $value]>1) && ([@ $value 1] eq {-eq})} {
-                        lappend params [list $paramName [@ $value 0] -eq]
+                    if {([llength $value]>1) && ([lindex $value 1] eq {-eq})} {
+                        lappend params [list $paramName [lindex $value 0] -eq]
                     } else {
                         lappend params [list $paramName {*}$value]
                     }
                 }
             }
-            next $type[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
+            next $type[dict get $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }
 
@@ -424,28 +424,28 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
                 {np -help {Name of node connected to positive pin}}
                 {nm -help {Name of node connected to negative pin}}
             }]
-            set dcVal [dget $arguments dc]
-            if {([llength $dcVal]>1) && ([@ $dcVal 0] eq {-eq})} {
-                lappend params [list -poseq dc [@ $dcVal 1]]
+            set dcVal [dict get $arguments dc]
+            if {([llength $dcVal]>1) && ([lindex $dcVal 0] eq {-eq})} {
+                lappend params [list -poseq dc [lindex $dcVal 1]]
             } else {
                 lappend params [list -pos dc $dcVal]
             }
-            set acVal [dget $arguments ac]
-            if {([llength $acVal]>1) && ([@ $acVal 0] eq {-eq})} {
-                lappend params [list -eq ac [@ $acVal 1]]
+            set acVal [dict get $arguments ac]
+            if {([llength $acVal]>1) && ([lindex $acVal 0] eq {-eq})} {
+                lappend params [list -eq ac [lindex $acVal 1]]
             } else {
                 lappend params [list ac $acVal]
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {dc ac name np nm}} {
-                    if {([llength $value]>1) && ([@ $value 1] eq {-eq})} {
-                        lappend params [list $paramName [@ $value 0] -eq]
+                    if {([llength $value]>1) && ([lindex $value 1] eq {-eq})} {
+                        lappend params [list $paramName [lindex $value 0] -eq]
                     } else {
                         lappend params [list $paramName {*}$value]
                     }
                 }
             }
-            next $type[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
+            next $type[dict get $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }
 
@@ -479,14 +479,14 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             my ParamsProcess $paramsOrder $arguments params
             dict for {paramName value} $arguments {
                 if {($paramName ni $paramsOrder) && ($paramName ni {name np nm})} {
-                    if {([llength $value]>1) && ([@ $value 0] eq {-eq})} {
-                        lappend params [list -eq $paramName [@ $value 1]]
+                    if {([llength $value]>1) && ([lindex $value 0] eq {-eq})} {
+                        lappend params [list -eq $paramName [lindex $value 1]]
                     } else {
                         lappend params [list $paramName {*}$value]
                     }
                 }
             }
-            next $type[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
+            next $type[dict get $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }
 
@@ -519,14 +519,14 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             my ParamsProcess $paramsOrder $arguments params
             dict for {paramName value} $arguments {
                 if {($paramName ni $paramsOrder) && ($paramName ni {name np nm})} {
-                    if {([llength $value]>1) && ([@ $value 0] eq {-eq})} {
-                        lappend params [list -eq $paramName [@ $value 1]]
+                    if {([llength $value]>1) && ([lindex $value 0] eq {-eq})} {
+                        lappend params [list -eq $paramName [lindex $value 1]]
                     } else {
                         lappend params [list $paramName {*}$value]
                     }
                 }
             }
-            next $type[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
+            next $type[dict get $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }
 
@@ -558,14 +558,14 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             my ParamsProcess $paramsOrder $arguments params
             dict for {paramName value} $arguments {
                 if {($paramName ni $paramsOrder) && ($paramName ni {name np nm})} {
-                    if {([llength $value]>1) && ([@ $value 0] eq {-eq})} {
-                        lappend params [list -eq $paramName [@ $value 1]]
+                    if {([llength $value]>1) && ([lindex $value 0] eq {-eq})} {
+                        lappend params [list -eq $paramName [lindex $value 1]]
                     } else {
                         lappend params [list $paramName {*}$value]
                     }
                 }
             }
-            next $type[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
+            next $type[dict get $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }
 
@@ -586,40 +586,40 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
                 {np -help {Name of node connected to positive pin}}
                 {nm -help {Name of node connected to negative pin}}
             }]
-            set pwlSeqVal [dget $arguments seq]
+            set pwlSeqVal [dict get $arguments seq]
             set pwlSeqLen [llength $pwlSeqVal]
             if {$pwlSeqLen%2} {
                 return -code error "Number of elements '$pwlSeqLen' in pwl sequence is odd in element\
-                        '$type[dget $arguments name]', must be even"
+                        '$type[dict get $arguments name]', must be even"
             } elseif {$pwlSeqLen<4} {
                 return -code error "Number of elements '$pwlSeqLen' in pwl sequence in element\
-                        '$type[dget $arguments name]' must be >=4"
+                        '$type[dict get $arguments name]' must be >=4"
             }
             # parse pwlSeq argument
             for {set i 0} {$i<[llength $pwlSeqVal]/2} {incr i} {
                 set 2i [* 2 $i]
                 set 2ip1 [+ $2i 1]
-                lappend params [list t$i [@ $pwlSeqVal $2i]] [list $type$i [@ $pwlSeqVal $2ip1]]
+                lappend params [list t$i [lindex $pwlSeqVal $2i]] [list $type$i [lindex $pwlSeqVal $2ip1]]
             }
             foreach param $params {
-                if {([llength [@ $param 1]]>1) && ([@ [@ $param 1] 0] eq {-eq})} {
-                    lappend paramList [list -poseq [@ $param 0] [@ [@ $param 1] 1]]
+                if {([llength [lindex $param 1]]>1) && ([lindex [lindex $param 1] 0] eq {-eq})} {
+                    lappend paramList [list -poseq [lindex $param 0] [lindex [lindex $param 1] 1]]
                 } else {
-                    lappend paramList [list -pos [@ $param 0] [@ $param 1]]
+                    lappend paramList [list -pos [lindex $param 0] [lindex $param 1]]
                 }
             }
             foreach paramName {rser cpar} {
-                if {[dexist $arguments $paramName]} {
-                    set paramVal [dget $arguments $paramName]
-                    if {([llength $paramVal]>1) && ([@ $paramVal 0] eq {-eq})} {
-                        lappend paramList [list -eq $paramName [@ $paramVal 1]]
+                if {[dict exists $arguments $paramName]} {
+                    set paramVal [dict get $arguments $paramName]
+                    if {([llength $paramVal]>1) && ([lindex $paramVal 0] eq {-eq})} {
+                        lappend paramList [list -eq $paramName [lindex $paramVal 1]]
                     } else {
                         lappend paramList [list $paramName {*}$paramVal]
                     }
                 }
             }
             set paramList [linsert $paramList 0 {-posnocheck model pwl}]
-            next $type[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $paramList
+            next $type[dict get $arguments name] [my FormPinNodeList $arguments {np nm}] $paramList
         }
     }
 
@@ -650,14 +650,14 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
             my ParamsProcess $paramsOrder $arguments params
             dict for {paramName value} $arguments {
                 if {($paramName ni $paramsOrder) && ($paramName ni {name np nm})} {
-                    if {([llength $value]>1) && ([@ $value 0] eq {-eq})} {
-                        lappend params [list -eq $paramName [@ $value 1]]
+                    if {([llength $value]>1) && ([lindex $value 0] eq {-eq})} {
+                        lappend params [list -eq $paramName [lindex $value 1]]
                     } else {
                         lappend params [list $paramName {*}$value]
                     }
                 }
             }
-            next $type[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
+            next $type[dict get $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }
 
@@ -1113,23 +1113,23 @@ namespace eval ::SpiceGenTcl::Ltspice::Sources {
                 {np -help {Name of node connected to positive pin}}
                 {nm -help {Name of node connected to negative pin}}
             }]
-            if {[dexist $arguments i]} {
-                lappend params [list -eq i [dget $arguments i]]
-            } elseif {[dexist $arguments v]} {
-                lappend params [list -eq v [dget $arguments v]]
+            if {[dict exists $arguments i]} {
+                lappend params [list -eq i [dict get $arguments i]]
+            } elseif {[dict exists $arguments v]} {
+                lappend params [list -eq v [dict get $arguments v]]
             } else {
                 return -code error {Equation must be specified as argument to -i or -v}
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {i v name np nm}} {
-                    if {[@ $value 0] eq {-eq}} {
-                        lappend params [list -eq $paramName [@ $value 1]]
+                    if {[lindex $value 0] eq {-eq}} {
+                        lappend params [list -eq $paramName [lindex $value 1]]
                     } else {
                         lappend params [list $paramName $value]
                     }
                 }
             }
-            next b[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
+            next b[dict get $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }
 
@@ -1174,28 +1174,28 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
                 {np -help {Name of node connected to positive pin}}
                 {nm -help {Name of node connected to negative pin}}
             }]
-            lappend params [list -posnocheck model [dget $arguments model]]
-            if {[dexist $arguments area]} {
-                set areaVal [dget $arguments area]
-                if {([llength $areaVal]>1) && ([@ $areaVal 0] eq {-eq})} {
-                    lappend params [list -poseq area [@ $areaVal 1]]
+            lappend params [list -posnocheck model [dict get $arguments model]]
+            if {[dict exists $arguments area]} {
+                set areaVal [dict get $arguments area]
+                if {([llength $areaVal]>1) && ([lindex $areaVal 0] eq {-eq})} {
+                    lappend params [list -poseq area [lindex $areaVal 1]]
                 } else {
                     lappend params [list -pos area $areaVal]
                 }
             }
-            if {[dget $arguments off]==1} {
+            if {[dict get $arguments off]==1} {
                 lappend params {-sw off}
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {model area off name np nm}} {
-                    if {[@ $value 0] eq {-eq}} {
-                        lappend params [list -eq $paramName [@ $value 1]]
+                    if {[lindex $value 0] eq {-eq}} {
+                        lappend params [list -eq $paramName [lindex $value 1]]
                     } else {
                         lappend params [list $paramName $value]
                     }
                 }
             }
-            next d[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
+            next d[dict get $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }
 
@@ -1238,32 +1238,32 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
                 {nb -help {Name of node connected to base pin}}
                 {ne -help {Name of node connected to emitter pin}}
             }]
-            lappend params [list -posnocheck model [dget $arguments model]]
-            if {[dexist $arguments area]} {
-                set areaVal [dget $arguments area]
-                if {([llength $areaVal]>1) && ([@ $areaVal 0] eq {-eq})} {
-                    lappend params [list -poseq area [@ $areaVal 1]]
+            lappend params [list -posnocheck model [dict get $arguments model]]
+            if {[dict exists $arguments area]} {
+                set areaVal [dict get $arguments area]
+                if {([llength $areaVal]>1) && ([lindex $areaVal 0] eq {-eq})} {
+                    lappend params [list -poseq area [lindex $areaVal 1]]
                 } else {
                     lappend params [list -pos area $areaVal]
                 }
             }
-            if {[dget $arguments off]==1} {
+            if {[dict get $arguments off]==1} {
                 lappend params {-sw off}
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {model area off ns name nc nb ne}} {
-                    if {[@ $value 0] eq {-eq}} {
-                        lappend params [list -eq $paramName [@ $value 1]]
+                    if {[lindex $value 0] eq {-eq}} {
+                        lappend params [list -eq $paramName [lindex $value 1]]
                     } else {
                         lappend params [list $paramName $value]
                     }
                 }
             }
             set pinList [my FormPinNodeList $arguments {nc nb ne}]
-            if {[dexist $arguments ns]} {
-                lappend pinList [list ns [dget $arguments ns]]
+            if {[dict exists $arguments ns]} {
+                lappend pinList [list ns [dict get $arguments ns]]
             }
-            next q[dget $arguments name] $pinList $params
+            next q[dict get $arguments name] $pinList $params
         }
     }
 
@@ -1305,28 +1305,28 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
                 {ng -help {Name of node connected to gate pin}}
                 {ns -help {Name of node connected to source pin}}
             }]
-            lappend params [list -posnocheck model [dget $arguments model]]
-            if {[dexist $arguments area]} {
-                set areaVal [dget $arguments area]
-                if {([llength $areaVal]>1) && ([@ $areaVal 0] eq {-eq})} {
-                    lappend params [list -poseq area [@ $areaVal 1]]
+            lappend params [list -posnocheck model [dict get $arguments model]]
+            if {[dict exists $arguments area]} {
+                set areaVal [dict get $arguments area]
+                if {([llength $areaVal]>1) && ([lindex $areaVal 0] eq {-eq})} {
+                    lappend params [list -poseq area [lindex $areaVal 1]]
                 } else {
                     lappend params [list -pos area $areaVal]
                 }
             }
-            if {[dget $arguments off]==1} {
+            if {[dict get $arguments off]==1} {
                 lappend params {-sw off}
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {model area off name nd ng ns}} {
-                    if {[@ $value 0] eq {-eq}} {
-                        lappend params [list -eq $paramName [@ $value 1]]
+                    if {[lindex $value 0] eq {-eq}} {
+                        lappend params [list -eq $paramName [lindex $value 1]]
                     } else {
                         lappend params [list $paramName $value]
                     }
                 }
             }
-            next j[dget $arguments name] [my FormPinNodeList $arguments {nd ng ns}] $params
+            next j[dict get $arguments name] [my FormPinNodeList $arguments {nd ng ns}] $params
         }
     }
 
@@ -1368,28 +1368,28 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
                 {ng -help {Name of node connected to gate pin}}
                 {ns -help {Name of node connected to source pin}}
             }]
-            lappend params [list -posnocheck model [dget $arguments model]]
-            if {[dexist $arguments area]} {
-                set areaVal [dget $arguments area]
-                if {([llength $areaVal]>1) && ([@ $areaVal 0] eq {-eq})} {
-                    lappend params [list -poseq area [@ $areaVal 1]]
+            lappend params [list -posnocheck model [dict get $arguments model]]
+            if {[dict exists $arguments area]} {
+                set areaVal [dict get $arguments area]
+                if {([llength $areaVal]>1) && ([lindex $areaVal 0] eq {-eq})} {
+                    lappend params [list -poseq area [lindex $areaVal 1]]
                 } else {
                     lappend params [list -pos area $areaVal]
                 }
             }
-            if {[dget $arguments off]==1} {
+            if {[dict get $arguments off]==1} {
                 lappend params {-sw off}
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {model area off name nd ng ns}} {
-                    if {[@ $value 0] eq {-eq}} {
-                        lappend params [list -eq $paramName [@ $value 1]]
+                    if {[lindex $value 0] eq {-eq}} {
+                        lappend params [list -eq $paramName [lindex $value 1]]
                     } else {
                         lappend params [list $paramName $value]
                     }
                 }
             }
-            next z[dget $arguments name] [my FormPinNodeList $arguments {nd ng ns}] $params
+            next z[dict get $arguments name] [my FormPinNodeList $arguments {nd ng ns}] $params
 
         }
     }
@@ -1480,49 +1480,49 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
                 {ng -help {Name of node connected to gate pin}}
                 {ns -help {Name of node connected to source pin}}
             }]
-            lappend params [list -posnocheck model [dget $arguments model]]
-            if {[dget $arguments off]==1} {
+            lappend params [list -posnocheck model [dict get $arguments model]]
+            if {[dict get $arguments off]==1} {
                 lappend params {-sw off}
             }
-            if {[dexist $arguments ic]} {
-                lappend params [list -nocheck ic [join [dget $arguments ic] ,]]
+            if {[dict exists $arguments ic]} {
+                lappend params [list -nocheck ic [join [dict get $arguments ic] ,]]
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {model off ic n4 n5 n6 n7 custparams name nd ng ns}} {
-                    if {[@ $value 0] eq {-eq}} {
-                        lappend params [list -eq $paramName [@ $value 1]]
+                    if {[lindex $value 0] eq {-eq}} {
+                        lappend params [list -eq $paramName [lindex $value 1]]
                     } else {
                         lappend params [list $paramName $value]
                     }
                 }
             }
-            if {[dget $arguments custparams] ne {}} {
-                if {[llength [dget $arguments custparams]]%2!=0} {
+            if {[dict get $arguments custparams] ne {}} {
+                if {[llength [dict get $arguments custparams]]%2!=0} {
                     return -code error {Custom parameters list must be even length}
                 }
-                set custParamDict [dcreate {*}[dget $arguments custparams]]
+                set custParamDict [dict create {*}[dict get $arguments custparams]]
                 dict for {paramName value} $custParamDict {
-                    if {[@ $value 0] eq {-eq}} {
-                        lappend params [list -eq $paramName [@ $value 1]]
+                    if {[lindex $value 0] eq {-eq}} {
+                        lappend params [list -eq $paramName [lindex $value 1]]
                     } else {
                         lappend params [list $paramName $value]
                     }
                 }
             }
             set pinList [my FormPinNodeList $arguments {nd ng ns}]
-            if {[dexist $arguments n4]} {
-                lappend pinList [list n4 [dget $arguments n4]]
-                if {[dexist $arguments n5]} {
-                    lappend pinList [list n5 [dget $arguments n5]]
-                    if {[dexist $arguments n6]} {
-                        lappend pinList [list n6 [dget $arguments n6]]
-                        if {[dexist $arguments n7]} {
-                            lappend pinList [list n7 [dget $arguments n7]]
+            if {[dict exists $arguments n4]} {
+                lappend pinList [list n4 [dict get $arguments n4]]
+                if {[dict exists $arguments n5]} {
+                    lappend pinList [list n5 [dict get $arguments n5]]
+                    if {[dict exists $arguments n6]} {
+                        lappend pinList [list n6 [dict get $arguments n6]]
+                        if {[dict exists $arguments n7]} {
+                            lappend pinList [list n7 [dict get $arguments n7]]
                         }
                     }
                 }
             }
-            next m[dget $arguments name] $pinList $params
+            next m[dict get $arguments name] $pinList $params
         }
     }
 

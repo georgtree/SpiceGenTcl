@@ -49,7 +49,7 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
                 {-incr= -required -help {Incrementing value}}
             }]
             my NameProcess $arguments [self object]
-            lappend params [list -posnocheck src [dget $arguments src]]
+            lappend params [list -posnocheck src [dict get $arguments src]]
             set paramsOrder {start stop incr}
             my ParamsProcess $paramsOrder $arguments params
             ##nagelfar variable name
@@ -83,7 +83,7 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
                 {-fstop= -required -help {Stop frequency}}
             }]
             my NameProcess $arguments [self object]
-            lappend params [list -posnocheck variation [dget $arguments variation]]
+            lappend params [list -posnocheck variation [dict get $arguments variation]]
             set paramsOrder {n fstart fstop}
             my ParamsProcess $paramsOrder $arguments params
             ##nagelfar variable name
@@ -121,7 +121,7 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
             my NameProcess $arguments [self object]
             set paramsOrder {tstep tstop tstart tmax}
             my ParamsProcess $paramsOrder $arguments params
-            if {[dget $arguments uic]} {
+            if {[dict get $arguments uic]} {
                 lappend params {-sw uic}
             }
             ##nagelfar variable name

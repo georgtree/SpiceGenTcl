@@ -19,8 +19,8 @@ $circuit configure -simulator $simulator
 $circuit runAndRead
 # get data object
 set data [$circuit getDataDict]
-set axis [dget $data in]
-set trace [dget $data out]
+set axis [dict get $data in]
+set trace [dict get $data out]
 
 # plot results with ticklecharts
 foreach x $axis y $trace {

@@ -91,13 +91,13 @@ namespace eval ::SpiceGenTcl {
         method ParamsProcess {paramsOrder arguments params} {
             upvar $params paramsLoc
             foreach param $paramsOrder {
-                if {[dexist $arguments $param]} {
-                    dict append argsOrdered $param [dget $arguments $param]
+                if {[dict exists $arguments $param]} {
+                    dict append argsOrdered $param [dict get $arguments $param]
                 }
             }
             dict for {paramName value} $argsOrdered {
-                if {([llength $value]>1) && ([@ $value 0] eq {-eq})} {
-                    lappend paramsLoc [list -poseq $paramName [@ $value 1]]
+                if {([llength $value]>1) && ([lindex $value 0] eq {-eq})} {
+                    lappend paramsLoc [list -poseq $paramName [lindex $value 1]]
                 } else {
                     lappend paramsLoc [list -pos $paramName $value]
                 }
@@ -107,18 +107,18 @@ namespace eval ::SpiceGenTcl {
         method ParamsProcessM {paramsOrder arguments params} {
             upvar $params paramsLoc
             foreach param $paramsOrder {
-                if {[dexist $arguments $param]} {
-                    dict append argsOrdered $param [dget $arguments $param]
+                if {[dict exists $arguments $param]} {
+                    dict append argsOrdered $param [dict get $arguments $param]
                 }
             }
-            set paramsLoc [dvalues $argsOrdered]
+            set paramsLoc [dict values $argsOrdered]
             return
         }
         method NameProcess {arguments object} {
             upvar name name
             ##nagelfar ignore #2 {Found constant "name"}
-            if {[dexist $arguments name]} {
-                set name [dget $arguments name]
+            if {[dict exists $arguments name]} {
+                set name [dict get $arguments name]
             } else {
                 set name $object
             }
@@ -156,7 +156,7 @@ namespace eval ::SpiceGenTcl {
             # Returns: list of parameters formatted for `Device/Model` constructor
             foreach switchName $switchesNames {
                 if {[llength $switchName]>1} {
-                    if {[@ $switchName 0] ni $suppHelpElems} {
+                    if {[lindex $switchName 0] ni $suppHelpElems} {
                         lappend paramDefList -[join $switchName |]=
                     } else {
                         lappend paramDefList  "\{-[join $switchName |]= -hsuppress\}"
@@ -186,19 +186,19 @@ namespace eval ::SpiceGenTcl {
             set params {}
             dict for {name value} $arguments {
                 if {$name ni $paramsNames} {
-                    if {[@ $value 0] eq {-eq}} {
-                        lappend switches [list -eq $name [@ $value 1]]
+                    if {[lindex $value 0] eq {-eq}} {
+                        lappend switches [list -eq $name [lindex $value 1]]
                     } else {
                         lappend switches [list $name $value]
                     }
                 }
             }
             foreach param $paramsNames {
-                if {[dexist $arguments $param]} {
-                    dict append argsOrdered $param [dget $arguments $param]
+                if {[dict exists $arguments $param]} {
+                    dict append argsOrdered $param [dict get $arguments $param]
                 }
             }
-            return [list {*}[dvalues $argsOrdered] $switches]
+            return [list {*}[dict values $argsOrdered] $switches]
         }
         method DuplListCheck {list} {
             # Checks if list contains duplicates.
@@ -233,7 +233,7 @@ namespace eval ::SpiceGenTcl {
             return $itemDup
         }
         method FormPinNodeList {nodes pins} {
-            return [lmap pin $pins {list $pin [dget $nodes $pin]}]
+            return [lmap pin $pins {list $pin [dict get $nodes $pin]}]
         }
     }
 
@@ -330,7 +330,7 @@ namespace eval ::SpiceGenTcl {
             set arguments [argparse -inline -help {Creates object of class 'ParameterSwitch' with parameter name} {
                 {name -help {Name of the parameter}}
             }]
-            my configure -name [dget $arguments name] -value {}
+            my configure -name [dict get $arguments name] -value {}
         }
         method genSPICEString {} {
             # Creates string for SPICE netlist.
@@ -467,7 +467,7 @@ namespace eval ::SpiceGenTcl {
                 {name -help {Name of the parameter}}
                 {value -help {Value of the parameter}}
             }]
-            next {*}[dvalues $arguments]
+            next {*}[dict values $arguments]
         }
     }
     oo::define ParameterNoCheck {
@@ -496,7 +496,7 @@ namespace eval ::SpiceGenTcl {
                 {name -help {Name of the parameter}}
                 {value -help {Value of the parameter}}
             }]
-            next {*}[dvalues $arguments]
+            next {*}[dict values $arguments]
         }
         method genSPICEString {} {
             # Creates string for SPICE netlist.
@@ -518,7 +518,7 @@ namespace eval ::SpiceGenTcl {
                 {name -help {Name of the parameter}}
                 {value -help {Value of the parameter}}
             }]
-            next {*}[dvalues $arguments]
+            next {*}[dict values $arguments]
         }
         method genSPICEString {} {
             # Creates string for SPICE netlist.
@@ -577,8 +577,8 @@ namespace eval ::SpiceGenTcl {
                 {value -help {Value of the parameter}}
                 {defValue -help {Default of the parameter}}
             }]
-            my configure -defvalue [dget $arguments defValue]
-            next [dget $arguments name] [dget $arguments value]
+            my configure -defvalue [dict get $arguments defValue]
+            next [dict get $arguments name] [dict get $arguments value]
         }
 
         method resetValue {args} {
@@ -603,7 +603,7 @@ namespace eval ::SpiceGenTcl {
                 {name -help {Name of the parameter}}
                 {value -help {Value of the parameter}}
             }]
-            next {*}[dvalues $arguments]
+            next {*}[dict values $arguments]
         }
         method genSPICEString {} {
             # Creates string for SPICE netlist.
@@ -636,7 +636,7 @@ namespace eval ::SpiceGenTcl {
                 {name -help {Name of the parameter}}
                 {value -help {Value of the parameter}}
             }]
-            next {*}[dvalues $arguments]
+            next {*}[dict values $arguments]
         }
         method genSPICEString {} {
             # Creates string for SPICE netlist.
@@ -693,9 +693,9 @@ namespace eval ::SpiceGenTcl {
                                        Parameter list can be empty if device doesn't have instance parameters}\
                          -type list}
             }]
-            my configure -name [dget $arguments name]
+            my configure -name [dict get $arguments name]
             # create Pins objects
-            foreach pin [dget $arguments pins] {
+            foreach pin [dict get $arguments pins] {
                 my actOnPin -add {*}$pin
             }
             #ruff
@@ -707,7 +707,7 @@ namespace eval ::SpiceGenTcl {
             #  -poseq - combination of both flags, print only `{$equation}`
             #  -posnocheck - positional parameter without check
             #  -nocheck - normal parameter without check
-            foreach param [dget $arguments params] {
+            foreach param [dict get $arguments params] {
                 my actOnParam -add {*}$param
             }
         }
@@ -751,13 +751,13 @@ namespace eval ::SpiceGenTcl {
                     set pin [string tolower $pin]
                     set node [string tolower $node]
                     if {[info exists Pins]} {
-                        set pins [dkeys $Pins]
+                        set pins [dict keys $Pins]
                     }
                     lappend pins $pin
                     if {[my DuplListCheck $pins]} {
                         return -code error "Pins list '$pins' has already contains pin with name '$pin'"
                     }
-                    dappend Pins $pin [::SpiceGenTcl::Pin new $pin $node]
+                    dict append Pins $pin [::SpiceGenTcl::Pin new $pin $node]
                 }
                 get {
                     if {![info exists Pins]} {
@@ -767,8 +767,8 @@ namespace eval ::SpiceGenTcl {
                         return [dict map {pinName pin} $Pins {$pin configure -node}]
                     } elseif {[info exists pin]} {
                         set pin [string tolower $pin]
-                        if {[dexist $Pins $pin]} {
-                            return [dget $Pins $pin]
+                        if {[dict exists $Pins $pin]} {
+                            return [dict get $Pins $pin]
                         } else {
                             return -code error "Device '$name' doesn't have pin with name '$pin'"
                         }
@@ -782,11 +782,11 @@ namespace eval ::SpiceGenTcl {
                     if {![info exists Pins]} {
                         return -code error "Device '$name' doesn't have pins"
                     }
-                    if {[dexist $Pins $pin]} {
-                        [dget $Pins $pin] configure -node $node
+                    if {[dict exists $Pins $pin]} {
+                        [dict get $Pins $pin] configure -node $node
                     } else {
                         return -code error "Pin with name '$pin' was not found in device's '$name' list of pins\
-                                '[dkeys $Pins]'"
+                                '[dict keys $Pins]'"
                     }
                 }
             }
@@ -893,8 +893,8 @@ namespace eval ::SpiceGenTcl {
                         return [dict map {paramName param} $Params {$param configure -value}]
                     } elseif {[info exists pname]} {
                         set pname [string tolower $pname]
-                        if {[dexist $Params $pname]} {
-                            return [dget $Params $pname]
+                        if {[dict exists $Params $pname]} {
+                            return [dict get $Params $pname]
                         } else {
                             return -code error "Device '$name' doesn't have parameter with name '$pname'"
                         }
@@ -909,22 +909,22 @@ namespace eval ::SpiceGenTcl {
                                 '-set' switch must be even"
                     }
                     for {set i 0} {$i<[llength $arguments]} {incr i 2} {
-                        set paramName [string tolower [@ $arguments $i]]
-                        set paramValue [@ $arguments [= {$i+1}]]
-                        if {[catch {dget $Params $paramName}]} {
+                        set paramName [string tolower [lindex $arguments $i]]
+                        set paramValue [lindex $arguments [expr {$i+1}]]
+                        if {[catch {dict get $Params $paramName}]} {
                             return -code error "Parameter with name '$paramName' was not found in element's\
-                                    '$name' list of parameters '[dkeys $Params]'"
+                                    '$name' list of parameters '[dict keys $Params]'"
                         } else {
-                            set param [dget $Params $paramName]
+                            set param [dict get $Params $paramName]
                         }
                         $param configure -value $paramValue
                     }
                 }
                 delete {
                     set pname [string tolower $pname]
-                    if {[catch {dget $Params $pname}]} {
+                    if {[catch {dict get $Params $pname}]} {
                         return -code error "Parameter with name '$pname' was not found in device's '$name'\
-                                list of parameters '[dkeys $Params]'"
+                                list of parameters '[dict keys $Params]'"
                     } else {
                         set Params [dict remove $Params $pname]
                     }
@@ -1012,10 +1012,10 @@ namespace eval ::SpiceGenTcl {
                                                   {Name1 Value1 ?-pos|eq|poseq|posnocheck|nocheck?}\
                                                   {Name2 Value2 ?-pos|eq|poseq|posnocheck|nocheck?} ...}'}} -type list}
             }]
-            my configure -name [dget $arguments name] -type [dget $arguments type]
+            my configure -name [dict get $arguments name] -type [dict get $arguments type]
             # create `Params` objects
-            if {[dexist $arguments params]} {
-                foreach param [dget $arguments params] {
+            if {[dict exists $arguments params]} {
+                foreach param [dict get $arguments params] {
                     my actOnParam -add {*}$param
                 }
             }
@@ -1063,12 +1063,12 @@ namespace eval ::SpiceGenTcl {
                 {-name= -help {Name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]\
                                        and its descendants object}}
             }]
-            if {[dexist $arguments name]} {
-                my configure -name [dget $arguments name]
+            if {[dict exists $arguments name]} {
+                my configure -name [dict get $arguments name]
             } else {
                 my configure -name [self object]
             }
-            my configure -value [dget $arguments value]
+            my configure -value [dict get $arguments value]
         }
         method genSPICEString {} {
             # Creates raw string for SPICE netlist.
@@ -1091,12 +1091,12 @@ namespace eval ::SpiceGenTcl {
                 {-name= -help {Name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]\
                                        object and its descendants}}
             }]
-            if {[dexist $arguments name]} {
-                my configure -name [dget $arguments name]
+            if {[dict exists $arguments name]} {
+                my configure -name [dict get $arguments name]
             } else {
                 my configure -name [self object]
             }
-            my configure -value [dget $arguments value]
+            my configure -value [dict get $arguments value]
         }
         method genSPICEString {} {
             # Creates comment string for SPICE netlist.
@@ -1121,12 +1121,12 @@ namespace eval ::SpiceGenTcl {
                 {-name= -help {Name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]\
                                        object and its descendants}}
             }]
-            if {[dexist $arguments name]} {
-                my configure -name [dget $arguments name]
+            if {[dict exists $arguments name]} {
+                my configure -name [dict get $arguments name]
             } else {
                 my configure -name [self object]
             }
-            my configure -value [dget $arguments value]
+            my configure -value [dict get $arguments value]
         }
         method genSPICEString {} {
             # Creates include string for SPICE netlist.
@@ -1155,12 +1155,12 @@ namespace eval ::SpiceGenTcl {
                 {-name= -help {Name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]\
                                        object and its descendants}}
             }]
-            if {[dexist $arguments name]} {
-                my configure -name [dget $arguments name]
+            if {[dict exists $arguments name]} {
+                my configure -name [dict get $arguments name]
             } else {
                 my configure -name [self object]
             }
-            my configure -declaration [dget $arguments declaration] -body [dget $arguments body]
+            my configure -declaration [dict get $arguments declaration] -body [dict get $arguments body]
         }
         method genSPICEString {} {
             # Creates func string for SPICE netlist.
@@ -1190,12 +1190,12 @@ namespace eval ::SpiceGenTcl {
                 {-name= -help {Name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]\
                                        object and its descendants}}
             }]
-            if {[dexist $arguments name]} {
-                my configure -name [dget $arguments name]
+            if {[dict exists $arguments name]} {
+                my configure -name [dict get $arguments name]
             } else {
                 my configure -name [self object]
             }
-            my configure -value [dget $arguments value] -libvalue [dget $arguments libvalue]
+            my configure -value [dict get $arguments value] -libvalue [dict get $arguments libvalue]
         }
         method genSPICEString {} {
             # Creates library string for SPICE netlist.
@@ -1226,12 +1226,12 @@ namespace eval ::SpiceGenTcl {
                 {-name= -help {Name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]\
                                        object and its descendants}}
             }]
-            if {[dexist $arguments name]} {
-                my configure -name [dget $arguments name]
+            if {[dict exists $arguments name]} {
+                my configure -name [dict get $arguments name]
             } else {
                 my configure -name [self object]
             }
-            foreach param [dget $arguments params] {
+            foreach param [dict get $arguments params] {
                 if {[llength $param]<2} {
                     error "Value '$param' is not a valid value"
                 } else {
@@ -1276,12 +1276,12 @@ namespace eval ::SpiceGenTcl {
                 {-name= -help {Name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]\
                                        object and its descendants}}
             }]
-            if {[dexist $arguments name]} {
-                my configure -name [dget $arguments name]
+            if {[dict exists $arguments name]} {
+                my configure -name [dict get $arguments name]
             } else {
                 my configure -name [self object]
             }
-            foreach param [dget $arguments params] {
+            foreach param [dict get $arguments params] {
                 if {[llength $param]<2} {
                     error "Value '$param' is not a valid value"
                 } else {
@@ -1325,12 +1325,12 @@ namespace eval ::SpiceGenTcl {
                 {-name= -help {Name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]\
                                        object and its descendants}}
             }]
-            if {[dexist $arguments name]} {
-                my configure -name [dget $arguments name]
+            if {[dict exists $arguments name]} {
+                my configure -name [dict get $arguments name]
             } else {
                 my configure -name [self object]
             }
-            foreach vector [dget $arguments vectors] {
+            foreach vector [dict get $arguments vectors] {
                 if {[llength $vector]>1} {
                     error "Name '$vector' is not a valid name of the vector"
                 } else {
@@ -1339,7 +1339,7 @@ namespace eval ::SpiceGenTcl {
             }
         }
         destructor {
-            # Destroy object of class `Save`, and its `ParameterVector`s objects.
+            # Destroy object of class `Save`, and its `ParameterVector` objects.
             if {[info exists Vectors]} {
                 foreach vector [dict values $Vectors] {
                     $vector destroy
@@ -1347,7 +1347,7 @@ namespace eval ::SpiceGenTcl {
             }
         }
         method getVectors {args} {
-            # Gets the dictionary of `ParameterVector`s
+            # Gets the dictionary of `ParameterVector`
             # Returns: vectors dictionary
             argparse -help {Gets the dictionary of vector names. Returns: vectors dictionary} {}
             return $Vectors
@@ -1376,7 +1376,7 @@ namespace eval ::SpiceGenTcl {
                 {vname -help {Name of vector}}
             }
             set vname [string tolower $vname]
-            if {[catch {dget $Vectors $vname}]} {
+            if {[catch {dict get $Vectors $vname}]} {
                 return -code error "Vector with name '$vname' was not found in device's '[my configure -name]'\
                         list of parameters '[dict keys $Vectors]'"
             } else {
@@ -1412,17 +1412,17 @@ namespace eval ::SpiceGenTcl {
                 {-name= -help {Name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]\
                                        object and its descendants}}
             }]
-            if {[dexist $arguments name]} {
-                my configure -name [dget $arguments name]
+            if {[dict exists $arguments name]} {
+                my configure -name [dict get $arguments name]
             } else {
                 my configure -name [self object]
             }
-            foreach param [dget $arguments params] {
+            foreach param [dict get $arguments params] {
                 if {[llength $param]<2} {
                     error "Value '$param' is not a valid value"
                 } else {
-                    if {[@ $param 0] eq {-eq}} {
-                        my actOnParam -add -nodeeq [@ $param 1] [@ $param 2]
+                    if {[lindex $param 0] eq {-eq}} {
+                        my actOnParam -add -nodeeq [lindex $param 1] [lindex $param 2]
                     } else {
                         my actOnParam -add -node {*}$param
                     }
@@ -1476,12 +1476,12 @@ namespace eval ::SpiceGenTcl {
                 {-name= -help {Name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]\
                                        object and its descendants}}
             }]
-            if {[dexist $arguments name]} {
-                my configure -name [dget $arguments name]
+            if {[dict exists $arguments name]} {
+                my configure -name [dict get $arguments name]
             } else {
                 my configure -name [self object]
             }
-            my addNets [dget $arguments nets]
+            my addNets [dict get $arguments nets]
         }
         method addNets {args} {
             argparse -help {Adds nets to the class} {
@@ -1546,10 +1546,10 @@ namespace eval ::SpiceGenTcl {
             }]
             my configure -name temp
             ##nagelfar variable eq
-            if {[dexist $arguments eq]} {
-                my AddParam -eq temp [dget $arguments value]
+            if {[dict exists $arguments eq]} {
+                my AddParam -eq temp [dict get $arguments value]
             } else {
-                my AddParam temp [dget $arguments value]
+                my AddParam temp [dict get $arguments value]
             }
         }
         method AddParam {args} {
@@ -1564,11 +1564,11 @@ namespace eval ::SpiceGenTcl {
                 {-eq -help {Optional parameter qualificator}}
             }]
             if {[dict exists $arguments eq]} {
-                set [my varname value] [::SpiceGenTcl::ParameterPositionalEquation new [dget $arguments pname]\
-                                                [dget $arguments value]]
+                set [my varname value] [::SpiceGenTcl::ParameterPositionalEquation new [dict get $arguments pname]\
+                                                [dict get $arguments value]]
             } else {
-                set [my varname value] [::SpiceGenTcl::ParameterPositional new [dget $arguments pname]\
-                                                [dget $arguments value]]
+                set [my varname value] [::SpiceGenTcl::ParameterPositional new [dict get $arguments pname]\
+                                                [dict get $arguments value]]
             }
             return
         }
@@ -1611,7 +1611,7 @@ namespace eval ::SpiceGenTcl {
             set arguments [argparse -inline -help {Creates object of class 'Netlist'} {
                 {name -help {Name of the netlist}}
             }]
-            my configure -name [dget $arguments name]
+            my configure -name [dict get $arguments name]
         }
         method add {args} {
             # Adds elements objects to `Elements` dictionary.
@@ -1648,7 +1648,7 @@ namespace eval ::SpiceGenTcl {
             }
             foreach elemName $elementsNames {
                 set elemName [string tolower $elemName]
-                if {[catch {dget $Elements $elemName}]} {
+                if {[catch {dict get $Elements $elemName}]} {
                     return -code error "Element with name '$elemName' was not found in netlist's '[my configure -name]'\
                         list of elements"
                 } else {
@@ -1665,11 +1665,11 @@ namespace eval ::SpiceGenTcl {
                 {elemName -help {Name of element}}
             }
             set elemName [string tolower $elemName]
-            if {[catch {dget $Elements $elemName}]} {
+            if {[catch {dict get $Elements $elemName}]} {
                 return -code error "Element with name '$elemName' was not found in netlist's '[my configure -name]'\
                         list of elements"
             } else {
-                set foundElem [dget $Elements $elemName]
+                set foundElem [dict get $Elements $elemName]
             }
             return $foundElem
         }
@@ -1711,7 +1711,7 @@ namespace eval ::SpiceGenTcl {
             set arguments [argparse -inline -help {Creates object of class 'CircuitNetlist'} {
                 {name -help {Name of the tol-level circuit}}
             }]
-            next [dget $arguments name]
+            next [dict get $arguments name]
         }
         method add {args} {
             # Adds elements object to Circuit `Elements` dictionary.
@@ -1753,11 +1753,11 @@ namespace eval ::SpiceGenTcl {
             }
             foreach elemName $elementsNames {
                 set elemName [string tolower $elemName]
-                if {[catch {dget $Elements $elemName}]} {
+                if {[catch {dict get $Elements $elemName}]} {
                     return -code error "Element with name '$elemName' was not found in circuit's '[my configure -name]'\
                             list of elements"
                 } else {
-                    if {[info object class [dget $Elements $elemName] {::SpiceGenTcl::Analysis}]} {
+                    if {[info object class [dict get $Elements $elemName] {::SpiceGenTcl::Analysis}]} {
                         unset ContainAnalysis
                     }
                     set Elements [dict remove $Elements $elemName]
@@ -1832,21 +1832,21 @@ namespace eval ::SpiceGenTcl {
                          -type list}
             }]
             # create Pins objects, nodes are set to empty string
-            foreach pin [dget $arguments pins] {
-                my actOnPin -add [@ $pin 0] {}
+            foreach pin [dict get $arguments pins] {
+                my actOnPin -add [lindex $pin 0] {}
             }
             # create Params objects that are input parameters of subcircuit
-            foreach param [dget $arguments params] {
+            foreach param [dict get $arguments params] {
                 if {[llength $param]<=2} {
                     my actOnParam -add {*}$param
                 } else {
-                    error "Wrong parameter '$param' definition in subcircuit '[dget $arguments name]'"
+                    error "Wrong parameter '$param' definition in subcircuit '[dict get $arguments name]'"
                 }
             }
-            next [dget $arguments name]
+            next [dict get $arguments name]
         }
         destructor {
-            # Destroy object of class `Subcircuit`, and its `Parameter`s and `Pin`s objects.
+            # Destroy object of class `Subcircuit`, and its `Parameter` and `Pin` objects.
             if {[info exists Params]} {
                 foreach param [dict values $Params] {
                     $param destroy
@@ -1932,14 +1932,14 @@ namespace eval ::SpiceGenTcl {
                 {-name= -help {Name of the string that could be used to retrieve element from [::SpiceGenTcl::Netlist]\
                                        object and its descendants}}
             }]
-            if {[dexist $arguments name]} {
-                my configure -name [dget $arguments name]
+            if {[dict exists $arguments name]} {
+                my configure -name [dict get $arguments name]
             } else {
                 my configure -name [self object]
             }
-            my configure -type [dget $arguments type]
+            my configure -type [dict get $arguments type]
             # create Analysis objects
-            foreach param [dget $arguments params] {
+            foreach param [dict get $arguments params] {
                 if {[llength $param]<2} {
                     return -code error "Value '$param' is not a valid value"
                 } else {
@@ -1948,7 +1948,7 @@ namespace eval ::SpiceGenTcl {
             }
         }
         destructor {
-            # Destroy object of class `Analysis`, and its `Parameter`s objects.
+            # Destroy object of class `Analysis`, and its `Parameter` objects.
             if {[info exists Params]} {
                 foreach param [dict values $Params] {
                     $param destroy
@@ -2128,8 +2128,8 @@ namespace eval ::SpiceGenTcl {
                 {axis -help {Name of axis that is linked to trace}}
                 {numtype -pass rest -optional -default real -help {Numerical type of trace}}
             }]
-            my configure -axis [dget $arguments axis]
-            next {*}[dget $arguments rest]
+            my configure -axis [dict get $arguments axis]
+            next {*}[dict get $arguments rest]
         }
     }
 
@@ -2179,9 +2179,9 @@ namespace eval ::SpiceGenTcl {
                 {simulator -optional -default ngspice -help {Total number of points}}
                 {-shared= -help {Handle to shared simulator instance}}
             }]
-            if {[dexist $arguments shared]} {
+            if {[dict exists $arguments shared]} {
                 package require ngspicetclbridge
-                set simHandle [dget $arguments shared]
+                set simHandle [dict get $arguments shared]
                 my configure -path {}
                 set vectorsInfo [::ngspicetclbridge::readVecsAsync -info $simHandle]
                 set vectorsData [::ngspicetclbridge::readVecsAsync $simHandle]
@@ -2216,22 +2216,22 @@ namespace eval ::SpiceGenTcl {
                     if {$name eq [dict get $scaleInfo name]} {
                         my configure -axis [::SpiceGenTcl::Axis new $nameModif [dict get $scaleInfo type]\
                                                     $npoints [dict get $scaleInfo ntype]]
-                        dappend Traces $nameModif [my configure -axis]
+                        dict append Traces $nameModif [my configure -axis]
                         [my configure -axis] setDataPoints $points
-                    } elseif {([dget $arguments traces2read] eq {*}) || ($nameModif in [dget $arguments traces2read])} {
+                    } elseif {([dict get $arguments traces2read] eq {*}) || ($nameModif in [dict get $arguments traces2read])} {
                         set traceObj [::SpiceGenTcl::Trace new $nameModif [dict get $vectorsInfo $name] $npoints {}\
                                               $numtype]
                         $traceObj setDataPoints $points
-                        dappend Traces $nameModif $traceObj
+                        dict append Traces $nameModif $traceObj
                     } else {
                         set traceObj [::SpiceGenTcl::EmptyTrace new $nameModif [dict get $vectorsInfo $name] $npoints\
                                               $numtype]
                         $traceObj setDataPoints $points
-                        dappend Traces $nameModif $traceObj
+                        dict append Traces $nameModif $traceObj
                     }
                 }
             } else {
-                my configure -path [dget $arguments path]
+                my configure -path [dict get $arguments path]
                 set fileSize [file size $path]
                 if {[regexp {^\|} $path]} {
                     return -code error "Filename '$path' starts with |"
@@ -2254,7 +2254,7 @@ namespace eval ::SpiceGenTcl {
                     close $file
                     error {Unknown encoding}
                 }
-                my configure -rawparams [dcreate Filename $path]
+                my configure -rawparams [dict create Filename $path]
                 set header {}
                 set binaryStart 6
                 while true {
@@ -2277,24 +2277,24 @@ namespace eval ::SpiceGenTcl {
                 ### save header parameters
                 foreach line $header {
                     set lineList [split $line :]
-                    if {[@ $lineList 0] eq {Variables}} {
+                    if {[lindex $lineList 0] eq {Variables}} {
                         break
                     }
-                    dict append rawparams [@ $lineList 0] [string trim [@ $lineList 1]]
+                    dict append rawparams [lindex $lineList 0] [string trim [lindex $lineList 1]]
                 }
-                my configure -npoints [dget [my configure -rawparams] {No. Points}] -nvariables\
-                        [dget [my configure -rawparams] {No. Variables}]
-                if {[dget [my configure -rawparams] Plotname] in {{Operating Point} {Transfet Function}}} {
+                my configure -npoints [dict get [my configure -rawparams] {No. Points}] -nvariables\
+                        [dict get [my configure -rawparams] {No. Variables}]
+                if {[dict get [my configure -rawparams] Plotname] in {{Operating Point} {Transfet Function}}} {
                     set hasAxis 0
                 } else {
                     set hasAxis 1
                 }
-                set flags [split [dget [my configure -rawparams] Flags]]
-                if {({complex} in $flags) || ([dget [my configure -rawparams] Plotname] eq {AC Analysis})} {
+                set flags [split [dict get [my configure -rawparams] Flags]]
+                if {({complex} in $flags) || ([dict get [my configure -rawparams] Plotname] eq {AC Analysis})} {
                     set numtype complex
                 } else {
-                    if {({double} in $flags) || ([dget $arguments simulator] eq {ngspice}) ||\
-                                ([dget $arguments simulator] eq {xyce})} {
+                    if {({double} in $flags) || ([dict get $arguments simulator] eq {ngspice}) ||\
+                                ([dict get $arguments simulator] eq {xyce})} {
                         set numtype double
                     } else {
                         set numtype real
@@ -2307,7 +2307,7 @@ namespace eval ::SpiceGenTcl {
                     set lineList [split [string trim $line] \t]
                     lassign $lineList idx name varType
                     if {$ivar==0} {
-                        if {([dget $arguments simulator] eq {ltspice}) && ($name eq {time})} {
+                        if {([dict get $arguments simulator] eq {ltspice}) && ($name eq {time})} {
                             # workaround for bug with negative values in time axis
                             set axisIsTime true
                         }
@@ -2318,32 +2318,32 @@ namespace eval ::SpiceGenTcl {
                         }
                         my configure -axis [::SpiceGenTcl::Axis new $name $varType $npoints $axisNumType]
                         ##nagelfar ignore #12 {Found constant "traces"}
-                        dappend Traces [string tolower $name] [my configure -axis]
-                    } elseif {([dget $arguments traces2read] eq {*}) || ($name in [dget $arguments traces2read])} {
+                        dict append Traces [string tolower $name] [my configure -axis]
+                    } elseif {([dict get $arguments traces2read] eq {*}) || ($name in [dict get $arguments traces2read])} {
                         if {$hasAxis} {
-                            dappend Traces [string tolower $name] [::SpiceGenTcl::Trace new $name $varType $npoints\
+                            dict append Traces [string tolower $name] [::SpiceGenTcl::Trace new $name $varType $npoints\
                                                                            [[my configure -axis] configure -name]\
                                                                            $numtype]
                         } else {
-                            dappend Traces [string tolower $name]\
+                            dict append Traces [string tolower $name]\
                                     [::SpiceGenTcl::Trace new $name $varType $npoints {} $numtype]
                         }
                     } else {
-                        dappend Traces [string tolower $name]\
+                        dict append Traces [string tolower $name]\
                                 [::SpiceGenTcl::EmptyTrace new $name $varType $npoints $numtype]
                     }
                     incr ivar
                 }
-                if {([dget $arguments traces2read] eq {}) || ![llength [dget $arguments traces2read]]} {
+                if {([dict get $arguments traces2read] eq {}) || ![llength [dict get $arguments traces2read]]} {
                     close $file
                     return
                 }
                 ### read data
                 if {$rawType eq {Binary:}} {
-                    set BlockSize [= {($fileSize - $binaryStart)/$npoints}]
+                    set BlockSize [expr {($fileSize - $binaryStart)/$npoints}]
                     set scanFunctions {}
                     set calcBlockSize 0
-                    foreach trace [dvalues $Traces] {
+                    foreach trace [dict values $Traces] {
                         if {[$trace configure -numtype] eq {double}} {
                             incr calcBlockSize 8
                             if {[info object class $trace ::SpiceGenTcl::EmptyTrace]} {
@@ -2378,12 +2378,12 @@ namespace eval ::SpiceGenTcl {
                     }
                     for {set i 0} {$i<$npoints} {incr i} {
                         for {set j 0} {$j<[dict size $Traces]} {incr j} {
-                            set value [{*}[list my [@ $scanFunctions $j] $file]]
-                            set trace [@ [dvalues $Traces] $j]
+                            set value [{*}[list my [lindex $scanFunctions $j] $file]]
+                            set trace [lindex [dict values $Traces] $j]
                             if {$j==0} {
                                 # workaround for bug with negative values in time axis
                                 if {[info exists axisIsTime]} {
-                                    set value [= {abs($value)}]
+                                    set value [expr {abs($value)}]
                                 }
                             }
                             if {[info object class $trace] ne {::SpiceGenTcl::EmptyTrace}} {
@@ -2402,24 +2402,24 @@ namespace eval ::SpiceGenTcl {
                             set lineList [textutil::split::splitx $line]
                             if {$firstVar} {
                                 set firstVar false
-                                set sPoint [@ $lineList 0]
+                                set sPoint [lindex $lineList 0]
                                 if {$i!=int($sPoint)} {
                                     close $file
                                     error {Error reading file}
                                 }
                                 if {$numtype eq {complex}} {
-                                    set value [split [@ $lineList 1] ,]
+                                    set value [split [lindex $lineList 1] ,]
                                 } else {
-                                    set value [@ $lineList 1]
+                                    set value [lindex $lineList 1]
                                 }
                             } else {
                                 if {$numtype eq {complex}} {
-                                    set value [split [@ $lineList 1] ,]
+                                    set value [split [lindex $lineList 1] ,]
                                 } else {
-                                    set value [@ $lineList 1]
+                                    set value [lindex $lineList 1]
                                 }
                             }
-                            set trace [@ [dvalues $Traces] $j]
+                            set trace [lindex [dict values $Traces] $j]
                             $trace appendDataPoints $value
                         }
                     }
@@ -2438,7 +2438,7 @@ namespace eval ::SpiceGenTcl {
         method getTrace {traceName} {
             # Returns `Trace` object reference by it's name
             set traceFoundFlag false
-            foreach trace [dvalues $Traces] {
+            foreach trace [dict values $Traces] {
                 if {[$trace configure -name] eq $traceName} {
                     set traceFound $trace
                     set traceFoundFlag true
@@ -2454,26 +2454,26 @@ namespace eval ::SpiceGenTcl {
         method getVariablesNames {args} {
             # Returns list that contains names of all variables
             argparse -help {Returns list that contains names of all variables} {}
-            return [dkeys $Traces]
+            return [dict keys $Traces]
         }
         method getVoltagesNames {args} {
             # Returns list that contains names of all voltage variables
             argparse -help {Returns list that contains names of all voltage variables} {}
-            return [lmap trace [dvalues $Traces]\
+            return [lmap trace [dict values $Traces]\
                             {expr {[string match -nocase *voltage* [$trace configure -type]] ?\
                                            [$trace configure -name] : [continue]}}]
         }
         method getCurrentsNames {args} {
             # Returns list that contains names of all current variables
             argparse -help {Returns list that contains names of all current variables} {}
-            return [lmap trace [dvalues $Traces]\
+            return [lmap trace [dict values $Traces]\
                             {expr {[string match -nocase *current* [$trace configure -type]] ?\
                                            [$trace configure -name] : [continue]}}]
         }
         method getTracesStr {args} {
-            # Returns information about all `Trace`s in raw file in form of string
+            # Returns information about all `Trace` in raw file in form of string
             argparse -help {Returns information about all Traces in raw file in form of string} {}
-            return [lmap trace [dvalues $Traces]\
+            return [lmap trace [dict values $Traces]\
                             {join [list [$trace configure -name] [$trace configure -type] [$trace configure -numtype]]}]
         }
         method getTracesData {args} {
@@ -2496,27 +2496,27 @@ namespace eval ::SpiceGenTcl {
                 {-traces -catchall -forbid all -help {Select names of traces to return}}
                 {-sep= -default , -help {Separator of columns}}
             }]
-            if {[dexist $arguments all]} {
+            if {[dict exists $arguments all]} {
                 set tracesDict [my getTracesData]
                 set tracesList [list [dict keys $tracesDict]]
                 for {set i 0} {$i<[my configure -npoints]} {incr i} {
-                    lappend tracesList [lmap traceValues [dict values $tracesDict] {@ $traceValues $i}]
+                    lappend tracesList [lmap traceValues [dict values $tracesDict] {lindex $traceValues $i}]
                 }
             ##nagelfar ignore #12 {Found constant "traces"}
-            } elseif {[dget $arguments traces] ne {}} {
-                foreach traceName [dget $arguments traces] {
+            } elseif {[dict get $arguments traces] ne {}} {
+                foreach traceName [dict get $arguments traces] {
                     set traceObj [my getTrace $traceName]
                     dict append tracesDict [$traceObj configure -name] [$traceObj getDataPoints]
                 }
                 set tracesList [list [dict keys $tracesDict]]
                 for {set i 0} {$i<[my configure -npoints]} {incr i} {
-                    lappend tracesList [lmap traceValues [dict values $tracesDict] {@ $traceValues $i}]
+                    lappend tracesList [lmap traceValues [dict values $tracesDict] {lindex $traceValues $i}]
                 }
             } else {
                 return -code error {Arguments '-all' or '-traces traceName1 traceName2 ...' must be provided to\
                                             'getTracesCsv' method}
             }
-            return [::csv::joinlist $tracesList [dget $arguments sep]]
+            return [::csv::joinlist $tracesList [dict get $arguments sep]]
         }
         method measure {args} {
             # Calls `measure` command from `tclmeasure` [package](https://github.com/georgtree/tclmeasure). Arguments to
@@ -2577,9 +2577,9 @@ namespace eval ::SpiceGenTcl {
                 {name -help {Name of the object}}
                 {filepath -help {Path to file that should be parsed}}
             }]
-            my configure -name [dget $arguments name]
-            my configure -filepath [dget $arguments filepath]
-            my configure -topnetlist [::SpiceGenTcl::Netlist new [file tail [dget $arguments filepath]]]
+            my configure -name [dict get $arguments name]
+            my configure -filepath [dict get $arguments filepath]
+            my configure -topnetlist [::SpiceGenTcl::Netlist new [file tail [dict get $arguments filepath]]]
         }
         method readFile {} {
             error {Not implemented}
@@ -2636,7 +2636,7 @@ namespace eval ::SpiceGenTcl {
             if {[llength $stack] > 1} {  # > 1 because root is always in stack
                 set unclosedNode [lindex $stack end]
                 set line [$tree get $unclosedNode startLine]
-                error "Unclosed .subckt '$unclosedNode' started at line [@ $fileData $line]"
+                error "Unclosed .subckt '$unclosedNode' started at line [lindex $fileData $line]"
             }
             set SubcktsTree $tree
             return
@@ -2654,7 +2654,7 @@ namespace eval ::SpiceGenTcl {
             set endLine [$SubcktsTree get $subcktPath endLine]
             set children [$SubcktsTree children $subcktPath]
             # parse definition line of subcircuit
-            set defLine [@ $allLines $startLine]
+            set defLine [lindex $allLines $startLine]
             set defLine [string map {" :" ":"} $defLine]
             set lineList [split $defLine]
             lassign $lineList elemName
@@ -2673,8 +2673,8 @@ namespace eval ::SpiceGenTcl {
             if {![info exists paramsStartIndex]} {
                 set paramsStartIndex [llength $lineList]
             }
-            set subName [@ $lineList 1]
-            set pinList [lrange $lineList 2 [= {$paramsStartIndex-1}]]
+            set subName [lindex $lineList 1]
+            set pinList [lrange $lineList 2 [expr {$paramsStartIndex-1}]]
             set params [my ParseParams $lineList $paramsStartIndex {} list]
             # create instance of subcircuit
             set subcktClassName [string totitle $subName]
@@ -2687,10 +2687,10 @@ namespace eval ::SpiceGenTcl {
             # find lines to add to subcircuit, excluding nested subcircuits lines
             set lines2remove {}
             foreach child $children {
-                lappend lines2remove {*}[lseq [= {[$SubcktsTree get $child startLine]-$startLine}]\
-                                                 [= {[$SubcktsTree get $child endLine]-$startLine}]]
+                lappend lines2remove {*}[lseq [expr {[$SubcktsTree get $child startLine]-$startLine}]\
+                                                 [expr {[$SubcktsTree get $child endLine]-$startLine}]]
             }
-            set netlist [my BuildNetlist [lremove [lrange $allLines [= {$startLine}] [= {$endLine}]]\
+            set netlist [my BuildNetlist [lremove [lrange $allLines [expr {$startLine}] [expr {$endLine}]]\
                                                         {*}$lines2remove] true]
             set elements {}
             foreach element $netlist {
@@ -2779,20 +2779,20 @@ namespace eval ::SpiceGenTcl {
             # Builds netlist from passed lines
             #   lines - list of lines to parse
             # Returns: code string for objects creation
-            set elems [dkeys $ElemsMethods]
-            set dots [dkeys $DotsMethods]
+            set elems [dict keys $ElemsMethods]
+            set dots [dict keys $DotsMethods]
             if {$subckt} {
                 set start 1
-                set end [= {[llength $lines]-1}]
+                set end [expr {[llength $lines]-1}]
             } else {
                 set start 0
                 set end [llength $lines]
             }
             set netlist {}
             for {set i $start} {$i<$end} {incr i} {
-                set line [@ $lines $i]
+                set line [lindex $lines $i]
                 set lineList [split $line]
-                set firstWord [@ $lineList 0]
+                set firstWord [lindex $lineList 0]
                 set firstChar [string index $firstWord 0]
                 ##nagelfar ignore {Found constant "end"}
                 set restChars [string range $firstWord 1 end]
@@ -2803,8 +2803,8 @@ namespace eval ::SpiceGenTcl {
                             ##nagelfar ignore Non static subcommand
                             set modelCommands [my [dict get $DotsMethods $restChars] $line]
                             if {[llength $modelCommands]==2} {
-                                lappend netlist [@ $modelCommands 0]
-                                lappend netlist [@ $modelCommands 1]
+                                lappend netlist [lindex $modelCommands 0]
+                                lappend netlist [lindex $modelCommands 1]
                             } else {
                                 ##nagelfar ignore Non static subcommand
                                 lappend netlist [my [dict get $DotsMethods $restChars] $line]
@@ -2949,8 +2949,8 @@ namespace eval ::SpiceGenTcl {
                 set upperBound [llength $list]
             }
             for {set i 0} {$i<$upperBound} {incr i} {
-                set elem [@ $list $i]
-                set name [@ $names $i]
+                set elem [lindex $list $i]
+                set name [lindex $names $i]
                 if {[my CheckBraced $elem]} {
                     set value [list -eq [my Unbrace $elem]]
                     set name -$name
@@ -2973,7 +2973,7 @@ namespace eval ::SpiceGenTcl {
             #   string - input braced string
             # Returns: string without braces
             if {[my CheckBraced $string]} {
-                return [@ [regexp -inline {^\{([^={}]+)\}$} $string] 1]
+                return [lindex [regexp -inline {^\{([^={}]+)\}$} $string] 1]
             } else {
                 return -code error "String '$string' isn't of form {string}, string must not contain '{' and '}'\
                         symbols"
@@ -2991,7 +2991,7 @@ namespace eval ::SpiceGenTcl {
             #   string - input braced string
             # Returns: string without braces,
             if {[my CheckQuoted $string]} {
-                return [@ [regexp -inline {^\'([^='']+)\'$} $string] 1]
+                return [lindex [regexp -inline {^\'([^='']+)\'$} $string] 1]
             } else {
                 return -code error "String '$string' isn't of form 'string', string must not contain ''' and '''\
                         symbols"

@@ -33,12 +33,12 @@ namespace eval ::SpiceGenTcl::Ngspice {
             # Creates object of class `Parser` that do parsing of valid Ngspice netlist.
             #   name - name of the object
             #   filepath - path to file that should be parsed
-            set ElemsMethods [dcreate b CreateBehSource c CreateCap d CreateDio e CreateVCVS f CreateCCCS\
+            set ElemsMethods [dict create b CreateBehSource c CreateCap d CreateDio e CreateVCVS f CreateCCCS\
                                       g CreateVCCS h CreateCCVS i CreateVIsource j CreateJFET k CreateCoupling\
                                       l CreateInd m CreateMOSFET n CreateVerilogA q CreateBJT r CreateRes\
                                       s CreateVSwitch v CreateVIsource w CreateCSwitch x CreateSubcktInst\
                                       z CreateMESFET]
-            set DotsMethods [dcreate ac CreateAc dc CreateDc func CreateFunc global CreateGlobal ic CreateIc\
+            set DotsMethods [dict create ac CreateAc dc CreateDc func CreateFunc global CreateGlobal ic CreateIc\
                                      include CreateInclude model CreateModel nodeset CreateNodeset op CreateOp\
                                      options CreateOptions option CreateOptions opt CreateOptions param CreateParam\
                                      temp CreateTemp tran CreateTran params CreateParam lib CreateLib\
@@ -68,15 +68,15 @@ namespace eval ::SpiceGenTcl::Ngspice {
             # indexes and values are the lists of lines indexes that are the continuation of the line with key index
             # also, skip the first line of the netlist
             for {set i 0} {$i<[llength $fileData]} {incr i} {
-                set line [@ $fileData $i]
+                set line [lindex $fileData $i]
                 if {[string index $line 0] eq "+"} {
                     if {$contFlag} {
                         ##nagelfar variable startIndex
                         dict lappend continLinesIndex $startIndex $i
                         continue
                     }
-                    dict append continLinesIndex [= {$i-1}]
-                    set startIndex [= {$i-1}]
+                    dict append continLinesIndex [expr {$i-1}]
+                    set startIndex [expr {$i-1}]
                     dict lappend continLinesIndex $startIndex $i
                     set contFlag true
                 } else {
@@ -88,11 +88,11 @@ namespace eval ::SpiceGenTcl::Ngspice {
             # to be `+` symbol)
             dict map {lineIndex contLinesIndexes} $continLinesIndex {
                 if {$contLinesIndexes eq {}} {
-                    lappend finalList [@ $fileData $lineIndex]
+                    lappend finalList [lindex $fileData $lineIndex]
                 } else {
-                    set locList [@ $fileData $lineIndex]
+                    set locList [lindex $fileData $lineIndex]
                     foreach contLineIndex $contLinesIndexes {
-                        lappend locList [string trim [string range [@ $fileData $contLineIndex] 1 end]]
+                        lappend locList [string trim [string range [lindex $fileData $contLineIndex] 1 end]]
                     }
                     lappend finalList [join $locList]
                 }
@@ -113,18 +113,18 @@ namespace eval ::SpiceGenTcl::Ngspice {
             # remove all end of line comments that starts with symbols \;, \$ and //
             foreach line $finalList {
                 if {[set index [string first {;} $line]]!=-1} {
-                    set line [string trim [string range $line 0 [= {$index-1}]]]
+                    set line [string trim [string range $line 0 [expr {$index-1}]]]
                 } elseif {[set index [string first {$} $line]]!=-1} {
-                    set line [string trim [string range $line 0 [= {$index-1}]]]
+                    set line [string trim [string range $line 0 [expr {$index-1}]]]
                 } elseif {[set index [string first {//} $line]]!=-1} {
-                    set line [string trim [string range $line 0 [= {$index-1}]]]
+                    set line [string trim [string range $line 0 [expr {$index-1}]]]
                 }
                 lappend tempList $line
             }
             set finalList $tempList
             # remove control section that starts with .control and ends with .endc
             for {set i 0} {$i<[llength $finalList]} {incr i} {
-                set line [@ $finalList $i]
+                set line [lindex $finalList $i]
                 if {[regexp {^\.control\s?} $line]} {
                     set controlStart $i
                 } elseif {[regexp {^\.endc\s?} $line]} {
@@ -193,7 +193,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
                 set modelClassName [string totitle $type]Model
                 puts "Model type '${type}' is not in the list of supported types, custom type '${modelClassName}' was\
                         created"
-                set paramString [string map {- {}} [join [dkeys $paramsList]]]
+                set paramString [string map {- {}} [join [dict keys $paramsList]]]
                 ##nagelfar ignore {Found constant "type"}
                 return [list [string map [list @type@ $modelClassName @paramsList@ $paramString @hsuppress@ type]\
                                       $ModelTemplate] [list $modelClassName new {*}$paramsList]]
@@ -225,8 +225,8 @@ namespace eval ::SpiceGenTcl::Ngspice {
                     }
                     npn -
                     pnp {
-                        if {{-level} in [dkeys $paramsList]} {
-                            set level [dget $paramsList -level]
+                        if {{-level} in [dict keys $paramsList]} {
+                            set level [dict get $paramsList -level]
                             if {$level==1} {
                                 set paramsList [linsert [dict remove $paramsList -level] 0 $name $type]
                                 return [list ${NamespacePath}::SemiconductorDevices::BjtGPModel new {*}$paramsList]
@@ -234,7 +234,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
                                 puts "Level '${level}' of type '${type}' model '${name}' is not in the list of\
                                         SpiceGenTcl supported levels, custom level model was created"
                                 set paramsList [linsert $paramsList 0 $name [string totitle $type]Model]
-                                set paramString [string map {- {}} [join [dkeys $paramsList]]]
+                                set paramString [string map {- {}} [join [dict keys $paramsList]]]
                                 ##nagelfar ignore #3 {Found constant "type"}
                                 set modelClassName [string totitle $type]Model
                                 return [list [string map [list @type@ $modelClassName @paramsList@\
@@ -250,8 +250,8 @@ namespace eval ::SpiceGenTcl::Ngspice {
                     }
                     njf -
                     pjf {
-                        if {{-level} in [dkeys $paramsList]} {
-                            set level [dget $paramsList -level]
+                        if {{-level} in [dict keys $paramsList]} {
+                            set level [dict get $paramsList -level]
                             if {$level==1} {
                                 set paramsList [linsert [dict remove $paramsList -level] 0 $name $type]
                                 return [list ${NamespacePath}::SemiconductorDevices::Jfet1Model new {*}$paramsList]
@@ -268,8 +268,8 @@ namespace eval ::SpiceGenTcl::Ngspice {
                     }
                     nmf -
                     pmf {
-                        if {{-level} in [dkeys $paramsList]} {
-                            set level [dget $paramsList -level]
+                        if {{-level} in [dict keys $paramsList]} {
+                            set level [dict get $paramsList -level]
                             if {$level==1} {
                                 set paramsList [linsert [dict remove $paramsList -level] 0 $name $type]
                                 return [list ${NamespacePath}::SemiconductorDevices::Mesfet1Model new {*}$paramsList]
@@ -335,15 +335,15 @@ namespace eval ::SpiceGenTcl::Ngspice {
                     format %s(%s) $a [string map {" " ""} $b]
                 }}}]
                 set lineList [lrange [split $line] 1 end]
-                if {[@ $lineList 1] eq {}} {
-                    return [list ${NamespacePath}::Analyses::SensDc new -outvar [@ $lineList 0]]
-                } elseif {[@ $lineList 1] eq {ac}} {
+                if {[lindex $lineList 1] eq {}} {
+                    return [list ${NamespacePath}::Analyses::SensDc new -outvar [lindex $lineList 0]]
+                } elseif {[lindex $lineList 1] eq {ac}} {
                     set lineList [lremove $lineList 1]
                     set paramsNames {outvar variation n fstart fstop}
                     return [list ${NamespacePath}::Analyses::SensAc new\
                                     {*}[my ParsePosParams $lineList $paramsNames]]
                 } else {
-                    error "Sense analysis has usupported type '[@ $lineList 1]'"
+                    error "Sense analysis has usupported type '[lindex $lineList 1]'"
                 }
             } else {
                 error "Sense analysis in line '${line}' doesn't have output variable with proper syntax"
@@ -355,7 +355,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             # Returns: code string for object creation
             set lineList [lrange [split $line] 1 end]
             set paramsNames {variation n fstart fstop}
-            if {[@ $lineList 4]==1} {
+            if {[lindex $lineList 4]==1} {
                 set lineList [lremove $lineList 4]
                 set configParams [linsert [my ParsePosParams $lineList $paramsNames] end -donoise]
                 return [list ${NamespacePath}::Analyses::Sp new {*}$configParams]
@@ -400,7 +400,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
             # Returns: code string for object creation
             set lineList [split $line]
             set value [lrange $lineList 1 end-1]
-            set libValue [@ $lineList end]
+            set libValue [lindex $lineList end]
             return [list ::SpiceGenTcl::Library new $value $libValue]
         }
         method CreateNodeset {line} {
@@ -454,8 +454,8 @@ namespace eval ::SpiceGenTcl::Ngspice {
             if {![info exists paramsStartIndex]} {
                 set paramsStartIndex [llength $lineList]
             }
-            set subName [@ $lineList [= {$paramsStartIndex-1}]]
-            set pinList [lrange $lineList 1 [= {$paramsStartIndex-2}]]
+            set subName [lindex $lineList [expr {$paramsStartIndex-1}]]
+            set pinList [lrange $lineList 1 [expr {$paramsStartIndex-2}]]
             set i 0
             foreach pin $pinList {
                 lappend pins [list p$i $pin]
@@ -805,11 +805,11 @@ namespace eval ::SpiceGenTcl::Ngspice {
                 }
                 incr i
             }
-            if {[my CheckBraced [@ $lineList 0]]} {
-                lappend paramsList -area [list -eq [my Unbrace [@ $lineList 0]]]
+            if {[my CheckBraced [lindex $lineList 0]]} {
+                lappend paramsList -area [list -eq [my Unbrace [lindex $lineList 0]]]
                 set lineList [lremove $lineList 0]
-            } elseif {[my CheckNumber [@ $lineList 0]]} {
-                lappend paramsList -area [@ $lineList 0]
+            } elseif {[my CheckNumber [lindex $lineList 0]]} {
+                lappend paramsList -area [lindex $lineList 0]
                 set lineList [lremove $lineList 0]
             }
             if {[my CheckModelName $modelVal]} {
@@ -856,23 +856,23 @@ namespace eval ::SpiceGenTcl::Ngspice {
             }
             switch -- $paramsStartIndex {
                 1 {
-                    set modelVal [@ $lineList 0]
+                    set modelVal [lindex $lineList 0]
                 }
                 2 {
-                    lappend paramsList -n4 [@ $lineList 0]
-                    set modelVal [@ $lineList 1]
+                    lappend paramsList -n4 [lindex $lineList 0]
+                    set modelVal [lindex $lineList 1]
                 }
                 3 {
-                    lappend paramsList -n4 [@ $lineList 0] -n5 [@ $lineList 1]
-                    set modelVal [@ $lineList 2]
+                    lappend paramsList -n4 [lindex $lineList 0] -n5 [lindex $lineList 1]
+                    set modelVal [lindex $lineList 2]
                 }
                 4 {
-                    lappend paramsList -n4 [@ $lineList 0] -n5 [@ $lineList 1] -n6 [@ $lineList 2]
-                    set modelVal [@ $lineList 3]
+                    lappend paramsList -n4 [lindex $lineList 0] -n5 [lindex $lineList 1] -n6 [lindex $lineList 2]
+                    set modelVal [lindex $lineList 3]
                 }
                 5 {
-                    lappend paramsList -n4 [@ $lineList 0] -n5 [@ $lineList 1] -n6 [@ $lineList 2] -n7 [@ $lineList 3]
-                    set modelVal [@ $lineList 4]
+                    lappend paramsList -n4 [lindex $lineList 0] -n5 [lindex $lineList 1] -n6 [lindex $lineList 2] -n7 [lindex $lineList 3]
+                    set modelVal [lindex $lineList 4]
                 }
             }
             if {[my CheckModelName $modelVal]} {
@@ -902,8 +902,8 @@ namespace eval ::SpiceGenTcl::Ngspice {
             if {![info exists paramsStartIndex]} {
                 set paramsStartIndex [llength $lineList]
             }
-            set subName [@ $lineList [= {$paramsStartIndex-1}]]
-            set pinList [lrange $lineList 1 [= {$paramsStartIndex-2}]]
+            set subName [lindex $lineList [expr {$paramsStartIndex-1}]]
+            set pinList [lrange $lineList 1 [expr {$paramsStartIndex-2}]]
             set i 0
             foreach pin $pinList {
                 lappend pins [list p$i $pin]
@@ -947,15 +947,15 @@ namespace eval ::SpiceGenTcl::Ngspice {
             }
             switch -- $paramsStartIndex {
                 1 {
-                    set modelVal [@ $lineList 0]
+                    set modelVal [lindex $lineList 0]
                 }
                 2 {
-                    lappend paramsList -ns [@ $lineList 0]
-                    set modelVal [@ $lineList 1]
+                    lappend paramsList -ns [lindex $lineList 0]
+                    set modelVal [lindex $lineList 1]
                 }
                 3 {
-                    lappend paramsList -ns [@ $lineList 0] -tj [@ $lineList 1]
-                    set modelVal [@ $lineList 2]
+                    lappend paramsList -ns [lindex $lineList 0] -tj [lindex $lineList 1]
+                    set modelVal [lindex $lineList 2]
                 }
             }
             if {[my CheckModelName $modelVal]} {
@@ -979,8 +979,8 @@ namespace eval ::SpiceGenTcl::Ngspice {
             set type [string index $elemName 0]
             set elemName [string range $elemName 1 end]
             # check if the first value is DC value without DC selector
-            if {[my CheckBraced [@ $lineList 0]] || [my CheckNumber [@ $lineList 0]]} {
-                set dcVal [@ $lineList 0]
+            if {[my CheckBraced [lindex $lineList 0]] || [my CheckNumber [lindex $lineList 0]]} {
+                set dcVal [lindex $lineList 0]
                 if {[my CheckBraced $dcVal]} {
                     lappend paramsList -dc [list -eq [my Unbrace $dcVal]]
                 } else {
@@ -990,50 +990,50 @@ namespace eval ::SpiceGenTcl::Ngspice {
             }
             # fine possible DC selector
             if {[set dcIndex [lsearch -exact $lineList dc]]!=-1} {
-                set dcValue [@ $lineList [= {$dcIndex+1}]]
+                set dcValue [lindex $lineList [expr {$dcIndex+1}]]
                 if {[my CheckBraced $dcValue]} {
                     lappend paramsList -dc [list -eq [my Unbrace $dcValue]]
                 } else {
                     lappend paramsList -dc $dcValue
                 }
-                set lineList [lremove $lineList $dcIndex [= {$dcIndex+1}]]
+                set lineList [lremove $lineList $dcIndex [expr {$dcIndex+1}]]
             }
             # find possible AC selector
             set acType false
             if {[set acIndex [lsearch -exact $lineList ac]]!=-1} {
                 set acType true
-                set acValue [@ $lineList [= {$acIndex+1}]]
+                set acValue [lindex $lineList [expr {$acIndex+1}]]
                 if {[my CheckBraced $acValue]} {
                     set acValue [list -eq [my Unbrace $acValue]]
                 }
-                set possibleAcPhase [@ $lineList [= {$acIndex+2}]]
+                set possibleAcPhase [lindex $lineList [expr {$acIndex+2}]]
                 if {[my CheckNumber $possibleAcPhase] || [my CheckBraced $possibleAcPhase]} {
                     set acPhase $possibleAcPhase
                     if {[my CheckBraced $acPhase]} {
                         set acPhase [list -eq [my Unbrace $acPhase]]
                     }
-                    set lineList [lremove $lineList $acIndex [= {$acIndex+1}] [= {$acIndex+2}]]
+                    set lineList [lremove $lineList $acIndex [expr {$acIndex+1}] [expr {$acIndex+2}]]
                     lappend paramsList -ac $acValue -acphase $acPhase
                 } else {
-                    set lineList [lremove $lineList $acIndex [= {$acIndex+1}]]
+                    set lineList [lremove $lineList $acIndex [expr {$acIndex+1}]]
                     lappend paramsList -ac $acValue
                 }
             }
-            set functsDict [dcreate pulse {low high td tr tf pw per np} sin {v0 va freq td theta phase}\
+            set functsDict [dict create pulse {low high td tr tf pw per np} sin {v0 va freq td theta phase}\
                                     exp {v1 v2 td1 tau1 td2 tau2} pwl {seq} sffm {v0 va fc mdi fs phasec phases}\
                                     am {v0 va mf fc td phases}]
             set nmspPath ${NamespacePath}::Sources
-            switch -- [@ $lineList 0] {
+            switch -- [lindex $lineList 0] {
                 pulse {
-                    lappend paramsList {*}[my ParsePosParams [lrange $lineList 1 end] [dget $functsDict pulse]]
+                    lappend paramsList {*}[my ParsePosParams [lrange $lineList 1 end] [dict get $functsDict pulse]]
                     return [list ${nmspPath}::[string toupper ${type}]pulse new $elemName $pin1 $pin2 {*}$paramsList]
                 }
                 sin {
-                    lappend paramsList {*}[my ParsePosParams [lrange $lineList 1 end] [dget $functsDict sin]]
+                    lappend paramsList {*}[my ParsePosParams [lrange $lineList 1 end] [dict get $functsDict sin]]
                     return [list ${nmspPath}::[string toupper ${type}]sin new $elemName $pin1 $pin2 {*}$paramsList]
                 }
                 exp {
-                    lappend paramsList {*}[my ParsePosParams [lrange $lineList 1 end] [dget $functsDict exp]]
+                    lappend paramsList {*}[my ParsePosParams [lrange $lineList 1 end] [dict get $functsDict exp]]
                     return [list ${nmspPath}::[string toupper ${type}]exp new $elemName $pin1 $pin2 {*}$paramsList]
                 }
                 pwl {
@@ -1047,20 +1047,20 @@ namespace eval ::SpiceGenTcl::Ngspice {
                     return [list ${nmspPath}::[string toupper ${type}]pwl new $elemName $pin1 $pin2 {*}$paramsList]
                 }
                 sffm {
-                    lappend paramsList {*}[my ParsePosParams [lrange $lineList 1 end] [dget $functsDict sffm]]
+                    lappend paramsList {*}[my ParsePosParams [lrange $lineList 1 end] [dict get $functsDict sffm]]
                     return [list ${nmspPath}::[string toupper ${type}]sffm new $elemName $pin1 $pin2 {*}$paramsList]
                 }
                 am {
-                    lappend paramsList {*}[my ParsePosParams [lrange $lineList 1 end] [dget $functsDict am]]
+                    lappend paramsList {*}[my ParsePosParams [lrange $lineList 1 end] [dict get $functsDict am]]
                     return [list ${nmspPath}::[string toupper ${type}]am new $elemName $pin1 $pin2 {*}$paramsList]
                 }
                 portnum {
                     if {$type ne {v}} {
                         return -code error "RF port could be only voltage type in line '${line}'"
                     }
-                    set portnumVal [@ $lineList 1]
-                    if {[@ $lineList 2] eq {z0}} {
-                        set z0Val [@ $lineList 3]
+                    set portnumVal [lindex $lineList 1]
+                    if {[lindex $lineList 2] eq {z0}} {
+                        set z0Val [lindex $lineList 3]
                         if {[my CheckBraced $z0Val]} {
                             lappend paramsList -z0 [list -eq [my Unbrace $z0Val]]
                         } else {
@@ -1104,11 +1104,11 @@ namespace eval ::SpiceGenTcl::Ngspice {
                 }
                 incr i
             }
-            if {[my CheckBraced [@ $lineList 0]]} {
-                lappend paramsList -area [list -eq [my Unbrace [@ $lineList 0]]]
+            if {[my CheckBraced [lindex $lineList 0]]} {
+                lappend paramsList -area [list -eq [my Unbrace [lindex $lineList 0]]]
                 set lineList [lremove $lineList 0]
-            } elseif {[my CheckNumber [@ $lineList 0]]} {
-                lappend paramsList -area [@ $lineList 0]
+            } elseif {[my CheckNumber [lindex $lineList 0]]} {
+                lappend paramsList -area [lindex $lineList 0]
                 set lineList [lremove $lineList 0]
             }
             if {[my CheckModelName $modelVal]} {

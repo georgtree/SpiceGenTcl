@@ -438,14 +438,14 @@ csv::split2matrix
 csv::split2queue
 csv::writematrix
 csv::writequeue
-dappend
-dcreate
-dexist
-dvalues
-dget
+dict append
+dict create
+dict exists
+dict values
+dict get
 dict
-dkeys
-dset
+dict keys
+dict set
 encoding
 eof
 eq

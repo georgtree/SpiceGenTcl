@@ -7,10 +7,10 @@
 
     <title>Tips &#8212; SpiceGenTcl  documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=514cf933" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=2bf1fcf8" />
     
     <script src="_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
@@ -18,7 +18,7 @@
     <link rel="next" title="Advanced" href="SpiceGenTcl-Advanced.html" />
     <link rel="prev" title="Tutorials" href="SpiceGenTcl-Tutorials.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -133,17 +133,17 @@ Verilog-AMS models.</p>
 <span class="w">            </span><span class="k">{</span><span class="nv">p</span><span class="w"> </span><span class="o">-</span>help<span class="w"> </span><span class="k">{</span><span class="nv">Name</span><span class="w"> </span>of<span class="w"> </span>node<span class="w"> </span>connected<span class="w"> </span>to<span class="w"> </span>positive<span class="w"> </span>pin<span class="k">}}</span>
 <span class="w">            </span><span class="k">{</span><span class="nv">n</span><span class="w"> </span><span class="o">-</span>help<span class="w"> </span><span class="k">{</span><span class="nv">Name</span><span class="w"> </span>of<span class="w"> </span>node<span class="w"> </span>connected<span class="w"> </span>to<span class="w"> </span>negative<span class="w"> </span>pin<span class="k">}}</span>
 <span class="w">        </span><span class="k">}]</span>
-<span class="w">        </span><span class="nb">lappend</span><span class="w"> </span>params<span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="o">-</span>posnocheck<span class="w"> </span>model<span class="w"> </span><span class="k">[</span><span class="nv">dget</span><span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span>model<span class="k">]]</span>
+<span class="w">        </span><span class="nb">lappend</span><span class="w"> </span>params<span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="o">-</span>posnocheck<span class="w"> </span>model<span class="w"> </span><span class="k">[</span><span class="nb">dict</span><span class="w"> </span>get<span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span>model<span class="k">]]</span>
 <span class="w">        </span><span class="nb">dict</span><span class="w"> </span>for<span class="w"> </span><span class="k">{</span><span class="nv">paramName</span><span class="w"> </span>value<span class="k">}</span><span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span><span class="k">{</span>
 <span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="k">{</span><span class="nv">$paramName</span><span class="w"> </span><span class="nv">ni</span><span class="w"> </span><span class="k">{</span><span class="nv">model</span><span class="w"> </span>name<span class="w"> </span>p<span class="w"> </span>n<span class="k">}}</span><span class="w"> </span><span class="k">{</span>
-<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="k">{[</span>@<span class="w"> </span><span class="nv">$value</span><span class="w"> </span><span class="nv">0</span><span class="k">]</span><span class="w"> </span><span class="nv">eq</span><span class="w"> </span><span class="k">{</span><span class="nv">-eq</span><span class="k">}}</span><span class="w"> </span><span class="k">{</span>
-<span class="w">                    </span><span class="nb">lappend</span><span class="w"> </span>params<span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="o">-</span><span class="ow">eq</span><span class="w"> </span><span class="nv">$paramName</span><span class="w"> </span><span class="k">[</span>@<span class="w"> </span><span class="nv">$value</span><span class="w"> </span><span class="nv">1</span><span class="k">]]</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="k">{[</span><span class="nb">lindex</span><span class="w"> </span><span class="nv">$value</span><span class="w"> </span><span class="mi">0</span><span class="k">]</span><span class="w"> </span><span class="nv">eq</span><span class="w"> </span><span class="k">{</span><span class="nv">-eq</span><span class="k">}}</span><span class="w"> </span><span class="k">{</span>
+<span class="w">                    </span><span class="nb">lappend</span><span class="w"> </span>params<span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="o">-</span><span class="ow">eq</span><span class="w"> </span><span class="nv">$paramName</span><span class="w"> </span><span class="k">[</span><span class="nb">lindex</span><span class="w"> </span><span class="nv">$value</span><span class="w"> </span><span class="mi">1</span><span class="k">]]</span>
 <span class="w">                </span><span class="k">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">{</span>
 <span class="w">                    </span><span class="nb">lappend</span><span class="w"> </span>params<span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="nv">$paramName</span><span class="w"> </span><span class="nv">$value</span><span class="k">]</span>
 <span class="w">                </span><span class="k">}</span>
 <span class="w">            </span><span class="k">}</span>
 <span class="w">        </span><span class="k">}</span>
-<span class="w">        </span><span class="nv">next</span><span class="w"> </span>n<span class="k">[</span><span class="nv">dget</span><span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span>name<span class="k">]</span><span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span>p<span class="w"> </span><span class="k">[</span><span class="nv">dget</span><span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span>p<span class="k">]]</span><span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span>n<span class="w"> </span><span class="k">[</span><span class="nv">dget</span><span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span>n<span class="k">]]]</span><span class="w"> </span><span class="nv">$params</span>
+<span class="w">        </span><span class="nv">next</span><span class="w"> </span>n<span class="k">[</span><span class="nb">dict</span><span class="w"> </span>get<span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span>name<span class="k">]</span><span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span>p<span class="w"> </span><span class="k">[</span><span class="nb">dict</span><span class="w"> </span>get<span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span>p<span class="k">]]</span><span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span>n<span class="w"> </span><span class="k">[</span><span class="nb">dict</span><span class="w"> </span>get<span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span>n<span class="k">]]]</span><span class="w"> </span><span class="nv">$params</span>
 <span class="w">    </span><span class="k">}</span>
 <span class="k">}</span>
 </pre></div>
@@ -182,11 +182,11 @@ example: <code class="docutils literal notranslate"><span class="pre">-area</spa
 <p>Possible qualificator is <code class="docutils literal notranslate"><span class="pre">-eq</span></code> - it means that parameter should be inserted into SPICE netlist as
 <code class="docutils literal notranslate"><span class="pre">paramName={expression}</span></code></p>
 <p>In the next few lines we build parameter list that will be passed to <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3adevice"><span class="std std-ref">::SpiceGenTcl::Device</span></a> constructor:</p>
-<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">lappend</span><span class="w"> </span>params<span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span>model<span class="w"> </span><span class="k">[</span><span class="nv">dget</span><span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span>model<span class="k">]</span><span class="w"> </span><span class="o">-</span>posnocheck<span class="k">]</span>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">lappend</span><span class="w"> </span>params<span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span>model<span class="w"> </span><span class="k">[</span><span class="nb">dict</span><span class="w"> </span>get<span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span>model<span class="k">]</span><span class="w"> </span><span class="o">-</span>posnocheck<span class="k">]</span>
 <span class="nb">dict</span><span class="w"> </span>for<span class="w"> </span><span class="k">{</span><span class="nv">paramName</span><span class="w"> </span>value<span class="k">}</span><span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span><span class="k">{</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="k">{</span><span class="nv">$paramName</span><span class="w"> </span><span class="nv">ni</span><span class="w"> </span><span class="k">{</span><span class="nv">model</span><span class="w"> </span>name<span class="w"> </span>p<span class="w"> </span>n<span class="k">}}</span><span class="w"> </span><span class="k">{</span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="k">{[</span>@<span class="w"> </span><span class="nv">$value</span><span class="w"> </span><span class="nv">0</span><span class="k">]</span><span class="w"> </span><span class="nv">eq</span><span class="w"> </span><span class="k">{</span><span class="nv">-eq</span><span class="k">}}</span><span class="w"> </span><span class="k">{</span>
-<span class="w">            </span><span class="nb">lappend</span><span class="w"> </span>params<span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="o">-</span><span class="ow">eq</span><span class="w"> </span><span class="nv">$paramName</span><span class="w"> </span><span class="k">[</span>@<span class="w"> </span><span class="nv">$value</span><span class="w"> </span><span class="nv">1</span><span class="k">]]</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="k">{[</span><span class="nb">lindex</span><span class="w"> </span><span class="nv">$value</span><span class="w"> </span><span class="mi">0</span><span class="k">]</span><span class="w"> </span><span class="nv">eq</span><span class="w"> </span><span class="k">{</span><span class="nv">-eq</span><span class="k">}}</span><span class="w"> </span><span class="k">{</span>
+<span class="w">            </span><span class="nb">lappend</span><span class="w"> </span>params<span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="o">-</span><span class="ow">eq</span><span class="w"> </span><span class="nv">$paramName</span><span class="w"> </span><span class="k">[</span><span class="nb">lindex</span><span class="w"> </span><span class="nv">$value</span><span class="w"> </span><span class="mi">1</span><span class="k">]]</span>
 <span class="w">        </span><span class="k">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">{</span>
 <span class="w">            </span><span class="nb">lappend</span><span class="w"> </span>params<span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="nv">$paramName</span><span class="w"> </span><span class="nv">$value</span><span class="k">]</span>
 <span class="w">        </span><span class="k">}</span>
@@ -195,13 +195,13 @@ example: <code class="docutils literal notranslate"><span class="pre">-area</spa
 </pre></div>
 </div>
 <p>The last but not the least is step of passing arguments to <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3adevice"><span class="std std-ref">::SpiceGenTcl::Device</span></a> constructor:</p>
-<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">next</span><span class="w"> </span>n<span class="k">[</span><span class="nv">dget</span><span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span>name<span class="k">]</span><span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span>p<span class="w"> </span><span class="k">[</span><span class="nv">dget</span><span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span>p<span class="k">]]</span><span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span>n<span class="w"> </span><span class="k">[</span><span class="nv">dget</span><span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span>n<span class="k">]]]</span><span class="w"> </span><span class="nv">$params</span>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">next</span><span class="w"> </span>n<span class="k">[</span><span class="nb">dict</span><span class="w"> </span>get<span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span>name<span class="k">]</span><span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span>p<span class="w"> </span><span class="k">[</span><span class="nb">dict</span><span class="w"> </span>get<span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span>p<span class="k">]]</span><span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span>n<span class="w"> </span><span class="k">[</span><span class="nb">dict</span><span class="w"> </span>get<span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span>n<span class="k">]]]</span><span class="w"> </span><span class="nv">$params</span>
 </pre></div>
 </div>
 <p>This superclass accept arguments in form <code class="docutils literal notranslate"><span class="pre">constructor</span> <span class="pre">{name</span> <span class="pre">pins</span> <span class="pre">params}</span></code>.
-So, we pass string <code class="docutils literal notranslate"><span class="pre">n[dget</span> <span class="pre">$arguments</span> <span class="pre">name]</span></code> as device name, <code class="docutils literal notranslate"><span class="pre">n</span></code> is reference designator for Verilog-A devices
+So, we pass string <code class="docutils literal notranslate"><span class="pre">n[dict</span> <span class="pre">get</span> <span class="pre">$arguments</span> <span class="pre">name]</span></code> as device name, <code class="docutils literal notranslate"><span class="pre">n</span></code> is reference designator for Verilog-A devices
 in Ngspice. Secondly we pass list of nodes
-<code class="docutils literal notranslate"><span class="pre">[list</span> <span class="pre">[list</span> <span class="pre">p</span> <span class="pre">[dget</span> <span class="pre">$arguments</span> <span class="pre">p]]</span> <span class="pre">[list</span> <span class="pre">n</span> <span class="pre">[dget</span> <span class="pre">$arguments</span> <span class="pre">n]]]</span></code> in form of
+<code class="docutils literal notranslate"><span class="pre">[list</span> <span class="pre">[list</span> <span class="pre">p</span> <span class="pre">[dict</span> <span class="pre">get</span> <span class="pre">$arguments</span> <span class="pre">p]]</span> <span class="pre">[list</span> <span class="pre">n</span> <span class="pre">[dict</span> <span class="pre">get</span> <span class="pre">$arguments</span> <span class="pre">n]]]</span></code> in form of
 <code class="docutils literal notranslate"><span class="pre">{{Name0</span> <span class="pre">NodeName}</span> <span class="pre">{Name1</span> <span class="pre">NodeName}</span> <span class="pre">{Name2</span> <span class="pre">NodeName}</span> <span class="pre">...}</span></code>.</p>
 <p>And the last is list of parameters in form <code class="docutils literal notranslate"><span class="pre">{{model</span> <span class="pre">Value</span> <span class="pre">-posnocheck}</span> <span class="pre">{Name</span> <span class="pre">Value</span> <span class="pre">?-eq?}</span> <span class="pre">{Name</span> <span class="pre">Value</span> <span class="pre">?-eq?}</span>
 <span class="pre">{Name</span> <span class="pre">Value</span> <span class="pre">?-eq?}</span> <span class="pre">...}</span></code>.</p>
@@ -249,8 +249,8 @@ name of Verilog-A module.</p>
 <span class="w">            </span><span class="nv">type</span>
 <span class="w">        </span><span class="k">}]</span>
 <span class="w">        </span><span class="nb">dict</span><span class="w"> </span>for<span class="w"> </span><span class="k">{</span><span class="nv">paramName</span><span class="w"> </span>value<span class="k">}</span><span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span><span class="k">{</span>
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="k">{[</span>@<span class="w"> </span><span class="nv">$value</span><span class="w"> </span><span class="nv">0</span><span class="k">]</span><span class="w"> </span><span class="nv">eq</span><span class="w"> </span><span class="k">{</span><span class="nv">-eq</span><span class="k">}}</span><span class="w"> </span><span class="k">{</span>
-<span class="w">                </span><span class="nb">lappend</span><span class="w"> </span>params<span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="o">-</span><span class="ow">eq</span><span class="w"> </span><span class="nv">$paramName</span><span class="w"> </span><span class="k">[</span>@<span class="w"> </span><span class="nv">$value</span><span class="w"> </span><span class="nv">1</span><span class="k">]]</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="k">{[</span><span class="nb">lindex</span><span class="w"> </span><span class="nv">$value</span><span class="w"> </span><span class="mi">0</span><span class="k">]</span><span class="w"> </span><span class="nv">eq</span><span class="w"> </span><span class="k">{</span><span class="nv">-eq</span><span class="k">}}</span><span class="w"> </span><span class="k">{</span>
+<span class="w">                </span><span class="nb">lappend</span><span class="w"> </span>params<span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="o">-</span><span class="ow">eq</span><span class="w"> </span><span class="nv">$paramName</span><span class="w"> </span><span class="k">[</span><span class="nb">lindex</span><span class="w"> </span><span class="nv">$value</span><span class="w"> </span><span class="mi">1</span><span class="k">]]</span>
 <span class="w">            </span><span class="k">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">{</span>
 <span class="w">                </span><span class="nb">lappend</span><span class="w"> </span>params<span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="nv">$paramName</span><span class="w"> </span><span class="nv">$value</span><span class="k">]</span>
 <span class="w">            </span><span class="k">}</span>
@@ -281,7 +281,7 @@ name of Verilog-A module.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
   <div>
     <h3><a href="index.html">Table of Contents</a></h3>
@@ -310,7 +310,7 @@ name of Verilog-A module.</p>
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
@@ -318,13 +318,13 @@ name of Verilog-A module.</p>
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -342,7 +342,7 @@ name of Verilog-A module.</p>
     </div>
     <div class="footer" role="contentinfo">
     &#169; Copyright George Yashin.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>
 </html>

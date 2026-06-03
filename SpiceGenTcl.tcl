@@ -30,7 +30,6 @@ set libDir [file join $dir lib]
 lappend auto_path $libDir
 set sourceDir [file join $dir src]
 
-source [file join $sourceDir aliases.tcl]
 source [file join $sourceDir generalClasses.tcl]
 source [file join $sourceDir specElementsClassesCommon.tcl]
 source [file join $sourceDir specAnalysesClassesCommon.tcl]

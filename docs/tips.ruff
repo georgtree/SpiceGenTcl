@@ -98,17 +98,17 @@ namespace eval Tips {
                     {p -help {Name of node connected to positive pin}}
                     {n -help {Name of node connected to negative pin}}
                 }]
-                lappend params [list -posnocheck model [dget $arguments model]]
+                lappend params [list -posnocheck model [dict get $arguments model]]
                 dict for {paramName value} $arguments {
                     if {$paramName ni {model name p n}} {
-                        if {[@ $value 0] eq {-eq}} {
-                            lappend params [list -eq $paramName [@ $value 1]]
+                        if {[lindex $value 0] eq {-eq}} {
+                            lappend params [list -eq $paramName [lindex $value 1]]
                         } else {
                             lappend params [list $paramName $value]
                         }
                     }
                 }
-                next n[dget $arguments name] [list [list p [dget $arguments p]] [list n [dget $arguments n]]] $params
+                next n[dict get $arguments name] [list [list p [dict get $arguments p]] [list n [dict get $arguments n]]] $params
             }
         }
         ```
@@ -155,11 +155,11 @@ namespace eval Tips {
         
         In the next few lines we build parameter list that will be passed to [::SpiceGenTcl::Device] constructor:      
         ```tcl
-        lappend params [list model [dget $arguments model] -posnocheck]
+        lappend params [list model [dict get $arguments model] -posnocheck]
         dict for {paramName value} $arguments {
             if {$paramName ni {model name p n}} {
-                if {[@ $value 0] eq {-eq}} {
-                    lappend params [list -eq $paramName [@ $value 1]]
+                if {[lindex $value 0] eq {-eq}} {
+                    lappend params [list -eq $paramName [lindex $value 1]]
                 } else {
                     lappend params [list $paramName $value]
                 }
@@ -169,13 +169,13 @@ namespace eval Tips {
         
         The last but not the least is step of passing arguments to [::SpiceGenTcl::Device] constructor:
         ```tcl
-        next n[dget $arguments name] [list [list p [dget $arguments p]] [list n [dget $arguments n]]] $params
+        next n[dict get $arguments name] [list [list p [dict get $arguments p]] [list n [dict get $arguments n]]] $params
         ```
         
         This superclass accept arguments in form `constructor {name pins params}`.
-        So, we pass string `n[dget $arguments name]` as device name, `n` is reference designator for Verilog-A devices
+        So, we pass string `n[dict get $arguments name]` as device name, `n` is reference designator for Verilog-A devices
         in Ngspice. Secondly we pass list of nodes
-        `[list [list p [dget $arguments p]] [list n [dget $arguments n]]]` in form of 
+        `[list [list p [dict get $arguments p]] [list n [dict get $arguments n]]]` in form of 
         `{{Name0 NodeName} {Name1 NodeName} {Name2 NodeName} ...}`.
         
         And the last is list of parameters in form `{{model Value -posnocheck} {Name Value ?-eq?} {Name Value ?-eq?}
@@ -230,8 +230,8 @@ namespace eval Tips {
                     type
                 }]
                 dict for {paramName value} $arguments {
-                    if {[@ $value 0] eq {-eq}} {
-                        lappend params [list -eq $paramName [@ $value 1]]
+                    if {[lindex $value 0] eq {-eq}} {
+                        lappend params [list -eq $paramName [lindex $value 1]]
                     } else {
                         lappend params [list $paramName $value]
                     }

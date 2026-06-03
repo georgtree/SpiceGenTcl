@@ -14,12 +14,12 @@
 # See the file "LICENSE.txt" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 
-interp alias {} dget {} dict get
+interp alias {} dict get {} dict get
 interp alias {} @ {} lindex
 interp alias {} = {} expr
-interp alias {} dexist {} dict exists
-interp alias {} dcreate {} dict create
-interp alias {} dset {} dict set
+interp alias {} dict exists {} dict exists
+interp alias {} dict create {} dict create
+interp alias {} dict set {} dict set
 
 global env
 if {[string match -nocase *linux* $tcl_platform(os)]} {
@@ -44,13 +44,13 @@ foreach file $srcList {
 # rename initial source files, then rename instrument files to the original name of the source file
 foreach file $srcList {
     if {[llength $file]>1} {
-        file rename [file join $currentDir .. src [@ $file 0] [@ $file 1]]\
-                [file join $currentDir .. src [@ $file 0] [@ $file 1]_orig]
-        file rename [file join $currentDir .. src [@ $file 0] [@ $file 1]_i]\
-                [file join $currentDir .. src [@ $file 0] [@ $file 1]]
+        file rename [file join $currentDir .. src [lindex $file 0] [lindex $file 1]]\
+                [file join $currentDir .. src [lindex $file 0] [lindex $file 1]_orig]
+        file rename [file join $currentDir .. src [lindex $file 0] [lindex $file 1]_i]\
+                [file join $currentDir .. src [lindex $file 0] [lindex $file 1]]
     } else {
-        file rename [file join $currentDir .. src [@ $file 0]] [file join $currentDir .. src [@ $file 0]_orig]
-        file rename [file join $currentDir .. src [@ $file 0]_i] [file join $currentDir .. src [@ $file 0]]
+        file rename [file join $currentDir .. src [lindex $file 0]] [file join $currentDir .. src [lindex $file 0]_orig]
+        file rename [file join $currentDir .. src [lindex $file 0]_i] [file join $currentDir .. src [lindex $file 0]]
     }
 }
 
@@ -59,13 +59,13 @@ exec tclsh [file join $currentDir all_codeCoverage.tcl]
 # revert renaming
 foreach file $srcList {
     if {[llength $file]>1} {
-        file rename [file join $currentDir .. src [@ $file 0] [@ $file 1]]\
-                [file join $currentDir .. src [@ $file 0] [@ $file 1]_i]
-        file rename [file join $currentDir .. src [@ $file 0] [@ $file 1]_orig]\
-                [file join $currentDir .. src [@ $file 0] [@ $file 1]]
+        file rename [file join $currentDir .. src [lindex $file 0] [lindex $file 1]]\
+                [file join $currentDir .. src [lindex $file 0] [lindex $file 1]_i]
+        file rename [file join $currentDir .. src [lindex $file 0] [lindex $file 1]_orig]\
+                [file join $currentDir .. src [lindex $file 0] [lindex $file 1]]
     } else {
-        file rename [file join $currentDir .. src [@ $file 0]] [file join $currentDir .. src [@ $file 0]_i]
-        file rename [file join $currentDir .. src [@ $file 0]_orig] [file join $currentDir .. src [@ $file 0]]
+        file rename [file join $currentDir .. src [lindex $file 0]] [file join $currentDir .. src [lindex $file 0]_i]
+        file rename [file join $currentDir .. src [lindex $file 0]_orig] [file join $currentDir .. src [lindex $file 0]]
     }
 }
 # create markup files
@@ -75,31 +75,31 @@ foreach file $srcList {
     set result [exec tclsh $nagelfarPath -markup [file join $currentDir .. src {*}$file]]
     lappend results $result
     if {[regexp {(\d+)/(\d+)\s+(\d+(\.\d+)?)%} $result match num1 num2 num3]} {
-        set coveredSum [= {$num1+$coveredSum}]
-        set totalSum [= {$num2+$totalSum}]
+        set coveredSum [expr {$num1+$coveredSum}]
+        set totalSum [expr {$num2+$totalSum}]
     }
 }
 # view results
 foreach file $srcList {
     if {[llength $file]>1} {
-        exec eskil -noparse [file join $currentDir .. src [@ $file 0] [@ $file 1]]\
-                [file join $currentDir .. src [@ $file 0] [@ $file 1]_m]
+        exec eskil -noparse [file join $currentDir .. src [lindex $file 0] [lindex $file 1]]\
+                [file join $currentDir .. src [lindex $file 0] [lindex $file 1]_m]
     } else {
-        exec eskil -noparse [file join ${currentDir} .. src [@ $file 0]]\
-                [file join $currentDir .. src [@ $file 0]_m]
+        exec eskil -noparse [file join ${currentDir} .. src [lindex $file 0]]\
+                [file join $currentDir .. src [lindex $file 0]_m]
     }
 }
 puts [join $results "\n"]
-puts "Covered $coveredSum of $totalSum branches, percentage is [= {double($coveredSum)/double($totalSum)*100}]%"
+puts "Covered $coveredSum of $totalSum branches, percentage is [expr {double($coveredSum)/double($totalSum)*100}]%"
 # remove tests files
 foreach file $srcList {
     if {[llength $file]>1} {
-        file delete [file join $currentDir .. src [@ $file 0] [@ $file 1]_i]
-        file delete [file join $currentDir .. src [@ $file 0] [@ $file 1]_log]
-        file delete [file join $currentDir .. src [@ $file 0] [@ $file 1]_m]
+        file delete [file join $currentDir .. src [lindex $file 0] [lindex $file 1]_i]
+        file delete [file join $currentDir .. src [lindex $file 0] [lindex $file 1]_log]
+        file delete [file join $currentDir .. src [lindex $file 0] [lindex $file 1]_m]
     } else {
-        file delete [file join $currentDir .. src [@ $file 0]_i]
-        file delete [file join $currentDir .. src [@ $file 0]_log]
-        file delete [file join $currentDir .. src [@ $file 0]_m]
+        file delete [file join $currentDir .. src [lindex $file 0]_i]
+        file delete [file join $currentDir .. src [lindex $file 0]_log]
+        file delete [file join $currentDir .. src [lindex $file 0]_m]
     }
 }

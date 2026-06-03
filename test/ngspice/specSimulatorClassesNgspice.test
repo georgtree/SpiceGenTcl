@@ -31,8 +31,8 @@ proc matchList {expected actual} {
     set match 1
     set len [llength $expected]
     for {set i 0} {$i<$len} {incr i} {
-        set exp [@ $expected $i]
-        set act [@ $actual $i]
+        set exp [lindex $expected $i]
+        set act [lindex $actual $i]
         if {(abs($act-$exp) > $epsilon) || (abs($act-$exp) > $epsilon)} {
             set match 0
             break
@@ -52,7 +52,7 @@ test testSimulations-1 {test creation of circuit, run it with NgspiceBatch and r
     $circuit runAndRead -nodelete
     set data [[$circuit configure -data] getTracesData]
 } -body {
-    lappend result [lmap voutVal [dget $data v(out)] {format "%.3e" $voutVal}]
+    lappend result [lmap voutVal [dict get $data v(out)] {format "%.3e" $voutVal}]
     return $result
 } -result {{0.000e+00 6.667e-01 1.333e+00 2.000e+00 2.667e+00 3.333e+00}} -cleanup {
     file delete {./voltage divider netlist.cir}
@@ -81,9 +81,9 @@ test testSimulations-2 {test diode IV simulation} -setup {
         $tempSt configure -value $temp
         $circuit runAndRead
         set data [$circuit getDataDict]
-        foreach x [dget $data v(anode)] y [dget $data i(va)] {
+        foreach x [dict get $data v(anode)] y [dict get $data i(va)] {
             set xf [format "%.3f" $x]
-            set yf [format "%.3f" [= {-$y}]]
+            set yf [format "%.3f" [expr {-$y}]]
             lappend xydata [list $xf $yf]
         }    
         lappend dataList $xydata
@@ -91,20 +91,20 @@ test testSimulations-2 {test diode IV simulation} -setup {
     }
 } -body {
     return $dataList
-} -result {{{0.000 -0.000} {0.100 0.000} {0.200 0.000} {0.300 0.000} {0.400 0.000} {0.500 0.000} {0.600 0.000}\
-{0.700 0.000} {0.800 0.001} {0.900 0.079} {1.000 2.490} {1.100 9.972} {1.200 19.251} {1.300 29.126} {1.400 39.270}\
-{1.500 49.598} {1.600 60.028} {1.700 70.526} {1.800 81.077} {1.900 91.669} {2.000 102.293}} {{0.000 -0.000}\
-{0.100 0.000} {0.200 0.000} {0.300 0.000} {0.400 0.000} {0.500 0.000} {0.600 0.000} {0.700 0.006} {0.800 0.136}\
-{0.900 1.941} {1.000 7.705} {1.100 15.555} {1.200 24.207} {1.300 33.227} {1.400 42.499} {1.500 51.909} {1.600 61.411}\
-{1.700 70.985} {1.800 80.612} {1.900 90.282} {2.000 99.987}} {{0.000 0.000} {0.100 0.000} {0.200 0.000} {0.300 0.000}\
-{0.400 0.000} {0.500 0.000} {0.600 0.007} {0.700 0.107} {0.800 1.175} {0.900 5.330} {1.000 11.959} {1.100 19.667}\
-{1.200 27.897} {1.300 36.405} {1.400 45.112} {1.500 53.942} {1.600 62.859} {1.700 71.844} {1.800 80.881} {1.900 89.961}\
-{2.000 99.075}} {{0.000 -0.000} {0.100 0.000} {0.200 0.000} {0.300 0.000} {0.400 0.000} {0.500 0.004} {0.600 0.045}\
-{0.700 0.462} {0.800 2.805} {0.900 7.988} {1.000 14.780} {1.100 22.346} {1.200 30.292} {1.300 38.510} {1.400 46.886}\
-{1.500 55.372} {1.600 63.941} {1.700 72.574} {1.800 81.257} {1.900 89.983} {2.000 98.742}} {{0.000 -0.000}\
-{0.100 0.000} {0.200 0.000} {0.300 0.000} {0.400 0.004} {0.500 0.034} {0.600 0.280} {0.700 1.704} {0.800 5.606}\
-{0.900 11.428} {1.000 18.259} {1.100 25.606} {1.200 33.251} {1.300 41.111} {1.400 49.108} {1.500 57.204} {1.600 65.376}\
-{1.700 73.608} {1.800 81.889} {1.900 90.209} {2.000 98.563}}} -cleanup {
+} -result {{{0.000 -0.000} {0.100 0.000} {0.200 0.000} {0.300 0.000} {0.400 0.000} {0.500 0.000} {0.600 0.000} {0.700\
+0.000} {0.800 0.001} {0.900 0.079} {1.000 2.490} {1.100 9.969} {1.200 19.251} {1.300 29.123} {1.400 39.260} {1.500\
+49.604} {1.600 59.984} {1.700 70.502} {1.800 81.057} {1.900 91.653} {2.000 102.280}} {{0.000 -0.000} {0.100 0.000}\
+{0.200 0.000} {0.300 0.000} {0.400 0.000} {0.500 0.000} {0.600 0.000} {0.700 0.006} {0.800 0.136} {0.900 1.942} {1.000\
+7.705} {1.100 15.549} {1.200 24.207} {1.300 33.244} {1.400 42.508} {1.500 51.911} {1.600 61.369} {1.700 70.959} {1.800\
+80.591} {1.900 90.265} {2.000 99.973}} {{0.000 0.000} {0.100 0.000} {0.200 0.000} {0.300 0.000} {0.400 0.000} {0.500\
+0.000} {0.600 0.007} {0.700 0.107} {0.800 1.175} {0.900 5.331} {1.000 11.957} {1.100 19.668} {1.200 27.896} {1.300\
+36.414} {1.400 45.117} {1.500 53.944} {1.600 62.820} {1.700 71.819} {1.800 80.860} {1.900 89.944} {2.000 99.061}}\
+{{0.000 -0.000} {0.100 0.000} {0.200 0.000} {0.300 0.000} {0.400 0.000} {0.500 0.004} {0.600 0.045} {0.700 0.462}\
+{0.800 2.805} {0.900 7.988} {1.000 14.780} {1.100 22.345} {1.200 30.310} {1.300 38.518} {1.400 46.889} {1.500 55.323}\
+{1.600 63.910} {1.700 72.548} {1.800 81.237} {1.900 89.966} {2.000 98.727}} {{0.000 -0.000} {0.100 0.000} {0.200 0.000}\
+{0.300 0.000} {0.400 0.004} {0.500 0.034} {0.600 0.280} {0.700 1.703} {0.800 5.606} {0.900 11.438} {1.000 18.260}\
+{1.100 25.593} {1.200 33.260} {1.300 41.115} {1.400 49.110} {1.500 57.159} {1.600 65.347} {1.700 73.584} {1.800 81.869}\
+{1.900 90.193} {2.000 98.548}}} -cleanup {
     unset circuit simulator data tempSt xf yf dataList
 }
 
@@ -133,9 +133,9 @@ test testSimulations-3 {test diode CV simulation} -setup {
         set data [$circuit getDataDict]
         set x $volt
         # get imaginary part of current
-        set y [@ [dget $data i(va)] 0 1]
+        set y [lindex [dict get $data i(va)] 0 1]
         set xf [format "%.3e" $x]
-        set yf [format "%.2e" [= {-$y/(2*$pi*1e5*1e-9)}]]
+        set yf [format "%.2e" [expr {-$y/(2*$pi*1e5*1e-9)}]]
         lappend xydata [list $xf $yf]
     }
 } -body {
@@ -170,8 +170,8 @@ test testSimulations-4 {test simple differential pair simulation} -setup {
     $circuit configure -simulator $simulator
     $circuit runAndRead
     set data [$circuit getDataDict]
-    set vrc1 [dget $data v(rc1)]
-    set vrc2 [dget $data v(rc2)]
+    set vrc1 [dict get $data v(rc1)]
+    set vrc2 [dict get $data v(rc2)]
 } -body {
     return [format "vrc1=%.3e vrc2=%.3e" $vrc1 $vrc2]
 } -result {vrc1=6.032e-04 vrc2=-6.032e-04} -cleanup {
@@ -206,14 +206,14 @@ test testSimulations-5 {test filter simulation} -setup {
     $circuit configure -simulator $simulator
     $circuit runAndRead
     set data [$circuit getDataDict]
-    set freq [dget $data frequency]
-    set s11 [dget $data v(s_1_1)]
-    set s21 [dget $data v(s_2_1)]
-    set freq [lmap val $freq {@ $val 0}]
-    set s11Mag [lmap s11Re [lmap val $s11 {@ $val 0}] s11Im [lmap val $s11 {@ $val 1}]\
-                        {= {sqrt($s11Re**2+$s11Im**2)}}]
-    set s21Mag [lmap s21Re [lmap val $s21 {@ $val 0}] s21Im [lmap val $s21 {@ $val 1}]\
-                        {= {sqrt($s21Re**2+$s21Im**2)}}]
+    set freq [dict get $data frequency]
+    set s11 [dict get $data s_1_1]
+    set s21 [dict get $data s_2_1]
+    set freq [lmap val $freq {lindex $val 0}]
+    set s11Mag [lmap s11Re [lmap val $s11 {lindex $val 0}] s11Im [lmap val $s11 {lindex $val 1}]\
+                        {expr {sqrt($s11Re**2+$s11Im**2)}}]
+    set s21Mag [lmap s21Re [lmap val $s21 {lindex $val 0}] s21Im [lmap val $s21 {lindex $val 1}]\
+                        {expr {sqrt($s21Re**2+$s21Im**2)}}]
 } -body {
     lappend result [lmap freqVal $freq {format "%.3e" $freqVal}]
     lappend result [lmap s11MagVal $s11Mag {format "%.3e" $s11MagVal}]
@@ -237,7 +237,7 @@ test testSimulations-5 {test creation of circuit, run it with NgspiceBatch and r
     set data [[$circuit configure -data] getTracesData]
     $simulator readLog
 } -body {
-    lappend result [lmap voutVal [dget $data v(out)] {format "%.3e" $voutVal}]
+    lappend result [lmap voutVal [dict get $data v(out)] {format "%.3e" $voutVal}]
     return $result
 } -result {{0.000e+00 6.667e-01 1.333e+00 2.000e+00 2.667e+00 3.333e+00}} -cleanup {
     file delete {./voltage divider netlist.cir}
@@ -257,7 +257,7 @@ test testSimulations-6 {test creation of circuit, run it with NgspiceBatch and r
     $circuit runAndRead
     set data [[$circuit configure -data] getTracesData]
 } -body {
-    lappend result [lmap voutVal [dget $data v(out)] {format "%.3e" $voutVal}]
+    lappend result [lmap voutVal [dict get $data v(out)] {format "%.3e" $voutVal}]
     return $result
 } -result {{0.000e+00 6.667e-01 1.333e+00 2.000e+00 2.667e+00 3.333e+00}} -cleanup {
     unset circuit simulator data result
@@ -274,7 +274,7 @@ test testSimulations-7 {test creation of circuit, run it with NgspiceShared and 
     $circuit runAndRead
     set data [[$circuit configure -data] getTracesData]
 } -body {
-    lappend result [lmap voutVal [dget $data v(out)] {format "%.3e" $voutVal}]
+    lappend result [lmap voutVal [dict get $data v(out)] {format "%.3e" $voutVal}]
     return $result
 } -result {{0.000e+00 6.667e-01 1.333e+00 2.000e+00 2.667e+00 3.333e+00}} -cleanup {
     $simulator destroy
@@ -309,14 +309,14 @@ test testSimulations-8 {test filter simulation with shared simulator} -setup {
     $circuit configure -simulator $simulator
     $circuit runAndRead
     set data [$circuit getDataDict]
-    set freq [dget $data frequency]
-    set s11 [dget $data v(s_1_1)]
-    set s21 [dget $data v(s_2_1)]
-    set freq [lmap val $freq {@ $val 0}]
-    set s11Mag [lmap s11Re [lmap val $s11 {@ $val 0}] s11Im [lmap val $s11 {@ $val 1}]\
-                        {= {sqrt($s11Re**2+$s11Im**2)}}]
-    set s21Mag [lmap s21Re [lmap val $s21 {@ $val 0}] s21Im [lmap val $s21 {@ $val 1}]\
-                        {= {sqrt($s21Re**2+$s21Im**2)}}]
+    set freq [dict get $data frequency]
+    set s11 [dict get $data v(s_1_1)]
+    set s21 [dict get $data v(s_2_1)]
+    set freq [lmap val $freq {lindex $val 0}]
+    set s11Mag [lmap s11Re [lmap val $s11 {lindex $val 0}] s11Im [lmap val $s11 {lindex $val 1}]\
+                        {expr {sqrt($s11Re**2+$s11Im**2)}}]
+    set s21Mag [lmap s21Re [lmap val $s21 {lindex $val 0}] s21Im [lmap val $s21 {lindex $val 1}]\
+                        {expr {sqrt($s21Re**2+$s21Im**2)}}]
 } -body {
     lappend result [lmap freqVal $freq {format "%.3e" $freqVal}]
     lappend result [lmap s11MagVal $s11Mag {format "%.3e" $s11MagVal}]
@@ -340,25 +340,26 @@ test testSimulations-9 {test creation of circuit, run it with NgspiceShared and 
     $circuit runAndRead
 } -body {
     return [join [$simulator configure -log] \n]
-} -match glob -result {stdout *
-stdout * ngspice-* shared library
-stdout * Creation Date: * * * *:*:* UTC *
-stdout *
+} -match glob -result {*
+* ngspice-* shared library
+* Creation Date: *
+*
 stdout Note: No compatibility mode selected!
 stdout Circuit: voltage divider netlist
+# status\[0\]: Prepare Deck
+# status\[0\]: Parse
 # background thread running started
 stdout Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
 stdout Using SPARSE 1.3 as Direct Linear Solver
- Reference value :  0.00000e+00*
-# status*: --ready--
-# status*: --ready--
+# status\[0\]: dc: 20.0%
+# status\[0\]: --ready--
+# status\[0\]: --ready--
 stdout No. of Data Rows : 6
 # background thread running ended
 stdout Background thread stopped with timeout = 0} -cleanup {
     $simulator destroy
     unset circuit simulator 
 }
-
 
 forgetNgspice
 

@@ -7,10 +7,10 @@
 
     <title>Parser &#8212; SpiceGenTcl  documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=514cf933" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=2bf1fcf8" />
     
     <script src="_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
@@ -18,7 +18,7 @@
     <link rel="next" title="::SpiceGenTcl" href="SpiceGenTcl-SpiceGenTcl.html" />
     <link rel="prev" title="Advanced" href="SpiceGenTcl-Advanced.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -156,8 +156,8 @@ of <code class="docutils literal notranslate"><span class="pre">definitions</spa
 <span class="nv">$circuit</span><span class="w"> </span><span class="nv">configure</span><span class="w"> </span><span class="o">-</span>simulator<span class="w"> </span><span class="nv">$simulator</span>
 <span class="nv">$circuit</span><span class="w"> </span><span class="nv">runAndRead</span>
 <span class="k">set</span><span class="w"> </span>data<span class="w"> </span><span class="k">[</span><span class="nv">$circuit</span><span class="w"> </span><span class="nv">getDataDict</span><span class="k">]</span>
-<span class="k">set</span><span class="w"> </span>vrc1<span class="w"> </span><span class="k">[</span><span class="nv">dget</span><span class="w"> </span><span class="nv">$data</span><span class="w"> </span>v<span class="k">(</span><span class="nv">rc1</span><span class="k">)]</span>
-<span class="k">set</span><span class="w"> </span>vrc2<span class="w"> </span><span class="k">[</span><span class="nv">dget</span><span class="w"> </span><span class="nv">$data</span><span class="w"> </span>v<span class="k">(</span><span class="nv">rc2</span><span class="k">)]</span>
+<span class="k">set</span><span class="w"> </span>vrc1<span class="w"> </span><span class="k">[</span><span class="nb">dict</span><span class="w"> </span>get<span class="w"> </span><span class="nv">$data</span><span class="w"> </span>v<span class="k">(</span><span class="nv">rc1</span><span class="k">)]</span>
+<span class="k">set</span><span class="w"> </span>vrc2<span class="w"> </span><span class="k">[</span><span class="nb">dict</span><span class="w"> </span>get<span class="w"> </span><span class="nv">$data</span><span class="w"> </span>v<span class="k">(</span><span class="nv">rc2</span><span class="k">)]</span>
 <span class="nb">puts</span><span class="w"> </span><span class="k">[</span><span class="nb">format</span><span class="w"> </span><span class="s2">&quot;vrc1</span><span class="o">=</span><span class="s2">%.3e vrc2</span><span class="o">=</span><span class="s2">%.3e&quot;</span><span class="w"> </span><span class="nv">$vrc1</span><span class="w"> </span><span class="nv">$vrc2</span><span class="k">]</span>
 </pre></div>
 </div>
@@ -209,8 +209,8 @@ to netlist object:</p>
 <span class="nv">$circuit</span><span class="w"> </span><span class="nv">configure</span><span class="w"> </span><span class="o">-</span>simulator<span class="w"> </span><span class="nv">$simulator</span>
 <span class="nv">$circuit</span><span class="w"> </span><span class="nv">runAndRead</span>
 <span class="k">set</span><span class="w"> </span>data<span class="w"> </span><span class="k">[</span><span class="nv">$circuit</span><span class="w"> </span><span class="nv">getDataDict</span><span class="k">]</span>
-<span class="k">set</span><span class="w"> </span>time<span class="w"> </span><span class="k">[</span><span class="nv">dget</span><span class="w"> </span><span class="nv">$data</span><span class="w"> </span>time<span class="k">]</span>
-<span class="k">foreach</span><span class="w"> </span>time<span class="w"> </span><span class="k">[</span><span class="nv">dget</span><span class="w"> </span><span class="nv">$data</span><span class="w"> </span>time<span class="k">]</span><span class="w"> </span>vg429<span class="w"> </span><span class="k">[</span><span class="nv">dget</span><span class="w"> </span><span class="nv">$data</span><span class="w"> </span>v<span class="k">(</span><span class="nv">g429</span><span class="k">)]</span><span class="w"> </span>vg430<span class="w"> </span><span class="k">[</span><span class="nv">dget</span><span class="w"> </span><span class="nv">$data</span><span class="w"> </span>v<span class="k">(</span><span class="nv">g430</span><span class="k">)]</span><span class="w"> </span><span class="k">{</span>
+<span class="k">set</span><span class="w"> </span>time<span class="w"> </span><span class="k">[</span><span class="nb">dict</span><span class="w"> </span>get<span class="w"> </span><span class="nv">$data</span><span class="w"> </span>time<span class="k">]</span>
+<span class="k">foreach</span><span class="w"> </span>time<span class="w"> </span><span class="k">[</span><span class="nb">dict</span><span class="w"> </span>get<span class="w"> </span><span class="nv">$data</span><span class="w"> </span>time<span class="k">]</span><span class="w"> </span>vg429<span class="w"> </span><span class="k">[</span><span class="nb">dict</span><span class="w"> </span>get<span class="w"> </span><span class="nv">$data</span><span class="w"> </span>v<span class="k">(</span><span class="nv">g429</span><span class="k">)]</span><span class="w"> </span>vg430<span class="w"> </span><span class="k">[</span><span class="nb">dict</span><span class="w"> </span>get<span class="w"> </span><span class="nv">$data</span><span class="w"> </span>v<span class="k">(</span><span class="nv">g430</span><span class="k">)]</span><span class="w"> </span><span class="k">{</span>
 <span class="w">    </span><span class="nb">lappend</span><span class="w"> </span>timeVg429<span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="nv">$time</span><span class="w"> </span><span class="nv">$vg429</span><span class="k">]</span>
 <span class="w">    </span><span class="nb">lappend</span><span class="w"> </span>timeVg430<span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="nv">$time</span><span class="w"> </span><span class="nv">$vg430</span><span class="k">]</span>
 <span class="k">}</span>
@@ -8769,7 +8769,7 @@ parsing within the constructor of the parent subcircuit definition class.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
   <div>
     <h3><a href="index.html">Table of Contents</a></h3>
@@ -8800,7 +8800,7 @@ parsing within the constructor of the parent subcircuit definition class.</p>
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
@@ -8808,13 +8808,13 @@ parsing within the constructor of the parent subcircuit definition class.</p>
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -8832,7 +8832,7 @@ parsing within the constructor of the parent subcircuit definition class.</p>
     </div>
     <div class="footer" role="contentinfo">
     &#169; Copyright George Yashin.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>
 </html>

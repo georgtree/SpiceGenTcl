@@ -26,9 +26,9 @@ foreach temp $temps {
     puts [$circuit configure -log]
     set data [$circuit getDataDict]
     set xydata [list]
-    foreach x [dget $data anode] y [dget $data va#branch] {
+    foreach x [dict get $data anode] y [dict get $data va#branch] {
         set xf [format "%.3f" $x]
-        set yf [format "%.3f" [= {-$y}]]
+        set yf [format "%.3f" [expr {-$y}]]
         lappend xydata [list $xf $yf]
     }
     lappend dataList $xydata

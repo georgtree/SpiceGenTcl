@@ -3,8 +3,8 @@ proc matchList {expected actual} {
     set match 1
     set len [llength $expected]
     for {set i 0} {$i<$len} {incr i} {
-        set exp [@ $expected $i]
-        set act [@ $actual $i]
+        set exp [lindex $expected $i]
+        set act [lindex $actual $i]
         if {abs($act-$exp) > $epsilon} {
             set match 0
             break
@@ -19,8 +19,8 @@ proc readResultFile {path} {
     close $file                     
     foreach line $lines {
         set data [textutil::split::splitx [string trim $line]]
-        lappend timeData [@ $data 0]
-        lappend traceData [@ $data 1]
+        lappend timeData [lindex $data 0]
+        lappend traceData [lindex $data 1]
     }
     return [list $timeData $traceData]
 }

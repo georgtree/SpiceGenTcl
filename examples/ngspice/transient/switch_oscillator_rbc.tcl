@@ -55,9 +55,9 @@ $circuit configure -simulator $simulator
 $circuit runAndRead
 # get data object
 set data [$circuit getDataDict]
-set time [dget $data time]
-set vout [dget $data v(osc_out)]
-set imeas [dget $data i(vmeasure)]
+set time [dict get $data time]
+set vout [dict get $data v(osc_out)]
+set imeas [dict get $data i(vmeasure)]
 
 vector create timeVec voutVec imeasVec
 timeVec set $time

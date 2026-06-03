@@ -59,22 +59,22 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 {np -help {Name of node connected to positive pin}}
                 {nm -help {Name of node connected to negative pin}}
             }]
-            set rVal [dget $arguments r]
-            if {([llength $rVal]>1) && ([@ $rVal 0] eq {-eq})} {
-                lappend params [list -poseq r [@ $rVal 1]]
+            set rVal [dict get $arguments r]
+            if {([llength $rVal]>1) && ([lindex $rVal 0] eq {-eq})} {
+                lappend params [list -poseq r [lindex $rVal 1]]
             } else {
                 lappend params [list -pos r $rVal]
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {r name np nm}} {
-                    if {[@ $value 0] eq {-eq}} {
-                        lappend params [list -eq $paramName [@ $value 1]]
+                    if {[lindex $value 0] eq {-eq}} {
+                        lappend params [list -eq $paramName [lindex $value 1]]
                     } else {
                         lappend params [list $paramName $value]
                     }
                 }
             }
-            next r[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
+            next r[dict get $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }
 
@@ -117,22 +117,22 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 {np -help {Name of node connected to positive pin}}
                 {nm -help {Name of node connected to negative pin}}
             }]
-            set cVal [dget $arguments c]
-            if {([llength $cVal]>1) && ([@ $cVal 0] eq {-eq})} {
-                lappend params [list -poseq c [@ $cVal 1]]
+            set cVal [dict get $arguments c]
+            if {([llength $cVal]>1) && ([lindex $cVal 0] eq {-eq})} {
+                lappend params [list -poseq c [lindex $cVal 1]]
             } else {
                 lappend params [list -pos c $cVal]
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {c name np nm}} {
-                    if {[@ $value 0] eq {-eq}} {
-                        lappend params [list -eq $paramName [@ $value 1]]
+                    if {[lindex $value 0] eq {-eq}} {
+                        lappend params [list -eq $paramName [lindex $value 1]]
                     } else {
                         lappend params [list $paramName $value]
                     }
                 }
             }
-            next c[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
+            next c[dict get $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }
 
@@ -172,22 +172,22 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 {np -help {Name of node connected to positive pin}}
                 {nm -help {Name of node connected to negative pin}}
             }]
-            set lVal [dget $arguments l]
-            if {([llength $lVal]>1) && ([@ $lVal 0] eq {-eq})} {
-                lappend params [list -poseq l [@ $lVal 1]]
+            set lVal [dict get $arguments l]
+            if {([llength $lVal]>1) && ([lindex $lVal 0] eq {-eq})} {
+                lappend params [list -poseq l [lindex $lVal 1]]
             } else {
                 lappend params [list -pos l $lVal]
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {l name np nm}} {
-                    if {[@ $value 0] eq {-eq}} {
-                        lappend params [list -eq $paramName [@ $value 1]]
+                    if {[lindex $value 0] eq {-eq}} {
+                        lappend params [list -eq $paramName [lindex $value 1]]
                     } else {
                         lappend params [list $paramName $value]
                     }
                 }
             }
-            next l[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
+            next l[dict get $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }
 
@@ -258,14 +258,14 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 {ncp -help {Name of node connected to positive controlling pin}}
                 {ncm -help {Name of node connected to negative controlling pin}}
             }]
-            lappend params [list -posnocheck model [dget $arguments model]]
-            if {[dexist $arguments on]} {
+            lappend params [list -posnocheck model [dict get $arguments model]]
+            if {[dict exists $arguments on]} {
                 lappend params {-sw on}
-            } elseif {[dexist $arguments off]} {
+            } elseif {[dict exists $arguments off]} {
                 lappend params {-sw off}
             }
 
-            next s[dget $arguments name] [my FormPinNodeList $arguments {np nm ncp ncm}] $params
+            next s[dict get $arguments name] [my FormPinNodeList $arguments {np nm ncp ncm}] $params
         }
     }
 
@@ -303,14 +303,14 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 {np -help {Name of node connected to positive pin}}
                 {nm -help {Name of node connected to negative pin}}
             }]
-            lappend params [list -posnocheck icntrl [dget $arguments icntrl]]
-            lappend params [list -posnocheck model [dget $arguments model] -posnocheck]
-            if {[dexist $arguments on]} {
+            lappend params [list -posnocheck icntrl [dict get $arguments icntrl]]
+            lappend params [list -posnocheck model [dict get $arguments model] -posnocheck]
+            if {[dict exists $arguments on]} {
                 lappend params {-sw on}
-            } elseif {[dexist $arguments off]} {
+            } elseif {[dict exists $arguments off]} {
                 lappend params {-sw off}
             }
-            next w[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
+            next w[dict get $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }
 
@@ -360,8 +360,8 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                 "]
                 # create list of parameters and values from which were supplied by args
                 dict for {paramName value} $arguments {
-                    if {[@ $value 0] eq {-eq}} {
-                        lappend params [list -eq $paramName [@ $value 1]]
+                    if {[lindex $value 0] eq {-eq}} {
+                        lappend params [list -eq $paramName [lindex $value 1]]
                     } else {
                         lappend params [list $paramName $value]
                     }
@@ -397,13 +397,13 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {np -help {Name of node connected to positive pin}}
                 {nm -help {Name of node connected to negative pin}}
             }]
-            set dcVal [dget $arguments dc]
-            if {([llength $dcVal]>1) && ([@ $dcVal 0] eq {-eq})} {
-                lappend params [list -poseq dc [@ $dcVal 1]]
+            set dcVal [dict get $arguments dc]
+            if {([llength $dcVal]>1) && ([lindex $dcVal 0] eq {-eq})} {
+                lappend params [list -poseq dc [lindex $dcVal 1]]
             } else {
                 lappend params [list -pos dc $dcVal]
             }
-            next $type[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
+            next $type[dict get $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }
 
@@ -424,29 +424,29 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {np -help {Name of node connected to positive pin}}
                 {nm -help {Name of node connected to negative pin}}
             }]
-            set dcVal [dget $arguments dc]
-            if {([llength $dcVal]>1) && ([@ $dcVal 0] eq {-eq})} {
-                lappend params [list -poseq dc [@ $dcVal 1]]
+            set dcVal [dict get $arguments dc]
+            if {([llength $dcVal]>1) && ([lindex $dcVal 0] eq {-eq})} {
+                lappend params [list -poseq dc [lindex $dcVal 1]]
             } else {
                 lappend params [list -pos dc $dcVal]
             }
-            set acVal [dget $arguments ac]
+            set acVal [dict get $arguments ac]
             lappend params {-posnocheck acsw ac}
-            if {([llength $acVal]>1) && ([@ $acVal 0] eq {-eq})} {
-                lappend params [list -poseq ac [@ $acVal 1]]
+            if {([llength $acVal]>1) && ([lindex $acVal 0] eq {-eq})} {
+                lappend params [list -poseq ac [lindex $acVal 1]]
             } else {
                 lappend params [list -pos ac $acVal]
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {ac dc name np nm}} {
-                    if {([llength $value]>1) && ([@ $value 0] eq {-eq})} {
-                        lappend params [list -poseq $paramName [@ $value 1]]
+                    if {([llength $value]>1) && ([lindex $value 0] eq {-eq})} {
+                        lappend params [list -poseq $paramName [lindex $value 1]]
                     } else {
                         lappend params [list -pos $paramName $value]
                     }
                 }
             }
-            next $type[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
+            next $type[dict get $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }
 
@@ -475,27 +475,27 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {np -help {Name of node connected to positive pin}}
                 {nm -help {Name of node connected to negative pin}}
             }]
-            if {[dexist $arguments dc]} {
+            if {[dict exists $arguments dc]} {
                 lappend params {-sw dc}
-                set dcVal [dget $arguments dc]
-                if {([llength $dcVal]>1) && ([@ $dcVal 0] eq {-eq})} {
-                    lappend params [list -poseq dcval [@ $dcVal 1]]
+                set dcVal [dict get $arguments dc]
+                if {([llength $dcVal]>1) && ([lindex $dcVal 0] eq {-eq})} {
+                    lappend params [list -poseq dcval [lindex $dcVal 1]]
                 } else {
                     lappend params [list -pos dcval $dcVal]
                 }
             }
-            if {[dexist $arguments ac]} {
+            if {[dict exists $arguments ac]} {
                 lappend params {-posnocheck acsw ac}
-                set acVal [dget $arguments ac]
-                if {([llength $acVal]>1) && ([@ $acVal 0] eq {-eq})} {
-                    lappend params [list -poseq ac [@ $acVal 1]]
+                set acVal [dict get $arguments ac]
+                if {([llength $acVal]>1) && ([lindex $acVal 0] eq {-eq})} {
+                    lappend params [list -poseq ac [lindex $acVal 1]]
                 } else {
                     lappend params [list -pos ac $acVal]
                 }
-                if {[dexist $arguments acphase]} {
-                    set acphaseVal [dget $arguments acphase]
-                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 0] eq {-eq})} {
-                        lappend params [list -poseq acphase [@ $acphaseVal 1]]
+                if {[dict exists $arguments acphase]} {
+                    set acphaseVal [dict get $arguments acphase]
+                    if {([llength $acphaseVal]>1) && ([lindex $acphaseVal 0] eq {-eq})} {
+                        lappend params [list -poseq acphase [lindex $acphaseVal 1]]
                     } else {
                         lappend params [list -pos acphase $acphaseVal]
                     }
@@ -504,7 +504,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             set paramsOrder {low high td tr tf ton tper}
             lappend params {-posnocheck model pulse}
             my ParamsProcess $paramsOrder $arguments params
-            next $type[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
+            next $type[dict get $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }
 
@@ -532,27 +532,27 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {np -help {Name of node connected to positive pin}}
                 {nm -help {Name of node connected to negative pin}}
             }]
-            if {[dexist $arguments dc]} {
+            if {[dict exists $arguments dc]} {
                 lappend params {-sw dc}
-                set dcVal [dget $arguments dc]
-                if {([llength $dcVal]>1) && ([@ $dcVal 0] eq {-eq})} {
-                    lappend params [list -poseq dcval [@ $dcVal 1]]
+                set dcVal [dict get $arguments dc]
+                if {([llength $dcVal]>1) && ([lindex $dcVal 0] eq {-eq})} {
+                    lappend params [list -poseq dcval [lindex $dcVal 1]]
                 } else {
                     lappend params [list -pos dcval $dcVal]
                 }
             }
-            if {[dexist $arguments ac]} {
+            if {[dict exists $arguments ac]} {
                 lappend params {-posnocheck acsw ac}
-                set acVal [dget $arguments ac]
-                if {([llength $acVal]>1) && ([@ $acVal 0] eq {-eq})} {
-                    lappend params [list -poseq ac [@ $acVal 1]]
+                set acVal [dict get $arguments ac]
+                if {([llength $acVal]>1) && ([lindex $acVal 0] eq {-eq})} {
+                    lappend params [list -poseq ac [lindex $acVal 1]]
                 } else {
                     lappend params [list -pos ac $acVal]
                 }
-                if {[dexist $arguments acphase]} {
-                    set acphaseVal [dget $arguments acphase]
-                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 0] eq {-eq})} {
-                        lappend params [list -poseq acphase [@ $acphaseVal 1]]
+                if {[dict exists $arguments acphase]} {
+                    set acphaseVal [dict get $arguments acphase]
+                    if {([llength $acphaseVal]>1) && ([lindex $acphaseVal 0] eq {-eq})} {
+                        lappend params [list -poseq acphase [lindex $acphaseVal 1]]
                     } else {
                         lappend params [list -pos acphase $acphaseVal]
                     }
@@ -561,7 +561,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             set paramsOrder {v0 va freq td theta phase}
             lappend params {-posnocheck model sin}
             my ParamsProcess $paramsOrder $arguments params
-            next $type[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
+            next $type[dict get $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }
 
@@ -589,27 +589,27 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {np -help {Name of node connected to positive pin}}
                 {nm -help {Name of node connected to negative pin}}
             }]
-            if {[dexist $arguments dc]} {
+            if {[dict exists $arguments dc]} {
                 lappend params {-sw dc}
-                set dcVal [dget $arguments dc]
-                if {([llength $dcVal]>1) && ([@ $dcVal 0] eq {-eq})} {
-                    lappend params [list -poseq dcval [@ $dcVal 1]]
+                set dcVal [dict get $arguments dc]
+                if {([llength $dcVal]>1) && ([lindex $dcVal 0] eq {-eq})} {
+                    lappend params [list -poseq dcval [lindex $dcVal 1]]
                 } else {
                     lappend params [list -pos dcval $dcVal]
                 }
             }
-            if {[dexist $arguments ac]} {
+            if {[dict exists $arguments ac]} {
                 lappend params {-posnocheck acsw ac}
-                set acVal [dget $arguments ac]
-                if {([llength $acVal]>1) && ([@ $acVal 0] eq {-eq})} {
-                    lappend params [list -poseq ac [@ $acVal 1]]
+                set acVal [dict get $arguments ac]
+                if {([llength $acVal]>1) && ([lindex $acVal 0] eq {-eq})} {
+                    lappend params [list -poseq ac [lindex $acVal 1]]
                 } else {
                     lappend params [list -pos ac $acVal]
                 }
-                if {[dexist $arguments acphase]} {
-                    set acphaseVal [dget $arguments acphase]
-                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 0] eq {-eq})} {
-                        lappend params [list -poseq acphase [@ $acphaseVal 1]]
+                if {[dict exists $arguments acphase]} {
+                    set acphaseVal [dict get $arguments acphase]
+                    if {([llength $acphaseVal]>1) && ([lindex $acphaseVal 0] eq {-eq})} {
+                        lappend params [list -poseq acphase [lindex $acphaseVal 1]]
                     } else {
                         lappend params [list -pos acphase $acphaseVal]
                     }
@@ -618,7 +618,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             set paramsOrder {v1 v2 td1 tau1 td2 tau2}
             lappend params {-posnocheck model exp}
             my ParamsProcess $paramsOrder $arguments params
-            next $type[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
+            next $type[dict get $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }
 
@@ -641,28 +641,28 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {nm -help {Name of node connected to negative pin}}
             }]
             set start 0
-            if {[dexist $arguments dc]} {
+            if {[dict exists $arguments dc]} {
                 lappend paramList {-sw dc}
-                set dcVal [dget $arguments dc]
-                if {([llength $dcVal]>1) && ([@ $dcVal 0] eq {-eq})} {
-                    lappend paramList [list -poseq dcval [@ $dcVal 1]]
+                set dcVal [dict get $arguments dc]
+                if {([llength $dcVal]>1) && ([lindex $dcVal 0] eq {-eq})} {
+                    lappend paramList [list -poseq dcval [lindex $dcVal 1]]
                 } else {
                     lappend paramList [list -pos dcval $dcVal]
                 }
                 incr start 2
             }
-            if {[dexist $arguments ac]} {
+            if {[dict exists $arguments ac]} {
                 lappend paramList {-posnocheck acsw ac}
-                set acVal [dget $arguments ac]
-                if {([llength $acVal]>1) && ([@ $acVal 0] eq {-eq})} {
-                    lappend paramList [list -poseq ac [@ $acVal 1]]
+                set acVal [dict get $arguments ac]
+                if {([llength $acVal]>1) && ([lindex $acVal 0] eq {-eq})} {
+                    lappend paramList [list -poseq ac [lindex $acVal 1]]
                 } else {
                     lappend paramList [list -pos ac $acVal]
                 }
-                if {[dexist $arguments acphase]} {
-                    set acphaseVal [dget $arguments acphase]
-                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 0] eq {-eq})} {
-                        lappend paramList [list -poseq acphase [@ $acphaseVal 1]]
+                if {[dict exists $arguments acphase]} {
+                    set acphaseVal [dict get $arguments acphase]
+                    if {([llength $acphaseVal]>1) && ([lindex $acphaseVal 0] eq {-eq})} {
+                        lappend paramList [list -poseq acphase [lindex $acphaseVal 1]]
                     } else {
                         lappend paramList [list -pos acphase $acphaseVal]
                     }
@@ -670,30 +670,30 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 }
                 incr start 2
             }
-            set pwlSeqVal [dget $arguments seq]
+            set pwlSeqVal [dict get $arguments seq]
             set pwlSeqLen [llength $pwlSeqVal]
             if {$pwlSeqLen%2} {
                 return -code error "Number of elements '$pwlSeqLen' in pwl sequence is odd in element\
-                        '$type[dget $arguments name]', must be even"
+                        '$type[dict get $arguments name]', must be even"
             } elseif {$pwlSeqLen<4} {
                 return -code error "Number of elements '$pwlSeqLen' in pwl sequence in element\
-                        '$type[dget $arguments name]' must be >=4"
+                        '$type[dict get $arguments name]' must be >=4"
             }
             # parse pwlSeq argument
             for {set i 0} {$i<[llength $pwlSeqVal]/2} {incr i} {
                 set 2i [* 2 $i]
                 set 2ip1 [+ $2i 1]
-                lappend params [list t$i [@ $pwlSeqVal $2i]] [list $type$i [@ $pwlSeqVal $2ip1]]
+                lappend params [list t$i [lindex $pwlSeqVal $2i]] [list $type$i [lindex $pwlSeqVal $2ip1]]
             }
             foreach param $params {
-                if {([llength [@ $param 1]]>1) && ([@ [@ $param 1] 0] eq {-eq})} {
-                    lappend paramList [list -poseq [@ $param 0] [@ [@ $param 1] 1]]
+                if {([llength [lindex $param 1]]>1) && ([lindex [lindex $param 1] 0] eq {-eq})} {
+                    lappend paramList [list -poseq [lindex $param 0] [lindex [lindex $param 1] 1]]
                 } else {
-                    lappend paramList [list -pos [@ $param 0] [@ $param 1]]
+                    lappend paramList [list -pos [lindex $param 0] [lindex $param 1]]
                 }
             }
             set paramList [linsert $paramList $start {-posnocheck model pwl}]
-            next $type[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $paramList
+            next $type[dict get $arguments name] [my FormPinNodeList $arguments {np nm}] $paramList
         }
     }
 
@@ -720,27 +720,27 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {np -help {Name of node connected to positive pin}}
                 {nm -help {Name of node connected to negative pin}}
             }]
-            if {[dexist $arguments dc]} {
+            if {[dict exists $arguments dc]} {
                 lappend params {-sw dc}
-                set dcVal [dget $arguments dc]
-                if {([llength $dcVal]>1) && ([@ $dcVal 0] eq {-eq})} {
-                    lappend params [list -poseq dcval [@ $dcVal 1]]
+                set dcVal [dict get $arguments dc]
+                if {([llength $dcVal]>1) && ([lindex $dcVal 0] eq {-eq})} {
+                    lappend params [list -poseq dcval [lindex $dcVal 1]]
                 } else {
                     lappend params [list -pos dcval $dcVal]
                 }
             }
-            if {[dexist $arguments ac]} {
+            if {[dict exists $arguments ac]} {
                 lappend params {-posnocheck acsw ac}
-                set acVal [dget $arguments ac]
-                if {([llength $acVal]>1) && ([@ $acVal 0] eq {-eq})} {
-                    lappend params [list -poseq ac [@ $acVal 1]]
+                set acVal [dict get $arguments ac]
+                if {([llength $acVal]>1) && ([lindex $acVal 0] eq {-eq})} {
+                    lappend params [list -poseq ac [lindex $acVal 1]]
                 } else {
                     lappend params [list -pos ac $acVal]
                 }
-                if {[dexist $arguments acphase]} {
-                    set acphaseVal [dget $arguments acphase]
-                    if {([llength $acphaseVal]>1) && ([@ $acphaseVal 0] eq {-eq})} {
-                        lappend params [list -poseq acphase [@ $acphaseVal 1]]
+                if {[dict exists $arguments acphase]} {
+                    set acphaseVal [dict get $arguments acphase]
+                    if {([llength $acphaseVal]>1) && ([lindex $acphaseVal 0] eq {-eq})} {
+                        lappend params [list -poseq acphase [lindex $acphaseVal 1]]
                     } else {
                         lappend params [list -pos acphase $acphaseVal]
                     }
@@ -749,7 +749,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
             set paramsOrder {v0 va fc mdi fs}
             lappend params {-posnocheck model sffm}
             my ParamsProcess $paramsOrder $arguments params
-            next $type[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
+            next $type[dict get $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }
 
@@ -1143,22 +1143,22 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {ncp -help {Name of node connected to positive controlling pin}}
                 {ncm -help {Name of node connected to negative controlling pin}}
             }]
-            set trcondVal [dget $arguments trcond]
-            if {([llength $trcondVal]>1) && ([@ $trcondVal 0] eq {-eq})} {
-                lappend params [list -poseq trcond [@ $trcondVal 1]]
+            set trcondVal [dict get $arguments trcond]
+            if {([llength $trcondVal]>1) && ([lindex $trcondVal 0] eq {-eq})} {
+                lappend params [list -poseq trcond [lindex $trcondVal 1]]
             } else {
                 lappend params [list -pos trcond $trcondVal]
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {trcond name np nm ncp ncm}} {
-                    if {[@ $value 0] eq {-eq}} {
-                        lappend params [list -eq $paramName [@ $value 1]]
+                    if {[lindex $value 0] eq {-eq}} {
+                        lappend params [list -eq $paramName [lindex $value 1]]
                     } else {
                         lappend params [list $paramName $value]
                     }
                 }
             }
-            next g[dget $arguments name] [my FormPinNodeList $arguments {np nm ncp ncm}] $params
+            next g[dict get $arguments name] [my FormPinNodeList $arguments {np nm ncp ncm}] $params
         }
     }
 
@@ -1194,13 +1194,13 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {ncp -help {Name of node connected to positive controlling pin}}
                 {ncm -help {Name of node connected to negative controlling pin}}
             }]
-            set gainVal [dget $arguments gain]
-            if {([llength $gainVal]>1) && ([@ $gainVal 0] eq {-eq})} {
-                lappend params [list -poseq vgain [@ $gainVal 1]]
+            set gainVal [dict get $arguments gain]
+            if {([llength $gainVal]>1) && ([lindex $gainVal 0] eq {-eq})} {
+                lappend params [list -poseq vgain [lindex $gainVal 1]]
             } else {
                 lappend params [list -pos vgain $gainVal]
             }
-            next e[dget $arguments name] [my FormPinNodeList $arguments {np nm ncp ncm}] $params
+            next e[dict get $arguments name] [my FormPinNodeList $arguments {np nm ncp ncm}] $params
         }
     }
 
@@ -1236,24 +1236,24 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {np -help {Name of node connected to positive pin}}
                 {nm -help {Name of node connected to negative pin}}
             }]
-            set consrcVal [dget $arguments consrc]
+            set consrcVal [dict get $arguments consrc]
             lappend params [list -posnocheck consrc $consrcVal]
-            set gainVal [dget $arguments gain]
-            if {([llength $gainVal]>1) && ([@ $gainVal 0] eq {-eq})} {
-                lappend params [list -poseq igain [@ $gainVal 1]]
+            set gainVal [dict get $arguments gain]
+            if {([llength $gainVal]>1) && ([lindex $gainVal 0] eq {-eq})} {
+                lappend params [list -poseq igain [lindex $gainVal 1]]
             } else {
                 lappend params [list -pos igain $gainVal]
             }
             dict for {paramName value} $arguments {
                 if {$paramName ni {consrc gain name np nm}} {
-                    if {[@ $value 0] eq {-eq}} {
-                        lappend params [list -eq $paramName [@ $value 1]]
+                    if {[lindex $value 0] eq {-eq}} {
+                        lappend params [list -eq $paramName [lindex $value 1]]
                     } else {
                         lappend params [list $paramName $value]
                     }
                 }
             }
-            next f[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
+            next f[dict get $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }
 
@@ -1287,15 +1287,15 @@ namespace eval ::SpiceGenTcl::Common::Sources {
                 {np -help {Name of node connected to positive pin}}
                 {nm -help {Name of node connected to negative pin}}
             }]
-            set consrcVal [dget $arguments consrc]
+            set consrcVal [dict get $arguments consrc]
             lappend params [list -posnocheck consrc $consrcVal]
-            set transrVal [dget $arguments transr]
-            if {([llength $transrVal]>1) && ([@ $transrVal 0] eq {-eq})} {
-                lappend params [list -poseq transr [@ $transrVal 1]]
+            set transrVal [dict get $arguments transr]
+            if {([llength $transrVal]>1) && ([lindex $transrVal 0] eq {-eq})} {
+                lappend params [list -poseq transr [lindex $transrVal 1]]
             } else {
                 lappend params [list -pos transr $transrVal]
             }
-            next h[dget $arguments name] [my FormPinNodeList $arguments {np nm}] $params
+            next h[dict get $arguments name] [my FormPinNodeList $arguments {np nm}] $params
         }
     }
 

@@ -58,10 +58,10 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
                 {-donoise -help {Activate s-parameter noise}}
             }]
             my NameProcess $arguments [self object]
-            lappend params [list -posnocheck variation [dget $arguments variation]]
+            lappend params [list -posnocheck variation [dict get $arguments variation]]
             set paramsOrder {n fstart fstop}
             my ParamsProcess $paramsOrder $arguments params
-            if {[dexist $arguments donoise]} {
+            if {[dict exists $arguments donoise]} {
                 lappend params {-pos donoise 1}
             }
             ##nagelfar variable name
@@ -97,9 +97,9 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
                 {-fstop= -required -help {Stop frequency}}
             }]
             my NameProcess $arguments [self object]
-            lappend params [list -posnocheck outvar [dget $arguments outvar]]
+            lappend params [list -posnocheck outvar [dict get $arguments outvar]]
             lappend params {-sw ac}
-            lappend params [list -posnocheck variation [dget $arguments variation]]
+            lappend params [list -posnocheck variation [dict get $arguments variation]]
             set paramsOrder {n fstart fstop}
             ##nagelfar variable name
             my ParamsProcess $paramsOrder $arguments params
@@ -128,7 +128,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
             }]
             ##nagelfar variable name
             my NameProcess $arguments [self object]
-            lappend params [list -posnocheck outvar [dget $arguments outvar]]
+            lappend params [list -posnocheck outvar [dict get $arguments outvar]]
             next sens $params -name $name
         }
     }

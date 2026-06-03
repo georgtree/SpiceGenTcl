@@ -66,7 +66,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
                 {-nodelete -help {Flag to forbid simulation file deletion}}
             }
             my variable Command
-            set firstLine [@ [split $circuitStr \n] 0]
+            set firstLine [lindex [split $circuitStr \n] 0]
             set runLocation [my configure -runlocation]
             set cirFile [open [file join $runLocation ${firstLine}.cir] w+]
             puts $cirFile $circuitStr
@@ -116,7 +116,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
             }
             my variable Command
             my variable LastRunFileName
-            set firstLine [@ [split $circuitStr \n] 0]
+            set firstLine [lindex [split $circuitStr \n] 0]
             set runLocation [my configure -runlocation]
             set cirFile [open [file join $runLocation ${firstLine}.cir] w+]
             puts $cirFile $circuitStr
@@ -170,15 +170,32 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
         constructor {args} {
             # Creates batch ngspice simulator that can be attached to top-level Circuit.
             #  name - name of simulator object
-            #  runLocation - location at which input netlist is stored and all output files will be saved,
-            #   default is current directory
+            #  liblocation - path to .so/.dll library
             package require ngspicetclbridge
             argparse -help {Creates batch ngspice simulator that can be attached to top-level 'Circuit'} {
                 {name -help {Name of simulator object}}
-                {liblocation -optional -default /usr/local/lib/libngspice.so -help {Location of .so/.dll library}}
+                {liblocation -optional -help {Path to .so/.dll library}}
+            }
+            if {![info exists liblocation]} {
+                if {{NGSPICE_DLL} in [array names ::env]} {
+                    if {$::tcl_platform(platform) eq {unix}} {
+                        set liblocation [file join $::env(NGSPICE_DLL) libngspice.so]
+                    } elseif {$::tcl_platform(platform) eq {windows}} {
+                        set liblocation [file join $::env(NGSPICE_DLL) ngspice.dll]
+                    } else {
+                        return -code error "Default library name does not exist for platform\
+                                '$::tcl_platform(platform)'"
+                    }
+                } else {
+                    if {$::tcl_platform(platform) eq {windows}} {
+                        set liblocation [file join C:/ Spice64_dll dll-vs ngspice.dll]
+                    } else {
+                        set liblocation [file join usr local lib libngspice.so]
+                    }
+                }
             }
             my configure -name $name -liblocation $liblocation
-            my configure -simhandle [ngspicetclbridge::new $liblocation]
+            my configure -simhandle [ngspicetclbridge::new [file nativename $liblocation]]
         }
         destructor {
             $simhandle destroy
@@ -191,7 +208,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
                 {circuitStr -help {Top-level netlist string}}
             }
             set circuitList [split $circuitStr \n]
-            set firstLine [@ $circuitList 0]
+            set firstLine [lindex $circuitList 0]
             $simhandle circuit [lappend circuitList .end]
             ngspicetclbridge::run $simhandle
             my readLog

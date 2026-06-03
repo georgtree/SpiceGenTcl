@@ -18,17 +18,17 @@ oo::class create Core {
             {p -help {Name of node connected to positive pin}}
             {n -help {Name of node connected to negative pin}}
         }]
-        lappend params [list -posnocheck model [dget $arguments model]]
+        lappend params [list -posnocheck model [dict get $arguments model]]
         dict for {paramName value} $arguments {
             if {$paramName ni {model name p n}} {
-                if {[@ $value 0] eq {-eq}} {
-                    lappend params [list -eq $paramName [@ $value 1]]
+                if {[lindex $value 0] eq {-eq}} {
+                    lappend params [list -eq $paramName [lindex $value 1]]
                 } else {
                     lappend params [list $paramName $value]
                 }
             }
         }
-        next n[dget $arguments name] [list [list p [dget $arguments p]] [list n [dget $arguments n]]] $params
+        next n[dict get $arguments name] [list [list p [dict get $arguments p]] [list n [dict get $arguments n]]] $params
     }
 }
 
@@ -50,17 +50,17 @@ oo::class create Gap {
             {p -help {Name of node connected to positive pin}}
             {n -help {Name of node connected to negative pin}}
         }]
-        lappend params [list -posnocheck model [dget $arguments model]]
+        lappend params [list -posnocheck model [dict get $arguments model]]
         dict for {paramName value} $arguments {
             if {$paramName ni {model name p n}} {
-                if {[@ $value 0] eq {-eq}} {
-                    lappend params [list -eq $paramName [@ $value 1]]
+                if {[lindex $value 0] eq {-eq}} {
+                    lappend params [list -eq $paramName [lindex $value 1]]
                 } else {
                     lappend params [list $paramName $value]
                 }
             }
         }
-        next n[dget $arguments name] [list [list p [dget $arguments p]] [list n [dget $arguments n]]] $params
+        next n[dict get $arguments name] [list [list p [dict get $arguments p]] [list n [dict get $arguments n]]] $params
     }
 }
 
@@ -86,18 +86,18 @@ oo::class create Winding {
             {m1 -help {Name of node connected to first magnetic pin}}
             {m2 -help {Name of node connected to second magnetic pin}}
         }]
-        lappend params [list -posnocheck model [dget $arguments model]]
+        lappend params [list -posnocheck model [dict get $arguments model]]
         dict for {paramName value} $arguments {
             if {$paramName ni {model name e1 e2 m1 m2}} {
-                if {[@ $value 0] eq {-eq}} {
-                    lappend params [list -eq $paramName [@ $value 1]]
+                if {[lindex $value 0] eq {-eq}} {
+                    lappend params [list -eq $paramName [lindex $value 1]]
                 } else {
                     lappend params [list $paramName $value]
                 }
             }
         }
-        next n[dget $arguments name] [list [list e1 [dget $arguments e1]] [list e2 [dget $arguments e2]]\
-                                              [list m1 [dget $arguments m1]] [list m2 [dget $arguments m2]]]\
+        next n[dict get $arguments name] [list [list e1 [dict get $arguments e1]] [list e2 [dict get $arguments e2]]\
+                                              [list m1 [dict get $arguments m1]] [list m2 [dict get $arguments m2]]]\
                 $params
     }
 }
@@ -147,10 +147,10 @@ $circuit add $osdiInclude
 $circuit configure -simulator [Batch new {batch1}]
 $circuit runAndRead
 set data [$circuit getDataDict]
-foreach time [dget $data time] m [dget $data v(m)] m1 [dget $data v(m1)] ph1 [dget $data i(vphmeas)] {
-    lappend timeMmf [list $time [= {($m-$m1)}]]
-    lappend timePh1 [list $time [= {$ph1}]]
-    lappend hb [list [= {($m-$m1)/60e-3}] [= {$ph1/4e-6}]]
+foreach time [dict get $data time] m [dict get $data v(m)] m1 [dict get $data v(m1)] ph1 [dict get $data i(vphmeas)] {
+    lappend timeMmf [list $time [expr {($m-$m1)}]]
+    lappend timePh1 [list $time [expr {$ph1}]]
+    lappend hb [list [expr {($m-$m1)/60e-3}] [expr {$ph1/4e-6}]]
 }
 
 # plot results with ticklecharts

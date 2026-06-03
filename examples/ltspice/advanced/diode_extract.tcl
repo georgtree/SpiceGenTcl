@@ -16,16 +16,16 @@ set fileDataPath [file normalize [file join $scriptPath raw_data]]
 
 proc diodeIVcalc {xall pdata args} {
     dict with pdata {}
-    $model actOnParam -set is [@ $xall 0] n [@ $xall 1] rs [@ $xall 2] ikf [@ $xall 3]
+    $model actOnParam -set is [lindex $xall 0] n [lindex $xall 1] rs [lindex $xall 2] ikf [lindex $xall 3]
     $vSrc actOnParam -set start $vMin stop $vMax incr $vStep
     $circuit runAndRead
     set data [$circuit getDataDict]
-    set iva [lin1d -x [dget $data va] -y [dget $data i(va)] -xi [dget $pdata v]]
-    foreach iVal $i iSim [lmap i $iva {= {-$i}}] {
-        lappend fvec [= {log(abs($iVal))-log(abs($iSim))}]
+    set iva [lin1d -x [dict get $data va] -y [dict get $data i(va)] -xi [dict get $pdata v]]
+    foreach iVal $i iSim [lmap i $iva {expr {-$i}}] {
+        lappend fvec [expr {log(abs($iVal))-log(abs($iSim))}]
         lappend fval $iSim
     }
-    return [dcreate fvec $fvec fval $fval]
+    return [dict create fvec $fvec fval $fval]
 }
 
 # define circuit, diode model and voltage source
@@ -44,8 +44,8 @@ $circuit configure -simulator [Batch new {batch1}]
 set file [open [file join $fileDataPath iv25.csv]]
 set ivTemp25 [csv_read -startline 1 $file]
 close $file
-set vRaw [lmap elem $ivTemp25 {@ $elem 0}]
-set iRaw [lmap elem $ivTemp25 {@ $elem 1}]
+set vRaw [lmap elem $ivTemp25 {lindex $elem 0}]
+set iRaw [lmap elem $ivTemp25 {lindex $elem 1}]
 
 ### define first fitting region
 set vMin [min {*}$vRaw]
@@ -55,60 +55,60 @@ set vStep 0.02
 set vInterp [lseq $vMin to $vMax by $vStep]
 set iInterp [lin1d -x $vRaw -y $iRaw -xi $vInterp]
 # set data dictionary passed into function
-set pdata [dcreate v $vInterp i $iInterp circuit $circuit model $diodeModel vMin $vMin vMax $vMax vStep $vStep\
+set pdata [dict create v $vInterp i $iInterp circuit $circuit model $diodeModel vMin $vMin vMax $vMax vStep $vStep\
                    vSrc $vSrc]
 # set fitting parameters
 set iniPars [list 1e-15 1.0 30 1e-4]
-set par0 [::tclopt::ParameterMpfit new is [@ $iniPars 0] -lowlim 1e-17 -uplim 1e-12]
-set par1 [::tclopt::ParameterMpfit new n [@ $iniPars 1] -lowlim 0.9 -uplim 1.1]
-set par2 [::tclopt::ParameterMpfit new rs [@ $iniPars 2] -fixed -lowlim 1e-3 -uplim 100]
-set par3 [::tclopt::ParameterMpfit new ikf [@ $iniPars 3] -fixed -lowlim 1e-6 -uplim 0.1]
+set par0 [::tclopt::ParameterMpfit new is [lindex $iniPars 0] -lowlim 1e-17 -uplim 1e-12]
+set par1 [::tclopt::ParameterMpfit new n [lindex $iniPars 1] -lowlim 0.9 -uplim 1.1]
+set par2 [::tclopt::ParameterMpfit new rs [lindex $iniPars 2] -fixed -lowlim 1e-3 -uplim 100]
+set par3 [::tclopt::ParameterMpfit new ikf [lindex $iniPars 3] -fixed -lowlim 1e-6 -uplim 0.1]
 # fit in first region
 set optimizer [::tclopt::Mpfit new -funct diodeIVcalc -m [llength $vInterp] -pdata $pdata]
 $optimizer addPars $par0 $par1 $par2 $par3
 set result [$optimizer run]
-set resPars [dget $result x]
-puts [format "is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e" {*}[dget $result x]]
+set resPars [dict get $result x]
+puts [format "is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e" {*}[dict get $result x]]
 
 ### define second fitting region
 set vMin 0.85
 set vMax [max {*}$vRaw]
 set vInterp [lseq $vMin to $vMax by $vStep]
 set iInterp [lin1d -x $vRaw -y $iRaw -xi $vInterp]
-dset pdata v $vInterp
-dset pdata i $iInterp
-dset pdata vMin $vMin
-dset pdata vMax $vMax
-$par0 configure -fixed 1 -initval [@ $resPars 0]
-$par1 configure -fixed 1 -initval [@ $resPars 1]
+dict set pdata v $vInterp
+dict set pdata i $iInterp
+dict set pdata vMin $vMin
+dict set pdata vMax $vMax
+$par0 configure -fixed 1 -initval [lindex $resPars 0]
+$par1 configure -fixed 1 -initval [lindex $resPars 1]
 $par2 configure -fixed 0
 $par3 configure -fixed 0
 $optimizer configure -m [llength $vInterp] -pdata $pdata
 set result [$optimizer run]
-set fittedIdiode [dget [diodeIVcalc [dget $result x] $pdata] fval]
-set resPars [dget $result x]
-puts [format "is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e" {*}[dget $result x]]
+set fittedIdiode [dict get [diodeIVcalc [dict get $result x] $pdata] fval]
+set resPars [dict get $result x]
+puts [format "is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e" {*}[dict get $result x]]
 
 ### define fitting to the whole curve
 set vMin [min {*}$vRaw]
 set vMax [max {*}$vRaw]
 set vInterp [lseq $vMin to $vMax by $vStep]
 set iInterp [lin1d -x $vRaw -y $iRaw -xi $vInterp]
-dset pdata v $vInterp
-dset pdata i $iInterp
-dset pdata vMin $vMin
-dset pdata vMax $vMax
-$par0 configure -fixed 0 -initval [@ $resPars 0] -lowlim [= {[@ $resPars 0]*0.9}] -uplim [= {[@ $resPars 0]*1.1}]
-$par1 configure -fixed 0 -initval [@ $resPars 1] -lowlim [= {[@ $resPars 1]*0.9}] -uplim [= {[@ $resPars 1]*1.1}]
-$par2 configure -initval [@ $resPars 2] -lowlim [= {[@ $resPars 2]*0.9}] -uplim [= {[@ $resPars 2]*1.1}]
-$par3 configure -initval [@ $resPars 3] -lowlim [= {[@ $resPars 3]*0.9}] -uplim [= {[@ $resPars 3]*1.1}]
+dict set pdata v $vInterp
+dict set pdata i $iInterp
+dict set pdata vMin $vMin
+dict set pdata vMax $vMax
+$par0 configure -fixed 0 -initval [lindex $resPars 0] -lowlim [expr {[lindex $resPars 0]*0.9}] -uplim [expr {[lindex $resPars 0]*1.1}]
+$par1 configure -fixed 0 -initval [lindex $resPars 1] -lowlim [expr {[lindex $resPars 1]*0.9}] -uplim [expr {[lindex $resPars 1]*1.1}]
+$par2 configure -initval [lindex $resPars 2] -lowlim [expr {[lindex $resPars 2]*0.9}] -uplim [expr {[lindex $resPars 2]*1.1}]
+$par3 configure -initval [lindex $resPars 3] -lowlim [expr {[lindex $resPars 3]*0.9}] -uplim [expr {[lindex $resPars 3]*1.1}]
 $optimizer configure -m [llength $vInterp] -pdata $pdata
 set result [$optimizer run]
-set fittedIdiode [dget [diodeIVcalc [dget $result x] $pdata] fval]
-puts [format "is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e" {*}[dget $result x]]
+set fittedIdiode [dict get [diodeIVcalc [dict get $result x] $pdata] fval]
+puts [format "is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e" {*}[dict get $result x]]
 
 ### calculate initial curve and fitted curve
-set initIdiode [dget [diodeIVcalc $iniPars $pdata] fval]
+set initIdiode [dict get [diodeIVcalc $iniPars $pdata] fval]
 set fittedVIdiode [lmap vVal $vInterp iVal $fittedIdiode {list $vVal $iVal}]
 set initVIdiode [lmap vVal $vInterp iVal $initIdiode {list $vVal $iVal}]
 set viRaw [lmap vVal $vRaw iVal $iRaw {list $vVal $iVal}]
