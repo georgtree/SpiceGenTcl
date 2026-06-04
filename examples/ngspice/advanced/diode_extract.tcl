@@ -67,7 +67,7 @@ set optimizer [::tclopt::Mpfit new -funct diodeIVcalc -m [llength $vInterp] -pda
 $optimizer addPars $par0 $par1 $par2 $par3
 set result [$optimizer run]
 set resPars [dict get $result x]
-puts [format "is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e" {*}[dict get $result x]]
+puts [format {is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e} {*}[dict get $result x]]
 
 ### define second fitting region
 set vMin 0.85
@@ -86,7 +86,7 @@ $optimizer configure -m [llength $vInterp] -pdata $pdata
 set result [$optimizer run]
 set fittedIdiode [dict get [diodeIVcalc [dict get $result x] $pdata] fval]
 set resPars [dict get $result x]
-puts [format "is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e" {*}[dict get $result x]]
+puts [format {is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e} {*}[dict get $result x]]
 
 ### define fitting to the whole curve
 set vMin [min {*}$vRaw]
@@ -97,14 +97,18 @@ dict set pdata v $vInterp
 dict set pdata i $iInterp
 dict set pdata vMin $vMin
 dict set pdata vMax $vMax
-$par0 configure -fixed 0 -initval [lindex $resPars 0] -lowlim [expr {[lindex $resPars 0]*0.9}] -uplim [expr {[lindex $resPars 0]*1.1}]
-$par1 configure -fixed 0 -initval [lindex $resPars 1] -lowlim [expr {[lindex $resPars 1]*0.9}] -uplim [expr {[lindex $resPars 1]*1.1}]
-$par2 configure -initval [lindex $resPars 2] -lowlim [expr {[lindex $resPars 2]*0.9}] -uplim [expr {[lindex $resPars 2]*1.1}]
-$par3 configure -initval [lindex $resPars 3] -lowlim [expr {[lindex $resPars 3]*0.9}] -uplim [expr {[lindex $resPars 3]*1.1}]
+$par0 configure -fixed 0 -initval [lindex $resPars 0] -lowlim [expr {[lindex $resPars 0]*0.9}]\
+        -uplim [expr {[lindex $resPars 0]*1.1}]
+$par1 configure -fixed 0 -initval [lindex $resPars 1] -lowlim [expr {[lindex $resPars 1]*0.9}]\
+        -uplim [expr {[lindex $resPars 1]*1.1}]
+$par2 configure -initval [lindex $resPars 2] -lowlim [expr {[lindex $resPars 2]*0.9}]\
+        -uplim [expr {[lindex $resPars 2]*1.1}]
+$par3 configure -initval [lindex $resPars 3] -lowlim [expr {[lindex $resPars 3]*0.9}]\
+        -uplim [expr {[lindex $resPars 3]*1.1}]
 $optimizer configure -m [llength $vInterp] -pdata $pdata
 set result [$optimizer run]
 set fittedIdiode [dict get [diodeIVcalc [dict get $result x] $pdata] fval]
-puts [format "is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e" {*}[dict get $result x]]
+puts [format {is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e} {*}[dict get $result x]]
 
 ### calculate initial curve and fitted curve
 set initIdiode [dict get [diodeIVcalc $iniPars $pdata] fval]
@@ -114,28 +118,25 @@ set viRaw [lmap vVal $vRaw iVal $iRaw {list $vVal $iVal}]
 
 # plot results with ticklecharts
 set chart [ticklecharts::chart new]
-$chart Xaxis -name "v(anode), V" -minorTick {show "True"}  -type "value" -splitLine {show "True"} -min "0.4" -max "1.6"
-$chart Yaxis -name "Idiode, A" -minorTick {show "True"}  -type "value" -splitLine {show "True"} -min "0.0"\
-        -max "dataMax"
-$chart SetOptions -title {} -tooltip {trigger "axis"} -animation "False" -legend {}\
-        -toolbox {feature {dataZoom {yAxisIndex "none"}}} -grid {left "10%" right "15%"}
-$chart Add "lineSeries" -data $fittedVIdiode -showAllSymbol "nothing" -name "fitted" -symbolSize "4"
-$chart Add "lineSeries" -data $initVIdiode -showAllSymbol "nothing" -name "unfitted" -symbolSize "4"
-$chart Add "lineSeries" -data $viRaw -showAllSymbol "nothing" -name "measured" -symbolSize "4"
+$chart Xaxis -name {v(anode), V} -minorTick {show True}  -type value -splitLine {show True} -min 0.4 -max 1.6
+$chart Yaxis -name {Idiode, A} -minorTick {show True}  -type value -splitLine {show True} -min 0.0 -max dataMax
+$chart SetOptions -title {} -tooltip {trigger axis} -animation False -legend {} -grid {left 10% right 15%}\
+        -toolbox {feature {dataZoom {yAxisIndex none}}}
+$chart Add lineSeries -data $fittedVIdiode -showAllSymbol nothing -name fitted -symbolSize 4
+$chart Add lineSeries -data $initVIdiode -showAllSymbol nothing -name unfitted -symbolSize 4
+$chart Add lineSeries -data $viRaw -showAllSymbol nothing -name measured -symbolSize 4
 set chartLog [ticklecharts::chart new]
-$chartLog Xaxis -name "v(anode), V" -minorTick {show "True"}  -type "value" -splitLine {show "True"} -min "0.4"\
-        -max "1.6"
-$chartLog Yaxis -name "Idiode, A" -minorTick {show "True"}  -type "log" -splitLine {show "True"} -min "dataMin"\
-        -max "0.1"
-$chartLog SetOptions -title {} -tooltip {trigger "axis"} -animation "False" -legend {}\
-        -toolbox {feature {dataZoom {yAxisIndex "none"}}} -grid {left "10%" right "15%"}
-$chartLog Add "lineSeries" -data $fittedVIdiode -showAllSymbol "nothing" -name "fitted" -symbolSize "4"
-$chartLog Add "lineSeries" -data $initVIdiode -showAllSymbol "nothing" -name "unfitted" -symbolSize "4"
-$chartLog Add "lineSeries" -data $viRaw -showAllSymbol "nothing" -name "measured" -symbolSize "4"
+$chartLog Xaxis -name {v(anode), V} -minorTick {show True}  -type value -splitLine {show True} -min 0.4 -max 1.6
+$chartLog Yaxis -name {Idiode, A} -minorTick {show True}  -type log -splitLine {show True} -min dataMin -max 0.1
+$chartLog SetOptions -title {} -tooltip {trigger axis} -animation False -legend {} -grid {left 10% right 15%}\
+        -toolbox {feature {dataZoom {yAxisIndex none}}} 
+$chartLog Add lineSeries -data $fittedVIdiode -showAllSymbol nothing -name fitted -symbolSize 4
+$chartLog Add lineSeries -data $initVIdiode -showAllSymbol nothing -name unfitted -symbolSize 4
+$chartLog Add lineSeries -data $viRaw -showAllSymbol nothing -name measured -symbolSize 4
 
 set layout [ticklecharts::Gridlayout new]
-$layout Add $chartLog -bottom "5%" -height "40%" -width "80%"
-$layout Add $chart -bottom "55%" -height "40%" -width "80%"
+$layout Add $chartLog -bottom 5% -height 40% -width 80%
+$layout Add $chart -bottom 55% -height 40% -width 80%
 
 set fbasename [file rootname [file tail [info script]]]
 $layout Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px

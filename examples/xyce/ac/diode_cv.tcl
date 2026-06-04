@@ -33,19 +33,17 @@ foreach volt $voltSweep {
     set x $volt
     # get imaginary part of current
     set y [lindex [dict get $data va#branch] 0 1]
-    set xf [format "%.3e" $x]
-    set yf [format "%.2e" [expr {-$y/(2*$pi*1e5*1e-9)}]]
+    set xf [format %.3e $x]
+    set yf [format %.2e [expr {-$y/(2*$pi*1e5*1e-9)}]]
     lappend xydata [list $xf $yf]
 }
 
 # plot results with ticklecharts
 set chart [ticklecharts::chart new]
-$chart Xaxis -name "v(0,c), V" -minorTick {show "True"} -type "value"
-$chart Yaxis -name "Diode capacitance, nF" -minorTick {show "True"} -type "value"
-$chart SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
-        -toolbox {feature {dataZoom {yAxisIndex "none"}}}
-$chart Add "lineSeries" -data $xydata -showAllSymbol "nothing"
+$chart Xaxis -name {v(0,c), V} -minorTick {show True} -type value
+$chart Yaxis -name {Diode capacitance, nF} -minorTick {show True} -type value
+$chart SetOptions -title {} -tooltip {trigger axis} -animation False -toolbox {feature {dataZoom {yAxisIndex none}}}
+$chart Add lineSeries -data $xydata -showAllSymbol nothing
 set fbasename [file rootname [file tail [info script]]]
-
 $chart Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px
 

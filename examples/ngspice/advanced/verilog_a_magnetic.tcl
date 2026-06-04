@@ -1,5 +1,5 @@
 # source main file
-lappend auto_path "../../"
+lappend auto_path ../../
 package require SpiceGenTcl
 package require ticklecharts
 # import class names to current namespace
@@ -28,7 +28,8 @@ oo::class create Core {
                 }
             }
         }
-        next n[dict get $arguments name] [list [list p [dict get $arguments p]] [list n [dict get $arguments n]]] $params
+        next n[dict get $arguments name] [list [list p [dict get $arguments p]] [list n [dict get $arguments n]]]\
+                $params
     }
 }
 
@@ -60,7 +61,8 @@ oo::class create Gap {
                 }
             }
         }
-        next n[dict get $arguments name] [list [list p [dict get $arguments p]] [list n [dict get $arguments n]]] $params
+        next n[dict get $arguments name] [list [list p [dict get $arguments p]] [list n [dict get $arguments n]]]\
+                $params
     }
 }
 
@@ -97,8 +99,8 @@ oo::class create Winding {
             }
         }
         next n[dict get $arguments name] [list [list e1 [dict get $arguments e1]] [list e2 [dict get $arguments e2]]\
-                                              [list m1 [dict get $arguments m1]] [list m2 [dict get $arguments m2]]]\
-                $params
+                                                  [list m1 [dict get $arguments m1]]\
+                                                  [list m2 [dict get $arguments m2]]] $params
     }
 }
 
@@ -155,11 +157,10 @@ foreach time [dict get $data time] m [dict get $data v(m)] m1 [dict get $data v(
 
 # plot results with ticklecharts
 set chart [ticklecharts::chart new]
-$chart Xaxis -name "H, A (A t)" -minorTick {show "True"}  -type "value" -splitLine {show "True"}
-$chart Yaxis -name "B, T" -minorTick {show "True"}  -type "value" -splitLine {show "True"} -min "-2"\
-        -max "2"
-$chart SetOptions -title {} -tooltip {} -animation "False" -legend {} -toolbox {feature {dataZoom {yAxisIndex "none"}}}\
-        -grid {left "10%" right "15%"}
-$chart Add "lineSeries" -data $hb -showAllSymbol "nothing" -name "fitted" -symbolSize "4"
+$chart Xaxis -name {H, A (A t)} -minorTick {show True}  -type value -splitLine {show True}
+$chart Yaxis -name {B, T} -minorTick {show True}  -type value -splitLine {show True} -min -2 -max 2
+$chart SetOptions -title {} -tooltip {} -animation False -legend {} -toolbox {feature {dataZoom {yAxisIndex none}}}\
+        -grid {left 10% right 15%}
+$chart Add lineSeries -data $hb -showAllSymbol nothing -name fitted -symbolSize 4
 set fbasename [file rootname [file tail [info script]]]
 $chart Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px

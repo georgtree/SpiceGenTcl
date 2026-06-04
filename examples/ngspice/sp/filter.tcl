@@ -33,24 +33,26 @@ set data [$circuit getDataDict]
 # get frequency
 set freq [dict get $data frequency]
 # get s11
-set s11 [dict get $data v(s_1_1)]
+set s11 [dict get $data s_1_1]
 # get s21
-set s21 [dict get $data v(s_2_1)]
+set s21 [dict get $data s_2_1]
 # extract real/imaginary parts of S11 and S21, and calculate magnitude
 set freq [lmap val $freq {lindex $val 0}]
-set s11Mag [lmap s11Re [lmap val $s11 {lindex $val 0}] s11Im [lmap val $s11 {@ $val 1}] {expr {sqrt($s11Re**2+$s11Im**2)}}]
-set s21Mag [lmap s21Re [lmap val $s21 {lindex $val 0}] s21Im [lmap val $s21 {@ $val 1}] {expr {sqrt($s21Re**2+$s21Im**2)}}]
+set s11Mag [lmap s11Re [lmap val $s11 {lindex $val 0}] s11Im [lmap val $s11 {lindex $val 1}]\
+                    {expr {sqrt($s11Re**2+$s11Im**2)}}]
+set s21Mag [lmap s21Re [lmap val $s21 {lindex $val 0}] s21Im [lmap val $s21 {lindex $val 1}]\
+                    {expr {sqrt($s21Re**2+$s21Im**2)}}]
 # prepare data for ticklecharts
 set freq_s11Mag [lmap freqVal $freq s11MagVal $s11Mag {list $freqVal $s11MagVal}]
 set freq_s21Mag [lmap freqVal $freq s21MagVal $s21Mag {list $freqVal $s21MagVal}]
 
 set chart [ticklecharts::chart new]
-$chart Xaxis -name "Frequency, Hz" -minorTick {show "True"} -type "value" -splitLine {show "True"}
-$chart Yaxis -name "mag(S)" -minorTick {show "True"} -type "value" -splitLine {show "True"}
-$chart SetOptions -title {} -tooltip {trigger "axis"} -legend {} -animation "False"\
-        -toolbox {feature {dataZoom {yAxisIndex "none"}}}
-$chart Add "lineSeries" -data $freq_s11Mag -showAllSymbol "nothing" -name "S11" -symbolSize "0"
-$chart Add "lineSeries" -data $freq_s21Mag -showAllSymbol "nothing" -name "S21" -symbolSize "0"
+$chart Xaxis -name {Frequency, Hz} -minorTick {show True} -type value -splitLine {show True}
+$chart Yaxis -name mag(S) -minorTick {show True} -type value -splitLine {show True}
+$chart SetOptions -title {} -tooltip {trigger axis} -legend {} -animation False\
+        -toolbox {feature {dataZoom {yAxisIndex none}}}
+$chart Add lineSeries -data $freq_s11Mag -showAllSymbol nothing -name S11 -symbolSize 0
+$chart Add lineSeries -data $freq_s21Mag -showAllSymbol nothing -name S21 -symbolSize 0
 set fbasename [file rootname [file tail [info script]]]
 
 $chart Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px

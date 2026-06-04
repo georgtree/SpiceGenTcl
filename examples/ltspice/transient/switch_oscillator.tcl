@@ -29,7 +29,7 @@ set circuit [Circuit new {switch_oscillator}]
 # add elements to circuit
 $circuit add [Tran new -tstep 50e-12 -tstop 80e-9]
 $circuit add [Options new {{method gear} {maxord 3}}]
-$circuit add [RawString new ".ic v(osc_out)=0.25"]
+$circuit add [RawString new {.ic v(osc_out)=0.25}]
 $circuit add $inverter
 $circuit add [Vdc new dd vdd2 0 -dc 3]
 $circuit add [Vdc new measure vdd2 vdd -dc 0]
@@ -38,7 +38,7 @@ $circuit add [C new vdd vdd 0 -c 1e-18]
 # add multiple inverters in the cycle
 for {set i 1} {$i<16} {incr i} {
     set ip1 [+ $i 1]
-    lappend invsList [SubcircuitInstanceAuto new $inverter x${ip1} "n${i} n${ip1} vdd 0"]
+    lappend invsList [SubcircuitInstanceAuto new $inverter x$ip1 "n$i n$ip1 vdd 0"]
 }
 $circuit add {*}$invsList
 $circuit add [SubcircuitInstanceAuto new $inverter x18 {osc_out n1 vdd 0}]
@@ -65,22 +65,22 @@ foreach time [dict get $data time] vout [dict get $data v(osc_out)] imeas [dict 
 # plot results with ticklecharts
 # chart for output voltage
 set chartVout [ticklecharts::chart new]
-$chartVout Xaxis -name "time, s" -minorTick {show "True"} -type "value" -splitLine {show "True"}
-$chartVout Yaxis -name "Output voltage, V" -minorTick {show "True"} -type "value" -splitLine {show "True"}
-$chartVout SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
-        -toolbox {feature {dataZoom {yAxisIndex "none"}}}
-$chartVout Add "lineSeries" -data $timeVout -showAllSymbol "nothing" -symbolSize "0"
+$chartVout Xaxis -name {time, s} -minorTick {show True} -type value -splitLine {show True}
+$chartVout Yaxis -name {Output voltage, V} -minorTick {show True} -type value -splitLine {show True}
+$chartVout SetOptions -title {} -tooltip {trigger axis} -animation False\
+        -toolbox {feature {dataZoom {yAxisIndex none}}}
+$chartVout Add lineSeries -data $timeVout -showAllSymbol nothing -symbolSize 0
 # chart for measured current
 set chartImeas [ticklecharts::chart new]
-$chartImeas Xaxis -name "time, s" -minorTick {show "True"} -type "value" -splitLine {show "True"}
-$chartImeas Yaxis -name "Current, I" -minorTick {show "True"} -type "value" -splitLine {show "True"}
-$chartImeas SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
-        -toolbox {feature {dataZoom {yAxisIndex "none"}}}
-$chartImeas Add "lineSeries" -data $timeImeas -showAllSymbol "nothing" -symbolSize "0"
+$chartImeas Xaxis -name {time, s} -minorTick {show True} -type value -splitLine {show True}
+$chartImeas Yaxis -name {Current, I} -minorTick {show True} -type value -splitLine {show True}
+$chartImeas SetOptions -title {} -tooltip {trigger axis} -animation False\
+        -toolbox {feature {dataZoom {yAxisIndex none}}}
+$chartImeas Add lineSeries -data $timeImeas -showAllSymbol nothing -symbolSize 0
 # create multiplot
 set layout [ticklecharts::Gridlayout new]
-$layout Add $chartVout -bottom "5%" -height "40%" -width "80%"
-$layout Add $chartImeas -bottom "55%" -height "40%" -width "80%"
+$layout Add $chartVout -bottom 5% -height 40% -width 80%
+$layout Add $chartImeas -bottom 55% -height 40% -width 80%
 
 set fbasename [file rootname [file tail [info script]]]
 $layout Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px

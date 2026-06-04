@@ -20,11 +20,11 @@ set title "Tcl SpiceGenTcl package"
 set commonSphinx [list -title $title -sortnamespaces false -pagesplit namespace -recurse false -preamble $startPage\
                     -includesource false -pagesplit namespace -autopunctuate true -compact false -includeprivate false\
                     -product SpiceGenTcl -diagrammer "ditaa --border-width 1" -version $packageVersion\
-                    -copyright "George Yashin" {*}$::argv]
+                    -copyright "George Yashin" -onlyexports true -excludeclasses {^[a-z].*} {*}$::argv]
 set commonNroff [list -title $title -sortnamespaces false -pagesplit namespace -recurse false -preamble $startPage\
                          -pagesplit namespace -autopunctuate true -compact false -includeprivate false\
                          -product SpiceGenTcl -diagrammer "ditaa --border-width 1" -version $packageVersion\
-                         -copyright "George Yashin" {*}$::argv]
+                         -copyright "George Yashin" -onlyexports true -excludeclasses {^[a-z].*} {*}$::argv]
 set namespaces [list "::List of devices" ::FAQ ::Tutorials ::Tips ::Advanced ::Parser ::SpiceGenTcl\
                 ::SpiceGenTcl::Common::BasicDevices ::SpiceGenTcl::Common::Analyses\
                 ::SpiceGenTcl::Common::Sources ::SpiceGenTcl::Ngspice ::SpiceGenTcl::Ngspice::BasicDevices\

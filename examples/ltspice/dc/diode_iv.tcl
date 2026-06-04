@@ -27,8 +27,8 @@ foreach temp $temps {
     set data [$circuit getDataDict]
     set xydata [list]
     foreach x [dict get $data v(anode)] y [dict get $data i(va)] {
-        set xf [format "%.3f" $x]
-        set yf [format "%.3f" [expr {-$y}]]
+        set xf [format %.3f $x]
+        set yf [format %.3f [expr {-$y}]]
         lappend xydata [list $xf $yf]
     }
     lappend dataList $xydata
@@ -36,13 +36,12 @@ foreach temp $temps {
 
 # plot results with ticklecharts
 set chart [ticklecharts::chart new]
-$chart Xaxis -name "v(anode), V" -minorTick {show "True"}  -type "value" -splitLine {show "True"}
-$chart Yaxis -name "Idiode, A" -minorTick {show "True"}  -type "value" -splitLine {show "True"}
-$chart SetOptions -title {} -tooltip {trigger "axis"} -animation "False" -legend {}\
-        -toolbox {feature {dataZoom {yAxisIndex "none"}}}  -grid {left "5%" right "15%"}
+$chart Xaxis -name {v(anode), V} -minorTick {show True}  -type value -splitLine {show True}
+$chart Yaxis -name {Idiode, A} -minorTick {show True}  -type value -splitLine {show True}
+$chart SetOptions -title {} -tooltip {trigger axis} -animation False -legend {}\
+        -toolbox {feature {dataZoom {yAxisIndex none}}}  -grid {left 5% right 15%}
 foreach data $dataList temp $temps {
-    $chart Add "lineSeries" -data $data -showAllSymbol "nothing" -name "${temp}°C" -symbolSize "2"
+    $chart Add lineSeries -data $data -showAllSymbol nothing -name ${temp}°C -symbolSize 2
 }
 set fbasename [file rootname [file tail [info script]]]
-
 $chart Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px

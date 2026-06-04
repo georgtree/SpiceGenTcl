@@ -33,9 +33,9 @@ proc findBW {freqs vals trigVal} {
 proc createIntervals {data numOfIntervals} {
     set intervals [::math::statistics::minmax-histogram-limits [tcl::mathfunc::min {*}$data] \
             [tcl::mathfunc::max {*}$data] $numOfIntervals]
-    lappend intervalsStrings [format "<=%.2e" [lindex $intervals 0]]
+    lappend intervalsStrings [format <=%.2e [lindex $intervals 0]]
     for {set i 0} {$i<[- [llength $intervals] 1]} {incr i} {
-        lappend intervalsStrings [format "%.2e-%.2e" [lindex $intervals $i] [lindex $intervals [+ $i 1]]]
+        lappend intervalsStrings [format %.2e-%.2e [lindex $intervals $i] [lindex $intervals [+ $i 1]]]
     }
     return [dict create intervals $intervals intervalsStr $intervalsStrings]
 }
@@ -81,11 +81,11 @@ foreach x $freqs y $trace {
 }
 puts [findBW [lmap freq $freqs {lindex $freq 0}] $trace -10]
 set chartTransMag [ticklecharts::chart new]
-$chartTransMag Xaxis -name "Frequency, Hz" -minorTick {show "True"} -type "log"
-$chartTransMag Yaxis -name "Magnitude, dB" -minorTick {show "True"} -type "value"
-$chartTransMag SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
-        -toolbox {feature {dataZoom {yAxisIndex "none"}}} -grid {left "10%" right "15%"}
-$chartTransMag Add "lineSeries" -data $xydata -showAllSymbol "nothing" -symbolSize "1"
+$chartTransMag Xaxis -name {Frequency, Hz} -minorTick {show True} -type log
+$chartTransMag Yaxis -name {Magnitude, dB} -minorTick {show True} -type value
+$chartTransMag SetOptions -title {} -tooltip {trigger axis} -animation False\
+        -toolbox {feature {dataZoom {yAxisIndex none}}} -grid {left 10% right 15%}
+$chartTransMag Add lineSeries -data $xydata -showAllSymbol nothing -symbolSize 1
 set fbasename [file rootname [file tail [info script]]]
 
 $chartTransMag Render -outfile [file normalize [file join .. html_charts ${fbasename}_typ.html]] -width 800px\
@@ -170,24 +170,24 @@ set normDist [createDist $bwsNorm [dict get $normIntervals intervals]]
 # plot results with ticklecharts
 # chart for uniformly distributed parameters
 set chartUni [ticklecharts::chart new]
-$chartUni Xaxis -name "Frequency intervals, Hz" -data [list [dict get $uniIntervals intervalsStr]]\
-        -axisTick {show "True" alignWithLabel "True"} -axisLabel {interval "0" rotate "45" fontSize "8"}
-$chartUni Yaxis -name "Bandwidths per interval" -minorTick {show "True"} -type "value"
-$chartUni SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
-        -toolbox {feature {dataZoom {yAxisIndex "none"}}}
-$chartUni Add "barSeries" -data [list $uniDist]
+$chartUni Xaxis -name {Frequency intervals, Hz} -data [list [dict get $uniIntervals intervalsStr]]\
+        -axisTick {show True alignWithLabel True} -axisLabel {interval 0 rotate 45 fontSize 8}
+$chartUni Yaxis -name {Bandwidths per interval} -minorTick {show True} -type value
+$chartUni SetOptions -title {} -tooltip {trigger axis} -animation False\
+        -toolbox {feature {dataZoom {yAxisIndex none}}}
+$chartUni Add barSeries -data [list $uniDist]
 # chart for normally distributed parameters
 set chartNorm [ticklecharts::chart new]
-$chartNorm Xaxis -name "Frequency intervals, Hz" -data [list [dict get $normIntervals intervalsStr]]\
-        -axisTick {show "True" alignWithLabel "True"} -axisLabel {interval "0" rotate "45" fontSize "8"}
-$chartNorm Yaxis -name "Bandwidths per interval" -minorTick {show "True"} -type "value"
-$chartNorm SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
-        -toolbox {feature {dataZoom {yAxisIndex "none"}}}
-$chartNorm Add "barSeries" -data [list $normDist]
+$chartNorm Xaxis -name {Frequency intervals, Hz} -data [list [dict get $normIntervals intervalsStr]]\
+        -axisTick {show True alignWithLabel True} -axisLabel {interval 0 rotate 45 fontSize 8}
+$chartNorm Yaxis -name {Bandwidths per interval} -minorTick {show True} -type value
+$chartNorm SetOptions -title {} -tooltip {trigger axis} -animation False\
+        -toolbox {feature {dataZoom {yAxisIndex none}}}
+$chartNorm Add barSeries -data [list $normDist]
 # create multiplot
 set layout [ticklecharts::Gridlayout new]
-$layout Add $chartNorm -bottom "10%" -height "35%" -width "75%"
-$layout Add $chartUni -bottom "60%" -height "35%" -width "75%"
+$layout Add $chartNorm -bottom 10% -height 35% -width 75%
+$layout Add $chartUni -bottom 60% -height 35% -width 75%
 
 set fbasename [file rootname [file tail [info script]]]
 $layout Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px
@@ -196,12 +196,12 @@ $layout Render -outfile [file normalize [file join .. html_charts $fbasename.htm
 set normDistWithUniIntervals [createDist $bwsNorm [dict get $uniIntervals intervals]]
 
 set chartCombined [ticklecharts::chart new]
-$chartCombined Xaxis -name "Frequency intervals, Hz" -data [list [dict get $uniIntervals intervalsStr]]\
-        -axisTick {show "True" alignWithLabel "True"} -axisLabel {interval "0" rotate "45" fontSize "8"}
-$chartCombined Yaxis -name "Bandwidths per interval" -minorTick {show "True"} -type "value"
-$chartCombined SetOptions -title {} -legend  {} -tooltip {trigger "axis"} -animation "False"\
-        -toolbox {feature {dataZoom {yAxisIndex "none"}}} -grid {left "10%" right "15%"}
-$chartCombined Add "barSeries" -data [list $uniDist] -name "Uniform"
-$chartCombined Add "barSeries" -data [list $normDistWithUniIntervals] -name "Normal"
+$chartCombined Xaxis -name{Frequency intervals, Hz} -data [list [dict get $uniIntervals intervalsStr]]\
+        -axisTick {show True alignWithLabel True} -axisLabel {interval 0 rotate 45 fontSize 8}
+$chartCombined Yaxis -name {Bandwidths per interval} -minorTick {show True} -type value
+$chartCombined SetOptions -title {} -legend  {} -tooltip {trigger axis} -animation False\
+        -toolbox {feature {dataZoom {yAxisIndex none}}} -grid {left 10% right 15%}
+$chartCombined Add barSeries -data [list $uniDist] -name Uniform
+$chartCombined Add barSeries -data [list $normDistWithUniIntervals] -name Normal
 $chartCombined Render -outfile [file normalize [file join .. html_charts ${fbasename}_combined.html]] -width 800px\
         -height 500px

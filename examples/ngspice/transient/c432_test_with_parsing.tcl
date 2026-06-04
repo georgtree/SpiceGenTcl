@@ -22,21 +22,20 @@ foreach time [dict get $data time] vg429 [dict get $data v(g429)] vg430 [dict ge
 puts [$parser configure -definitions]
 # plot results with ticklecharts
 set chartVout [ticklecharts::chart new]
-$chartVout Xaxis -name "time, s" -minorTick {show "True"} -type "value" -splitLine {show "True"}
-$chartVout Yaxis -name "g429 voltage, V" -minorTick {show "True"} -type "value" -splitLine {show "True"}
-$chartVout SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
-        -toolbox {feature {dataZoom {yAxisIndex "none"}}}
-$chartVout Add "lineSeries" -data $timeVg429 -showAllSymbol "nothing" -symbolSize "0"
+$chartVout Xaxis -name {time, s} -minorTick {show True} -type value -splitLine {show True}
+$chartVout Yaxis -name {g429 voltage, V} -minorTick {show True} -type value -splitLine {show True}
+$chartVout SetOptions -title {} -tooltip {trigger axis} -animation False -toolbox {feature {dataZoom {yAxisIndex none}}}
+$chartVout Add lineSeries -data $timeVg429 -showAllSymbol nothing -symbolSize 0
 set chartImeas [ticklecharts::chart new]
-$chartImeas Xaxis -name "time, s" -minorTick {show "True"} -type "value" -splitLine {show "True"}
-$chartImeas Yaxis -name "g430 voltage, V" -minorTick {show "True"} -type "value" -splitLine {show "True"}
-$chartImeas SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
-        -toolbox {feature {dataZoom {yAxisIndex "none"}}}
-$chartImeas Add "lineSeries" -data $timeVg430 -showAllSymbol "nothing" -symbolSize "0"
+$chartImeas Xaxis -name {time, s} -minorTick {show True} -type value -splitLine {show True}
+$chartImeas Yaxis -name {g430 voltage, V} -minorTick {show True} -type value -splitLine {show True}
+$chartImeas SetOptions -title {} -tooltip {trigger axis} -animation False\
+        -toolbox {feature {dataZoom {yAxisIndex none}}}
+$chartImeas Add lineSeries -data $timeVg430 -showAllSymbol nothing -symbolSize 0
 # create multiplot
 set layout [ticklecharts::Gridlayout new]
-$layout Add $chartVout -bottom "5%" -height "40%" -width "80%"
-$layout Add $chartImeas -bottom "55%" -height "40%" -width "80%"
+$layout Add $chartVout -bottom 5% -height 40% -width 80%
+$layout Add $chartImeas -bottom 55% -height 40% -width 80%
 
 set fbasename [file rootname [file tail [info script]]]
 $layout Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px

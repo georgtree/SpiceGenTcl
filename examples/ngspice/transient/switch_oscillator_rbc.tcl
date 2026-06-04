@@ -30,7 +30,7 @@ set circuit [Circuit new {switch_oscillator}]
 # add elements to circuit
 $circuit add [Tran new -tstep 50e-12 -tstop 80e-9]
 $circuit add [Options new {{method gear} {maxord 3}}]
-$circuit add [RawString new ".ic v(osc_out)=0.25"]
+$circuit add [RawString new {.ic v(osc_out)=0.25}]
 $circuit add $inverter
 $circuit add [Vdc new dd vdd2 0 -dc 3]
 $circuit add [Vdc new measure vdd2 vdd -dc 0]
@@ -39,7 +39,7 @@ $circuit add [C new vdd vdd 0 -c 1e-18]
 # add multiple inverters in the cycle
 for {set i 1} {$i<16} {incr i} {
     set ip1 [+ $i 1]
-    lappend invsList [SubcircuitInstanceAuto new $inverter x${ip1} "n${i} n${ip1} vdd 0"]
+    lappend invsList [SubcircuitInstanceAuto new $inverter x$ip1 "n$i n$ip1 vdd 0"]
 }
 $circuit add {*}$invsList
 $circuit add [SubcircuitInstanceAuto new $inverter x18 {osc_out n1 vdd 0}]

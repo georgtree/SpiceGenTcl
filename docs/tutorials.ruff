@@ -289,15 +289,15 @@ namespace eval Tutorials {
         foreach temp $temps {
             $tempSt configure -value $temp
             $circuit runAndRead
-            puts [$circuit getLog]
+            puts [$circuit configure -log]
             set data [$circuit getDataDict]
-            foreach x [dict get $data v(anode)] y [dict get $data i(va)]   {
-                set xf [format "%.3f" $x]
-                set yf [format "%.3f" [expr {-$y}]]
+            set xydata [list]
+            foreach x [dict get $data v(anode)] y [dict get $data i(va)] {
+                set xf [format %.3f $x]
+                set yf [format %.3f [expr {-$y}]]
                 lappend xydata [list $xf $yf]
-            }    
+            }
             lappend dataList $xydata
-            unset xydata
         }
         ```
         
@@ -305,16 +305,16 @@ namespace eval Tutorials {
         ```tcl
         # plot results with ticklecharts
         set chart [ticklecharts::chart new]
-        $chart Xaxis -name "v(anode), V" -minorTick {show "True"}  -type "value" -splitLine {show "True"}
-        $chart Yaxis -name "Idiode, A" -minorTick {show "True"}  -type "value" -splitLine {show "True"}
-        $chart SetOptions -title {} -tooltip {trigger "axis"} -animation "False" -legend {}\
-                -toolbox {feature {dataZoom {yAxisIndex "none"}}}  -grid {left "5%" right "15%"} -backgroundColor "#212121"
+        $chart Xaxis -name {v(anode), V} -minorTick {show True}  -type value -splitLine {show True}
+        $chart Yaxis -name {Idiode, A} -minorTick {show True}  -type value -splitLine {show True}
+        $chart SetOptions -title {} -tooltip {trigger axis} -animation False -legend {}\
+                -toolbox {feature {dataZoom {yAxisIndex none}}} -grid {left 5% right 15%}
         foreach data $dataList temp $temps {
-            $chart Add "lineSeries" -data $data -showAllSymbol "nothing" -name "${temp}°C" -symbolSize "2"
+            $chart Add lineSeries -data $data -showAllSymbol nothing -name ${temp}°C -symbolSize 2
         }
         set fbasename [file rootname [file tail [info script]]]
 
-        $chart Render -outfile [file normalize [file join .. html_charts $fbasename.html]]
+        $chart Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px
         ```
         
         In the picture, you can see how temperature affects the forward current of the diode. Because the series
@@ -401,8 +401,8 @@ namespace eval Tutorials {
             set x $volt
             # get imaginary part of current
             set y [lindex [dict get $data i(va)] 0 1]
-            set xf [format "%.3e" $x]
-            set yf [format "%.2e" [expr {-$y/(2*$pi*1e5*1e-9)}]]
+            set xf [format %.3e $x]
+            set yf [format %.2e [expr {-$y/(2*$pi*1e5*1e-9)}]]
             lappend xydata [list $xf $yf]
         }
         ```
@@ -430,14 +430,13 @@ namespace eval Tutorials {
         ```tcl
         # plot results with ticklecharts
         set chart [ticklecharts::chart new]
-        $chart Xaxis -name "v(0,c), V" -minorTick {show "True"} -type "value" -splitLine {show "True"}
-        $chart Yaxis -name "Diode capacitance, nF" -minorTick {show "True"} -type "value" -splitLine {show "True"}
-        $chart SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
-                -toolbox {feature {dataZoom {yAxisIndex "none"}}} -backgroundColor "#212121"
-        $chart Add "lineSeries" -data $xydata -showAllSymbol "nothing" 
+        $chart Xaxis -name {v(0,c), V} -minorTick {show True} -type value -splitLine {show True}
+        $chart Yaxis -name {Diode capacitance, nF} -minorTick {show True} -type value -splitLine {show True}
+        $chart SetOptions -title {} -tooltip {trigger axis} -animation False -toolbox {feature {dataZoom {yAxisIndex none}}}
+        $chart Add lineSeries -data $xydata -showAllSymbol nothing
         set fbasename [file rootname [file tail [info script]]]
 
-        $chart Render -outfile [file normalize [file join .. html_charts $fbasename.html]]
+        $chart Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px
         ```
         As a result, we obtain the expected curve, showing a decrease in capacitance value with higher reverse voltage:
         
@@ -454,19 +453,10 @@ namespace eval Tutorials {
         # create top-level circuit
         set circuit [Circuit new {simple differential pair}]
         # add elements to circuit
-        $circuit add [Vdc new cc 8 0 -dc 12]
-        $circuit add [Vdc new ee 9 0 -dc -12]
-        $circuit add [Vac new cm 1 0 -ac 1]
-        $circuit add [Vac new dm 1 11 -ac 1]
-        $circuit add [Q new 1 4 2 6 -model qnr]
-        $circuit add [Q new 2 5 3 6 -model qnl]
-        $circuit add [R new s1 11 2 -r 1e3]
-        $circuit add [R new s2 3 1 -r 1e3]
-        $circuit add [R new c1 4 8 -r 10e3]
-        $circuit add [R new c2 5 8 -r 10e3]
-        $circuit add [Q new 3 7 7 9 -model qnl]
-        $circuit add [Q new 4 6 7 9 -model qnr]
-        $circuit add [R new bias 7 8 -r 20e3]
+        $circuit add [Vdc new cc 8 0 -dc 12] [Vdc new ee 9 0 -dc -12] [Vac new cm 1 0 -ac 1] [Vac new dm 1 11 -ac 1]\
+                [Q new 1 4 2 6 -model qnr] [Q new 2 5 3 6 -model qnl] [R new s1 11 2 -r 1e3] [R new s2 3 1 -r 1e3]\
+                [R new c1 4 8 -r 10e3] [R new c2 5 8 -r 10e3] [Q new 3 7 7 9 -model qnl] [Q new 4 6 7 9 -model qnr]\
+                [R new bias 7 8 -r 20e3]
         ```
         
         Then we add models for NPN and PNP bipolar transistors:
@@ -492,6 +482,7 @@ namespace eval Tutorials {
         set data [$circuit getDataDict]
         set vrc1 [dict get $data v(rc1)]
         set vrc2 [dict get $data v(rc2)]
+        puts [format {vrc1=%.3e vrc2=%.3e} $vrc1 $vrc2]
         ```
         
         To print resulted sensitivities we use `format` command where we specify the format of the number:
@@ -538,7 +529,7 @@ namespace eval Tutorials {
         # add elements to circuit
         $circuit add [Tran new -tstep 50e-12 -tstop 80e-9]
         $circuit add [Options new {{method gear} {maxord 3}}]
-        $circuit add [RawString new ".ic v(osc_out)=0.25"]
+        $circuit add [RawString new {.ic v(osc_out)=0.25}]
         $circuit add $inverter
         $circuit add [Vdc new dd vdd2 0 -dc 3]
         $circuit add [Vdc new measure vdd2 vdd -dc 0]
@@ -551,7 +542,7 @@ namespace eval Tutorials {
         # add multiple inverters in the loop
         for {set i 1} {$i<16} {incr i} {
             set ip1 [+ $i 1]
-            lappend invsList [SubcircuitInstanceAuto new $inverter x${ip1} "n${i} n${ip1} vdd 0"]
+            lappend invsList [SubcircuitInstanceAuto new $inverter x$ip1 "n$i n$ip1 vdd 0"]
         }
         $circuit add {*}$invsList
         ```
@@ -588,25 +579,24 @@ namespace eval Tutorials {
         # plot results with ticklecharts
         # chart for output voltage
         set chartVout [ticklecharts::chart new]
-        $chartVout Xaxis -name "time, s" -minorTick {show "True"} -type "value" -splitLine {show "True"}
-        $chartVout Yaxis -name "Output voltage, V" -minorTick {show "True"} -type "value" -splitLine {show "True"}
-        $chartVout SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
-                -toolbox {feature {dataZoom {yAxisIndex "none"}}} -backgroundColor "#212121"
-        $chartVout Add "lineSeries" -data $timeVout -showAllSymbol "nothing" -symbolSize "0"
+        $chartVout Xaxis -name {time, s} -minorTick {show True} -type value -splitLine {show True}
+        $chartVout Yaxis -name {Output voltage, V} -minorTick {show True} -type value -splitLine {show True}
+        $chartVout SetOptions -title {} -tooltip {trigger axis} -animation False -toolbox {feature {dataZoom {yAxisIndex none}}}
+        $chartVout Add lineSeries -data $timeVout -showAllSymbol nothing -symbolSize 0
         # chart for measured current
         set chartImeas [ticklecharts::chart new]
-        $chartImeas Xaxis -name "time, s" -minorTick {show "True"} -type "value" -splitLine {show "True"}
-        $chartImeas Yaxis -name "Current, I" -minorTick {show "True"} -type "value" -splitLine {show "True"}
-        $chartImeas SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
-                -toolbox {feature {dataZoom {yAxisIndex "none"}}} -backgroundColor "#212121"
-        $chartImeas Add "lineSeries" -data $timeImeas -showAllSymbol "nothing" -symbolSize "0"
+        $chartImeas Xaxis -name {time, s} -minorTick {show True} -type value -splitLine {show True}
+        $chartImeas Yaxis -name {Current, I} -minorTick {show True} -type value -splitLine {show True}
+        $chartImeas SetOptions -title {} -tooltip {trigger axis} -animation False\
+                -toolbox {feature {dataZoom {yAxisIndex none}}}
+        $chartImeas Add lineSeries -data $timeImeas -showAllSymbol nothing -symbolSize 0
         # create multiplot
         set layout [ticklecharts::Gridlayout new]
-        $layout Add $chartVout -bottom "5%" -height "40%" -width "80%"
-        $layout Add $chartImeas -bottom "55%" -height "40%" -width "80%"
+        $layout Add $chartVout -bottom 5% -height 40% -width 80%
+        $layout Add $chartImeas -bottom 55% -height 40% -width 80%
 
         set fbasename [file rootname [file tail [info script]]]
-        $layout Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -height 800px
+        $layout Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px
         ```
         
         !ticklechart_mark_switch_oscillator_ngspice!
@@ -656,9 +646,9 @@ namespace eval Tutorials {
                 set params {}
                 # add elements to subcircuit definition
                 global variable nand
-                my add [XAuto new $nand x1 "1 2 7 6"] [XAuto new $nand x2 "1 7 8 6"] [XAuto new $nand x3 "2 7 9 6"]\
-                        [XAuto new $nand x4 "8 9 10 6"] [XAuto new $nand x5 "3 10 11 6"] [XAuto new $nand x6 "3 11 12 6"]\
-                        [XAuto new $nand x7 "10 11 13 6"] [XAuto new $nand x8 "12 13 4 6"] [XAuto new $nand x9 "11 7 5 6"]
+                my add [XAuto new $nand x1 {1 2 7 6}] [XAuto new $nand x2 {1 7 8 6}] [XAuto new $nand x3 {2 7 9 6}]\
+                        [XAuto new $nand x4 {8 9 10 6}] [XAuto new $nand x5 {3 10 11 6}] [XAuto new $nand x6 {3 11 12 6}]\
+                        [XAuto new $nand x7 {10 11 13 6}] [XAuto new $nand x8 {12 13 4 6}] [XAuto new $nand x9 {11 7 5 6}]
                 # pass name, list of pins and list of parameters to Subcircuit constructor
                 next onebit $pins $params
             }
@@ -682,7 +672,7 @@ namespace eval Tutorials {
                 set params {}
                 # add elements to subcircuit definition
                 global variable onebit
-                my add [XAuto new $onebit x1 "1 2 7 5 10 9"] [XAuto new $onebit x2 "3 4 10 6 8 9"]
+                my add [XAuto new $onebit x1 {1 2 7 5 10 9}] [XAuto new $onebit x2 {3 4 10 6 8 9}]
                 # pass name, list of pins and list of parameters to Subcircuit constructor
                 next twobit $pins $params
             }
@@ -699,7 +689,7 @@ namespace eval Tutorials {
                 set params {}
                 # add elements to subcircuit definition
                 global variable twobit
-                my add [XAuto new $twobit x1 "1 2 3 4 9 10 13 16 15"] [XAuto new $twobit x2 "5 6 7 8 11 12 16 14 15"] 
+                my add [XAuto new $twobit x1 {1 2 3 4 9 10 13 16 15}] [XAuto new $twobit x2 {5 6 7 8 11 12 16 14 15}] 
                 # pass name, list of pins and list of parameters to Subcircuit constructor
                 next fourbit $pins $params
             }
@@ -727,8 +717,8 @@ namespace eval Tutorials {
         $circuit add [Vdc new cc 99 0 -dc 5]
         set i 1
         foreach name [list in1a in1b in2a in2b in3a in3b in4a in4b] {
-            $circuit add [Vpulse new $name $i 0 -low 0 -high 3 -td 0 -tf $trtf -tr $trtf\
-                    -pw [expr {$tonStep*pow(2,$i-1)}] -per [expr {$perStep*pow(2,$i-1)}]]
+            $circuit add [Vpulse new $name $i 0 -low 0 -high 3 -td 0 -tf $trtf -tr $trtf -pw [expr {$tonStep*pow(2,$i-1)}]\
+                                  -per [expr {$perStep*pow(2,$i-1)}]]
             incr i
         }
         ```
@@ -771,23 +761,22 @@ namespace eval Tutorials {
             lappend timeV12 [list $time $v12]
         }
         # plot data with ticklecharts
-        set nodes [list 9 10 11 12]
+        set nodes {9 10 11 12}
         set layout [ticklecharts::Gridlayout new]
         set i 0
         foreach node $nodes {
             ticklecharts::chart create chartV$node
-            chartV$node SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
-                    -toolbox {feature {dataZoom {yAxisIndex "none"}}} -backgroundColor "#212121"
-            chartV$node Xaxis -name "time, s" -minorTick {show "True"} -type "value" -splitLine {show "True"}
-            chartV$node Yaxis -name "v(${node}), V" -minorTick {show "True"} -type "value" -splitLine {show "True"}
-            chartV$node Add "lineSeries" -data [set [subst timeV$node]] -showAllSymbol "nothing" -name "V(${node})"\
-                    -symbolSize "0"
-            $layout Add chartV$node -bottom "[expr {4+24*$i}]%" -height "18%" -width "80%"
+            chartV$node SetOptions -title {} -tooltip {trigger axis} -animation False\
+                    -toolbox {feature {dataZoom {yAxisIndex none}}}
+            chartV$node Xaxis -name {time, s} -minorTick {show True} -type value -splitLine {show True}
+            chartV$node Yaxis -name "v(${node}), V" -minorTick {show True} -type value -splitLine {show True}
+            chartV$node Add lineSeries -data [set [subst timeV$node]] -showAllSymbol nothing -name V(${node}) -symbolSize 0
+            $layout Add chartV$node -bottom [expr {4+24*$i}]% -height 18% -width 80%
             incr i
         }
 
         set fbasename [file rootname [file tail [info script]]]
-        $layout Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -height 800px
+        $layout Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px
         ```
         Results:
         
@@ -848,13 +837,15 @@ namespace eval Tutorials {
         # get frequency
         set freq [dict get $data frequency]
         # get s11
-        set s11 [dict get $data v(s_1_1)]
+        set s11 [dict get $data s_1_1]
         # get s21
-        set s21 [dict get $data v(s_2_1)]
+        set s21 [dict get $data s_2_1]
         # extract real/imaginary parts of S11 and S21, and calculate magnitude
         set freq [lmap val $freq {lindex $val 0}]
-        set s11Mag [lmap s11Re [lmap val $s11 {lindex $val 0}] s11Im [lmap val $s11 {lindex $val 1}] {expr {sqrt($s11Re**2+$s11Im**2)}}]
-        set s21Mag [lmap s21Re [lmap val $s21 {lindex $val 0}] s21Im [lmap val $s21 {lindex $val 1}] {expr {sqrt($s21Re**2+$s21Im**2)}}]
+        set s11Mag [lmap s11Re [lmap val $s11 {lindex $val 0}] s11Im [lmap val $s11 {lindex $val 1}]\
+                            {expr {sqrt($s11Re**2+$s11Im**2)}}]
+        set s21Mag [lmap s21Re [lmap val $s21 {lindex $val 0}] s21Im [lmap val $s21 {lindex $val 1}]\
+                            {expr {sqrt($s21Re**2+$s21Im**2)}}]
         # prepare data for ticklecharts
         set freq_s11Mag [lmap freqVal $freq s11MagVal $s11Mag {list $freqVal $s11MagVal}]
         set freq_s21Mag [lmap freqVal $freq s21MagVal $s21Mag {list $freqVal $s21MagVal}]
@@ -863,15 +854,15 @@ namespace eval Tutorials {
         Now we are ready to plot data:
         ```tcl
         set chart [ticklecharts::chart new]
-        $chart Xaxis -name "Frequency, Hz" -minorTick {show "True"} -type "value" -splitLine {show "True"}
-        $chart Yaxis -name "mag(S)" -minorTick {show "True"} -type "value" -splitLine {show "True"}
-        $chart SetOptions -title {} -tooltip {trigger "axis"} -legend {} -animation "False"\
-                -toolbox {feature {dataZoom {yAxisIndex "none"}}} -backgroundColor "#212121"
-        $chart Add "lineSeries" -data $freq_s11Mag -showAllSymbol "nothing" -name "S11" -symbolSize "0"
-        $chart Add "lineSeries" -data $freq_s21Mag -showAllSymbol "nothing" -name "S21" -symbolSize "0"
+        $chart Xaxis -name {Frequency, Hz} -minorTick {show True} -type value -splitLine {show True}
+        $chart Yaxis -name mag(S) -minorTick {show True} -type value -splitLine {show True}
+        $chart SetOptions -title {} -tooltip {trigger axis} -legend {} -animation False\
+                -toolbox {feature {dataZoom {yAxisIndex none}}}
+        $chart Add lineSeries -data $freq_s11Mag -showAllSymbol nothing -name S11 -symbolSize 0
+        $chart Add lineSeries -data $freq_s21Mag -showAllSymbol nothing -name S21 -symbolSize 0
         set fbasename [file rootname [file tail [info script]]]
 
-        $chart Render -outfile [file normalize [file join .. html_charts $fbasename.html]]
+        $chart Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px
         ```
 
         The result is:

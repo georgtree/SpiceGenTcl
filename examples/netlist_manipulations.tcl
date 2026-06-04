@@ -25,7 +25,7 @@ $netlist add [Tran new -tstep 1e-6 -tstop 1e-3 -uic -name tran1]
 # generate SPICE netlist
 puts [$netlist genSPICEString]
 $netlist del c1
-puts ""
+puts {}
 puts [$netlist genSPICEString]
 # get reference of resistor object
 set resistor [$netlist getElement r1]
@@ -33,7 +33,7 @@ set resistor [$netlist getElement r1]
 $resistor actOnParam -set r 100
 $resistor actOnPin -set np net10
 # generate SPICE netlist again with different value of resistor
-puts "\n"
+puts \n
 puts [$netlist genSPICEString]
 # get and print all names of elements attached to $netlist
 puts [$netlist getAllElemNames]

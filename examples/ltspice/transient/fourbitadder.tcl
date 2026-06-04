@@ -37,9 +37,9 @@ oo::class create ONEBIT {
         set params {}
         # add elements to subcircuit definition
         global variable nand
-        my add [XAuto new $nand x1 "1 2 7 6"] [XAuto new $nand x2 "1 7 8 6"] [XAuto new $nand x3 "2 7 9 6"]\
-                [XAuto new $nand x4 "8 9 10 6"] [XAuto new $nand x5 "3 10 11 6"] [XAuto new $nand x6 "3 11 12 6"]\
-                [XAuto new $nand x7 "10 11 13 6"] [XAuto new $nand x8 "12 13 4 6"] [XAuto new $nand x9 "11 7 5 6"]
+        my add [XAuto new $nand x1 {1 2 7 6}] [XAuto new $nand x2 {1 7 8 6}] [XAuto new $nand x3 {2 7 9 6}]\
+                [XAuto new $nand x4 {8 9 10 6}] [XAuto new $nand x5 {3 10 11 6}] [XAuto new $nand x6 {3 11 12 6}]\
+                [XAuto new $nand x7 {10 11 13 6}] [XAuto new $nand x8 {12 13 4 6}] [XAuto new $nand x9 {11 7 5 6}]
         # pass name, list of pins and list of parameters to Subcircuit constructor
         next onebit $pins $params
     }
@@ -57,7 +57,7 @@ oo::class create TWOBIT {
         set params {}
         # add elements to subcircuit definition
         global variable onebit
-        my add [XAuto new $onebit x1 "1 2 7 5 10 9"] [XAuto new $onebit x2 "3 4 10 6 8 9"]
+        my add [XAuto new $onebit x1 {1 2 7 5 10 9}] [XAuto new $onebit x2 {3 4 10 6 8 9}]
         # pass name, list of pins and list of parameters to Subcircuit constructor
         next twobit $pins $params
     }
@@ -75,7 +75,7 @@ oo::class create FOURBIT {
         set params {}
         # add elements to subcircuit definition
         global variable twobit
-        my add [XAuto new $twobit x1 "1 2 3 4 9 10 13 16 15"] [XAuto new $twobit x2 "5 6 7 8 11 12 16 14 15"]
+        my add [XAuto new $twobit x1 {1 2 3 4 9 10 13 16 15}] [XAuto new $twobit x2 {5 6 7 8 11 12 16 14 15}]
         # pass name, list of pins and list of parameters to Subcircuit constructor
         next fourbit $pins $params
     }
@@ -118,7 +118,6 @@ set v9List [dict get $data v(9)]
 set v10List [dict get $data v(10)]
 set v11List [dict get $data v(11)]
 set v12List [dict get $data v(12)]
-
 foreach time $timeList v9 $v9List v10 $v10List v11 $v11List v12 $v12List {
     lappend timeV9 [list $time $v9]
     lappend timeV10 [list $time $v10]
@@ -127,20 +126,18 @@ foreach time $timeList v9 $v9List v10 $v10List v11 $v11List v12 $v12List {
 }
 
 # plot data with ticklecharts
-set nodes [list 9 10 11 12]
+set nodes {9 10 11 12}
 set layout [ticklecharts::Gridlayout new]
 set i 0
 foreach node $nodes {
     ticklecharts::chart create chartV$node
-    chartV$node SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
-            -toolbox {feature {dataZoom {yAxisIndex "none"}}}
-    chartV$node Xaxis -name "time, s" -minorTick {show "True"} -type "value" -splitLine {show "True"}
-    chartV$node Yaxis -name "v(${node}), V" -minorTick {show "True"} -type "value" -splitLine {show "True"}
-    chartV$node Add "lineSeries" -data [subst $[subst timeV$node]] -showAllSymbol "nothing" -name "V(${node})"\
-            -symbolSize "0"
-    $layout Add chartV$node -bottom "[expr {4+24*$i}]%" -height "18%" -width "80%"
+    chartV$node SetOptions -title {} -tooltip {trigger axis} -animation False\
+            -toolbox {feature {dataZoom {yAxisIndex none}}}
+    chartV$node Xaxis -name {time, s} -minorTick {show True} -type value -splitLine {show True}
+    chartV$node Yaxis -name "v(${node}), V" -minorTick {show True} -type value -splitLine {show True}
+    chartV$node Add lineSeries -data [subst $[subst timeV$node]] -showAllSymbol nothing -name V(${node}) -symbolSize 0
+    $layout Add chartV$node -bottom [expr {4+24*$i}]% -height 18% -width 80%
     incr i
 }
-
 set fbasename [file rootname [file tail [info script]]]
 $layout Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px

@@ -81,7 +81,8 @@ proc costFunc {xall pdata args} {
         lappend vlowList [$data measure -find v(out) -at $tmeas1]
         lappend vhighList [$data measure -find v(out) -at $tmeas2]
         set instantPower [expr {mul([dict get $dataDict i(vdd)], [dict get $dataDict v(vdd)])}]
-        lappend psupplyList [measure -xname time -data [dict create time [dict get $dataDict time] instantPower $instantPower]\
+        lappend psupplyList [measure -xname time\
+                                     -data [dict create time [dict get $dataDict time] instantPower $instantPower]\
                                      -rms "-vec instantPower -from $tmeas1 -to $tmeas2"]
     }
     set costObj 0.0
@@ -103,8 +104,8 @@ proc costFunc {xall pdata args} {
 
 # set and run optimizer
 set par [::tclopt::Parameter new width $pWidth -lowlim 1e-4 -uplim 10e-3]
-set optimizer [::tclopt::DE new -funct costFunc -pdata $pdata -strategy rand-to-best/1/exp -genmax 50 -refresh 1\
-                           -np 10 -f 0.5 -cr 1 -seed 3 -debug -abstol 1e-6 -history -histfreq 1]
+set optimizer [::tclopt::DE new -funct costFunc -pdata $pdata -strategy rand-to-best/1/exp -genmax 50 -refresh 1 -np 10\
+                       -f 0.5 -cr 1 -seed 3 -debug -abstol 1e-6 -history -histfreq 1]
 $optimizer addPars $par
 
 # get results and history
@@ -119,11 +120,10 @@ foreach genTr $trajectory genF $bestf {
 
 # plot 2D trajectory
 set chart [ticklecharts::chart new]
-$chart Xaxis -name "Generation" -minorTick {show "True"} -type "value" -splitLine {show "True"}
-$chart Yaxis -name "Width" -minorTick {show "True"}  -splitLine {show "True"}
-$chart SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
-        -toolbox {feature {dataZoom {yAxisIndex "none"}}}
-$chart Add "lineSeries" -name "Best trajectory" -data $functionTrajectory -showAllSymbol "nothing"
+$chart Xaxis -name Generation -minorTick {show True} -type value -splitLine {show True}
+$chart Yaxis -name Width -minorTick {show True}  -splitLine {show True}
+$chart SetOptions -title {} -tooltip {trigger axis} -animation False -toolbox {feature {dataZoom {yAxisIndex none}}}
+$chart Add lineSeries -name {Best trajectory} -data $functionTrajectory -showAllSymbol nothing
 set fbasename [file rootname [file tail [info script]]]
 $chart Render -outfile [file normalize [file join .. html_charts ${fbasename}_plot.html]] -width 800px -height 500px
 
@@ -163,14 +163,14 @@ set psupplyFinal [measure -xname time -data [dict create time [dict get $dataDic
 
 # plot waveforms
 set chart [ticklecharts::chart new]
-$chart Xaxis -name "Time, s" -minorTick {show "True"} -type "value" -splitLine {show "True"}
-$chart Yaxis -name "v(out)" -minorTick {show "True"}  -splitLine {show "True"}
-$chart SetOptions -title {} -legend {} -tooltip {trigger "axis"} -animation "False"\
-        -toolbox {feature {dataZoom {yAxisIndex "none"}}}
-$chart Add "lineSeries" -name "initial, vdd=[lindex $vSupplyVals 2]" -data $initialWaveform -showAllSymbol "nothing"\
-        -symbolSize "0"
-$chart Add "lineSeries" -name "final, vdd=[lindex $vSupplyVals 2]" -data $finalWaveform -showAllSymbol "nothing"\
-        -symbolSize "0"
+$chart Xaxis -name {Time, s} -minorTick {show True} -type value -splitLine {show True}
+$chart Yaxis -name v(out) -minorTick {show True}  -splitLine {show True}
+$chart SetOptions -title {} -legend {} -tooltip {trigger axis} -animation False\
+        -toolbox {feature {dataZoom {yAxisIndex none}}}
+$chart Add lineSeries -name "initial, vdd=[lindex $vSupplyVals 2]" -data $initialWaveform -showAllSymbol nothing\
+        -symbolSize 0
+$chart Add lineSeries -name "final, vdd=[lindex $vSupplyVals 2]" -data $finalWaveform -showAllSymbol nothing\
+        -symbolSize 0
 
 
 set fbasename [file rootname [file tail [info script]]]
@@ -178,13 +178,13 @@ $chart Render -outfile [file normalize [file join .. html_charts ${fbasename}_wa
         -height 500px
 
 # print resulted values for the highest supply voltage
-puts "Optimization succesfully finished at generation [dict get $results generation], total number of function evaluations\
-      - [dict get $results nfev]"
+puts "Optimization succesfully finished at generation [dict get $results generation], total number of function\
+      evaluations - [dict get $results nfev]"
 puts "Convergence info: [dict get $results info]"
-puts "Best value of cost function is [format "%3e" [dict get $results objfunc]]"
-puts "Final width of PMOS is [format "%.3f" [expr {$width/1e-3}]]mm, from initial value\
-        [format "%.3f" [expr {$initialPWidth/1e-3}]]mm"
+puts "Best value of cost function is [format %3e [dict get $results objfunc]]"
+puts "Final width of PMOS is [format %.3f [expr {$width/1e-3}]]mm, from initial value\
+        [format %.3f [expr {$initialPWidth/1e-3}]]mm"
 puts "For VDD=[lindex $vSupplyVals 2]V,\
-        VLOW: [format "%.3f" $vlowInitial]V → [format "%.3f" $vlowFinal]V<[format "%.3f" $vLowLim]V,\
-        VHIGH: [format "%.3f" $vhighInitial]V → [format "%.3f" $vhighFinal]V>[format "%.3f" $vHighLim]V,\
-        PSUPPLY: [format "%.3f" $psupplyInitial]W → [format "%.3f" $psupplyFinal]W"
+        VLOW: [format %.3f $vlowInitial]V → [format %.3f $vlowFinal]V<[format %.3f $vLowLim]V,\
+        VHIGH: [format %.3f $vhighInitial]V → [format %.3f $vhighFinal]V>[format %.3f $vHighLim]V,\
+        PSUPPLY: [format %.3f $psupplyInitial]W → [format %.3f $psupplyFinal]W"

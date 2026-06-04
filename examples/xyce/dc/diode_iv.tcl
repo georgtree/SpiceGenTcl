@@ -27,8 +27,8 @@ foreach temp $temps {
     set data [$circuit getDataDict]
     set xydata [list]
     foreach x [dict get $data anode] y [dict get $data va#branch] {
-        set xf [format "%.3f" $x]
-        set yf [format "%.3f" [expr {-$y}]]
+        set xf [format %.3f $x]
+        set yf [format %.3f [expr {-$y}]]
         lappend xydata [list $xf $yf]
     }
     lappend dataList $xydata
@@ -37,12 +37,12 @@ foreach temp $temps {
 
 # plot results with ticklecharts
 set chart [ticklecharts::chart new]
-$chart Xaxis -name "v(anode), V" -minorTick {show "True"}  -type "value"
-$chart Yaxis -name "Idiode, A" -minorTick {show "True"}  -type "value"
-$chart SetOptions -title {} -tooltip {trigger "axis"} -animation "False" -legend {}\
-        -toolbox {feature {dataZoom {yAxisIndex "none"}}} -grid {left "5%" right "15%"}
+$chart Xaxis -name {v(anode), V} -minorTick {show True}  -type value
+$chart Yaxis -name {Idiode, A} -minorTick {show True}  -type value
+$chart SetOptions -title {} -tooltip {trigger axis} -animation False -legend {}\
+        -toolbox {feature {dataZoom {yAxisIndex none}}} -grid {left 5% right 15%}
 foreach data $dataList temp $temps {
-    $chart Add "lineSeries" -data $data -showAllSymbol "nothing" -name "${temp}°C" -symbolSize "1"
+    $chart Add lineSeries -data $data -showAllSymbol nothing -name ${temp}°C -symbolSize 1
 }
 set fbasename [file rootname [file tail [info script]]]
 
