@@ -616,6 +616,8 @@ ac_subst_vars='LTLIBOBJS
 LIBOBJS
 TCLLIBPATH
 TCLSH_PROG
+DIST_TEST_FILES
+DOC_HTML_FILES
 PKG_OBJECTS
 PKG_SOURCES
 TCL_SHLIB_LD_LIBS
@@ -3741,7 +3743,15 @@ printf "%s\n" "$as_me: --exec-prefix defaulting to ${prefix}" >&6;}
 
 
 
-    vars="SpiceGenTcl.tcl"
+    vars="SpiceGenTcl.tcl src/generalClasses.tcl src/specElementsClassesCommon.tcl
+                     src/specAnalysesClassesCommon.tcl src/ngspice/specAnalysesClassesNgspice.tcl
+                     src/ngspice/specElementsClassesNgspice.tcl src/ngspice/specModelsClassesNgspice.tcl
+                     src/ngspice/specSimulatorClassesNgspice.tcl src/ngspice/netlistParserClassNgspice.tcl
+                     src/ngspice/specMiscClassesNgspice.tcl src/xyce/specAnalysesClassesXyce.tcl
+                     src/xyce/specElementsClassesXyce.tcl src/xyce/specModelsClassesXyce.tcl
+                     src/xyce/specSimulatorClassesXyce.tcl src/ltspice/specAnalysesClassesLtspice.tcl
+                     src/ltspice/specElementsClassesLtspice.tcl src/ltspice/specModelsClassesLtspice.tcl
+                     src/ltspice/specSimulatorClassesLtspice.tcl"
     for i in $vars; do
 	# check for existence, be strict because it is installed
 	if test ! -f "${srcdir}/$i" ; then
@@ -3749,6 +3759,59 @@ printf "%s\n" "$as_me: --exec-prefix defaulting to ${prefix}" >&6;}
 	fi
 	PKG_TCL_SOURCES="$PKG_TCL_SOURCES $i"
     done
+
+
+
+DOC_HTML_FILES="index.html objects.inv search.html searchindex.js genindex.html"
+DOC_SRCDIR="${srcdir}/docs"
+if test -d "$DOC_SRCDIR"; then
+    # Add all top-level *.html files from docs/, not subdirectories.
+    for f in "$DOC_SRCDIR"/*.html; do
+        test -f "$f" || continue
+
+        b=`basename "$f"`
+
+        case " $DOC_HTML_FILES " in
+            *" $b "*) ;;
+            *) DOC_HTML_FILES="$DOC_HTML_FILES $b" ;;
+        esac
+    done
+    # Add everything from docs/_static and docs/assets recursively.
+    for d in _static assets; do
+        if test -d "$DOC_SRCDIR/$d"; then
+            for f in `find "$DOC_SRCDIR/$d" -type f -print`; do
+                rel=`echo "$f" | sed "s|^$DOC_SRCDIR/||"`
+
+                case " $DOC_HTML_FILES " in
+                    *" $rel "*) ;;
+                    *) DOC_HTML_FILES="$DOC_HTML_FILES $rel" ;;
+                esac
+            done
+        fi
+    done
+
+else
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: documentation directory not found: $DOC_SRCDIR" >&5
+printf "%s\n" "$as_me: WARNING: documentation directory not found: $DOC_SRCDIR" >&2;}
+fi
+#AC_MSG_NOTICE([DOC_HTML_FILES = $DOC_HTML_FILES])
+
+
+# Test files to include in the distribution.
+# Paths are relative to $srcdir.
+DIST_TEST_FILES="test/specElemsClassesCommon.test test/generalClasses.test test/testUtilities.tcl test/all.tcl"
+# Add everything from test/xyce, test/ngspice, and test/ltspice recursively.
+for d in test/xyce test/ngspice test/ltspice; do
+    if test -d "$srcdir/$d"; then
+        for f in `cd "$srcdir" && find "$d" -type f -print`; do
+            case " $DIST_TEST_FILES " in
+                *" $f "*) ;;
+                *) DIST_TEST_FILES="$DIST_TEST_FILES $f" ;;
+            esac
+        done
+    fi
+done
+#AC_MSG_NOTICE([DIST_TEST_FILES = $DIST_TEST_FILES])
 
 
 

@@ -16,6 +16,8 @@
 # Makefile variables
 #========================================================================
 PKG_TCL_SOURCES = @PKG_TCL_SOURCES@
+DOC_HTML_FILES = @DOC_HTML_FILES@
+DIST_TEST_FILES = @DIST_TEST_FILES@
 
 SHELL		= @SHELL@
 
@@ -47,6 +49,7 @@ INSTALL_DATA	= @INSTALL_DATA@
 INSTALL_PROGRAM	= @INSTALL_PROGRAM@
 INSTALL_SCRIPT	= @INSTALL_SCRIPT@
 INSTALL_LIBRARY	= @INSTALL_LIBRARY@
+DOC_INSTALL_DIR = $(DESTDIR)/usr/local/share/$(PACKAGE_NAME)$(PACKAGE_VERSION)/doc
 
 PACKAGE_NAME	= @PACKAGE_NAME@
 PACKAGE_VERSION	= @PACKAGE_VERSION@
@@ -89,52 +92,19 @@ test: libraries
 install: all install-libraries install-doc
 
 install-libraries:
-	@mkdir -p $(DESTDIR)$(pkglibdir)
+	@$(INSTALL_DATA_DIR) "$(DESTDIR)$(pkglibdir)"
+
 	@list='$(PKG_TCL_SOURCES)'; for p in $$list; do \
-	  if test -f $(srcdir)/$$p; then \
-	    destp=`basename $$p`; \
-	    echo " Install $$destp $(DESTDIR)$(pkglibdir)/$$destp"; \
-	    $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(pkglibdir)/$$destp; \
+	  if test -f "$(srcdir)/$$p"; then \
+	    d=`dirname "$$p"`; \
+	    $(INSTALL_DATA_DIR) "$(DESTDIR)$(pkglibdir)/$$d"; \
+	    echo " Install $(srcdir)/$$p $(DESTDIR)$(pkglibdir)/$$p"; \
+	    $(INSTALL_DATA) "$(srcdir)/$$p" "$(DESTDIR)$(pkglibdir)/$$p"; \
 	  fi; \
 	done
-	@echo " Install pkgIndex.tcl $(DESTDIR)$(pkglibdir)"; \
-	$(INSTALL_DATA) pkgIndex.tcl $(DESTDIR)$(pkglibdir);
-	$(INSTALL_DATA_DIR) "$(DESTDIR)$(pkglibdir)/src" "$(DESTDIR)$(pkglibdir)/src/ngspice" \
-	"$(DESTDIR)$(pkglibdir)/src/xyce" "$(DESTDIR)$(pkglibdir)/src/ltspice"
-	@echo " Install $(srcdir)/src/generalClasses.tcl $(DESTDIR)$(pkglibdir)/src"; \
-	$(INSTALL_DATA) $(srcdir)/src/generalClasses.tcl $(DESTDIR)$(pkglibdir)/src;
-	@echo " Install $(srcdir)/src/specElementsClassesCommon.tcl $(DESTDIR)$(pkglibdir)/src"; \
-	$(INSTALL_DATA) $(srcdir)/src/specElementsClassesCommon.tcl $(DESTDIR)$(pkglibdir)/src;
-	@echo " Install $(srcdir)/src/specAnalysesClassesCommon.tcl $(DESTDIR)$(pkglibdir)/src"; \
-	$(INSTALL_DATA) $(srcdir)/src/specAnalysesClassesCommon.tcl $(DESTDIR)$(pkglibdir)/src;
-	@echo " Install $(srcdir)/src/ngspice/specAnalysesClassesNgspice.tcl $(DESTDIR)$(pkglibdir)/src/ngspice"; \
-	$(INSTALL_DATA) $(srcdir)/src/ngspice/specAnalysesClassesNgspice.tcl $(DESTDIR)$(pkglibdir)/src/ngspice;
-	@echo " Install $(srcdir)/src/ngspice/specElementsClassesNgspice.tcl $(DESTDIR)$(pkglibdir)/src/ngspice"; \
-	$(INSTALL_DATA) $(srcdir)/src/ngspice/specElementsClassesNgspice.tcl $(DESTDIR)$(pkglibdir)/src/ngspice;
-	@echo " Install $(srcdir)/src/ngspice/specModelsClassesNgspice.tcl $(DESTDIR)$(pkglibdir)/src/ngspice"; \
-	$(INSTALL_DATA) $(srcdir)/src/ngspice/specModelsClassesNgspice.tcl $(DESTDIR)$(pkglibdir)/src/ngspice;
-	@echo " Install $(srcdir)/src/ngspice/specSimulatorClassesNgspice.tcl $(DESTDIR)$(pkglibdir)/src/ngspice"; \
-	$(INSTALL_DATA) $(srcdir)/src/ngspice/specSimulatorClassesNgspice.tcl $(DESTDIR)$(pkglibdir)/src/ngspice;
-	@echo " Install $(srcdir)/src/ngspice/netlistParserClassNgspice.tcl $(DESTDIR)$(pkglibdir)/src/ngspice"; \
-	$(INSTALL_DATA) $(srcdir)/src/ngspice/netlistParserClassNgspice.tcl $(DESTDIR)$(pkglibdir)/src/ngspice;
-	@echo " Install $(srcdir)/src/ngspice/specMiscClassesNgspice.tcl $(DESTDIR)$(pkglibdir)/src/ngspice"; \
-	$(INSTALL_DATA) $(srcdir)/src/ngspice/specMiscClassesNgspice.tcl $(DESTDIR)$(pkglibdir)/src/ngspice;
-	@echo " Install $(srcdir)/src/xyce/specAnalysesClassesXyce.tcl $(DESTDIR)$(pkglibdir)/src/xyce"; \
-	$(INSTALL_DATA) $(srcdir)/src/xyce/specAnalysesClassesXyce.tcl $(DESTDIR)$(pkglibdir)/src/xyce;
-	@echo " Install $(srcdir)/src/xyce/specElementsClassesXyce.tcl $(DESTDIR)$(pkglibdir)/src/xyce"; \
-	$(INSTALL_DATA) $(srcdir)/src/xyce/specElementsClassesXyce.tcl $(DESTDIR)$(pkglibdir)/src/xyce;
-	@echo " Install $(srcdir)/src/xyce/specModelsClassesXyce.tcl $(DESTDIR)$(pkglibdir)/src/xyce"; \
-	$(INSTALL_DATA) $(srcdir)/src/xyce/specModelsClassesXyce.tcl $(DESTDIR)$(pkglibdir)/src/xyce;
-	@echo " Install $(srcdir)/src/xyce/specSimulatorClassesXyce.tcl $(DESTDIR)$(pkglibdir)/src/xyce"; \
-	$(INSTALL_DATA) $(srcdir)/src/xyce/specSimulatorClassesXyce.tcl $(DESTDIR)$(pkglibdir)/src/xyce;
-	@echo " Install $(srcdir)/src/ltspice/specAnalysesClassesLtspice.tcl $(DESTDIR)$(pkglibdir)/src/ltspice"; \
-	$(INSTALL_DATA) $(srcdir)/src/ltspice/specAnalysesClassesLtspice.tcl $(DESTDIR)$(pkglibdir)/src/ltspice;
-	@echo " Install $(srcdir)/src/ltspice/specElementsClassesLtspice.tcl $(DESTDIR)$(pkglibdir)/src/ltspice"; \
-	$(INSTALL_DATA) $(srcdir)/src/ltspice/specElementsClassesLtspice.tcl $(DESTDIR)$(pkglibdir)/src/ltspice;
-	@echo " Install $(srcdir)/src/ltspice/specModelsClassesLtspice.tcl $(DESTDIR)$(pkglibdir)/src/ltspice"; \
-	$(INSTALL_DATA) $(srcdir)/src/ltspice/specModelsClassesLtspice.tcl $(DESTDIR)$(pkglibdir)/src/ltspice;
-	@echo " Install $(srcdir)/src/ltspice/specSimulatorClassesLtspice.tcl $(DESTDIR)$(pkglibdir)/src/ltspice"; \
-	$(INSTALL_DATA) $(srcdir)/src/ltspice/specSimulatorClassesLtspice.tcl $(DESTDIR)$(pkglibdir)/src/ltspice;
+
+	@echo " Install pkgIndex.tcl $(DESTDIR)$(pkglibdir)"
+	@$(INSTALL_DATA) pkgIndex.tcl "$(DESTDIR)$(pkglibdir)"
 
 install-doc:
 	@$(INSTALL_DATA_DIR) "$(DESTDIR)$(mandir)/mann"
@@ -143,14 +113,18 @@ install-doc:
 	    echo "Installing $$i"; \
 	    $(INSTALL_DATA) $$i "$(DESTDIR)$(mandir)/mann" ; \
 	done
-	@$(INSTALL_DATA_DIR) "$(DESTDIR)/usr/local/share/$(PACKAGE_NAME)$(PACKAGE_VERSION)/doc"
-	@echo "Installing html documentation in $(DESTDIR)/usr/local/share/$(PACKAGE_NAME)$(PACKAGE_VERSION)/doc"
-	@list='$(srcdir)/docs/*.html'; for i in $$list; do \
-	    echo "Installing $$i"; \
-	    $(INSTALL_DATA) $$i "$(DESTDIR)/usr/local/share/$(PACKAGE_NAME)$(PACKAGE_VERSION)/doc" ; \
+	@$(INSTALL_DATA_DIR) "$(DOC_INSTALL_DIR)"
+	@echo "Installing html documentation in $(DOC_INSTALL_DIR)"
+	@list='$(DOC_HTML_FILES)'; for p in $$list; do \
+	  if test -f "$(srcdir)/docs/$$p"; then \
+	    d=`dirname "$$p"`; \
+	    if test "x$$d" != "x."; then \
+	      $(INSTALL_DATA_DIR) "$(DOC_INSTALL_DIR)/$$d"; \
+	    fi; \
+	    echo " Install $(srcdir)/docs/$$p $(DOC_INSTALL_DIR)/$$p"; \
+	    $(INSTALL_DATA) "$(srcdir)/docs/$$p" "$(DOC_INSTALL_DIR)/$$p"; \
+	  fi; \
 	done
-	echo "Installing $(srcdir)/docs/assets"; \
-	cp -r $(srcdir)/docs/assets "$(DESTDIR)/usr/local/share/$(PACKAGE_NAME)$(PACKAGE_VERSION)/doc";
 
 #========================================================================
 # Doc generating recipes
@@ -171,26 +145,47 @@ dist-clean:
 	rm -rf $(DIST_DIR) $(DIST_ROOT)/$(PKG_DIR).zip
 
 dist: dist-clean
-	mkdir -p $(DIST_DIR)
-	cp -p $(srcdir)/README.md $(DIST_DIR)/
-	cp -p $(srcdir)/changelog.txt $(DIST_DIR)/
-	cp -p $(srcdir)/LICENSE.txt $(DIST_DIR)/
-	for i in $(srcdir)/*.tcl; do \
+	@mkdir -p $(DIST_DIR)
+	@cp -p $(srcdir)/README.md $(DIST_DIR)/
+	@cp -p $(srcdir)/changelog.txt $(DIST_DIR)/
+	@cp -p $(srcdir)/LICENSE.txt $(DIST_DIR)/
+	@for i in $(srcdir)/*.tcl; do \
 	    if [ -f $$i ]; then \
 		cp -p $$i $(DIST_DIR)/ ; \
 	    fi; \
 	done;
-	cp -r $(srcdir)/src $(DIST_DIR)
-	cp -r $(srcdir)/lib $(DIST_DIR)
-	mkdir -p $(DIST_DIR)/test
-	cp -r $(srcdir)/test/ltspice $(DIST_DIR)/test/
-	cp -r $(srcdir)/test/ngspice $(DIST_DIR)/test/
-	cp -r $(srcdir)/test/xyce $(DIST_DIR)/test/
-	cp -p $(srcdir)/test/all.tcl $(DIST_DIR)/test/
-	cp -p $(srcdir)/test/testUtilities.tcl $(DIST_DIR)/test/
-	cp -p $(srcdir)/test/generalClasses.test $(DIST_DIR)/test/
-	cp -p $(srcdir)/test/specElemsClassesCommon.test $(DIST_DIR)/test/
-	cp -r $(srcdir)/examples $(DIST_DIR)
+	@cp -r $(srcdir)/src $(DIST_DIR)
+	@list='$(DIST_TEST_FILES)'; for p in $$list; do \
+	  if test -f "$(srcdir)/$$p"; then \
+	    d=`dirname "$$p"`; \
+	    $(INSTALL_DATA_DIR) "$(DIST_DIR)/$$d"; \
+	    echo " Copy $(srcdir)/$$p $(DIST_DIR)/$$p"; \
+	    $(INSTALL_DATA) "$(srcdir)/$$p" "$(DIST_DIR)/$$p"; \
+	  fi; \
+	done
+	@echo "Copying examples to $(DIST_DIR)/examples"
+	@cp -r $(srcdir)/examples $(DIST_DIR)
+	@$(INSTALL_DATA_DIR) "$(DIST_DIR)/docs/mann"
+	@echo "Copying manpage documentation to $(DIST_DIR)/docs/mann"
+	@list='$(srcdir)/docs/*.n'; for p in $$list; do \
+	  if test -f "$$p"; then \
+	    b=`basename "$$p"`; \
+	    echo " Copy $$p $(DIST_DIR)/docs/mann/$$b"; \
+	    $(INSTALL_DATA) "$$p" "$(DIST_DIR)/docs/mann/$$b"; \
+	  fi; \
+	done
+	@$(INSTALL_DATA_DIR) "$(DIST_DIR)/docs"
+	@echo "Copying html documentation to $(DIST_DIR)/docs"
+	@list='$(DOC_HTML_FILES)'; for p in $$list; do \
+	  if test -f "$(srcdir)/docs/$$p"; then \
+	    d=`dirname "$$p"`; \
+	    if test "x$$d" != "x."; then \
+	      $(INSTALL_DATA_DIR) "$(DIST_DIR)/docs/$$d"; \
+	    fi; \
+	    echo " Copy $(srcdir)/docs/$$p $(DIST_DIR)/docs/$$p"; \
+	    $(INSTALL_DATA) "$(srcdir)/docs/$$p" "$(DIST_DIR)/docs/$$p"; \
+	  fi; \
+	done
 	(cd $(DIST_ROOT); $(COMPRESS); $(COMPRESS_ZIP))
 
 #========================================================================
@@ -200,14 +195,15 @@ clean:
 	-test -z "$(BINARIES)" || rm -f $(BINARIES)
 	-rm -f *.$(OBJEXT) core *.core
 	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
+	rm -rf docs/sphinx
+	-rm -rf docs/.doctrees
+	-rm -rf docs/_sources
+	-rm -f docs/.buildinfo
 
 distclean: clean
 	-rm -f *.tab.c
 	-rm -f $(CONFIG_CLEAN_FILES)
 	-rm -f config.cache config.log config.status
-	-rm -rf docs/sphinx
-	-rm -rf docs/.doctrees
-	-rm -rf docs/_sources
 
 #========================================================================
 # Uninstall recipes

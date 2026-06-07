@@ -15,6 +15,9 @@ source [file join $docDir parser.ruff]
 source [file join $docDir .. SpiceGenTcl.tcl]
 
 set packageVersion [package versions SpiceGenTcl]
+if {$packageVersion eq {}} {
+    return -code error "Package version is empty"
+}
 set title "Tcl SpiceGenTcl package"
 
 set commonSphinx [list -title $title -sortnamespaces false -pagesplit namespace -recurse false -preamble $startPage\
