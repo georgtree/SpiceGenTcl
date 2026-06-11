@@ -18,7 +18,7 @@ namespace eval Tutorials {
           "examples/xyce/transient/fourbitadder.tcl" "examples/ltspice/transient/fourbitadder.tcl" files
         - [S-parameter simulation of pass-band filter] - "examples/ngspice/sp/filter.tcl"
         
-        ## Netlist manipulations
+        ### Netlist manipulations
         
         In this example we will examine the availible actions that we can do on elements in netlist.
         First step is building the target netlist with variable elements:
@@ -62,7 +62,7 @@ namespace eval Tutorials {
         .tran 1e-6 1e-3 uic
         ```
         
-        ### Delete element
+        #### Delete element
         
         The opposite action is to delete with the [::SpiceGenTcl::Netlist::del] method. 
         For example, we can delete the 'c1' element from the netlist by specifying its name:
@@ -86,7 +86,7 @@ namespace eval Tutorials {
         ```
         As you can see, capacitor 'c1' is no more in netlist.
         
-        ### Get element
+        #### Get element
         
         Next important operation is getting reference of element in netlist. We can do it again by specifying its name:
         ```tcl
@@ -123,7 +123,7 @@ namespace eval Tutorials {
         .tran 1e-6 1e-3 uic
         ```
 
-        ### Print list of all elements
+        #### Print list of all elements
         
         We can get the list of all elements attached to `$netlist` object:
         ```tcl
@@ -135,7 +135,7 @@ namespace eval Tutorials {
         r1 r5 rsem1mod r2 ps1 com1 inc1 lib1 raw1 v1 tran1
         ```
         
-        ### Temporarly remove of element
+        #### Temporarly remove of element
         
         We can delete element from netlist and store reference to elements object, and then again add element to
         netlist:
@@ -153,7 +153,7 @@ namespace eval Tutorials {
         [::SpiceGenTcl::Netlist::getElement] method.
         
         
-        ## Subcircuit definition
+        ### Subcircuit definition
         
         To create subcircuit definition we use special [::SpiceGenTcl::Subcircuit] class and make subcircuit by
         defining new class with it as superclass:
@@ -236,15 +236,17 @@ namespace eval Tutorials {
         x2 net1 net2 rcnet r=1 c={cpar}
         ```
         
-        ## Diode current simualtion
+        ### Diode current simualtion
         
         In this example, we examine the parametric simulation of a diode model's current curve, with the ambient
         temperature as the parameter. To achieve this, we need to run the simulation multiple times at different
         temperatures, save the results from each iteration, and then combine them into a single plot. 
         
+        #ruffopt excludedformats {nroff}
         The circuit is simple:
 
         ![drawing](assets/img/diode_iv_cir.png)
+        #ruffopt excludedformats {}
         
         As in previous examples, we start by creating the top circuit and adding elements to it:
         ```tcl
@@ -319,9 +321,11 @@ namespace eval Tutorials {
         
         In the picture, you can see how temperature affects the forward current of the diode. Because the series
         resistance has a temperature dependence, all the lines intersect near 1.8V, indicating the point of zero
-        temperature coefficient:
+        temperature coefficient.
         
+        #ruffopt excludedformats {nroff}
         !ticklechart_mark_diode_iv_ngspice!
+        #ruffopt excludedformats {}
         
         This circuit works almost without modification in Xyce simulator, see "examples/xyce/dc/diode_iv.tcl" file.
         The one of the differences is how we set the global temperature: in Xyce there is no .temp statement, for
@@ -335,7 +339,7 @@ namespace eval Tutorials {
         $tempSt configure -value $temp
         ```
         
-        ## Diode capacitance simualtion
+        ### Diode capacitance simualtion
         
         In this example, we measure the volt-farad (or capacitance-voltage) relationship of the diode's depletion
         charge. To achieve this, we need to apply a negative voltage bias to the anode and perform an AC simulation at
@@ -371,10 +375,12 @@ namespace eval Tutorials {
         - AC voltage source `[Vac new b nin 0 -ac 1]` - uses to generate AC signal
         - AC analysis statement `[Ac new -variation lin -n 1 -fstart 1e5 -fstop 1e5]` - uses to define AC frequency,
         100 kHz in our case.
-         
+
+        #ruffopt excludedformats {nroff}
         The final circuit looks like this:
         
         ![drawing](assets/img/diode_cv_cir.png)
+        #ruffopt excludedformats {}
         
         Nest step is to add voltage sweep:
         ```tcl
@@ -438,15 +444,19 @@ namespace eval Tutorials {
 
         $chart Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px
         ```
-        As a result, we obtain the expected curve, showing a decrease in capacitance value with higher reverse voltage:
+        As a result, we obtain the expected curve, showing a decrease in capacitance value with higher reverse voltage.
         
+        #ruffopt excludedformats {nroff}
         !ticklechart_mark_diode_cv_ngspice!
+        #ruffopt excludedformats {}
         
-        ## Sensitive analysis of differential pair
+        ### Sensitive analysis of differential pair
         
-        In this circuit we run DC sensitive analysis of differential pair: 
+        In this circuit we run DC sensitive analysis of differential pair.
         
+        #ruffopt excludedformats {nroff}
         ![drawing](assets/img/diff_pair_cir.png)
+        #ruffopt excludedformats {}
         
         We build circuit step by step:
         ```tcl
@@ -491,7 +501,7 @@ namespace eval Tutorials {
         vrc2=-6.032e-04
         ```
         
-        ## Transient simulation of ring oscillator
+        ### Transient simulation of ring oscillator
         
         In this example, we analyze a circuit with transient analysis and demonstrate how to use a Tcl script to build
         a circuit containing multiple stages of the same subcircuit.
@@ -599,9 +609,11 @@ namespace eval Tutorials {
         $layout Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px
         ```
         
+        #ruffopt excludedformats {nroff}
         !ticklechart_mark_switch_oscillator_ngspice!
+        #ruffopt excludedformats {}
         
-        ## Transient simulation of four-bit adder
+        ### Transient simulation of four-bit adder
         
         This example, like the previous one, involves a circuit run in transient analysis. However, it differs in terms
         of complexity and the presence of nested subcircuit elements.
@@ -778,19 +790,24 @@ namespace eval Tutorials {
         set fbasename [file rootname [file tail [info script]]]
         $layout Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px
         ```
+
+        #ruffopt excludedformats {nroff}
         Results:
         
         !ticklechart_mark_four_bit_adder_ngspice!
+        #ruffopt excludedformats {}
 
-        ## S-parameter simulation of pass-band filter
+        ### S-parameter simulation of pass-band filter
 
         This example demonstrates capability of AC simulation with S-parameter output in Ngspice. As the circuit
         of interest we use band pass filter sourced from Ngspice examples (/examples/sp/filter.sp).
 
+        #ruffopt excludedformats {nroff}
         The circuit image is (from Novarianti, Dini. (2019). Design and Implementation of Chebyshev Band Pass Filter
-        with M-Derived Section in Frequency Band 88 - 108 MHz):
+        with M-Derived Section in Frequency Band 88 - 108 MHz).
 
         ![drawing](assets/img/band_pass_filter.png)
+        #ruffopt excludedformats {}
 
         The circuit is built with following code:
         ```tcl
@@ -865,11 +882,13 @@ namespace eval Tutorials {
         $chart Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px
         ```
 
+        #ruffopt excludedformats {nroff}
         The result is:
         
         !ticklechart_mark_filter_ngspice!
+        #ruffopt excludedformats {}
 
-        We can clearly see the band that spans from 70Mhz to 135Mhz.
+        On the picture We can clearly see the band that spans from 70Mhz to 135Mhz.
     }
 
 }

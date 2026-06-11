@@ -1,0 +1,365 @@
+'\"
+'\" '\" Copyright (c) George Yashin
+'\"
+.TH "Tips" 3tcl 0\&.71 "SpiceGenTcl" "Tcl SpiceGenTcl package"
+.SH NAME
+Tips - Commands in namespace Tips
+.SH TIPS
+.PP
+This page contains different tips that help you to use SpiceGenTcl more efficiently\&.
+.SS "DEFINE CUSTOM ELEMENT"
+.PP
+To define custom element class we should use \fI::SpiceGenTcl::Device\fP class as a superclass\&. Why we need this?
+One simple example is custom Verilog-A device, that could have arbitary number of pins and parameters\&.
+Let's try to define new element for next Verilog-A device:
+.PP
+.RS 4n
+.nf
+// Jiles/Atherton Magnetic Core Model
+// Enhanced as described in "Simulation and MOdeling of Nonlinear Magnetics"
+// by Williams, Vogelsong, and Kundert, as found on www\&.designers-guide\&.org\&.
+`include "discipline\&.h"
+`include "constants\&.h"
+
+//
+// Core Model
+//
+module coreja(p,n);
+
+magnetic p, n;
+inout p, n;
+(* type = "instance" *) parameter real len=0\&.1 from (0:1000);   // effective magnetic length of core
+(* type = "instance" *) parameter real area=1 from (0:inf);     // magnetic cross-sectional area of core
+parameter real ms=1\&.6M from (0:inf);    // saturation magnetization
+parameter real a=1100 from (0:inf);     //
+parameter real k=2000 from (0:inf);     // bulk coupliing coefficient
+parameter real alpha=1\&.6m from (0:inf); // interdomain coupling coef\&.
+parameter real c=0\&.2 from [0:1];        // coef\&. for reversable magnetization
+
+magnetic Hdot;          // internal Hdot node
+real H;                 // field intensity
+real B;                 // flux density
+real Manh;              // anhysteric magnetization
+real Mirr;              // irreversible magnetization
+real dMirr;             // dMirr/dH
+real M;                 // total magnetization
+real Heff;              // effective field intensity
+integer delta;          // direction of the input MMF
+integer migrating;      // flag indicating that the pinning sites are moving
+
+// sign function
+    analog function integer sign;
+    input arg;
+    real arg;
+    sign = (arg >= 0\&.0 ? 1 : -1);
+    endfunction
+
+// hyperbolic cotangent function
+    analog function real coth;
+    input arg;
+    real arg;
+    real x;
+    begin
+        x = exp(min(80,max(-80,arg)));
+        coth = (x+1/x)/(x-1/x);
+    end
+    endfunction
+
+// core model
+    analog begin
+    H = MMF(p,n) / len;
+    MMF(Hdot) <+ ddt(H);
+    delta = sign(MMF(Hdot));
+    B = Phi(p,n)/area;
+    M = B/`P_U0 - H;
+    Heff = H + alpha * M;
+    if (abs(Heff) > 0\&.001 * a)
+        Manh = ms * (coth(Heff/a) - a/Heff);
+    else
+        Manh = ms * Heff/(3\&.0*a);       // Taylor series expansion of coth()
+    dMirr = (Manh - M)/(delta*k - alpha*(Manh - M)) * MMF(Hdot);
+    migrating = (delta > 0) ^ (M > Manh);
+    Mirr = idt( migrating * dMirr, Manh );
+
+    M = (1-c)*Mirr + c*Manh;
+    Phi(p,n) <+ area*`P_U0*(H+M);
+    end
+endmodule
+.fi
+.RE
+.PP
+This model is taken from \fIdesigners-guide\fP [URL: https://designers-guide\&.org/modeling/jilath\&.va], that contains many
+Verilog-AMS models\&.
+.PP
+.RS 4n
+.nf
+oo::class create Core {
+    superclass Device
+    constructor {args} {
+        set arguments [argparse -inline -pfirst -helplevel 1 -help {} {
+            {-model= -required -help {Model of the core}}
+            {-len= -default 0\&.1 -help {Length of the core}}
+            {-area= -default 1 -help {Cross-section area of the core}}
+            {name -help {Name of the device without first-letter designator}}
+            {p -help {Name of node connected to positive pin}}
+            {n -help {Name of node connected to negative pin}}
+        }]
+        lappend params [list -posnocheck model [dict get $arguments model]]
+        dict for {paramName value} $arguments {
+            if {$paramName ni {model name p n}} {
+                if {[lindex $value 0] eq {-eq}} {
+                    lappend params [list -eq $paramName [lindex $value 1]]
+                } else {
+                    lappend params [list $paramName $value]
+                }
+            }
+        }
+        next n[dict get $arguments name] [list [list p [dict get $arguments p]] [list n [dict get $arguments n]]] $params
+    }
+}
+.fi
+.RE
+.PP
+In this block of code we define instance class of core\&. Let's go through the each line\&.
+First line is class definition:
+.PP
+.RS 4n
+.nf
+oo::class create Core
+.fi
+.RE
+.PP
+It is good convention to start class name from capital letter\&.
+.PP
+Superclass for new element is \fI::SpiceGenTcl::Device\fP:
+.PP
+.RS 4n
+.nf
+superclass SpiceGenTcl::Device
+.fi
+.RE
+.PP
+In next line we define arguments for constructor:
+.PP
+.RS 4n
+.nf
+constructor {args}
+.fi
+.RE
+.PP
+In these few lines we process args variable with \fIargparse\fP [URL: https://github\&.com/georgtree/argparse] package:
+.PP
+.RS 4n
+.nf
+set arguments [argparse -inline -pfirst -helplevel 1 -help {} {
+    {-model= -required -help {Model of the core}}
+    {-len= -default 0\&.1 -help {Length of the core}}
+    {-area= -default 1 -help {Cross-section area of the core}}
+    {name -help {Name of the device without first-letter designator}}
+    {p -help {Name of node connected to positive pin}}
+    {n -help {Name of node connected to negative pin}}
+}]
+.fi
+.RE
+.PP
+Switch -pfirst allows to pass required parameters (name, p and n) first, before switches\&. -help
+switch allows to call constructor of the Core with argument -help and get interactive help message\&.
+Required parameters are: name, positive node p and negative node n\&.
+.PP
+Next we define required -model argument, and optional instance arguments -len and -area with default
+values\&. Due to these lines we can pass parameters to element in forms -paramName $paramValue $paramQual, for
+example: -area 1e-4 or -area l*m -eq\&.
+.PP
+Possible qualificator is -eq - it means that parameter should be inserted into SPICE netlist as
+paramName={expression}
+.PP
+In the next few lines we build parameter list that will be passed to \fI::SpiceGenTcl::Device\fP constructor:
+.PP
+.RS 4n
+.nf
+lappend params [list model [dict get $arguments model] -posnocheck]
+dict for {paramName value} $arguments {
+    if {$paramName ni {model name p n}} {
+        if {[lindex $value 0] eq {-eq}} {
+            lappend params [list -eq $paramName [lindex $value 1]]
+        } else {
+            lappend params [list $paramName $value]
+        }
+    }
+}
+.fi
+.RE
+.PP
+The last but not the least is step of passing arguments to \fI::SpiceGenTcl::Device\fP constructor:
+.PP
+.RS 4n
+.nf
+next n[dict get $arguments name] [list [list p [dict get $arguments p]] [list n [dict get $arguments n]]] $params
+.fi
+.RE
+.PP
+This superclass accept arguments in form constructor {name pins params}\&.
+So, we pass string n[dict get $arguments name] as device name, n is reference designator for Verilog-A devices
+in Ngspice\&. Secondly we pass list of nodes
+[list [list p [dict get $arguments p]] [list n [dict get $arguments n]]] in form of
+{{Name0 NodeName} {Name1 NodeName} {Name2 NodeName} \&.\&.\&.}\&.
+.PP
+And the last is list of parameters in form {{model Value -posnocheck} {Name Value ?-eq?} {Name Value ?-eq?}
+{Name Value ?-eq?} \&.\&.\&.}\&.
+.PP
+So, after that we can create a new instance of newly created class:
+.PP
+.RS 4n
+.nf
+set coreInst [Core new 1 p n -model coreModel -area 1e-4 -len {l*5 -eq}]
+puts [$coreInst genSPICEString]
+.fi
+.RE
+.PP
+Resulted SPICE string is:
+.PP
+.RS 4n
+.nf
+n1 p n coremodel area=1e-4 len={l*5}
+.fi
+.RE
+.PP
+Verilog-A devices in Ngspice demand corresponding model being instantiated in the netlist\&. For that purpose we
+create CoreModel class:
+.PP
+.RS 4n
+.nf
+oo::class create CoreModel {
+    superclass Model
+    constructor {args} {
+        next {*}[my ArgsPreprocess {ms a k alpha c} {name type} type {*}[linsert $args 1 coreja]]
+    }
+}
+.fi
+.RE
+.PP
+Here we use as superclass \fI::SpiceGenTcl::Model\fP for new element\&.
+To process optional arguments, we use special method \fI::SpiceGenTcl::Utility::ArgsPreprocess\fP, that
+process optional args arguments and produces string for \fI::SpiceGenTcl::Model\fP constructor\&.
+.PP
+.RS 4n
+.nf
+next {*}[my ArgsPreprocess {ms a k alpha c} {name type} type {*}[linsert $args 1 coreja]]
+.fi
+.RE
+.PP
+We set model parameters in list {ms a k alpha c} as switches, and then the list of required parameters
+{name type}\&. Then we provide elements names which should be ignored while generating help message, and the last
+are arguments with switches and values, including default type value coreja\&. The name coreja corresponds to
+name of Verilog-A module\&.
+.PP
+We use \fI::SpiceGenTcl::Utility::ArgsPreprocess\fP procedure here, but we can go the same way we do with
+Core class, and add, for example, default values, or use some complex logic of elements initialization:
+.PP
+.RS 4n
+.nf
+oo::class create CoreModel {
+    superclass Model
+    constructor {args} {
+        set arguments [argparse -inline -pfirst -helplevel 1 -help {} {
+            -ms=
+            {-a= -default 1000}
+            -k=
+            -alpha=
+            -c=
+            name
+            type
+        }]
+        dict for {paramName value} $arguments {
+            if {[lindex $value 0] eq {-eq}} {
+                lappend params [list -eq $paramName [lindex $value 1]]
+            } else {
+                lappend params [list $paramName $value]
+            }
+        }
+        next $name coreja {*}$params
+    }
+}
+.fi
+.RE
+.PP
+Finally, we initialize model instance and print SPICE string:
+.PP
+.RS 4n
+.nf
+set coreModel [CoreModel new coremodel -ms 1\&.7meg -a 1100 -k 2000 -alpha 1\&.6m -c 0\&.2]
+puts [$coreModel genSPICEString]
+.fi
+.RE
+.PP
+The result is:
+.PP
+.RS 4n
+.nf
+\&.model coremodel coreja(ms=1\&.7meg a=1100 k=2000 alpha=1\&.6m c=0\&.2)
+.fi
+.RE
+.PP
+If you want to see the simulation example with that model, please look at
+/examples/ngspice/advanced/verilog_a_magnetic\&.tcl\&.
+
+
+.SH SEE ALSO
+spicegentcl(n) - package's main page
+.br
+spicegentcl-list-of-devices(n) - list of availible devices' classes
+.br
+spicegentcl-faq(n) - answers on common questions
+.br
+spicegentcl-tutorials(n) - examples of usage with detailed explanations
+.br
+spicegentcl-advanced(n) - examples of advanced usage
+.br
+spicegentcl-tips(n) - tips on adding new functionality to the package
+.br
+spicegentcl-parser(n) - examples of usage netlist parser
+.br
+.sp 1
+Public commands and classes documentation:
+.br
+spicegentcl-spicegentcl(n)
+.br
+spicegentcl-spicegentcl-common-basicdevices(n)
+.br
+spicegentcl-spicegentcl-common-analyses(n)
+.br
+spicegentcl-spicegentcl-common-sources(n)
+.br
+spicegentcl-spicegentcl-ngspice(n)
+.br
+spicegentcl-spicegentcl-ngspice-basicdevices(n)
+.br
+spicegentcl-spicegentcl-ngspice-sources(n)
+.br
+spicegentcl-spicegentcl-ngspice-semiconductordevices(n)
+.br
+spicegentcl-spicegentcl-ngspice-analyses(n)
+.br
+spicegentcl-spicegentcl-ngspice-simulators(n)
+.br
+spicegentcl-spicegentcl-ngspice-misc(n)
+.br
+spicegentcl-spicegentcl-xyce-basicdevices(n)
+.br
+spicegentcl-spicegentcl-xyce-sources(n)
+.br
+spicegentcl-spicegentcl-xyce-semiconductordevices(n)
+.br
+spicegentcl-spicegentcl-xyce-analyses(n)
+.br
+spicegentcl-spicegentcl-xyce-simulators(n)
+.br
+spicegentcl-spicegentcl-ltspice-basicdevices(n)
+.br
+spicegentcl-spicegentcl-ltspice-sources(n)
+.br
+spicegentcl-spicegentcl-ltspice-semiconductordevices(n)
+.br
+spicegentcl-spicegentcl-ltspice-analyses(n)
+.br
+spicegentcl-spicegentcl-ltspice-simulators(n)

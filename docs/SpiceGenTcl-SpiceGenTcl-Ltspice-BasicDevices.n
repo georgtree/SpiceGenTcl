@@ -9,21 +9,21 @@ SpiceGenTcl::Ltspice::BasicDevices - Commands in namespace SpiceGenTcl::Ltspice:
 .br
 \fBC new\fP
 .br
-\fBOBJECT constructor\fP \fIname np nm -c value ?-m value? ?-temp value? ?-ic value? ?-rser value? ?-lser value? ?-rpar value? ?-cpar value? ?-rlshunt value?\fP
+\fBCAPACITOROBJ constructor\fP \fIname np nm -c value ?-m value? ?-temp value? ?-ic value? ?-rser value? ?-lser value? ?-rpar value? ?-cpar value? ?-rlshunt value?\fP
 .br
-\fBOBJECT constructor\fP \fIname np nm -q value ?-m value? ?-ic value? ?-rser value? ?-lser value? ?-rpar value? ?-cpar value? ?-rlshunt value?\fP
+\fBCAPACITOROBJ constructor\fP \fIname np nm -q value ?-m value? ?-ic value? ?-rser value? ?-lser value? ?-rpar value? ?-cpar value? ?-rlshunt value?\fP
 .br
 \fBCSwitch create OBJNAME\fP
 .br
 \fBCSwitch new\fP
 .br
-\fBOBJECT constructor\fP \fIname ?-option value \&.\&.\&.?\fP
+\fBCSWITCHMODELOBJ constructor\fP \fIname ?-option value \&.\&.\&.?\fP
 .br
-\fBOBJECT constructor\fP \fIname np nm -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value|-dtemp value? ?-scale value? ?-ic value?\fP
+\fBINDUCTOROBJ constructor\fP \fIname np nm -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value|-dtemp value? ?-scale value? ?-ic value?\fP
 .br
-\fBOBJECT constructor\fP \fIname np nm -beh -l value ?-tc1 value? ?-tc2 value?\fP
+\fBINDUCTOROBJ constructor\fP \fIname np nm -beh -l value ?-tc1 value? ?-tc2 value?\fP
 .br
-\fBOBJECT constructor\fP \fIname np nm -model value ?-l value? ?-temp value|-dtemp value? ?-m value? ?scale value? ?-ic value? ?-nt value? ?-tc1 value? ?-tc2 value?\fP
+\fBINDUCTOROBJ constructor\fP \fIname np nm -model value ?-l value? ?-temp value|-dtemp value? ?-m value? ?scale value? ?-ic value? ?-nt value? ?-tc1 value? ?-tc2 value?\fP
 .br
 \fBL create OBJNAME\fP
 .br
@@ -41,7 +41,7 @@ SpiceGenTcl::Ltspice::BasicDevices - Commands in namespace SpiceGenTcl::Ltspice:
 .br
 \fBSubcircuitInstance new\fP \fI?args?\fP
 .br
-\fBOBJECT constructor\fP \fIsubcktObj name nodes ?-paramName ?-eq? paramValue \&.\&.\&.?\fP
+\fBSUBCIRCUITINSTANCEAUTOOBJ constructor\fP \fIsubcktObj name nodes ?-paramName ?-eq? paramValue \&.\&.\&.?\fP
 .br
 \fBVSw create OBJNAME\fP
 .br
@@ -51,7 +51,7 @@ SpiceGenTcl::Ltspice::BasicDevices - Commands in namespace SpiceGenTcl::Ltspice:
 .br
 \fBVSwitch new\fP
 .br
-\fBOBJECT constructor\fP \fIname ?-option value \&.\&.\&.?\fP
+\fBVSWITCHMODELOBJ constructor\fP \fIname ?-option value \&.\&.\&.?\fP
 .br
 \fBW create OBJNAME\fP
 .br
@@ -149,9 +149,9 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class Capacitor that describes capacitor\&.
 .RS 4n
-\fBOBJECT constructor\fP \fIname np nm -c value ?-m value? ?-temp value? ?-ic value? ?-rser value? ?-lser value? ?-rpar value? ?-cpar value? ?-rlshunt value?\fP
+\fBCAPACITOROBJ constructor\fP \fIname np nm -c value ?-m value? ?-temp value? ?-ic value? ?-rser value? ?-lser value? ?-rpar value? ?-cpar value? ?-rlshunt value?\fP
 .br
-\fBOBJECT constructor\fP \fIname np nm -q value ?-m value? ?-ic value? ?-rser value? ?-lser value? ?-rpar value? ?-cpar value? ?-rlshunt value?\fP
+\fBCAPACITOROBJ constructor\fP \fIname np nm -q value ?-m value? ?-ic value? ?-rser value? ?-lser value? ?-rpar value? ?-cpar value? ?-rlshunt value?\fP
 .br
 .RE
 .PP
@@ -315,7 +315,7 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class CSwitchModel that describes current switch model\&.
 .RS 4n
-\fBOBJECT constructor\fP \fIname ?-option value \&.\&.\&.?\fP
+\fBCSWITCHMODELOBJ constructor\fP \fIname ?-option value \&.\&.\&.?\fP
 .br
 .RE
 .PP
@@ -386,11 +386,11 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class Inductor that describes inductor\&.
 .RS 4n
-\fBOBJECT constructor\fP \fIname np nm -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value|-dtemp value? ?-scale value? ?-ic value?\fP
+\fBINDUCTOROBJ constructor\fP \fIname np nm -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value|-dtemp value? ?-scale value? ?-ic value?\fP
 .br
-\fBOBJECT constructor\fP \fIname np nm -beh -l value ?-tc1 value? ?-tc2 value?\fP
+\fBINDUCTOROBJ constructor\fP \fIname np nm -beh -l value ?-tc1 value? ?-tc2 value?\fP
 .br
-\fBOBJECT constructor\fP \fIname np nm -model value ?-l value? ?-temp value|-dtemp value? ?-m value? ?scale value? ?-ic value? ?-nt value? ?-tc1 value? ?-tc2 value?\fP
+\fBINDUCTOROBJ constructor\fP \fIname np nm -model value ?-l value? ?-temp value|-dtemp value? ?-m value? ?scale value? ?-ic value? ?-nt value? ?-tc1 value? ?-tc2 value?\fP
 .br
 .RE
 .PP
@@ -755,7 +755,7 @@ Readable, writable\&. Inherited\&.
 Creates object of class SubcircuitInstanceAuto that describes subcircuit instance with already created
 subcircuit definition object\&.
 .RS 4n
-\fBOBJECT constructor\fP \fIsubcktObj name nodes ?-paramName ?-eq? paramValue \&.\&.\&.?\fP
+\fBSUBCIRCUITINSTANCEAUTOOBJ constructor\fP \fIsubcktObj name nodes ?-paramName ?-eq? paramValue \&.\&.\&.?\fP
 .br
 .RE
 .PP
@@ -903,7 +903,7 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class VSwitchModel that describes voltage switch model\&.
 .RS 4n
-\fBOBJECT constructor\fP \fIname ?-option value \&.\&.\&.?\fP
+\fBVSWITCHMODELOBJ constructor\fP \fIname ?-option value \&.\&.\&.?\fP
 .br
 .RE
 .PP
@@ -1029,3 +1029,63 @@ Readable, writable\&. Inherited\&.
 .PP
 \fISubcircuitInstanceAuto\fP
 
+
+.SH SEE ALSO
+spicegentcl(n) - package's main page
+.br
+spicegentcl-list-of-devices(n) - list of availible devices' classes
+.br
+spicegentcl-faq(n) - answers on common questions
+.br
+spicegentcl-tutorials(n) - examples of usage with detailed explanations
+.br
+spicegentcl-advanced(n) - examples of advanced usage
+.br
+spicegentcl-tips(n) - tips on adding new functionality to the package
+.br
+spicegentcl-parser(n) - examples of usage netlist parser
+.br
+.sp 1
+Public commands and classes documentation:
+.br
+spicegentcl-spicegentcl(n)
+.br
+spicegentcl-spicegentcl-common-basicdevices(n)
+.br
+spicegentcl-spicegentcl-common-analyses(n)
+.br
+spicegentcl-spicegentcl-common-sources(n)
+.br
+spicegentcl-spicegentcl-ngspice(n)
+.br
+spicegentcl-spicegentcl-ngspice-basicdevices(n)
+.br
+spicegentcl-spicegentcl-ngspice-sources(n)
+.br
+spicegentcl-spicegentcl-ngspice-semiconductordevices(n)
+.br
+spicegentcl-spicegentcl-ngspice-analyses(n)
+.br
+spicegentcl-spicegentcl-ngspice-simulators(n)
+.br
+spicegentcl-spicegentcl-ngspice-misc(n)
+.br
+spicegentcl-spicegentcl-xyce-basicdevices(n)
+.br
+spicegentcl-spicegentcl-xyce-sources(n)
+.br
+spicegentcl-spicegentcl-xyce-semiconductordevices(n)
+.br
+spicegentcl-spicegentcl-xyce-analyses(n)
+.br
+spicegentcl-spicegentcl-xyce-simulators(n)
+.br
+spicegentcl-spicegentcl-ltspice-basicdevices(n)
+.br
+spicegentcl-spicegentcl-ltspice-sources(n)
+.br
+spicegentcl-spicegentcl-ltspice-semiconductordevices(n)
+.br
+spicegentcl-spicegentcl-ltspice-analyses(n)
+.br
+spicegentcl-spicegentcl-ltspice-simulators(n)

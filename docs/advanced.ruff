@@ -12,13 +12,17 @@ namespace eval Advanced {
         - [Parameters extraction of diode model parameters] - "examples/ngspice/advanced/diode_extract.tcl" file
         - [Inverter performance optimization] - "examples/ngspice/advanced/inverter_optimization.tcl" file
                 
-        ## Monte-Carlo simulation
+        ### Monte-Carlo simulation
         
-        This example demonstrates multiple runs of a simple filter circuit and the collection of the resulting
-        statistical distribution of frequency bandwidths. The original circuit source is from the ngspice source
-        distribution. The target filter circuit is:
+        This example demonstrates multiple runs of a simple filter circuit and the collection of the resulting\
+        statistical distribution of frequency bandwidths. The original circuit source is from the ngspice source\
+        distribution.\
+
+        #ruffopt excludedformats {nroff}
+        The target filter circuit is:
         
         ![drawing](assets/img/monte_carlo_cir.png)
+        #ruffopt excludedformats {}
         
         The filter is a 3rd-order Chebyshev bandpass. The first step is to build the circuit and obtain the magnitude 
         of the transfer characteristic:
@@ -94,7 +98,9 @@ namespace eval Advanced {
                 -height 500px
         ```
         
+        #ruffopt excludedformats {nroff}
         !ticklechart_mark_monte_carlo_typ_mag_ngspice!
+        #ruffopt excludedformats {}
         
         We define pass bandwidth by edge values -10dB, to find them we use next procedure:
         ```tcl
@@ -258,7 +264,9 @@ namespace eval Advanced {
         $layout Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px
         ```
         
+        #ruffopt excludedformats {nroff}
         !ticklechart_mark_monte_carlo_dists_ngspice!
+        #ruffopt excludedformats {}
         
         We can clearly see the difference between normal and uniform distributions; 
         the intervals are close due to setting the standard deviation of the normal distribution as
@@ -280,9 +288,11 @@ namespace eval Advanced {
                 -height 500px
         ```
 
+        #ruffopt excludedformats {nroff}
         !ticklechart_mark_monte_carlo_dists_comb_ngspice!
+        #ruffopt excludedformats {}
         
-        ## Parameters extraction of diode model parameters
+        ### Parameters extraction of diode model parameters
 
         In this advanced example we will do curve fitting procedure to extract parameters of diode model. We use
         measured (emulated with more advanced diode model generated data, with added small distorsion and make non-equal
@@ -405,11 +415,13 @@ namespace eval Advanced {
         set iRaw [lmap elem $ivTemp25 {lindex $elem 1}]
         ```
 
+        #ruffopt excludedformats {nroff}
         The loaded data is (with selected regions of fitting):
 
         ![drawing](assets/img/iv_diode_extraction_plots.png)
+        #ruffopt excludedformats {}
 
-        ### Fitting in first region
+        #### Fitting in first region
 
         First region we want to fit is the region of ideal diode, it spans from minimum voltage to approximately 0.85V.
         We set these limits in variables `vMin`, `vMax` and define the equal step of voltage `vStep`.
@@ -484,7 +496,7 @@ namespace eval Advanced {
         You can notice that `is` and `n` now have different values, and `rs` and `ikf` remains the same because of
         `-fixed` option.
 
-        ### Fitting in second region
+        #### Fitting in second region
         
         Now we are ready to fit curve in the second ohmic/high-injection region. It started at the upper end of first
         region and continue until the end of the data. We interpolate this range with the same voltage step:
@@ -532,7 +544,7 @@ namespace eval Advanced {
         ```
         Now we can see that `rs` and `ikf` were changed during fitting, just as planned.
 
-        ### Fitting the whole curve
+        #### Fitting the whole curve
 
         The last step is the fitting to the whole curve, with initial values of parameters replaced with resulted values.
 
@@ -576,7 +588,7 @@ namespace eval Advanced {
 
         All parameters were changed to produce best fit for the whole curve.
 
-        ### Plotting resulted data
+        #### Plotting resulted data
 
         Now we are ready to see the result of the fitting, we need to calculate curves with initial values and final
         values of parameters:
@@ -615,12 +627,14 @@ namespace eval Advanced {
         $layout Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px
         ```
         
+        #ruffopt excludedformats {nroff}
         !ticklechart_mark_diode_extract_ngspice!
+        #ruffopt excludedformats {}
         
         On the plot we can see the initial simulated curve, the measured data and the final fitting result.
 
 
-        ## Inverter performance optimization
+        ### Inverter performance optimization
 
         This example was taken from [ASCO (A SPICE Circuit Optimizer)](https://asco.sourceforge.net/) - software to make
         optimization of different circuit performance with usage of differential evolution (DE) optimization algorithm.
@@ -632,9 +646,11 @@ namespace eval Advanced {
         to `.measure` SPICE facilities
         - [extexpr](https://github.com/georgtree/extexpr) - provides simple mathematical operators to work with vectors
 
-        Circuit is the simplest possible invertor with capacitive load:
+        Circuit is the simplest possible invertor with capacitive load.
 
+        #ruffopt excludedformats {nroff}
         ![drawing](assets/img/cmos_inverter.png)
+        #ruffopt excludedformats {}
 
         Simulation is done with pulsed input signal 4 periods long. We use three diffrerent supply voltage values to
         make result be optimal across possible range of power levels. The goal is to find width `PWIDTH` of PMOS
@@ -978,7 +994,9 @@ namespace eval Advanced {
         $chart Render -outfile [file normalize [file join .. html_charts ${fbasename}_plot.html]] -width 800px -height 500px
         ```
 
+        #ruffopt excludedformats {nroff}
         !ticklechart_mark_inverter_optimization_plot_ngspice!
+        #ruffopt excludedformats {}
 
         The final block of code is for calculating initial and final values of `VLOW`, `VHIGH`, `VSUPPLY` and preparing
         waveform for plotting. We calculate it only for highest supply voltage to avoid cluttering:
@@ -1049,9 +1067,11 @@ namespace eval Advanced {
                 PSUPPLY: [format %.3f $psupplyInitial]W → [format %.3f $psupplyFinal]W"
         ```
 
+        #ruffopt excludedformats {nroff}
         Waveforms are:
 
         !ticklechart_mark_inverter_optimization_waveforms_ngspice!
+        #ruffopt excludedformats {}
 
         And final numbers:
         ```

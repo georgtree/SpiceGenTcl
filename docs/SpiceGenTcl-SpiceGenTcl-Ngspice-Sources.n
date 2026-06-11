@@ -9,9 +9,9 @@ SpiceGenTcl::Ngspice::Sources - Commands in namespace SpiceGenTcl::Ngspice::Sour
 .br
 \fBB new\fP
 .br
-\fBOBJECT constructor\fP \fIname np nm -i value ?-tc1 value? ?-tc2 value? ?-noisy 0|1? ?-temp value|-dtemp value?\fP
+\fBBEHAVIOURALSOURCEOBJ constructor\fP \fIname np nm -i value ?-tc1 value? ?-tc2 value? ?-noisy 0|1? ?-temp value|-dtemp value?\fP
 .br
-\fBOBJECT constructor\fP \fIname np nm -v value ?-tc1 value? ?-tc2 value? ?-noisy 0|1? ?-temp value|-dtemp value?\fP
+\fBBEHAVIOURALSOURCEOBJ constructor\fP \fIname np nm -v value ?-tc1 value? ?-tc2 value? ?-noisy 0|1? ?-temp value|-dtemp value?\fP
 .br
 \fBCccs create OBJNAME\fP
 .br
@@ -41,7 +41,7 @@ SpiceGenTcl::Ngspice::Sources - Commands in namespace SpiceGenTcl::Ngspice::Sour
 .br
 \fBIac new\fP
 .br
-\fBOBJECT constructor\fP \fIname np nm -i0 value -ia value -mf value -fc value ?-td value ?-phases value??\fP
+\fBIAMOBJ constructor\fP \fIname np nm -i0 value -ia value -mf value -fc value ?-td value ?-phases value??\fP
 .br
 \fBIdc create OBJNAME\fP
 .br
@@ -51,13 +51,13 @@ SpiceGenTcl::Ngspice::Sources - Commands in namespace SpiceGenTcl::Ngspice::Sour
 .br
 \fBIexp new\fP
 .br
-\fBOBJECT constructor\fP \fIname np nm -low value -high value -td value -tr value -tf value -pw value -per value ?-np value?\fP
+\fBIPULSEOBJ constructor\fP \fIname np nm -low value -high value -td value -tr value -tf value -pw value -per value ?-np value?\fP
 .br
 \fBIpwl create OBJNAME\fP
 .br
 \fBIpwl new\fP
 .br
-\fBOBJECT constructor\fP \fIname np nm -i0|ioff value -ia|iamp value -fc|fcar value -mdi value -fs|fsig value ?-phasec value ?-phases value??\fP
+\fBISFFMOBJ constructor\fP \fIname np nm -i0|ioff value -ia|iamp value -fc|fcar value -mdi value -fs|fsig value ?-phasec value ?-phases value??\fP
 .br
 \fBIsin create OBJNAME\fP
 .br
@@ -67,7 +67,7 @@ SpiceGenTcl::Ngspice::Sources - Commands in namespace SpiceGenTcl::Ngspice::Sour
 .br
 \fBVac new\fP
 .br
-\fBOBJECT constructor\fP \fIname np nm -v0 value -va value -mf value -fc value ?-td value ?-phases value??\fP
+\fBVAMOBJ constructor\fP \fIname np nm -v0 value -va value -mf value -fc value ?-td value ?-phases value??\fP
 .br
 \fBVccs create OBJNAME\fP
 .br
@@ -85,15 +85,15 @@ SpiceGenTcl::Ngspice::Sources - Commands in namespace SpiceGenTcl::Ngspice::Sour
 .br
 \fBVexp new\fP
 .br
-\fBOBJECT constructor\fP \fIname np nm -dc value -ac value -portnum value ?-z0 value?\fP
+\fBVPORTOBJ constructor\fP \fIname np nm -dc value -ac value -portnum value ?-z0 value?\fP
 .br
-\fBOBJECT constructor\fP \fIname np nm -low|voff value -high|von value -td value -tr value -tf value -pw|ton value -per|tper value ?-np value?\fP
+\fBVPULSEOBJ constructor\fP \fIname np nm -low|voff value -high|von value -td value -tr value -tf value -pw|ton value -per|tper value ?-np value?\fP
 .br
 \fBVpwl create OBJNAME\fP
 .br
 \fBVpwl new\fP
 .br
-\fBOBJECT constructor\fP \fIname np nm -v0|voff value -va|vamp value -fc|fcar value -mdi value -fs|fsig value ?-phasec value ?-phases value??\fP
+\fBVSFFMOBJ constructor\fP \fIname np nm -v0|voff value -va|vamp value -fc|fcar value -mdi value -fs|fsig value ?-phasec value ?-phases value??\fP
 .br
 \fBVsin create OBJNAME\fP
 .br
@@ -183,9 +183,9 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class BehaviouralSource that describes behavioural source\&.
 .RS 4n
-\fBOBJECT constructor\fP \fIname np nm -i value ?-tc1 value? ?-tc2 value? ?-noisy 0|1? ?-temp value|-dtemp value?\fP
+\fBBEHAVIOURALSOURCEOBJ constructor\fP \fIname np nm -i value ?-tc1 value? ?-tc2 value? ?-noisy 0|1? ?-temp value|-dtemp value?\fP
 .br
-\fBOBJECT constructor\fP \fIname np nm -v value ?-tc1 value? ?-tc2 value? ?-noisy 0|1? ?-temp value|-dtemp value?\fP
+\fBBEHAVIOURALSOURCEOBJ constructor\fP \fIname np nm -v value ?-tc1 value? ?-tc2 value? ?-noisy 0|1? ?-temp value|-dtemp value?\fP
 .br
 .RE
 .PP
@@ -528,7 +528,7 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class Iam that describes single-frequency FM current source\&.
 .RS 4n
-\fBOBJECT constructor\fP \fIname np nm -i0 value -ia value -mf value -fc value ?-td value ?-phases value??\fP
+\fBIAMOBJ constructor\fP \fIname np nm -i0 value -ia value -mf value -fc value ?-td value ?-phases value??\fP
 .br
 .RE
 .PP
@@ -690,7 +690,7 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class Ipulse that describes pulse current source\&.
 .RS 4n
-\fBOBJECT constructor\fP \fIname np nm -low value -high value -td value -tr value -tf value -pw value -per value ?-np value?\fP
+\fBIPULSEOBJ constructor\fP \fIname np nm -low value -high value -td value -tr value -tf value -pw value -per value ?-np value?\fP
 .br
 .RE
 .PP
@@ -833,7 +833,7 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class Isffm that describes single-frequency FM current source\&.
 .RS 4n
-\fBOBJECT constructor\fP \fIname np nm -i0|ioff value -ia|iamp value -fc|fcar value -mdi value -fs|fsig value ?-phasec value ?-phases value??\fP
+\fBISFFMOBJ constructor\fP \fIname np nm -i0|ioff value -ia|iamp value -fc|fcar value -mdi value -fs|fsig value ?-phasec value ?-phases value??\fP
 .br
 .RE
 .PP
@@ -1007,7 +1007,7 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class Vam that describes single-frequency AM voltage source\&.
 .RS 4n
-\fBOBJECT constructor\fP \fIname np nm -v0 value -va value -mf value -fc value ?-td value ?-phases value??\fP
+\fBVAMOBJ constructor\fP \fIname np nm -v0 value -va value -mf value -fc value ?-td value ?-phases value??\fP
 .br
 .RE
 .PP
@@ -1254,7 +1254,7 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class Vport that describes simple constant voltage source\&.
 .RS 4n
-\fBOBJECT constructor\fP \fIname np nm -dc value -ac value -portnum value ?-z0 value?\fP
+\fBVPORTOBJ constructor\fP \fIname np nm -dc value -ac value -portnum value ?-z0 value?\fP
 .br
 .RE
 .PP
@@ -1342,7 +1342,7 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class Vpulse that describes pulse voltage source\&.
 .RS 4n
-\fBOBJECT constructor\fP \fIname np nm -low|voff value -high|von value -td value -tr value -tf value -pw|ton value -per|tper value ?-np value?\fP
+\fBVPULSEOBJ constructor\fP \fIname np nm -low|voff value -high|von value -td value -tr value -tf value -pw|ton value -per|tper value ?-np value?\fP
 .br
 .RE
 .PP
@@ -1485,7 +1485,7 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class Vsffm that describes single-frequency FM voltage source\&.
 .RS 4n
-\fBOBJECT constructor\fP \fIname np nm -v0|voff value -va|vamp value -fc|fcar value -mdi value -fs|fsig value ?-phasec value ?-phases value??\fP
+\fBVSFFMOBJ constructor\fP \fIname np nm -v0|voff value -va|vamp value -fc|fcar value -mdi value -fs|fsig value ?-phasec value ?-phases value??\fP
 .br
 .RE
 .PP
@@ -1582,3 +1582,63 @@ Readable, writable\&. Inherited\&.
 .PP
 \fI::SpiceGenTcl::Common::Sources::Vsin\fP
 
+
+.SH SEE ALSO
+spicegentcl(n) - package's main page
+.br
+spicegentcl-list-of-devices(n) - list of availible devices' classes
+.br
+spicegentcl-faq(n) - answers on common questions
+.br
+spicegentcl-tutorials(n) - examples of usage with detailed explanations
+.br
+spicegentcl-advanced(n) - examples of advanced usage
+.br
+spicegentcl-tips(n) - tips on adding new functionality to the package
+.br
+spicegentcl-parser(n) - examples of usage netlist parser
+.br
+.sp 1
+Public commands and classes documentation:
+.br
+spicegentcl-spicegentcl(n)
+.br
+spicegentcl-spicegentcl-common-basicdevices(n)
+.br
+spicegentcl-spicegentcl-common-analyses(n)
+.br
+spicegentcl-spicegentcl-common-sources(n)
+.br
+spicegentcl-spicegentcl-ngspice(n)
+.br
+spicegentcl-spicegentcl-ngspice-basicdevices(n)
+.br
+spicegentcl-spicegentcl-ngspice-sources(n)
+.br
+spicegentcl-spicegentcl-ngspice-semiconductordevices(n)
+.br
+spicegentcl-spicegentcl-ngspice-analyses(n)
+.br
+spicegentcl-spicegentcl-ngspice-simulators(n)
+.br
+spicegentcl-spicegentcl-ngspice-misc(n)
+.br
+spicegentcl-spicegentcl-xyce-basicdevices(n)
+.br
+spicegentcl-spicegentcl-xyce-sources(n)
+.br
+spicegentcl-spicegentcl-xyce-semiconductordevices(n)
+.br
+spicegentcl-spicegentcl-xyce-analyses(n)
+.br
+spicegentcl-spicegentcl-xyce-simulators(n)
+.br
+spicegentcl-spicegentcl-ltspice-basicdevices(n)
+.br
+spicegentcl-spicegentcl-ltspice-sources(n)
+.br
+spicegentcl-spicegentcl-ltspice-semiconductordevices(n)
+.br
+spicegentcl-spicegentcl-ltspice-analyses(n)
+.br
+spicegentcl-spicegentcl-ltspice-simulators(n)

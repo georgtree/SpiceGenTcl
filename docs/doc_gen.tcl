@@ -29,25 +29,16 @@ set commonNroff [list -title $title -sortnamespaces false -pagesplit namespace -
                          -product SpiceGenTcl -diagrammer "ditaa --border-width 1" -version $packageVersion\
                          -copyright "George Yashin" -onlyexports true -excludeclasses {^[a-z].*} {*}$::argv]
 set namespaces [list "::List of devices" ::FAQ ::Tutorials ::Tips ::Advanced ::Parser ::SpiceGenTcl\
-                ::SpiceGenTcl::Common::BasicDevices ::SpiceGenTcl::Common::Analyses\
-                ::SpiceGenTcl::Common::Sources ::SpiceGenTcl::Ngspice ::SpiceGenTcl::Ngspice::BasicDevices\
-                ::SpiceGenTcl::Ngspice::Sources ::SpiceGenTcl::Ngspice::SemiconductorDevices\
-                ::SpiceGenTcl::Ngspice::Analyses ::SpiceGenTcl::Ngspice::Simulators ::SpiceGenTcl::Ngspice::Misc\
-                ::SpiceGenTcl::Xyce::BasicDevices ::SpiceGenTcl::Xyce::Sources\
-                ::SpiceGenTcl::Xyce::SemiconductorDevices ::SpiceGenTcl::Xyce::Analyses\
-                ::SpiceGenTcl::Xyce::Simulators ::SpiceGenTcl::Ltspice::BasicDevices ::SpiceGenTcl::Ltspice::Sources\
-                ::SpiceGenTcl::Ltspice::SemiconductorDevices ::SpiceGenTcl::Ltspice::Analyses\
-                ::SpiceGenTcl::Ltspice::Simulators]
-set namespacesNroff [list "::List of devices" ::SpiceGenTcl ::SpiceGenTcl::Common::BasicDevices\
-                ::SpiceGenTcl::Common::Analyses ::SpiceGenTcl::Common::Sources ::SpiceGenTcl::Ngspice::BasicDevices\
-                ::SpiceGenTcl::Ngspice::Sources ::SpiceGenTcl::Ngspice ::SpiceGenTcl::Ngspice::SemiconductorDevices\
-                ::SpiceGenTcl::Ngspice::Analyses ::SpiceGenTcl::Ngspice::Simulators ::SpiceGenTcl::Ngspice::Misc\
-                ::SpiceGenTcl::Xyce::BasicDevices ::SpiceGenTcl::Xyce::Sources\
-                ::SpiceGenTcl::Xyce::SemiconductorDevices ::SpiceGenTcl::Xyce::Analyses\
-                ::SpiceGenTcl::Xyce::Simulators ::SpiceGenTcl::Ltspice::BasicDevices ::SpiceGenTcl::Ltspice::Sources\
-                ::SpiceGenTcl::Ltspice::SemiconductorDevices ::SpiceGenTcl::Ltspice::Analyses\
-                ::SpiceGenTcl::Ltspice::Simulators]
-
+                        ::SpiceGenTcl::Common::BasicDevices ::SpiceGenTcl::Common::Analyses\
+                        ::SpiceGenTcl::Common::Sources ::SpiceGenTcl::Ngspice ::SpiceGenTcl::Ngspice::BasicDevices\
+                        ::SpiceGenTcl::Ngspice::Sources ::SpiceGenTcl::Ngspice::SemiconductorDevices\
+                        ::SpiceGenTcl::Ngspice::Analyses ::SpiceGenTcl::Ngspice::Simulators\
+                        ::SpiceGenTcl::Ngspice::Misc ::SpiceGenTcl::Xyce::BasicDevices ::SpiceGenTcl::Xyce::Sources\
+                        ::SpiceGenTcl::Xyce::SemiconductorDevices ::SpiceGenTcl::Xyce::Analyses\
+                        ::SpiceGenTcl::Xyce::Simulators ::SpiceGenTcl::Ltspice::BasicDevices\
+                        ::SpiceGenTcl::Ltspice::Sources ::SpiceGenTcl::Ltspice::SemiconductorDevices\
+                        ::SpiceGenTcl::Ltspice::Analyses ::SpiceGenTcl::Ltspice::Simulators]
+set namespacesNroff $namespaces
 
 ruff::document $namespaces -outdir $docDir -format sphinx -outfile SpiceGenTcl.rst -outdir [file join $docDir sphinx]\
         {*}$commonSphinx
@@ -80,7 +71,6 @@ catch {exec sphinx-build -b html [file join $docDir sphinx] [file join $docDir]}
 puts $errorStr
 
 # ticklechart graphs substitutions
-
 proc processContentsTutorial {fileContents} {
     global path chartsMap
     dict for {mark file} $chartsMap {
@@ -108,3 +98,58 @@ set chartsMap [dict create !ticklechart_mark_monte_carlo_typ_mag_ngspice! monte_
 fileutil::updateInPlace [file join $docDir SpiceGenTcl-Advanced.html] processContentsTutorial
 set chartsMap [dict create !ticklechart_mark_c432_test_with_parsing_ngspice! c432_test_with_parsing.html]
 fileutil::updateInPlace [file join $docDir SpiceGenTcl-Parser.html] processContentsTutorial
+
+# nroff pages names processing
+foreach file [glob -directory $docDir *.n] {
+    set old $file
+    set tmp [file join $docDir __temp_rename__.n]
+    set new [file join $docDir [string tolower [file tail $file]]]
+    file rename $old $tmp
+    file rename $tmp $new
+}
+set specialPages [list spicegentcl-list-of-devices spicegentcl-faq spicegentcl-tutorials spicegentcl-advanced\
+                         spicegentcl-tips spicegentcl-parser]
+foreach namespacePath $namespacesNroff {
+    set tails [list]
+    while {$namespacePath ne {}} {
+        set tail [string tolower [namespace tail $namespacePath]]
+        regsub -all {\s+} [string trim $tail] {-} tail
+        set namespacePath [namespace qualifiers $namespacePath]
+        lappend tails $tail
+    }
+    lappend tails [string tolower SpiceGenTcl]
+    set manFileName [join [lreverse $tails] -]
+    if {$manFileName ni $specialPages} {
+        lappend manFilesLinks "${manFileName}(n)"
+    }
+}
+
+set linksString ".SH SEE ALSO
+spicegentcl(n) - package's main page
+.br
+spicegentcl-list-of-devices(n) - list of availible devices' classes
+.br
+spicegentcl-faq(n) - answers on common questions
+.br
+spicegentcl-tutorials(n) - examples of usage with detailed explanations
+.br
+spicegentcl-advanced(n) - examples of advanced usage
+.br
+spicegentcl-tips(n) - tips on adding new functionality to the package
+.br
+spicegentcl-parser(n) - examples of usage netlist parser
+.br
+.sp 1
+Public commands and classes documentation:
+.br
+[join $manFilesLinks \n.br\n]"
+
+proc addLinks2man {fileContents} {
+    global linksString
+    append fileContents "\n$linksString"
+    return $fileContents
+}
+
+foreach file [glob -directory $docDir *.n] {
+    fileutil::updateInPlace $file addLinks2man
+}
