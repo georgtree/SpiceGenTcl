@@ -1,25 +1,17 @@
 '\"
 '\" '\" Copyright (c) George Yashin
 '\"
-.TH "SpiceGenTcl::Ngspice::Sources" 3tcl 0\&.71 "SpiceGenTcl" "Tcl SpiceGenTcl package"
+.TH "SpiceGenTcl::Common::Sources" 3tcl 0\&.71 "SpiceGenTcl" "Tcl SpiceGenTcl package"
 .SH NAME
-SpiceGenTcl::Ngspice::Sources - Commands in namespace SpiceGenTcl::Ngspice::Sources
+SpiceGenTcl::Common::Sources - Commands in namespace SpiceGenTcl::Common::Sources
 .SH SYNOPSIS
-\fBB create OBJNAME\fP
+\fBCccs create OBJNAME\fP \fIname np nm -consrc value -gain value ?-m value?\fP
 .br
-\fBB new\fP
+\fBCccs new\fP \fIname np nm -consrc value -gain value ?-m value?\fP
 .br
-\fBBEHAVIOURALSOURCEOBJ constructor\fP \fIname np nm -i value ?-tc1 value? ?-tc2 value? ?-noisy 0|1? ?-temp value|-dtemp value?\fP
+\fBCcvs create OBJNAME\fP \fIname np nm -consrc value -transr value\fP
 .br
-\fBBEHAVIOURALSOURCEOBJ constructor\fP \fIname np nm -v value ?-tc1 value? ?-tc2 value? ?-noisy 0|1? ?-temp value|-dtemp value?\fP
-.br
-\fBCccs create OBJNAME\fP
-.br
-\fBCccs new\fP
-.br
-\fBCcvs create OBJNAME\fP
-.br
-\fBCcvs new\fP
+\fBCcvs new\fP \fIname np nm -consrc value -transr value\fP
 .br
 \fBE create OBJNAME\fP
 .br
@@ -37,107 +29,75 @@ SpiceGenTcl::Ngspice::Sources - Commands in namespace SpiceGenTcl::Ngspice::Sour
 .br
 \fBH new\fP
 .br
-\fBIac create OBJNAME\fP
+\fBIac create OBJNAME\fP \fIname np nm -ac value ?-acphase value?\fP
 .br
-\fBIac new\fP
+\fBIac new\fP \fIname np nm -ac value ?-acphase value?\fP
 .br
-\fBIAMOBJ constructor\fP \fIname np nm -i0 value -ia value -mf value -fc value ?-td value ?-phases value??\fP
+\fBIdc create OBJNAME\fP \fIname np nm -dc value\fP
 .br
-\fBIdc create OBJNAME\fP
+\fBIdc new\fP \fIname np nm -dc value\fP
 .br
-\fBIdc new\fP
+\fBIexp create OBJNAME\fP \fIname np nm -i1 value -i2 value -td1 value -tau1 value -td2 value -tau2 value ?-phase|phi value???\fP
 .br
-\fBIexp create OBJNAME\fP
+\fBIexp new\fP \fIname np nm -i1 value -i2 value -td1 value -tau1 value -td2 value -tau2 value ?-phase|phi value???\fP
 .br
-\fBIexp new\fP
+\fBIpulse create OBJNAME\fP \fIname np nm -voff|ioff|low value -von|ion|high value -td value -tr value -tf value -pw|ton value ?-phase|phi value???\fP
 .br
-\fBIPULSEOBJ constructor\fP \fIname np nm -low value -high value -td value -tr value -tf value -pw value -per value ?-np value?\fP
+\fBIpulse new\fP \fIname np nm -voff|ioff|low value -von|ion|high value -td value -tr value -tf value -pw|ton value ?-phase|phi value???\fP
 .br
-\fBIpwl create OBJNAME\fP
+\fBIpwl create OBJNAME\fP \fIname np nm -seq list ?-phase|phi value???\fP
 .br
-\fBIpwl new\fP
+\fBIpwl new\fP \fIname np nm -seq list ?-phase|phi value???\fP
 .br
-\fBISFFMOBJ constructor\fP \fIname np nm -i0|ioff value -ia|iamp value -fc|fcar value -mdi value -fs|fsig value ?-phasec value ?-phases value??\fP
+\fBIsffm create OBJNAME\fP \fIname np nm -i0|voff|ioff|v0 value -ia|vamp|iamp|va value -fc|fcar value -mdi value -fs|fsig value ?-phi|phase value???\fP
 .br
-\fBIsin create OBJNAME\fP
+\fBIsffm new\fP \fIname np nm -i0|voff|ioff|v0 value -ia|vamp|iamp|va value -fc|fcar value -mdi value -fs|fsig value ?-phi|phase value???\fP
 .br
-\fBIsin new\fP
+\fBIsin create OBJNAME\fP \fIname np nm -i0|ioffset value -ia|iamp value -freq value ?-td value ?-theta value ?-phase|phi value???\fP
 .br
-\fBVac create OBJNAME\fP
+\fBIsin new\fP \fIname np nm -i0|ioffset value -ia|iamp value -freq value ?-td value ?-theta value ?-phase|phi value???\fP
 .br
-\fBVac new\fP
+\fBVac create OBJNAME\fP \fIname np nm -ac value ?-acphase value?\fP
 .br
-\fBVAMOBJ constructor\fP \fIname np nm -v0 value -va value -mf value -fc value ?-td value ?-phases value??\fP
+\fBVac new\fP \fIname np nm -ac value ?-acphase value?\fP
 .br
-\fBVccs create OBJNAME\fP
+\fBVccs create OBJNAME\fP \fIname np nm ncp ncm -trcond value ?-m value?\fP
 .br
-\fBVccs new\fP
+\fBVccs new\fP \fIname np nm ncp ncm -trcond value ?-m value?\fP
 .br
-\fBVcvs create OBJNAME\fP
+\fBVcvs create OBJNAME\fP \fIname np nm ncp ncm -gain value\fP
 .br
-\fBVcvs new\fP
+\fBVcvs new\fP \fIname np nm ncp ncm -gain value\fP
 .br
-\fBVdc create OBJNAME\fP
+\fBVdc create OBJNAME\fP \fIname np nm -dc value\fP
 .br
-\fBVdc new\fP
+\fBVdc new\fP \fIname np nm -dc value\fP
 .br
-\fBVexp create OBJNAME\fP
+\fBVexp create OBJNAME\fP \fIname np nm -i1|v1 value -i2|v2 value -td1 value -tau1 value -td2 value -tau2 value ?-phi|phase value???\fP
 .br
-\fBVexp new\fP
+\fBVexp new\fP \fIname np nm -i1|v1 value -i2|v2 value -td1 value -tau1 value -td2 value -tau2 value ?-phi|phase value???\fP
 .br
-\fBVPORTOBJ constructor\fP \fIname np nm -dc value -ac value -portnum value ?-z0 value?\fP
+\fBVpulse create OBJNAME\fP \fIname np nm -voff|ioff|low value -von|ion|high value -td value -tr value -tf value -pw|ton value ?-dc value? ?-ac value ?-acphase value??\fP
 .br
-\fBVPULSEOBJ constructor\fP \fIname np nm -low|voff value -high|von value -td value -tr value -tf value -pw|ton value -per|tper value ?-np value?\fP
+\fBVpulse new\fP \fIname np nm -voff|ioff|low value -von|ion|high value -td value -tr value -tf value -pw|ton value ?-dc value? ?-ac value ?-acphase value??\fP
 .br
-\fBVpwl create OBJNAME\fP
+\fBVpwl create OBJNAME\fP \fIname np nm -seq list ?-phase|phi value???\fP
 .br
-\fBVpwl new\fP
+\fBVpwl new\fP \fIname np nm -seq list ?-phase|phi value???\fP
 .br
-\fBVSFFMOBJ constructor\fP \fIname np nm -v0|voff value -va|vamp value -fc|fcar value -mdi value -fs|fsig value ?-phasec value ?-phases value??\fP
+\fBVsffm create OBJNAME\fP \fIname np nm -i0|voff|ioff|v0 value -ia|vamp|iamp|va value -fc|fcar value -mdi value -fs|fsig ?-phi|phase value???\fP
 .br
-\fBVsin create OBJNAME\fP
+\fBVsffm new\fP \fIname np nm -i0|voff|ioff|v0 value -ia|vamp|iamp|va value -fc|fcar value -mdi value -fs|fsig ?-phi|phase value???\fP
 .br
-\fBVsin new\fP
+\fBVsin create OBJNAME\fP \fIname np nm -i0|voffset|ioffset|v0 value -ia|vamp|iamp|va value -freq value ?-td value ?-theta value ?-phi|phase value???\fP
 .br
-.SH ::SPICEGENTCL::NGSPICE::SOURCES
+\fBVsin new\fP \fIname np nm -i0|voffset|ioffset|v0 value -ia|vamp|iamp|va value -freq value ?-td value ?-theta value ?-phi|phase value???\fP
+.br
+.SH ::SPICEGENTCL::COMMON::SOURCES
 .SH CLASSES
 .PP
 .RS -4n
-\fBB\fR (::SpiceGenTcl::Ngspice::Sources)
-.RE
-.PP
-\fBMethod summary\fR
-.RS 4n
-.TP
-\fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
-Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
-.TP
-::SpiceGenTcl::Device\&.actOnParam
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
-.TP
-::SpiceGenTcl::Device\&.actOnPin
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
-.TP
-::SpiceGenTcl::Device\&.checkFloatingPins
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
-.TP
-::SpiceGenTcl::Device\&.genSPICEString
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
-.RE
-.PP
-\fBProperties\fR
-.RS 4n
-.TP
--name
-Readable, writable\&. Inherited\&.
-.RE
-.PP
-\fBSuperclasses\fR
-.PP
-\fIBehaviouralSource\fP
-.PP
-.RS -4n
-\fBBehaviouralSource\fR (::SpiceGenTcl::Ngspice::Sources)
+\fBCccs\fR (::SpiceGenTcl::Common::Sources)
 .RE
 .PP
 \fBMethod summary\fR
@@ -175,46 +135,34 @@ Readable, writable\&. Inherited\&.
 .PP
 \fBSubclasses\fR
 .PP
-\fIB\fP
+\fIF\fP, \fI::SpiceGenTcl::Ngspice::Sources::Cccs\fP, \fI::SpiceGenTcl::Xyce::Sources::Cccs\fP, \fI::SpiceGenTcl::Ltspice::Sources::Cccs\fP
 .PP
 .RS -4n
-\fBconstructor\fR (::SpiceGenTcl::Ngspice::Sources::BehaviouralSource)
+\fBconstructor\fR (::SpiceGenTcl::Common::Sources::Cccs)
 .RE
 .PP
-Creates object of class BehaviouralSource that describes behavioural source\&.
+Creates object of class Cccs that describes linear current-controlled current source\&.
 .RS 4n
-\fBBEHAVIOURALSOURCEOBJ constructor\fP \fIname np nm -i value ?-tc1 value? ?-tc2 value? ?-noisy 0|1? ?-temp value|-dtemp value?\fP
+\fBCccs create OBJNAME\fP \fIname np nm -consrc value -gain value ?-m value?\fP
 .br
-\fBBEHAVIOURALSOURCEOBJ constructor\fP \fIname np nm -v value ?-tc1 value? ?-tc2 value? ?-noisy 0|1? ?-temp value|-dtemp value?\fP
+\fBCccs new\fP \fIname np nm -consrc value -gain value ?-m value?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
--dtemp value
-Temperature offset, optional\&.
+-consrc value
+Name of controlling source\&.
 .TP
--i value
-Current expression\&.
+-gain value
+Current gain\&.
 .TP
--noisy
-Selects noise behaviour\&.
-.TP
--tc1 value
-Linear thermal coefficient, optional\&.
-.TP
--tc2 value
-Quadratic thermal coefficient, optional\&.
-.TP
--temp value
-Device temperature, optional\&.
-.TP
--v value
-Voltage expression\&.
+-m value
+Parallel source multiplicator\&.
 .TP
 name
-Name of the device without first-letter designator B\&.
+Name of the device without first-letter designator F\&.
 .TP
 nm
 Name of node connected to negative pin\&.
@@ -227,7 +175,7 @@ Name of node connected to positive pin\&.
 .PP
 .RS 4n
 .nf
-BXXXXXXX n+ n- <i=expr> <v=expr> <tc1=value> <tc2=value> <dtemp=value> <temp=value>
+FXXXXXXX N+ N- VNAM VALUE <m=val>
 .fi
 .RE
 .PP
@@ -235,16 +183,19 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-BehaviouralSource new 1 netp netm -v "V(a)+V(b)+pow(V(c),2)" -tc1 1
+Cccs new 1 net1 0 netc 0 -consrc vc -gain 10 -m 1
 .fi
 .RE
 .PP
 .RS -4n
-\fBCccs\fR (::SpiceGenTcl::Ngspice::Sources)
+\fBCcvs\fR (::SpiceGenTcl::Common::Sources)
 .RE
 .PP
 \fBMethod summary\fR
 .RS 4n
+.TP
+constructor
+Constructor for the class\&.
 .TP
 \fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
 Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
@@ -271,52 +222,61 @@ Readable, writable\&. Inherited\&.
 .PP
 \fBSuperclasses\fR
 .PP
-\fI::SpiceGenTcl::Common::Sources::Cccs\fP
+\fI::SpiceGenTcl::Device\fP
 .PP
 \fBSubclasses\fR
 .PP
-\fIF\fP
+\fIH\fP, \fI::SpiceGenTcl::Ngspice::Sources::Ccvs\fP, \fI::SpiceGenTcl::Xyce::Sources::Ccvs\fP, \fI::SpiceGenTcl::Ltspice::Sources::Ccvs\fP
 .PP
 .RS -4n
-\fBCcvs\fR (::SpiceGenTcl::Ngspice::Sources)
+\fBconstructor\fR (::SpiceGenTcl::Common::Sources::Ccvs)
 .RE
 .PP
-\fBMethod summary\fR
+Creates object of class Ccvs that describes linear current-controlled current source\&.
+.RS 4n
+\fBCcvs create OBJNAME\fP \fIname np nm -consrc value -transr value\fP
+.br
+\fBCcvs new\fP \fIname np nm -consrc value -transr value\fP
+.br
+.RE
+.PP
+\fBParameters\fR
 .RS 4n
 .TP
-\fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
-Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
+-consrc value
+Name of controlling source\&.
 .TP
-::SpiceGenTcl::Device\&.actOnParam
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
+-transr value
+Transresistance\&.
 .TP
-::SpiceGenTcl::Device\&.actOnPin
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
+name
+Name of the device without first-letter designator H\&.
 .TP
-::SpiceGenTcl::Device\&.checkFloatingPins
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
+nm
+Name of node connected to negative pin\&.
 .TP
-::SpiceGenTcl::Device\&.genSPICEString
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
+np
+Name of node connected to positive pin\&.
 .RE
 .PP
-\fBProperties\fR
+\fBDescription\fR
+.PP
 .RS 4n
-.TP
--name
-Readable, writable\&. Inherited\&.
+.nf
+HXXXXXXX N+ N- VNAM VALUE
+.fi
 .RE
 .PP
-\fBSuperclasses\fR
+Example of class initialization:
 .PP
-\fI::SpiceGenTcl::Common::Sources::Ccvs\fP
-.PP
-\fBSubclasses\fR
-.PP
-\fIH\fP
+.RS 4n
+.nf
+Ccvs new 1 net1 0 -consrc vc -transr {-eq tres}
+.fi
+.RE
 .PP
 .RS -4n
-\fBE\fR (::SpiceGenTcl::Ngspice::Sources)
+\fBE\fR (::SpiceGenTcl::Common::Sources)
 .RE
 .PP
 \fBMethod summary\fR
@@ -350,7 +310,7 @@ Readable, writable\&. Inherited\&.
 \fIVcvs\fP
 .PP
 .RS -4n
-\fBF\fR (::SpiceGenTcl::Ngspice::Sources)
+\fBF\fR (::SpiceGenTcl::Common::Sources)
 .RE
 .PP
 \fBMethod summary\fR
@@ -384,7 +344,7 @@ Readable, writable\&. Inherited\&.
 \fICccs\fP
 .PP
 .RS -4n
-\fBG\fR (::SpiceGenTcl::Ngspice::Sources)
+\fBG\fR (::SpiceGenTcl::Common::Sources)
 .RE
 .PP
 \fBMethod summary\fR
@@ -418,7 +378,7 @@ Readable, writable\&. Inherited\&.
 \fIVccs\fP
 .PP
 .RS -4n
-\fBH\fR (::SpiceGenTcl::Ngspice::Sources)
+\fBH\fR (::SpiceGenTcl::Common::Sources)
 .RE
 .PP
 \fBMethod summary\fR
@@ -452,41 +412,7 @@ Readable, writable\&. Inherited\&.
 \fICcvs\fP
 .PP
 .RS -4n
-\fBIac\fR (::SpiceGenTcl::Ngspice::Sources)
-.RE
-.PP
-\fBMethod summary\fR
-.RS 4n
-.TP
-\fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
-Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
-.TP
-::SpiceGenTcl::Device\&.actOnParam
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
-.TP
-::SpiceGenTcl::Device\&.actOnPin
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
-.TP
-::SpiceGenTcl::Device\&.checkFloatingPins
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
-.TP
-::SpiceGenTcl::Device\&.genSPICEString
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
-.RE
-.PP
-\fBProperties\fR
-.RS 4n
-.TP
--name
-Readable, writable\&. Inherited\&.
-.RE
-.PP
-\fBSuperclasses\fR
-.PP
-\fI::SpiceGenTcl::Common::Sources::Iac\fP
-.PP
-.RS -4n
-\fBIam\fR (::SpiceGenTcl::Ngspice::Sources)
+\fBIac\fR (::SpiceGenTcl::Common::Sources)
 .RE
 .PP
 \fBMethod summary\fR
@@ -520,38 +446,32 @@ Readable, writable\&. Inherited\&.
 .PP
 \fBSuperclasses\fR
 .PP
-\fIam\fP
+\fIac\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fI::SpiceGenTcl::Ngspice::Sources::Iac\fP, \fI::SpiceGenTcl::Xyce::Sources::Iac\fP
 .PP
 .RS -4n
-\fBconstructor\fR (::SpiceGenTcl::Ngspice::Sources::Iam)
+\fBconstructor\fR (::SpiceGenTcl::Common::Sources::Iac)
 .RE
 .PP
-Creates object of class Iam that describes single-frequency FM current source\&.
+Creates object of class Iac that describes ac current source\&.
 .RS 4n
-\fBIAMOBJ constructor\fP \fIname np nm -i0 value -ia value -mf value -fc value ?-td value ?-phases value??\fP
+\fBIac create OBJNAME\fP \fIname np nm -ac value ?-acphase value?\fP
+.br
+\fBIac new\fP \fIname np nm -ac value ?-acphase value?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
--fc value
-Carrier frequency\&.
+-acphase value
+Phase of AC current\&.
 .TP
--i0 value
-Initial value\&.
-.TP
--ia value
-Pulsed value\&.
-.TP
--mf value
-Modulating frequency\&.
-.TP
--phases value
-Phase, optional, require -td
-.TP
--td value
-Signal delay, optional\&.
+-dc value
+AC current value\&.
 .TP
 name
 Name of the device without first-letter designator I\&.
@@ -567,7 +487,7 @@ Name of node connected to positive pin\&.
 .PP
 .RS 4n
 .nf
-IYYYYYYY n+ n- AM(VA VO MF FC TD PHASES)
+IYYYYYYY n+ n- <AC<ACMAG<ACPHASE>>>
 .fi
 .RE
 .PP
@@ -575,16 +495,19 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-Iam new 1 net1 net2 -i0 0 -ia 2 -mf 1e3 -fc {-eq freq} -td 1e-6 -phases {-eq phase}
+Iac new 1 netp netm -ac 10 -acphase 45
 .fi
 .RE
 .PP
 .RS -4n
-\fBIdc\fR (::SpiceGenTcl::Ngspice::Sources)
+\fBIdc\fR (::SpiceGenTcl::Common::Sources)
 .RE
 .PP
 \fBMethod summary\fR
 .RS 4n
+.TP
+constructor
+Constructor for the class\&.
 .TP
 \fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
 Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
@@ -611,14 +534,65 @@ Readable, writable\&. Inherited\&.
 .PP
 \fBSuperclasses\fR
 .PP
-\fI::SpiceGenTcl::Common::Sources::Idc\fP
+\fIdc\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fI::SpiceGenTcl::Ngspice::Sources::Idc\fP, \fI::SpiceGenTcl::Xyce::Sources::Idc\fP
 .PP
 .RS -4n
-\fBIexp\fR (::SpiceGenTcl::Ngspice::Sources)
+\fBconstructor\fR (::SpiceGenTcl::Common::Sources::Idc)
+.RE
+.PP
+Creates object of class Idc that describes simple constant current source\&.
+.RS 4n
+\fBIdc create OBJNAME\fP \fIname np nm -dc value\fP
+.br
+\fBIdc new\fP \fIname np nm -dc value\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+-dc value
+DC voltage value\&.
+.TP
+name
+Name of the device without first-letter designator I\&.
+.TP
+nm
+Name of node connected to negative pin\&.
+.TP
+np
+Name of node connected to positive pin\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+.RS 4n
+.nf
+IYYYYYYY n+ n- <<DC> DC/TRAN VALUE>>
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+Idc new 1 netp netm -dc 10
+.fi
+.RE
+.PP
+.RS -4n
+\fBIexp\fR (::SpiceGenTcl::Common::Sources)
 .RE
 .PP
 \fBMethod summary\fR
 .RS 4n
+.TP
+constructor
+Constructor for the class\&.
 .TP
 \fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
 Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
@@ -645,10 +619,82 @@ Readable, writable\&. Inherited\&.
 .PP
 \fBSuperclasses\fR
 .PP
-\fI::SpiceGenTcl::Common::Sources::Iexp\fP
+\fIexp\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fI::SpiceGenTcl::Ngspice::Sources::Iexp\fP, \fI::SpiceGenTcl::Xyce::Sources::Iexp\fP
 .PP
 .RS -4n
-\fBIpulse\fR (::SpiceGenTcl::Ngspice::Sources)
+\fBconstructor\fR (::SpiceGenTcl::Common::Sources::Iexp)
+.RE
+.PP
+Creates object of class Iexp that describes exponential current source\&.
+.RS 4n
+\fBIexp create OBJNAME\fP \fIname np nm -i1 value -i2 value -td1 value -tau1 value -td2 value -tau2 value ?-phase|phi value???\fP
+.br
+\fBIexp new\fP \fIname np nm -i1 value -i2 value -td1 value -tau1 value -td2 value -tau2 value ?-phase|phi value???\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+-ac value
+AC value, optional\&.
+.TP
+-acphase value
+Phase of AC signal, optional, requires -ac
+.TP
+-dc value
+DC value, optional\&.
+.TP
+-i1 value
+Initial value\&.
+.TP
+-i2 value
+Pulsed value\&.
+.TP
+-tau1 value
+Rise time constant\&.
+.TP
+-tau2 value
+Fall time constant\&.
+.TP
+-td1 value
+Rise delay time\&.
+.TP
+-td2 value
+Fall delay time\&.
+.TP
+name
+Name of the device without first-letter designator I\&.
+.TP
+nm
+Name of node connected to negative pin\&.
+.TP
+np
+Name of node connected to positive pin\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+.RS 4n
+.nf
+IYYYYYYY n+ n- EXP(V1 V2 TD1 TAU1 TD2 TAU2)
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+Iexp new 1 net1 net2 -i1 0 -i2 1 -td1 1e-9 -tau1 1e-9 -td2 {-eq td2} -tau2 10e-6
+.fi
+.RE
+.PP
+.RS -4n
+\fBIpulse\fR (::SpiceGenTcl::Common::Sources)
 .RE
 .PP
 \fBMethod summary\fR
@@ -684,13 +730,19 @@ Readable, writable\&. Inherited\&.
 .PP
 \fIpulse\fP
 .PP
+\fBSubclasses\fR
+.PP
+\fI::SpiceGenTcl::Xyce::Sources::Ipulse\fP
+.PP
 .RS -4n
-\fBconstructor\fR (::SpiceGenTcl::Ngspice::Sources::Ipulse)
+\fBconstructor\fR (::SpiceGenTcl::Common::Sources::Ipulse)
 .RE
 .PP
 Creates object of class Ipulse that describes pulse current source\&.
 .RS 4n
-\fBIPULSEOBJ constructor\fP \fIname np nm -low value -high value -td value -tr value -tf value -pw value -per value ?-np value?\fP
+\fBIpulse create OBJNAME\fP \fIname np nm -voff|ioff|low value -von|ion|high value -td value -tr value -tf value -pw|ton value ?-phase|phi value???\fP
+.br
+\fBIpulse new\fP \fIname np nm -voff|ioff|low value -von|ion|high value -td value -tr value -tf value -pw|ton value ?-phase|phi value???\fP
 .br
 .RE
 .PP
@@ -707,19 +759,16 @@ Phase of AC signal, optional, requires -ac
 DC value, optional\&.
 .TP
 -high value
-High value\&.
+High value, aliases: -von, -ion
 .TP
 -low value
-Low value\&.
-.TP
--npulses value
-Number of pulses, optional\&.
+Low value, aliases: -voff, -ioff
 .TP
 -per value
-Period time\&.
+Period time, alias -tper
 .TP
 -pw value
-Width of pulse\&.
+Width of pulse, alias -ton
 .TP
 -td value
 Time delay\&.
@@ -744,7 +793,7 @@ Name of node connected to positive pin\&.
 .PP
 .RS 4n
 .nf
-IYYYYYYY n+ n- PULSE(V1 V2 TD TR TF PW PER NP)
+IYYYYYYY n+ n- PULSE(V1 V2 TD TR TF PW PER)
 .fi
 .RE
 .PP
@@ -752,16 +801,19 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-Ipulse new 1 net1 net2 -low 0 -high 1 -td {-eq td} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6 -npulses {-eq np}
+Ipulse new 1 net1 net2 -low 0 -high 1 -td {-eq td} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6
 .fi
 .RE
 .PP
 .RS -4n
-\fBIpwl\fR (::SpiceGenTcl::Ngspice::Sources)
+\fBIpwl\fR (::SpiceGenTcl::Common::Sources)
 .RE
 .PP
 \fBMethod summary\fR
 .RS 4n
+.TP
+constructor
+Constructor for the class\&.
 .TP
 \fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
 Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
@@ -788,10 +840,67 @@ Readable, writable\&. Inherited\&.
 .PP
 \fBSuperclasses\fR
 .PP
-\fI::SpiceGenTcl::Common::Sources::Ipwl\fP
+\fIpwl\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fI::SpiceGenTcl::Ngspice::Sources::Ipwl\fP, \fI::SpiceGenTcl::Xyce::Sources::Ipwl\fP
 .PP
 .RS -4n
-\fBIsffm\fR (::SpiceGenTcl::Ngspice::Sources)
+\fBconstructor\fR (::SpiceGenTcl::Common::Sources::Ipwl)
+.RE
+.PP
+Creates object of class Ipwl that describes piece-wise current source\&.
+.RS 4n
+\fBIpwl create OBJNAME\fP \fIname np nm -seq list ?-phase|phi value???\fP
+.br
+\fBIpwl new\fP \fIname np nm -seq list ?-phase|phi value???\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+-ac value
+AC value, optional\&.
+.TP
+-acphase value
+Phase of AC signal, optional, requires -ac
+.TP
+-dc value
+DC value, optional\&.
+.TP
+-seq list
+Sequence of pwl points in form {t0 i0 t1 i1 t2 i2 t3 i3 \&.\&.\&.}
+.TP
+name
+Name of the device without first-letter designator I\&.
+.TP
+nm
+Name of node connected to negative pin\&.
+.TP
+np
+Name of node connected to positive pin\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+.RS 4n
+.nf
+IYYYYYYY n+ n- PWL (T1 I1 <T2 I2 T3 I3 T4 I4 \&.\&.\&.>)
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+Ipwl new 1 np nm -seq {0 0 {-eq t1} 1 2 2 3 3 4 4}
+.fi
+.RE
+.PP
+.RS -4n
+\fBIsffm\fR (::SpiceGenTcl::Common::Sources)
 .RE
 .PP
 \fBMethod summary\fR
@@ -827,13 +936,19 @@ Readable, writable\&. Inherited\&.
 .PP
 \fIsffm\fP
 .PP
+\fBSubclasses\fR
+.PP
+\fI::SpiceGenTcl::Xyce::Sources::Isffm\fP
+.PP
 .RS -4n
-\fBconstructor\fR (::SpiceGenTcl::Ngspice::Sources::Isffm)
+\fBconstructor\fR (::SpiceGenTcl::Common::Sources::Isffm)
 .RE
 .PP
 Creates object of class Isffm that describes single-frequency FM current source\&.
 .RS 4n
-\fBISFFMOBJ constructor\fP \fIname np nm -i0|ioff value -ia|iamp value -fc|fcar value -mdi value -fs|fsig value ?-phasec value ?-phases value??\fP
+\fBIsffm create OBJNAME\fP \fIname np nm -i0|voff|ioff|v0 value -ia|vamp|iamp|va value -fc|fcar value -mdi value -fs|fsig value ?-phi|phase value???\fP
+.br
+\fBIsffm new\fP \fIname np nm -i0|voff|ioff|v0 value -ia|vamp|iamp|va value -fc|fcar value -mdi value -fs|fsig value ?-phi|phase value???\fP
 .br
 .RE
 .PP
@@ -864,12 +979,6 @@ Pulsed value, aliases: -vamp, -va, -iamp
 -mdi value
 Modulation index\&.
 .TP
--phasec value
-Carrier phase, optional\&.
-.TP
--phases value
-Signal phase, optional, require -phasec
-.TP
 name
 Name of the device without first-letter designator I\&.
 .TP
@@ -884,7 +993,7 @@ Name of node connected to positive pin\&.
 .PP
 .RS 4n
 .nf
-IYYYYYYY n+ n- SFFM(VO VA FC MDI FS PHASEC PHASES)
+IYYYYYYY n+ n- SFFM(VO VA FC MDI FS)
 .fi
 .RE
 .PP
@@ -892,80 +1001,12 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-Isin new 1 net1 net2 -i0 0 -ia 1 -fc {-eq freq} -mdi 0 -fs 1e3 -phasec {-eq phase}
+Isin new 1 net1 net2 -i0 0 -ia 1 -fc {-eq freq} -mdi 0 -fs 1e3
 .fi
 .RE
 .PP
 .RS -4n
-\fBIsin\fR (::SpiceGenTcl::Ngspice::Sources)
-.RE
-.PP
-\fBMethod summary\fR
-.RS 4n
-.TP
-\fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
-Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
-.TP
-::SpiceGenTcl::Device\&.actOnParam
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
-.TP
-::SpiceGenTcl::Device\&.actOnPin
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
-.TP
-::SpiceGenTcl::Device\&.checkFloatingPins
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
-.TP
-::SpiceGenTcl::Device\&.genSPICEString
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
-.RE
-.PP
-\fBProperties\fR
-.RS 4n
-.TP
--name
-Readable, writable\&. Inherited\&.
-.RE
-.PP
-\fBSuperclasses\fR
-.PP
-\fI::SpiceGenTcl::Common::Sources::Isin\fP
-.PP
-.RS -4n
-\fBVac\fR (::SpiceGenTcl::Ngspice::Sources)
-.RE
-.PP
-\fBMethod summary\fR
-.RS 4n
-.TP
-\fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
-Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
-.TP
-::SpiceGenTcl::Device\&.actOnParam
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
-.TP
-::SpiceGenTcl::Device\&.actOnPin
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
-.TP
-::SpiceGenTcl::Device\&.checkFloatingPins
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
-.TP
-::SpiceGenTcl::Device\&.genSPICEString
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
-.RE
-.PP
-\fBProperties\fR
-.RS 4n
-.TP
--name
-Readable, writable\&. Inherited\&.
-.RE
-.PP
-\fBSuperclasses\fR
-.PP
-\fI::SpiceGenTcl::Common::Sources::Vac\fP
-.PP
-.RS -4n
-\fBVam\fR (::SpiceGenTcl::Ngspice::Sources)
+\fBIsin\fR (::SpiceGenTcl::Common::Sources)
 .RE
 .PP
 \fBMethod summary\fR
@@ -999,15 +1040,21 @@ Readable, writable\&. Inherited\&.
 .PP
 \fBSuperclasses\fR
 .PP
-\fIam\fP
+\fIsin\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fI::SpiceGenTcl::Ngspice::Sources::Isin\fP, \fI::SpiceGenTcl::Xyce::Sources::Isin\fP
 .PP
 .RS -4n
-\fBconstructor\fR (::SpiceGenTcl::Ngspice::Sources::Vam)
+\fBconstructor\fR (::SpiceGenTcl::Common::Sources::Isin)
 .RE
 .PP
-Creates object of class Vam that describes single-frequency AM voltage source\&.
+Creates object of class Isin that describes sinusoidal current source\&.
 .RS 4n
-\fBVAMOBJ constructor\fP \fIname np nm -v0 value -va value -mf value -fc value ?-td value ?-phases value??\fP
+\fBIsin create OBJNAME\fP \fIname np nm -i0|ioffset value -ia|iamp value -freq value ?-td value ?-theta value ?-phase|phi value???\fP
+.br
+\fBIsin new\fP \fIname np nm -i0|ioffset value -ia|iamp value -freq value ?-td value ?-theta value ?-phase|phi value???\fP
 .br
 .RE
 .PP
@@ -1023,23 +1070,111 @@ Phase of AC signal, optional, requires -ac
 -dc value
 DC value, optional\&.
 .TP
--fc value
-Carrier frequency\&.
+-freq value
+Frequency of sinusoidal signal\&.
 .TP
--mf value
-Modulating frequency\&.
+-i0 value
+DC shift value, aliases: -voffset, -v0, -ioffset
 .TP
--phases value
-Phase, optional, require -td
+-ia value
+Amplitude value, aliases: -vamp, -va, -iamp
+.TP
+-phase value
+Phase of signal, optional, requires -td and -phase, alias -phi
 .TP
 -td value
-Signal delay, optional\&.
+Time delay, optional\&.
 .TP
--v0 value
-Initial value\&.
+-theta value
+Damping factor, optional, requires -td
 .TP
--va value
-Pulsed value\&.
+name
+Name of the device without first-letter designator I\&.
+.TP
+nm
+Name of node connected to negative pin\&.
+.TP
+np
+Name of node connected to positive pin\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+.RS 4n
+.nf
+IYYYYYYY n+ n- SIN(VO VA FREQ TD THETA PHASE)
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+Isin new 1 net1 net2 -i0 0 -ia 2 -freq {-eq freq} -td 1e-6 -theta {-eq theta}
+.fi
+.RE
+.PP
+.RS -4n
+\fBVac\fR (::SpiceGenTcl::Common::Sources)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+\fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
+Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
+.TP
+::SpiceGenTcl::Device\&.actOnParam
+Inherited from \fI::SpiceGenTcl::Device\fP\&.
+.TP
+::SpiceGenTcl::Device\&.actOnPin
+Inherited from \fI::SpiceGenTcl::Device\fP\&.
+.TP
+::SpiceGenTcl::Device\&.checkFloatingPins
+Inherited from \fI::SpiceGenTcl::Device\fP\&.
+.TP
+::SpiceGenTcl::Device\&.genSPICEString
+Inherited from \fI::SpiceGenTcl::Device\fP\&.
+.RE
+.PP
+\fBProperties\fR
+.RS 4n
+.TP
+-name
+Readable, writable\&. Inherited\&.
+.RE
+.PP
+\fBSuperclasses\fR
+.PP
+\fIac\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fI::SpiceGenTcl::Ngspice::Sources::Vac\fP, \fI::SpiceGenTcl::Xyce::Sources::Vac\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Common::Sources::Vac)
+.RE
+.PP
+Creates object of class Vac that describes ac voltage source\&.
+.RS 4n
+\fBVac create OBJNAME\fP \fIname np nm -ac value ?-acphase value?\fP
+.br
+\fBVac new\fP \fIname np nm -ac value ?-acphase value?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+-ac value
+AC voltage value\&.
+.TP
+-acphase value
+Phase of AC voltage\&.
 .TP
 name
 Name of the device without first-letter designator V\&.
@@ -1055,7 +1190,7 @@ Name of node connected to positive pin\&.
 .PP
 .RS 4n
 .nf
-VYYYYYYY n+ n- AM(VA VO MF FC TD PHASES)
+VYYYYYYY n+ n- <AC<ACMAG<ACPHASE>>>
 .fi
 .RE
 .PP
@@ -1063,156 +1198,12 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-Vam new 1 net1 net2 -v0 0 -va 2 -mf 1e3 -fc {-eq freq} -td 1e-6 -phases {-eq phase}
+Vac new 1 netp netm -ac 10 -acphase 45
 .fi
 .RE
 .PP
 .RS -4n
-\fBVccs\fR (::SpiceGenTcl::Ngspice::Sources)
-.RE
-.PP
-\fBMethod summary\fR
-.RS 4n
-.TP
-\fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
-Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
-.TP
-::SpiceGenTcl::Device\&.actOnParam
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
-.TP
-::SpiceGenTcl::Device\&.actOnPin
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
-.TP
-::SpiceGenTcl::Device\&.checkFloatingPins
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
-.TP
-::SpiceGenTcl::Device\&.genSPICEString
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
-.RE
-.PP
-\fBProperties\fR
-.RS 4n
-.TP
--name
-Readable, writable\&. Inherited\&.
-.RE
-.PP
-\fBSuperclasses\fR
-.PP
-\fI::SpiceGenTcl::Common::Sources::Vccs\fP
-.PP
-\fBSubclasses\fR
-.PP
-\fIG\fP
-.PP
-.RS -4n
-\fBVcvs\fR (::SpiceGenTcl::Ngspice::Sources)
-.RE
-.PP
-\fBMethod summary\fR
-.RS 4n
-.TP
-\fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
-Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
-.TP
-::SpiceGenTcl::Device\&.actOnParam
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
-.TP
-::SpiceGenTcl::Device\&.actOnPin
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
-.TP
-::SpiceGenTcl::Device\&.checkFloatingPins
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
-.TP
-::SpiceGenTcl::Device\&.genSPICEString
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
-.RE
-.PP
-\fBProperties\fR
-.RS 4n
-.TP
--name
-Readable, writable\&. Inherited\&.
-.RE
-.PP
-\fBSuperclasses\fR
-.PP
-\fI::SpiceGenTcl::Common::Sources::Vcvs\fP
-.PP
-\fBSubclasses\fR
-.PP
-\fIE\fP
-.PP
-.RS -4n
-\fBVdc\fR (::SpiceGenTcl::Ngspice::Sources)
-.RE
-.PP
-\fBMethod summary\fR
-.RS 4n
-.TP
-\fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
-Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
-.TP
-::SpiceGenTcl::Device\&.actOnParam
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
-.TP
-::SpiceGenTcl::Device\&.actOnPin
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
-.TP
-::SpiceGenTcl::Device\&.checkFloatingPins
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
-.TP
-::SpiceGenTcl::Device\&.genSPICEString
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
-.RE
-.PP
-\fBProperties\fR
-.RS 4n
-.TP
--name
-Readable, writable\&. Inherited\&.
-.RE
-.PP
-\fBSuperclasses\fR
-.PP
-\fI::SpiceGenTcl::Common::Sources::Vdc\fP
-.PP
-.RS -4n
-\fBVexp\fR (::SpiceGenTcl::Ngspice::Sources)
-.RE
-.PP
-\fBMethod summary\fR
-.RS 4n
-.TP
-\fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
-Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
-.TP
-::SpiceGenTcl::Device\&.actOnParam
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
-.TP
-::SpiceGenTcl::Device\&.actOnPin
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
-.TP
-::SpiceGenTcl::Device\&.checkFloatingPins
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
-.TP
-::SpiceGenTcl::Device\&.genSPICEString
-Inherited from \fI::SpiceGenTcl::Device\fP\&.
-.RE
-.PP
-\fBProperties\fR
-.RS 4n
-.TP
--name
-Readable, writable\&. Inherited\&.
-.RE
-.PP
-\fBSuperclasses\fR
-.PP
-\fI::SpiceGenTcl::Common::Sources::Vexp\fP
-.PP
-.RS -4n
-\fBVport\fR (::SpiceGenTcl::Ngspice::Sources)
+\fBVccs\fR (::SpiceGenTcl::Common::Sources)
 .RE
 .PP
 \fBMethod summary\fR
@@ -1248,30 +1239,212 @@ Readable, writable\&. Inherited\&.
 .PP
 \fI::SpiceGenTcl::Device\fP
 .PP
+\fBSubclasses\fR
+.PP
+\fIG\fP, \fI::SpiceGenTcl::Ngspice::Sources::Vccs\fP, \fI::SpiceGenTcl::Xyce::Sources::Vccs\fP, \fI::SpiceGenTcl::Ltspice::Sources::Vccs\fP
+.PP
 .RS -4n
-\fBconstructor\fR (::SpiceGenTcl::Ngspice::Sources::Vport)
+\fBconstructor\fR (::SpiceGenTcl::Common::Sources::Vccs)
 .RE
 .PP
-Creates object of class Vport that describes simple constant voltage source\&.
+Creates object of class Vccs that describes linear voltage-controlled current source\&.
 .RS 4n
-\fBVPORTOBJ constructor\fP \fIname np nm -dc value -ac value -portnum value ?-z0 value?\fP
+\fBVccs create OBJNAME\fP \fIname np nm ncp ncm -trcond value ?-m value?\fP
+.br
+\fBVccs new\fP \fIname np nm ncp ncm -trcond value ?-m value?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
--ac value
-AC voltage value\&.
+-m value
+Multiplier factor, optional\&.
+.TP
+-trcond value
+Transconductance\&.
+.TP
+name
+Name of the device without first-letter designator G\&.
+.TP
+ncm
+Name of node connected to negative controlling pin\&.
+.TP
+ncp
+Name of node connected to positive controlling pin\&.
+.TP
+nm
+Name of node connected to negative pin\&.
+.TP
+np
+Name of node connected to positive pin\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+.RS 4n
+.nf
+GXXXXXXX N+ N- NC+ NC- VALUE <m=val>
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+Vccs new 1 net1 0 netc 0 -trcond 10 -m 1
+.fi
+.RE
+.PP
+.RS -4n
+\fBVcvs\fR (::SpiceGenTcl::Common::Sources)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+\fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
+Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
+.TP
+::SpiceGenTcl::Device\&.actOnParam
+Inherited from \fI::SpiceGenTcl::Device\fP\&.
+.TP
+::SpiceGenTcl::Device\&.actOnPin
+Inherited from \fI::SpiceGenTcl::Device\fP\&.
+.TP
+::SpiceGenTcl::Device\&.checkFloatingPins
+Inherited from \fI::SpiceGenTcl::Device\fP\&.
+.TP
+::SpiceGenTcl::Device\&.genSPICEString
+Inherited from \fI::SpiceGenTcl::Device\fP\&.
+.RE
+.PP
+\fBProperties\fR
+.RS 4n
+.TP
+-name
+Readable, writable\&. Inherited\&.
+.RE
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Device\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fIE\fP, \fI::SpiceGenTcl::Ngspice::Sources::Vcvs\fP, \fI::SpiceGenTcl::Xyce::Sources::Vcvs\fP, \fI::SpiceGenTcl::Ltspice::Sources::Vcvs\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Common::Sources::Vcvs)
+.RE
+.PP
+Creates object of class Vcvs that describes linear voltage-controlled current source\&.
+.RS 4n
+\fBVcvs create OBJNAME\fP \fIname np nm ncp ncm -gain value\fP
+.br
+\fBVcvs new\fP \fIname np nm ncp ncm -gain value\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+-gain value
+Voltage gain\&.
+.TP
+name
+Name of the device without first-letter designator E\&.
+.TP
+ncm
+Name of node connected to negative controlling pin\&.
+.TP
+ncp
+Name of node connected to positive controlling pin\&.
+.TP
+nm
+Name of node connected to negative pin\&.
+.TP
+np
+Name of node connected to positive pin\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+.RS 4n
+.nf
+EXXXXXXX N+ N- NC+ NC- VALUE
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+Vcvs new 1 net1 0 netc 0 -gain 10
+.fi
+.RE
+.PP
+.RS -4n
+\fBVdc\fR (::SpiceGenTcl::Common::Sources)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+\fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
+Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
+.TP
+::SpiceGenTcl::Device\&.actOnParam
+Inherited from \fI::SpiceGenTcl::Device\fP\&.
+.TP
+::SpiceGenTcl::Device\&.actOnPin
+Inherited from \fI::SpiceGenTcl::Device\fP\&.
+.TP
+::SpiceGenTcl::Device\&.checkFloatingPins
+Inherited from \fI::SpiceGenTcl::Device\fP\&.
+.TP
+::SpiceGenTcl::Device\&.genSPICEString
+Inherited from \fI::SpiceGenTcl::Device\fP\&.
+.RE
+.PP
+\fBProperties\fR
+.RS 4n
+.TP
+-name
+Readable, writable\&. Inherited\&.
+.RE
+.PP
+\fBSuperclasses\fR
+.PP
+\fIdc\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fI::SpiceGenTcl::Ngspice::Sources::Vdc\fP, \fI::SpiceGenTcl::Xyce::Sources::Vdc\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Common::Sources::Vdc)
+.RE
+.PP
+Creates object of class Vdc that describes simple constant voltage source\&.
+.RS 4n
+\fBVdc create OBJNAME\fP \fIname np nm -dc value\fP
+.br
+\fBVdc new\fP \fIname np nm -dc value\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
 .TP
 -dc value
 DC voltage value\&.
-.TP
--portnum value
-Number of port\&.
-.TP
--z0 value
-Internal source impedance\&.
 .TP
 name
 Name of the device without first-letter designator V\&.
@@ -1287,7 +1460,7 @@ Name of node connected to positive pin\&.
 .PP
 .RS 4n
 .nf
-VYYYYYYY n+ n- DC 0 AC 1 portnum n1 <z0 n2>
+VYYYYYYY n+ n- <<DC> DC/TRAN VALUE>>
 .fi
 .RE
 .PP
@@ -1295,12 +1468,121 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-Vport new 1 netp netm -dc 1 -ac 1 -portnum 1 -z0 100
+Vdc new 1 netp netm -dc 10
 .fi
 .RE
 .PP
 .RS -4n
-\fBVpulse\fR (::SpiceGenTcl::Ngspice::Sources)
+\fBVexp\fR (::SpiceGenTcl::Common::Sources)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+\fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
+Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
+.TP
+::SpiceGenTcl::Device\&.actOnParam
+Inherited from \fI::SpiceGenTcl::Device\fP\&.
+.TP
+::SpiceGenTcl::Device\&.actOnPin
+Inherited from \fI::SpiceGenTcl::Device\fP\&.
+.TP
+::SpiceGenTcl::Device\&.checkFloatingPins
+Inherited from \fI::SpiceGenTcl::Device\fP\&.
+.TP
+::SpiceGenTcl::Device\&.genSPICEString
+Inherited from \fI::SpiceGenTcl::Device\fP\&.
+.RE
+.PP
+\fBProperties\fR
+.RS 4n
+.TP
+-name
+Readable, writable\&. Inherited\&.
+.RE
+.PP
+\fBSuperclasses\fR
+.PP
+\fIexp\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fI::SpiceGenTcl::Ngspice::Sources::Vexp\fP, \fI::SpiceGenTcl::Xyce::Sources::Vexp\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Common::Sources::Vexp)
+.RE
+.PP
+Creates object of class Vexp that describes exponential voltage source\&.
+.RS 4n
+\fBVexp create OBJNAME\fP \fIname np nm -i1|v1 value -i2|v2 value -td1 value -tau1 value -td2 value -tau2 value ?-phi|phase value???\fP
+.br
+\fBVexp new\fP \fIname np nm -i1|v1 value -i2|v2 value -td1 value -tau1 value -td2 value -tau2 value ?-phi|phase value???\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+-ac value
+AC value, optional\&.
+.TP
+-acphase value
+Phase of AC signal, optional, requires -ac
+.TP
+-dc value
+DC value, optional\&.
+.TP
+-tau1 value
+Rise time constant\&.
+.TP
+-tau2 value
+Fall time constant\&.
+.TP
+-td1 value
+Rise delay time\&.
+.TP
+-td2 value
+Fall delay time\&.
+.TP
+-v1 value
+Initial value\&.
+.TP
+-v2 value
+Pulsed value\&.
+.TP
+name
+Name of the device without first-letter designator V\&.
+.TP
+nm
+Name of node connected to negative pin\&.
+.TP
+np
+Name of node connected to positive pin\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+.RS 4n
+.nf
+VYYYYYYY n+ n- EXP(V1 V2 TD1 TAU1 TD2 TAU2)
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+Vexp new 1 net1 net2 -v1 0 -v2 1 -td1 1e-9 -tau1 1e-9 -td2 {-eq td2} -tau2 10e-6
+.fi
+.RE
+.PP
+.RS -4n
+\fBVpulse\fR (::SpiceGenTcl::Common::Sources)
 .RE
 .PP
 \fBMethod summary\fR
@@ -1336,13 +1618,19 @@ Readable, writable\&. Inherited\&.
 .PP
 \fIpulse\fP
 .PP
+\fBSubclasses\fR
+.PP
+\fI::SpiceGenTcl::Xyce::Sources::Vpulse\fP
+.PP
 .RS -4n
-\fBconstructor\fR (::SpiceGenTcl::Ngspice::Sources::Vpulse)
+\fBconstructor\fR (::SpiceGenTcl::Common::Sources::Vpulse)
 .RE
 .PP
 Creates object of class Vpulse that describes pulse voltage source\&.
 .RS 4n
-\fBVPULSEOBJ constructor\fP \fIname np nm -low|voff value -high|von value -td value -tr value -tf value -pw|ton value -per|tper value ?-np value?\fP
+\fBVpulse create OBJNAME\fP \fIname np nm -voff|ioff|low value -von|ion|high value -td value -tr value -tf value -pw|ton value ?-dc value? ?-ac value ?-acphase value??\fP
+.br
+\fBVpulse new\fP \fIname np nm -voff|ioff|low value -von|ion|high value -td value -tr value -tf value -pw|ton value ?-dc value? ?-ac value ?-acphase value??\fP
 .br
 .RE
 .PP
@@ -1364,20 +1652,17 @@ High value, aliases: -von, -ion
 -low value
 Low value, aliases: -voff, -ioff
 .TP
--npulses value
-Number of pulses, optional\&.
-.TP
--per value
-Period time, alias -tper
-.TP
--pw value
-Width of pulse, alias -ton
-.TP
 -td value
 Time delay\&.
 .TP
 -tf value
 Fall time\&.
+.TP
+-ton value
+Width of pulse, alias -pw
+.TP
+-tper value
+Period time, alias -per
 .TP
 -tr value
 Rise time\&.
@@ -1396,7 +1681,7 @@ Name of node connected to positive pin\&.
 .PP
 .RS 4n
 .nf
-VYYYYYYY n+ n- PULSE(V1 V2 TD TR TF PW PER NP)
+VYYYYYYY n+ n- PULSE(V1 V2 TD TR TF PW PER)
 .fi
 .RE
 .PP
@@ -1404,16 +1689,19 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-Vpulse new 1 net1 net2 -low 0 -high 1 -td {-eq td} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6 -npulses {-eq np}
+Vpulse new 1 net1 net2 -low 0 -high 1 -td {td -eq} -tr 1e-9 -tf 1e-9 -pw 10e-6 -per 20e-6
 .fi
 .RE
 .PP
 .RS -4n
-\fBVpwl\fR (::SpiceGenTcl::Ngspice::Sources)
+\fBVpwl\fR (::SpiceGenTcl::Common::Sources)
 .RE
 .PP
 \fBMethod summary\fR
 .RS 4n
+.TP
+constructor
+Constructor for the class\&.
 .TP
 \fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
 Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
@@ -1440,10 +1728,67 @@ Readable, writable\&. Inherited\&.
 .PP
 \fBSuperclasses\fR
 .PP
-\fI::SpiceGenTcl::Common::Sources::Vpwl\fP
+\fIpwl\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fI::SpiceGenTcl::Ngspice::Sources::Vpwl\fP, \fI::SpiceGenTcl::Xyce::Sources::Vpwl\fP
 .PP
 .RS -4n
-\fBVsffm\fR (::SpiceGenTcl::Ngspice::Sources)
+\fBconstructor\fR (::SpiceGenTcl::Common::Sources::Vpwl)
+.RE
+.PP
+Creates object of class Vpwl that describes piece-wise voltage source\&.
+.RS 4n
+\fBVpwl create OBJNAME\fP \fIname np nm -seq list ?-phase|phi value???\fP
+.br
+\fBVpwl new\fP \fIname np nm -seq list ?-phase|phi value???\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+-ac value
+AC value, optional\&.
+.TP
+-acphase value
+Phase of AC signal, optional, requires -ac
+.TP
+-dc value
+DC value, optional\&.
+.TP
+-seq list
+Sequence of pwl points in form {t0 v0 t1 v1 t2 v2 t3 v3 \&.\&.\&.}
+.TP
+name
+Name of the device without first-letter designator V\&.
+.TP
+nm
+Name of node connected to negative pin\&.
+.TP
+np
+Name of node connected to positive pin\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+.RS 4n
+.nf
+VYYYYYYY n+ n- PWL (T1 V1 <T2 V2 T3 V3 T4 V4 \&.\&.\&.>)
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+Vpwl new 1 np nm -seq {0 0 {-eq t1} 1 2 2 3 3 4 4}
+.fi
+.RE
+.PP
+.RS -4n
+\fBVsffm\fR (::SpiceGenTcl::Common::Sources)
 .RE
 .PP
 \fBMethod summary\fR
@@ -1479,13 +1824,19 @@ Readable, writable\&. Inherited\&.
 .PP
 \fIsffm\fP
 .PP
+\fBSubclasses\fR
+.PP
+\fI::SpiceGenTcl::Xyce::Sources::Vsffm\fP
+.PP
 .RS -4n
-\fBconstructor\fR (::SpiceGenTcl::Ngspice::Sources::Vsffm)
+\fBconstructor\fR (::SpiceGenTcl::Common::Sources::Vsffm)
 .RE
 .PP
 Creates object of class Vsffm that describes single-frequency FM voltage source\&.
 .RS 4n
-\fBVSFFMOBJ constructor\fP \fIname np nm -v0|voff value -va|vamp value -fc|fcar value -mdi value -fs|fsig value ?-phasec value ?-phases value??\fP
+\fBVsffm create OBJNAME\fP \fIname np nm -i0|voff|ioff|v0 value -ia|vamp|iamp|va value -fc|fcar value -mdi value -fs|fsig ?-phi|phase value???\fP
+.br
+\fBVsffm new\fP \fIname np nm -i0|voff|ioff|v0 value -ia|vamp|iamp|va value -fc|fcar value -mdi value -fs|fsig ?-phi|phase value???\fP
 .br
 .RE
 .PP
@@ -1510,17 +1861,11 @@ Signal frequency, alias -fsig
 -mdi value
 Modulation index\&.
 .TP
--phasec value
-Carrier phase, optional\&.
-.TP
--phases value
-Signal phase, optional, require -phasec
-.TP
 -v0 value
 Initial value, aliases: -voff, -i0, -ioff
 .TP
 -va value
-Pulsed value, aliases: -vamp, -ia, -iamp
+Pulsed value, aliases: -vamp, -ia, -iamp`
 .TP
 name
 Name of the device without first-letter designator V\&.
@@ -1536,7 +1881,7 @@ Name of node connected to positive pin\&.
 .PP
 .RS 4n
 .nf
-VYYYYYYY n+ n- SFFM(VO VA FC MDI FS PHASEC PHASES)
+VYYYYYYY n+ n- SFFM(VO VA FC MDI FS)
 .fi
 .RE
 .PP
@@ -1544,16 +1889,19 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-Vsin new 1 net1 net2 -v0 0 -va 1 -fc {-eq freq} -mdi 0 -fs 1e3 -phasec {-eq phase}
+Vsin new 1 net1 net2 -v0 0 -va 1 -fc {-eq freq} -mdi 0 -fs 1e3
 .fi
 .RE
 .PP
 .RS -4n
-\fBVsin\fR (::SpiceGenTcl::Ngspice::Sources)
+\fBVsin\fR (::SpiceGenTcl::Common::Sources)
 .RE
 .PP
 \fBMethod summary\fR
 .RS 4n
+.TP
+constructor
+Constructor for the class\&.
 .TP
 \fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
 Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
@@ -1580,7 +1928,79 @@ Readable, writable\&. Inherited\&.
 .PP
 \fBSuperclasses\fR
 .PP
-\fI::SpiceGenTcl::Common::Sources::Vsin\fP
+\fIsin\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fI::SpiceGenTcl::Ngspice::Sources::Vsin\fP, \fI::SpiceGenTcl::Xyce::Sources::Vsin\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Common::Sources::Vsin)
+.RE
+.PP
+Creates object of class Vsin that describes sinusoidal voltage source\&.
+.RS 4n
+\fBVsin create OBJNAME\fP \fIname np nm -i0|voffset|ioffset|v0 value -ia|vamp|iamp|va value -freq value ?-td value ?-theta value ?-phi|phase value???\fP
+.br
+\fBVsin new\fP \fIname np nm -i0|voffset|ioffset|v0 value -ia|vamp|iamp|va value -freq value ?-td value ?-theta value ?-phi|phase value???\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+-ac value
+AC value, optional\&.
+.TP
+-acphase value
+Phase of AC signal, optional, requiress -ac
+.TP
+-dc value
+DC value, optional\&.
+.TP
+-freq value
+Frequency of sinusoidal signal\&.
+.TP
+-phase value
+Phase of signal, optional, requires -td and -phase, alias -phi
+.TP
+-td value
+Time delay, optional\&.
+.TP
+-theta value
+Damping factor, optional, requires -td
+.TP
+-v0 value
+DC shift value, aliases: -voffset, -i0, -ioffset
+.TP
+-va value
+Amplitude value, aliases: -vamp, -ia, -iamp
+.TP
+name
+Name of the device without first-letter designator V\&.
+.TP
+nm
+Name of node connected to negative pin\&.
+.TP
+np
+Name of node connected to positive pin\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+.RS 4n
+.nf
+VYYYYYYY n+ n- SIN(VO VA FREQ TD THETA PHASE)
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+Vsin new 1 net1 net2 -v0 0 -va 2 -freq {-eq freq} -td 1e-6 -theta {-eq theta}
+.fi
+.RE
 
 
 .SH SEE ALSO

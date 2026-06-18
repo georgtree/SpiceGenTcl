@@ -5,39 +5,57 @@
 .SH NAME
 SpiceGenTcl::Ltspice::SemiconductorDevices - Commands in namespace SpiceGenTcl::Ltspice::SemiconductorDevices
 .SH SYNOPSIS
-\fBBJTOBJ constructor\fP \fIname nc nb ne -model value ?-ns value? ?-area value? ?-m value? ?-temp value?\fP
+\fBBjt create OBJNAME\fP \fIname nc nb ne -model value ?-ns value? ?-area value? ?-m value? ?-temp value?\fP
 .br
-\fBBJTGPMODELOBJ constructor\fP \fIname type ?-option value \&.\&.\&.?\fP
+\fBBjt new\fP \fIname nc nb ne -model value ?-ns value? ?-area value? ?-m value? ?-temp value?\fP
+.br
+\fBBjtGPModel create OBJNAME\fP \fIname type ?-option value \&.\&.\&.?\fP
+.br
+\fBBjtGPModel new\fP \fIname type ?-option value \&.\&.\&.?\fP
 .br
 \fBD create OBJNAME\fP
 .br
 \fBD new\fP
 .br
-\fBDIODEOBJ constructor\fP \fIname np nm -model value ?-area value? ?-off? ?-m value? ?-n value? ?-temp value?\fP
+\fBDiode create OBJNAME\fP \fIname np nm -model value ?-area value? ?-off? ?-m value? ?-n value? ?-temp value?\fP
 .br
-\fBDIODEIDEALMODELOBJ constructor\fP \fIname ?-option value \&.\&.\&.?\fP
+\fBDiode new\fP \fIname np nm -model value ?-area value? ?-off? ?-m value? ?-n value? ?-temp value?\fP
 .br
-\fBDIODEMODELOBJ constructor\fP \fIname ?-option value \&.\&.\&.?\fP
+\fBDiodeIdealModel create OBJNAME\fP \fIname ?-option value \&.\&.\&.?\fP
+.br
+\fBDiodeIdealModel new\fP \fIname ?-option value \&.\&.\&.?\fP
+.br
+\fBDiodeModel create OBJNAME\fP \fIname ?-option value \&.\&.\&.?\fP
+.br
+\fBDiodeModel new\fP \fIname ?-option value \&.\&.\&.?\fP
 .br
 \fBJ create OBJNAME\fP
 .br
 \fBJ new\fP
 .br
-\fBJFETOBJ constructor\fP \fIname nd ng ns -model value ?-area value? ?-off? ?-temp value?\fP
+\fBJfet create OBJNAME\fP \fIname nd ng ns -model value ?-area value? ?-off? ?-temp value?\fP
 .br
-\fBJFETMODELOBJ constructor\fP \fIname type ?-option value \&.\&.\&.?\fP
+\fBJfet new\fP \fIname nd ng ns -model value ?-area value? ?-off? ?-temp value?\fP
+.br
+\fBJfetModel create OBJNAME\fP \fIname type ?-option value \&.\&.\&.?\fP
+.br
+\fBJfetModel new\fP \fIname type ?-option value \&.\&.\&.?\fP
 .br
 \fBM create OBJNAME\fP
 .br
 \fBM new\fP
 .br
-\fBMESFETOBJ constructor\fP \fIname nd ng ns -model value ?-area value? ?-off? ?-ic {value value} ?\fP
+\fBMesfet create OBJNAME\fP \fIname nd ng ns -model value ?-area value? ?-off? ?-ic {value value} ?\fP
 .br
-\fBMESFETMODELOBJ constructor\fP \fIname type ?-option value \&.\&.\&.?\fP
+\fBMesfet new\fP \fIname nd ng ns -model value ?-area value? ?-off? ?-ic {value value} ?\fP
 .br
-\fBMOSFETOBJ constructor\fP \fIname nd ng ns -model value -n4|nb value ?-n5 value ?-n6 value ?-n7 value??? ?-m value? ?-l value? ?-w value? ?-ad value|-nrd value? ?-as value|-nrs value? ?-temp value? ?-off? ?-pd value? ?-ps value? ?-ic {value value value}? ?-custparams param1 {?-eq|-poseq|-posnocheck|-pos|-nocheck? param1Val} \&.\&.\&.?\fP
+\fBMesfetModel create OBJNAME\fP \fIname type ?-option value \&.\&.\&.?\fP
 .br
-\fBMOSFETOBJ constructor\fP \fIname nd ng ns -model value ?-m value? ?-l value? ?-w value? ?-temp value? ?-off? ?-custparams param1 {?-eq|-poseq|-posnocheck|-pos|-nocheck? param1Val} \&.\&.\&.?\fP
+\fBMesfetModel new\fP \fIname type ?-option value \&.\&.\&.?\fP
+.br
+\fBMosfet create OBJNAME\fP \fIname nd ng ns -model value ?-m value? ?-l value? ?-w value? ?-temp value? ?-off? ?-custparams param1 {?-eq|-poseq|-posnocheck|-pos|-nocheck? param1Val} \&.\&.\&.?\fP
+.br
+\fBMosfet new\fP \fIname nd ng ns -model value ?-m value? ?-l value? ?-w value? ?-temp value? ?-off? ?-custparams param1 {?-eq|-poseq|-posnocheck|-pos|-nocheck? param1Val} \&.\&.\&.?\fP
 .br
 \fBQ create OBJNAME\fP
 .br
@@ -97,7 +115,9 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class Bjt that describes semiconductor bipolar junction transistor device\&.
 .RS 4n
-\fBBJTOBJ constructor\fP \fIname nc nb ne -model value ?-ns value? ?-area value? ?-m value? ?-temp value?\fP
+\fBBjt create OBJNAME\fP \fIname nc nb ne -model value ?-ns value? ?-area value? ?-m value? ?-temp value?\fP
+.br
+\fBBjt new\fP \fIname nc nb ne -model value ?-ns value? ?-area value? ?-m value? ?-temp value?\fP
 .br
 .RE
 .PP
@@ -188,7 +208,9 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class BjtGPModel that describes Gummel-Poon model of semiconductor bipolar transistor\&.
 .RS 4n
-\fBBJTGPMODELOBJ constructor\fP \fIname type ?-option value \&.\&.\&.?\fP
+\fBBjtGPModel create OBJNAME\fP \fIname type ?-option value \&.\&.\&.?\fP
+.br
+\fBBjtGPModel new\fP \fIname type ?-option value \&.\&.\&.?\fP
 .br
 .RE
 .PP
@@ -296,7 +318,9 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class Diode that describes semiconductor diode device\&.
 .RS 4n
-\fBDIODEOBJ constructor\fP \fIname np nm -model value ?-area value? ?-off? ?-m value? ?-n value? ?-temp value?\fP
+\fBDiode create OBJNAME\fP \fIname np nm -model value ?-area value? ?-off? ?-m value? ?-n value? ?-temp value?\fP
+.br
+\fBDiode new\fP \fIname np nm -model value ?-area value? ?-off? ?-m value? ?-n value? ?-temp value?\fP
 .br
 .RE
 .PP
@@ -387,7 +411,9 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class DiodeIdealModel that describes semiconductor diode model\&.
 .RS 4n
-\fBDIODEIDEALMODELOBJ constructor\fP \fIname ?-option value \&.\&.\&.?\fP
+\fBDiodeIdealModel create OBJNAME\fP \fIname ?-option value \&.\&.\&.?\fP
+.br
+\fBDiodeIdealModel new\fP \fIname ?-option value \&.\&.\&.?\fP
 .br
 .RE
 .PP
@@ -451,7 +477,9 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class DiodeModel that describes semiconductor diode model\&.
 .RS 4n
-\fBDIODEMODELOBJ constructor\fP \fIname ?-option value \&.\&.\&.?\fP
+\fBDiodeModel create OBJNAME\fP \fIname ?-option value \&.\&.\&.?\fP
+.br
+\fBDiodeModel new\fP \fIname ?-option value \&.\&.\&.?\fP
 .br
 .RE
 .PP
@@ -556,7 +584,9 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class Jfet that describes semiconductor junction FET device\&.
 .RS 4n
-\fBJFETOBJ constructor\fP \fIname nd ng ns -model value ?-area value? ?-off? ?-temp value?\fP
+\fBJfet create OBJNAME\fP \fIname nd ng ns -model value ?-area value? ?-off? ?-temp value?\fP
+.br
+\fBJfet new\fP \fIname nd ng ns -model value ?-area value? ?-off? ?-temp value?\fP
 .br
 .RE
 .PP
@@ -647,7 +677,9 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class JfetModel that describes JFET level 1 model with Parker Skellern modification\&.
 .RS 4n
-\fBJFETMODELOBJ constructor\fP \fIname type ?-option value \&.\&.\&.?\fP
+\fBJfetModel create OBJNAME\fP \fIname type ?-option value \&.\&.\&.?\fP
+.br
+\fBJfetModel new\fP \fIname type ?-option value \&.\&.\&.?\fP
 .br
 .RE
 .PP
@@ -755,7 +787,9 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class Mesfet that describes semiconductor MESFET device\&.
 .RS 4n
-\fBMESFETOBJ constructor\fP \fIname nd ng ns -model value ?-area value? ?-off? ?-ic {value value} ?\fP
+\fBMesfet create OBJNAME\fP \fIname nd ng ns -model value ?-area value? ?-off? ?-ic {value value} ?\fP
+.br
+\fBMesfet new\fP \fIname nd ng ns -model value ?-area value? ?-off? ?-ic {value value} ?\fP
 .br
 .RE
 .PP
@@ -846,7 +880,9 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class MesfetModel that describes MESFET model by Statz e\&.a\&.\&.
 .RS 4n
-\fBMESFETMODELOBJ constructor\fP \fIname type ?-option value \&.\&.\&.?\fP
+\fBMesfetModel create OBJNAME\fP \fIname type ?-option value \&.\&.\&.?\fP
+.br
+\fBMesfetModel new\fP \fIname type ?-option value \&.\&.\&.?\fP
 .br
 .RE
 .PP
@@ -920,9 +956,9 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class Mosfet that describes semiconductor MOSFET device\&.
 .RS 4n
-\fBMOSFETOBJ constructor\fP \fIname nd ng ns -model value -n4|nb value ?-n5 value ?-n6 value ?-n7 value??? ?-m value? ?-l value? ?-w value? ?-ad value|-nrd value? ?-as value|-nrs value? ?-temp value? ?-off? ?-pd value? ?-ps value? ?-ic {value value value}? ?-custparams param1 {?-eq|-poseq|-posnocheck|-pos|-nocheck? param1Val} \&.\&.\&.?\fP
+\fBMosfet create OBJNAME\fP \fIname nd ng ns -model value ?-m value? ?-l value? ?-w value? ?-temp value? ?-off? ?-custparams param1 {?-eq|-poseq|-posnocheck|-pos|-nocheck? param1Val} \&.\&.\&.?\fP
 .br
-\fBMOSFETOBJ constructor\fP \fIname nd ng ns -model value ?-m value? ?-l value? ?-w value? ?-temp value? ?-off? ?-custparams param1 {?-eq|-poseq|-posnocheck|-pos|-nocheck? param1Val} \&.\&.\&.?\fP
+\fBMosfet new\fP \fIname nd ng ns -model value ?-m value? ?-l value? ?-w value? ?-temp value? ?-off? ?-custparams param1 {?-eq|-poseq|-posnocheck|-pos|-nocheck? param1Val} \&.\&.\&.?\fP
 .br
 .RE
 .PP

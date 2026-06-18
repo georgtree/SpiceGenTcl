@@ -9,9 +9,9 @@ SpiceGenTcl::Ltspice::Sources - Commands in namespace SpiceGenTcl::Ltspice::Sour
 .br
 \fBB new\fP
 .br
-\fBBEHAVIOURALSOURCEOBJ constructor\fP \fIname np nm -v value ?-ic value? ?-tripdv value -tripdt value? ?-laplace value ?-window value? ?-nfft value? ?-mtol value??\fP
+\fBBehaviouralSource create OBJNAME\fP \fIname np nm -i value ?-ic value? ?-tripdv value -tripdt value? ?-laplace value ?-window value? ?-nfft value? ?-mtol value??\fP
 .br
-\fBBEHAVIOURALSOURCEOBJ constructor\fP \fIname np nm -i value ?-ic value? ?-tripdv value -tripdt value? ?-laplace value ?-window value? ?-nfft value? ?-mtol value??\fP
+\fBBehaviouralSource new\fP \fIname np nm -i value ?-ic value? ?-tripdv value -tripdt value? ?-laplace value ?-window value? ?-nfft value? ?-mtol value??\fP
 .br
 \fBCccs create OBJNAME\fP
 .br
@@ -37,21 +37,37 @@ SpiceGenTcl::Ltspice::Sources - Commands in namespace SpiceGenTcl::Ltspice::Sour
 .br
 \fBH new\fP
 .br
-\fBIACOBJ constructor\fP \fIname np nm -ac value ?-dc value?\fP
+\fBIac create OBJNAME\fP \fIname np nm -ac value ?-dc value?\fP
 .br
-\fBIDCOBJ constructor\fP \fIname np nm -dc value\fP
+\fBIac new\fP \fIname np nm -ac value ?-dc value?\fP
 .br
-\fBIEXPOBJ constructor\fP \fIname np nm -i1 value -i2 value -td1 value -tau1 value -td2 value -tau2 value\fP
+\fBIdc create OBJNAME\fP \fIname np nm -dc value\fP
 .br
-\fBIPULSEOBJ constructor\fP \fIname np nm -low|ioff value -high|ion value -td value -tr value -tf value -pw|ton value -per|tper value ?-np|ncycles value?\fP
+\fBIdc new\fP \fIname np nm -dc value\fP
 .br
-\fBIPWLOBJ constructor\fP \fIname np nm -seq list\fP
+\fBIexp create OBJNAME\fP \fIname np nm -i1 value -i2 value -td1 value -tau1 value -td2 value -tau2 value\fP
 .br
-\fBISFFMOBJ constructor\fP \fIname np nm -i0|ioff value -ia|iamp value -fc|fcar value -mdi value -fs|fsig value\fP
+\fBIexp new\fP \fIname np nm -i1 value -i2 value -td1 value -tau1 value -td2 value -tau2 value\fP
 .br
-\fBISINOBJ constructor\fP \fIname np nm -i0|ioffset value -ia|iamp value -freq value ?-td value ?-theta value ?-phase|phi value ?-ncycles value????\fP
+\fBIpulse create OBJNAME\fP \fIname np nm -low|ioff value -high|ion value -td value -tr value -tf value -pw|ton value -per|tper value ?-np|ncycles value?\fP
 .br
-\fBVACOBJ constructor\fP \fIname np nm -ac value ?-dc value? ?-rser value? ?-cpar value?\fP
+\fBIpulse new\fP \fIname np nm -low|ioff value -high|ion value -td value -tr value -tf value -pw|ton value -per|tper value ?-np|ncycles value?\fP
+.br
+\fBIpwl create OBJNAME\fP \fIname np nm -seq list\fP
+.br
+\fBIpwl new\fP \fIname np nm -seq list\fP
+.br
+\fBIsffm create OBJNAME\fP \fIname np nm -i0|ioff value -ia|iamp value -fc|fcar value -mdi value -fs|fsig value\fP
+.br
+\fBIsffm new\fP \fIname np nm -i0|ioff value -ia|iamp value -fc|fcar value -mdi value -fs|fsig value\fP
+.br
+\fBIsin create OBJNAME\fP \fIname np nm -i0|ioffset value -ia|iamp value -freq value ?-td value ?-theta value ?-phase|phi value ?-ncycles value????\fP
+.br
+\fBIsin new\fP \fIname np nm -i0|ioffset value -ia|iamp value -freq value ?-td value ?-theta value ?-phase|phi value ?-ncycles value????\fP
+.br
+\fBVac create OBJNAME\fP \fIname np nm -ac value ?-dc value? ?-rser value? ?-cpar value?\fP
+.br
+\fBVac new\fP \fIname np nm -ac value ?-dc value? ?-rser value? ?-cpar value?\fP
 .br
 \fBVccs create OBJNAME\fP
 .br
@@ -61,17 +77,29 @@ SpiceGenTcl::Ltspice::Sources - Commands in namespace SpiceGenTcl::Ltspice::Sour
 .br
 \fBVcvs new\fP
 .br
-\fBVDCOBJ constructor\fP \fIname np nm -dc value ?-rser value? ?-cpar value?\fP
+\fBVdc create OBJNAME\fP \fIname np nm -dc value ?-rser value? ?-cpar value?\fP
 .br
-\fBVEXPOBJ constructor\fP \fIname np nm -v1 value -v2 value -td1 value -tau1 value -td2 value -tau2 value ?-rser value? ?-cpar value?\fP
+\fBVdc new\fP \fIname np nm -dc value ?-rser value? ?-cpar value?\fP
 .br
-\fBVPULSEOBJ constructor\fP \fIname np nm -low|voff value -high|von value -td value -tr value -tf value -pw|ton value -per|tper value ?-np|ncycles value? ?-rser value? ?-cpar value?\fP
+\fBVexp create OBJNAME\fP \fIname np nm -v1 value -v2 value -td1 value -tau1 value -td2 value -tau2 value ?-rser value? ?-cpar value?\fP
 .br
-\fBVPWLOBJ constructor\fP \fIname np nm -seq list ?-rser value? ?-cpar value?\fP
+\fBVexp new\fP \fIname np nm -v1 value -v2 value -td1 value -tau1 value -td2 value -tau2 value ?-rser value? ?-cpar value?\fP
 .br
-\fBVSFFMOBJ constructor\fP \fIname np nm -v0|voff value -va|vamp value -fc|fcar value -mdi value -fs|fsig value ?-rser value? ?-cpar value?\fP
+\fBVpulse create OBJNAME\fP \fIname np nm -low|voff value -high|von value -td value -tr value -tf value -pw|ton value -per|tper value ?-np|ncycles value? ?-rser value? ?-cpar value?\fP
 .br
-\fBVSINOBJ constructor\fP \fIname np nm -v0|voffset value -va|vamp value -freq value ?-td value ?-theta value ?-phase|phi value ?-ncycles value???? ?-rser value? ?-cpar value?\fP
+\fBVpulse new\fP \fIname np nm -low|voff value -high|von value -td value -tr value -tf value -pw|ton value -per|tper value ?-np|ncycles value? ?-rser value? ?-cpar value?\fP
+.br
+\fBVpwl create OBJNAME\fP \fIname np nm -seq list ?-rser value? ?-cpar value?\fP
+.br
+\fBVpwl new\fP \fIname np nm -seq list ?-rser value? ?-cpar value?\fP
+.br
+\fBVsffm create OBJNAME\fP \fIname np nm -v0|voff value -va|vamp value -fc|fcar value -mdi value -fs|fsig value ?-rser value? ?-cpar value?\fP
+.br
+\fBVsffm new\fP \fIname np nm -v0|voff value -va|vamp value -fc|fcar value -mdi value -fs|fsig value ?-rser value? ?-cpar value?\fP
+.br
+\fBVsin create OBJNAME\fP \fIname np nm -v0|voffset value -va|vamp value -freq value ?-td value ?-theta value ?-phase|phi value ?-ncycles value???? ?-rser value? ?-cpar value?\fP
+.br
+\fBVsin new\fP \fIname np nm -v0|voffset value -va|vamp value -freq value ?-td value ?-theta value ?-phase|phi value ?-ncycles value???? ?-rser value? ?-cpar value?\fP
 .br
 .SH ::SPICEGENTCL::LTSPICE::SOURCES
 .SH CLASSES
@@ -157,9 +185,9 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class BehaviouralSource that describes behavioural source\&.
 .RS 4n
-\fBBEHAVIOURALSOURCEOBJ constructor\fP \fIname np nm -v value ?-ic value? ?-tripdv value -tripdt value? ?-laplace value ?-window value? ?-nfft value? ?-mtol value??\fP
+\fBBehaviouralSource create OBJNAME\fP \fIname np nm -i value ?-ic value? ?-tripdv value -tripdt value? ?-laplace value ?-window value? ?-nfft value? ?-mtol value??\fP
 .br
-\fBBEHAVIOURALSOURCEOBJ constructor\fP \fIname np nm -i value ?-ic value? ?-tripdv value -tripdt value? ?-laplace value ?-window value? ?-nfft value? ?-mtol value??\fP
+\fBBehaviouralSource new\fP \fIname np nm -i value ?-ic value? ?-tripdv value -tripdt value? ?-laplace value ?-window value? ?-nfft value? ?-mtol value??\fP
 .br
 .RE
 .PP
@@ -474,7 +502,9 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class Iac that describes ac current source\&.
 .RS 4n
-\fBIACOBJ constructor\fP \fIname np nm -ac value ?-dc value?\fP
+\fBIac create OBJNAME\fP \fIname np nm -ac value ?-dc value?\fP
+.br
+\fBIac new\fP \fIname np nm -ac value ?-dc value?\fP
 .br
 .RE
 .PP
@@ -556,7 +586,9 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class Idc that describes simple constant current source\&.
 .RS 4n
-\fBIDCOBJ constructor\fP \fIname np nm -dc value\fP
+\fBIdc create OBJNAME\fP \fIname np nm -dc value\fP
+.br
+\fBIdc new\fP \fIname np nm -dc value\fP
 .br
 .RE
 .PP
@@ -635,7 +667,9 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class Iexp that describes exponential current source\&.
 .RS 4n
-\fBIEXPOBJ constructor\fP \fIname np nm -i1 value -i2 value -td1 value -tau1 value -td2 value -tau2 value\fP
+\fBIexp create OBJNAME\fP \fIname np nm -i1 value -i2 value -td1 value -tau1 value -td2 value -tau2 value\fP
+.br
+\fBIexp new\fP \fIname np nm -i1 value -i2 value -td1 value -tau1 value -td2 value -tau2 value\fP
 .br
 .RE
 .PP
@@ -729,7 +763,9 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class Ipulse that describes pulse current source\&.
 .RS 4n
-\fBIPULSEOBJ constructor\fP \fIname np nm -low|ioff value -high|ion value -td value -tr value -tf value -pw|ton value -per|tper value ?-np|ncycles value?\fP
+\fBIpulse create OBJNAME\fP \fIname np nm -low|ioff value -high|ion value -td value -tr value -tf value -pw|ton value -per|tper value ?-np|ncycles value?\fP
+.br
+\fBIpulse new\fP \fIname np nm -low|ioff value -high|ion value -td value -tr value -tf value -pw|ton value -per|tper value ?-np|ncycles value?\fP
 .br
 .RE
 .PP
@@ -829,7 +865,9 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class Ipwl that describes piece-wise current source\&.
 .RS 4n
-\fBIPWLOBJ constructor\fP \fIname np nm -seq list\fP
+\fBIpwl create OBJNAME\fP \fIname np nm -seq list\fP
+.br
+\fBIpwl new\fP \fIname np nm -seq list\fP
 .br
 .RE
 .PP
@@ -914,7 +952,9 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class Isffm that describes single-frequency FM current source\&.
 .RS 4n
-\fBISFFMOBJ constructor\fP \fIname np nm -i0|ioff value -ia|iamp value -fc|fcar value -mdi value -fs|fsig value\fP
+\fBIsffm create OBJNAME\fP \fIname np nm -i0|ioff value -ia|iamp value -fc|fcar value -mdi value -fs|fsig value\fP
+.br
+\fBIsffm new\fP \fIname np nm -i0|ioff value -ia|iamp value -fc|fcar value -mdi value -fs|fsig value\fP
 .br
 .RE
 .PP
@@ -1005,7 +1045,9 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class Isin that describes sinusoidal current source\&.
 .RS 4n
-\fBISINOBJ constructor\fP \fIname np nm -i0|ioffset value -ia|iamp value -freq value ?-td value ?-theta value ?-phase|phi value ?-ncycles value????\fP
+\fBIsin create OBJNAME\fP \fIname np nm -i0|ioffset value -ia|iamp value -freq value ?-td value ?-theta value ?-phase|phi value ?-ncycles value????\fP
+.br
+\fBIsin new\fP \fIname np nm -i0|ioffset value -ia|iamp value -freq value ?-td value ?-theta value ?-phase|phi value ?-ncycles value????\fP
 .br
 .RE
 .PP
@@ -1102,7 +1144,9 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class Vac that describes ac voltage source\&.
 .RS 4n
-\fBVACOBJ constructor\fP \fIname np nm -ac value ?-dc value? ?-rser value? ?-cpar value?\fP
+\fBVac create OBJNAME\fP \fIname np nm -ac value ?-dc value? ?-rser value? ?-cpar value?\fP
+.br
+\fBVac new\fP \fIname np nm -ac value ?-dc value? ?-rser value? ?-cpar value?\fP
 .br
 .RE
 .PP
@@ -1266,7 +1310,9 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class Vdc that describes simple constant voltage source\&.
 .RS 4n
-\fBVDCOBJ constructor\fP \fIname np nm -dc value ?-rser value? ?-cpar value?\fP
+\fBVdc create OBJNAME\fP \fIname np nm -dc value ?-rser value? ?-cpar value?\fP
+.br
+\fBVdc new\fP \fIname np nm -dc value ?-rser value? ?-cpar value?\fP
 .br
 .RE
 .PP
@@ -1351,7 +1397,9 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class Vexp that describes exponential voltage source\&.
 .RS 4n
-\fBVEXPOBJ constructor\fP \fIname np nm -v1 value -v2 value -td1 value -tau1 value -td2 value -tau2 value ?-rser value? ?-cpar value?\fP
+\fBVexp create OBJNAME\fP \fIname np nm -v1 value -v2 value -td1 value -tau1 value -td2 value -tau2 value ?-rser value? ?-cpar value?\fP
+.br
+\fBVexp new\fP \fIname np nm -v1 value -v2 value -td1 value -tau1 value -td2 value -tau2 value ?-rser value? ?-cpar value?\fP
 .br
 .RE
 .PP
@@ -1451,7 +1499,9 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class Vpulse that describes pulse voltage source\&.
 .RS 4n
-\fBVPULSEOBJ constructor\fP \fIname np nm -low|voff value -high|von value -td value -tr value -tf value -pw|ton value -per|tper value ?-np|ncycles value? ?-rser value? ?-cpar value?\fP
+\fBVpulse create OBJNAME\fP \fIname np nm -low|voff value -high|von value -td value -tr value -tf value -pw|ton value -per|tper value ?-np|ncycles value? ?-rser value? ?-cpar value?\fP
+.br
+\fBVpulse new\fP \fIname np nm -low|voff value -high|von value -td value -tr value -tf value -pw|ton value -per|tper value ?-np|ncycles value? ?-rser value? ?-cpar value?\fP
 .br
 .RE
 .PP
@@ -1557,7 +1607,9 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class Vpwl that describes piece-wise voltage source\&.
 .RS 4n
-\fBVPWLOBJ constructor\fP \fIname np nm -seq list ?-rser value? ?-cpar value?\fP
+\fBVpwl create OBJNAME\fP \fIname np nm -seq list ?-rser value? ?-cpar value?\fP
+.br
+\fBVpwl new\fP \fIname np nm -seq list ?-rser value? ?-cpar value?\fP
 .br
 .RE
 .PP
@@ -1642,7 +1694,9 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class Vsffm that describes single-frequency FM voltage source\&.
 .RS 4n
-\fBVSFFMOBJ constructor\fP \fIname np nm -v0|voff value -va|vamp value -fc|fcar value -mdi value -fs|fsig value ?-rser value? ?-cpar value?\fP
+\fBVsffm create OBJNAME\fP \fIname np nm -v0|voff value -va|vamp value -fc|fcar value -mdi value -fs|fsig value ?-rser value? ?-cpar value?\fP
+.br
+\fBVsffm new\fP \fIname np nm -v0|voff value -va|vamp value -fc|fcar value -mdi value -fs|fsig value ?-rser value? ?-cpar value?\fP
 .br
 .RE
 .PP
@@ -1739,7 +1793,9 @@ Readable, writable\&. Inherited\&.
 .PP
 Creates object of class Vsin that describes sinusoidal voltage source\&.
 .RS 4n
-\fBVSINOBJ constructor\fP \fIname np nm -v0|voffset value -va|vamp value -freq value ?-td value ?-theta value ?-phase|phi value ?-ncycles value???? ?-rser value? ?-cpar value?\fP
+\fBVsin create OBJNAME\fP \fIname np nm -v0|voffset value -va|vamp value -freq value ?-td value ?-theta value ?-phase|phi value ?-ncycles value???? ?-rser value? ?-cpar value?\fP
+.br
+\fBVsin new\fP \fIname np nm -v0|voffset value -va|vamp value -freq value ?-td value ?-theta value ?-phase|phi value ?-ncycles value???? ?-rser value? ?-cpar value?\fP
 .br
 .RE
 .PP

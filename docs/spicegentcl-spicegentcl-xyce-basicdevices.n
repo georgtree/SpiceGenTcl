@@ -1,41 +1,81 @@
 '\"
 '\" '\" Copyright (c) George Yashin
 '\"
-.TH "SpiceGenTcl::Common::BasicDevices" 3tcl 0\&.71 "SpiceGenTcl" "Tcl SpiceGenTcl package"
+.TH "SpiceGenTcl::Xyce::BasicDevices" 3tcl 0\&.71 "SpiceGenTcl" "Tcl SpiceGenTcl package"
 .SH NAME
-SpiceGenTcl::Common::BasicDevices - Commands in namespace SpiceGenTcl::Common::BasicDevices
+SpiceGenTcl::Xyce::BasicDevices - Commands in namespace SpiceGenTcl::Xyce::BasicDevices
 .SH SYNOPSIS
 \fBC create OBJNAME\fP
 .br
 \fBC new\fP
 .br
-\fBCAPACITOROBJ constructor\fP \fIname np nm -c value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value? ?-ic value?\fP
+\fBCapacitor create OBJNAME\fP \fIname np nm -model value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value? ?-age value? ?-d value? ?-l value? ?-w value?\fP
 .br
-\fBCSWITCHOBJ constructor\fP \fIname np nm -icntrl value -model value ?-on|-off?\fP
+\fBCapacitor new\fP \fIname np nm -model value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value? ?-age value? ?-d value? ?-l value? ?-w value?\fP
 .br
-\fBINDUCTOROBJ constructor\fP \fIname np nm -l value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value?\fP
+\fBCModel create OBJNAME\fP \fIname ?-option value \&.\&.\&.?\fP
+.br
+\fBCModel new\fP \fIname ?-option value \&.\&.\&.?\fP
+.br
+\fBCSwitch create OBJNAME\fP
+.br
+\fBCSwitch new\fP
+.br
+\fBCSwitchModel create OBJNAME\fP \fIname ?-option value \&.\&.\&.?\fP
+.br
+\fBCSwitchModel new\fP \fIname ?-option value \&.\&.\&.?\fP
+.br
+\fBGenS create OBJNAME\fP
+.br
+\fBGenS new\fP
+.br
+\fBGenSwitch create OBJNAME\fP \fIname np nm -model value -control value ?-on|off?\fP
+.br
+\fBGenSwitch new\fP \fIname np nm -model value -control value ?-on|off?\fP
+.br
+\fBInductor create OBJNAME\fP \fIname np nm -model value -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value?\fP
+.br
+\fBInductor new\fP \fIname np nm -model value -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value?\fP
 .br
 \fBL create OBJNAME\fP
 .br
 \fBL new\fP
 .br
+\fBLModel create OBJNAME\fP \fIname ?-option value \&.\&.\&.?\fP
+.br
+\fBLModel new\fP \fIname ?-option value \&.\&.\&.?\fP
+.br
 \fBR create OBJNAME\fP
 .br
 \fBR new\fP
 .br
-\fBRESISTOROBJ constructor\fP \fIname np nm -r value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value?\fP
+\fBResistor create OBJNAME\fP \fIname np nm -r value -model ?-tc1 value? ?-tc2 value? ?-tce value? ?-m value? ?-temp value? ?-l value? ?-w value?\fP
+.br
+\fBResistor new\fP \fIname np nm -r value -model ?-tc1 value? ?-tc2 value? ?-tce value? ?-m value? ?-temp value? ?-l value? ?-w value?\fP
+.br
+\fBRModel create OBJNAME\fP \fIname ?-option value \&.\&.\&.?\fP
+.br
+\fBRModel new\fP \fIname ?-option value \&.\&.\&.?\fP
 .br
 \fBSubcircuitInstance create OBJNAME\fP \fI?args?\fP
 .br
 \fBSubcircuitInstance new\fP \fI?args?\fP
 .br
-\fBSUBCIRCUITINSTANCEAUTOOBJ constructor\fP \fIsubcktObj name nodes ?-paramName ?-eq? paramValue \&.\&.\&.?\fP
+\fBSubcircuitInstanceAuto create OBJNAME\fP \fIsubcktObj name nodes ?-paramName ?-eq? paramValue \&.\&.\&.?\fP
+.br
+\fBSubcircuitInstanceAuto new\fP \fIsubcktObj name nodes ?-paramName ?-eq? paramValue \&.\&.\&.?\fP
 .br
 \fBVSw create OBJNAME\fP
 .br
 \fBVSw new\fP
 .br
-\fBVSWITCHOBJ constructor\fP \fIname np nm ncp ncm -model value ?-on|-off?\fP
+\fBVSwitch create OBJNAME\fP
+.br
+\fBVSwitch new\fP
+.br
+\fBVSwitchModel create OBJNAME\fP \fIname ?-option value \&.\&.\&.?\fP
+.br
+\fBVSwitchModel new\fP \fIname ?-option value \&.\&.\&.?\fP
 .br
 \fBW create OBJNAME\fP
 .br
@@ -49,11 +89,11 @@ SpiceGenTcl::Common::BasicDevices - Commands in namespace SpiceGenTcl::Common::B
 .br
 \fBXAuto new\fP
 .br
-.SH ::SPICEGENTCL::COMMON::BASICDEVICES
+.SH ::SPICEGENTCL::XYCE::BASICDEVICES
 .SH CLASSES
 .PP
 .RS -4n
-\fBC\fR (::SpiceGenTcl::Common::BasicDevices)
+\fBC\fR (::SpiceGenTcl::Xyce::BasicDevices)
 .RE
 .PP
 \fBMethod summary\fR
@@ -87,7 +127,7 @@ Readable, writable\&. Inherited\&.
 \fICapacitor\fP
 .PP
 .RS -4n
-\fBCapacitor\fR (::SpiceGenTcl::Common::BasicDevices)
+\fBCapacitor\fR (::SpiceGenTcl::Xyce::BasicDevices)
 .RE
 .PP
 \fBMethod summary\fR
@@ -128,26 +168,46 @@ Readable, writable\&. Inherited\&.
 \fIC\fP
 .PP
 .RS -4n
-\fBconstructor\fR (::SpiceGenTcl::Common::BasicDevices::Capacitor)
+\fBconstructor\fR (::SpiceGenTcl::Xyce::BasicDevices::Capacitor)
 .RE
 .PP
 Creates object of class Capacitor that describes capacitor\&.
 .RS 4n
-\fBCAPACITOROBJ constructor\fP \fIname np nm -c value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value? ?-ic value?\fP
+\fBCapacitor create OBJNAME\fP \fIname np nm -model value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value? ?-age value? ?-d value? ?-l value? ?-w value?\fP
+.br
+\fBCapacitor new\fP \fIname np nm -model value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value? ?-age value? ?-d value? ?-l value? ?-w value?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
+-age value
+Aging coefficient, optional\&.
+.TP
+-beh
+Selects behavioural type of capacitor, optional\&.
+.TP
 -c value
-Capacitance value\&.
+Capacitance value or equation\&.
+.TP
+-d value
+Aging coefficient, optional\&.
 .TP
 -ic value
-Initial condition, optional\&.
+Initial voltage on capacitor, optional\&.
+.TP
+-l value
+Length of semiconductor capacitor, optional\&.
 .TP
 -m value
 Multiplier value, optional\&.
+.TP
+-model value
+Model of the capacitor, optional\&.
+.TP
+-q value
+Charge equation\&.
 .TP
 -tc1 value
 Linear thermal coefficient, optional\&.
@@ -156,7 +216,10 @@ Linear thermal coefficient, optional\&.
 Quadratic thermal coefficient, optional\&.
 .TP
 -temp value
-Device temperature, optional, optional\&.
+Device temperature, optional\&.
+.TP
+-w value
+Width of semiconductor capacitor, optional\&.
 .TP
 name
 Name of the device without first-letter designator C\&.
@@ -170,11 +233,29 @@ Name of node connected to positive pin\&.
 .PP
 \fBDescription\fR
 .PP
+Capacitor type could be specified with additional switches: -beh if we want to model circuit's variable
+dependent capacitor, or -model modelName if we want to simulate capacitor with model card\&.
 Simple capacitor:
 .PP
 .RS 4n
 .nf
-CXXXXXXX n+ n- <value> <m=val> <temp=val> <tc1=val> <tc2=val>
+C<device name> <(+) node> <(-) node> <value> [device parameters]
+.fi
+.RE
+.PP
+Example of class initialization as a simple capacitor:
+.PP
+.RS 4n
+.nf
+Capacitor new 1 netp netm 1e-6 -tc1 1 -temp {-eq temp}
+.fi
+.RE
+.PP
+Behavioral capacitor with C expression:
+.PP
+.RS 4n
+.nf
+C<device name> <(+) node> <(-) node> C={expression} [device parameters]
 .fi
 .RE
 .PP
@@ -182,12 +263,248 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-Capacitor new 1 netp netm -c 1e3 -tc1 1 -temp {-eq temp_amb}
+Capacitor new 1 netp netm -c "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1
+.fi
+.RE
+.PP
+Behavioral capacitor with Q expression:
+.PP
+.RS 4n
+.nf
+C<device name> <(+) node> <(-) node> Q={expression} [device parameters]
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+Capacitor new 1 netp netm -q "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1
+.fi
+.RE
+.PP
+Capacitor with model card:
+.PP
+.RS 4n
+.nf
+C<device name> <(+) node> <(-) node> <model name> [value] [device parameters]
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+Capacitor new 1 netp netm -model capm -l 1e-6 -w 10e-6
 .fi
 .RE
 .PP
 .RS -4n
-\fBCSwitch\fR (::SpiceGenTcl::Common::BasicDevices)
+\fBCModel\fR (::SpiceGenTcl::Xyce::BasicDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+\fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
+Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
+.TP
+::SpiceGenTcl::Model\&.actOnParam
+Inherited from \fI::SpiceGenTcl::Model\fP\&.
+.TP
+::SpiceGenTcl::Model\&.genSPICEString
+Inherited from \fI::SpiceGenTcl::Model\fP\&.
+.RE
+.PP
+\fBProperties\fR
+.RS 4n
+.TP
+-name
+Readable, writable\&. Inherited\&.
+.TP
+-type
+Readable, writable\&. Inherited\&.
+.RE
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Model\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Xyce::BasicDevices::CModel)
+.RE
+.PP
+Creates object of class CModel that describes semiconductor capacitor model\&.
+.RS 4n
+\fBCModel create OBJNAME\fP \fIname ?-option value \&.\&.\&.?\fP
+.br
+\fBCModel new\fP \fIname ?-option value \&.\&.\&.?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+args
+Keyword instance parameters, for details please refer to Xyce reference manual, 2\&.3\&.4 section\&.
+.TP
+name
+Name of the model\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+CModel new capmod -tc1 1 -tc2 2
+.fi
+.RE
+.PP
+.RS -4n
+\fBCSwitch\fR (::SpiceGenTcl::Xyce::BasicDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+\fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
+Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
+.TP
+::SpiceGenTcl::Device\&.actOnParam
+Inherited from \fI::SpiceGenTcl::Device\fP\&.
+.TP
+::SpiceGenTcl::Device\&.actOnPin
+Inherited from \fI::SpiceGenTcl::Device\fP\&.
+.TP
+::SpiceGenTcl::Device\&.checkFloatingPins
+Inherited from \fI::SpiceGenTcl::Device\fP\&.
+.TP
+::SpiceGenTcl::Device\&.genSPICEString
+Inherited from \fI::SpiceGenTcl::Device\fP\&.
+.RE
+.PP
+\fBProperties\fR
+.RS 4n
+.TP
+-name
+Readable, writable\&. Inherited\&.
+.RE
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Common::BasicDevices::CSwitch\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fIW\fP
+.PP
+.RS -4n
+\fBCSwitchModel\fR (::SpiceGenTcl::Xyce::BasicDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+\fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
+Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
+.TP
+::SpiceGenTcl::Model\&.actOnParam
+Inherited from \fI::SpiceGenTcl::Model\fP\&.
+.TP
+::SpiceGenTcl::Model\&.genSPICEString
+Inherited from \fI::SpiceGenTcl::Model\fP\&.
+.RE
+.PP
+\fBProperties\fR
+.RS 4n
+.TP
+-name
+Readable, writable\&. Inherited\&.
+.TP
+-type
+Readable, writable\&. Inherited\&.
+.RE
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Model\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Xyce::BasicDevices::CSwitchModel)
+.RE
+.PP
+Creates object of class CSwitchModel that describes current switch model\&.
+.RS 4n
+\fBCSwitchModel create OBJNAME\fP \fIname ?-option value \&.\&.\&.?\fP
+.br
+\fBCSwitchModel new\fP \fIname ?-option value \&.\&.\&.?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+args
+Keyword instance parameters, for details please refer to Xyce reference manual, 2\&.3\&.22 section\&.
+.TP
+name
+Name of the model\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+CSwitchModel new cswmod -ion 1 -ioff 0\&.5 -ron 1 -roff 1e6
+.fi
+.RE
+.PP
+.RS -4n
+\fBGenS\fR (::SpiceGenTcl::Xyce::BasicDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+\fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
+Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
+.TP
+::SpiceGenTcl::Device\&.actOnParam
+Inherited from \fI::SpiceGenTcl::Device\fP\&.
+.TP
+::SpiceGenTcl::Device\&.actOnPin
+Inherited from \fI::SpiceGenTcl::Device\fP\&.
+.TP
+::SpiceGenTcl::Device\&.checkFloatingPins
+Inherited from \fI::SpiceGenTcl::Device\fP\&.
+.TP
+::SpiceGenTcl::Device\&.genSPICEString
+Inherited from \fI::SpiceGenTcl::Device\fP\&.
+.RE
+.PP
+\fBProperties\fR
+.RS 4n
+.TP
+-name
+Readable, writable\&. Inherited\&.
+.RE
+.PP
+\fBSuperclasses\fR
+.PP
+\fIGenSwitch\fP
+.PP
+.RS -4n
+\fBGenSwitch\fR (::SpiceGenTcl::Xyce::BasicDevices)
 .RE
 .PP
 \fBMethod summary\fR
@@ -225,23 +542,25 @@ Readable, writable\&. Inherited\&.
 .PP
 \fBSubclasses\fR
 .PP
-\fIW\fP, \fI::SpiceGenTcl::Ngspice::BasicDevices::CSwitch\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::CSwitch\fP, \fI::SpiceGenTcl::Ltspice::BasicDevices::CSwitch\fP
+\fIGenS\fP
 .PP
 .RS -4n
-\fBconstructor\fR (::SpiceGenTcl::Common::BasicDevices::CSwitch)
+\fBconstructor\fR (::SpiceGenTcl::Xyce::BasicDevices::GenSwitch)
 .RE
 .PP
-Creates object of class CSwitch that describes current controlled switch device\&.
+Creates object of class GenSwitch that describes generic switch device\&.
 .RS 4n
-\fBCSWITCHOBJ constructor\fP \fIname np nm -icntrl value -model value ?-on|-off?\fP
+\fBGenSwitch create OBJNAME\fP \fIname np nm -model value -control value ?-on|off?\fP
+.br
+\fBGenSwitch new\fP \fIname np nm -model value -control value ?-on|off?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
--icntrl value
-Source of control current\&.
+-control value
+Control equation\&.
 .TP
 -model value
 Model name\&.
@@ -250,7 +569,7 @@ Model name\&.
 Initial state of switch\&.
 .TP
 name
-Name of the device without first-letter designator W\&.
+Name of the device without first-letter designator S\&.
 .TP
 nm
 Name of node connected to negative pin\&.
@@ -263,7 +582,7 @@ Name of node connected to positive pin\&.
 .PP
 .RS 4n
 .nf
-WYYYYYYY N+ N- VNAM MODEL <ON> <OFF>
+S<name> <(+) switch node> <(-) switch node> <model name> [ON] [OFF] <control = =ession>
 .fi
 .RE
 .PP
@@ -271,12 +590,12 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-CSwitch new 1 net1 0 -icntrl v1 -model sw1 -on
+GenSwitch new 1 net1 0 -model sw1 -control {I(VMON)}
 .fi
 .RE
 .PP
 .RS -4n
-\fBInductor\fR (::SpiceGenTcl::Common::BasicDevices)
+\fBInductor\fR (::SpiceGenTcl::Xyce::BasicDevices)
 .RE
 .PP
 \fBMethod summary\fR
@@ -317,23 +636,31 @@ Readable, writable\&. Inherited\&.
 \fIL\fP
 .PP
 .RS -4n
-\fBconstructor\fR (::SpiceGenTcl::Common::BasicDevices::Inductor)
+\fBconstructor\fR (::SpiceGenTcl::Xyce::BasicDevices::Inductor)
 .RE
 .PP
 Creates object of class Inductor that describes inductor\&.
 .RS 4n
-\fBINDUCTOROBJ constructor\fP \fIname np nm -l value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value?\fP
+\fBInductor create OBJNAME\fP \fIname np nm -model value -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value?\fP
+.br
+\fBInductor new\fP \fIname np nm -model value -l value ?-tc1 value? ?-tc2 value? ?-m value? ?-temp value? ?-ic value?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
+-ic value
+Initial current through inductor, optional\&.
+.TP
 -l value
 Inductance value\&.
 .TP
 -m value
 Multiplier value, optional\&.
+.TP
+-model value
+Model of the inductor, optional\&.
 .TP
 -tc1 value
 Linear thermal coefficient, optional\&.
@@ -342,7 +669,7 @@ Linear thermal coefficient, optional\&.
 Quadratic thermal coefficient, optional\&.
 .TP
 -temp value
-Device temperature, optional, optional\&.
+Device temperature, optional\&.
 .TP
 name
 Name of the device without first-letter designator L\&.
@@ -356,11 +683,29 @@ Name of node connected to positive pin\&.
 .PP
 \fBDescription\fR
 .PP
+Inductor type could be specified with additional switch -model modelName if we want to simulate inductor
+with model card\&.
 Simple inductor:
 .PP
 .RS 4n
 .nf
-LXXXXXXX n+ n- <value> <m=val> <temp=val> <tc1=val> <tc2=val>
+L<name> <(+) node> <(-) node> <value> [device parameters]
+.fi
+.RE
+.PP
+Example of class initialization as a simple inductor:
+.PP
+.RS 4n
+.nf
+Inductor new 1 netp netm -l 1e-6 -tc1 1 -temp {-eq temp}
+.fi
+.RE
+.PP
+Inductor with model card:
+.PP
+.RS 4n
+.nf
+L<name> <(+) node> <(-) node> [model] <value> [device parameters]
 .fi
 .RE
 .PP
@@ -368,12 +713,12 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-Inductor new 1 netp netm -l 1e3 -tc1 1 -temp {-eq temp_amb}
+Inductor new 1 netp netm -l 1e-6 -model indm
 .fi
 .RE
 .PP
 .RS -4n
-\fBL\fR (::SpiceGenTcl::Common::BasicDevices)
+\fBL\fR (::SpiceGenTcl::Xyce::BasicDevices)
 .RE
 .PP
 \fBMethod summary\fR
@@ -407,7 +752,73 @@ Readable, writable\&. Inherited\&.
 \fIInductor\fP
 .PP
 .RS -4n
-\fBR\fR (::SpiceGenTcl::Common::BasicDevices)
+\fBLModel\fR (::SpiceGenTcl::Xyce::BasicDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+\fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
+Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
+.TP
+::SpiceGenTcl::Model\&.actOnParam
+Inherited from \fI::SpiceGenTcl::Model\fP\&.
+.TP
+::SpiceGenTcl::Model\&.genSPICEString
+Inherited from \fI::SpiceGenTcl::Model\fP\&.
+.RE
+.PP
+\fBProperties\fR
+.RS 4n
+.TP
+-name
+Readable, writable\&. Inherited\&.
+.TP
+-type
+Readable, writable\&. Inherited\&.
+.RE
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Model\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Xyce::BasicDevices::LModel)
+.RE
+.PP
+Creates object of class LModel that describes inductor model\&.
+.RS 4n
+\fBLModel create OBJNAME\fP \fIname ?-option value \&.\&.\&.?\fP
+.br
+\fBLModel new\fP \fIname ?-option value \&.\&.\&.?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+args
+Keyword instance parameters, for details please refer to Xyce reference manual, 2\&.3\&.5 section\&.
+.TP
+name
+Name of the model\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+LModel new indmod -tc1 1 -tc2 2
+.fi
+.RE
+.PP
+.RS -4n
+\fBR\fR (::SpiceGenTcl::Xyce::BasicDevices)
 .RE
 .PP
 \fBMethod summary\fR
@@ -441,7 +852,7 @@ Readable, writable\&. Inherited\&.
 \fIResistor\fP
 .PP
 .RS -4n
-\fBResistor\fR (::SpiceGenTcl::Common::BasicDevices)
+\fBResistor\fR (::SpiceGenTcl::Xyce::BasicDevices)
 .RE
 .PP
 \fBMethod summary\fR
@@ -479,26 +890,37 @@ Readable, writable\&. Inherited\&.
 .PP
 \fBSubclasses\fR
 .PP
-\fIR\fP, \fI::SpiceGenTcl::Ltspice::BasicDevices::Resistor\fP
+\fIR\fP
 .PP
 .RS -4n
-\fBconstructor\fR (::SpiceGenTcl::Common::BasicDevices::Resistor)
+\fBconstructor\fR (::SpiceGenTcl::Xyce::BasicDevices::Resistor)
 .RE
 .PP
 Creates object of class Resistor that describes resistor\&.
 .RS 4n
-\fBRESISTOROBJ constructor\fP \fIname np nm -r value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value?\fP
+\fBResistor create OBJNAME\fP \fIname np nm -r value -model ?-tc1 value? ?-tc2 value? ?-tce value? ?-m value? ?-temp value? ?-l value? ?-w value?\fP
+.br
+\fBResistor new\fP \fIname np nm -r value -model ?-tc1 value? ?-tc2 value? ?-tce value? ?-m value? ?-temp value? ?-l value? ?-w value?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
+-beh
+Selects behavioural type of resistor, optional\&.
+.TP
+-l value
+Length of semiconductor resistor, optional\&.
+.TP
 -m value
 Multiplier value, optional\&.
 .TP
+-model value
+Model of the resistor, optional\&.
+.TP
 -r value
-Resistance value\&.
+Resistance value or equation\&.
 .TP
 -tc1 value
 Linear thermal coefficient, optional\&.
@@ -506,8 +928,14 @@ Linear thermal coefficient, optional\&.
 -tc2 value
 Quadratic thermal coefficient, optional\&.
 .TP
+-tce value
+Exponential thermal coefficient, optional\&.
+.TP
 -temp value
 Device temperature, optional\&.
+.TP
+-w value
+Width of semiconductor resistor, optional\&.
 .TP
 name
 Name of the device without first-letter designator R\&.
@@ -521,15 +949,17 @@ Name of node connected to positive pin\&.
 .PP
 \fBDescription\fR
 .PP
+Resistor type could be specified with additional switches: -beh if we want to model circuit's variable
+dependent resistor, or -model modelName if we want to simulate resistor with model card\&.
 Simple resistor:
 .PP
 .RS 4n
 .nf
-RXXXXXXX n+ n- <value> <m=val> <temp=val> <tc1=val> <tc2=val>
+R<name> <(+) node> <(-) node> <value> [device parameters]
 .fi
 .RE
 .PP
-Example of class initialization:
+Example of class initialization as a simple resistor:
 .PP
 .RS 4n
 .nf
@@ -537,8 +967,106 @@ Resistor new 1 netp netm -r 1e3 -tc1 1 -temp {-eq temp_amb}
 .fi
 .RE
 .PP
+Behavioral resistor:
+.PP
+.RS 4n
+.nf
+R<name> <(+) node> <(-) node> R ={expression} [device parameters]
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+Resistor new 1 netp netm -r "V(a)+V(b)+pow(V(c),2)" -beh -tc1 1
+.fi
+.RE
+.PP
+Resistor with model card:
+.PP
+.RS 4n
+.nf
+R<name> <(+) node> <(-) node> <model name> [value] [device parameters]
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+Resistor new 1 netp netm -model resm -l 1e-6 -w 10e-6
+.fi
+.RE
+.PP
 .RS -4n
-\fBSubcircuitInstance\fR (::SpiceGenTcl::Common::BasicDevices)
+\fBRModel\fR (::SpiceGenTcl::Xyce::BasicDevices)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+\fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
+Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
+.TP
+::SpiceGenTcl::Model\&.actOnParam
+Inherited from \fI::SpiceGenTcl::Model\fP\&.
+.TP
+::SpiceGenTcl::Model\&.genSPICEString
+Inherited from \fI::SpiceGenTcl::Model\fP\&.
+.RE
+.PP
+\fBProperties\fR
+.RS 4n
+.TP
+-name
+Readable, writable\&. Inherited\&.
+.TP
+-type
+Readable, writable\&. Inherited\&.
+.RE
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Model\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Xyce::BasicDevices::RModel)
+.RE
+.PP
+Creates object of class RModel that describes semiconductor resistor model\&.
+.RS 4n
+\fBRModel create OBJNAME\fP \fIname ?-option value \&.\&.\&.?\fP
+.br
+\fBRModel new\fP \fIname ?-option value \&.\&.\&.?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+args
+Keyword instance parameters, for details please refer to Xyce reference manual, 2\&.3\&.7 section\&.
+.TP
+name
+Name of the model\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+RModel new resmod -tc1 1 -tc2 2
+.fi
+.RE
+.PP
+.RS -4n
+\fBSubcircuitInstance\fR (::SpiceGenTcl::Xyce::BasicDevices)
 .RE
 .PP
 \fBMethod summary\fR
@@ -579,7 +1107,7 @@ Readable, writable\&. Inherited\&.
 \fIX\fP
 .PP
 .RS -4n
-\fBconstructor\fR (::SpiceGenTcl::Common::BasicDevices::SubcircuitInstance)
+\fBconstructor\fR (::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstance)
 .RE
 .PP
 Creates object of class SubcircuitInstance that describes subcircuit instance\&.
@@ -610,7 +1138,7 @@ Name of subcircuit definition\&.
 .PP
 .RS 4n
 .nf
-XYYYYYYY N1 <N2 N3 \&.\&.\&.> SUBNAM
+X<name> [nodes] <subcircuit name> [PARAMS: [<name> = <value>] \&.\&.\&.]
 .fi
 .RE
 .PP
@@ -625,7 +1153,7 @@ SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {-eq c cpar}}
 #nagelfar implicitvarcmd {argparse \fICreates object of class 'SubcircuitInstance'\fP} name pins subName params
 .PP
 .RS -4n
-\fBSubcircuitInstanceAuto\fR (::SpiceGenTcl::Common::BasicDevices)
+\fBSubcircuitInstanceAuto\fR (::SpiceGenTcl::Xyce::BasicDevices)
 .RE
 .PP
 \fBMethod summary\fR
@@ -666,13 +1194,15 @@ Readable, writable\&. Inherited\&.
 \fIXAuto\fP
 .PP
 .RS -4n
-\fBconstructor\fR (::SpiceGenTcl::Common::BasicDevices::SubcircuitInstanceAuto)
+\fBconstructor\fR (::SpiceGenTcl::Xyce::BasicDevices::SubcircuitInstanceAuto)
 .RE
 .PP
 Creates object of class SubcircuitInstanceAuto that describes subcircuit instance with already created
 subcircuit definition object\&.
 .RS 4n
-\fBSUBCIRCUITINSTANCEAUTOOBJ constructor\fP \fIsubcktObj name nodes ?-paramName ?-eq? paramValue \&.\&.\&.?\fP
+\fBSubcircuitInstanceAuto create OBJNAME\fP \fIsubcktObj name nodes ?-paramName ?-eq? paramValue \&.\&.\&.?\fP
+.br
+\fBSubcircuitInstanceAuto new\fP \fIsubcktObj name nodes ?-paramName ?-eq? paramValue \&.\&.\&.?\fP
 .br
 .RE
 .PP
@@ -689,14 +1219,14 @@ nodes
 List of nodes connected to pins in the same order as pins in subcircuit definition {nodeName1 nodeName2 \&.\&.\&.}
 .TP
 args
-Parameters as argument in form : -paramName {?-eq? paramValue} -paramName {?-eq? paramValue}
+Parameters as argument in form: -paramName {?-eq? paramValue} -paramName {?-eq? paramValue}
 .RE
 .PP
 \fBDescription\fR
 .PP
 .RS 4n
 .nf
-XYYYYYYY N1 <N2 N3 \&.\&.\&.> SUBNAM
+X<name> [nodes] <subcircuit name> [PARAMS: [<name> = <value>] \&.\&.\&.]
 .fi
 .RE
 .PP
@@ -709,7 +1239,7 @@ SubcircuitInstanceAuto new $subcktObj 1 {net1 net2} -r 1 -c {-eq cpar}
 .RE
 .PP
 .RS -4n
-\fBVSw\fR (::SpiceGenTcl::Common::BasicDevices)
+\fBVSw\fR (::SpiceGenTcl::Xyce::BasicDevices)
 .RE
 .PP
 \fBMethod summary\fR
@@ -743,14 +1273,11 @@ Readable, writable\&. Inherited\&.
 \fIVSwitch\fP
 .PP
 .RS -4n
-\fBVSwitch\fR (::SpiceGenTcl::Common::BasicDevices)
+\fBVSwitch\fR (::SpiceGenTcl::Xyce::BasicDevices)
 .RE
 .PP
 \fBMethod summary\fR
 .RS 4n
-.TP
-constructor
-Constructor for the class\&.
 .TP
 \fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
 Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
@@ -777,65 +1304,80 @@ Readable, writable\&. Inherited\&.
 .PP
 \fBSuperclasses\fR
 .PP
-\fI::SpiceGenTcl::Device\fP
+\fI::SpiceGenTcl::Common::BasicDevices::VSwitch\fP
 .PP
 \fBSubclasses\fR
 .PP
-\fIVSw\fP, \fI::SpiceGenTcl::Ngspice::BasicDevices::VSwitch\fP, \fI::SpiceGenTcl::Xyce::BasicDevices::VSwitch\fP, \fI::SpiceGenTcl::Ltspice::BasicDevices::VSwitch\fP
+\fIVSw\fP
 .PP
 .RS -4n
-\fBconstructor\fR (::SpiceGenTcl::Common::BasicDevices::VSwitch)
+\fBVSwitchModel\fR (::SpiceGenTcl::Xyce::BasicDevices)
 .RE
 .PP
-Creates object of class VSwitch that describes voltage controlled switch device\&.
+\fBMethod summary\fR
 .RS 4n
-\fBVSWITCHOBJ constructor\fP \fIname np nm ncp ncm -model value ?-on|-off?\fP
+.TP
+constructor
+Constructor for the class\&.
+.TP
+\fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
+Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
+.TP
+::SpiceGenTcl::Model\&.actOnParam
+Inherited from \fI::SpiceGenTcl::Model\fP\&.
+.TP
+::SpiceGenTcl::Model\&.genSPICEString
+Inherited from \fI::SpiceGenTcl::Model\fP\&.
+.RE
+.PP
+\fBProperties\fR
+.RS 4n
+.TP
+-name
+Readable, writable\&. Inherited\&.
+.TP
+-type
+Readable, writable\&. Inherited\&.
+.RE
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Model\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Xyce::BasicDevices::VSwitchModel)
+.RE
+.PP
+Creates object of class VSwitchModel that describes voltage switch model\&.
+.RS 4n
+\fBVSwitchModel create OBJNAME\fP \fIname ?-option value \&.\&.\&.?\fP
+.br
+\fBVSwitchModel new\fP \fIname ?-option value \&.\&.\&.?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
 .TP
--model value
-Model name\&.
-.TP
--on/-off
-Initial state of switch\&.
+args
+Keyword instance parameters, for details please refer to Xyce reference manual, 2\&.3\&.22 section\&.
 .TP
 name
-Name of the device without first-letter designator S\&.
-.TP
-ncm
-Name of node connected to negative controlling pin\&.
-.TP
-ncp
-Name of node connected to positive controlling pin\&.
-.TP
-nm
-Name of node connected to negative pin\&.
-.TP
-np
-Name of node connected to positive pin\&.
+Name of the model\&.
 .RE
 .PP
 \fBDescription\fR
-.PP
-.RS 4n
-.nf
-SXXXXXXX N+ N- NC+ NC- MODEL <ON> <OFF>
-.fi
-.RE
 .PP
 Example of class initialization:
 .PP
 .RS 4n
 .nf
-VSwitch new 1 net1 0 netc 0 -model sw1 -on
+VSwitchModel new swmod -von 1 -voff 0\&.5 -ron 1 -roff 1e6
 .fi
 .RE
 .PP
 .RS -4n
-\fBW\fR (::SpiceGenTcl::Common::BasicDevices)
+\fBW\fR (::SpiceGenTcl::Xyce::BasicDevices)
 .RE
 .PP
 \fBMethod summary\fR
@@ -869,7 +1411,7 @@ Readable, writable\&. Inherited\&.
 \fICSwitch\fP
 .PP
 .RS -4n
-\fBX\fR (::SpiceGenTcl::Common::BasicDevices)
+\fBX\fR (::SpiceGenTcl::Xyce::BasicDevices)
 .RE
 .PP
 \fBMethod summary\fR
@@ -903,7 +1445,7 @@ Readable, writable\&. Inherited\&.
 \fISubcircuitInstance\fP
 .PP
 .RS -4n
-\fBXAuto\fR (::SpiceGenTcl::Common::BasicDevices)
+\fBXAuto\fR (::SpiceGenTcl::Xyce::BasicDevices)
 .RE
 .PP
 \fBMethod summary\fR

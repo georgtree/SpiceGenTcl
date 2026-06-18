@@ -1,130 +1,31 @@
 '\"
 '\" '\" Copyright (c) George Yashin
 '\"
-.TH "SpiceGenTcl::Ngspice::Analyses" 3tcl 0\&.71 "SpiceGenTcl" "Tcl SpiceGenTcl package"
+.TH "SpiceGenTcl::Common::Analyses" 3tcl 0\&.71 "SpiceGenTcl" "Tcl SpiceGenTcl package"
 .SH NAME
-SpiceGenTcl::Ngspice::Analyses - Commands in namespace SpiceGenTcl::Ngspice::Analyses
+SpiceGenTcl::Common::Analyses - Commands in namespace SpiceGenTcl::Common::Analyses
 .SH SYNOPSIS
-\fBAc create OBJNAME\fP
+\fBAc create OBJNAME\fP \fI-variation value -n value -fstart value -fstop value ?-name value?\fP
 .br
-\fBAc new\fP
+\fBAc new\fP \fI-variation value -n value -fstart value -fstop value ?-name value?\fP
 .br
-\fBDc create OBJNAME\fP
+\fBDc create OBJNAME\fP \fI-src value -start value -stop value -incr value ?-name value?\fP
 .br
-\fBDc new\fP
+\fBDc new\fP \fI-src value -start value -stop value -incr value ?-name value?\fP
 .br
-\fBOp create OBJNAME\fP
+\fBOp create OBJNAME\fP \fI?-name value?\fP
 .br
-\fBOp new\fP
+\fBOp new\fP \fI?-name value?\fP
 .br
-\fBSENSACOBJ constructor\fP \fI-outvar value -variation value -n value -fstart value -fstop value ?-name value?\fP
+\fBTran create OBJNAME\fP \fI-tstep value -tstop value ?-tstart value ?-tmax value?? ?-uic? ?-name value?\fP
 .br
-\fBSENSDCOBJ constructor\fP \fI-outvar value ?-name value?\fP
+\fBTran new\fP \fI-tstep value -tstop value ?-tstart value ?-tmax value?? ?-uic? ?-name value?\fP
 .br
-\fBSPOBJ constructor\fP \fI-variation value -n value -fstart value -fstop value ?-name value? ?-donoise?\fP
-.br
-\fBTran create OBJNAME\fP
-.br
-\fBTran new\fP
-.br
-.SH ::SPICEGENTCL::NGSPICE::ANALYSES
+.SH ::SPICEGENTCL::COMMON::ANALYSES
 .SH CLASSES
 .PP
 .RS -4n
-\fBAc\fR (::SpiceGenTcl::Ngspice::Analyses)
-.RE
-.PP
-\fBMethod summary\fR
-.RS 4n
-.TP
-\fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
-Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
-.TP
-::SpiceGenTcl::Analysis\&.actOnParam
-Inherited from \fI::SpiceGenTcl::Analysis\fP\&.
-.TP
-::SpiceGenTcl::Analysis\&.genSPICEString
-Inherited from \fI::SpiceGenTcl::Analysis\fP\&.
-.RE
-.PP
-\fBProperties\fR
-.RS 4n
-.TP
--name
-Readable, writable\&. Inherited\&.
-.TP
--type
-Readable, writable\&. Inherited\&.
-.RE
-.PP
-\fBSuperclasses\fR
-.PP
-\fI::SpiceGenTcl::Common::Analyses::Ac\fP
-.PP
-.RS -4n
-\fBDc\fR (::SpiceGenTcl::Ngspice::Analyses)
-.RE
-.PP
-\fBMethod summary\fR
-.RS 4n
-.TP
-\fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
-Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
-.TP
-::SpiceGenTcl::Analysis\&.actOnParam
-Inherited from \fI::SpiceGenTcl::Analysis\fP\&.
-.TP
-::SpiceGenTcl::Analysis\&.genSPICEString
-Inherited from \fI::SpiceGenTcl::Analysis\fP\&.
-.RE
-.PP
-\fBProperties\fR
-.RS 4n
-.TP
--name
-Readable, writable\&. Inherited\&.
-.TP
--type
-Readable, writable\&. Inherited\&.
-.RE
-.PP
-\fBSuperclasses\fR
-.PP
-\fI::SpiceGenTcl::Common::Analyses::Dc\fP
-.PP
-.RS -4n
-\fBOp\fR (::SpiceGenTcl::Ngspice::Analyses)
-.RE
-.PP
-\fBMethod summary\fR
-.RS 4n
-.TP
-\fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
-Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
-.TP
-::SpiceGenTcl::Analysis\&.actOnParam
-Inherited from \fI::SpiceGenTcl::Analysis\fP\&.
-.TP
-::SpiceGenTcl::Analysis\&.genSPICEString
-Inherited from \fI::SpiceGenTcl::Analysis\fP\&.
-.RE
-.PP
-\fBProperties\fR
-.RS 4n
-.TP
--name
-Readable, writable\&. Inherited\&.
-.TP
--type
-Readable, writable\&. Inherited\&.
-.RE
-.PP
-\fBSuperclasses\fR
-.PP
-\fI::SpiceGenTcl::Common::Analyses::Op\fP
-.PP
-.RS -4n
-\fBSensAc\fR (::SpiceGenTcl::Ngspice::Analyses)
+\fBAc\fR (::SpiceGenTcl::Common::Analyses)
 .RE
 .PP
 \fBMethod summary\fR
@@ -161,13 +62,19 @@ Readable, writable\&. Inherited\&.
 .PP
 \fI::SpiceGenTcl::Utility\fP
 .PP
+\fBSubclasses\fR
+.PP
+\fI::SpiceGenTcl::Ngspice::Analyses::Ac\fP, \fI::SpiceGenTcl::Xyce::Analyses::Ac\fP, \fI::SpiceGenTcl::Ltspice::Analyses::Ac\fP
+.PP
 .RS -4n
-\fBconstructor\fR (::SpiceGenTcl::Ngspice::Analyses::SensAc)
+\fBconstructor\fR (::SpiceGenTcl::Common::Analyses::Ac)
 .RE
 .PP
-Creates object of class SensAc that describes SENS ac analysis\&.
+Creates object of class Ac that describes AC analysis\&.
 .RS 4n
-\fBSENSACOBJ constructor\fP \fI-outvar value -variation value -n value -fstart value -fstop value ?-name value?\fP
+\fBAc create OBJNAME\fP \fI-variation value -n value -fstart value -fstop value ?-name value?\fP
+.br
+\fBAc new\fP \fI-variation value -n value -fstart value -fstop value ?-name value?\fP
 .br
 .RE
 .PP
@@ -178,170 +85,7 @@ Creates object of class SensAc that describes SENS ac analysis\&.
 Start frequency\&.
 .TP
 -fstop value
-Start frequency\&.
-.TP
--n value
-Number of points\&.
-.TP
--name value
-Name argument, optional\&.
-.TP
--outvar value
-Output variable\&.
-.TP
--variation value
-Parameter that defines frequency scale, could be dec, oct or lin
-.RE
-.PP
-\fBDescription\fR
-.PP
-.RS 4n
-.nf
-\&.sens outvar ac variation n fstart fstop
-.fi
-.RE
-.PP
-Example of class initialization:
-.PP
-.RS 4n
-.nf
-SensAc new -outvar v(1,out) -variation dec -n 10 -fstart 1 -fstop 1e6 -name dc1
-.fi
-.RE
-.PP
-.RS -4n
-\fBSensDc\fR (::SpiceGenTcl::Ngspice::Analyses)
-.RE
-.PP
-\fBMethod summary\fR
-.RS 4n
-.TP
-constructor
-Constructor for the class\&.
-.TP
-\fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
-Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
-.TP
-::SpiceGenTcl::Analysis\&.actOnParam
-Inherited from \fI::SpiceGenTcl::Analysis\fP\&.
-.TP
-::SpiceGenTcl::Analysis\&.genSPICEString
-Inherited from \fI::SpiceGenTcl::Analysis\fP\&.
-.RE
-.PP
-\fBProperties\fR
-.RS 4n
-.TP
--name
-Readable, writable\&. Inherited\&.
-.TP
--type
-Readable, writable\&. Inherited\&.
-.RE
-.PP
-\fBSuperclasses\fR
-.PP
-\fI::SpiceGenTcl::Analysis\fP
-.PP
-\fBMixins\fR
-.PP
-\fI::SpiceGenTcl::Utility\fP
-.PP
-.RS -4n
-\fBconstructor\fR (::SpiceGenTcl::Ngspice::Analyses::SensDc)
-.RE
-.PP
-Creates object of class SensDc that describes SENS dc analysis\&.
-.RS 4n
-\fBSENSDCOBJ constructor\fP \fI-outvar value ?-name value?\fP
-.br
-.RE
-.PP
-\fBParameters\fR
-.RS 4n
-.TP
--name value
-Name argument, optional\&.
-.TP
--outvar value
-Output variable\&.
-.RE
-.PP
-\fBDescription\fR
-.PP
-.RS 4n
-.nf
-\&.senc outvar
-.fi
-.RE
-.PP
-Example of class initialization:
-.PP
-.RS 4n
-.nf
-SensDc new -outvar v(1,out) -name sensdc1
-.fi
-.RE
-.PP
-.RS -4n
-\fBSp\fR (::SpiceGenTcl::Ngspice::Analyses)
-.RE
-.PP
-\fBMethod summary\fR
-.RS 4n
-.TP
-constructor
-Constructor for the class\&.
-.TP
-\fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
-Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
-.TP
-::SpiceGenTcl::Analysis\&.actOnParam
-Inherited from \fI::SpiceGenTcl::Analysis\fP\&.
-.TP
-::SpiceGenTcl::Analysis\&.genSPICEString
-Inherited from \fI::SpiceGenTcl::Analysis\fP\&.
-.RE
-.PP
-\fBProperties\fR
-.RS 4n
-.TP
--name
-Readable, writable\&. Inherited\&.
-.TP
--type
-Readable, writable\&. Inherited\&.
-.RE
-.PP
-\fBSuperclasses\fR
-.PP
-\fI::SpiceGenTcl::Analysis\fP
-.PP
-\fBMixins\fR
-.PP
-\fI::SpiceGenTcl::Utility\fP
-.PP
-.RS -4n
-\fBconstructor\fR (::SpiceGenTcl::Ngspice::Analyses::Sp)
-.RE
-.PP
-Creates object of class Sp that describes s-parameter analysis\&.
-.RS 4n
-\fBSPOBJ constructor\fP \fI-variation value -n value -fstart value -fstop value ?-name value? ?-donoise?\fP
-.br
-.RE
-.PP
-\fBParameters\fR
-.RS 4n
-.TP
--donoise
-Activate s-parameter noise\&.
-.TP
--fstart value
-Start frequency\&.
-.TP
--fstop value
-Start frequency\&.
+Stop frequency\&.
 .TP
 -n value
 Number of points\&.
@@ -357,7 +101,7 @@ Parameter that defines frequency scale, could be dec, oct or lin
 .PP
 .RS 4n
 .nf
-\&.ac variation n fstart fstop <donoise>
+\&.ac variation n fstart fstop
 .fi
 .RE
 .PP
@@ -365,16 +109,19 @@ Example of class initialization:
 .PP
 .RS 4n
 .nf
-Sp new -variation dec -n 10 -fstart 1 -fstop 1e6 -name sp1 -donoise
+Ac new -variation dec -n 10 -fstart 1 -fstop 1e6 -name dc1
 .fi
 .RE
 .PP
 .RS -4n
-\fBTran\fR (::SpiceGenTcl::Ngspice::Analyses)
+\fBDc\fR (::SpiceGenTcl::Common::Analyses)
 .RE
 .PP
 \fBMethod summary\fR
 .RS 4n
+.TP
+constructor
+Constructor for the class\&.
 .TP
 \fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
 Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
@@ -398,7 +145,231 @@ Readable, writable\&. Inherited\&.
 .PP
 \fBSuperclasses\fR
 .PP
-\fI::SpiceGenTcl::Common::Analyses::Tran\fP
+\fI::SpiceGenTcl::Analysis\fP
+.PP
+\fBMixins\fR
+.PP
+\fI::SpiceGenTcl::Utility\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fI::SpiceGenTcl::Ngspice::Analyses::Dc\fP, \fI::SpiceGenTcl::Xyce::Analyses::Dc\fP, \fI::SpiceGenTcl::Ltspice::Analyses::Dc\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Common::Analyses::Dc)
+.RE
+.PP
+Creates object of class Dc that describes DC analysis\&.
+.RS 4n
+\fBDc create OBJNAME\fP \fI-src value -start value -stop value -incr value ?-name value?\fP
+.br
+\fBDc new\fP \fI-src value -start value -stop value -incr value ?-name value?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+-incr value
+Incrementing value\&.
+.TP
+-name value
+Name argument, optional\&.
+.TP
+-src value
+Name of independent voltage or current source, a resistor, or the circuit temperature\&.
+.TP
+-start value
+Start value\&.
+.TP
+-stop value
+Stop value\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+.RS 4n
+.nf
+\&.dc src start stop vincr
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+Dc new -src v1 -start {-eq time1} -stop 5 -incr 0\&.1 -name dc1
+.fi
+.RE
+.PP
+.RS -4n
+\fBOp\fR (::SpiceGenTcl::Common::Analyses)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+\fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
+Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
+.TP
+::SpiceGenTcl::Analysis\&.actOnParam
+Inherited from \fI::SpiceGenTcl::Analysis\fP\&.
+.TP
+::SpiceGenTcl::Analysis\&.genSPICEString
+Inherited from \fI::SpiceGenTcl::Analysis\fP\&.
+.RE
+.PP
+\fBProperties\fR
+.RS 4n
+.TP
+-name
+Readable, writable\&. Inherited\&.
+.TP
+-type
+Readable, writable\&. Inherited\&.
+.RE
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Analysis\fP
+.PP
+\fBMixins\fR
+.PP
+\fI::SpiceGenTcl::Utility\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fI::SpiceGenTcl::Ngspice::Analyses::Op\fP, \fI::SpiceGenTcl::Xyce::Analyses::Op\fP, \fI::SpiceGenTcl::Ltspice::Analyses::Op\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Common::Analyses::Op)
+.RE
+.PP
+Creates object of class Op that describes OP analysis\&.
+.RS 4n
+\fBOp create OBJNAME\fP \fI?-name value?\fP
+.br
+\fBOp new\fP \fI?-name value?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+-name value
+Name argument, optional\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+.RS 4n
+.nf
+\&.op
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+Op new -name op1
+.fi
+.RE
+.PP
+.RS -4n
+\fBTran\fR (::SpiceGenTcl::Common::Analyses)
+.RE
+.PP
+\fBMethod summary\fR
+.RS 4n
+.TP
+constructor
+Constructor for the class\&.
+.TP
+\fIconfigure\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]
+Configure properties\&. See \fI::oo::configuresupport::configurable\fP [URL: https://www\&.tcl-lang\&.org/man/tcl9\&.0/TclCmd/index\&.html]\&.
+.TP
+::SpiceGenTcl::Analysis\&.actOnParam
+Inherited from \fI::SpiceGenTcl::Analysis\fP\&.
+.TP
+::SpiceGenTcl::Analysis\&.genSPICEString
+Inherited from \fI::SpiceGenTcl::Analysis\fP\&.
+.RE
+.PP
+\fBProperties\fR
+.RS 4n
+.TP
+-name
+Readable, writable\&. Inherited\&.
+.TP
+-type
+Readable, writable\&. Inherited\&.
+.RE
+.PP
+\fBSuperclasses\fR
+.PP
+\fI::SpiceGenTcl::Analysis\fP
+.PP
+\fBMixins\fR
+.PP
+\fI::SpiceGenTcl::Utility\fP
+.PP
+\fBSubclasses\fR
+.PP
+\fI::SpiceGenTcl::Ngspice::Analyses::Tran\fP, \fI::SpiceGenTcl::Xyce::Analyses::Tran\fP, \fI::SpiceGenTcl::Ltspice::Analyses::Tran\fP
+.PP
+.RS -4n
+\fBconstructor\fR (::SpiceGenTcl::Common::Analyses::Tran)
+.RE
+.PP
+Creates object of class Tran that describes TRAN analysis\&.
+.RS 4n
+\fBTran create OBJNAME\fP \fI-tstep value -tstop value ?-tstart value ?-tmax value?? ?-uic? ?-name value?\fP
+.br
+\fBTran new\fP \fI-tstep value -tstop value ?-tstart value ?-tmax value?? ?-uic? ?-name value?\fP
+.br
+.RE
+.PP
+\fBParameters\fR
+.RS 4n
+.TP
+-name value
+Name argument, optional\&.
+.TP
+-tmax value
+Size of maximum time step in actual simulation, optional, require -tstart
+.TP
+-tstart value
+Start time of saving data, optional\&.
+.TP
+-tstep value
+Size of maximum time step for plotting\&.
+.TP
+-tstop value
+Stop time value\&.
+.TP
+-uic
+Skip initial operating point solution, optional\&.
+.RE
+.PP
+\fBDescription\fR
+.PP
+.RS 4n
+.nf
+\&.tran tstep tstop <tstart<tmax>> <uic>
+.fi
+.RE
+.PP
+Example of class initialization:
+.PP
+.RS 4n
+.nf
+Tran new -tstep 1e-9 -tstop 10e-6 -name dc1
+.fi
+.RE
 
 
 .SH SEE ALSO
