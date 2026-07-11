@@ -196,7 +196,7 @@ $layout Render -outfile [file normalize [file join .. html_charts $fbasename.htm
 set normDistWithUniIntervals [createDist $bwsNorm [dict get $uniIntervals intervals]]
 
 set chartCombined [ticklecharts::chart new]
-$chartCombined Xaxis -name{Frequency intervals, Hz} -data [list [dict get $uniIntervals intervalsStr]]\
+$chartCombined Xaxis -name {Frequency intervals, Hz} -data [list [dict get $uniIntervals intervalsStr]]\
         -axisTick {show True alignWithLabel True} -axisLabel {interval 0 rotate 45 fontSize 8}
 $chartCombined Yaxis -name {Bandwidths per interval} -minorTick {show True} -type value
 $chartCombined SetOptions -title {} -legend  {} -tooltip {trigger axis} -animation False\

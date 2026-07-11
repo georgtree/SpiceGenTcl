@@ -83,6 +83,7 @@ Package is written in pure Tcl with relying on multiple libraries, tcl version i
 - [argparse](https://github.com/georgtree/argparse)
 - [ticklecharts](https://github.com/nico-robert/ticklecharts)
 - [tclmeasure](https://github.com/georgtree/tclmeasure)
+- [tclsimrawreader](https://github.com/georgtree/tclsimrawreader)
 
 For some examples you also need these packages:
 

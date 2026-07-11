@@ -2176,8 +2176,9 @@ namespace eval ::SpiceGenTcl {
                 {path -help {path to raw file including it's file name}}
                 {traces2read -optional -default * -help {List of traces that will be readed, default value is *,\
                                                                  that means reading all traces}}
-                {simulator -optional -default ngspice -help {Total number of points}}
+                {simulator -optional -default ngspice -help {Name of the simulator}}
                 {-shared= -help {Handle to shared simulator instance}}
+                {-legacy -forbid shared -help {Use legacy backend for file reading}}
             }]
             if {[dict exists $arguments shared]} {
                 package require ngspicetclbridge
@@ -2218,7 +2219,8 @@ namespace eval ::SpiceGenTcl {
                                                     $npoints [dict get $scaleInfo ntype]]
                         dict append Traces $nameModif [my configure -axis]
                         [my configure -axis] setDataPoints $points
-                    } elseif {([dict get $arguments traces2read] eq {*}) || ($nameModif in [dict get $arguments traces2read])} {
+                    } elseif {([dict get $arguments traces2read] eq {*}) ||\
+                                      ($nameModif in [dict get $arguments traces2read])} {
                         set traceObj [::SpiceGenTcl::Trace new $nameModif [dict get $vectorsInfo $name] $npoints {}\
                                               $numtype]
                         $traceObj setDataPoints $points
@@ -2226,10 +2228,58 @@ namespace eval ::SpiceGenTcl {
                     } else {
                         set traceObj [::SpiceGenTcl::EmptyTrace new $nameModif [dict get $vectorsInfo $name] $npoints\
                                               $numtype]
-                        $traceObj setDataPoints $points
+                        #$traceObj setDataPoints $points
                         dict append Traces $nameModif $traceObj
                     }
                 }
+            } elseif {![dict exists $arguments legacy]} {
+                package require tclsimrawreader
+                if {[dict get $arguments simulator] eq {ltspice}} {
+                    set dialect ltspice
+                } else {
+                    set dialect generic
+                }
+                my configure -path [dict get $arguments path]
+                set fileHandle [::tclsimrawreader::openraw -dialect $dialect [dict get $arguments path]]
+                set header [$fileHandle header] 
+                my configure -npoints [dict get $header npoints]
+                my configure -nvariables [dict get $header nvariables]
+                if {[dict get $arguments simulator] eq {ngspice}} {
+                    set numtype double
+                } else {
+                    foreach flag [dict get $header flags] {
+                        if {$flag in {real complex double}} {
+                            set numtype $flag
+                        }
+                    }
+                }
+                if {![info exists numtype]} {
+                    set numtype double
+                }
+                set rawparams [dict create Filename $path Title [dict get $header title] Date [dict get $header date]\
+                                       Plotname [dict get $header plotname] Flags [dict get $header flags]\
+                                       {No. Variables} $nvariables {No. Points} $npoints]
+                set vectorsData [dict get $header variables]
+                foreach vectorInfo $vectorsData {
+                    set nameModif [string tolower [dict get $vectorInfo name]]
+                    if {[dict get $vectorInfo index]==0} {
+                        my configure -axis [::SpiceGenTcl::Axis new $nameModif [dict get $vectorInfo type]\
+                                                    $npoints $numtype]
+                        dict append Traces $nameModif [my configure -axis]
+                        [my configure -axis] setDataPoints [$fileHandle vector [dict get $vectorInfo name]]
+                    } elseif {([dict get $arguments traces2read] eq {*}) ||\
+                                      ($nameModif in [dict get $arguments traces2read])} {
+                        set traceObj [::SpiceGenTcl::Trace new $nameModif [dict get $vectorInfo type] $npoints {}\
+                                              $numtype]
+                        $traceObj setDataPoints [$fileHandle vector [dict get $vectorInfo name]]
+                        dict append Traces $nameModif $traceObj
+                    } else {
+                        set traceObj [::SpiceGenTcl::EmptyTrace new $nameModif [dict get $vectorInfo type] $npoints\
+                                              $numtype]
+                        dict append Traces $nameModif $traceObj
+                    }
+                }
+                $fileHandle close
             } else {
                 my configure -path [dict get $arguments path]
                 set fileSize [file size $path]
@@ -2252,10 +2302,10 @@ namespace eval ::SpiceGenTcl {
                     set line Tit
                 } else {
                     close $file
-                    error {Unknown encoding}
+                    error {unknown file text encoding}
                 }
                 my configure -rawparams [dict create Filename $path]
-                set header {}
+                set header [list]
                 set binaryStart 6
                 while true {
                     set ch [encoding convertfrom $encode [read $file $encSize]]
@@ -2280,7 +2330,7 @@ namespace eval ::SpiceGenTcl {
                     if {[lindex $lineList 0] eq {Variables}} {
                         break
                     }
-                    dict append rawparams [lindex $lineList 0] [string trim [lindex $lineList 1]]
+                    dict append rawparams [lindex $lineList 0] [string trim [join [lrange $lineList 1 end] :]]
                 }
                 my configure -npoints [dict get [my configure -rawparams] {No. Points}] -nvariables\
                         [dict get [my configure -rawparams] {No. Variables}]
@@ -2319,7 +2369,8 @@ namespace eval ::SpiceGenTcl {
                         my configure -axis [::SpiceGenTcl::Axis new $name $varType $npoints $axisNumType]
                         ##nagelfar ignore #12 {Found constant "traces"}
                         dict append Traces [string tolower $name] [my configure -axis]
-                    } elseif {([dict get $arguments traces2read] eq {*}) || ($name in [dict get $arguments traces2read])} {
+                    } elseif {([dict get $arguments traces2read] eq {*}) ||\
+                                      ($name in [dict get $arguments traces2read])} {
                         if {$hasAxis} {
                             dict append Traces [string tolower $name] [::SpiceGenTcl::Trace new $name $varType $npoints\
                                                                            [[my configure -axis] configure -name]\
@@ -2840,7 +2891,7 @@ namespace eval ::SpiceGenTcl {
             #   format - select format of output list, arg: `{-name1 value1 -name2 value2 ...}`, list:
             #    `{{name1 value1 ?qual?} {name2 value2 ?qual?} ...}`
             # Returns: formatted list of parameters
-            set results {}
+            set results [list]
             foreach elem [lrange $list $start end] {
                 if {[my CheckEqual $elem]} {
                     lassign [my ParseWithEqual $elem] name value
@@ -2886,7 +2937,7 @@ namespace eval ::SpiceGenTcl {
             #   format - select format of output list, arg: `{-name1 value1 -name2 value2 ...}`, list:
             #    `{{name1 value1 ?qual?} {name2 value2 ?qual?} ...}`
             # Returns: formatted list of parameters
-            set results {}
+            set results [list]
             foreach elem [lrange $list $start end] {
                 set switch false
                 if {[my CheckEqual $elem]} {
@@ -2938,7 +2989,7 @@ namespace eval ::SpiceGenTcl {
             #   list - input list of parameters in order of elements in `names` list
             #   names - names of parameters
             # Returns: list of the form `{-name1 value1 -name2 value2 ...}`
-            set results {}
+            set results [list]
             if {[llength $list]!=[llength $names]} {
                 if {[llength $list]>[llength $names]} {
                     set upperBound [llength $names]
