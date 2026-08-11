@@ -768,7 +768,7 @@ namespace eval ::SpiceGenTcl {
                     } elseif {[info exists pin]} {
                         set pin [string tolower $pin]
                         if {[dict exists $Pins $pin]} {
-                            return [dict get $Pins $pin]
+                            return [[dict get $Pins $pin] configure -node]
                         } else {
                             return -code error "Device '$name' doesn't have pin with name '$pin'"
                         }
@@ -894,7 +894,7 @@ namespace eval ::SpiceGenTcl {
                     } elseif {[info exists pname]} {
                         set pname [string tolower $pname]
                         if {[dict exists $Params $pname]} {
-                            return [dict get $Params $pname]
+                            return [[dict get $Params $pname] configure -value]
                         } else {
                             return -code error "Device '$name' doesn't have parameter with name '$pname'"
                         }

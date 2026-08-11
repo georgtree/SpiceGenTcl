@@ -506,6 +506,24 @@ test testDeviceClass-27 {} -setup {
     unset elemInst
 }
 
+test testDeviceClass-28 {} -setup {
+    set elemInst [Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
+    $elemInst actOnPin -set g n123
+} -body {
+    set result [$elemInst actOnPin -get d]
+} -result netd -cleanup {
+    unset elemInst result
+}
+
+test testDeviceClass-29 {} -setup {
+    set elemInst [Device new M1 {{d netd} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
+    $elemInst actOnPin -set g n123
+} -body {
+    set result [$elemInst actOnParam -get u0]
+} -result 100 -cleanup {
+    unset elemInst result
+}
+
 ###  Model class tests 
     
 test testModelClass-1 {test creation of Model class instance and getType interface} -setup {
