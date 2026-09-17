@@ -1,5 +1,5 @@
 
-![drawing](assets/img/spicegentcl_logo.svg)
+![drawing](docs/assets/img/spicegentcl_logo.svg)
 
 This package provides Tcl interface to different SPICE and SPICE-like simulator, Ngspice, Xyce.
 It was inspired by [PySpice](https://github.com/PySpice-org/PySpice) project, object-oriented interface to
