@@ -73,6 +73,8 @@ namespace eval ::SpiceGenTcl {
         }}
     }
 
+    set multipliers [dict create a 1e-18 f 1e-15 p 1e-12 n 1e-9 u 1e-6 m 1e-3 k 1e3 meg 1e6 g 1e9 t 1e12]
+
     oo::configurable create SPICEElement {
         self mixin -append oo::abstract
         # Abstract class of all elements of SPICE netlist
@@ -146,6 +148,18 @@ namespace eval ::SpiceGenTcl {
             }
             set paramDefStr [join $paramDefList \n]
             return $paramDefStr
+        }
+        method ToNumber {string} {
+            if {[regexp {^([+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?)(meg|[afpnumkgt])?([a-zA-Z]*)$}\
+                         $string -> number qualifier units]} {
+                if {$qualifier eq {}} {
+                    return $number
+                } else {
+                    return [expr {$number*[dict get $::SpiceGenTcl::multipliers $qualifier]}]
+                }
+            } else {
+                return $string
+            }
         }
         method ArgsPreprocess {switchesNames paramsNames suppHelpElems args} {
             # Calls `argparse` and constructs list for passing to `Device` constructor.
@@ -796,6 +810,8 @@ namespace eval ::SpiceGenTcl {
             # Acts on `Parameter` object with selected action
             #  -add - add new parameter to the device, requires `pname` argument
             #  -get - get parameter value, requires `pname` argument
+            #  -tonumber - parameter(s) value(s) will be converted to number without qualifier and units, if applicable,
+            #    requires `-get`
             #  -set - set (or change) value of particular parameters, requires `pname` and `value` arguments
             #  -delete - delete existing parameter
             #  -all - option for getting the dictionary that contains parameters names as keys and parameters values
@@ -821,6 +837,7 @@ namespace eval ::SpiceGenTcl {
                 # {Actions selectors}
                 {-add -key action -value add -require pname -help {Add new parameter to device}}
                 {-get -key action -value get -help {Get parameter value}}
+                {-tonumber -require get -help {Convert value to number}}
                 {-set -key action -value set -require {pname value} -help {Sets (or change) value of particular\
                                                                                    parameters}}
                 {-delete -key action -value delete -require pname -help {Delete existing parameter}}
@@ -890,11 +907,19 @@ namespace eval ::SpiceGenTcl {
                         return
                     }
                     if {[info exists all]} {
-                        return [dict map {paramName param} $Params {$param configure -value}]
+                        if {[info exists tonumber]} {
+                            return [dict map {paramName param} $Params {my ToNumber [$param configure -value]}]
+                        } else {
+                            return [dict map {paramName param} $Params {$param configure -value}]
+                        }
                     } elseif {[info exists pname]} {
                         set pname [string tolower $pname]
                         if {[dict exists $Params $pname]} {
-                            return [[dict get $Params $pname] configure -value]
+                            if {[info exists tonumber]} {
+                                return [my ToNumber [[dict get $Params $pname] configure -value]]
+                            } else {
+                                return [[dict get $Params $pname] configure -value]
+                            }
                         } else {
                             return -code error "Device '$name' doesn't have parameter with name '$pname'"
                         }

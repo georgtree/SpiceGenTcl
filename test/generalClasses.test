@@ -351,7 +351,6 @@ testTemplate testParameterEquationClass-3 {} {ParameterEquation new U0T {}} {Par
 testTemplate testParameterPositionalEquationClass-1 {} {ParameterPositionalEquation new U0T {temp*2.1+U0}} {{temp*2.1+U0}}
 
 ###  Device class tests 
-
 test testDeviceClass-1 {test creation of Device class instance and getName interface} -setup {
     set elemInst [Device new M1 {{d netg} {g netg} {s nets}} {{VTH0 0.7} {U0 100} {K1 1.5e-3}}]
 } -body {
@@ -524,8 +523,31 @@ test testDeviceClass-29 {} -setup {
     unset elemInst result
 }
 
-###  Model class tests 
-    
+test testDeviceClass-30 {} -setup {
+    set elemInst [Device new M1 {{d netg} {g netg} {s nets}} {{VTH0 0.7} {U0 1k} {K1 1.5m}}]
+} -body {
+    set result [$elemInst actOnParam -get -all -tonumber]
+} -result {vth0 0.7 u0 1000.0 k1 0.0015} -cleanup {
+    unset elemInst result
+}
+
+test testDeviceClass-31 {} -setup {
+    set elemInst [Device new M1 {{d netg} {g netg} {s nets}} {{VTH0 0.7} {U0 1k} {K1 1.5m}}]
+} -body {
+    set result [$elemInst actOnParam -get -tonumber k1]
+} -result 0.0015 -cleanup {
+    unset elemInst result
+}
+
+test testDeviceClass-32 {} -setup {
+    set elemInst [Device new M1 {{d netg} {g netg} {s nets}} {{VTH0 0.7} {U0 1k} {-eq K1 t*r}}]
+} -body {
+    set result [$elemInst actOnParam -get -tonumber k1]
+} -result t*r -cleanup {
+    unset elemInst result
+}
+
+###  Model class tests
 test testModelClass-1 {test creation of Model class instance and getType interface} -setup {
     set modelInst [Model new MOD1 NMOS {{VTH0 0.7} {U0 100} {VTH1 1} {K1 1.5e-3}}]
 } -body {
