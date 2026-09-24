@@ -154,6 +154,28 @@ test testSimulations-3 {test diode CV simulation} -setup {
     unset circuit simulator data voltSweep vdc x xf y yf xydata
 }
 
+test testSimulations-4 {-nocleanup check} -setup {
+    set circuit [Circuit new {voltage divider netlist}]
+    $circuit add [Vdc new 1 in 0 -dc 1]
+    $circuit add [R new 1 in out -r 1e3]
+    $circuit add [R new 2 out 0 -r 2e3]
+    $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1]
+    set simulator [Batch new  batch1]
+    $circuit configure -simulator $simulator
+} -body {
+    $circuit runAndRead
+    set rawFileObject [$circuit configure -data]
+    $circuit runAndRead
+    lappend results [info object isa object $rawFileObject]
+    set rawFileObject [$circuit configure -data]
+    $simulator configure -nocleanup yes
+    $circuit runAndRead
+    lappend results [info object isa object $rawFileObject]
+    return $results
+} -result {0 1} -cleanup {
+    unset circuit simulator results rawFileObject
+}
+
 
 forgetLtspice
 

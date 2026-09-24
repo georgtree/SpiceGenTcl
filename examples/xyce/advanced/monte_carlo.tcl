@@ -10,6 +10,9 @@ namespace import ::SpiceGenTcl::*
 namespace import ::tclmeasure::*
 importXyce
 
+# set seed for random number generator
+expr {srand(100)}
+
 proc calcDbMag {re im} {
     set mag [expr {sqrt($re*$re+$im*$im)}]
     set db [expr {10*log($mag)}]
@@ -25,13 +28,13 @@ proc calcDbMagVec {vector} {
 
 proc findBW {freqs vals trigVal} {
     # calculate bandwidth of results
-    set bw [dict get [measure -xname freqs -data [dict create freqs $freqs vals $vals] -trig "-vec vals -val $trigVal -rise 1"\
-                          -targ "-vec vals -val $trigVal -fall 1"] xdelta]
+    set bw [dict get [measure -xname freqs -data [dict create freqs $freqs vals $vals]\
+                              -trig "-vec vals -val $trigVal -rise 1" -targ "-vec vals -val $trigVal -fall 1"] xdelta]
     return $bw
 }
 
 proc createIntervals {data numOfIntervals} {
-    set intervals [::math::statistics::minmax-histogram-limits [tcl::mathfunc::min {*}$data] \
+    set intervals [::math::statistics::minmax-histogram-limits [tcl::mathfunc::min {*}$data]\
             [tcl::mathfunc::max {*}$data] $numOfIntervals]
     lappend intervalsStrings [format <=%.2e [lindex $intervals 0]]
     for {set i 0} {$i<[- [llength $intervals] 1]} {incr i} {

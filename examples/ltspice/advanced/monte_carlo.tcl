@@ -9,6 +9,9 @@ namespace import ::math::statistics::*
 namespace import ::SpiceGenTcl::*
 importLtspice
 
+# set seed for random number generator
+expr {srand(100)}
+
 proc calcDbMag {re im} {
     set mag [expr {sqrt($re*$re+$im*$im)}]
     set db [expr {10*log($mag)}]

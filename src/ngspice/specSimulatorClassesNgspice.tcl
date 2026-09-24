@@ -41,10 +41,12 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
             #  name - name of simulator object
             #  runLocation - location at which input netlist is stored and all output files will be saved,
             #   default is current directory
+            #  -nocleanup - if provided, retains RawFile object from the previous simulation
             argparse -help {Creates batch ngspice simulator that can be attached to top-level 'Circuit'} {
                 {name -help {Name of simulator object}}
                 {runLocation -optional -default . -help {Location at which input netlist is stored and all output files\
                                                                  will be saved}}
+                {-nocleanup -boolean -help {Retain RawFile object from previous simulation}}
             }
             my configure -name $name
             my variable Command
@@ -54,7 +56,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
             } else {
                 set Command ngspice
             }
-            my configure -runlocation $runLocation
+            my configure -runlocation $runLocation -nocleanup $nocleanup
         }
         method runAndRead {args} {
             # Runs netlist circuit file.
@@ -102,12 +104,20 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
                 {vector -optional -default 0 -help {Flag to enable RBC vector storage}}
             }
             my variable data
+            if {[info exists data]} {
+                set previousRawFile $data
+            }
             if {$vector} {
                 set data [::SpiceGenTcl::RawFile new -vector [file join [my configure -runlocation]\
                                                               ${LastRunFileName}.raw] * ngspice]
             } else {
                 set data [::SpiceGenTcl::RawFile new [file join [my configure -runlocation]\
                                                               ${LastRunFileName}.raw] * ngspice]
+            }
+            if {![my configure -nocleanup]} {
+                if {[info exists previousRawFile]} {
+                    $previousRawFile destroy
+                }
             }
             return
         }
@@ -184,10 +194,12 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
             # Creates batch ngspice simulator that can be attached to top-level Circuit.
             #  name - name of simulator object
             #  liblocation - path to .so/.dll library
+            #  -nocleanup - if provided, retains RawFile object from the previous simulation
             package require ngspicetclbridge
             argparse -help {Creates batch ngspice simulator that can be attached to top-level 'Circuit'} {
                 {name -help {Name of simulator object}}
                 {liblocation -optional -help {Path to .so/.dll library}}
+                {-nocleanup -boolean -help {Retain RawFile object from previous simulation}}
             }
             if {![info exists liblocation]} {
                 if {{NGSPICE_DLL} in [array names ::env]} {
@@ -207,7 +219,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
                     }
                 }
             }
-            my configure -name $name -liblocation $liblocation
+            my configure -name $name -liblocation $liblocation -nocleanup $nocleanup
             my configure -simhandle [ngspicetclbridge::new [file nativename $liblocation]]
         }
         destructor {
@@ -243,10 +255,18 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
                 {vector -optional -default 0 -help {Flag to enable RBC vector storage}}
             }
             my variable data
+            if {[info exists data]} {
+                set previousRawFile $data
+            }
             if {$vector} {
                 set data [::SpiceGenTcl::RawFile new -vector -shared $simhandle {} * ngspice]
             } else {
                 set data [::SpiceGenTcl::RawFile new -shared $simhandle {} * ngspice]
+            }
+            if {![my configure -nocleanup]} {
+                if {[info exists previousRawFile]} {
+                    $previousRawFile destroy
+                }
             }
             return
         }

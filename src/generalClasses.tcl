@@ -1997,7 +1997,8 @@ namespace eval ::SpiceGenTcl {
         property name
         property log
         property data
-        variable name Command log data
+        property nocleanup
+        variable name Command log data nocleanup
         method run {} {
             # Runs simulation.
             error {Not implemented}

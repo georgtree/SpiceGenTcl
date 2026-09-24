@@ -10,6 +10,9 @@ namespace import ::SpiceGenTcl::*
 namespace import ::tclmeasure::*
 importNgspice
 
+# set seed for random number generator
+expr {srand(100)}
+
 proc calcDbMag {re im} {
     set mag [expr {sqrt($re*$re+$im*$im)}]
     set db [expr {10*log($mag)}]
@@ -65,9 +68,10 @@ foreach elem {c1 l1 c2 l2 c3 l3} {
 }
 $circuit add [Ac new -variation oct -n 100 -fstart 250e3 -fstop 10e6]
 #set simulator with default
-set simulator [Batch new {batch1}]
+set simulator [Shared new {batch1}]
 # attach simulator object to circuit
 $circuit configure -simulator $simulator
+
 
 # simulate typical values bandwidth
 # run simulation
@@ -116,9 +120,10 @@ for {set i 0} {$i<$mcRuns} {incr i} {
         }
     }
     # get vout frequency curve
-    lappend traceListUni [calcDbMagVec [dict get $data v(out)]]
+    set traceUni [calcDbMagVec [dict get $data v(out)]]
     # calculate bandwidths values
-    lappend bwsUni [findBW $freqRes [lindex $traceListUni end] -10]
+    lappend bwsUni [findBW $freqRes $traceUni -10]
+    [$simulator configure -simhandle] command {destroy all}
 }
 
 # get distribution of bandwidths with uniform parameters distribution
@@ -149,9 +154,10 @@ for {set i 0} {$i<$mcRuns} {incr i} {
         }
     }
     # get vout frequency curve
-    lappend traceListNorm [calcDbMagVec [dict get $data v(out)]]
+    set traceNorm [calcDbMagVec [dict get $data v(out)]]
     # calculate bandwidths values
-    lappend bwsNorm [findBW $freqRes [lindex $traceListNorm end] -10]
+    lappend bwsNorm [findBW $freqRes $traceNorm -10]
+    [$simulator configure -simhandle] command {destroy all}
 }
 # get distribution of bandwidths with normal parameters distribution
 set normIntervals [createIntervals $bwsNorm $numOfIntervals]
