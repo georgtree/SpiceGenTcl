@@ -41,11 +41,11 @@
           <div class="body" role="main">
             
   <section id="tips">
-<span id="r-tips"></span><span id="r-3a3atips"></span><h1>Tips<a class="headerlink" href="#tips" title="Link to this heading">¶</a></h1>
+<span id="r-tips"></span><span id="r-namespaceqz3a3atips"></span><h1>Tips<a class="headerlink" href="#tips" title="Link to this heading">¶</a></h1>
 <p>This page contains different tips that help you to use SpiceGenTcl more efficiently.</p>
 <section id="define-custom-element">
 <span id="r-tips-define-custom-element"></span><span id="r-3a3atipsqzdefine20custom20element"></span><h2>Define custom element<a class="headerlink" href="#define-custom-element" title="Link to this heading">¶</a></h2>
-<p>To define custom element class we should use <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3adevice"><span class="std std-ref">::SpiceGenTcl::Device</span></a> class as a superclass. Why we need this?
+<p>To define custom element class we should use <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-symbolqz3a3aspicegentcl3a3adevice"><span class="std std-ref">::SpiceGenTcl::Device</span></a> class as a superclass. Why we need this?
 One simple example is custom Verilog-A device, that could have arbitary number of pins and parameters.
 Let’s try to define new element for next Verilog-A device:</p>
 <div class="highlight-verilog notranslate"><div class="highlight"><pre><span></span><span class="c1">// Jiles/Atherton Magnetic Core Model</span>
@@ -154,7 +154,7 @@ First line is class definition:</p>
 </pre></div>
 </div>
 <p>It is good convention to start class name from capital letter.</p>
-<p>Superclass for new element is <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3adevice"><span class="std std-ref">::SpiceGenTcl::Device</span></a>:</p>
+<p>Superclass for new element is <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-symbolqz3a3aspicegentcl3a3adevice"><span class="std std-ref">::SpiceGenTcl::Device</span></a>:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">superclass</span><span class="w"> </span>SpiceGenTcl::Device
 </pre></div>
 </div>
@@ -181,7 +181,7 @@ values. Due to these lines we can pass parameters to element in forms <code clas
 example: <code class="docutils literal notranslate"><span class="pre">-area</span> <span class="pre">1e-4</span></code> or <code class="docutils literal notranslate"><span class="pre">-area</span> <span class="pre">l*m</span> <span class="pre">-eq</span></code>.</p>
 <p>Possible qualificator is <code class="docutils literal notranslate"><span class="pre">-eq</span></code> - it means that parameter should be inserted into SPICE netlist as
 <code class="docutils literal notranslate"><span class="pre">paramName={expression}</span></code></p>
-<p>In the next few lines we build parameter list that will be passed to <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3adevice"><span class="std std-ref">::SpiceGenTcl::Device</span></a> constructor:</p>
+<p>In the next few lines we build parameter list that will be passed to <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-symbolqz3a3aspicegentcl3a3adevice"><span class="std std-ref">::SpiceGenTcl::Device</span></a> constructor:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">lappend</span><span class="w"> </span>params<span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span>model<span class="w"> </span><span class="k">[</span><span class="nb">dict</span><span class="w"> </span>get<span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span>model<span class="k">]</span><span class="w"> </span><span class="o">-</span>posnocheck<span class="k">]</span>
 <span class="nb">dict</span><span class="w"> </span>for<span class="w"> </span><span class="k">{</span><span class="nv">paramName</span><span class="w"> </span>value<span class="k">}</span><span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span><span class="k">{</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="k">{</span><span class="nv">$paramName</span><span class="w"> </span><span class="nv">ni</span><span class="w"> </span><span class="k">{</span><span class="nv">model</span><span class="w"> </span>name<span class="w"> </span>p<span class="w"> </span>n<span class="k">}}</span><span class="w"> </span><span class="k">{</span>
@@ -194,7 +194,7 @@ example: <code class="docutils literal notranslate"><span class="pre">-area</spa
 <span class="k">}</span>
 </pre></div>
 </div>
-<p>The last but not the least is step of passing arguments to <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3adevice"><span class="std std-ref">::SpiceGenTcl::Device</span></a> constructor:</p>
+<p>The last but not the least is step of passing arguments to <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-symbolqz3a3aspicegentcl3a3adevice"><span class="std std-ref">::SpiceGenTcl::Device</span></a> constructor:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">next</span><span class="w"> </span>n<span class="k">[</span><span class="nb">dict</span><span class="w"> </span>get<span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span>name<span class="k">]</span><span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span>p<span class="w"> </span><span class="k">[</span><span class="nb">dict</span><span class="w"> </span>get<span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span>p<span class="k">]]</span><span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span>n<span class="w"> </span><span class="k">[</span><span class="nb">dict</span><span class="w"> </span>get<span class="w"> </span><span class="nv">$arguments</span><span class="w"> </span>n<span class="k">]]]</span><span class="w"> </span><span class="nv">$params</span>
 </pre></div>
 </div>
@@ -224,9 +224,9 @@ create <code class="docutils literal notranslate"><span class="pre">CoreModel</s
 <span class="k">}</span>
 </pre></div>
 </div>
-<p>Here we use as superclass <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3amodel"><span class="std std-ref">::SpiceGenTcl::Model</span></a> for new element.
+<p>Here we use as superclass <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-symbolqz3a3aspicegentcl3a3amodel"><span class="std std-ref">::SpiceGenTcl::Model</span></a> for new element.
 To process optional arguments, we use special method [::SpiceGenTcl::Utility::ArgsPreprocess], that
-process optional <code class="docutils literal notranslate"><span class="pre">args</span></code> arguments and produces string for <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3amodel"><span class="std std-ref">::SpiceGenTcl::Model</span></a> constructor.</p>
+process optional <code class="docutils literal notranslate"><span class="pre">args</span></code> arguments and produces string for <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-symbolqz3a3aspicegentcl3a3amodel"><span class="std std-ref">::SpiceGenTcl::Model</span></a> constructor.</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">next</span><span class="w"> </span><span class="k">{</span><span class="o">*</span><span class="k">}[</span><span class="nv">my</span><span class="w"> </span>ArgsPreprocess<span class="w"> </span><span class="k">{</span><span class="nv">ms</span><span class="w"> </span>a<span class="w"> </span>k<span class="w"> </span>alpha<span class="w"> </span>c<span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">name</span><span class="w"> </span>type<span class="k">}</span><span class="w"> </span>type<span class="w"> </span><span class="k">{</span><span class="o">*</span><span class="k">}[</span><span class="nb">linsert</span><span class="w"> </span><span class="nv">$args</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span>coreja<span class="k">]]</span>
 </pre></div>
 </div>

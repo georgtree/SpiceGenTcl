@@ -77,13 +77,17 @@ lappend auto_path "path to SpiceGenTcl package"
 ```
 
 ## Dependencies
-Package is written in pure Tcl with relying on multiple libraries, tcl version is 9.0. 
+Package is written in pure Tcl with relying on multiple libraries, Tcl version is 9.0. 
 
 - [Tcllib](https://www.tcl.tk/software/tcllib/)
 - [argparse](https://github.com/georgtree/argparse)
 - [ticklecharts](https://github.com/nico-robert/ticklecharts)
 - [tclmeasure](https://github.com/georgtree/tclmeasure)
 - [tclsimrawreader](https://github.com/georgtree/tclsimrawreader)
+
+For RBC vector data support you need:
+
+- [rbc-tk9](https://github.com/georgtree/rbc-tk9)
 
 For some examples you also need these packages:
 

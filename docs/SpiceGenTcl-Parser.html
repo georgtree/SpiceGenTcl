@@ -41,7 +41,7 @@
           <div class="body" role="main">
             
   <section id="parser">
-<span id="r-parser"></span><span id="r-3a3aparser"></span><h1>Parser<a class="headerlink" href="#parser" title="Link to this heading">¶</a></h1>
+<span id="r-parser"></span><span id="r-namespaceqz3a3aparser"></span><h1>Parser<a class="headerlink" href="#parser" title="Link to this heading">¶</a></h1>
 <p>This section provides examples of netlist parser usage, Ngspice netlists in particular.</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#r-3a3aparserqzsimple20netlist20parsing"><span class="std std-ref">Simple netlist parsing</span></a> - “examples/ngspice/parse.tcl” file</p></li>
@@ -82,13 +82,13 @@
 </div>
 <p>This netlist doesn’t contains subcircuits or unknown models, but contains various elements: independent
 sources, resistors, bipolar transistors, <code class="docutils literal notranslate"><span class="pre">.model</span></code> and <code class="docutils literal notranslate"><span class="pre">.sens</span></code> statements.</p>
-<p>We create parser for Ngspice netlist with command <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice.html#r-3a3aspicegentcl3a3angspice3a3angspiceparser"><span class="std std-ref">::SpiceGenTcl::Ngspice::NgspiceParser</span></a>:</p>
+<p>We create parser for Ngspice netlist with command <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice.html#r-symbolqz3a3aspicegentcl3a3angspice3a3angspiceparser"><span class="std std-ref">::SpiceGenTcl::Ngspice::NgspiceParser</span></a>:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">set</span><span class="w"> </span>netlistsLoc<span class="w"> </span><span class="k">[</span><span class="nb">file</span><span class="w"> </span>dirname<span class="w"> </span><span class="k">[</span><span class="nb">info</span><span class="w"> </span>script<span class="k">]]</span>
 <span class="k">set</span><span class="w"> </span>parser<span class="w"> </span><span class="k">[</span><span class="o">::</span><span class="nv">SpiceGenTcl</span><span class="o">::</span>Ngspice::NgspiceParser<span class="w"> </span>new<span class="w"> </span>parser1<span class="w"> </span><span class="k">[</span><span class="nb">file</span><span class="w"> </span>join<span class="w"> </span><span class="nv">$netlistsLoc</span><span class="w"> </span>diffpair.cir<span class="k">]]</span>
 </pre></div>
 </div>
-<p>After that, we use method <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aparser3a3areadandparse"><span class="std std-ref">::SpiceGenTcl::Parser::readAndParse</span></a> to read circuit file and parse it content.
-As a result, method returns <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3anetlist"><span class="std std-ref">::SpiceGenTcl::Netlist</span></a> object that contains all parsed elements objects:</p>
+<p>After that, we use method <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-symbolqz3a3aspicegentcl3a3aparser3a3areadandparse"><span class="std std-ref">::SpiceGenTcl::Parser::readAndParse</span></a> to read circuit file and parse it content.
+As a result, method returns <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-symbolqz3a3aspicegentcl3a3anetlist"><span class="std std-ref">::SpiceGenTcl::Netlist</span></a> object that contains all parsed elements objects:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">set</span><span class="w"> </span>netlist<span class="w"> </span><span class="k">[</span><span class="nv">$parser</span><span class="w"> </span><span class="nv">readAndParse</span><span class="k">]</span>
 </pre></div>
 </div>
@@ -116,7 +116,7 @@ As a result, method returns <a class="reference internal" href="SpiceGenTcl-Spic
 <span class="p">.</span><span class="nx">sens</span><span class="w"> </span><span class="nx">v</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Object of class <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice.html#r-3a3aspicegentcl3a3angspice3a3angspiceparser"><span class="std std-ref">::SpiceGenTcl::Ngspice::NgspiceParser</span></a> has <code class="docutils literal notranslate"><span class="pre">definitions</span></code> property that contains ready for
+<p>Object of class <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice.html#r-symbolqz3a3aspicegentcl3a3angspice3a3angspiceparser"><span class="std std-ref">::SpiceGenTcl::Ngspice::NgspiceParser</span></a> has <code class="docutils literal notranslate"><span class="pre">definitions</span></code> property that contains ready for
 evaluation list of commands to create elements objects parsed from the file:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">puts</span><span class="w"> </span><span class="k">[</span><span class="nb">join</span><span class="w"> </span><span class="k">[</span><span class="nv">$parser</span><span class="w"> </span><span class="nv">configure</span><span class="w"> </span><span class="o">-</span>definitions<span class="k">]</span><span class="w"> </span><span class="s2">&quot;\n&quot;</span><span class="k">]</span>
 </pre></div>
@@ -143,13 +143,13 @@ evaluation list of commands to create elements objects parsed from the file:</p>
 </div>
 <p>We can use this result directly in SpiceGenTcl, or modify it before that. If we don’t want adding element
 to netlist object and evaluate models and subcircuits classes, we can call
-<a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aparser3a3areadandparse"><span class="std std-ref">::SpiceGenTcl::Parser::readAndParse</span></a> command with switch <code class="docutils literal notranslate"><span class="pre">-noeval</span></code>, and in that case it returns the content
+<a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-symbolqz3a3aspicegentcl3a3aparser3a3areadandparse"><span class="std std-ref">::SpiceGenTcl::Parser::readAndParse</span></a> command with switch <code class="docutils literal notranslate"><span class="pre">-noeval</span></code>, and in that case it returns the content
 of <code class="docutils literal notranslate"><span class="pre">definitions</span></code> parser’s property:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">puts</span><span class="w"> </span><span class="k">[</span><span class="nb">join</span><span class="w"> </span><span class="k">[</span><span class="nv">$parser</span><span class="w"> </span><span class="nv">readAndParse</span><span class="w"> </span><span class="o">-</span>noeval<span class="k">]</span><span class="w"> </span><span class="s2">&quot;\n&quot;</span><span class="k">]</span>
 </pre></div>
 </div>
 <p>After that we will get the same results we’ve got in previous run by accessing <code class="docutils literal notranslate"><span class="pre">definitions</span></code> property.</p>
-<p>Then, we can attach that netlist to the <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3acircuit"><span class="std std-ref">::SpiceGenTcl::Circuit</span></a> class object and run the simulation:</p>
+<p>Then, we can attach that netlist to the <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-symbolqz3a3aspicegentcl3a3acircuit"><span class="std std-ref">::SpiceGenTcl::Circuit</span></a> class object and run the simulation:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">set</span><span class="w"> </span>circuit<span class="w"> </span><span class="k">[</span><span class="nv">Circuit</span><span class="w"> </span>new<span class="w"> </span><span class="k">{</span><span class="nv">diffpair</span><span class="k">}]</span>
 <span class="k">set</span><span class="w"> </span>simulator<span class="w"> </span><span class="k">[</span><span class="nv">BatchLiveLog</span><span class="w"> </span>new<span class="w"> </span><span class="k">{</span><span class="nv">batch1</span><span class="k">}]</span>
 <span class="nv">$circuit</span><span class="w"> </span><span class="nv">add</span><span class="w"> </span><span class="nv">$netlist</span>
@@ -178,7 +178,7 @@ contains subcircuits that implement logical cells using transistors from the 45n
 <span class="k">set</span><span class="w"> </span>netlist<span class="w"> </span><span class="k">[</span><span class="nv">$parser</span><span class="w"> </span><span class="nv">readAndParse</span><span class="k">]</span>
 </pre></div>
 </div>
-<p>Subcircuit definitions are wrapped as new classes, with the <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3asubcircuit"><span class="std std-ref">::SpiceGenTcl::Subcircuit</span></a> class as the superclass,
+<p>Subcircuit definitions are wrapped as new classes, with the <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-symbolqz3a3aspicegentcl3a3asubcircuit"><span class="std std-ref">::SpiceGenTcl::Subcircuit</span></a> class as the superclass,
 and are evaluated in the caller’s scope. For example, the <code class="docutils literal notranslate"><span class="pre">nor2</span></code> subcircuit is represented by the class <code class="docutils literal notranslate"><span class="pre">Nor2</span></code>:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">oo</span><span class="o">::</span>class<span class="w"> </span>create<span class="w"> </span>Nor2<span class="w"> </span><span class="k">{</span>
 <span class="w">    </span><span class="nv">superclass</span><span class="w"> </span><span class="o">::</span>SpiceGenTcl::Subcircuit

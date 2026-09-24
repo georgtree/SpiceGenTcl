@@ -1796,17 +1796,17 @@ namespace eval ::SpiceGenTcl {
             # Invokes `runAndRead`, `configure -log` and `configure -data` methods from attached simulator.
             #  -nodelete - flag to forbid simulation file deletion
             # Synopsis: ?-nodelete?
-            argparse -help {Invokes 'runAndRead', 'configure -log' and 'configure -data' methods from attached\
-                                    simulator.} {
+            argparse -pass passKey -help {Invokes 'runAndRead', 'configure -log' and 'configure -data' methods from\
+                                                  attached simulator.} {
                 {-nodelete -help {Flag to forbid simulation file deletion}}
             }
             if {![info exists simulator]} {
                 return -code error "Simulator is not attached to '[my configure -name]' circuit"
             }
             if {[info exists nodelete]} {
-                $simulator runAndRead [my genSPICEString] -nodelete
+                $simulator runAndRead [my genSPICEString] -nodelete {*}$passKey
             } else {
-                $simulator runAndRead [my genSPICEString]
+                $simulator runAndRead [my genSPICEString] {*}$passKey
             }
             my configure -log [$simulator configure -log] -data [$simulator configure -data]
         }
@@ -2055,21 +2055,32 @@ namespace eval ::SpiceGenTcl {
             }
             set numtype $value
         }
+        # Storage type of the dataset: list or vector
+        property storagetype -set {
+            # method to set the numerical type of the dataset
+            if {$value ni {list vector}} {
+                error "Unknown storage type '$value' of data"
+            }
+            set storagetype $value
+        }
+        property vectorname
         # Number of points (length of dataset)
         property len
          # values at points
-        variable name type numtype len DataPoints
+        variable name type numtype len storagetype vectorname DataPoints
         constructor {args} {
             # Initializes `Dataset` object.
             #  name - name of the dataset
             #  type - type of dataset
             #  len - total number of points
             #  numtype - numerical type of dataset
+            #  storagetype - type of storage, vector or list, default is list
             set arguments [argparse -inline -help {Initialize object 'Dataset'} {
                 {name -help {Name of the dataset}}
                 {type -help {Type of dataset}}
                 {len -help {Total number of points}}
                 {numtype -optional -default real -help {Numerical type of dataset}}
+                {storagetype -optional -default list -help {Storage type of dataset}}
             }]
             dict for {elName elValue} $arguments {
                 my configure -$elName $elValue
@@ -2078,18 +2089,27 @@ namespace eval ::SpiceGenTcl {
         method setDataPoints {dataPoints} {
             # Sets the data points
             #  dataPoints - data points
+            if {$storagetype eq {vector}} {
+                return -code error {Wrong storage type, must be list}
+            }
             set DataPoints $dataPoints
             return
         }
         method appendDataPoints {dataPoint} {
             # Appends the data points to the existing ones
             #  dataPoints - data points
+            if {$storagetype eq {vector}} {
+                return -code error {Wrong storage type, must be list}
+            }
             lappend DataPoints $dataPoint
             return
         }
         method getDataPoints {args} {
             # Gets the data points
             argparse -help {Gets all data points} {}
+            if {$storagetype eq {vector}} {
+                return -code error {Wrong storage type, must be list}
+            }
             if {[info exists DataPoints]} {
                 return $DataPoints
             } else {
@@ -2100,7 +2120,7 @@ namespace eval ::SpiceGenTcl {
         method getStr {} {
             # Returns metadata of `Dataset`
             return "Name: '[my configure -name]', Type: '[my configure -type]', Length: '[my configure -len]',\
-                    Numerical type: '[my configure -numtype]'"
+                    Numerical type: '[my configure -numtype]', Storage type: '[my configure -storagetype]'"
         }
     }
 
@@ -2121,12 +2141,14 @@ namespace eval ::SpiceGenTcl {
             #  len - total number of points
             #  axis - name of axis that is linked to trace
             #  numtype - numerical type of trace
+            #  storagetype - type of storage, vector or list, default is list
             set arguments [argparse -inline -help {Initialize object 'Dataset'} {
                 {name -pass rest -help {Name of the trace}}
                 {type -pass rest -help {Type of trace}}
                 {len -pass rest -help {Total number of points}}
                 {axis -help {Name of axis that is linked to trace}}
                 {numtype -pass rest -optional -default real -help {Numerical type of trace}}
+                {storagetype -pass rest -optional -default list -help {Storage type of dataset}}
             }]
             my configure -axis [dict get $arguments axis]
             next {*}[dict get $arguments rest]
@@ -2165,27 +2187,47 @@ namespace eval ::SpiceGenTcl {
                 return -code error "Raw file '[my configure -path]' doesn't have an axis"
             }
         }
-        variable path rawparams npoints nvariables axis Traces BlockSize
+        # Storage type of the dataset: list or vector
+        property storagetype -set {
+            # method to set the numerical type of the dataset
+            if {$value ni {list vector}} {
+                error "Unknown storage type '$value' of data"
+            }
+            set storagetype $value
+        }
+        variable path rawparams npoints nvariables axis storagetype Traces BlockSize
         constructor {args} {
             # Creates `RawFile` object.
             #  path - path to raw file including it's file name (provide empty string if `-shared` option is provided)
             #  traces2read - list of traces that will be readed, default value is `*`, that means reading all traces
             #  simulator - simulator that produced this raw file, default is `ngspice`
-            #  -shared value - Handle to shared simulator instance
+            #  -vector - enable RBC vectors storage
+            #  -shared value - handle to shared simulator instance
+            #  -legacy - use legacy backend for file reading, incompatible with -shared and -vector
             set arguments [argparse -inline -help {Creates 'RawFile' object} {
                 {path -help {path to raw file including it's file name}}
                 {traces2read -optional -default * -help {List of traces that will be readed, default value is *,\
                                                                  that means reading all traces}}
                 {simulator -optional -default ngspice -help {Name of the simulator}}
                 {-shared= -help {Handle to shared simulator instance}}
-                {-legacy -forbid shared -help {Use legacy backend for file reading}}
+                {-vector -help {Enable RBC vectors storage}}
+                {-legacy -forbid {shared vector} -help {Use legacy backend for file reading}}
             }]
+            if {[dict exists $arguments vector]} {
+                set storagetype vector
+            } else {
+                set storagetype list
+            }
             if {[dict exists $arguments shared]} {
                 package require ngspicetclbridge
                 set simHandle [dict get $arguments shared]
                 my configure -path {}
                 set vectorsInfo [::ngspicetclbridge::readVecsAsync -info $simHandle]
-                set vectorsData [::ngspicetclbridge::readVecsAsync $simHandle]
+                if {[my configure -storagetype] eq {vector}} {
+                    set vectorsData [::ngspicetclbridge::readVecsAsync -output vector $simHandle]
+                } else {
+                    set vectorsData [::ngspicetclbridge::readVecsAsync $simHandle]
+                }
                 set scaleInfo [::ngspicetclbridge::getScaleInfo $simHandle]
                 my configure -npoints [dict get $scaleInfo length]
                 my configure -nvariables [dict size $vectorsInfo]
@@ -2216,19 +2258,26 @@ namespace eval ::SpiceGenTcl {
                     }
                     if {$name eq [dict get $scaleInfo name]} {
                         my configure -axis [::SpiceGenTcl::Axis new $nameModif [dict get $scaleInfo type]\
-                                                    $npoints [dict get $scaleInfo ntype]]
+                                                    $npoints [dict get $scaleInfo ntype] [my configure -storagetype]]
                         dict append Traces $nameModif [my configure -axis]
-                        [my configure -axis] setDataPoints $points
+                        if {[my configure -storagetype] eq {vector}} {
+                            [my configure -axis] configure -vectorname $points
+                        } else {
+                            [my configure -axis] setDataPoints $points
+                        }
                     } elseif {([dict get $arguments traces2read] eq {*}) ||\
                                       ($nameModif in [dict get $arguments traces2read])} {
                         set traceObj [::SpiceGenTcl::Trace new $nameModif [dict get $vectorsInfo $name] $npoints {}\
-                                              $numtype]
-                        $traceObj setDataPoints $points
+                                              $numtype [my configure -storagetype]]
+                        if {[my configure -storagetype] eq {vector}} {
+                            $traceObj configure -vectorname $points
+                        } else {
+                            $traceObj setDataPoints $points
+                        }
                         dict append Traces $nameModif $traceObj
                     } else {
                         set traceObj [::SpiceGenTcl::EmptyTrace new $nameModif [dict get $vectorsInfo $name] $npoints\
-                                              $numtype]
-                        #$traceObj setDataPoints $points
+                                              $numtype [my configure -storagetype]]
                         dict append Traces $nameModif $traceObj
                     }
                 }
@@ -2240,8 +2289,9 @@ namespace eval ::SpiceGenTcl {
                     set dialect generic
                 }
                 my configure -path [dict get $arguments path]
-                set fileHandle [::tclsimrawreader::openraw -dialect $dialect [dict get $arguments path]]
-                set header [$fileHandle header] 
+                set fileHandle [::tclsimrawreader::openraw -output [my configure -storagetype]\
+                                        -dialect $dialect [dict get $arguments path]]
+                set header [$fileHandle header]
                 my configure -npoints [dict get $header npoints]
                 my configure -nvariables [dict get $header nvariables]
                 if {[dict get $arguments simulator] eq {ngspice}} {
@@ -2264,18 +2314,26 @@ namespace eval ::SpiceGenTcl {
                     set nameModif [string tolower [dict get $vectorInfo name]]
                     if {[dict get $vectorInfo index]==0} {
                         my configure -axis [::SpiceGenTcl::Axis new $nameModif [dict get $vectorInfo type]\
-                                                    $npoints $numtype]
+                                                    $npoints $numtype [my configure -storagetype]]
                         dict append Traces $nameModif [my configure -axis]
-                        [my configure -axis] setDataPoints [$fileHandle vector [dict get $vectorInfo name]]
+                        if {[my configure -storagetype] eq {vector}} {
+                            [my configure -axis] configure -vectorname [$fileHandle vector [dict get $vectorInfo name]]
+                        } else {
+                            [my configure -axis] setDataPoints [$fileHandle vector [dict get $vectorInfo name]]
+                        }
                     } elseif {([dict get $arguments traces2read] eq {*}) ||\
                                       ($nameModif in [dict get $arguments traces2read])} {
                         set traceObj [::SpiceGenTcl::Trace new $nameModif [dict get $vectorInfo type] $npoints {}\
-                                              $numtype]
-                        $traceObj setDataPoints [$fileHandle vector [dict get $vectorInfo name]]
+                                              $numtype [my configure -storagetype]]
+                        if {[my configure -storagetype] eq {vector}} {
+                            $traceObj configure -vectorname [$fileHandle vector [dict get $vectorInfo name]]
+                        } else {
+                            $traceObj setDataPoints [$fileHandle vector [dict get $vectorInfo name]]
+                        }
                         dict append Traces $nameModif $traceObj
                     } else {
                         set traceObj [::SpiceGenTcl::EmptyTrace new $nameModif [dict get $vectorInfo type] $npoints\
-                                              $numtype]
+                                              $numtype [my configure -storagetype]]
                         dict append Traces $nameModif $traceObj
                     }
                 }
@@ -2532,7 +2590,11 @@ namespace eval ::SpiceGenTcl {
             argparse -help {Returns dictionary that contains all data in value and name as a key} {}
             set dict {}
             dict for {traceName trace} $Traces {
-                dict append dict $traceName [$trace getDataPoints]
+                if {[my configure -storagetype] eq {list}} {
+                    dict append dict $traceName [$trace getDataPoints]
+                } else {
+                    dict append dict $traceName [$trace configure -vectorname]
+                }
             }
             return $dict
         }
@@ -2548,8 +2610,14 @@ namespace eval ::SpiceGenTcl {
                 {-sep= -default , -help {Separator of columns}}
             }]
             if {[dict exists $arguments all]} {
-                set tracesDict [my getTracesData]
-                set tracesList [list [dict keys $tracesDict]]
+                set tracesList [list [dict keys $Traces]]
+                dict for {traceName traceObj} $Traces {
+                    if {[my configure -storagetype] eq {list}} {
+                        dict append tracesDict $traceName [$traceObj getDataPoints]
+                    } else {
+                        dict append tracesDict $traceName [[$traceObj configure -vectorname] index :]
+                    }
+                }
                 for {set i 0} {$i<[my configure -npoints]} {incr i} {
                     lappend tracesList [lmap traceValues [dict values $tracesDict] {lindex $traceValues $i}]
                 }
@@ -2557,7 +2625,11 @@ namespace eval ::SpiceGenTcl {
             } elseif {[dict get $arguments traces] ne {}} {
                 foreach traceName [dict get $arguments traces] {
                     set traceObj [my getTrace $traceName]
-                    dict append tracesDict [$traceObj configure -name] [$traceObj getDataPoints]
+                    if {[my configure -storagetype] eq {list}} {
+                        dict append tracesDict $traceName [$traceObj getDataPoints]
+                    } else {
+                        dict append tracesDict $traceName [[$traceObj configure -vectorname] index :]
+                    }
                 }
                 set tracesList [list [dict keys $tracesDict]]
                 for {set i 0} {$i<[my configure -npoints]} {incr i} {
@@ -2574,8 +2646,13 @@ namespace eval ::SpiceGenTcl {
             # `-xname` and `-data` are provided automatically with data of raw file.
             #  args - arguments to `measure` command
             # Synopsis: args
-            return [::tclmeasure::measure -xname [[my configure -axis] configure -name] -data [my getTracesData]\
-                            {*}$args]
+            set tracesData [my getTracesData]
+            if {[my configure -storagetype] eq {vector}} {
+                set processedArgs [string map $tracesData $args]
+                return [::tclmeasure::measure -xname [[my configure -axis] configure -name] {*}$processedArgs]
+            } else {
+                return [::tclmeasure::measure -xname [[my configure -axis] configure -name] -data $tracesData {*}$args]
+            }
         }
     }
     # noqa: W115

@@ -41,7 +41,7 @@
           <div class="body" role="main">
             
   <section id="tutorials">
-<span id="r-tutorials"></span><span id="r-3a3atutorials"></span><h1>Tutorials<a class="headerlink" href="#tutorials" title="Link to this heading">¶</a></h1>
+<span id="r-tutorials"></span><span id="r-namespaceqz3a3atutorials"></span><h1>Tutorials<a class="headerlink" href="#tutorials" title="Link to this heading">¶</a></h1>
 <p>Tutorials in this section describes examples from folder <code class="docutils literal notranslate"><span class="pre">examples</span></code> in root directory of SpiceGenTcl.
 List of availible tutorials:</p>
 <ul class="simple">
@@ -75,8 +75,8 @@ First step is building the target netlist with variable elements:</p>
 <span class="nv">$netlist</span><span class="w"> </span><span class="nv">add</span><span class="w"> </span><span class="k">[</span><span class="nv">Tran</span><span class="w"> </span>new<span class="w"> </span><span class="o">-</span>tstep<span class="w"> </span><span class="mi">1</span>e-6<span class="w"> </span><span class="o">-</span>tstop<span class="w"> </span><span class="mi">1</span>e-3<span class="w"> </span><span class="o">-</span>uic<span class="w"> </span><span class="o">-</span>name<span class="w"> </span>tran1<span class="k">]</span>
 </pre></div>
 </div>
-<p>Here we can see the <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3anetlist3a3aadd"><span class="std std-ref">::SpiceGenTcl::Netlist::add</span></a> method that adds elemements objects references to
-<a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3anetlist"><span class="std std-ref">::SpiceGenTcl::Netlist</span></a> object. To view netlist we can invoke method <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3anetlist3a3agenspicestring"><span class="std std-ref">::SpiceGenTcl::Netlist::genSPICEString</span></a>
+<p>Here we can see the <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-symbolqz3a3aspicegentcl3a3anetlist3a3aadd"><span class="std std-ref">::SpiceGenTcl::Netlist::add</span></a> method that adds elemements objects references to
+<a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-symbolqz3a3aspicegentcl3a3anetlist"><span class="std std-ref">::SpiceGenTcl::Netlist</span></a> object. To view netlist we can invoke method <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-symbolqz3a3aspicegentcl3a3anetlist3a3agenspicestring"><span class="std std-ref">::SpiceGenTcl::Netlist::genSPICEString</span></a>
 that have all circuit elements:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="c"># generate SPICE netlist</span>
 <span class="nb">puts</span><span class="w"> </span><span class="k">[</span><span class="nv">$netlist</span><span class="w"> </span><span class="nv">genSPICEString</span><span class="k">]</span>
@@ -99,7 +99,7 @@ v1 net1 net3 5
 </div>
 <section id="delete-element">
 <span id="r-tutorials-delete-element"></span><span id="r-3a3atutorialsqzdelete20element"></span><h3>Delete element<a class="headerlink" href="#delete-element" title="Link to this heading">¶</a></h3>
-<p>The opposite action is to delete with the <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3anetlist3a3adel"><span class="std std-ref">::SpiceGenTcl::Netlist::del</span></a> method.
+<p>The opposite action is to delete with the <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-symbolqz3a3aspicegentcl3a3anetlist3a3adel"><span class="std std-ref">::SpiceGenTcl::Netlist::del</span></a> method.
 For example, we can delete the ‘c1’ element from the netlist by specifying its name:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">$netlist</span><span class="w"> </span><span class="nv">del</span><span class="w"> </span>c1
 <span class="nb">puts</span><span class="w"> </span><span class="k">[</span><span class="nv">$netlist</span><span class="w"> </span><span class="nv">genSPICEString</span><span class="k">]</span>
@@ -133,14 +133,14 @@ For example, we can delete the ‘c1’ element from the netlist by specifying i
 <span class="nv">$resistor</span><span class="w"> </span><span class="nv">actOnParam</span><span class="w"> </span><span class="o">-</span>set<span class="w"> </span>r<span class="w"> </span><span class="mi">100</span>
 </pre></div>
 </div>
-<p>We apply method <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3adevice3a3aactonparam"><span class="std std-ref">::SpiceGenTcl::Device::actOnParam</span></a> with three arguments: <code class="docutils literal notranslate"><span class="pre">-set</span></code> option that selects action,
+<p>We apply method <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-symbolqz3a3aspicegentcl3a3adevice3a3aactonparam"><span class="std std-ref">::SpiceGenTcl::Device::actOnParam</span></a> with three arguments: <code class="docutils literal notranslate"><span class="pre">-set</span></code> option that selects action,
 name of parameter ‘r’ and its new value ‘100’. The other action we can do is change the pin connection of
 element:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="c"># change the name of connected net to plus pin</span>
 <span class="nv">$resistor</span><span class="w"> </span><span class="nv">actOnPin</span><span class="w"> </span><span class="o">-</span>set<span class="w"> </span>np<span class="w"> </span>net10
 </pre></div>
 </div>
-<p>We use method <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3adevice3a3aactonpin"><span class="std std-ref">::SpiceGenTcl::Device::actOnPin</span></a> with <code class="docutils literal notranslate"><span class="pre">-set</span></code> option that selects action, pin name and name of the
+<p>We use method <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-symbolqz3a3aspicegentcl3a3adevice3a3aactonpin"><span class="std std-ref">::SpiceGenTcl::Device::actOnPin</span></a> with <code class="docutils literal notranslate"><span class="pre">-set</span></code> option that selects action, pin name and name of the
 net as arguments.</p>
 <p>Then we can again print netlist and see that value of parameter and name of connected name have been changed:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>r1 net10 net2 100
@@ -184,12 +184,12 @@ netlist:</p>
 </pre></div>
 </div>
 <p>In this case we can directly modify ‘r5’ parameters without necessity to call
-<a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3anetlist3a3agetelement"><span class="std std-ref">::SpiceGenTcl::Netlist::getElement</span></a> method.</p>
+<a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-symbolqz3a3aspicegentcl3a3anetlist3a3agetelement"><span class="std std-ref">::SpiceGenTcl::Netlist::getElement</span></a> method.</p>
 </section>
 </section>
 <section id="subcircuit-definition">
 <span id="r-tutorials-subcircuit-definition"></span><span id="r-3a3atutorialsqzsubcircuit20definition"></span><h2>Subcircuit definition<a class="headerlink" href="#subcircuit-definition" title="Link to this heading">¶</a></h2>
-<p>To create subcircuit definition we use special <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3asubcircuit"><span class="std std-ref">::SpiceGenTcl::Subcircuit</span></a> class and make subcircuit by
+<p>To create subcircuit definition we use special <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-symbolqz3a3aspicegentcl3a3asubcircuit"><span class="std std-ref">::SpiceGenTcl::Subcircuit</span></a> class and make subcircuit by
 defining new class with it as superclass:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">oo</span><span class="o">::</span>class<span class="w"> </span>create<span class="w"> </span>RCnet<span class="w"> </span><span class="k">{</span>
 <span class="w">    </span><span class="nv">superclass</span><span class="w"> </span>Subcircuit
@@ -240,8 +240,8 @@ be printed in subcircuit definition in netlist.</p>
 <p>But place definition of subcircuit is not enough - we need to place netlist instance of subcircuit. We can do
 it by using two mechanisms:</p>
 <ul class="simple">
-<li><p>use <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#r-3a3aspicegentcl3a3angspice3a3abasicdevices3a3asubcircuitinstance"><span class="std std-ref">::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstance</span></a> class</p></li>
-<li><p>use <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#r-3a3aspicegentcl3a3angspice3a3abasicdevices3a3asubcircuitinstanceauto"><span class="std std-ref">::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstanceAuto</span></a> class</p></li>
+<li><p>use <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#r-symbolqz3a3aspicegentcl3a3angspice3a3abasicdevices3a3asubcircuitinstance"><span class="std std-ref">::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstance</span></a> class</p></li>
+<li><p>use <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-BasicDevices.html#r-symbolqz3a3aspicegentcl3a3angspice3a3abasicdevices3a3asubcircuitinstanceauto"><span class="std std-ref">::SpiceGenTcl::Ngspice::BasicDevices::SubcircuitInstanceAuto</span></a> class</p></li>
 </ul>
 <p>First way is direct construction of element by providing pins and parameter lists:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="c"># create subcircuit instance</span>
@@ -286,13 +286,13 @@ temperatures, save the results from each iteration, and then combine them into a
 <span class="nv">$circuit</span><span class="w"> </span><span class="nv">add</span><span class="w"> </span><span class="k">[</span><span class="nv">Dc</span><span class="w"> </span>new<span class="w"> </span><span class="o">-</span>src<span class="w"> </span>va<span class="w"> </span><span class="o">-</span>start<span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">-</span>step<span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">-</span>incr<span class="w"> </span><span class="mf">0.01</span><span class="k">]</span>
 </pre></div>
 </div>
-<p>In the upper block of code, we add a diode instance using the <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-SemiconductorDevices.html#r-3a3aspicegentcl3a3angspice3a3asemiconductordevices3a3ad"><span class="std std-ref">::SpiceGenTcl::Ngspice::SemiconductorDevices::D</span></a>
+<p>In the upper block of code, we add a diode instance using the <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-SemiconductorDevices.html#r-symbolqz3a3aspicegentcl3a3angspice3a3asemiconductordevices3a3ad"><span class="std std-ref">::SpiceGenTcl::Ngspice::SemiconductorDevices::D</span></a>
 command, create the corresponding diode model with the
-<a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-SemiconductorDevices.html#r-3a3aspicegentcl3a3angspice3a3asemiconductordevices3a3adiodemodel"><span class="std std-ref">::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel</span></a> command, add a DC voltage source that will be swept,
+<a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-SemiconductorDevices.html#r-symbolqz3a3aspicegentcl3a3angspice3a3asemiconductordevices3a3adiodemodel"><span class="std std-ref">::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel</span></a> command, add a DC voltage source that will be swept,
 and include a DC analysis statement. The voltage ranges from 0 to 2 volts to obtain the forward current
 characteristic.</p>
 <p>The temperature in Ngspice is set using the <code class="docutils literal notranslate"><span class="pre">.temp</span></code> statement. We create an instance with the
-<a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3atemp"><span class="std std-ref">::SpiceGenTcl::Temp</span></a> command, save the object reference in the variable <code class="docutils literal notranslate"><span class="pre">tempSt</span></code>, and then add it to the
+<a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-symbolqz3a3aspicegentcl3a3atemp"><span class="std std-ref">::SpiceGenTcl::Temp</span></a> command, save the object reference in the variable <code class="docutils literal notranslate"><span class="pre">tempSt</span></code>, and then add it to the
 circuit:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="c"># add .temp</span>
 <span class="k">set</span><span class="w"> </span>tempSt<span class="w"> </span><span class="k">[</span><span class="nv">Temp</span><span class="w"> </span>new<span class="w"> </span><span class="mi">25</span><span class="k">]</span>
@@ -300,7 +300,7 @@ circuit:</p>
 </pre></div>
 </div>
 <p>Next, we create an array containing the temperature values and instantiate an object of the
-<a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Simulators.html#r-3a3aspicegentcl3a3angspice3a3asimulators3a3abatch"><span class="std std-ref">::SpiceGenTcl::Ngspice::Simulators::Batch</span></a> class.:</p>
+<a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Simulators.html#r-symbolqz3a3aspicegentcl3a3angspice3a3asimulators3a3abatch"><span class="std std-ref">::SpiceGenTcl::Ngspice::Simulators::Batch</span></a> class.:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="c"># add temperature sweep</span>
 <span class="k">set</span><span class="w"> </span>temps<span class="w"> </span><span class="k">[</span><span class="nb">list</span><span class="w"> </span><span class="o">-</span><span class="mi">55</span><span class="w"> </span><span class="mi">25</span><span class="w"> </span><span class="mi">85</span><span class="w"> </span><span class="mi">125</span><span class="w"> </span><span class="mi">175</span><span class="k">]</span>
 <span class="c"># set simulator with default</span>
@@ -309,7 +309,7 @@ circuit:</p>
 <span class="nv">$circuit</span><span class="w"> </span><span class="nv">configure</span><span class="w"> </span><span class="o">-</span>simulator<span class="w"> </span><span class="nv">$simulator</span>
 </pre></div>
 </div>
-<p>The only thing left is to set the temperature value in the <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3atemp"><span class="std std-ref">::SpiceGenTcl::Temp</span></a> class object, run the circuit,
+<p>The only thing left is to set the temperature value in the <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-symbolqz3a3aspicegentcl3a3atemp"><span class="std std-ref">::SpiceGenTcl::Temp</span></a> class object, run the circuit,
 save the data, and repeat this process multiple times:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="c"># run circuit, change temperature, read log and data</span>
 <span class="k">foreach</span><span class="w"> </span>temp<span class="w"> </span><span class="nv">$temps</span><span class="w"> </span><span class="k">{</span>
@@ -4649,7 +4649,7 @@ temperature coefficient.</p>
 </p>
 <p>This circuit works almost without modification in Xyce simulator, see “examples/xyce/dc/diode_iv.tcl” file.
 The one of the differences is how we set the global temperature: in Xyce there is no .temp statement, for
-setting global temperature we use <code class="docutils literal notranslate"><span class="pre">.options</span></code> statement with class <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aoptions"><span class="std std-ref">::SpiceGenTcl::Options</span></a>:</p>
+setting global temperature we use <code class="docutils literal notranslate"><span class="pre">.options</span></code> statement with class <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-symbolqz3a3aspicegentcl3a3aoptions"><span class="std std-ref">::SpiceGenTcl::Options</span></a>:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">set</span><span class="w"> </span>tempSt<span class="w"> </span><span class="k">[</span><span class="nv">Options</span><span class="w"> </span>new<span class="w"> </span><span class="k">{{</span><span class="nv">-sw</span><span class="w"> </span>device<span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">temp</span><span class="w"> </span><span class="mi">25</span><span class="k">}}]</span>
 </pre></div>
 </div>
@@ -4701,7 +4701,7 @@ First, we can define π constant manually, or borrow the value from <code class=
 <span class="k">set</span><span class="w"> </span>voltSweep<span class="w"> </span><span class="k">[</span><span class="nv">lseq</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mf">20.0</span><span class="w"> </span><span class="mf">0.1</span><span class="k">]</span>
 </pre></div>
 </div>
-<p>Then we as usual, create <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Simulators.html#r-3a3aspicegentcl3a3angspice3a3asimulators3a3abatchlivelog"><span class="std std-ref">::SpiceGenTcl::Ngspice::Simulators::BatchLiveLog</span></a> class object, attach it to
+<p>Then we as usual, create <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Simulators.html#r-symbolqz3a3aspicegentcl3a3angspice3a3asimulators3a3abatchlivelog"><span class="std std-ref">::SpiceGenTcl::Ngspice::Simulators::BatchLiveLog</span></a> class object, attach it to
 <code class="docutils literal notranslate"><span class="pre">$circuit</span></code>, run it multiple times, collect results and apply the equation to calculate the capacitance
 (with the voltage phasor set to 1, so it is omitted):</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="c">#set simulator with default</span>
@@ -4725,8 +4725,8 @@ First, we can define π constant manually, or borrow the value from <code class=
 <span class="k">}</span>
 </pre></div>
 </div>
-<p>The <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Simulators.html#r-3a3aspicegentcl3a3angspice3a3asimulators3a3abatchlivelog"><span class="std std-ref">::SpiceGenTcl::Ngspice::Simulators::BatchLiveLog</span></a> simulator differs from
-<a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Simulators.html#r-3a3aspicegentcl3a3angspice3a3asimulators3a3abatch"><span class="std std-ref">::SpiceGenTcl::Ngspice::Simulators::Batch</span></a> in that it prints output line by line during the simulation,
+<p>The <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Simulators.html#r-symbolqz3a3aspicegentcl3a3angspice3a3asimulators3a3abatchlivelog"><span class="std std-ref">::SpiceGenTcl::Ngspice::Simulators::BatchLiveLog</span></a> simulator differs from
+<a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Simulators.html#r-symbolqz3a3aspicegentcl3a3angspice3a3asimulators3a3abatch"><span class="std std-ref">::SpiceGenTcl::Ngspice::Simulators::Batch</span></a> in that it prints output line by line during the simulation,
 rather than only at the end.</p>
 <p>Here, we collect the imaginary component of the current flowing through the AC voltage source ‘Va’.</p>
 <p>You might wonder why we use two indices, 0 and 1, when extracting values from the vector i(va).</p>
@@ -408758,10 +408758,10 @@ with M-Derived Section in Frequency Band 88 - 108 MHz).</p>
 <span class="nv">$circuit</span><span class="w"> </span><span class="nv">add</span><span class="w"> </span><span class="k">[</span><span class="nv">Sp</span><span class="w"> </span>new<span class="w"> </span><span class="o">-</span>variation<span class="w"> </span>lin<span class="w"> </span><span class="o">-</span>n<span class="w"> </span><span class="mi">500</span><span class="w"> </span><span class="o">-</span>fstart<span class="w"> </span><span class="mi">10</span>meg<span class="w"> </span><span class="o">-</span>fstop<span class="w"> </span><span class="mi">200</span>meg<span class="k">]</span>
 </pre></div>
 </div>
-<p>You should draw attention to special voltage sources, <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#r-3a3aspicegentcl3a3angspice3a3asources3a3avport"><span class="std std-ref">::SpiceGenTcl::Ngspice::Sources::Vport</span></a>, that represents
+<p>You should draw attention to special voltage sources, <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Sources.html#r-symbolqz3a3aspicegentcl3a3angspice3a3asources3a3avport"><span class="std std-ref">::SpiceGenTcl::Ngspice::Sources::Vport</span></a>, that represents
 RF-port with special parameter <code class="docutils literal notranslate"><span class="pre">-portnum</span></code> as a port number, so digits in S-parameters are refered to these
 port numbers (i.e. S11, S12, S21, S22).</p>
-<p>Special analysis object for S-parameter simulation is <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Analyses.html#r-3a3aspicegentcl3a3angspice3a3aanalyses3a3asp"><span class="std std-ref">::SpiceGenTcl::Ngspice::Analyses::Sp</span></a>, parameters are the
+<p>Special analysis object for S-parameter simulation is <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ngspice-Analyses.html#r-symbolqz3a3aspicegentcl3a3angspice3a3aanalyses3a3asp"><span class="std std-ref">::SpiceGenTcl::Ngspice::Analyses::Sp</span></a>, parameters are the
 same as for AC analysis:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">$circuit</span><span class="w"> </span><span class="nv">add</span><span class="w"> </span><span class="k">[</span><span class="nv">Sp</span><span class="w"> </span>new<span class="w"> </span><span class="o">-</span>variation<span class="w"> </span>lin<span class="w"> </span><span class="o">-</span>n<span class="w"> </span><span class="mi">500</span><span class="w"> </span><span class="o">-</span>fstart<span class="w"> </span><span class="mi">10</span>meg<span class="w"> </span><span class="o">-</span>fstop<span class="w"> </span><span class="mi">200</span>meg<span class="k">]</span>
 </pre></div>
@@ -408812,10 +408812,10 @@ same as for AC analysis:</p>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
   </head>
   <body>
-    <div id="id_59a20371a548414c9597a3ca10131392" class="chart-container" style="width:800px; height:500px;"></div>
+    <div id="id_ce72c8e3ad654f5683ca9bbcf8523306" class="chart-container" style="width:800px; height:500px;"></div>
     <script>
-      var chart_59a20371a548414c9597a3ca10131392 = echarts.init(document.getElementById("id_59a20371a548414c9597a3ca10131392"), null, {renderer: "canvas"});
-      var option_59a20371a548414c9597a3ca10131392 = {
+      var chart_ce72c8e3ad654f5683ca9bbcf8523306 = echarts.init(document.getElementById("id_ce72c8e3ad654f5683ca9bbcf8523306"), null, {renderer: "canvas"});
+      var option_ce72c8e3ad654f5683ca9bbcf8523306 = {
   "xAxis": [{
       "show": true,
       "type": "value",
@@ -413012,7 +413012,7 @@ same as for AC analysis:</p>
     }
   ]
 };
-      chart_59a20371a548414c9597a3ca10131392.setOption(option_59a20371a548414c9597a3ca10131392);
+      chart_ce72c8e3ad654f5683ca9bbcf8523306.setOption(option_ce72c8e3ad654f5683ca9bbcf8523306);
     </script>
   </body>
 </html>

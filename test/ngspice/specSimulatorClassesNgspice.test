@@ -358,7 +358,28 @@ stdout No. of Data Rows : 6
 # background thread running ended
 stdout Background thread stopped with timeout = 0} -cleanup {
     $simulator destroy
-    unset circuit simulator 
+    unset circuit simulator
+}
+
+if {[llength [package versions rbc::vector]] > 0} {
+
+    test testSimulationsRBC-7 {test creation of circuit, run it with NgspiceShared and read result} -setup {
+        set circuit [Circuit new {voltage divider netlist}]
+        $circuit add [Vdc new 1 in 0 -dc 1]
+        $circuit add [R new 1 in out -r 1e3]
+        $circuit add [R new 2 out 0 -r 2e3]
+        $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1]
+        set simulator [Shared new batch1]
+        $circuit configure -simulator $simulator
+        $circuit runAndRead -vector
+        set data [[$circuit configure -data] getTracesData]
+    } -body {
+        lappend result [lmap voutVal [[dict get $data v(out)] index :] {format "%.3e" $voutVal}]
+        return $result
+    } -result {{0.000e+00 6.667e-01 1.333e+00 2.000e+00 2.667e+00 3.333e+00}} -cleanup {
+        $simulator destroy
+        unset circuit simulator data result
+    }
 }
 
 forgetNgspice

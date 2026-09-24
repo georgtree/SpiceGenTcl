@@ -60,10 +60,12 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
             # Runs netlist circuit file.
             #  circuitStr - top-level netlist string
             #  -nodelete - flag to forbid simulation file deletion
-            # Synopsis: circuitStr ?-nodelete?
+            #  -vector - flag to enable RBC vector storage
+            # Synopsis: circuitStr ?-nodelete? ?-vector?
             argparse -pfirst -help {Runs netlist circuit file} {
                 {circuitStr -help {Top-level netlist string}}
                 {-nodelete -help {Flag to forbid simulation file deletion}}
+                {-vector -boolean -help {Flag to enable RBC vector storage}}
             }
             my variable Command
             set firstLine [lindex [split $circuitStr \n] 0]
@@ -77,7 +79,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
             exec {*}[list $Command -b -r $rawFileName -o $logFileName $cirFileName]
             set LastRunFileName $firstLine
             my readLog
-            my readData
+            my readData $vector
             if {![info exists nodelete]} {
                 file delete -- $rawFileName
                 file delete -- $logFileName
@@ -94,10 +96,19 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
         }
         method readData {args} {
             # Reads raw data file, create RawFile object and return it's reference name.
-            argparse -help {Reads raw data file, create RawFile object and return it's reference name} {}
+            #  vector - flag to enable RBC vector storage
+            # Synopsis: ?vector?
+            argparse -help {Reads raw data file, create RawFile object and return it's reference name} {
+                {vector -optional -default 0 -help {Flag to enable RBC vector storage}}
+            }
             my variable data
-            set data [::SpiceGenTcl::RawFile new [file join [my configure -runlocation]\
-                                                          ${LastRunFileName}.raw] * ngspice]
+            if {$vector} {
+                set data [::SpiceGenTcl::RawFile new -vector [file join [my configure -runlocation]\
+                                                              ${LastRunFileName}.raw] * ngspice]
+            } else {
+                set data [::SpiceGenTcl::RawFile new [file join [my configure -runlocation]\
+                                                              ${LastRunFileName}.raw] * ngspice]
+            }
             return
         }
     }
@@ -109,10 +120,12 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
             # Runs netlist circuit file.
             #  circuitStr - top-level netlist string
             #  -nodelete - flag to forbid simulation file deletion
-            # Synopsis: circuitStr ?-nodelete?
+            #  -vector - flag to enable RBC vector storage
+            # Synopsis: circuitStr ?-nodelete? ?-vector?
             argparse -pfirst -help {Runs netlist circuit file} {
                 {circuitStr -help {Top-level netlist string}}
                 {-nodelete -help {Flag to forbid simulation file deletion}}
+                {-vector -boolean -help {Flag to enable RBC vector storage}}
             }
             my variable Command
             my variable LastRunFileName
@@ -137,7 +150,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
             close $chan
             set LastRunFileName ${firstLine}
             my configure -log $logData
-            my readData
+            my readData $vector
             if {![info exists nodelete]} {
                 file delete -- $rawFileName
                 file delete -- $logFileName
@@ -203,16 +216,18 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
         method runAndRead {args} {
             # Runs circuit.
             #  circuitStr - top-level netlist string
-            # Synopsis: circuitStr
+            #  -vector - flag to enable RBC vector storage
+            # Synopsis: circuitStr ?-vector?
             argparse -pfirst -help {Runs circuit} {
                 {circuitStr -help {Top-level netlist string}}
+                {-vector -boolean -help {Flag to enable RBC vector storage}}
             }
             set circuitList [split $circuitStr \n]
             set firstLine [lindex $circuitList 0]
             $simhandle circuit [lappend circuitList .end]
             ngspicetclbridge::run $simhandle
             my readLog
-            my readData
+            my readData $vector
         }
         method readLog {args} {
             # Gets log of last simulation and save it's content to Log variable.
@@ -221,10 +236,18 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
             return
         }
         method readData {args} {
-            # Gets data, create RawFile object and return it's reference name.
-            argparse -help {Gets data, create RawFile object and return it's reference name} {}
+            # Reads raw data file, create RawFile object and return it's reference name.
+            #  vector - flag to enable RBC vector storage
+            # Synopsis: ?vector?
+            argparse -help {Reads raw data file, create RawFile object and return it's reference name} {
+                {vector -optional -default 0 -help {Flag to enable RBC vector storage}}
+            }
             my variable data
-            set data [::SpiceGenTcl::RawFile new -shared $simhandle {} * ngspice]
+            if {$vector} {
+                set data [::SpiceGenTcl::RawFile new -vector -shared $simhandle {} * ngspice]
+            } else {
+                set data [::SpiceGenTcl::RawFile new -shared $simhandle {} * ngspice]
+            }
             return
         }
     }

@@ -37,12 +37,12 @@ proc matchList {expected actual} {
     }
     return $match
 }
-    
-    
+
+
 proc readResultFile {path} {
     set file [open $path r+]
     set lines [split [read $file] "\n"]
-    close $file                     
+    close $file
     foreach line $lines {
         set data [textutil::split::splitx [string trim $line]]
         lappend timeData [lindex $data 0]
@@ -50,16 +50,15 @@ proc readResultFile {path} {
     }
     return [list $timeData $traceData]
 }
-    
+
 
 
 ###  Data class tests 
-    
 test testDataClass-1 {test Data class object construction and getStr interface} -setup {
     set data [Dataset new v1 voltage 100 real]
 } -body {
     set result [$data getStr]
-} -result "Name: 'v1', Type: 'voltage', Length: '100', Numerical type: 'real'" -cleanup {
+} -result "Name: 'v1', Type: 'voltage', Length: '100', Numerical type: 'real', Storage type: 'list'" -cleanup {
     unset data result
 }
 
@@ -90,7 +89,6 @@ test testDataClass-4 {test Data class object construction and getDataPoints inte
 }
 
 ###  RawFile class tests 
-    
 test testRawFileClass-1 {test RawFile class object construction and reading binary transient data, together with\
                                  interface getTrace} -setup {
     set data [RawFile new "${rawDataLoc}/tran.raw"]
@@ -596,6 +594,30 @@ test testRawFileClass-21 {} -setup {
     $data destroy
 } -result {} -cleanup {
     unset data
+}
+
+if {[llength [package versions rbc::vector]] > 0} {
+
+    test testRawFileClassRBC-1.1 {test RawFile class object construction and reading binary transient data, together\
+                                          with interface getTrace} -setup {
+        set data [RawFile new -vector "${rawDataLoc}/tran.raw"]
+        set traceTime [$data getTrace time]
+        set trace [$data getTrace v(osc_out)]
+        set refData [readResultFile "${rawDataLoc}/vosc.csv"]
+        set timeData [[$traceTime configure -vectorname] index :]
+        set traceData [[$trace configure -vectorname] index :]
+    } -body {
+        set timeMatch [matchList [lrange [lindex $refData 0] 0 end-1] $timeData]
+        set traceMatch [matchList [lrange [lindex $refData 1] 0 end-1] $traceData]
+        if {$timeMatch && $traceMatch} {
+            set result pass
+        } else {
+            set result fail
+        }
+    } -result pass -cleanup {
+        unset data traceTime trace refData timeData traceData traceMatch result
+    }
+
 }
 
 forgetNgspice

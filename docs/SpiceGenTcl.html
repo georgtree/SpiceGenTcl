@@ -108,13 +108,17 @@ variable:</p>
 </section>
 <section id="dependencies">
 <span id="r-dependencies"></span><h1>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading">¶</a></h1>
-<p>Package is written in pure Tcl with relying on multiple libraries, tcl version is 9.0.</p>
+<p>Package is written in pure Tcl with relying on multiple libraries, Tcl version is 9.0.</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://www.tcl.tk/software/tcllib/">Tcllib</a></p></li>
 <li><p><a class="reference external" href="https://github.com/georgtree/argparse">argparse</a></p></li>
 <li><p><a class="reference external" href="https://github.com/nico-robert/ticklecharts">ticklecharts</a></p></li>
 <li><p><a class="reference external" href="https://github.com/georgtree/tclmeasure">tclmeasure</a></p></li>
 <li><p><a class="reference external" href="https://github.com/georgtree/tclsimrawreader">tclsimrawreader</a></p></li>
+</ul>
+<p>For RBC vector data support you need:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/georgtree/rbc-tk9">rbc-tk9</a></p></li>
 </ul>
 <p>For some examples you also need these packages:</p>
 <ul class="simple">
@@ -167,7 +171,7 @@ Xyce is availible as pre-compiled for Windows, RHEL and MacOS, but can be compil
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">namespace</span><span class="w"> </span>import<span class="w"> </span><span class="o">::</span>SpiceGenTcl::<span class="o">*</span>
 </pre></div>
 </div>
-<p>One of the commands is <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3aimportngspice"><span class="std std-ref">::SpiceGenTcl::importNgspice</span></a>. By calling this command, we can import all commands related
+<p>One of the commands is <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-symbolqz3a3aspicegentcl3a3aimportngspice"><span class="std std-ref">::SpiceGenTcl::importNgspice</span></a>. By calling this command, we can import all commands related
 to the Ngspice simulator, eliminating the need to add the <code class="docutils literal notranslate"><span class="pre">::SpiceGenTcl::Ngspice</span></code> prefix before any command.
 Here’s how to do it:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">importNgspice</span>
@@ -193,7 +197,7 @@ r2 out 0 2e3
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">set</span><span class="w"> </span>circuit<span class="w"> </span><span class="k">[</span><span class="nv">Circuit</span><span class="w"> </span>new<span class="w"> </span><span class="k">{</span><span class="nv">voltage</span><span class="w"> </span>divider<span class="w"> </span>netlist<span class="k">}]</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">Circuit</span></code> command creates a new object of the <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3acircuit"><span class="std std-ref">::SpiceGenTcl::Circuit</span></a> class, which is imported from the
+<p>The <code class="docutils literal notranslate"><span class="pre">Circuit</span></code> command creates a new object of the <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-symbolqz3a3aspicegentcl3a3acircuit"><span class="std std-ref">::SpiceGenTcl::Circuit</span></a> class, which is imported from the
 <code class="docutils literal notranslate"><span class="pre">::SpiceGenTcl</span></code> namespace and represents the top-level circuit.
 The only argument we provide is the name of the circuit, which will be printed on the first line of the netlist.</p>
 <p>The next step is building netlist by addding elements to top circuit object:</p>
@@ -203,16 +207,16 @@ The only argument we provide is the name of the circuit, which will be printed o
 <span class="nv">$circuit</span><span class="w"> </span><span class="nv">add</span><span class="w"> </span><span class="k">[</span><span class="nv">Dc</span><span class="w"> </span>new<span class="w"> </span><span class="o">-</span>src<span class="w"> </span>v1<span class="w"> </span><span class="o">-</span>start<span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">-</span>stop<span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="o">-</span>incr<span class="w"> </span><span class="mf">0.1</span><span class="k">]</span>
 </pre></div>
 </div>
-<p>An instance of the <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3acircuit"><span class="std std-ref">::SpiceGenTcl::Circuit</span></a> class, referenced by the <code class="docutils literal notranslate"><span class="pre">circuit</span></code> variable, has an
-<a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3acircuit3a3aadd"><span class="std std-ref">::SpiceGenTcl::Circuit::add</span></a> method that appends the references of argument objects to it. The object-creating
+<p>An instance of the <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-symbolqz3a3aspicegentcl3a3acircuit"><span class="std std-ref">::SpiceGenTcl::Circuit</span></a> class, referenced by the <code class="docutils literal notranslate"><span class="pre">circuit</span></code> variable, has an
+<a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-symbolqz3a3aspicegentcl3a3acircuit3a3aadd"><span class="std std-ref">::SpiceGenTcl::Circuit::add</span></a> method that appends the references of argument objects to it. The object-creating
 commands <code class="docutils literal notranslate"><span class="pre">Vdc</span></code>, <code class="docutils literal notranslate"><span class="pre">R</span></code>, and <code class="docutils literal notranslate"><span class="pre">Dc</span></code> — which represent a DC voltage source, a basic resistor, and a DC analysis,
 respectively — are imported from the <code class="docutils literal notranslate"><span class="pre">::SpiceGenTcl::Ngspice::Sources</span></code>, <code class="docutils literal notranslate"><span class="pre">::SpiceGenTcl::Ngspice::BasicElements</span></code>,
 and <code class="docutils literal notranslate"><span class="pre">::SpiceGenTcl::Ngspice::Analyses</span></code> namespaces.</p>
 <p>When using the <code class="docutils literal notranslate"><span class="pre">new</span></code> subcommand, you provide the basic arguments for the element. For example, in the <code class="docutils literal notranslate"><span class="pre">R</span></code> command,
 you would supply the name ‘1’, the name of the net connected to the positive node ‘in’, the name of the net
 connected to the negative node ‘0’ (which is the global ground), and the resistance value ‘1e3’.</p>
-<p>The last necessary step is to create <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3asimulator"><span class="std std-ref">::SpiceGenTcl::Simulator</span></a> object with command <code class="docutils literal notranslate"><span class="pre">Batch</span></code> from
-<code class="docutils literal notranslate"><span class="pre">::SpiceGenTcl::Ngspice</span></code> namespace and attach it to <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3acircuit"><span class="std std-ref">::SpiceGenTcl::Circuit</span></a> object:</p>
+<p>The last necessary step is to create <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-symbolqz3a3aspicegentcl3a3asimulator"><span class="std std-ref">::SpiceGenTcl::Simulator</span></a> object with command <code class="docutils literal notranslate"><span class="pre">Batch</span></code> from
+<code class="docutils literal notranslate"><span class="pre">::SpiceGenTcl::Ngspice</span></code> namespace and attach it to <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-symbolqz3a3aspicegentcl3a3acircuit"><span class="std std-ref">::SpiceGenTcl::Circuit</span></a> object:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">set</span><span class="w"> </span>simulator<span class="w"> </span><span class="k">[</span><span class="nv">Batch</span><span class="w"> </span>new<span class="w"> </span><span class="k">{</span><span class="nv">batch1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="o">/</span><span class="nv">usr</span><span class="o">/</span>local<span class="o">/</span>bin<span class="o">/</span><span class="k">}]</span>
 <span class="nv">$circuit</span><span class="w"> </span><span class="nv">configure</span><span class="w"> </span><span class="o">-</span>Simulator<span class="w"> </span><span class="nv">$simulator</span>
 </pre></div>
@@ -221,7 +225,7 @@ connected to the negative node ‘0’ (which is the global ground), and the res
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">$circuit</span><span class="w"> </span><span class="nv">runAndRead</span>
 </pre></div>
 </div>
-<p>After the simulation, we can read the resulting data. We use the <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-3a3aspicegentcl3a3acircuit3a3agetdatadict"><span class="std std-ref">::SpiceGenTcl::Circuit::getDataDict</span></a> method to
+<p>After the simulation, we can read the resulting data. We use the <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl.html#r-symbolqz3a3aspicegentcl3a3acircuit3a3agetdatadict"><span class="std std-ref">::SpiceGenTcl::Circuit::getDataDict</span></a> method to
 obtain a dictionary where the keys are the names of the result vectors:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">set</span><span class="w"> </span>data<span class="w"> </span><span class="k">[</span><span class="nv">$circuit</span><span class="w"> </span><span class="nv">getDataDict</span><span class="k">]</span>
 </pre></div>

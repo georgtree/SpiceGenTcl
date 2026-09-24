@@ -1622,9 +1622,184 @@ test testRawFileClass-10 {} -setup {
     unset data
 }
 
+if {[llength [package versions rbc::vector]] > 0} {
+    test testRawFileClassRBC-1 {test creation of RawFile class instance and getDataCsv interface} -setup {
+        set circuit [Circuit new {voltage divider netlist}]
+        $circuit add [Vdc new 1 in 0 -dc 1]
+        $circuit add [R new 1 in out -r 1e3]
+        $circuit add [R new 2 out 0 -r 2e3]
+        $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1]
+        set simulator [Batch new {batch1}]
+        $circuit configure -simulator $simulator
+        $circuit runAndRead -vector
+        set dataObj [$circuit configure -data]
+    } -body {
+        set data [$dataObj getTracesCsv -all]
+        return $data
+    } -result {v(v-sweep),v(in),v(out),i(v1)
+0.0,0.0,0.0,0.0
+1.0,1.0,0.6666666666666666,-0.0003333333333333334
+2.0,2.0,1.3333333333333333,-0.0006666666666666668
+3.0,3.0,2.0,-0.001
+4.0,4.0,2.6666666666666665,-0.0013333333333333335
+5.0,5.0,3.333333333333333,-0.001666666666666667
+} -cleanup {
+        unset circuit data simulator dataObj
+    }
 
-###  Circuit class tests 
+    test testRawFileClassRBC-2 {test creation of RawFile class instance and getDataCsv interface} -setup {
+        set circuit [Circuit new {voltage divider netlist}]
+        $circuit add [Vdc new 1 in 0 -dc 1]
+        $circuit add [R new 1 in out -r 1e3]
+        $circuit add [R new 2 out 0 -r 2e3]
+        $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1]
+        set simulator [Batch new {batch1}]
+        $circuit configure -simulator $simulator
+        $circuit runAndRead -vector
+        set dataObj [$circuit configure -data]
+    } -body {
+        set data [$dataObj getTracesCsv -all -sep ,,]
+        return $data
+    } -result {v(v-sweep),,v(in),,v(out),,i(v1)
+0.0,,0.0,,0.0,,0.0
+1.0,,1.0,,0.6666666666666666,,-0.0003333333333333334
+2.0,,2.0,,1.3333333333333333,,-0.0006666666666666668
+3.0,,3.0,,2.0,,-0.001
+4.0,,4.0,,2.6666666666666665,,-0.0013333333333333335
+5.0,,5.0,,3.333333333333333,,-0.001666666666666667
+} -cleanup {
+        unset circuit data simulator dataObj
+    }
 
+    test testRawFileClassRBC-3 {test creation of RawFile class instance and getDataCsv interface} -setup {
+        set circuit [Circuit new {voltage divider netlist}]
+        $circuit add [Vdc new 1 in 0 -dc 1]
+        $circuit add [R new 1 in out -r 1e3]
+        $circuit add [R new 2 out 0 -r 2e3]
+        $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1]
+        set simulator [Batch new {batch1}]
+        $circuit configure -simulator $simulator
+        $circuit runAndRead -vector
+        set dataObj [$circuit configure -data]
+    } -body {
+        set data [$dataObj getTracesCsv -traces v(in) v(out)]
+        return $data
+    } -result {v(in),v(out)
+0.0,0.0
+1.0,0.6666666666666666
+2.0,1.3333333333333333
+3.0,2.0
+4.0,2.6666666666666665
+5.0,3.333333333333333
+} -cleanup {
+        unset circuit data simulator dataObj
+    }
+
+    test testRawFileClassRBC-4 {test creation of RawFile class instance and getDataCsv interface} -setup {
+        set circuit [Circuit new {voltage divider netlist}]
+        $circuit add [Vdc new 1 in 0 -dc 1]
+        $circuit add [R new 1 in out -r 1e3]
+        $circuit add [R new 2 out 0 -r 2e3]
+        $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1]
+        set simulator [Batch new {batch1}]
+        $circuit configure -simulator $simulator
+        $circuit runAndRead -vector
+        set dataObj [$circuit configure -data]
+    } -body {
+        catch {$dataObj getTracesCsv -traces v(in1) v(out)} errorStr
+        return $errorStr
+    } -result {Trace with name 'v(in1)' was not found in raw file './voltage divider netlist.raw' list of traces}\
+            -cleanup {
+        unset circuit errorStr simulator dataObj
+    }
+
+    test testRawFileClassRBC-5 {test creation of RawFile class instance and getTracesCsv interface} -setup {
+        set circuit [Circuit new {voltage divider netlist}]
+        $circuit add [Vdc new 1 in 0 -dc 1]
+        $circuit add [R new 1 in out -r 1e3]
+        $circuit add [R new 2 out 0 -r 2e3]
+        $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1]
+        set simulator [Batch new {batch1}]
+        $circuit configure -simulator $simulator
+        $circuit runAndRead -vector
+        set dataObj [$circuit configure -data]
+    } -body {
+        catch {$dataObj getTracesCsv} errorStr
+        return $errorStr
+    } -result {Arguments '-all' or '-traces traceName1 traceName2 ...' must be provided to 'getTracesCsv' method}\
+            -cleanup {
+        unset circuit errorStr simulator dataObj
+    }
+
+    test testRawFileClassRBC-6 {test creation of RawFile class instance and getDataCsv interface} -setup {
+        set circuit [Circuit new {voltage divider netlist}]
+        $circuit add [Vdc new 1 in 0 -dc 1]
+        $circuit add [R new 1 in out -r 1e3]
+        $circuit add [R new 2 out 0 -r 2e3]
+        $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1]
+        set simulator [Batch new {batch1}]
+        $circuit configure -simulator $simulator
+        $circuit runAndRead -vector
+        set dataObj [$circuit configure -data]
+    } -body {
+        set data [$dataObj getVoltagesNames]
+        return $data
+    } -result {v(v-sweep) v(in) v(out)} -cleanup {
+        unset circuit data simulator dataObj
+    }
+
+    test testRawFileClassRBC-6 {test creation of RawFile class instance and getDataCsv interface} -setup {
+        set circuit [Circuit new {voltage divider netlist}]
+        $circuit add [Vdc new 1 in 0 -dc 1]
+        $circuit add [R new 1 in out -r 1e3]
+        $circuit add [R new 2 out 0 -r 2e3]
+        $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1]
+        set simulator [Batch new {batch1}]
+        $circuit configure -simulator $simulator
+        $circuit runAndRead -vector
+        set dataObj [$circuit configure -data]
+    } -body {
+        set data [$dataObj getCurrentsNames]
+        return $data
+    } -result i(v1) -cleanup {
+        unset circuit data simulator dataObj
+    }
+
+    test testRawFileClassRBC-7 {} -setup {
+        set data [RawFile new -vector "${currentDir}/ngspice/raw_data_ngspice/tran.raw"]
+    } -body {
+        return [$data measure -avg {-vec v(vdd)}]
+    } -result 3.0000000000000138 -cleanup {
+        unset data
+    }
+
+    test testRawFileClassRBC-8 {} -setup {
+        set data [RawFile new -vector "${currentDir}/ngspice/raw_data_ngspice/tran.raw"]
+    } -body {
+        return [$data measure -when {-vec v(osc_out) -val 0.5 -rise 3}]
+    } -result 8.699963889119589e-9 -cleanup {
+        unset data
+    }
+
+    test testRawFileClassRBC-9 {} -setup {
+        set data [RawFile new -vector "${currentDir}/ngspice/raw_data_ngspice/tran.raw"]
+    } -body {
+        return [$data measure -find v(osc_out) -when {-vec v(osc_out) -val 0.5 -rise 3}]
+    } -result 0.4999999999999959 -cleanup {
+        unset data
+    }
+
+    test testRawFileClassRBC-10 {} -setup {
+        set data [RawFile new -vector "${currentDir}/ngspice/raw_data_ngspice/tran.raw"]
+    } -body {
+        return [$data measure -find v(vdd) -when {-vec v(osc_out) -val 0.5 -rise 3}]
+    } -result 3.0 -cleanup {
+        unset data
+    }
+}
+
+
+###  Circuit class tests
 test testCircuitClass-1 {test creation of Circuit class instance and getDataCsv interface} -setup {
     set circuit [Circuit new {voltage divider netlist}]
     $circuit add [Vdc new 1 in 0 -dc 1]
@@ -1747,7 +1922,7 @@ test testCircuitClass-9 {test creation of Circuit class instance} -setup {
 test testCircuitClass-10 {test creation of Circuit class instance and getDataCsv interface} -setup {
     set circuit [Circuit new {voltage divider netlist}]
     $circuit add [Vdc new 1 in 0 -dc 1]
-    $circuit add [R new 1 in out -r 1e3] [R new 2 out 0 -r 2e3] 
+    $circuit add [R new 1 in out -r 1e3] [R new 2 out 0 -r 2e3]
     $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1]
     set simulator [Batch new {batch1}]
     $circuit configure -simulator $simulator
@@ -1794,6 +1969,32 @@ test testCircuitClass-12 {test creation of Circuit class instance and getDataCsv
     file delete {voltage divider netlist.cir}
     file delete {voltage divider netlist.log}
     file delete {voltage divider netlist.raw}
+}
+
+if {[llength [package versions rbc::vector]] > 0} {
+
+    test testCircuitClassRBC-1 {test creation of Circuit class instance and getDataCsv interface} -setup {
+        set circuit [Circuit new {voltage divider netlist}]
+        $circuit add [Vdc new 1 in 0 -dc 1]
+        $circuit add [R new 1 in out -r 1e3] [R new 2 out 0 -r 2e3]
+        $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1]
+        set simulator [Batch new {batch1}]
+        $circuit configure -simulator $simulator
+        $circuit runAndRead -vector
+    } -body {
+        set data [$circuit getDataCsv -traces v(in) v(out)]
+        return $data
+    } -result {v(in),v(out)
+0.0,0.0
+1.0,0.6666666666666666
+2.0,1.3333333333333333
+3.0,2.0
+4.0,2.6666666666666665
+5.0,3.333333333333333
+} -cleanup {
+        unset circuit data simulator
+    }
+
 }
 
 ###  Parser class tests 

@@ -61,10 +61,12 @@ namespace eval ::SpiceGenTcl::Ltspice::Simulators {
             # Runs netlist circuit file.
             #  circuitStr - top-level netlist string
             #  -nodelete - flag to forbid simulation file deletion
-            # Synopsis: circuitStr ?-nodelete?
+            #  -vector - flag to enable RBC vector storage
+            # Synopsis: circuitStr ?-nodelete? ?-vector?
             argparse -pfirst -help {Runs netlist circuit file} {
                 {circuitStr -help {Top-level netlist string}}
                 {-nodelete -help {Flag to forbid simulation file deletion}}
+                {-vector -boolean -help {Flag to enable RBC vector storage}}
             }
             my variable Command
             global tcl_platform
@@ -89,7 +91,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Simulators {
             }
             set LastRunFileName $firstLine
             my readLog
-            my readData
+            my readData $vector
             if {![info exists nodelete]} {
                 file delete -- $rawFileName
                 file delete -- $logFileName
@@ -109,10 +111,19 @@ namespace eval ::SpiceGenTcl::Ltspice::Simulators {
         }
         method readData {args} {
             # Reads raw data file, create RawFile object and return it's reference name.
-            argparse -help {Reads raw data file, create RawFile object and return it's reference name} {}
+            #  vector - flag to enable RBC vector storage
+            # Synopsis: ?vector?
+            argparse -help {Reads raw data file, create RawFile object and return it's reference name} {
+                {vector -optional -default 0 -help {Flag to enable RBC vector storage}}
+            }
             my variable data
-            set data [::SpiceGenTcl::RawFile new [file join [my configure -runlocation]\
-                                                          ${LastRunFileName}.raw] * ltspice]
+            if {$vector} {
+                set data [::SpiceGenTcl::RawFile new -vector [file join [my configure -runlocation]\
+                                                              ${LastRunFileName}.raw] * ltspice]
+            } else {
+                set data [::SpiceGenTcl::RawFile new [file join [my configure -runlocation]\
+                                                              ${LastRunFileName}.raw] * ltspice]
+            }
             return
         }
     }

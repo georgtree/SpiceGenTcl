@@ -181,6 +181,31 @@ test testRawFileClass-7 {read ascii tran data} -setup {
     unset data traceTime trace refData timeData traceData timeMatch traceMatch result
 }
 
+if {[llength [package versions rbc::vector]] > 0} {
+
+    test testRawFileClassRBC-1 {read binary ac data} -setup {
+        set data [RawFile new -vector "${rawDataLoc}/ac.raw" * ltspice]
+        set traceAxis [$data configure -axis]
+        set trace [$data getTrace v(2)]
+        set refData [readResultFile "${rawDataLoc}/v(2).csv"]
+        set axisData [[$traceAxis configure -vectorname] index :]
+        set traceData [[$trace configure -vectorname] index :]
+    } -body {
+        set axisMatchRe [matchList [lindex $refData 0 0] [lindex $axisData 0]]
+        set traceMatchRe [matchList [lindex $refData 1 0] [lindex $traceData 0]]
+        set axisMatchIm [matchList [lindex $refData 0 1] [lindex $axisData 1]]
+        set traceMatchIm [matchList [lindex $refData 1 1] [lindex $traceData 1]]
+        if {$axisMatchRe && $traceMatchRe && $axisMatchIm && $traceMatchIm} {
+            set result pass
+        } else {
+            set result fail
+        }
+    } -result pass -cleanup {
+        unset data traceAxis trace refData axisData traceData axisMatchRe traceMatchRe axisMatchIm traceMatchIm result
+    }
+
+}
+
 forgetLtspice
 
 cleanupTests

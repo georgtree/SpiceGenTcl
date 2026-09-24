@@ -9,11 +9,11 @@ SpiceGenTcl::Xyce::Simulators - Commands in namespace SpiceGenTcl::Xyce::Simulat
 .br
 \fBBatch new\fP \fI?args?\fP
 .br
-\fBBATCHOBJ readData\fP \fI?args?\fP
+\fBBATCHOBJ readData\fP \fI?vector?\fP
 .br
 \fBBATCHOBJ readLog\fP \fI?args?\fP
 .br
-\fBBATCHOBJ runAndRead\fP \fIcircuitStr ?-nodelete?\fP
+\fBBATCHOBJ runAndRead\fP \fIcircuitStr ?-nodelete? ?-vector?\fP
 .br
 .SH ::SPICEGENTCL::XYCE::SIMULATORS
 .SH CLASSES
@@ -95,12 +95,15 @@ Location at which input netlist is stored and all output files will be saved, de
 .PP
 Reads raw data file, create RawFile object and return it's reference name\&.
 .RS 4n
-\fBBATCHOBJ readData\fP \fI?args?\fP
+\fBBATCHOBJ readData\fP \fI?vector?\fP
 .br
 .RE
 .PP
 \fBParameters\fR
 .RS 4n
+.TP
+vector
+Flag to enable RBC vector storage\&.
 .RE
 .PP
 .RS -4n
@@ -123,7 +126,7 @@ Reads log file of last simulation and save it's content to Log variable\&.
 .PP
 Runs netlist circuit file\&.
 .RS 4n
-\fBBATCHOBJ runAndRead\fP \fIcircuitStr ?-nodelete?\fP
+\fBBATCHOBJ runAndRead\fP \fIcircuitStr ?-nodelete? ?-vector?\fP
 .br
 .RE
 .PP
@@ -132,6 +135,9 @@ Runs netlist circuit file\&.
 .TP
 -nodelete
 Flag to forbid simulation file deletion\&.
+.TP
+-vector
+Flag to enable RBC vector storage\&.
 .TP
 circuitStr
 Top-level netlist string\&.
