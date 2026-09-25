@@ -1999,6 +1999,11 @@ namespace eval ::SpiceGenTcl {
         property data
         property nocleanup
         variable name Command log data nocleanup
+        destructor {
+            if {[info exists nocleanup] && !$nocleanup && [info exists data] && [info object isa object $data]} {
+                $data destroy
+            }
+        }
         method run {} {
             # Runs simulation.
             error {Not implemented}

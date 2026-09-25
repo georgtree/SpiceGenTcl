@@ -114,10 +114,9 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
                 set data [::SpiceGenTcl::RawFile new [file join [my configure -runlocation]\
                                                               ${LastRunFileName}.raw] * ngspice]
             }
-            if {![my configure -nocleanup]} {
-                if {[info exists previousRawFile]} {
-                    $previousRawFile destroy
-                }
+            if {![my configure -nocleanup] && [info exists previousRawFile] &&\
+                        [info object isa object $previousRawFile]} {
+                $previousRawFile destroy
             }
             return
         }
@@ -223,6 +222,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
             my configure -simhandle [ngspicetclbridge::new [file nativename $liblocation]]
         }
         destructor {
+            next
             $simhandle destroy
         }
         method runAndRead {args} {
@@ -263,10 +263,9 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
             } else {
                 set data [::SpiceGenTcl::RawFile new -shared $simhandle {} * ngspice]
             }
-            if {![my configure -nocleanup]} {
-                if {[info exists previousRawFile]} {
-                    $previousRawFile destroy
-                }
+            if {![my configure -nocleanup] && [info exists previousRawFile] &&\
+                        [info object isa object $previousRawFile]} {
+                $previousRawFile destroy
             }
             return
         }

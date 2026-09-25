@@ -383,6 +383,193 @@ test testSimulations-10 {-nocleanup check} -setup {
     unset circuit simulator results rawFileObject
 }
 
+namespace eval ::simCleanupTest {
+    variable simulator {}
+    variable circuit {}
+    variable results {}
+    variable vectorMode 0
+
+    proc setup {backend useVectors {retain 0}} {
+        variable simulator
+        variable circuit
+        variable results
+        variable vectorMode
+        set simulator {}
+        set circuit {}
+        set results {}
+        set vectorMode $useVectors
+        set circuit [::SpiceGenTcl::Circuit new cleanup_test]
+        set deviceNs ::SpiceGenTcl::Ngspice
+        # Use the imported device commands from this test file.
+        $circuit add [Vdc new 1 in 0 -dc 1]
+        $circuit add [R new 1 in out -r 1e3]
+        $circuit add [R new 2 out 0 -r 2e3]
+        $circuit add [Dc new -src v1 -start 0 -stop 5 -incr 1]
+        set class ::SpiceGenTcl::Ngspice::Simulators::$backend
+        set args [list cleanup_simulator]
+        if {$backend eq {Batch}} {
+            lappend args $::currentDir
+        }
+        if {$retain} {
+            set args [linsert $args 0 -nocleanup]
+        }
+        set simulator [$class new {*}$args]
+        $circuit configure -simulator $simulator
+    }
+    proc run {} {
+        variable simulator
+        variable circuit
+        variable results
+        variable vectorMode
+        set args {}
+        if {$vectorMode} {
+            lappend args -vector
+        }
+        # Capture the simulator's result even if Circuit.runAndRead
+        # fails after the simulator has installed a new result.
+        try {
+            $circuit runAndRead {*}$args
+        } finally {
+            if {![catch {$simulator configure -data} raw] &&
+                [info object isa object $raw] &&
+                $raw ni $results} {
+                lappend results $raw
+            }
+        }
+        return [$circuit configure -data]
+    }
+    proc vectorNames {raw} {
+        variable vectorMode
+        if {!$vectorMode} {
+            return
+        }
+        return [dict values [$raw getTracesData]]
+    }
+    proc commandsAlive {names} {
+        foreach name $names {
+            if {[namespace which -command $name] eq {}} {
+                return 0
+            }
+        }
+        return 1
+    }
+    proc commandsGone {names} {
+        foreach name $names {
+            if {[namespace which -command $name] ne {}} {
+                return 0
+            }
+        }
+        return 1
+    }
+    proc cleanup {} {
+        variable simulator
+        variable circuit
+        variable results
+        # Explicitly release caller-owned results too.
+        foreach raw $results {
+            if {[info object isa object $raw]} {
+                $raw destroy
+            }
+        }
+        if {[info object isa object $simulator]} {
+            $simulator destroy
+        }
+        if {[info object isa object $circuit]} {
+            $circuit destroy
+        }
+
+        set simulator {}
+        set circuit {}
+        set results {}
+    }
+}
+
+set cleanupStorageModes {list}
+if {![catch {package require rbc::vector}]} {
+    lappend cleanupStorageModes vector
+}
+
+foreach backend {Batch Shared} {
+    foreach storage $cleanupStorageModes {
+        set useVectors [expr {$storage eq {vector}}]
+
+        test cleanup-$backend-$storage-1 {Replacement destroys old results; simulator destroys final result} -setup {
+            ::simCleanupTest::setup $backend $useVectors
+        } -body {
+            set first [::simCleanupTest::run]
+            set firstVectors [::simCleanupTest::vectorNames $first]
+            set firstNamespace [info object namespace $first]
+            set second [::simCleanupTest::run]
+            set secondVectors [::simCleanupTest::vectorNames $second]
+            set checks [list [expr {![info object isa object $first]}] [expr {![namespace exists $firstNamespace]}]\
+                                [::simCleanupTest::commandsGone $firstVectors] [info object isa object $second]\
+                                [::simCleanupTest::commandsAlive $secondVectors]]
+            # Ensure the test actually obtained vectors in vector mode.
+            lappend checks [expr {!$useVectors || [llength $secondVectors] > 0 }]
+            $::simCleanupTest::simulator destroy
+            lappend checks [expr {![info object isa object $second]}] [::simCleanupTest::commandsGone $secondVectors]
+            set checks
+        } -result {1 1 1 1 1 1 1 1} -cleanup {
+            ::simCleanupTest::cleanup
+        }
+
+        test cleanup-$backend-$storage-2 {Manually destroyed previous result does not break the next run} -setup {
+            ::simCleanupTest::setup $backend $useVectors
+        } -body {
+            set first [::simCleanupTest::run]
+            $first destroy
+            set second [::simCleanupTest::run]
+            set simulator $::simCleanupTest::simulator
+            set circuit $::simCleanupTest::circuit
+            set checks [list [info object isa object $second]\
+                                [expr {[$simulator configure -data] eq [$circuit configure -data]}]\
+                                [dict exists [$circuit getDataDict] v(out)]]
+            # The simulator destructor must also tolerate manual cleanup.
+            $second destroy
+            lappend checks [expr {![catch {$simulator destroy}]}]
+            set checks
+        } -result {1 1 1 1} -cleanup {
+            ::simCleanupTest::cleanup
+        }
+
+        test cleanup-$backend-$storage-3 {-nocleanup retains results through replacement and destruction} -setup {
+            ::simCleanupTest::setup $backend $useVectors 1
+        } -body {
+            set first [::simCleanupTest::run]
+            set firstVectors [::simCleanupTest::vectorNames $first]
+            set second [::simCleanupTest::run]
+            set secondVectors [::simCleanupTest::vectorNames $second]
+            $::simCleanupTest::simulator destroy
+            set checks [list [info object isa object $first] [info object isa object $second]\
+                                [::simCleanupTest::commandsAlive $firstVectors]\
+                                [::simCleanupTest::commandsAlive $secondVectors]]
+            # Caller cleanup of one result must not affect the other.
+            $first destroy
+            lappend checks [::simCleanupTest::commandsGone $firstVectors] [info object isa object $second]\
+                    [::simCleanupTest::commandsAlive $secondVectors]
+            $second destroy
+            lappend checks [::simCleanupTest::commandsGone $secondVectors]
+            set checks
+        } -result {1 1 1 1 1 1 1 1} -cleanup {
+            ::simCleanupTest::cleanup
+        }
+    }
+
+    test cleanup-$backend-no-result {Simulator destruction before the first simulation} -setup {
+        ::simCleanupTest::setup $backend 0
+    } -body {
+        set simulator $::simCleanupTest::simulator
+        set code [catch {$simulator destroy}]
+        list $code [info object isa object $simulator]
+    } -result {0 0} -cleanup {
+        ::simCleanupTest::cleanup
+    }
+}
+
+namespace delete ::simCleanupTest
+unset cleanupStorageModes backend storage useVectors
+
+
 if {[llength [package versions rbc::vector]] > 0} {
 
     test testSimulationsRBC-7 {test creation of circuit, run it with NgspiceShared and read result} -setup {

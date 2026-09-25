@@ -109,10 +109,9 @@ namespace eval ::SpiceGenTcl::Xyce::Simulators {
                 set data [::SpiceGenTcl::RawFile new [file join [my configure -runlocation]\
                                                               ${LastRunFileName}.raw] * ngspice]
             }
-            if {![my configure -nocleanup]} {
-                if {[info exists previousRawFile]} {
-                    $previousRawFile destroy
-                }
+            if {![my configure -nocleanup] && [info exists previousRawFile] &&\
+                        [info object isa object $previousRawFile]} {
+                $previousRawFile destroy
             }
             return
         }
