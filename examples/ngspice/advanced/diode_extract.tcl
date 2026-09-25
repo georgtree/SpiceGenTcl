@@ -37,7 +37,7 @@ $circuit add $diodeModel
 $circuit add $vSrc
 set tempSt [Temp new 25]
 $circuit add $tempSt
-$circuit configure -simulator [Batch new {batch1}]
+$circuit configure -simulator [Shared new {batch1}]
 
 ### load measurement data
 set file [open [file join $fileDataPath iv25.csv]]

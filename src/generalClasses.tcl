@@ -458,11 +458,8 @@ namespace eval ::SpiceGenTcl {
         property name -set {
             if {$value eq {}} {
                 return -code error {ParameterVector must have a name, empty string was provided}
-            } elseif {[regexp -expanded {^([a-zA-Z0-9]+|[vi]\([a-zA-Z0-9]+\)|[a-zA-Z0-9]+\#[a-zA-Z0-9]+|@[a-zA-Z0-9]+
-                                           \[[a-zA-Z0-9]+\])$} $value]} {
-                set name [string tolower $value]
             } else {
-                return -code error "Parameter name '$value' is not a valid name"
+                set name [string tolower $value]
             }
         }
         variable name
@@ -1015,7 +1012,7 @@ namespace eval ::SpiceGenTcl {
         property type -set {
             if {$value eq {}} {
                 return -code error {Model must have a type, empty string was provided}
-            } elseif {[regexp {[^A-Za-z0-9]+} $value]} {
+            } elseif {[regexp {[^A-Za-z0-9_]+} $value]} {
                 return -code error "Model type '$value' is not a valid type"
             } else {
                 set type [string tolower $value]

@@ -10,6 +10,8 @@ namespace import ::SpiceGenTcl::*
 namespace import ::tclmeasure::*
 importNgspice
 
+variable pi
+
 # set seed for random number generator
 expr {srand(100)}
 
@@ -48,8 +50,6 @@ proc createDist {data intervals} {
     set dist [::math::statistics::histogram $intervals $data]
     return [lrange $dist 0 end-1]
 }
-
-variable pi
 
 # create top-level circuit
 set circuit [Circuit new {Monte-Carlo}]
@@ -123,7 +123,6 @@ for {set i 0} {$i<$mcRuns} {incr i} {
     set traceUni [calcDbMagVec [dict get $data v(out)]]
     # calculate bandwidths values
     lappend bwsUni [findBW $freqRes $traceUni -10]
-    [$simulator configure -simhandle] command {destroy all}
 }
 
 # get distribution of bandwidths with uniform parameters distribution
@@ -157,7 +156,6 @@ for {set i 0} {$i<$mcRuns} {incr i} {
     set traceNorm [calcDbMagVec [dict get $data v(out)]]
     # calculate bandwidths values
     lappend bwsNorm [findBW $freqRes $traceNorm -10]
-    [$simulator configure -simhandle] command {destroy all}
 }
 # get distribution of bandwidths with normal parameters distribution
 set normIntervals [createIntervals $bwsNorm $numOfIntervals]
