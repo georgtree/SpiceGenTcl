@@ -84,8 +84,11 @@ def setup(app):
     from sphinx.highlighting import lexers
     lexers["tcl"] = MyTclLexer()
 }
-catch {exec sphinx-build -b html [file join $docDir sphinx] [file join $docDir]} errorStr
-puts $errorStr
+if {[catch {exec sphinx-build -b html [file join $docDir sphinx] $docDir 2>@1} output]} {
+    puts stderr $output
+    exit 1
+}
+puts $output
 
 # ticklechart graphs substitutions
 proc processContentsTutorial {fileContents} {

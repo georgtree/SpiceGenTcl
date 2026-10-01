@@ -1,0 +1,111 @@
+# Run explicitly with SPICE_BUILD_TEST_TCLCONFIG=/path/to/tcl/lib.
+# Uses an isolated source fixture, needs no simulators or package dependencies.
+package require tcltest
+namespace import ::tcltest::*
+namespace eval ::buildTargets {
+    variable sourceRoot [file dirname [file dirname [file normalize [info script]]]]
+    proc write {path contents} {
+        file mkdir [file dirname $path]
+        set f [open $path w]; puts -nonewline $f $contents; close $f
+    }
+    proc readFile {path} {
+        set f [open $path rb]; try {read $f} finally {close $f}
+    }
+    proc setup {} {
+        variable sourceRoot
+        variable root [file normalize [file join [::tcltest::temporaryDirectory] build-targets-[pid]]]
+        variable saved [pwd]
+        file delete -force $root
+        file mkdir $root/source $root/build
+        foreach p {configure Makefile.in pkgIndex.tcl.in SpiceGenTcl.tcl src tclconfig LICENSE.txt} {
+            file copy [file join $sourceRoot $p] $root/source
+        }
+        write $root/source/docs/index.html initial
+        write $root/source/docs/spicegentcl.n manual
+        write "$root/source/docs/assets/nested/space name.svg" asset
+        write $root/source/docs/doc_gen.tcl {
+            if {"-fail" in $argv} {puts stderr "doc failure"; exit 1}
+            set f [open [file join [file dirname [info script]] flags.txt] w]
+            puts -nonewline $f $argv
+            close $f
+        }
+        cd $root/build
+        exec sh ../source/configure --with-tcl=$::env(SPICE_BUILD_TEST_TCLCONFIG)\
+            --prefix=/opt/spice-test --exec-prefix=/opt/spice-test 2>@1
+        return $root
+    }
+    proc cleanup {} {
+        variable root; variable saved
+        cd $saved
+        file delete -force $root
+    }
+    proc make {args} {exec make {*}$args 2>@1}
+}
+testConstraint buildTools [expr {[info exists ::env(SPICE_BUILD_TEST_TCLCONFIG)] &&
+    [auto_execok make] ne {} && [auto_execok tar] ne {} && [auto_execok zip] ne {} && [auto_execok unzip] ne {}}]
+
+test build-targets-install-1 {nested runtime and late-generated docs install; uninstall preserves unrelated files}\
+        -constraints buildTools -setup {
+    set root [::buildTargets::setup]
+} -body {
+    ::buildTargets::write $root/source/docs/late.html late
+    ::buildTargets::make -j4 install "DESTDIR=$root/stage with spaces"
+    set prefix "$root/stage with spaces/opt/spice-test"
+    set pkg $prefix/lib/SpiceGenTcl0.71
+    set doc $prefix/share/SpiceGenTcl0.71/doc
+    set result [list [file exists $pkg/src/ngspice/netlistParserClassNgspice.tcl] \
+        [file exists $pkg/pkgIndex.tcl] [file exists $doc/late.html] \
+        [file exists "$doc/assets/nested/space name.svg"] [file exists $doc/LICENSE.txt]]
+    ::buildTargets::write $pkg/src/keep.txt keep
+    ::buildTargets::write $doc/keep.txt keep
+    ::buildTargets::write $prefix/share/man/mann/other.n keep
+    ::buildTargets::make uninstall "DESTDIR=$root/stage with spaces"
+    lappend result [file exists $pkg/SpiceGenTcl.tcl] [file exists $doc/late.html] \
+        [file exists $pkg/src/keep.txt] [file exists $doc/keep.txt] [file exists $prefix/share/man/mann/other.n]
+} -cleanup {::buildTargets::cleanup} -result {1 1 1 1 1 0 0 1 1 1}
+
+test build-targets-dist-1 {tar and zip contain identical relocatable installation payloads} -constraints buildTools\
+        -setup {
+    set root [::buildTargets::setup]
+} -body {
+    ::buildTargets::make -j4 dist-zip DESTDIR=/ignored "DIST_ROOT=$root/archive output"
+    set archive "$root/archive output/SpiceGenTcl0.71"
+    file mkdir $root/tar $root/zip
+    exec tar -xzf $archive.tar.gz -C $root/tar
+    exec unzip -q $archive.zip -d $root/zip
+    set same 1
+    foreach file [split [exec unzip -Z1 $archive.zip] \n] {
+        if {[string match */ $file]} {
+            continue
+        }
+        if {[::buildTargets::readFile $root/tar/$file] ne [::buildTargets::readFile $root/zip/$file]} {
+            set same 0
+        }
+    }
+    list $same [file exists $root/tar/lib/SpiceGenTcl0.71/pkgIndex.tcl]\
+        [file exists $root/tar/share/SpiceGenTcl0.71/doc/index.html]\
+        [file exists $root/tar/opt] [file exists $root/tar/ignored]
+} -cleanup {::buildTargets::cleanup} -result {1 1 1 0 0}
+
+test build-targets-doc-1 {doc forwards Ruff flags and failures; clean keeps prebuilt docs} -constraints buildTools\
+        -setup {
+    set root [::buildTargets::setup]
+} -body {
+    ::buildTargets::make doc "TCLSH_PROG=[info nameofexecutable]" {DOCFLAGS=-title "Example title"}
+    set flags [::buildTargets::readFile $root/source/docs/flags.txt]
+    set failed [catch {::buildTargets::make doc "TCLSH_PROG=[info nameofexecutable]" DOCFLAGS=-fail}]
+    ::buildTargets::write $root/source/docs/sphinx/intermediate.txt temp
+    ::buildTargets::make clean
+    set kept [file exists $root/source/docs/index.html]
+    ::buildTargets::make doc-clean
+    list $flags $failed $kept [file exists $root/source/docs/sphinx]
+} -cleanup {::buildTargets::cleanup} -result {{-title {Example title}} 1 1 0}
+
+test build-targets-outside-1 {dist rejects install directories outside prefix} -constraints buildTools -setup {
+    set root [::buildTargets::setup]
+} -body {
+    catch {::buildTargets::make dist libdir=/elsewhere/lib} message
+    string match {*outside prefix*} $message
+} -cleanup {::buildTargets::cleanup} -result 1
+namespace delete ::buildTargets
+cleanupTests

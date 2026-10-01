@@ -16,8 +16,6 @@
 # Makefile variables
 #========================================================================
 PKG_TCL_SOURCES = @PKG_TCL_SOURCES@
-DOC_HTML_FILES = @DOC_HTML_FILES@
-DIST_TEST_FILES = @DIST_TEST_FILES@
 
 SHELL		= @SHELL@
 
@@ -43,13 +41,15 @@ pkgincludedir	= $(includedir)/$(PKG_DIR)
 top_builddir	= @abs_top_builddir@
 
 INSTALL_OPTIONS	=
-INSTALL		= @INSTALL@ $(INSTALL_OPTIONS)
+INSTALL		= $(SHELL) "$(srcdir)/tclconfig/install-sh" -c $(INSTALL_OPTIONS)
 INSTALL_DATA_DIR = @INSTALL_DATA_DIR@
 INSTALL_DATA	= @INSTALL_DATA@
 INSTALL_PROGRAM	= @INSTALL_PROGRAM@
 INSTALL_SCRIPT	= @INSTALL_SCRIPT@
 INSTALL_LIBRARY	= @INSTALL_LIBRARY@
-DOC_INSTALL_DIR = $(DESTDIR)/usr/local/share/$(PACKAGE_NAME)$(PACKAGE_VERSION)/doc
+DOC_INSTALL_DIR = $(DESTDIR)$(pkgdatadir)/doc
+DOCFLAGS =
+DOC_ASSET_DIRS = _static assets images _images
 
 PACKAGE_NAME	= @PACKAGE_NAME@
 PACKAGE_VERSION	= @PACKAGE_VERSION@
@@ -60,10 +60,10 @@ TCL_SRC_DIR	= @TCL_SRC_DIR@
 EXTRA_PATH	= $(top_builddir):$(TCL_BIN_DIR)
 TCLLIBPATH	= @TCLLIBPATH@
 TCLSH_ENV	= TCL_LIBRARY=`@CYGPATH@ $(TCL_SRC_DIR)/library`
-PKG_ENV		= PATH="$(EXTRA_PATH):$(PATH)" TCLLIBPATH="$(TCLLIBPATH)"
+PKG_ENV		= PATH="$(EXTRA_PATH):$(PATH)" TCLLIBPATH="{@abs_srcdir@} $(TCLLIBPATH)"
 
 TCLSH_PROG	= @TCLSH_PROG@
-TCLSH		= $(PKG_ENV) $(TCLSH_PROG)
+TCLSH		= $(PKG_ENV) "$(TCLSH_PROG)"
 
 CONFIG_CLEAN_FILES = Makefile pkgIndex.tcl
 CLEANFILES	= @CLEANFILES@
@@ -84,121 +84,111 @@ shell: binaries libraries
 # Test recipes
 #========================================================================
 test: libraries
-	$(TCLSH) `@CYGPATH@ $(srcdir)/test/all.tcl` $(TESTFLAGS)
+	$(TCLSH) "$(srcdir)/test/all.tcl" $(TESTFLAGS)
 
 #========================================================================
 # Package installing recipes
 #========================================================================
 install: all install-libraries install-doc
 
-install-libraries:
+install-libraries: libraries
 	@$(INSTALL_DATA_DIR) "$(DESTDIR)$(pkglibdir)"
-
-	@list='$(PKG_TCL_SOURCES)'; for p in $$list; do \
-	  if test -f "$(srcdir)/$$p"; then \
-	    d=`dirname "$$p"`; \
-	    $(INSTALL_DATA_DIR) "$(DESTDIR)$(pkglibdir)/$$d"; \
-	    echo " Install $(srcdir)/$$p $(DESTDIR)$(pkglibdir)/$$p"; \
-	    $(INSTALL_DATA) "$(srcdir)/$$p" "$(DESTDIR)$(pkglibdir)/$$p"; \
-	  fi; \
+	@set -e; for p in $(PKG_TCL_SOURCES); do \
+	  $(INSTALL_DATA_DIR) "$(DESTDIR)$(pkglibdir)/`dirname "$$p"`"; \
+	  echo " Install" "$(srcdir)/$$p" "$(DESTDIR)$(pkglibdir)/$$p"; \
+	  $(INSTALL_DATA) "$(srcdir)/$$p" "$(DESTDIR)$(pkglibdir)/$$p"; \
 	done
-
-	@echo " Install pkgIndex.tcl $(DESTDIR)$(pkglibdir)"
-	@$(INSTALL_DATA) pkgIndex.tcl "$(DESTDIR)$(pkglibdir)"
+	@echo " Install" pkgIndex.tcl "$(DESTDIR)$(pkglibdir)/pkgIndex.tcl"
+	@$(INSTALL_DATA) pkgIndex.tcl "$(DESTDIR)$(pkglibdir)/pkgIndex.tcl"
 
 install-doc:
-	@$(INSTALL_DATA_DIR) "$(DESTDIR)$(mandir)/mann"
-	@echo "Installing documentation in $(DESTDIR)$(mandir)"
-	@list='$(srcdir)/docs/*.n'; for i in $$list; do \
-	    echo "Installing $$i"; \
-	    $(INSTALL_DATA) $$i "$(DESTDIR)$(mandir)/mann" ; \
+	@$(INSTALL_DATA_DIR) "$(DESTDIR)$(mandir)/mann" "$(DOC_INSTALL_DIR)"
+	@set -e; for p in "$(srcdir)"/docs/*.n; do \
+	  test -f "$$p" || continue; \
+	  echo " Install" "$$p" "$(DESTDIR)$(mandir)/mann/`basename "$$p"`"; \
+	  $(INSTALL_DATA) "$$p" "$(DESTDIR)$(mandir)/mann/`basename "$$p"`"; \
 	done
-	@$(INSTALL_DATA_DIR) "$(DOC_INSTALL_DIR)"
-	@echo "Installing html documentation in $(DOC_INSTALL_DIR)"
-	@list='$(DOC_HTML_FILES)'; for p in $$list; do \
-	  if test -f "$(srcdir)/docs/$$p"; then \
-	    d=`dirname "$$p"`; \
-	    if test "x$$d" != "x."; then \
-	      $(INSTALL_DATA_DIR) "$(DOC_INSTALL_DIR)/$$d"; \
-	    fi; \
-	    echo " Install $(srcdir)/docs/$$p $(DOC_INSTALL_DIR)/$$p"; \
-	    $(INSTALL_DATA) "$(srcdir)/docs/$$p" "$(DOC_INSTALL_DIR)/$$p"; \
+	@set -e; for p in "$(srcdir)"/docs/*.html "$(srcdir)"/docs/objects.inv "$(srcdir)"/docs/searchindex.js; do \
+	  test -f "$$p" || continue; \
+	  echo " Install" "$$p" "$(DOC_INSTALL_DIR)/`basename "$$p"`"; \
+	  $(INSTALL_DATA) "$$p" "$(DOC_INSTALL_DIR)/`basename "$$p"`"; \
+	done
+	@set -e; for directory in $(DOC_ASSET_DIRS); do \
+	  if test -d "$(srcdir)/docs/$$directory"; then \
+	    (cd "$(srcdir)/docs" && find "$$directory" -type f -print) | \
+	    while IFS= read -r file; do \
+	      $(INSTALL_DATA_DIR) "$(DOC_INSTALL_DIR)/`dirname "$$file"`"; \
+	      echo " Install" "$(srcdir)/docs/$$file" "$(DOC_INSTALL_DIR)/$$file"; \
+	      $(INSTALL_DATA) "$(srcdir)/docs/$$file" "$(DOC_INSTALL_DIR)/$$file"; \
+	    done; \
 	  fi; \
 	done
+	@echo " Install" "$(srcdir)/LICENSE.txt" "$(DOC_INSTALL_DIR)/LICENSE.txt"
+	@$(INSTALL_DATA) "$(srcdir)/LICENSE.txt" "$(DOC_INSTALL_DIR)/LICENSE.txt"
+
 
 #========================================================================
 # Doc generating recipes
 #========================================================================
 doc:
-	$(TCLSH) $(srcdir)/docs/doc_gen.tcl
+	$(TCLSH) "$(srcdir)/docs/doc_gen.tcl" $(DOCFLAGS)
 
 #========================================================================
 # Distribution creation
 #========================================================================
-COMPRESS	= tar zcvf $(PKG_DIR).tar.gz $(PKG_DIR)
-COMPRESS_ZIP= zip -r $(PKG_DIR).zip $(PKG_DIR)
-DIST_ROOT	= /tmp/dist
-DIST_DIR	= $(DIST_ROOT)/$(PKG_DIR)
+DIST_ROOT = $(top_builddir)/dist
+DIST_NAME = $(PKG_DIR)
+DIST_DIR = $(DIST_ROOT)/$(DIST_NAME)
 
 dist-clean:
-	rm -rf $(DIST_DIR) $(DIST_ROOT)/$(PKG_DIR).tar.*;\
-	rm -rf $(DIST_DIR) $(DIST_ROOT)/$(PKG_DIR).zip
+	rm -rf "$(DIST_DIR)"
+	rm -f "$(DIST_ROOT)/$(DIST_NAME).tar.gz" "$(DIST_ROOT)/$(DIST_NAME).zip"
 
-dist: dist-clean
-	@mkdir -p $(DIST_DIR)
-	@cp -p $(srcdir)/README.md $(DIST_DIR)/
-	@cp -p $(srcdir)/changelog.txt $(DIST_DIR)/
-	@cp -p $(srcdir)/LICENSE.txt $(DIST_DIR)/
-	@for i in $(srcdir)/*.tcl; do \
-	    if [ -f $$i ]; then \
-		cp -p $$i $(DIST_DIR)/ ; \
-	    fi; \
-	done;
-	@cp -r $(srcdir)/src $(DIST_DIR)
-	@list='$(DIST_TEST_FILES)'; for p in $$list; do \
-	  if test -f "$(srcdir)/$$p"; then \
-	    d=`dirname "$$p"`; \
-	    $(INSTALL_DATA_DIR) "$(DIST_DIR)/$$d"; \
-	    echo " Copy $(srcdir)/$$p $(DIST_DIR)/$$p"; \
-	    $(INSTALL_DATA) "$(srcdir)/$$p" "$(DIST_DIR)/$$p"; \
-	  fi; \
-	done
-	@echo "Copying examples to $(DIST_DIR)/examples"
-	@cp -r $(srcdir)/examples $(DIST_DIR)
-	@$(INSTALL_DATA_DIR) "$(DIST_DIR)/docs/mann"
-	@echo "Copying manpage documentation to $(DIST_DIR)/docs/mann"
-	@list='$(srcdir)/docs/*.n'; for p in $$list; do \
-	  if test -f "$$p"; then \
-	    b=`basename "$$p"`; \
-	    echo " Copy $$p $(DIST_DIR)/docs/mann/$$b"; \
-	    $(INSTALL_DATA) "$$p" "$(DIST_DIR)/docs/mann/$$b"; \
-	  fi; \
-	done
-	@$(INSTALL_DATA_DIR) "$(DIST_DIR)/docs"
-	@echo "Copying html documentation to $(DIST_DIR)/docs"
-	@list='$(DOC_HTML_FILES)'; for p in $$list; do \
-	  if test -f "$(srcdir)/docs/$$p"; then \
-	    d=`dirname "$$p"`; \
-	    if test "x$$d" != "x."; then \
-	      $(INSTALL_DATA_DIR) "$(DIST_DIR)/docs/$$d"; \
-	    fi; \
-	    echo " Copy $(srcdir)/docs/$$p $(DIST_DIR)/docs/$$p"; \
-	    $(INSTALL_DATA) "$(srcdir)/docs/$$p" "$(DIST_DIR)/docs/$$p"; \
-	  fi; \
-	done
-	(cd $(DIST_ROOT); $(COMPRESS); $(COMPRESS_ZIP))
+# Do not make dist-clean a parallel prerequisite: staging must finish before
+# archiving, and cleanup must not race with the installer.
+dist: all
+	@set -eu; \
+	  case '$(DIST_NAME)' in ''|.|..|*/*|*\\*) echo 'dist: DIST_NAME must be a directory name' >&2; exit 1 ;; esac; \
+	  root=`mkdir -p "$(DIST_ROOT)" && cd "$(DIST_ROOT)" && pwd`; \
+	  stage="$$root/$(DIST_NAME)"; \
+	  prefix='$(prefix)'; prefix=$${prefix%/}; \
+	  relative() { \
+	    case "$$1" in \
+	      "$$prefix"/*) printf '%s\n' "$${1#"$$prefix"}" ;; \
+	      *) echo "dist: install directory '$$1' is outside prefix '$$prefix'" >&2; return 1 ;; \
+	    esac; \
+	  }; \
+	  set --; \
+	  for entry in 'bindir=$(bindir)' 'libdir=$(libdir)' 'includedir=$(includedir)' \
+	      'datadir=$(datadir)' 'mandir=$(mandir)' 'pkglibdir=$(pkglibdir)' \
+	      'pkgdatadir=$(pkgdatadir)' 'pkgincludedir=$(pkgincludedir)'; do \
+	    key=$${entry%%=*}; value=$${entry#*=}; \
+	    value=`relative "$$value"`; \
+	    set -- "$$@" "$$key=$$stage$$value"; \
+	  done; \
+	  doc='$(DOC_INSTALL_DIR)'; dest='$(DESTDIR)'; doc=$${doc#"$$dest"}; \
+	  doc=`relative "$$doc"`; \
+	  rm -rf "$$stage"; mkdir -p "$$stage"; \
+	  rm -f "$$root/$(DIST_NAME).tar.gz" "$$root/$(DIST_NAME).zip"; \
+	  $(MAKE) install DESTDIR= "$$@" "DOC_INSTALL_DIR=$$stage$$doc"; \
+	  tar -czf "$$root/$(DIST_NAME).tar.gz" -C "$$stage" .; \
+	  echo "Installation archive: $$root/$(DIST_NAME).tar.gz"
+
+# ZIP is convenient for Windows Explorer. The payload is identical to dist.
+dist-zip: dist
+	@set -e; root=`cd "$(DIST_ROOT)" && pwd`; \
+	  cd "$$root/$(DIST_NAME)" && zip -qr "$$root/$(DIST_NAME).zip" .
+
 
 #========================================================================
 # Cleaning of building files
 #========================================================================
+# Ordinary clean preserves the prebuilt documentation distributed in git.
 clean:
-	-test -z "$(BINARIES)" || rm -f $(BINARIES)
-	-rm -f *.$(OBJEXT) core *.core
 	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
-	-rm -rf docs/sphinx
-	-rm -rf docs/.doctrees
-	-rm -rf docs/_sources
-	-rm -f docs/.buildinfo
+
+doc-clean:
+	-rm -rf "$(srcdir)/docs/sphinx" "$(srcdir)/docs/.doctrees" "$(srcdir)/docs/_sources"
 
 distclean: clean
 	-rm -f *.tab.c
@@ -209,13 +199,34 @@ distclean: clean
 # Uninstall recipes
 #========================================================================
 uninstall-libraries:
-	list='$(PKG_TCL_SOURCES)'; for p in $$list; do \
-	  p=`basename $$p`; \
+	@set -e; for p in $(PKG_TCL_SOURCES) pkgIndex.tcl; do \
 	  rm -f "$(DESTDIR)$(pkglibdir)/$$p"; \
 	done
+	@if test -d "$(DESTDIR)$(pkglibdir)"; then \
+	  find "$(DESTDIR)$(pkglibdir)" -depth -type d -exec rmdir {} \; 2>/dev/null || :; \
+	fi
 
-uninstall:
-	rm -rf "$(DESTDIR)$(pkglibdir)"
+uninstall-doc:
+	@set -e; for p in "$(srcdir)"/docs/*.n; do \
+	  test -f "$$p" || continue; \
+	  rm -f "$(DESTDIR)$(mandir)/mann/`basename "$$p"`"; \
+	done
+	@set -e; for p in "$(srcdir)"/docs/*.html "$(srcdir)"/docs/objects.inv "$(srcdir)"/docs/searchindex.js; do \
+	  test -f "$$p" || continue; \
+	  rm -f "$(DOC_INSTALL_DIR)/`basename "$$p"`"; \
+	done
+	@set -e; for directory in $(DOC_ASSET_DIRS); do \
+	  if test -d "$(srcdir)/docs/$$directory"; then \
+	    (cd "$(srcdir)/docs" && find "$$directory" -type f -print) | \
+	    while IFS= read -r file; do rm -f "$(DOC_INSTALL_DIR)/$$file"; done; \
+	  fi; \
+	done
+	@rm -f "$(DOC_INSTALL_DIR)/LICENSE.txt"
+	@if test -d "$(DOC_INSTALL_DIR)"; then \
+	  find "$(DOC_INSTALL_DIR)" -depth -type d -exec rmdir {} \; 2>/dev/null || :; \
+	fi
+
+uninstall: uninstall-libraries uninstall-doc
 
 #========================================================================
 # Install binary executables
@@ -227,5 +238,6 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 #========================================================================
 # Flag PHONY recipes
 #========================================================================
-.PHONY: all clean depend distclean doc install libraries test
+.PHONY: all binaries clean distclean doc doc-clean install install-libraries install-doc \
+	uninstall uninstall-libraries uninstall-doc libraries shell test dist dist-clean dist-zip
 .NOEXPORT:

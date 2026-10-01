@@ -310,8 +310,8 @@ test testSimulations-8 {test filter simulation with shared simulator} -setup {
     $circuit runAndRead
     set data [$circuit getDataDict]
     set freq [dict get $data frequency]
-    set s11 [dict get $data v(s_1_1)]
-    set s21 [dict get $data v(s_2_1)]
+    set s11 [dict get $data s_1_1]
+    set s21 [dict get $data s_2_1]
     set freq [lmap val $freq {lindex $val 0}]
     set s11Mag [lmap s11Re [lmap val $s11 {lindex $val 0}] s11Im [lmap val $s11 {lindex $val 1}]\
                         {expr {sqrt($s11Re**2+$s11Im**2)}}]

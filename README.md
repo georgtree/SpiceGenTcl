@@ -63,17 +63,38 @@ Run following commands:
 - `./configure`
 - `sudo make install`
 
-During installing it installs manpages, and local html documentation in `/usr/local/share/SpiceGenTcl/doc`.
+Installation follows the configured prefix: Tcl scripts go to `lib/SpiceGenTcl0.71`, HTML documentation
+and the license to `share/SpiceGenTcl0.71/doc`, and manual pages to `share/man/mann` (relative to the
+prefix, unless their directories are overridden). `make install DESTDIR=/path/to/stage` stages that layout.
+Use both `--prefix=/desired/prefix` and `--exec-prefix=/desired/prefix` when overriding Tcl's install defaults.
+`make uninstall` honors the same directory overrides and removes package-owned files, preserving unrelated files.
+
+`make doc DOCFLAGS="..."` forwards Ruff options to the generator and reports Sphinx failures as errors.
+Documentation is generated under the source tree's `docs` directory, including in out-of-tree builds.
+Ruff, Tcllib, Sphinx, the package dependencies, and any diagram tools used by the documentation must be available.
+Use `TCLLIBPATH` at configure time or as a make variable to locate dependencies.
+`make clean` preserves prebuilt documentation; `make doc-clean` removes intermediate documentation directories.
 
 For test package in place run `make test`.
 
 For package uninstall run `sudo make uninstall`.
 
+Build-target regression tests can run without simulator dependencies:
+```sh
+SPICE_BUILD_TEST_TCLCONFIG=/path/to/tcl/lib tclsh9.0 test/buildTargets.test
+```
+They require make, tar, zip and unzip, and run in an isolated temporary source fixture.
+
 ### From archive
-To install the package you should extract archive with source code and add path of the package folder to `auto_path`
-variable:
+`make dist` creates `dist/SpiceGenTcl0.71.tar.gz` using the install targets; `make dist-zip` also creates
+`dist/SpiceGenTcl0.71.zip` with the same contents. Override `DIST_ROOT` or `DIST_NAME` as needed.
+These are installation archives, not source bundles: merge their `lib` and `share` directories into the
+chosen installation prefix. All configured installation directories must lie under `prefix` for `dist`.
+`DESTDIR` does not become part of the archive. Use the repository for sources, tests and examples.
+
+For a nonstandard prefix, add its library directory to Tcl's search path:
 ```tcl
-lappend auto_path "path to SpiceGenTcl package"
+lappend auto_path "/chosen/prefix/lib"
 ```
 
 ## Dependencies

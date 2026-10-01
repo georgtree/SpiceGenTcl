@@ -614,10 +614,8 @@ PACKAGE_URL=''
 
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
-TCLLIBPATH
 TCLSH_PROG
-DIST_TEST_FILES
-DOC_HTML_FILES
+TCLLIBPATH
 PKG_OBJECTS
 PKG_SOURCES
 TCL_SHLIB_LD_LIBS
@@ -712,7 +710,8 @@ CC
 CFLAGS
 LDFLAGS
 LIBS
-CPPFLAGS'
+CPPFLAGS
+TCLLIBPATH'
 
 
 # Initialize some variables set by options.
@@ -1342,6 +1341,7 @@ Some influential environment variables:
   LIBS        libraries to pass to the linker, e.g. -l<library>
   CPPFLAGS    (Objective) C/C++ preprocessor flags, e.g. -I<include dir> if
               you have headers in a nonstandard directory <include dir>
+  TCLLIBPATH  Tcl list of directories containing build/test/doc dependencies
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
@@ -3762,57 +3762,11 @@ printf "%s\n" "$as_me: --exec-prefix defaulting to ${prefix}" >&6;}
 
 
 
-DOC_HTML_FILES="index.html objects.inv search.html searchindex.js genindex.html"
-DOC_SRCDIR="${srcdir}/docs"
-if test -d "$DOC_SRCDIR"; then
-    # Add all top-level *.html files from docs/, not subdirectories.
-    for f in "$DOC_SRCDIR"/*.html; do
-        test -f "$f" || continue
-
-        b=`basename "$f"`
-
-        case " $DOC_HTML_FILES " in
-            *" $b "*) ;;
-            *) DOC_HTML_FILES="$DOC_HTML_FILES $b" ;;
-        esac
-    done
-    # Add everything from docs/_static and docs/assets recursively.
-    for d in _static assets; do
-        if test -d "$DOC_SRCDIR/$d"; then
-            for f in `find "$DOC_SRCDIR/$d" -type f -print`; do
-                rel=`echo "$f" | sed "s|^$DOC_SRCDIR/||"`
-
-                case " $DOC_HTML_FILES " in
-                    *" $rel "*) ;;
-                    *) DOC_HTML_FILES="$DOC_HTML_FILES $rel" ;;
-                esac
-            done
-        fi
-    done
-
-else
-    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: documentation directory not found: $DOC_SRCDIR" >&5
-printf "%s\n" "$as_me: WARNING: documentation directory not found: $DOC_SRCDIR" >&2;}
+# The package uses Tcl 9 APIs despite containing only Tcl scripts.
+if test "$TCL_MAJOR_VERSION" -lt 9; then
+    as_fn_error $? "SpiceGenTcl requires Tcl 9" "$LINENO" 5
 fi
-#AC_MSG_NOTICE([DOC_HTML_FILES = $DOC_HTML_FILES])
-
-
-# Test files to include in the distribution.
-# Paths are relative to $srcdir.
-DIST_TEST_FILES="test/specElemsClassesCommon.test test/generalClasses.test test/testUtilities.tcl test/all.tcl"
-# Add everything from test/xyce, test/ngspice, and test/ltspice recursively.
-for d in test/xyce test/ngspice test/ltspice; do
-    if test -d "$srcdir/$d"; then
-        for f in `cd "$srcdir" && find "$d" -type f -print`; do
-            case " $DIST_TEST_FILES " in
-                *" $f "*) ;;
-                *) DIST_TEST_FILES="$DIST_TEST_FILES $f" ;;
-            esac
-        done
-    fi
-done
-#AC_MSG_NOTICE([DIST_TEST_FILES = $DIST_TEST_FILES])
-
+# Discover documentation at make time, including files generated after configure.
 
 
     { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for tclsh" >&5

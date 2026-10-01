@@ -93,15 +93,33 @@ examples for some of them:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">./configure</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">make</span> <span class="pre">install</span></code></p></li>
 </ul>
-<p>During installing it installs manpages, and local html documentation in <code class="docutils literal notranslate"><span class="pre">/usr/local/share/SpiceGenTcl/doc</span></code>.</p>
+<p>Installation follows the configured prefix: Tcl scripts go to <code class="docutils literal notranslate"><span class="pre">lib/SpiceGenTcl0.71</span></code>, HTML documentation
+and the license to <code class="docutils literal notranslate"><span class="pre">share/SpiceGenTcl0.71/doc</span></code>, and manual pages to <code class="docutils literal notranslate"><span class="pre">share/man/mann</span></code> (relative to the
+prefix, unless their directories are overridden). <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">install</span> <span class="pre">DESTDIR=/path/to/stage</span></code> stages that layout.
+Use both <code class="docutils literal notranslate"><span class="pre">--prefix=/desired/prefix</span></code> and <code class="docutils literal notranslate"><span class="pre">--exec-prefix=/desired/prefix</span></code> when overriding Tcl’s install defaults.
+<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">uninstall</span></code> honors the same directory overrides and removes package-owned files, preserving unrelated files.</p>
+<p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">doc</span> <span class="pre">DOCFLAGS=&quot;...&quot;</span></code> forwards Ruff options to the generator and reports Sphinx failures as errors.
+Documentation is generated under the source tree’s <code class="docutils literal notranslate"><span class="pre">docs</span></code> directory, including in out-of-tree builds.
+Ruff, Tcllib, Sphinx, the package dependencies, and any diagram tools used by the documentation must be available.
+Use <code class="docutils literal notranslate"><span class="pre">TCLLIBPATH</span></code> at configure time or as a make variable to locate dependencies.
+<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">clean</span></code> preserves prebuilt documentation; <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">doc-clean</span></code> removes intermediate documentation directories.</p>
 <p>For test package in place run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">test</span></code>.</p>
 <p>For package uninstall run <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">make</span> <span class="pre">uninstall</span></code>.</p>
+<p>Build-target regression tests can run without simulator dependencies:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nv">SPICE_BUILD_TEST_TCLCONFIG</span><span class="o">=</span>/path/to/tcl/lib<span class="w"> </span>tclsh9.0<span class="w"> </span>test/buildTargets.test
+</pre></div>
+</div>
+<p>They require make, tar, zip and unzip, and run in an isolated temporary source fixture.</p>
 </section>
 <section id="from-archive">
 <span id="r-from-archive"></span><span id="r-from20archive"></span><h2>From archive<a class="headerlink" href="#from-archive" title="Link to this heading">¶</a></h2>
-<p>To install the package you should extract archive with source code and add path of the package folder to <code class="docutils literal notranslate"><span class="pre">auto_path</span></code>
-variable:</p>
-<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">lappend</span><span class="w"> </span>auto_path<span class="w"> </span><span class="s2">&quot;path to SpiceGenTcl package&quot;</span>
+<p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">dist</span></code> creates <code class="docutils literal notranslate"><span class="pre">dist/SpiceGenTcl0.71.tar.gz</span></code> using the install targets; <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">dist-zip</span></code> also creates
+<code class="docutils literal notranslate"><span class="pre">dist/SpiceGenTcl0.71.zip</span></code> with the same contents. Override <code class="docutils literal notranslate"><span class="pre">DIST_ROOT</span></code> or <code class="docutils literal notranslate"><span class="pre">DIST_NAME</span></code> as needed.
+These are installation archives, not source bundles: merge their <code class="docutils literal notranslate"><span class="pre">lib</span></code> and <code class="docutils literal notranslate"><span class="pre">share</span></code> directories into the
+chosen installation prefix. All configured installation directories must lie under <code class="docutils literal notranslate"><span class="pre">prefix</span></code> for <code class="docutils literal notranslate"><span class="pre">dist</span></code>.
+<code class="docutils literal notranslate"><span class="pre">DESTDIR</span></code> does not become part of the archive. Use the repository for sources, tests and examples.</p>
+<p>For a nonstandard prefix, add its library directory to Tcl’s search path:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">lappend</span><span class="w"> </span>auto_path<span class="w"> </span><span class="s2">&quot;/chosen/prefix/lib&quot;</span>
 </pre></div>
 </div>
 </section>

@@ -99,26 +99,26 @@ proc ::docgen::expandIncludes {text root} {
         # Parse arguments as a Tcl list without evaluating them.
         if {[catch {
             if {[llength $specification] == 0} {
-                error "missing source filename"
+                return -code error "missing source filename"
             }
             set path [lindex $specification 0]
             set options [lrange $specification 1 end]
             if {[llength $options] % 2 != 0} {
-                error "each option requires a value"
+                return -code error "each option requires a value"
             }
             set lang tcl
             set seen {}
             set snippetOptions {}
             foreach {option value} $options {
                 if {$option in $seen} {
-                    error "duplicate option \"$option\""
+                    return -code error "duplicate option '$option'"
                 }
                 lappend seen $option
                 switch -- $option {
                     -lang {
                         # Empty language produces an unlabelled code block.
                         if {$value ne {} && ![regexp {^[[:alnum:]_+.-]+$} $value]} {
-                            error "invalid language name \"$value\""
+                            return -code error "invalid language name '$value'"
                         }
                         set lang $value
                     }
@@ -128,17 +128,17 @@ proc ::docgen::expandIncludes {text root} {
                     }
 
                     default {
-                        error "unknown option \"$option\": expected -lang, -lines or -region"
+                        return -code error "unknown option '$option': expected -lang, -lines or -region"
                     }
                 }
             }
 
             if {"-lines" in $seen && "-region" in $seen} {
-                error "-lines and -region cannot be used together"
+                return -code error "-lines and -region cannot be used together"
             }
             set snippet [::docgen::readSnippet $root $path {*}$snippetOptions]
         } message]} {
-            error "documentation line $lineNumber: $message"
+            return -code error "documentation line $lineNumber: $message"
         }
         # Preserve the directive's indentation and source indentation.
         lappend result "${indent}```${lang}"
