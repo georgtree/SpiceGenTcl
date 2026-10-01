@@ -49,40 +49,40 @@ integer migrating;      // flag indicating that the pinning sites are moving
 
 // sign function
     analog function integer sign;
-    input arg;
-    real arg;
-    sign = (arg >= 0\&.0 ? 1 : -1);
+        input arg;
+        real arg;
+        sign = (arg >= 0\&.0 ? 1 : -1);
     endfunction
 
 // hyperbolic cotangent function
     analog function real coth;
-    input arg;
-    real arg;
-    real x;
-    begin
-        x = exp(min(80,max(-80,arg)));
-        coth = (x+1/x)/(x-1/x);
-    end
+        input arg;
+        real arg;
+        real x;
+        begin
+            x = exp(min(80,max(-80,arg)));
+            coth = (x+1/x)/(x-1/x);
+        end
     endfunction
 
 // core model
     analog begin
-    H = MMF(p,n) / len;
-    MMF(Hdot) <+ ddt(H);
-    delta = sign(MMF(Hdot));
-    B = Phi(p,n)/area;
-    M = B/`P_U0 - H;
-    Heff = H + alpha * M;
-    if (abs(Heff) > 0\&.001 * a)
-        Manh = ms * (coth(Heff/a) - a/Heff);
-    else
-        Manh = ms * Heff/(3\&.0*a);       // Taylor series expansion of coth()
-    dMirr = (Manh - M)/(delta*k - alpha*(Manh - M)) * MMF(Hdot);
-    migrating = (delta > 0) ^ (M > Manh);
-    Mirr = idt( migrating * dMirr, Manh );
+        H = MMF(p,n) / len;
+        MMF(Hdot) <+ ddt(H);
+        delta = sign(MMF(Hdot));
+        B = Phi(p,n)/area;
+        M = B/`P_U0 - H;
+        Heff = H + alpha * M;
+        if (abs(Heff) > 0\&.001 * a)
+            Manh = ms * (coth(Heff/a) - a/Heff);
+        else
+            Manh = ms * Heff/(3\&.0*a);   // Taylor series expansion of coth()
+        dMirr = (Manh - M)/(delta*k - alpha*(Manh - M)) * MMF(Hdot);
+        migrating = (delta > 0) ^ (M > Manh);
+        Mirr = idt( migrating * dMirr, Manh );
 
-    M = (1-c)*Mirr + c*Manh;
-    Phi(p,n) <+ area*`P_U0*(H+M);
+        M = (1-c)*Mirr + c*Manh;
+        Phi(p,n) <+ area*`P_U0*(H+M);
     end
 endmodule
 .fi
@@ -114,7 +114,8 @@ oo::class create Core {
                 }
             }
         }
-        next n[dict get $arguments name] [list [list p [dict get $arguments p]] [list n [dict get $arguments n]]] $params
+        next n[dict get $arguments name] [list [list p [dict get $arguments p]] [list n [dict get $arguments n]]]\\
+                $params
     }
 }
 .fi
@@ -125,7 +126,7 @@ First line is class definition:
 .PP
 .RS 4n
 .nf
-oo::class create Core
+oo::class create Core {
 .fi
 .RE
 .PP
@@ -135,7 +136,7 @@ Superclass for new element is \fI::SpiceGenTcl::Device\fP:
 .PP
 .RS 4n
 .nf
-superclass SpiceGenTcl::Device
+    superclass Device
 .fi
 .RE
 .PP
@@ -143,7 +144,7 @@ In next line we define arguments for constructor:
 .PP
 .RS 4n
 .nf
-constructor {args}
+    constructor {args} {
 .fi
 .RE
 .PP
@@ -151,14 +152,14 @@ In these few lines we process args variable with \fIargparse\fP [URL: https://gi
 .PP
 .RS 4n
 .nf
-set arguments [argparse -inline -pfirst -helplevel 1 -help {} {
-    {-model= -required -help {Model of the core}}
-    {-len= -default 0\&.1 -help {Length of the core}}
-    {-area= -default 1 -help {Cross-section area of the core}}
-    {name -help {Name of the device without first-letter designator}}
-    {p -help {Name of node connected to positive pin}}
-    {n -help {Name of node connected to negative pin}}
-}]
+        set arguments [argparse -inline -pfirst -helplevel 1 -help {} {
+            {-model= -required -help {Model of the core}}
+            {-len= -default 0\&.1 -help {Length of the core}}
+            {-area= -default 1 -help {Cross-section area of the core}}
+            {name -help {Name of the device without first-letter designator}}
+            {p -help {Name of node connected to positive pin}}
+            {n -help {Name of node connected to negative pin}}
+        }]
 .fi
 .RE
 .PP
@@ -177,16 +178,16 @@ In the next few lines we build parameter list that will be passed to \fI::SpiceG
 .PP
 .RS 4n
 .nf
-lappend params [list model [dict get $arguments model] -posnocheck]
-dict for {paramName value} $arguments {
-    if {$paramName ni {model name p n}} {
-        if {[lindex $value 0] eq {-eq}} {
-            lappend params [list -eq $paramName [lindex $value 1]]
-        } else {
-            lappend params [list $paramName $value]
+        lappend params [list -posnocheck model [dict get $arguments model]]
+        dict for {paramName value} $arguments {
+            if {$paramName ni {model name p n}} {
+                if {[lindex $value 0] eq {-eq}} {
+                    lappend params [list -eq $paramName [lindex $value 1]]
+                } else {
+                    lappend params [list $paramName $value]
+                }
+            }
         }
-    }
-}
 .fi
 .RE
 .PP
@@ -194,7 +195,8 @@ The last but not the least is step of passing arguments to \fI::SpiceGenTcl::Dev
 .PP
 .RS 4n
 .nf
-next n[dict get $arguments name] [list [list p [dict get $arguments p]] [list n [dict get $arguments n]]] $params
+        next n[dict get $arguments name] [list [list p [dict get $arguments p]] [list n [dict get $arguments n]]]\\
+                $params
 .fi
 .RE
 .PP
@@ -211,8 +213,7 @@ So, after that we can create a new instance of newly created class:
 .PP
 .RS 4n
 .nf
-set coreInst [Core new 1 p n -model coreModel -area 1e-4 -len {l*5 -eq}]
-puts [$coreInst genSPICEString]
+set core1 [Core new c1 mi m1 -model coremodel -len 60m -area 4u]
 .fi
 .RE
 .PP
@@ -244,7 +245,7 @@ process optional args arguments and produces string for \fI::SpiceGenTcl::Model\
 .PP
 .RS 4n
 .nf
-next {*}[my ArgsPreprocess {ms a k alpha c} {name type} type {*}[linsert $args 1 coreja]]
+        next {*}[my ArgsPreprocess {ms a k alpha c} {name type} type {*}[linsert $args 1 coreja]]
 .fi
 .RE
 .PP
@@ -288,7 +289,6 @@ Finally, we initialize model instance and print SPICE string:
 .RS 4n
 .nf
 set coreModel [CoreModel new coremodel -ms 1\&.7meg -a 1100 -k 2000 -alpha 1\&.6m -c 0\&.2]
-puts [$coreModel genSPICEString]
 .fi
 .RE
 .PP
@@ -301,7 +301,7 @@ The result is:
 .RE
 .PP
 If you want to see the simulation example with that model, please look at
-/examples/ngspice/advanced/verilog_a_magnetic\&.tcl\&.
+"examples/ngspice/advanced/verilog_a_magnetic\&.tcl"\&.
 
 
 .SH SEE ALSO

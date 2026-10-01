@@ -1,11 +1,14 @@
 # example is from Ngspice example folder (/examples/p-to-n-examples/switch-oscillators.cir)
-
+package require rbc::vector
 package require SpiceGenTcl
 package require ticklecharts
+package require math::linearalgebra
+namespace import ::math::linearalgebra::transpose
+namespace import rbc::vector
 namespace import ::SpiceGenTcl::*
 importXyce
 
-# create class that represents inverter subcircuit
+### create class that represents inverter subcircuit
 oo::class create Inverter {
     superclass Subcircuit
     constructor {} {
@@ -24,10 +27,10 @@ oo::class create Inverter {
 # create subcircuit definition instance
 set inverter [Inverter new]
 
-# create top-level circuit
+### create top-level circuit
 set circuit [Circuit new {switch_oscillator}]
 # add elements to circuit
-$circuit add [Tran new -tstep 50e-12 -tstop 80e-9]
+$circuit add [Tran new -tstep 50e-12 -tstop 40e-9]
 $circuit add [Options new {{method gear} {maxord 3}}]
 $circuit add [RawString new ".ic v(osc_out)=0.25"]
 $circuit add $inverter
@@ -46,38 +49,80 @@ $circuit add [SubcircuitInstanceAuto new $inverter x19 {n16 osc_out vdd 0}]
 $circuit add [VSwitchModel new swswitch -von 1 -voff 0.9 -ron 1e3 -roff 1e12]
 $circuit add [VSwitchModel new switchn -von 1 -voff 0.9 -ron 1e3 -roff 1e12]
 
-#set simulator with default temporary directory
+### set simulator with default temporary directory
 set simulator [Batch new {batch1}]
 # attach simulator object to circuit
 $circuit configure -simulator $simulator
 # run circuit, read log and data
-$circuit runAndRead
+$circuit runAndRead -vector
 # get data object
 set data [$circuit getDataDict]
-foreach time [dict get $data time] vout [dict get $data osc_out] imeas [dict get $data vmeasure#branch] {
-    lappend timeVout [list $time $vout]
-    lappend timeImeas [list $time $imeas]
-}
+set time [dict get $data time]
+set vout [dict get $data osc_out]
+set imeas [dict get $data vmeasure#branch]
+set timeVout [transpose [list [$time index :] [$vout index :]]]
+set timeImeas  [transpose [list [$time index :] [$imeas index :]]]
 
-# plot results with ticklecharts
+### plot results with ticklecharts
 # chart for output voltage
+set numberFormat [ticklecharts::jsfunc new {
+    function (value) {
+        return Number(value).toPrecision(3);
+    }
+}]
 set chartVout [ticklecharts::chart new]
-$chartVout Xaxis -name "time, s" -minorTick {show "True"} -type "value"
-$chartVout Yaxis -name "Output voltage, V" -minorTick {show "True"} -type "value"
-$chartVout SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
-        -toolbox {feature {dataZoom {yAxisIndex "none"}}}
-$chartVout Add "lineSeries" -data $timeVout -showAllSymbol "nothing" -symbolSize "0"
+$chartVout Xaxis -name {time, s} -minorTick {show True} -type value -splitLine {show True}
+$chartVout Yaxis -name {Output voltage, V} -minorTick {show True} -type value -splitLine {show True}
+$chartVout SetOptions -title {} -tooltip [list trigger axis valueFormatter $numberFormat] -animation False\
+        -toolbox {feature {dataZoom {yAxisIndex none}}}
+$chartVout Add lineSeries -data $timeVout -showAllSymbol nothing -symbolSize 0 -name v(osc_out)
 # chart for measured current
 set chartImeas [ticklecharts::chart new]
-$chartImeas Xaxis -name "time, s" -minorTick {show "True"} -type "value"
-$chartImeas Yaxis -name "Current, I" -minorTick {show "True"} -type "value"
-$chartImeas SetOptions -title {} -tooltip {trigger "axis"} -animation "False"\
-        -toolbox {feature {dataZoom {yAxisIndex "none"}}}
-$chartImeas Add "lineSeries" -data $timeImeas -showAllSymbol "nothing" -symbolSize "0"
+$chartImeas Xaxis -name {time, s} -minorTick {show True} -type value -splitLine {show True}
+$chartImeas Yaxis -name {Current, I} -minorTick {show True} -type value -splitLine {show True}
+$chartImeas SetOptions -title {} -tooltip [list trigger axis valueFormatter $numberFormat] -animation False\
+        -toolbox {feature {dataZoom {yAxisIndex none}}}
+$chartImeas Add lineSeries -data $timeImeas -showAllSymbol nothing -symbolSize 0 -name i(vmeasure)
 # create multiplot
 set layout [ticklecharts::Gridlayout new]
-$layout Add $chartVout -bottom "5%" -height "40%" -width "80%"
-$layout Add $chartImeas -bottom "55%" -height "40%" -width "80%"
-
+$layout Add $chartVout -bottom 5% -height 40% -width 80%
+$layout Add $chartImeas -bottom 55% -height 40% -width 80%
 set fbasename [file rootname [file tail [info script]]]
-$layout Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px
+$layout Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px\
+        -divid $fbasename -jschartvar chart_$fbasename -jsvar option_$fbasename
+
+### plot results with rbc
+if {![catch {package require rbc}]} {
+
+    set currentDir [file dirname [file normalize [info script]]]
+    source [file join $currentDir .. .. common.tcl]
+
+    set graphVout [rbc::graphtoolbar .gVout -width 700 -height 400 -type graph -controlmode context -zoom -crosshairs\
+                       -crosshairsmode closest  -pan -zoomwheel]
+    set graphImeas [rbc::graphtoolbar .gImeas -width 700 -height 400 -type graph -controlmode context -zoom -crosshairs\
+                       -crosshairsmode closest  -pan -zoomwheel]
+    $graphVout graph grid on
+    $graphVout graph axis configure x -title {time, s}
+    $graphVout graph axis configure y -title {Output voltage, V}
+    $graphVout graph element create vout -x $time -y $vout -symbol {} -label v(osc_out) -color [lindex $colors 0]\
+            -linewidth 2
+    $graphImeas graph grid on
+    $graphImeas graph axis configure x -title {time, s}
+    $graphImeas graph axis configure y -title {Current, I}
+    $graphImeas graph element create imeas -x $time -y $imeas -symbol {} -label i(vmeasure) -color [lindex $colors 1]\
+            -linewidth 2
+
+    # add bindings for axes synchronization
+    dict set ::axesStates [$graphVout subwidget graph] x [$graphVout graph axis limits x]
+    dict set ::axesStates [$graphImeas subwidget graph] x [$graphImeas graph axis limits x]
+    bind [$graphVout subwidget graph] <<RbcAxisLimitsChanged>> [list syncAxes %W %d x [$graphImeas subwidget graph] x]
+    bind [$graphImeas subwidget graph] <<RbcAxisLimitsChanged>> [list syncAxes %W %d x [$graphVout subwidget graph] x]
+
+    grid $graphVout -row 0 -sticky nsew
+    grid $graphImeas -row 1 -sticky nsew
+    grid columnconfigure . 0 -weight 1
+    grid rowconfigure . 0 -weight 1
+    grid rowconfigure . 1 -weight 1
+    $graphVout graph svg output [file normalize [file join .. svg_charts ${fbasename}_vout.svg]]
+    $graphImeas graph svg output [file normalize [file join .. svg_charts ${fbasename}_imeas.svg]]
+}

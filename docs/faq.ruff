@@ -46,7 +46,6 @@ namespace eval FAQ {
         that defines the simulator currently in use.
         
         ## How to change parameter of existing element?
-        
         For all elements with parameters you can change parameter value by its name with method
         [::SpiceGenTcl::Device::actOnParam] with selected action `-set`.
         
@@ -109,7 +108,6 @@ namespace eval FAQ {
         
         
         ## How to find the list of optional parameters for elements?
-        
         The list of parameters in the documentation includes descriptions of the mandatory arguments and availible
         options. But for some elements, especially models, there could be dozens of parameters, and I wanted to avoid
         cluttering the documentation.
@@ -161,7 +159,6 @@ namespace eval FAQ {
         ```
 
         ## How to get raw data after simulation?
-        
         After a successful simulation, an object of the [::SpiceGenTcl::RawFile] class is created and attached to the
         top-level [::SpiceGenTcl::Circuit] object. To retrieve the result vectors, simply call the
         [::SpiceGenTcl::Circuit::getDataDict] method on the [::SpiceGenTcl::Circuit] object. This method returns the
@@ -174,9 +171,16 @@ namespace eval FAQ {
         set axisList [dict get $data v(anode)]
         set traceList [dict get $data i(va)]
         ```
+
+        If you run and read data in vector mode:
+        ```tcl
+        $circuit runAndRead -vector
+        ```
+
+        Then instead of the list of values, dictionary values will contain RBC vector full name, that can be accessed 
+        directly.
         
         ## How to get the names of all vectors in raw file?
-        
         For this task, you should first retrieve the [::SpiceGenTcl::RawFile] object reference from the
         [::SpiceGenTcl::Circuit] object using the `configure -data` method. Then, call the
         [::SpiceGenTcl::RawFile::getVariablesNames] method, which returns a list of all variable names.
@@ -191,7 +195,6 @@ namespace eval FAQ {
         [::SpiceGenTcl::RawFile::getVoltagesNames] and [::SpiceGenTcl::RawFile::getCurrentsNames].
         
         ## How to get log file after simulation?
-        
         There is a property method for it in object of [::SpiceGenTcl::Circuit] class - `configure -log`, it returns
         string containing log file.
         
@@ -201,7 +204,6 @@ namespace eval FAQ {
         ```
 
         ## How to save result traces in comma-separated file format (csv)?
-
         After simulation is done, you can use [::SpiceGenTcl::Circuit] class method [::SpiceGenTcl::Circuit::getDataCsv]
         to get string formatted with csv. You can get all traces with the flag `-all`, or select individual traces
         by providing name after `-traces` switch. Also you can define column separator after the flag `-sep`.

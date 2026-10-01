@@ -6,10 +6,17 @@ package require ticklecharts
 namespace import ::SpiceGenTcl::*
 importNgspice
 
-
+# docs-begin core-definition-verilog-a
+# docs-begin core-definition-name-verilog-a
 oo::class create Core {
+# docs-end core-definition-name-verilog-a
+    # docs-begin core-definition-superclass-verilog-a
     superclass Device
+    # docs-end core-definition-superclass-verilog-a
+    # docs-begin core-definition-constructor-line-verilog-a
     constructor {args} {
+        # docs-end core-definition-constructor-line-verilog-a
+        # docs-begin core-definition-constructor-args-verilog-a
         set arguments [argparse -inline -pfirst -helplevel 1 -help {} {
             {-model= -required -help {Model of the core}}
             {-len= -default 0.1 -help {Length of the core}}
@@ -18,6 +25,8 @@ oo::class create Core {
             {p -help {Name of node connected to positive pin}}
             {n -help {Name of node connected to negative pin}}
         }]
+        # docs-end core-definition-constructor-args-verilog-a
+        # docs-begin core-definition-constructor-args-build-verilog-a
         lappend params [list -posnocheck model [dict get $arguments model]]
         dict for {paramName value} $arguments {
             if {$paramName ni {model name p n}} {
@@ -28,17 +37,25 @@ oo::class create Core {
                 }
             }
         }
+        # docs-end core-definition-constructor-args-build-verilog-a
+        # docs-begin core-definition-constructor-next-verilog-a
         next n[dict get $arguments name] [list [list p [dict get $arguments p]] [list n [dict get $arguments n]]]\
                 $params
+        # docs-end core-definition-constructor-next-verilog-a
     }
 }
+# docs-end core-definition-verilog-a
 
+# docs-begin core-model-verilog-a
 oo::class create CoreModel {
     superclass Model
     constructor {args} {
+        # docs-begin core-model-args-verilog-a
         next {*}[my ArgsPreprocess {ms a k alpha c} {name type} type {*}[linsert $args 1 coreja]]
+        # docs-end core-model-args-verilog-a
     }
 }
+# docs-end core-model-verilog-a
 
 oo::class create Gap {
     superclass Device
@@ -120,11 +137,15 @@ pre_osdi [file join $dir verilog_a gap.osdi]
 pre_osdi [file join $dir verilog_a winding.osdi]
 .endc"
 set osdiInclude [RawString new $control]
+# docs-begin core-inst-verilog-a
 set core1 [Core new c1 mi m1 -model coremodel -len 60m -area 4u]
+# docs-end core-inst-verilog-a
 set phCore [Vdc new phmeas m mi -dc 0]
 set core2 [Core new c2 m m2a -model coremodel -len 20m -area 8u]
 set core3 [Core new c3 m m3a -model coremodel -len 60m -area 4u]
+# docs-begin core-model-inst-verilog-a
 set coreModel [CoreModel new coremodel -ms 1.7meg -a 1100 -k 2000 -alpha 1.6m -c 0.2]
+# docs-end core-model-inst-verilog-a
 set gap1 [Gap new g1 m2a m2b -model gapmodel -len 0.4m -area 8u]
 set gap2 [Gap new g2 m 0 -model gapmodel -len 20m -area 80u]
 set gapModel [GapModel new gapmodel]
@@ -146,7 +167,10 @@ $circuit add $core1 $phCore $core2 $core3 $gap1 $gap2 $wind1 $wind2 $wind3a $win
 $circuit add $coreModel $gapModel $windModel
 $circuit add $tran
 $circuit add $osdiInclude
-$circuit configure -simulator [Batch new {batch1}]
+if {[catch {set simulator [Shared new batch1]}]} {
+    set simulator [Batch new batch1]
+}
+$circuit configure -simulator $simulator
 $circuit runAndRead
 set data [$circuit getDataDict]
 foreach time [dict get $data time] m [dict get $data v(m)] m1 [dict get $data v(m1)] ph1 [dict get $data i(vphmeas)] {

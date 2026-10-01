@@ -2265,7 +2265,7 @@ namespace eval ::SpiceGenTcl {
                                        Plotname [::ngspicetclbridge::getPlotName $simHandle]\
                                        Flags $numtype {No. Variables} $nvariables {No. Points} $npoints]
                 dict for {name points} $vectorsData {
-                    if {[dict get [dict get $vectorsInfo $name] type] in {voltage s-param impedance admittance}} {
+                    if {[dict get [dict get $vectorsInfo $name] type] in {voltage}} {
                         # noqa: W306
                         if {[regexp -nocase "^v\\((\[^)]+)\\)$" $name]} {
                             set nameModif [string tolower $name]

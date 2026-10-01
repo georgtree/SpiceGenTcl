@@ -3,6 +3,8 @@
 package require ruff
 package require fileutil
 set docDir [file dirname [file normalize [info script]]]
+set projectRoot [file normalize [file join $docDir ..]]
+source [file join $docDir doc_include.tcl]
 set sourceDir "${docDir}/../src"
 source [file join $docDir startPage.ruff]
 source [file join $docDir generalInformation.ruff]
@@ -14,7 +16,7 @@ source [file join $docDir advanced.ruff]
 source [file join $docDir parser.ruff]
 source [file join $docDir .. SpiceGenTcl.tcl]
 
-set packageVersion [package versions SpiceGenTcl]
+set packageVersion [package provide SpiceGenTcl]
 if {$packageVersion eq {}} {
     return -code error "Package version is empty"
 }
@@ -40,6 +42,13 @@ set namespaces [list "::List of devices" ::FAQ ::Tutorials ::Tips ::Advanced ::P
                         ::SpiceGenTcl::Ltspice::Analyses ::SpiceGenTcl::Ltspice::Simulators]
 set namespacesNroff $namespaces
 
+foreach ns $namespaces {
+    set preambleVar "${ns}::_ruff_preamble"
+    if {[info exists $preambleVar]} {
+        set $preambleVar [::docgen::expandIncludes [set $preambleVar] $projectRoot]
+    }
+}
+
 ruff::document $namespaces -outdir $docDir -format sphinx -outfile SpiceGenTcl.rst -outdir [file join $docDir sphinx]\
         {*}$commonSphinx
 ruff::document $namespacesNroff -outdir $docDir -format nroff -outfile SpiceGenTcl.n {*}$commonNroff
@@ -59,6 +68,14 @@ class MyTclLexer(TclLexer):
     def get_tokens_unprocessed(self, text):
         for i, t, v in super().get_tokens_unprocessed(text):
             if v == "=":
+                yield i, Operator, v   # or Name.Builtin
+            elif v == "$":
+                yield i, Operator, v   # or Name.Builtin
+            elif v == "\\":
+                yield i, Operator, v   # or Name.Builtin
+            elif v == "%":
+                yield i, Operator, v   # or Name.Builtin
+            elif v == "'":
                 yield i, Operator, v   # or Name.Builtin
             else:
                 yield i, t, v

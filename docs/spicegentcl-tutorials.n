@@ -39,8 +39,8 @@ First step is building the target netlist with variable elements:
 .PP
 .RS 4n
 .nf
-# create netlist
 set netlist [Netlist new main_netlist]
+
 # incrementally build netlist by adding different elements
 $netlist add [R new 1 net1 net2 -r 10]
 $netlist add [R new 5 net1 net2 -model res_sem -l 10e-6 -w 100e-6]
@@ -63,7 +63,6 @@ that have all circuit elements:
 .PP
 .RS 4n
 .nf
-# generate SPICE netlist
 puts [$netlist genSPICEString]
 .fi
 .RE
@@ -125,7 +124,6 @@ Next important operation is getting reference of element in netlist\&. We can do
 .PP
 .RS 4n
 .nf
-# get reference of resistor object
 set resistor [$netlist getElement r1]
 .fi
 .RE
@@ -134,7 +132,6 @@ After it, we can change the resistance parameter of element:
 .PP
 .RS 4n
 .nf
-# change the value of resistor in circuit
 $resistor actOnParam -set r 100
 .fi
 .RE
@@ -145,7 +142,6 @@ element:
 .PP
 .RS 4n
 .nf
-# change the name of connected net to plus pin
 $resistor actOnPin -set np net10
 .fi
 .RE
@@ -244,7 +240,7 @@ In constructor of this class we define pins as list with names in order of appea
 .PP
 .RS 4n
 .nf
-set pins {plus minus}
+        set pins {plus minus}
 .fi
 .RE
 .PP
@@ -252,7 +248,7 @@ Then we define parameters as list of two-elements list that contains name and de
 .PP
 .RS 4n
 .nf
-set params {{r 100} {c 1e-6}}
+        set params {{r 100} {c 1e-6}}
 .fi
 .RE
 .PP
@@ -260,10 +256,10 @@ Next step is adding elements to subcircuit:
 .PP
 .RS 4n
 .nf
-my add [R new 1 net1 plus -r {-eq r}]
-my add [C new 1 net2 net3 -c {-eq c}]
-my add [R new 5 minus net2 -model res_sem -l 10e-6 -w 100e-6]
-my add [RModel new rsem1mod -tc1 0\&.1 -tc2 0\&.4]
+        my add [R new 1 net1 plus -r {-eq r}]
+        my add [C new 1 net2 net3 -c {-eq c}]
+        my add [R new 5 minus net2 -model res_sem -l 10e-6 -w 100e-6]
+        my add [RModel new rsem1mod -tc1 0\&.1 -tc2 0\&.4]
 .fi
 .RE
 .PP
@@ -271,7 +267,7 @@ The last action is to pass name of subcircuit, list of pins and parameters to co
 .PP
 .RS 4n
 .nf
-next rcnet $pins $params
+        next rcnet $pins $params
 .fi
 .RE
 .PP
@@ -302,7 +298,6 @@ First way is direct construction of element by providing pins and parameter list
 .PP
 .RS 4n
 .nf
-# create subcircuit instance
 set subInst [SubcircuitInstance new 1 {{plus net1} {minus net2}} rcnet {{r 1} {-eq c cpar}}]
 .fi
 .RE
@@ -311,7 +306,6 @@ But the second way is simpler and allow to check if we have mistake in definitio
 .PP
 .RS 4n
 .nf
-# create subcircuit instance with help of already created subcircuit definition $subcircuit
 set subInst1 [SubcircuitInstanceAuto new $subcircuit 2 {net1 net2} -r 1 -c {-eq cpar}]
 .fi
 .RE
@@ -345,13 +339,12 @@ As in previous examples, we start by creating the top circuit and adding element
 .PP
 .RS 4n
 .nf
-# create top-level circuit
 set circuit [Circuit new {diode IV}]
 # add elements to circuit
 $circuit add [D new 1 anode 0 -model diomod -area 1 -lm 1e-6]
 $circuit add [Vdc new a anode 0 -dc 0]
-$circuit add [DiodeModel new diomod -is 1e-12 -n 1\&.2 -rs 0\&.01 -cj0 1e-9 -trs1 0\&.001 -xti 5]
-$circuit add [Dc new -src va -start 0 -step 2 -incr 0\&.01]
+$circuit add [DiodeModel new diomod -is 1e-12 -n 1\&.2 -rs 0\&.01 -cjo 1e-9 -trs1 0\&.001 -xti 5 -ikf 100]
+$circuit add [Dc new -src va -start 0 -stop 2 -incr 0\&.01]
 .fi
 .RE
 .PP
@@ -367,21 +360,23 @@ circuit:
 .PP
 .RS 4n
 .nf
-# add \&.temp
 set tempSt [Temp new 25]
 $circuit add $tempSt
 .fi
 .RE
 .PP
 Next, we create an array containing the temperature values and instantiate an object of the
-\fI::SpiceGenTcl::Ngspice::Simulators::Batch\fP class\&.:
+\fI::SpiceGenTcl::Ngspice::Simulators::Batch\fP class:
 .PP
 .RS 4n
 .nf
 # add temperature sweep
-set temps [list -55 25 85 125 175]
-# set simulator with default
-set simulator [Batch new {batch1}]
+set temps {-55 25 85 125 175}
+
+### set simulator with default
+if {[catch {set simulator [Shared new -nocleanup shared1]}]} {
+    set simulator [Batch new -nocleanup batch1]
+}
 # attach simulator object to circuit
 $circuit configure -simulator $simulator
 .fi
@@ -392,19 +387,14 @@ save the data, and repeat this process multiple times:
 .PP
 .RS 4n
 .nf
-# run circuit, change temperature, read log and data
 foreach temp $temps {
     $tempSt configure -value $temp
-    $circuit runAndRead
-    puts [$circuit configure -log]
+    $circuit runAndRead -vector
     set data [$circuit getDataDict]
-    set xydata [list]
-    foreach x [dict get $data v(anode)] y [dict get $data i(va)] {
-        set xf [format %\&.3f $x]
-        set yf [format %\&.3f [expr {-$y}]]
-        lappend xydata [list $xf $yf]
-    }
-    lappend dataList $xydata
+    lappend xVecs [dict get $data v(anode)]
+    set yVec [dict get $data i(va)]
+    $yVec expr {-$yVec}
+    lappend yVecs $yVec
 }
 .fi
 .RE
@@ -413,17 +403,23 @@ Plotting the results:
 .PP
 .RS 4n
 .nf
-# plot results with ticklecharts
 set chart [ticklecharts::chart new]
-$chart Xaxis -name {v(anode), V} -minorTick {show True}  -type value -splitLine {show True}
-$chart Yaxis -name {Idiode, A} -minorTick {show True}  -type value -splitLine {show True}
-$chart SetOptions -title {} -tooltip {trigger axis} -animation False -legend {} -toolbox {feature {dataZoom {yAxisIndex none}}} -grid {left 5% right 15%}
-foreach data $dataList temp $temps {
-    $chart Add lineSeries -data $data -showAllSymbol nothing -name ${temp}°C -symbolSize 2
+set numberFormat [ticklecharts::jsfunc new {
+    function (value) {
+        return Number(value)\&.toPrecision(4);
+    }
+}]
+$chart Xaxis -name {v(anode), V} -minorTick {show True} -type value -splitLine {show True}
+$chart Yaxis -name {Idiode, A} -minorTick {show True} -type value -splitLine {show True}
+$chart SetOptions -title {} -tooltip [list trigger axis valueFormatter $numberFormat] -animation False -legend {}\\
+        -toolbox {feature {dataZoom {yAxisIndex none}}} -grid {left 5% right 15%}
+foreach xVec $xVecs yVec $yVecs temp $temps {
+    $chart Add lineSeries -data [transpose [list [$xVec index :] [$yVec index :]]] -showAllSymbol nothing\\
+            -name ${temp}°C -symbolSize 2
 }
 set fbasename [file rootname [file tail [info script]]]
-
-$chart Render -outfile [file normalize [file join \&.\&. html_charts $fbasename\&.html]] -width 800px -height 500px
+$chart Render -outfile [file normalize [file join \&.\&. html_charts $fbasename\&.html]] -width 800px -height 500px\\
+        -divid $fbasename -jschartvar chart_$fbasename -jsvar option_$fbasename
 .fi
 .RE
 .PP
@@ -431,7 +427,34 @@ In the picture, you can see how temperature affects the forward current of the d
 resistance has a temperature dependence, all the lines intersect near 1\&.8V, indicating the point of zero
 temperature coefficient\&.
 .PP
-This circuit works almost without modification in Xyce simulator, see "examples/xyce/dc/diode_iv\&.tcl" file\&.
+If rbc package is installed, plotting could be done with it:
+.PP
+.RS 4n
+.nf
+if {![catch {package require rbc}]} {
+    set colors {#5470c6 #91cc75 #fac858 #ee6666 #73c0de #3ba272 #fc8452 #9a60b4 #ea7ccc}
+    set graph [rbc::graphtoolbar \&.g -width 700 -height 400 -type graph -controlmode context -zoom -crosshairs\\
+                       -crosshairsmode closest -crosshairsclosestopts {-interpolate no} -pan -zoomwheel -scaletoggle y\\
+                       -activelegend]
+    $graph graph grid on
+    $graph graph axis configure x -title {v(anode), V}
+    $graph graph axis configure y -title {Idiode, A}
+    set i -1
+    foreach xVec $xVecs yVec $yVecs temp $temps {
+        $graph graph element create temp$temp -x $xVec -y $yVec -symbol circle -pixels 2 -label ${temp}°C\\
+                -color [lindex $colors [incr i]]
+    }
+    grid $graph -sticky nsew
+    grid columnconfigure \&. 0 -weight 1
+    grid rowconfigure \&. 0 -weight 1
+    $graph graph svg output [file normalize [file join \&.\&. svg_charts $fbasename\&.svg]]
+}
+.fi
+.RE
+.PP
+This circuit works without modification in LTspice simulator, see "examples/ltspice/dc/diode_iv\&.tcl" file\&.
+.PP
+For Xyce simulator there are some differences, see "examples/xyce/dc/diode_iv\&.tcl" file\&.
 The one of the differences is how we set the global temperature: in Xyce there is no \&.temp statement, for
 setting global temperature we use \&.options statement with class \fI::SpiceGenTcl::Options\fP:
 .PP
@@ -445,7 +468,16 @@ and then modify this value in loop:
 .PP
 .RS 4n
 .nf
-$tempSt configure -value $temp
+    $tempSt actOnParam -set temp $temp
+.fi
+.RE
+.PP
+Also, the names of the resulted vectors are different:
+.PP
+.RS 4n
+.nf
+    lappend xVecs [dict get $data anode]
+    set yVec [dict get $data va#branch]
 .fi
 .RE
 .SS "DIODE CAPACITANCE SIMUALTION"
@@ -472,7 +504,8 @@ First, we can define π constant manually, or borrow the value from ::math::cons
 .RS 4n
 .nf
 package require math::constants
-::math::constants::constants  pi
+::math::constants::constants radtodeg degtorad pi
+variable pi
 .fi
 .RE
 .PP
@@ -480,19 +513,18 @@ We again go through the circuit building sequence:
 .PP
 .RS 4n
 .nf
-# create top-level circuit
 set circuit [Circuit new {diode CV}]
 # add elements to circuit
 $circuit add [D new 1 0 c -model diomod -area 1 -lm 1e-6]
 set vdc [Vdc new a c nin -dc 0]
 $circuit add $vdc
 $circuit add [Vac new b nin 0 -ac 1]
-$circuit add [DiodeModel new diomod -is 1e-12 -n 1\&.2 -rs 0\&.01 -cj0 1e-9 -trs1 0\&.001 -xti 5]
-$circuit add [Ac new -variation lin -n 1 -fstart 1e5 -fstop 1e5]
+$circuit add [DiodeModel new diomod -is 1e-12 -n 1\&.2 -rs 0\&.01 -cjo 1e-9 -trs1 0\&.001 -xti 5]
+$circuit add [Ac new -name ac -variation lin -n 1 -fstart 1e5 -fstop 1e5]
 .fi
 .RE
 .PP
-What are new here:
+What is new here:
 .TP
 \(bu
 AC voltage source [Vac new b nin 0 -ac 1] - uses to generate AC signal
@@ -504,22 +536,26 @@ Nest step is to add voltage sweep:
 .PP
 .RS 4n
 .nf
-# add voltage sweep
 set voltSweep [lseq 0 20\&.0 0\&.1]
 .fi
 .RE
 .PP
-Then we as usual, create \fI::SpiceGenTcl::Ngspice::Simulators::BatchLiveLog\fP class object, attach it to
-$circuit, run it multiple times, collect results and apply the equation to calculate the capacitance
-(with the voltage phasor set to 1, so it is omitted):
+Then we as usual, create \fI::SpiceGenTcl::Ngspice::Simulators::Batch\fP (or
+\fI::SpiceGenTcl::Ngspice::Simulators::Shared\fP if availible) class object, attach it to $circuit, run it
+multiple times, collect results and apply the equation to calculate the capacitance (with the voltage phasor
+set to 1, so it is omitted):
 .PP
 .RS 4n
 .nf
-#set simulator with default
-set simulator [BatchLiveLog new {batch1}]
+if {[catch {set simulator [Shared new shared1]}]} {
+    set simulator [Batch new batch1]
+}
 # attach simulator object to circuit
 $circuit configure -simulator $simulator
-# loop in which we run simulation, change reverse bias and read the results
+
+### loop in which we run simulation, change reverse bias and read the results
+vector create y -type complex
+vector create voltage
 foreach volt $voltSweep {
     #set reverse voltage bias
     $vdc actOnParam -set dc $volt
@@ -527,56 +563,63 @@ foreach volt $voltSweep {
     $circuit runAndRead
     # get data object
     set data [$circuit getDataDict]
-    set x $volt
-    # get imaginary part of current
-    set y [lindex [dict get $data i(va)] 0 1]
-    set xf [format %\&.3e $x]
-    set yf [format %\&.2e [expr {-$y/(2*$pi*1e5*1e-9)}]]
-    lappend xydata [list $xf $yf]
+    # append data to vectors
+    voltage append $volt
+    y append [dict get $data i(va)]
 }
+vector create capacitance
+set freq [[$circuit getElement ac] actOnParam -get fstart]
+capacitance expr {-imag(y)/(2*$pi*$freq*1e-9)}
+set xydata [transpose [list [voltage index :] [capacitance index :]]]
 .fi
 .RE
-.PP
-The \fI::SpiceGenTcl::Ngspice::Simulators::BatchLiveLog\fP simulator differs from
-\fI::SpiceGenTcl::Ngspice::Simulators::Batch\fP in that it prints output line by line during the simulation,
-rather than only at the end\&.
 .PP
 Here, we collect the imaginary component of the current flowing through the AC voltage source 'Va'\&.
 .PP
-You might wonder why we use two indices, 0 and 1, when extracting values from the vector i(va)\&.
-.PP
-The answer is as follows: the first index extracts values from the list of values at different frequencies,
-while the second index retrieves the imaginary component\&.
-.PP
-The AC data vectors are organized as follows:
-.PP
-.RS 4n
-.nf
-{{reVal0 imVal0} {reVal1 imVal1} {reVal2 imVal2} \&.\&.\&.}
-.fi
-.RE
-.PP
-Here, reVal0 is the real value at frequency index 0, imVal0is the imaginary value at the same frequency,
-reVal1 is the real value at frequency index 1, imVal1 is the imaginary value at that frequency, and so on\&.
-Even if there is only one frequency in the AC analysis, you should still extract the value using index 0\&.
+The AC data vectors are saved into complex RBC vector y\&.
 .PP
 Now we can plot the results:
 .PP
 .RS 4n
 .nf
-# plot results with ticklecharts
 set chart [ticklecharts::chart new]
+set numberFormat [ticklecharts::jsfunc new {
+    function (value) {
+        return Number(value)\&.toPrecision(2);
+    }
+}]
 $chart Xaxis -name {v(0,c), V} -minorTick {show True} -type value -splitLine {show True}
 $chart Yaxis -name {Diode capacitance, nF} -minorTick {show True} -type value -splitLine {show True}
-$chart SetOptions -title {} -tooltip {trigger axis} -animation False -toolbox {feature {dataZoom {yAxisIndex none}}}
-$chart Add lineSeries -data $xydata -showAllSymbol nothing
+$chart SetOptions -title {} -tooltip [list trigger axis valueFormatter $numberFormat] -animation False\\
+        -toolbox {feature {dataZoom {yAxisIndex none}}}
+$chart Add lineSeries -name Capacitance -data $xydata -showAllSymbol nothing
 set fbasename [file rootname [file tail [info script]]]
-
-$chart Render -outfile [file normalize [file join \&.\&. html_charts $fbasename\&.html]] -width 800px -height 500px
+$chart Render -outfile [file normalize [file join \&.\&. html_charts $fbasename\&.html]] -width 800px -height 500px\\
+        -divid $fbasename -jschartvar chart_$fbasename -jsvar option_$fbasename
 .fi
 .RE
 .PP
 As a result, we obtain the expected curve, showing a decrease in capacitance value with higher reverse voltage\&.
+.PP
+If rbc package is installed, plotting could be done with it:
+.PP
+.RS 4n
+.nf
+if {![catch {package require rbc}]} {
+    set graph [rbc::graphtoolbar \&.g -width 700 -height 400 -type graph -controlmode context -zoom -crosshairs\\
+                       -crosshairsmode closest -crosshairsclosestopts {-interpolate no} -pan -zoomwheel]
+    $graph graph legend configure -hide yes
+    $graph graph grid on
+    $graph graph axis configure x -title {v(0,c), V}
+    $graph graph axis configure y -title {Diode capacitance, nF}
+    $graph graph element create current -x voltage -y capacitance -symbol circle -pixels 2
+    grid $graph -sticky nsew
+    grid columnconfigure \&. 0 -weight 1
+    grid rowconfigure \&. 0 -weight 1
+    $graph graph svg output [file normalize [file join \&.\&. svg_charts $fbasename\&.svg]]
+}
+.fi
+.RE
 .SS "SENSITIVE ANALYSIS OF DIFFERENTIAL PAIR"
 .PP
 In this circuit we run DC sensitive analysis of differential pair\&.
@@ -585,10 +628,12 @@ We build circuit step by step:
 .PP
 .RS 4n
 .nf
-# create top-level circuit
 set circuit [Circuit new {simple differential pair}]
 # add elements to circuit
-$circuit add [Vdc new cc 8 0 -dc 12] [Vdc new ee 9 0 -dc -12] [Vac new cm 1 0 -ac 1] [Vac new dm 1 11 -ac 1] [Q new 1 4 2 6 -model qnr] [Q new 2 5 3 6 -model qnl] [R new s1 11 2 -r 1e3] [R new s2 3 1 -r 1e3] [R new c1 4 8 -r 10e3] [R new c2 5 8 -r 10e3] [Q new 3 7 7 9 -model qnl] [Q new 4 6 7 9 -model qnr] [R new bias 7 8 -r 20e3]
+$circuit add [Vdc new cc 8 0 -dc 12] [Vdc new ee 9 0 -dc -12] [Vac new cm 1 0 -ac 1] [Vac new dm 1 11 -ac 1]\\
+        [Q new 1 4 2 6 -model qnr] [Q new 2 5 3 6 -model qnl] [R new s1 11 2 -r 1e3] [R new s2 3 1 -r 1e3]\\
+        [R new c1 4 8 -r 10e3] [R new c2 5 8 -r 10e3] [Q new 3 7 7 9 -model qnl] [Q new 4 6 7 9 -model qnr]\\
+        [R new bias 7 8 -r 20e3]
 .fi
 .RE
 .PP
@@ -596,8 +641,8 @@ Then we add models for NPN and PNP bipolar transistors:
 .PP
 .RS 4n
 .nf
-$circuit add [BjtGPModel new qnl npn -bf 80 -rb 100 -cjc 2e-12 -tf 0\&.3e-9 -tr 6e-9 -cje 3e-12 -cjc 2e-12 -va 50]
-$circuit add [BjtGPModel new qnr npn -bf 80 -rb 100 -cjc 2e-12 -tf 0\&.3e-9 -tr 6e-9 -cje 3e-12 -cjc 2e-12 -va 50]
+$circuit add [BjtGPModel new qnl npn -bf 80 -rb 100 -cjc 2e-12 -tf 0\&.3e-9 -tr 6e-9 -cje 3e-12 -cjc 2e-12 -vaf 50]
+$circuit add [BjtGPModel new qnr npn -bf 80 -rb 100 -cjc 2e-12 -tf 0\&.3e-9 -tr 6e-9 -cje 3e-12 -cjc 2e-12 -vaf 50]
 .fi
 .RE
 .PP
@@ -613,7 +658,6 @@ We create simulator, run it and read data:
 .PP
 .RS 4n
 .nf
-#set simulator with default
 set simulator [Batch new {batch1}]
 # attach simulator object to circuit
 $circuit configure -simulator $simulator
@@ -649,7 +693,6 @@ of this class:
 .PP
 .RS 4n
 .nf
-# create class that represents inverter subcircuit
 oo::class create Inverter {
     superclass Subcircuit
     constructor {} {
@@ -664,6 +707,7 @@ oo::class create Inverter {
         next inverter $pins $params
     }
 }
+
 # create subcircuit definition instance
 set inverter [Inverter new]
 .fi
@@ -673,10 +717,9 @@ Next, we define the other elements and the top-level circuit:
 .PP
 .RS 4n
 .nf
-# create top-level circuit
 set circuit [Circuit new {switch_oscillator}]
 # add elements to circuit
-$circuit add [Tran new -tstep 50e-12 -tstop 80e-9]
+$circuit add [Tran new -tstep 50e-12 -tstop 40e-9]
 $circuit add [Options new {{method gear} {maxord 3}}]
 $circuit add [RawString new {\&.ic v(osc_out)=0\&.25}]
 $circuit add $inverter
@@ -691,7 +734,6 @@ dynamically adjust the number of stages:
 .PP
 .RS 4n
 .nf
-# add multiple inverters in the loop
 for {set i 1} {$i<16} {incr i} {
     set ip1 [+ $i 1]
     lappend invsList [SubcircuitInstanceAuto new $inverter x$ip1 "n$i n$ip1 vdd 0"]
@@ -715,21 +757,20 @@ Now we can run and read data:
 .PP
 .RS 4n
 .nf
-#set simulator with default temporary directory
-set simulator [BatchLiveLog new {batch1}]
+if {[catch {set simulator [Shared new shared1]}]} {
+    set simulator [Batch new batch1]
+}
 # attach simulator object to circuit
 $circuit configure -simulator $simulator
 # run circuit, read log and data
-$circuit runAndRead
+$circuit runAndRead -vector
 # get data object
 set data [$circuit getDataDict]
-set axis [dict get $data time]
+set time [dict get $data time]
 set vout [dict get $data v(osc_out)]
 set imeas [dict get $data i(vmeasure)]
-foreach time [dict get $data time] vout [dict get $data v(osc_out)] imeas [dict get $data i(vmeasure)] {
-    lappend timeVout [list $time $vout]
-    lappend timeImeas [list $time $imeas]
-}
+set timeVout [transpose [list [$time index :] [$vout index :]]]
+set timeImeas  [transpose [list [$time index :] [$imeas index :]]]
 .fi
 .RE
 .PP
@@ -737,26 +778,73 @@ We save output waveform and power currents, and then plot it:
 .PP
 .RS 4n
 .nf
-# plot results with ticklecharts
 # chart for output voltage
+set numberFormat [ticklecharts::jsfunc new {
+    function (value) {
+        return Number(value)\&.toPrecision(3);
+    }
+}]
 set chartVout [ticklecharts::chart new]
 $chartVout Xaxis -name {time, s} -minorTick {show True} -type value -splitLine {show True}
 $chartVout Yaxis -name {Output voltage, V} -minorTick {show True} -type value -splitLine {show True}
-$chartVout SetOptions -title {} -tooltip {trigger axis} -animation False -toolbox {feature {dataZoom {yAxisIndex none}}}
-$chartVout Add lineSeries -data $timeVout -showAllSymbol nothing -symbolSize 0
+$chartVout SetOptions -title {} -tooltip [list trigger axis valueFormatter $numberFormat] -animation False\\
+        -toolbox {feature {dataZoom {yAxisIndex none}}}
+$chartVout Add lineSeries -data $timeVout -showAllSymbol nothing -symbolSize 0 -name v(osc_out)
 # chart for measured current
 set chartImeas [ticklecharts::chart new]
 $chartImeas Xaxis -name {time, s} -minorTick {show True} -type value -splitLine {show True}
 $chartImeas Yaxis -name {Current, I} -minorTick {show True} -type value -splitLine {show True}
-$chartImeas SetOptions -title {} -tooltip {trigger axis} -animation False -toolbox {feature {dataZoom {yAxisIndex none}}}
-$chartImeas Add lineSeries -data $timeImeas -showAllSymbol nothing -symbolSize 0
+$chartImeas SetOptions -title {} -tooltip [list trigger axis valueFormatter $numberFormat] -animation False\\
+        -toolbox {feature {dataZoom {yAxisIndex none}}}
+$chartImeas Add lineSeries -data $timeImeas -showAllSymbol nothing -symbolSize 0 -name i(vmeasure)
 # create multiplot
 set layout [ticklecharts::Gridlayout new]
 $layout Add $chartVout -bottom 5% -height 40% -width 80%
 $layout Add $chartImeas -bottom 55% -height 40% -width 80%
-
 set fbasename [file rootname [file tail [info script]]]
-$layout Render -outfile [file normalize [file join \&.\&. html_charts $fbasename\&.html]] -width 800px -height 500px
+$layout Render -outfile [file normalize [file join \&.\&. html_charts $fbasename\&.html]] -width 800px -height 500px\\
+        -divid $fbasename -jschartvar chart_$fbasename -jsvar option_$fbasename
+.fi
+.RE
+.PP
+If rbc package is installed, plotting could be done with it:
+.PP
+.RS 4n
+.nf
+if {![catch {package require rbc}]} {
+
+    set currentDir [file dirname [file normalize [info script]]]
+    source [file join $currentDir \&.\&. \&.\&. common\&.tcl]
+
+    set graphVout [rbc::graphtoolbar \&.gVout -width 700 -height 400 -type graph -controlmode context -zoom -crosshairs\\
+                       -crosshairsmode closest  -pan -zoomwheel]
+    set graphImeas [rbc::graphtoolbar \&.gImeas -width 700 -height 400 -type graph -controlmode context -zoom -crosshairs\\
+                       -crosshairsmode closest  -pan -zoomwheel]
+    $graphVout graph grid on
+    $graphVout graph axis configure x -title {time, s}
+    $graphVout graph axis configure y -title {Output voltage, V}
+    $graphVout graph element create vout -x $time -y $vout -symbol {} -label v(osc_out) -color [lindex $colors 0]\\
+            -linewidth 2
+    $graphImeas graph grid on
+    $graphImeas graph axis configure x -title {time, s}
+    $graphImeas graph axis configure y -title {Current, I}
+    $graphImeas graph element create imeas -x $time -y $imeas -symbol {} -label i(vmeasure) -color [lindex $colors 1]\\
+            -linewidth 2
+
+    # add bindings for axes synchronization
+    dict set ::axesStates [$graphVout subwidget graph] x [$graphVout graph axis limits x]
+    dict set ::axesStates [$graphImeas subwidget graph] x [$graphImeas graph axis limits x]
+    bind [$graphVout subwidget graph] <<RbcAxisLimitsChanged>> [list syncAxes %W %d x [$graphImeas subwidget graph] x]
+    bind [$graphImeas subwidget graph] <<RbcAxisLimitsChanged>> [list syncAxes %W %d x [$graphVout subwidget graph] x]
+
+    grid $graphVout -row 0 -sticky nsew
+    grid $graphImeas -row 1 -sticky nsew
+    grid columnconfigure \&. 0 -weight 1
+    grid rowconfigure \&. 0 -weight 1
+    grid rowconfigure \&. 1 -weight 1
+    $graphVout graph svg output [file normalize [file join \&.\&. svg_charts ${fbasename}_vout\&.svg]]
+    $graphImeas graph svg output [file normalize [file join \&.\&. svg_charts ${fbasename}_imeas\&.svg]]
+}
 .fi
 .RE
 .SS "TRANSIENT SIMULATION OF FOUR-BIT ADDER"
@@ -773,7 +861,6 @@ definition is as follows:
 .PP
 .RS 4n
 .nf
-# create class that represents NAND subcircuit
 oo::class create NAND {
     superclass Subcircuit
     constructor {} {
@@ -782,7 +869,10 @@ oo::class create NAND {
         # define input parameters of subcircuit
         set params {}
         # add elements to subcircuit definition
-        my add [Q new 1 9 5 1 -model qmod] [D new 1clamp 0 1 -model dmod] [Q new 2 9 5 2 -model qmod] [D new 2clamp 0 2 -model dmod] [R new b 4 5 -r 4e3] [R new 1 4 6 -r 1\&.6e3] [Q new 3 6 9 8 -model qmod] [R new 2 8 0 -r 1e3] [R new c 4 7 -r 130] [Q new 4 7 6 10 -model qmod] [D new vbedrop 10 3 -model dmod] [Q new 5 3 8 0 -model qmod]
+        my add [Q new 1 9 5 1 -model qmod] [D new 1clamp 0 1 -model dmod] [Q new 2 9 5 2 -model qmod]\\
+                [D new 2clamp 0 2 -model dmod] [R new b 4 5 -r 4e3] [R new 1 4 6 -r 1\&.6e3] [Q new 3 6 9 8 -model qmod]\\
+                [R new 2 8 0 -r 1e3] [R new c 4 7 -r 130] [Q new 4 7 6 10 -model qmod] [D new vbedrop 10 3 -model dmod]\\
+                [Q new 5 3 8 0 -model qmod]
         # pass name, list of pins and list of parameters to Subcircuit constructor
         next nand $pins $params
     }
@@ -796,7 +886,6 @@ To build one-bit adder we use combination of NAND subcircuits:
 .PP
 .RS 4n
 .nf
-# create class that represents ONEBIT subcircuit
 oo::class create ONEBIT {
     superclass Subcircuit
     constructor {} {
@@ -806,7 +895,9 @@ oo::class create ONEBIT {
         set params {}
         # add elements to subcircuit definition
         global variable nand
-        my add [XAuto new $nand x1 {1 2 7 6}] [XAuto new $nand x2 {1 7 8 6}] [XAuto new $nand x3 {2 7 9 6}] [XAuto new $nand x4 {8 9 10 6}] [XAuto new $nand x5 {3 10 11 6}] [XAuto new $nand x6 {3 11 12 6}] [XAuto new $nand x7 {10 11 13 6}] [XAuto new $nand x8 {12 13 4 6}] [XAuto new $nand x9 {11 7 5 6}]
+        my add [XAuto new $nand x1 {1 2 7 6}] [XAuto new $nand x2 {1 7 8 6}] [XAuto new $nand x3 {2 7 9 6}]\\
+                [XAuto new $nand x4 {8 9 10 6}] [XAuto new $nand x5 {3 10 11 6}] [XAuto new $nand x6 {3 11 12 6}]\\
+                [XAuto new $nand x7 {10 11 13 6}] [XAuto new $nand x8 {12 13 4 6}] [XAuto new $nand x9 {11 7 5 6}]
         # pass name, list of pins and list of parameters to Subcircuit constructor
         next onebit $pins $params
     }
@@ -823,7 +914,6 @@ two-bit subcircuits to create a four-bit adder:
 .PP
 .RS 4n
 .nf
-# create class that represents TWOBIT subcircuit
 oo::class create TWOBIT {
     superclass Subcircuit
     constructor {} {
@@ -840,7 +930,8 @@ oo::class create TWOBIT {
 }
 # create TWOBIT subcircuit definition instance
 set twobit [TWOBIT new]
-# create class that represents FOURBIT subcircuit
+
+### create class that represents FOURBIT subcircuit
 oo::class create FOURBIT {
     superclass Subcircuit
     constructor {} {
@@ -864,11 +955,10 @@ Next step is to initialize top circuit and add all subcircuit definitions to it:
 .PP
 .RS 4n
 .nf
-# create top-level circuit
 set circuit [Circuit new {Four-bit adder}]
 # add elements to circuit
-$circuit add [Tran new -tstep 1e-9 -tstop 10e-6]
-$circuit add [Options new {{-sw noacct}}]
+$circuit add [Tran new -tstep 1e-9 -tstop 2e-6]
+$circuit add [Options new {{noacct -sw}}]
 $circuit add $nand $onebit $twobit $fourbit
 $circuit add [XAuto new $fourbit x18 {1 2 3 4 5 6 7 8 9 10 11 12 0 13 99}]
 .fi
@@ -884,7 +974,8 @@ set perStep 50e-9
 $circuit add [Vdc new cc 99 0 -dc 5]
 set i 1
 foreach name [list in1a in1b in2a in2b in3a in3b in4a in4b] {
-    $circuit add [Vpulse new $name $i 0 -low 0 -high 3 -td 0 -tf $trtf -tr $trtf -pw [expr {$tonStep*pow(2,$i-1)}] -per [expr {$perStep*pow(2,$i-1)}]]
+    $circuit add [Vpulse new $name $i 0 -low 0 -high 3 -td 0 -tf $trtf -tr $trtf -pw [expr {$tonStep*pow(2,$i-1)}]\\
+                          -per [expr {$perStep*pow(2,$i-1)}]]
     incr i
 }
 .fi
@@ -894,7 +985,8 @@ Add load resistors:
 .PP
 .RS 4n
 .nf
-$circuit add [R new bit0 9 0 -r 1e3] [R new bit1 10 0 -r 1e3] [R new bit2 11 0 -r 1e3] [R new bit3 12 0 -r 1e3] [R new cout 13 0 -r 1e3]
+$circuit add [R new bit0 9 0 -r 1e3] [R new bit1 10 0 -r 1e3] [R new bit2 11 0 -r 1e3] [R new bit3 12 0 -r 1e3]\\
+        [R new cout 13 0 -r 1e3]
 .fi
 .RE
 .PP
@@ -910,12 +1002,13 @@ Now we can create simulator and run circuit:
 .PP
 .RS 4n
 .nf
-#set simulator with default temporary directory
-set simulator [BatchLiveLog new {batch1}]
+if {[catch {set simulator [Shared new shared1]}]} {
+    set simulator [Batch new batch1]
+}
 # attach simulator object to circuit
 $circuit configure -simulator $simulator
 # run circuit, read log and data
-$circuit runAndRead
+$circuit runAndRead -vector
 .fi
 .RE
 .PP
@@ -923,36 +1016,75 @@ Finally we read the data and plot it as usual:
 .PP
 .RS 4n
 .nf
-# get data dict
 set data [$circuit getDataDict]
-set timeList [dict get $data time]
-set v9List [dict get $data v(9)]
-set v10List [dict get $data v(10)]
-set v11List [dict get $data v(11)]
-set v12List [dict get $data v(12)]
+set time [dict get $data time]
+set v9 [dict get $data v(9)]
+set v10 [dict get $data v(10)]
+set v11 [dict get $data v(11)]
+set v12 [dict get $data v(12)]
 
-foreach time $timeList v9 $v9List v10 $v10List v11 $v11List v12 $v12List {
-    lappend timeV9 [list $time $v9]
-    lappend timeV10 [list $time $v10]
-    lappend timeV11 [list $time $v11]
-    lappend timeV12 [list $time $v12]
-}
-# plot data with ticklecharts
+set timeV9 [transpose [list [$time index :] [$v9 index :]]]
+set timeV10 [transpose [list [$time index :] [$v10 index :]]]
+set timeV11 [transpose [list [$time index :] [$v11 index :]]]
+set timeV12 [transpose [list [$time index :] [$v12  index :]]]
+
+### plot data with ticklecharts
+set numberFormat [ticklecharts::jsfunc new {
+    function (value) {
+        return Number(value)\&.toPrecision(2);
+    }
+}]
 set nodes {9 10 11 12}
 set layout [ticklecharts::Gridlayout new]
-set i 0
+set i -1
 foreach node $nodes {
     ticklecharts::chart create chartV$node
-    chartV$node SetOptions -title {} -tooltip {trigger axis} -animation False -toolbox {feature {dataZoom {yAxisIndex none}}}
+    chartV$node SetOptions -title {} -tooltip [list trigger axis valueFormatter $numberFormat] -animation False\\
+            -toolbox {feature {dataZoom {yAxisIndex none}}}
     chartV$node Xaxis -name {time, s} -minorTick {show True} -type value -splitLine {show True}
     chartV$node Yaxis -name "v(${node}), V" -minorTick {show True} -type value -splitLine {show True}
-    chartV$node Add lineSeries -data [set [subst timeV$node]] -showAllSymbol nothing -name V(${node}) -symbolSize 0
-    $layout Add chartV$node -bottom [expr {4+24*$i}]% -height 18% -width 80%
-    incr i
+    chartV$node Add lineSeries -data [set timeV$node] -showAllSymbol nothing -name V(${node}) -symbolSize 0
+    $layout Add chartV$node -bottom [expr {4+24*[incr i]}]% -height 18% -width 80%
 }
-
 set fbasename [file rootname [file tail [info script]]]
-$layout Render -outfile [file normalize [file join \&.\&. html_charts $fbasename\&.html]] -width 800px -height 500px
+$layout Render -outfile [file normalize [file join \&.\&. html_charts $fbasename\&.html]] -width 800px -height 500px\\
+        -divid $fbasename -jschartvar chart_$fbasename -jsvar option_$fbasename
+.fi
+.RE
+.PP
+If rbc package is installed, plotting could be done with it:
+.PP
+.RS 4n
+.nf
+if {![catch {package require rbc}]} {
+
+    set currentDir [file dirname [file normalize [info script]]]
+    source [file join $currentDir \&.\&. \&.\&. common\&.tcl]
+    set i -1
+    set nodes {v9 v10 v11 v12}
+    foreach node $nodes {
+        set graphName \&.g$node
+        rbc::graphtoolbar $graphName -width 700 -height 200 -type graph -controlmode context -zoom -crosshairs\\
+                -crosshairsmode closest  -pan -zoomwheel
+        $graphName graph grid on
+        $graphName graph axis configure x -title {time, s}
+        $graphName graph axis configure y -title "${node}, V"
+        $graphName graph element create $node -x $time -y [set $node] -symbol {} -label $node\\
+                -color [lindex $colors [incr i]] -linewidth 2
+        grid $graphName -row $i -sticky nsew
+        grid rowconfigure \&. $i -weight 1
+        lappend members [list [$graphName subwidget graph] x]
+        dict set ::axesStates [$graphName subwidget graph] x [$graphName graph axis limits x]
+    }
+    # A graph may contain several group members; bind it only once\&.
+    foreach graph [lmap member $members {lindex $member 0}] {
+        bind $graph  <<RbcAxisLimitsChanged>> [list syncAxisGroup $members %W %d]
+    }
+    grid columnconfigure \&. 0 -weight 1
+    foreach node $nodes {
+        \&.g$node graph svg output [file normalize [file join \&.\&. svg_charts ${fbasename}_$node\&.svg]]
+    }
+}
 .fi
 .RE
 .SS "S-PARAMETER SIMULATION OF PASS-BAND FILTER"
@@ -964,18 +1096,19 @@ The circuit is built with following code:
 .PP
 .RS 4n
 .nf
-# create top-level circuit
 set circuit [Circuit new {filter s-parameters}]
 # add elements to circuit
 $circuit add [Vport new gen 1 0 -dc 0 -ac 1 -portnum 1]
 # lowpass Chebyshev
-$circuit add [L new 1 1 2 -l 0\&.058u] [C new 2 2 0 -c 40\&.84p] [L new 3 2 3 -l 0\&.128u] [C new 4 3 0 -c 47\&.91p] [L new 5 3 4 -l 0\&.128u] [C new 6 4 0 -c 40\&.48p] [L new 7 4 5 -l 0\&.0653u]
+$circuit add [L new 1 1 2 -l 0\&.058u] [C new 2 2 0 -c 40\&.84p] [L new 3 2 3 -l 0\&.128u] [C new 4 3 0 -c 47\&.91p]\\
+        [L new 5 3 4 -l 0\&.128u] [C new 6 4 0 -c 40\&.48p] [L new 7 4 5 -l 0\&.0653u]
 # lowpass m-derived
 $circuit add [L new a 5 6 -l 0\&.044u] [L new b 6 a -l 0\&.078u] [C new b a 0 -c 17\&.61p]
 # highpass m-derived
 $circuit add [C new a 6 7 -c 60\&.6p] [L new c 6 b -l 0\&.151u] [C new c b 0 -c 34\&.12p]
 # highpass Chebyshev
-$circuit add [C new 1 7 8 -c 45\&.64p] [L new 2 8 0 -l 0\&.0653u] [C new 3 8 9 -c 20\&.8p] [L new 4 9 0 -l 0\&.055u] [C new 5 9 10 -c 20\&.8p] [L new 6 10 0 -l 0\&.0653u] [C new 7 10 out -c 45\&.64p]
+$circuit add [C new 1 7 8 -c 45\&.64p] [L new 2 8 0 -l 0\&.0653u] [C new 3 8 9 -c 20\&.8p] [L new 4 9 0 -l 0\&.055u]\\
+        [C new 5 9 10 -c 20\&.8p] [L new 6 10 0 -l 0\&.0653u] [C new 7 10 out -c 45\&.64p]
 $circuit add [Vport new l out 0 -dc 0 -ac 0 -portnum 2]
 $circuit add [Sp new -variation lin -n 500 -fstart 10meg -fstop 200meg]
 .fi
@@ -998,10 +1131,12 @@ As usual, we create simulator, run the circuit and read the data:
 .PP
 .RS 4n
 .nf
-set simulator [BatchLiveLog new {batch1}]
+if {[catch {set simulator [Shared new shared1]}]} {
+    set simulator [Batch new batch1]
+}
 # attach simulator object to circuit
 $circuit configure -simulator $simulator
-$circuit runAndRead
+$circuit runAndRead -vector
 # get data object
 set data [$circuit getDataDict]
 .fi
@@ -1011,19 +1146,12 @@ Next few lines of code is used to extract magnitude of S11 and S21 parameters:
 .PP
 .RS 4n
 .nf
-# get frequency
-set freq [dict get $data frequency]
-# get s11
-set s11 [dict get $data s_1_1]
-# get s21
-set s21 [dict get $data s_2_1]
-# extract real/imaginary parts of S11 and S21, and calculate magnitude
-set freq [lmap val $freq {lindex $val 0}]
-set s11Mag [lmap s11Re [lmap val $s11 {lindex $val 0}] s11Im [lmap val $s11 {lindex $val 1}] {expr {sqrt($s11Re**2+$s11Im**2)}}]
-set s21Mag [lmap s21Re [lmap val $s21 {lindex $val 0}] s21Im [lmap val $s21 {lindex $val 1}] {expr {sqrt($s21Re**2+$s21Im**2)}}]
-# prepare data for ticklecharts
-set freq_s11Mag [lmap freqVal $freq s11MagVal $s11Mag {list $freqVal $s11MagVal}]
-set freq_s21Mag [lmap freqVal $freq s21MagVal $s21Mag {list $freqVal $s21MagVal}]
+vector create freq
+freq expr {real([dict get $data frequency])}
+# and calculate magnitude of S11 and S21
+vector create s11Mag s21Mag
+s11Mag expr {abs([dict get $data s_1_1])}
+s21Mag expr {abs([dict get $data s_2_1])}
 .fi
 .RE
 .PP
@@ -1032,18 +1160,48 @@ Now we are ready to plot data:
 .RS 4n
 .nf
 set chart [ticklecharts::chart new]
+set numberFormat [ticklecharts::jsfunc new {
+    function (value) {
+        return Number(value)\&.toPrecision(4);
+    }
+}]
 $chart Xaxis -name {Frequency, Hz} -minorTick {show True} -type value -splitLine {show True}
 $chart Yaxis -name mag(S) -minorTick {show True} -type value -splitLine {show True}
-$chart SetOptions -title {} -tooltip {trigger axis} -legend {} -animation False -toolbox {feature {dataZoom {yAxisIndex none}}}
-$chart Add lineSeries -data $freq_s11Mag -showAllSymbol nothing -name S11 -symbolSize 0
-$chart Add lineSeries -data $freq_s21Mag -showAllSymbol nothing -name S21 -symbolSize 0
+$chart SetOptions -title {} -tooltip [list trigger axis valueFormatter $numberFormat] -legend {} -animation False\\
+        -toolbox {feature {dataZoom {yAxisIndex none}}}
+$chart Add lineSeries -data [transpose [list [freq index :] [s11Mag index :]]] -showAllSymbol nothing -name S11\\
+        -symbolSize 0
+$chart Add lineSeries -data [transpose [list [freq index :] [s21Mag index :]]] -showAllSymbol nothing -name S21\\
+        -symbolSize 0
 set fbasename [file rootname [file tail [info script]]]
-
-$chart Render -outfile [file normalize [file join \&.\&. html_charts $fbasename\&.html]] -width 800px -height 500px
+$chart Render -outfile [file normalize [file join \&.\&. html_charts $fbasename\&.html]] -width 800px -height 500px\\
+        -divid $fbasename -jschartvar chart_$fbasename -jsvar option_$fbasename
 .fi
 .RE
 .PP
 On the picture We can clearly see the band that spans from 70Mhz to 135Mhz\&.
+.PP
+If rbc package is installed, plotting could be done with it:
+.PP
+.RS 4n
+.nf
+if {![catch {package require rbc}]} {
+    set colors {#5470c6 #91cc75}
+    set graph [rbc::graphtoolbar \&.g -width 700 -height 400 -type graph -controlmode context -zoom -crosshairs\\
+                       -crosshairsmode closest -crosshairsclosestopts {-interpolate no} -pan -zoomwheel -scaletoggle y\\
+                       -activelegend]
+    $graph graph grid on
+    $graph graph axis configure x -title {Frequency, Hz}
+    $graph graph axis configure y -title mag(S)
+    $graph graph element create s11 -x freq -y s11Mag -symbol {} -label S11 -color [lindex $colors 0] -linewidth 2
+    $graph graph element create s21 -x freq -y s21Mag -symbol {} -label S21 -color [lindex $colors 1] -linewidth 2
+    grid $graph -sticky nsew
+    grid columnconfigure \&. 0 -weight 1
+    grid rowconfigure \&. 0 -weight 1
+    $graph graph svg output [file normalize [file join \&.\&. svg_charts $fbasename\&.svg]]
+}
+.fi
+.RE
 
 
 .SH SEE ALSO

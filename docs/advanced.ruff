@@ -13,7 +13,6 @@ namespace eval Advanced {
         - [Inverter performance optimization] - "examples/ngspice/advanced/inverter_optimization.tcl" file
                 
         ### Monte-Carlo simulation
-        
         This example demonstrates multiple runs of a simple filter circuit and the collection of the resulting
         statistical distribution of frequency bandwidths. The original circuit source is from the ngspice source
         distribution.
@@ -26,243 +25,76 @@ namespace eval Advanced {
         
         The filter is a 3rd-order Chebyshev bandpass. The first step is to build the circuit and obtain the magnitude 
         of the transfer characteristic:
-        ```tcl
-        # create top-level circuit
-        set circuit [Circuit new {Monte-Carlo}]
-        # add elements to circuit
-        $circuit add [Vac new 1 n001 0 -ac 1]
-        $circuit add [R new 1 n002 n001 -r 141]
-        $circuit add [R new 2 0 out -r 141]
-        C create c1 1 out 0 -c 1e-9
-        L create l1 1 out 0 -l 10e-6
-        C create c2 2 n002 0 -c 1e-9
-        L create l2 2 n002 0 -l 10e-6
-        C create c3 3 out n003 -c 250e-12
-        L create l3 3 n003 n002 -l 40e-6
-        foreach elem {c1 l1 c2 l2 c3 l3} {
-            $circuit add $elem
-        }
-        $circuit add [Ac new -variation oct -n 100 -fstart 250e3 -fstop 10e6]
-        #set simulator with default
-        set simulator [Batch new {batch1}]
-        # attach simulator object to circuit
-        $circuit configure -simulator $simulator
-        ```
+        @include-code examples/ngspice/advanced/monte_carlo.tcl -region circuit-creation-and-config-monte-carlo
         
         Here, we use a different method for creating a class instance: `create` instead of `new`. With `create`, we can
-        directly set a custom object reference name, rather than relying on the automatically generated one by Tcl.
-        ```tcl
-        C create c1 1 out 0 -c 1e-9
-        ```
+        directly set a custom object reference name, rather than relying on the automatically generated one by Tcl:
+        @include-code examples/ngspice/advanced/monte_carlo.tcl -region create-usage-monte-carlo
+
         Keep in mind that `c1` is an object reference, not the name of a variable storing the reference. 
         Therefore, it can be used as an object command directly, without the need for a `$`.
         
         To calculate the magnitude of the transfer function in dB scale from the output voltage phasor, we create a
         procedure:
-        ```tcl
-        proc calcDbMag {re im} {
-            set mag [expr {sqrt($re*$re+$im*$im)}]
-            set db [expr {10*log($mag)}]
-            return $db
-        }
-
-        proc calcDbMagVec {vector} {
-            foreach value $vector {
-                lappend db [calcDbMag [lindex $value 0] [lindex $value 1]]
-            }
-            return $db
-        }
-        ```
-        `calcDbMagVec` - procedure that apply `calcDbMag` to list of complex values.
+        @include-code examples/ngspice/advanced/monte_carlo.tcl -region proc-calcdbmag-monte-carlo
         
         Run and plot the result:
-        ```tcl
-        # run simulation
-        $circuit runAndRead
-        # get data dictionary
-        set data [$circuit getDataDict]
-        set trace [calcDbMagVec [dict get $data v(out)]]
-        set freqs [dict get $data frequency]
-        foreach x $freqs y $trace {
-            lappend xydata [list [lindex $x 0] $y]
-        }
-        puts [findBW [lmap freq $freqs {lindex $freq 0}] $trace -10]
-        set chartTransMag [ticklecharts::chart new]
-        $chartTransMag Xaxis -name {Frequency, Hz} -minorTick {show True} -type log -splitLine {show True}
-        $chartTransMag Yaxis -name {Magnitude, dB} -minorTick {show True} -type value -splitLine {show True}
-        $chartTransMag SetOptions -title {} -tooltip {trigger axis} -animation False\
-                -toolbox {feature {dataZoom {yAxisIndex none}}} -grid {left 10% right 15%}
-        $chartTransMag Add lineSeries -data $xydata -showAllSymbol nothing -symbolSize 1
-        set fbasename [file rootname [file tail [info script]]]
-        $chartTransMag Render -outfile [file normalize [file join .. html_charts ${fbasename}_typ.html]] -width 800px\
-                -height 500px
-        ```
+        @include-code examples/ngspice/advanced/monte_carlo.tcl -region typical-run-and-plot-monte-carlo
         
         #ruffopt excludedformats {nroff}
         !ticklechart_mark_monte_carlo_typ_mag_ngspice!
         #ruffopt excludedformats {}
         
         We define pass bandwidth by edge values -10dB, to find them we use next procedure:
-        ```tcl
-        proc findBW {freqs vals trigVal} {
-            # calculate bandwidth of results
-            set bw [dict get [measure -xname freqs -data [dict create freqs $freqs vals $vals]\
-                                      -trig "-vec vals -val $trigVal -rise 1"\
-                                      -targ "-vec vals -val $trigVal -fall 1"] xdelta]
-            return $bw
-        }
-        ```
+        @include-code examples/ngspice/advanced/monte_carlo.tcl -region proc-findbw-monte-carlo
+
         Find bandwidth:
         ```tcl
-        puts [findBW [lmap freq $freqs {lindex $freq 0}] $trace -10]
+        puts [findBW frequencyInit traceVecInit -10]
         ```
         The value is 1.086255 Mhz.
         
         Our goal is to obtain a distribution of bandwidths by varying the filter parameters. 
+
         To generate random values for these parameters, we use the built-in functions of the `math::statistics` package
         from Tcllib. The parameters can be distributed either normally or uniformly. For uniform distribution, we use 
         `::math::statistics::random-uniform xmin xmax number`; for normal distribution, we use
         `::math::statistics::random-normal mean stdev number`. For uniform distribution, we define the following min
         and max limits for each C and L element:
-        ```tcl
-        set uniformLimits [dict create c1 [dict create min 0.9e-9 max 1.1e-9] l1 [dict create min 9e-6 max 11e-6]\
-                                   c2 [dict create min 0.9e-9 max 1.1e-9] l2 [dict create min 9e-6 max 11e-6]\
-                                   c3 [dict create min 225e-12 max 275e-12] l3 [dict create min 36e-6 max 44e-6]]
-        ```
+        @include-code examples/ngspice/advanced/monte_carlo.tcl -region set-uniform-params-dist-monte-carlo
         
         We can specify different numbers of simulations; the more runs we perform, the more accurate the representation
         becomes. For example, we set the number of simulations to 1,000 runs with 15 intervals for constructing a
         boxplot:
-        ```tcl
-        # set number of simulations
-        set mcRuns 1000
-        set numOfIntervals 15
-        ```
+        @include-code examples/ngspice/advanced/monte_carlo.tcl -region set-uniform-number-sims-monte-carlo
         
         Now we ready to run simulations 1000 times and collect results:
-        ```tcl
-        # loop in which we run simulation with uniform distribution
-        for {set i 0} {$i<$mcRuns} {incr i} {
-            #set elements values according to uniform distribution
-            foreach elem [list c1 l1 c2 l2 c3 l3] {
-                $elem actOnParam -set [string index $elem 0] [random-uniform {*}[dict values [dict get $uniformLimits $elem]] 1]
-            }
-            # run simulation
-            $circuit runAndRead
-            # get data dictionary
-            set data [$circuit getDataDict]
-            # get results
-            if {$i==0} {
-                set freqs [dict get $data frequency]
-                foreach freq $freqs {
-                    lappend freqRes [lindex $freq 0]
-                }
-            }
-            # get vout frequency curve
-            lappend traceListUni [calcDbMagVec [dict get $data v(out)]]
-            # calculate bandwidths values
-            lappend bwsUni [findBW $freqRes [lindex $traceListUni end] -10]
-        }
-        ```
+        @include-code examples/ngspice/advanced/monte_carlo.tcl -region uniform-loop-monte-carlo
         
         To obtain the distribution, we need to determine reasonable limits based on the minimum and maximum of 
         the generated bandwidth values. Using the specified number of intervals (15), we apply the following procedure:
-        ```tcl
-        proc createIntervals {data numOfIntervals} {
-            set intervals [::math::statistics::minmax-histogram-limits [tcl::mathfunc::min {*}$data]\
-                                   [tcl::mathfunc::max {*}$data] $numOfIntervals]
-            lappend intervalsStrings [format <=%.2e [lindex $intervals 0]]
-            for {set i 0} {$i<[- [llength $intervals] 1]} {incr i} {
-                lappend intervalsStrings [format %.2e-%.2e [lindex $intervals $i] [lindex $intervals [+ $i 1]]]
-            }
-            return [dict create intervals $intervals intervalsStr $intervalsStrings]
-        }
-        ```
+        @include-code examples/ngspice/advanced/monte_carlo.tcl -region proc-createintervals-monte-carlo
         
         Here, we use the dedicated procedure from the statistics package:
         `::math::statistics::minmax-histogram-limits min max number`. 
         Additionally, we construct strings in form `leftVal-rightVal` that represent the intervals on the boxplot
         chart. We call this procedure and store the results:
-        ```tcl
-        set uniIntervals [createIntervals $bwsUni $numOfIntervals]
-        ```
+        @include-code examples/ngspice/advanced/monte_carlo.tcl -region create-uni-intervals-monte-carlo
         
         Finally, to obtain the expected histogram for a uniform distribution, we use the following procedure 
         with the built-in function: `::math::statistics::histogram-uniform xmin xmax limits number`:
-        ```tcl
-        proc createDist {data intervals} {
-            set dist [::math::statistics::histogram $intervals $data]
-            return [lrange $dist 0 end-1]
-        }
-        ```
+        @include-code examples/ngspice/advanced/monte_carlo.tcl -region proc-createdist-monte-carlo
         
         Call the `createDist` procedure to calculate the histogram y-axis values, which correspond to the number of
         bandwidths within each interval:
-        ```tcl
-        set normDist [createDist $bwsNorm [dict get $normIntervals intervals]]
-        ```
+        @include-code examples/ngspice/advanced/monte_carlo.tcl -region create-uni-dist-monte-carlo
         
         The same sequence of steps is applied for the normal distribution. We assume that `std = (xmax - xmin) / 6`, 
         where `xmax` and `xmin` are the limits of the uniform distribution.
-        ```tcl
-        # set parameter's normal distributions limits
-        set normalLimits [dict create c1 [dict create mean 1e-9 std [/ 0.1e-9 3]] l1 [dict create mean 10e-6 std [/ 1e-6 3]]\
-                                  c2 [dict create mean 1e-9 std [/ 0.1e-9 3]] l2 [dict create mean 10e-6 std [/ 1e-6 3]]\
-                                  c3 [dict create mean 250e-12 std [/ 25e-12 3]] l3 [dict create mean 40e-6 std [/ 4e-6 3]]]
-
-        ## loop in which we run simulation with normal distribution
-        set freqRes [list]
-        for {set i 0} {$i<$mcRuns} {incr i} {
-            #set elements values according to normal distribution
-            foreach elem [list c1 l1 c2 l2 c3 l3] {
-                $elem actOnParam -set [string index $elem 0] [random-normal {*}[dict values [dict get $normalLimits $elem]] 1]
-            }
-            # run simulation
-            $circuit runAndRead
-            # get data dictionary
-            set data [$circuit getDataDict]
-            # get results
-            if {$i==0} {
-                set freqs [dict get $data frequency]
-                foreach freq $freqs {
-                    lappend freqRes [lindex $freq 0]
-                }
-            }
-            # get vout frequency curve
-            lappend traceListNorm [calcDbMagVec [dict get $data v(out)]]
-            # calculate bandwidths values
-            lappend bwsNorm [findBW $freqRes [lindex $traceListNorm end] -10]
-        }
-        # get distribution of bandwidths with normal parameters distribution
-        set normIntervals [createIntervals $bwsNorm $numOfIntervals]
-        set normDist [createDist $bwsNorm [dict get $normIntervals intervals]]
-        ```
+        @include-code examples/ngspice/advanced/monte_carlo.tcl -region norm-dist-generation-monte-carlo
         
         Finally, we plot resulted distributions:
-        ```tcl
-        # plot results with ticklecharts
-        # chart for uniformly distributed parameters
-        set chartUni [ticklecharts::chart new]
-        $chartUni Xaxis -name {Frequency intervals, Hz} -data [list [dict get $uniIntervals intervalsStr]]\
-                -axisTick {show True alignWithLabel True} -axisLabel {interval 0 rotate 45 fontSize 8}
-        $chartUni Yaxis -name {Bandwidths per interval} -minorTick {show True} -type value
-        $chartUni SetOptions -title {} -tooltip {trigger axis} -animation False -toolbox {feature {dataZoom {yAxisIndex none}}}
-        $chartUni Add barSeries -data [list $uniDist]
-        # chart for normally distributed parameters
-        set chartNorm [ticklecharts::chart new]
-        $chartNorm Xaxis -name {Frequency intervals, Hz} -data [list [dict get $normIntervals intervalsStr]]\
-                -axisTick {show True alignWithLabel True} -axisLabel {interval 0 rotate 45 fontSize 8}
-        $chartNorm Yaxis -name {Bandwidths per interval} -minorTick {show True} -type value
-        $chartNorm SetOptions -title {} -tooltip {trigger axis} -animation False -toolbox {feature {dataZoom {yAxisIndex none}}}
-        $chartNorm Add barSeries -data [list $normDist]
-        # create multiplot
-        set layout [ticklecharts::Gridlayout new]
-        $layout Add $chartNorm -bottom 10% -height 35% -width 75%
-        $layout Add $chartUni -bottom 60% -height 35% -width 75%
-
-        set fbasename [file rootname [file tail [info script]]]
-        $layout Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px
-        ```
+        @include-code examples/ngspice/advanced/monte_carlo.tcl -region plot-individual-dist-ticklecharts-monte-carlo
         
         #ruffopt excludedformats {nroff}
         !ticklechart_mark_monte_carlo_dists_ngspice!
@@ -273,27 +105,21 @@ namespace eval Advanced {
         std = (xmax - xmin) / 6.
 
         We can also take the uniform intervals and calculate the normal distribution values at these intervals:
-        ```tcl
-        # find distribution of normal distributed values in uniform intervals
-        set normDistWithUniIntervals [createDist $bwsNorm [dict get $uniIntervals intervals]]
-        set chartCombined [ticklecharts::chart new]
-        $chartCombined Xaxis -name {Frequency intervals, Hz} -data [list [dict get $uniIntervals intervalsStr]]\
-                -axisTick {show True alignWithLabel True} -axisLabel {interval 0 rotate 45 fontSize 8}
-        $chartCombined Yaxis -name {Bandwidths per interval} -minorTick {show True} -type value
-        $chartCombined SetOptions -title {} -legend {} -tooltip {trigger axis} -animation False\
-                -toolbox {feature {dataZoom {yAxisIndex none}}} -grid {left 10% right 15%}
-        $chartCombined Add barSeries -data [list $uniDist] -name Uniform
-        $chartCombined Add barSeries -data [list $normDistWithUniIntervals] -name Normal
-        $chartCombined Render -outfile [file normalize [file join .. html_charts ${fbasename}_combined.html]] -width 800px\
-                -height 500px
-        ```
+        @include-code examples/ngspice/advanced/monte_carlo.tcl -region plot-combined-dists-ticklecharts-monte-carlo
 
         #ruffopt excludedformats {nroff}
         !ticklechart_mark_monte_carlo_dists_comb_ngspice!
         #ruffopt excludedformats {}
         
-        ### Parameters extraction of diode model parameters
+        If `rbc` package is installed, plotting could be done with it:
+        @include-code examples/ngspice/advanced/monte_carlo.tcl -region plot-rbc-monte-carlo
 
+        #ruffopt excludedformats {nroff}
+        ![drawing](../examples/ngspice/svg_charts/monte_carlo_typ.svg)
+        ![drawing](../examples/ngspice/svg_charts/monte_carlo_combined.svg)
+        #ruffopt excludedformats {}
+
+        ### Parameters extraction of diode model parameters
         In this advanced example we will do curve fitting procedure to extract parameters of diode model. We use
         measured (emulated with more advanced diode model generated data, with added small distorsion and make non-equal
         voltage steps) forward current characteristic of diode.
@@ -316,20 +142,7 @@ namespace eval Advanced {
         - Repeat until the quality of fitting reaches required level.
 
         First step is to define the cost function that will be used by the optimizer:
-        ```tcl
-        proc diodeIVcalc {xall pdata args} {
-            dict with pdata {}
-            $model actOnParam -set is [lindex $xall 0] n [lindex $xall 1] rs [lindex $xall 2] ikf [lindex $xall 3]
-            $vSrc actOnParam -set start $vMin stop $vMax incr $vStep
-            $circuit runAndRead
-            set data [$circuit getDataDict]
-            foreach iVal $i iSim [lmap i [dict get $data i(va)] {expr {-$i}}] {
-                lappend fvec [expr {log(abs($iVal))-log(abs($iSim))}]
-                lappend fval $iSim
-            }
-            return [dict create fvec $fvec fval $fval]
-        }
-        ```
+        @include-code examples/ngspice/advanced/diode_extract.tcl -region proc-diodeivcalc-diode-extract
 
         The input arguments are:
         - `xall` - list with fitting parameters, in our case, the parameters of the diode model.
@@ -339,8 +152,8 @@ namespace eval Advanced {
           derivatives.
 
         Let me expand the values in `pdata` dictionary:
-        - `v` - list of applied voltages values
-        - `i` - list of measured current values
+        - `v` - RBC vector name containing applied voltages values
+        - `i` - RBC vector name containing measured current values
         - `circuit` - top circuit object simulating forward diode current
         - `model` - diode model object
         - `vMin` - start of the voltage region
@@ -349,33 +162,19 @@ namespace eval Advanced {
         - `vSrc` - voltage source object
 
         First line creates variables with the same name as keys of `pdata` dictionary:
-        ```tcl
-        dict with pdata {}
-        ```
+        @include-code examples/ngspice/advanced/diode_extract.tcl -region dict-expansion-diode-extract
 
         Then we set parameters values of the diode model object using [::SpiceGenTcl::Model::actOnParam] method:
-        ```tcl
-        $model actOnParam -set is [lindex $xall 0] n [lindex $xall 1] rs [lindex $xall 2] ikf [lindex $xall 3]
-        ```
+        @include-code examples/ngspice/advanced/diode_extract.tcl -region set-fitting-params-diode-extract
 
         The same we do with voltage source element:
-        ```tcl
-        $vSrc actOnParam -set start $vMin stop $vMax incr $vStep
-        ```
+        @include-code examples/ngspice/advanced/diode_extract.tcl -region set-vsrc-params-diode-extract
 
         Then we run circuit with new parameters and read data back to calculate residuals:
-        ```tcl
-        $circuit runAndRead
-        set data [$circuit getDataDict]
-        ```
+        @include-code examples/ngspice/advanced/diode_extract.tcl -region circuit-run-diode-extract
 
         Calculating residuals and save simulated data in the loop:
-        ```tcl
-        foreach iVal $i iSim [lmap i [dict get $data i(va)] {expr {-$i}}] {
-            lappend fvec [expr {log(abs($iVal))-log(abs($iSim))}]
-            lappend fval $iSim
-        }
-        ```
+        @include-code examples/ngspice/advanced/diode_extract.tcl -region residuals-calc-diode-extract
 
         The residuals is calculated with the next formula:
         ```
@@ -390,30 +189,13 @@ namespace eval Advanced {
         `fval`, and `fvec` key is mandatory because list under this key is used by optimization procedure.
 
         To run simulation we need to build circuit and define necessary objects:
-        ```tcl
-        set diodeModel [DiodeModel new diomod -is 1e-12 -n 1.0 -rs 30 -cj0 1e-9 -trs1 0.001 -xti 5 -ikf 1e-4]
-        set vSrc [Dc new -src va -start 0 -stop 2 -incr 0.02]
-        set circuit [Circuit new {diode IV}]
-        $circuit add [D new 1 anode 0 -model diomod -area 1]
-        $circuit add [Vdc new a anode 0 -dc 0]
-        $circuit add $diodeModel
-        $circuit add $vSrc
-        set tempSt [Temp new 25]
-        $circuit add $tempSt
-        $circuit configure -simulator [Batch new {batch1}]
-        ```
+        @include-code examples/ngspice/advanced/diode_extract.tcl -region circuit-creaion-diode-extract
 
         We save object references for diode model and voltage source into dedicated variable to use it in cost 
         function \- it will be saved into `pdata` dictionary.
 
         Next, we read measured data from .csv file with `tclcsv` package:
-        ```tcl
-        set file [open [file join $fileDataPath iv25.csv]]
-        set ivTemp25 [csv_read -startline 1 $file]
-        close $file
-        set vRaw [lmap elem $ivTemp25 {lindex $elem 0}]
-        set iRaw [lmap elem $ivTemp25 {lindex $elem 1}]
-        ```
+        @include-code examples/ngspice/advanced/diode_extract.tcl -region load-meas-data-diode-extract
 
         #ruffopt excludedformats {nroff}
         The loaded data is (with selected regions of fitting):
@@ -422,24 +204,15 @@ namespace eval Advanced {
         #ruffopt excludedformats {}
 
         #### Fitting in first region
-
         First region we want to fit is the region of ideal diode, it spans from minimum voltage to approximately 0.85V.
         We set these limits in variables `vMin`, `vMax` and define the equal step of voltage `vStep`.
-        ```tcl
-        set vMin [min {*}$vRaw]
-        set vMax 0.85
-        set vStep 0.02
-        ```
+        @include-code examples/ngspice/advanced/diode_extract.tcl -region first-region-voltage-setup-diode-extract
+
         We use fixed voltage step instead of data points defined in measured data with non-equal steps to ease the 
         defining the sweep of voltage in simulator \- we can use DC sweep of voltage source with fixed step. So,
         we use linear interpolation to get values of current at even grid with defined minimum and maximum values. Then,
         we create `pdata` dictionary with corresponding values:
-        ```tcl
-        set vInterp [lseq $vMin to $vMax by $vStep]
-        set iInterp [lin1d -x $vRaw -y $iRaw -xi $vInterp]
-        set pdata [dict create v $vInterp i $iInterp circuit $circuit model $diodeModel vMin $vMin vMax $vMax vStep $vStep\
-                   vSrc $vSrc]
-        ```
+        @include-code examples/ngspice/advanced/diode_extract.tcl -region first-region-interp-setup-diode-extract
         
         Command `lin1d` is imported from `tclinterp` package.
 
@@ -454,21 +227,13 @@ namespace eval Advanced {
 
         Parameter are represented as special objects `::tclopt::ParameterMpfit` from `tclopt` package, where we can 
         define initial values and lower/upper limits:
-        ```tcl
-        set iniPars [list 1e-14 1.0 30 1e-4]
-        set par0 [::tclopt::ParameterMpfit new is [lindex $iniPars 0] -lowlim 1e-17 -uplim 1e-12]
-        set par1 [::tclopt::ParameterMpfit new n [lindex $iniPars 1] -lowlim 0.5 -uplim 2]
-        set par2 [::tclopt::ParameterMpfit new rs [lindex $iniPars 2] -fixed -lowlim 1e-10 -uplim 100]
-        set par3 [::tclopt::ParameterMpfit new ikf [lindex $iniPars 3] -fixed -lowlim 1e-12 -uplim 0.1]
-        ```
+        @include-code examples/ngspice/advanced/diode_extract.tcl -region first-region-fitting-params-setup-diode-extract
 
         For `rs` and `ikf` parameters we specify option `-fixed` to make them constant during the first region fitting.
         
         Optimization is done with Levenberg-Marquardt algorithm based optimizator from `tclopt` package. First step is 
         to create `::tclopt::Mpfit` object that defines the optimization parameters:
-        ```tcl
-        set optimizer [::tclopt::Mpfit new -funct diodeIVcalc -m [llength $vInterp] -pdata $pdata]
-        ```
+        @include-code examples/ngspice/advanced/diode_extract.tcl -region first-region-optimizer-creattion-diode-extract
         
         The arguments we pass here are:
         `-funct` - name of the procedure calculating the residuals
@@ -477,16 +242,10 @@ namespace eval Advanced {
 
         Then we add parameters to $optimizer object, and the order of adding them should match the order of the elements
         list `xall` we pass values to cost function:
-        ```tcl
-        $optimizer addPars $par0 $par1 $par2 $par3
-        ```
+        @include-code examples/ngspice/advanced/diode_extract.tcl -region first-region-add-params-diode-extract
         
         Then we can run the simulation, read the resulted list of parameters `x` and print formatted values:
-        ```tcl
-        set result [$optimizer run]
-        set resPars [dict get $result x]
-        puts [format {is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e} {*}[dict get $result x]]
-        ```
+        @include-code examples/ngspice/advanced/diode_extract.tcl -region first-region-run-opt-diode-extract
 
         The result is:
         ```
@@ -497,46 +256,24 @@ namespace eval Advanced {
         `-fixed` option.
 
         #### Fitting in second region
-        
         Now we are ready to fit curve in the second ohmic/high-injection region. It started at the upper end of first
         region and continue until the end of the data. We interpolate this range with the same voltage step:
-        ```tcl
-        set vMin 0.85
-        set vMax [max {*}$vRaw]
-        set vInterp [lseq $vMin to $vMax by $vStep]
-        set iInterp [lin1d -x $vRaw -y $iRaw -xi $vInterp]
-        ```
+        @include-code examples/ngspice/advanced/diode_extract.tcl -region second-region-voltage-setup-diode-extract
 
         We will use the same `pdata` variable containing dictionary, but change the current and voltage data and limits:
-        ```tcl
-        dict set pdata v $vInterp
-        dict set pdata i $iInterp
-        dict set pdata vMin $vMin
-        dict set pdata vMax $vMax
-        ```
+        @include-code examples/ngspice/advanced/diode_extract.tcl -region second-region-change-pdata-diode-extract
 
         We make `is` and `n` parameters fixed this time, and free the `rs` and `ikf`:
-        ```tcl
-        $par0 configure -fixed 1 -initval [lindex $resPars 0]
-        $par1 configure -fixed 1 -initval [lindex $resPars 1]
-        $par2 configure -fixed 0
-        $par3 configure -fixed 0
-        ```
+        @include-code examples/ngspice/advanced/diode_extract.tcl -region second-region-set-fitting-params-diode-extract
+
         You can notice that we supply the resulted values of `is` and `n` as the initial values to the second fitting,
         so we have two parameters already fitted before start the next optimization.
 
         Replace $optimizer object fields with the new values:
-        ```tcl
-        $optimizer configure -m [llength $vInterp] -pdata $pdata
-        ```
+        @include-code examples/ngspice/advanced/diode_extract.tcl -region second-region-optimizer-change-diode-extract
 
         Run, read result and print new parameters values:
-        ```tcl
-        set result [$optimizer run]
-        set fittedIdiode [dict get [diodeIVcalc [dict get $result x] $pdata] fval]
-        set resPars [dict get $result x]
-        puts [format {is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e} {*}[dict get $result x]]
-        ```
+        @include-code examples/ngspice/advanced/diode_extract.tcl -region second-region-run-opt-diode-extract
 
         The result is:
         ```
@@ -545,41 +282,18 @@ namespace eval Advanced {
         Now we can see that `rs` and `ikf` were changed during fitting, just as planned.
 
         #### Fitting the whole curve
-
         The last step is the fitting to the whole curve, with initial values of parameters replaced with resulted values.
 
         Again, set voltage limits to minimum and maximum of the data, interpolate it and replace data in $pdata 
         dictionary:
-        ```tcl
-        set vMin [min {*}$vRaw]
-        set vMax [max {*}$vRaw]
-        set vInterp [lseq $vMin to $vMax by $vStep]
-        set iInterp [lin1d -x $vRaw -y $iRaw -xi $vInterp]
-        dict set pdata v $vInterp
-        dict set pdata i $iInterp
-        dict set pdata vMin $vMin
-        dict set pdata vMax $vMax
-        ```
+        @include-code examples/ngspice/advanced/diode_extract.tcl -region whole-region-setup-diode-extract
 
         We unfix `rs` and `ikf` parameters, and set new limits within ±10% of previous values to forbid parameters
         becoming too different:
-        ```tcl
-        $par0 configure -fixed 0 -initval [lindex $resPars 0] -lowlim [expr {[lindex $resPars 0]*0.9}]\
-                -uplim [expr {[lindex $resPars 0]*1.1}]
-        $par1 configure -fixed 0 -initval [lindex $resPars 1] -lowlim [expr {[lindex $resPars 1]*0.9}]\
-                -uplim [expr {[lindex $resPars 1]*1.1}]
-        $par2 configure -initval [lindex $resPars 2] -lowlim [expr {[lindex $resPars 2]*0.9}]\
-                -uplim [expr {[lindex $resPars 2]*1.1}]
-        $par3 configure -initval [lindex $resPars 3] -lowlim [expr {[lindex $resPars 3]*0.9}]\
-                -uplim [expr {[lindex $resPars 3]*1.1}]
-        ```
+        @include-code examples/ngspice/advanced/diode_extract.tcl -region whole-region-fitting-params-setup-diode-extract
 
         The set new data in optimizer object, run and print results:
-        ```tcl
-        $optimizer configure -m [llength $vInterp] -pdata $pdata
-        set result [$optimizer run]
-        puts [format {is=%.3e, n=%.3e, rs=%.3e, ikf=%.3e} {*}[dict get $result x]]
-        ```
+        @include-code examples/ngspice/advanced/diode_extract.tcl -region whole-region-run-opt-diode-extract
         
         The result is:
         ```
@@ -589,43 +303,12 @@ namespace eval Advanced {
         All parameters were changed to produce best fit for the whole curve.
 
         #### Plotting resulted data
-
         Now we are ready to see the result of the fitting, we need to calculate curves with initial values and final
         values of parameters:
-        ```tcl
-        set initIdiode [dict get [diodeIVcalc $iniPars $pdata] fval]
-        set fittedVIdiode [lmap vVal $vInterp iVal $fittedIdiode {list $vVal $iVal}]
-        set initVIdiode [lmap vVal $vInterp iVal $initIdiode {list $vVal $iVal}]
-        set viRaw [lmap vVal $vRaw iVal $iRaw {list $vVal $iVal}]
-        ```
+        @include-code examples/ngspice/advanced/diode_extract.tcl -region final-curves-calculation-diode-extract
 
         Plot it with `ticklecharts` package in linear and logarithmic scales:
-        ```tcl
-        # plot results with ticklecharts
-        set chart [ticklecharts::chart new]
-        $chart Xaxis -name {v(anode), V} -minorTick {show True}  -type value -splitLine {show True} -min 0.4 -max 1.6
-        $chart Yaxis -name {Idiode, A} -minorTick {show True}  -type value -splitLine {show True} -min 0.0 -max dataMax
-        $chart SetOptions -title {} -tooltip {trigger axis} -animation False -legend {} -grid {left 10% right 15%}\
-                -toolbox {feature {dataZoom {yAxisIndex none}}}
-        $chart Add lineSeries -data $fittedVIdiode -showAllSymbol nothing -name fitted -symbolSize 4
-        $chart Add lineSeries -data $initVIdiode -showAllSymbol nothing -name unfitted -symbolSize 4
-        $chart Add lineSeries -data $viRaw -showAllSymbol nothing -name measured -symbolSize 4
-        set chartLog [ticklecharts::chart new]
-        $chartLog Xaxis -name {v(anode), V} -minorTick {show True}  -type value -splitLine {show True} -min 0.4 -max 1.6
-        $chartLog Yaxis -name {Idiode, A} -minorTick {show True}  -type log -splitLine {show True} -min dataMin -max 0.1
-        $chartLog SetOptions -title {} -tooltip {trigger axis} -animation False -legend {} -grid {left 10% right 15%}\
-                -toolbox {feature {dataZoom {yAxisIndex none}}} 
-        $chartLog Add lineSeries -data $fittedVIdiode -showAllSymbol nothing -name fitted -symbolSize 4
-        $chartLog Add lineSeries -data $initVIdiode -showAllSymbol nothing -name unfitted -symbolSize 4
-        $chartLog Add lineSeries -data $viRaw -showAllSymbol nothing -name measured -symbolSize 4
-
-        set layout [ticklecharts::Gridlayout new]
-        $layout Add $chartLog -bottom 5% -height 40% -width 80%
-        $layout Add $chart -bottom 55% -height 40% -width 80%
-
-        set fbasename [file rootname [file tail [info script]]]
-        $layout Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px
-        ```
+        @include-code examples/ngspice/advanced/diode_extract.tcl -region plot-ticklecharts-diode-extract
         
         #ruffopt excludedformats {nroff}
         !ticklechart_mark_diode_extract_ngspice!
@@ -633,9 +316,14 @@ namespace eval Advanced {
         
         On the plot we can see the initial simulated curve, the measured data and the final fitting result.
 
+        If `rbc` package is installed, plotting could be done with it:
+        @include-code examples/ngspice/advanced/diode_extract.tcl -region plot-rbc-diode-extract
+
+        #ruffopt excludedformats {nroff}
+        ![drawing](../examples/ngspice/svg_charts/diode_extract.svg)
+        #ruffopt excludedformats {}
 
         ### Inverter performance optimization
-
         This example was taken from [ASCO (A SPICE Circuit Optimizer)](https://asco.sourceforge.net/) - software to make
         optimization of different circuit performance with usage of differential evolution (DE) optimization algorithm.
 
@@ -703,56 +391,14 @@ namespace eval Advanced {
         ```
 
         In the next code lines we define all above mentioned constants as well as equations for `PD` and `PS`:
-        ```tcl
-        proc pdPsCalc {width length} {
-            return [expr {2*$width+2*$length}]
-        }
-        # set parameters
-        set vSupply 2.0
-        set inpFreq 850e6
-        set inpPeriod [expr {1.0/$inpFreq}]
-        set noPeriods 4
-        set tmeasStart [expr {($noPeriods-1)*$inpPeriod}]
-        set tmeasStop [expr {$noPeriods*$inpPeriod}]
-        set tmeas1 [expr {$tmeasStop-3.0*$inpPeriod/4.0}]
-        set tmeas2 [expr {$tmeasStop-1.0*$inpPeriod/4.0}]
-        set initialPWidth 10e-3
-        set pWidth $initialPWidth
-        set nWidth [expr {$pWidth/3.0}]
-        set length 0.35e-6
-        set vLowLim 0.05
-        set vHighLim 1.95
-        set pd [pdPsCalc $pWidth $length]
-        set ps [pdPsCalc $pWidth $length]
-        set vSupplyVals {2.0 2.1 2.2}
-        ```
+        @include-code examples/ngspice/advanced/inverter_optimization.tcl -region params-definition-inverter-optimization
 
         Next step is to define circuit with all mentioned values calculated previously, and add `.include` statement
         for NMOS and PMOS models with class [::SpiceGenTcl::Include]:
-        ```tcl
-        # build circuit
-        set circuit [Circuit new {Inverter}]
-        set vdd [Vdc new dd vdd 0 -dc $vSupply]
-        set vss [Vdc new ss vss 0 -dc 0.0]
-        set vIn [Vpulse new 1 in vss -low $vSupply -high 0.0 -td [expr {$inpPeriod/2.0}] -tr [expr {$inpPeriod/1000.0}]\
-                         -tf [expr {$inpPeriod/1000.0}] -pw [expr {$inpPeriod/2.0}] -per $inpPeriod]
-        set capLoad [C new l out vss -c 3p]
-        set mp [M new p out in vdd -model pmos -l $length -w $pWidth -n4 vdd -pd $pd -ps $ps]
-        set mn [M new n out in vss -model nmos -l $length -w $nWidth -n4 vss -pd $pd -ps $ps]
-        $circuit add $vdd $vss $vIn $capLoad $mp $mn
-        $circuit add [Tran new -tstep [expr {$inpPeriod/1000.0}] -tstop [expr {$inpPeriod*$noPeriods}]]
-        $circuit add [Include new [file join $scriptPath models n.typ]]
-        $circuit add [Include new [file join $scriptPath models p.typ]]
-        ```
+        @include-code examples/ngspice/advanced/inverter_optimization.tcl -region circuit-creation-inverter-optimization
 
         Also we define simulator (Ngspice) that should be used:
-        ```tcl
-        # set simulator
-        if {[catch {set simulator [Shared new batch1]}]} {
-            set simulator [Batch new batch1]
-        }
-        $circuit configure -simulator $simulator
-        ```
+        @include-code examples/ngspice/advanced/inverter_optimization.tcl -region simulator-creation-inverter-optimization
 
         It is better to use [::SpiceGenTcl::Ngspice::Simulators::Shared] because of speed improvement - we read data
         right from the memory and skipping phase of reading saving and reading raw file. But for that we need to have
@@ -800,58 +446,12 @@ namespace eval Advanced {
         the higher value, so we set it to 10000.
 
         So, the final cost function is:
-        ```tcl
-        set pdata [dict create vSupplyVals $vSupplyVals nDevice $mn pDevice $mp vLowLim $vLowLim vHighLim $vHighLim length\
-                           $length vdd $vdd tmeas1 $tmeas1 tmeas2 $tmeas2 objWeight 10 constrWeight 10000 circuit $circuit]
-        proc costFunc {xall pdata args} {
-            dict with pdata {}
-            set width [lindex $xall 0]
-            set pdPs [pdPsCalc $width $length]
-            $nDevice actOnParam -set l $length w [expr {$width/3.0}] pd $pdPs ps $pdPs
-            $pDevice actOnParam -set l $length w $width pd $pdPs ps $pdPs
-            foreach val $vSupplyVals {
-                $vdd actOnParam -set dc $val
-                if {[catch {$circuit runAndRead}]} {
-                    # huge penalty in case of non-convergence
-                    lappend vlowList 1
-                    lappend vhighList 1
-                    lappend psupplyList 1
-                    continue
-                }
-                set data [$circuit configure -data]
-                set dataDict [$circuit getDataDict]
-                lappend vlowList [$data measure -find v(out) -at $tmeas1]
-                lappend vhighList [$data measure -find v(out) -at $tmeas2]
-                set instantPower [expr {mul([dict get $dataDict i(vdd)], [dict get $dataDict v(vdd)])}]
-                lappend psupplyList [measure -xname time\
-                                             -data [dict create time [dict get $dataDict time] instantPower $instantPower]\
-                                             -rms "-vec instantPower -from $tmeas1 -to $tmeas2"]
-            }
-            set costObj 0.0
-            set costConstr 0.0
-            foreach psupply $psupplyList vlow $vlowList vhigh $vhighList {
-                set constrVlow [expr {($vlow-$vLowLim)/$vLowLim}]
-                if {$constrVlow<0} {
-                    set constrVlow 0.0
-                }
-                set constrVhigh [expr {($vHighLim-$vhigh)/$vHighLim}]
-                if {$constrVhigh<0} {
-                    set constrVhigh 0.0
-                }
-                set costObj [expr {$costObj+$psupply}]
-                set costConstr [expr {$costConstr+max($constrVlow, $constrVhigh)}]
-            }
-            return [expr {$objWeight*$costObj+$constrWeight*$costConstr}]
-        }
-        ```
+        @include-code examples/ngspice/advanced/inverter_optimization.tcl -region cost-function-inverter-optimization
 
         Let's breakdown it line by line to clarify every step while keeping in mind the previous information.
 
         First, we build `pdata` dictionary with information that is necessary to evaluate the cost function:
-        ```tcl
-        set pdata [dict create vSupplyVals $vSupplyVals nDevice $mn pDevice $mp vLowLim $vLowLim vHighLim $vHighLim length\
-                           $length vdd $vdd tmeas1 $tmeas1 tmeas2 $tmeas2 objWeight 10 constrWeight 10000 circuit $circuit]
-        ```
+        @include-code examples/ngspice/advanced/inverter_optimization.tcl -region pdata-inverter-optimization
 
         - `vSupplyVals` - list of power supply voltages
         - `nDevice` - NMOS transistor object from the circuit we built, used to change parameters of the device
@@ -869,98 +469,33 @@ namespace eval Advanced {
         At the start we unpack the dictionary to local variables with the same name as key of the dictionary.
         Then we extract the `WIDTH` parameter from vectors of variables. We have only one variable, so we just get
         first and the only element:
-        ```tcl
-        dict with pdata {}
-        set width [lindex $xall 0]
-        ```
+        @include-code examples/ngspice/advanced/inverter_optimization.tcl -region pdata-unpack-inverter-optimization
 
         Next we calculate the `pd` and `ps` parameters from the given length and and new width, and change the
         parameters of NMOS and PMOS devices with the new values:
-        ```tcl
-        set pdPs [pdPsCalc $width $length]
-        $nDevice actOnParam -set l $length w [expr {$width/3.0}] pd $pdPs ps $pdPs
-        $pDevice actOnParam -set l $length w $width pd $pdPs ps $pdPs
-        ```
+        @include-code examples/ngspice/advanced/inverter_optimization.tcl -region geometry-calculation-inverter-optimization
 
         In the next block we loop over all power supply voltages, run circuit, read the data and extract values we need:
-        ```tcl
-        foreach val $vSupplyVals {
-            $vdd actOnParam -set dc $val
-            if {[catch {$circuit runAndRead}]} {
-                # huge penalty in case of non-convergence
-                lappend vlowList 1
-                lappend vhighList 1
-                lappend psupplyList 1
-                continue
-            }
-            set data [$circuit configure -data]
-            set dataDict [$circuit getDataDict]
-            lappend vlowList [$data measure -find v(out) -at $tmeas1]
-            lappend vhighList [$data measure -find v(out) -at $tmeas2]
-            set instantPower [expr {mul([dict get $dataDict i(vdd)], [dict get $dataDict v(vdd)])}]
-            lappend psupplyList [measure -xname time\
-                                         -data [dict create time [dict get $dataDict time] instantPower $instantPower]\
-                                         -rms "-vec instantPower -from $tmeas1 -to $tmeas2"]
-        }
-        ```
+        @include-code examples/ngspice/advanced/inverter_optimization.tcl -region loop-run-inverter-optimization
 
         An additional guard was added to prevent stepping into regions where circuit could fail due to non-convergence,
         so we set objective and constraints metric to high values:
-        ```tcl
-        if {[catch {$circuit runAndRead}]} {
-            # huge penalty in case of non-convergence
-            lappend vlowList 1
-            lappend vhighList 1
-            lappend psupplyList 1
-            continue
-        }
-        ```
+        @include-code examples/ngspice/advanced/inverter_optimization.tcl -region convergence-guard-inverter-optimization
 
         To find values `VLOW` and `VHIGH` we use method [::SpiceGenTcl::RawFile::measure], that is wrapper
         to `measure` command from package `tclmeasure`. Then we calculate calculate instant power by multiplying
         current through power source to power voltage, and then directly use command `measure` from package `tclmeasure`:
-        ```tcl
-        set data [$circuit configure -data]
-        set dataDict [$circuit getDataDict]
-        lappend vlowList [$data measure -find v(out) -at $tmeas1]
-        lappend vhighList [$data measure -find v(out) -at $tmeas2]
-        set instantPower [expr {mul([dict get $dataDict i(vdd)], [dict get $dataDict v(vdd)])}]
-        lappend psupplyList [measure -xname time\
-                                     -data [dict create time [dict get $dataDict time] instantPower $instantPower]\
-                                     -rms "-vec instantPower -from $tmeas1 -to $tmeas2"]
-        ```
+        @include-code examples/ngspice/advanced/inverter_optimization.tcl -region data-extraction-inverter-optimization
 
         After looping through all power voltages, we get values of objective in list `psupplyList` and constraints
         for `VLOW` and `VHIGH` in lists `vlowList` and `vhighList` correspondingly.
 
         In the final block we calculate value of cost function according to equations provided previously:
-        ```tcl
-        set costObj 0.0
-        set costConstr 0.0
-        foreach psupply $psupplyList vlow $vlowList vhigh $vhighList {
-            set constrVlow [expr {($vlow-$vLowLim)/$vLowLim}]
-            if {$constrVlow<0} {
-                set constrVlow 0.0
-            }
-            set constrVhigh [expr {($vHighLim-$vhigh)/$vHighLim}]
-            if {$constrVhigh<0} {
-                set constrVhigh 0.0
-            }
-            set costObj [expr {$costObj+$psupply}]
-            set costConstr [expr {$costConstr+max($constrVlow, $constrVhigh)}]
-        }
-        return [expr {$objWeight*$costObj+$constrWeight*$costConstr}]
-        ```
+        @include-code examples/ngspice/advanced/inverter_optimization.tcl -region cost-calculation-inverter-optimization
 
         After defining cost function, we can initialize and run optimization. As optimization engine we use
         Differential Evolution algorithm from `tclopt` packkage:
-        ```tcl
-        set par [::tclopt::Parameter new width $pWidth -lowlim 1e-4 -uplim 10e-3]
-        set optimizer [::tclopt::DE new -funct costFunc -pdata $pdata -strategy rand-to-best/1/exp -genmax 50 -refresh 1 -np 10\
-                               -f 0.5 -cr 1 -seed 3 -debug -abstol 1e-6 -history -histfreq 1]
-        $optimizer addPars $par
-        set width [dict get [$optimizer run] x]
-        ```
+        @include-code examples/ngspice/advanced/inverter_optimization.tcl -region optimizer-creation-inverter-optimization
 
         In first line we create parameter object and set the boundaries for the width value, from 100um to 10mm.
         Strategy selection, values of `f`, `cr`, `np` and `genmax` are the same as in ASCO example. Then we add 
@@ -970,29 +505,10 @@ namespace eval Advanced {
 
         In the next block we read history information that is saved during the optimization, it was turned on by
         `-history` switch:
-        ```tcl
-        # get results and history
-        set results [$optimizer run]
-        set width [dict get $results x]
-        set trajectory [dict get $results besttraj]
-        set bestf [dict get $results history]
-        foreach genTr $trajectory genF $bestf {
-            lappend optData [list {*}[dict get $genTr x] [dict get $genF bestf]]
-            lappend functionTrajectory [list [dict get $genTr gen] [dict get $genTr x]]
-        }
-        ```
+        @include-code examples/ngspice/advanced/inverter_optimization.tcl -region get-optimization-results-inverter-optimization
 
         The we plot trajectory with `ticklecharts` package:
-        ```tcl
-        # plot 2D trajectory
-        set chart [ticklecharts::chart new]
-        $chart Xaxis -name Generation -minorTick {show True} -type value -splitLine {show True}
-        $chart Yaxis -name Width -minorTick {show True}  -splitLine {show True}
-        $chart SetOptions -title {} -tooltip {trigger axis} -animation False -toolbox {feature {dataZoom {yAxisIndex none}}}
-        $chart Add lineSeries -name {Best trajectory} -data $functionTrajectory -showAllSymbol nothing
-        set fbasename [file rootname [file tail [info script]]]
-        $chart Render -outfile [file normalize [file join .. html_charts ${fbasename}_plot.html]] -width 800px -height 500px
-        ```
+        @include-code examples/ngspice/advanced/inverter_optimization.tcl -region plot-generations-ticklecharts-inverter-optimization
 
         #ruffopt excludedformats {nroff}
         !ticklechart_mark_inverter_optimization_plot_ngspice!
@@ -1000,72 +516,10 @@ namespace eval Advanced {
 
         The final block of code is for calculating initial and final values of `VLOW`, `VHIGH`, `VSUPPLY` and preparing
         waveform for plotting. We calculate it only for highest supply voltage to avoid cluttering:
-        ```tcl
-        # calculate initial waveforms the highest supply voltage
-        set pdPs [pdPsCalc $initialPWidth $length]
-        $mn actOnParam -set l $length w [expr {$initialPWidth/3.0}] pd $pdPs ps $pdPs
-        $mp actOnParam -set l $length w $initialPWidth pd $pdPs ps $pdPs
-        $vdd actOnParam -set dc [lindex $vSupplyVals 2]
-        $circuit runAndRead
-        set data [$circuit configure -data]
-        set dataDict [$circuit getDataDict]
-        foreach timeVal [dict get $dataDict time] voutVal [dict get $dataDict v(out)] {
-            lappend initialWaveform [list $timeVal $voutVal]
-        }
-        set vlowInitial [$data measure -find v(out) -at $tmeas1]
-        set vhighInitial [$data measure -find v(out) -at $tmeas2]
-        set instantPower [expr {mul([dict get $dataDict i(vdd)], [dict get $dataDict v(vdd)])}]
-        set psupplyInitial [measure -xname time -data [dict create time [dict get $dataDict time] instantPower $instantPower]\
-                                    -rms "-vec instantPower -from $tmeas1 -to $tmeas2"]
-
-        # calculate final waveform for the highest supply voltage
-        set pdPs [pdPsCalc $width $length]
-        $mn actOnParam -set l $length w [expr {$width/3.0}] pd $pdPs ps $pdPs
-        $mp actOnParam -set l $length w $width pd $pdPs ps $pdPs
-        $vdd actOnParam -set dc [lindex $vSupplyVals 2]
-        $circuit runAndRead
-        set data [$circuit configure -data]
-        set dataDict [$circuit getDataDict]
-        foreach timeVal [dict get $dataDict time] voutVal [dict get $dataDict v(out)] {
-            lappend finalWaveform [list $timeVal $voutVal]
-        }
-        set vlowFinal [$data measure -find v(out) -at $tmeas1]
-        set vhighFinal [$data measure -find v(out) -at $tmeas2]
-        set instantPower [expr {mul([dict get $dataDict i(vdd)], [dict get $dataDict v(vdd)])}]
-        set psupplyFinal [measure -xname time -data [dict create time [dict get $dataDict time] instantPower $instantPower]\
-                                  -rms "-vec instantPower -from $tmeas1 -to $tmeas2"]
-        ```
+        @include-code examples/ngspice/advanced/inverter_optimization.tcl -region waveforms-calculation-inverter-optimization
 
         Plotting initial and final waveforms, and result values:
-        ```tcl
-        # plot waveforms
-        set chart [ticklecharts::chart new]
-        $chart Xaxis -name {Time, s} -minorTick {show True} -type value -splitLine {show True}
-        $chart Yaxis -name v(out) -minorTick {show True}  -splitLine {show True}
-        $chart SetOptions -title {} -legend {} -tooltip {trigger axis} -animation False\
-                -toolbox {feature {dataZoom {yAxisIndex none}}}
-        $chart Add lineSeries -name "initial, vdd=[lindex $vSupplyVals 2]" -data $initialWaveform -showAllSymbol nothing\
-                -symbolSize 0
-        $chart Add lineSeries -name "final, vdd=[lindex $vSupplyVals 2]" -data $finalWaveform -showAllSymbol nothing\
-                -symbolSize 0
-
-
-        set fbasename [file rootname [file tail [info script]]]
-        $chart Render -outfile [file normalize [file join .. html_charts ${fbasename}_waveforms_plot.html]] -width 800px\
-                -height 500px
-
-        # print resulted values for the highest supply voltage
-        puts "Optimization succesfully finished at generation [dict get $results generation], total number of function\
-              evaluations - [dict get $results nfev]"
-        puts "Convergence info: [dict get $results info]"
-        puts "Best value of cost function is [format %3e [dict get $results objfunc]]"
-        puts "Final width of PMOS is [format %.3f [expr {$width/1e-3}]]mm, from initial value\
-                [format %.3f [expr {$initialPWidth/1e-3}]]mm"
-        puts "For VDD=[lindex $vSupplyVals 2]V,\
-                VLOW: [format %.3f $vlowInitial]V → [format %.3f $vlowFinal]V<[format %.3f $vLowLim]V,\
-                VHIGH: [format %.3f $vhighInitial]V → [format %.3f $vhighFinal]V>[format %.3f $vHighLim]V,\
-                PSUPPLY: [format %.3f $psupplyInitial]W → [format %.3f $psupplyFinal]W"
-        ```
+        @include-code examples/ngspice/advanced/inverter_optimization.tcl -region plot-waveforms-ticklecharts-inverter-optimization
 
         #ruffopt excludedformats {nroff}
         Waveforms are:
@@ -1082,6 +536,13 @@ namespace eval Advanced {
         For VDD=2.2V, VLOW: 0.147V → 0.046V<0.050V, VHIGH: 2.020V → 2.161V>1.950V, PSUPPLY: 1.101W → 0.107W
         ```
 
+        If `rbc` package is installed, plotting could be done with it:
+        @include-code examples/ngspice/advanced/inverter_optimization.tcl -region plot-rbc-inverter-optimization
+
+        #ruffopt excludedformats {nroff}
+        ![drawing](../examples/ngspice/svg_charts/inverter_optimization_trajectory.svg)
+        ![drawing](../examples/ngspice/svg_charts/inverter_optimization_wfms.svg)
+        #ruffopt excludedformats {}
     }
 
 }

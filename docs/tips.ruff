@@ -10,138 +10,28 @@ namespace eval Tips {
         To define custom element class we should use [::SpiceGenTcl::Device] class as a superclass. Why we need this?
         One simple example is custom Verilog-A device, that could have arbitary number of pins and parameters.
         Let's try to define new element for next Verilog-A device:
-        ```verilog
-        // Jiles/Atherton Magnetic Core Model
-        // Enhanced as described in "Simulation and MOdeling of Nonlinear Magnetics"
-        // by Williams, Vogelsong, and Kundert, as found on www.designers-guide.org.
-        `include "discipline.h"
-        `include "constants.h"
-
-        //
-        // Core Model
-        //
-        module coreja(p,n);
-
-        magnetic p, n;
-        inout p, n;
-        (* type = "instance" *) parameter real len=0.1 from (0:1000);	// effective magnetic length of core
-        (* type = "instance" *) parameter real area=1 from (0:inf);	// magnetic cross-sectional area of core
-        parameter real ms=1.6M from (0:inf);	// saturation magnetization
-        parameter real a=1100 from (0:inf);	// 
-        parameter real k=2000 from (0:inf);	// bulk coupliing coefficient
-        parameter real alpha=1.6m from (0:inf); // interdomain coupling coef.
-        parameter real c=0.2 from [0:1];	// coef. for reversable magnetization
-
-        magnetic Hdot;  	// internal Hdot node
-        real H;			// field intensity
-        real B;			// flux density
-        real Manh;		// anhysteric magnetization
-        real Mirr;		// irreversible magnetization
-        real dMirr;		// dMirr/dH
-        real M;			// total magnetization
-        real Heff;		// effective field intensity
-        integer delta;		// direction of the input MMF
-        integer migrating;	// flag indicating that the pinning sites are moving
-
-        // sign function
-            analog function integer sign;
-            input arg;
-            real arg;
-            sign = (arg >= 0.0 ? 1 : -1);
-            endfunction
-
-        // hyperbolic cotangent function
-            analog function real coth;
-            input arg;
-            real arg;
-            real x;
-            begin
-                x = exp(min(80,max(-80,arg)));
-                coth = (x+1/x)/(x-1/x);
-            end
-            endfunction
-
-        // core model
-            analog begin
-            H = MMF(p,n) / len;
-            MMF(Hdot) <+ ddt(H);
-            delta = sign(MMF(Hdot));
-            B = Phi(p,n)/area;
-            M = B/`P_U0 - H;
-            Heff = H + alpha * M;
-            if (abs(Heff) > 0.001 * a) 
-                Manh = ms * (coth(Heff/a) - a/Heff);
-            else
-                Manh = ms * Heff/(3.0*a);	// Taylor series expansion of coth()
-            dMirr = (Manh - M)/(delta*k - alpha*(Manh - M)) * MMF(Hdot);
-            migrating = (delta > 0) ^ (M > Manh);
-            Mirr = idt( migrating * dMirr, Manh );
-
-            M = (1-c)*Mirr + c*Manh;
-            Phi(p,n) <+ area*`P_U0*(H+M);
-            end
-        endmodule
-        ```
+        @include-code examples/ngspice/advanced/verilog_a/core.va -lang verilog
         
         This model is taken from [designers-guide](https://designers-guide.org/modeling/jilath.va), that contains many
         Verilog-AMS models.
-        
-        ```tcl
-        oo::class create Core {
-            superclass Device
-            constructor {args} {
-                set arguments [argparse -inline -pfirst -helplevel 1 -help {} {
-                    {-model= -required -help {Model of the core}}
-                    {-len= -default 0.1 -help {Length of the core}}
-                    {-area= -default 1 -help {Cross-section area of the core}}
-                    {name -help {Name of the device without first-letter designator}}
-                    {p -help {Name of node connected to positive pin}}
-                    {n -help {Name of node connected to negative pin}}
-                }]
-                lappend params [list -posnocheck model [dict get $arguments model]]
-                dict for {paramName value} $arguments {
-                    if {$paramName ni {model name p n}} {
-                        if {[lindex $value 0] eq {-eq}} {
-                            lappend params [list -eq $paramName [lindex $value 1]]
-                        } else {
-                            lappend params [list $paramName $value]
-                        }
-                    }
-                }
-                next n[dict get $arguments name] [list [list p [dict get $arguments p]] [list n [dict get $arguments n]]] $params
-            }
-        }
-        ```
+
+        @include-code examples/ngspice/advanced/verilog_a_magnetic.tcl -region core-definition-verilog-a
         
         In this block of code we define instance class of core. Let's go through the each line.
         First line is class definition:
-        ```tcl
-        oo::class create Core
-        ```
+        @include-code examples/ngspice/advanced/verilog_a_magnetic.tcl -region core-definition-name-verilog-a
         
         It is good convention to start class name from capital letter.
         
         Superclass for new element is [::SpiceGenTcl::Device]:
-        ```tcl
-        superclass SpiceGenTcl::Device
-        ```
+        @include-code examples/ngspice/advanced/verilog_a_magnetic.tcl -region core-definition-superclass-verilog-a
         
         In next line we define arguments for constructor:
-        ```tcl
-        constructor {args}
-        ```
+        @include-code examples/ngspice/advanced/verilog_a_magnetic.tcl -region core-definition-constructor-line-verilog-a
         
         In these few lines we process `args` variable with [argparse](https://github.com/georgtree/argparse) package:
-        ```tcl
-        set arguments [argparse -inline -pfirst -helplevel 1 -help {} {
-            {-model= -required -help {Model of the core}}
-            {-len= -default 0.1 -help {Length of the core}}
-            {-area= -default 1 -help {Cross-section area of the core}}
-            {name -help {Name of the device without first-letter designator}}
-            {p -help {Name of node connected to positive pin}}
-            {n -help {Name of node connected to negative pin}}
-        }]
-        ```
+        @include-code examples/ngspice/advanced/verilog_a_magnetic.tcl -region core-definition-constructor-args-verilog-a
+
         Switch `-pfirst` allows to pass required parameters (name, p and n) first, before switches. `-help`
         switch allows to call constructor of the `Core` with argument `-help` and get interactive help message.
         Required parameters are: `name`, positive node `p` and negative node `n`.
@@ -154,23 +44,10 @@ namespace eval Tips {
         `paramName={expression}`
         
         In the next few lines we build parameter list that will be passed to [::SpiceGenTcl::Device] constructor:      
-        ```tcl
-        lappend params [list model [dict get $arguments model] -posnocheck]
-        dict for {paramName value} $arguments {
-            if {$paramName ni {model name p n}} {
-                if {[lindex $value 0] eq {-eq}} {
-                    lappend params [list -eq $paramName [lindex $value 1]]
-                } else {
-                    lappend params [list $paramName $value]
-                }
-            }
-        }
-        ```
+        @include-code examples/ngspice/advanced/verilog_a_magnetic.tcl -region core-definition-constructor-args-build-verilog-a
         
         The last but not the least is step of passing arguments to [::SpiceGenTcl::Device] constructor:
-        ```tcl
-        next n[dict get $arguments name] [list [list p [dict get $arguments p]] [list n [dict get $arguments n]]] $params
-        ```
+        @include-code examples/ngspice/advanced/verilog_a_magnetic.tcl -region core-definition-constructor-next-verilog-a
         
         This superclass accept arguments in form `constructor {name pins params}`.
         So, we pass string `n[dict get $arguments name]` as device name, `n` is reference designator for Verilog-A devices
@@ -182,10 +59,8 @@ namespace eval Tips {
         {Name Value ?-eq?} ...}`.
         
         So, after that we can create a new instance of newly created class:
-        ```tcl
-        set coreInst [Core new 1 p n -model coreModel -area 1e-4 -len {l*5 -eq}]
-        puts [$coreInst genSPICEString]
-        ```
+        @include-code examples/ngspice/advanced/verilog_a_magnetic.tcl -region core-inst-verilog-a
+
         Resulted SPICE string is:
         ```
         n1 p n coremodel area=1e-4 len={l*5}
@@ -193,21 +68,12 @@ namespace eval Tips {
         
         Verilog-A devices in Ngspice demand corresponding model being instantiated in the netlist. For that purpose we
         create `CoreModel` class:
-        ```tcl
-        oo::class create CoreModel {
-            superclass Model
-            constructor {args} {
-                next {*}[my ArgsPreprocess {ms a k alpha c} {name type} type {*}[linsert $args 1 coreja]]
-            }
-        }
-        ```
+        @include-code examples/ngspice/advanced/verilog_a_magnetic.tcl -region core-model-verilog-a
         
         Here we use as superclass [::SpiceGenTcl::Model] for new element.
         To process optional arguments, we use special method [::SpiceGenTcl::Utility::ArgsPreprocess], that 
         process optional `args` arguments and produces string for [::SpiceGenTcl::Model] constructor.
-        ```tcl
-        next {*}[my ArgsPreprocess {ms a k alpha c} {name type} type {*}[linsert $args 1 coreja]]
-        ```
+        @include-code examples/ngspice/advanced/verilog_a_magnetic.tcl -region core-model-args-verilog-a
 
         We set model parameters in list `{ms a k alpha c}` as switches, and then the list of required parameters
         `{name type}`. Then we provide elements names which should be ignored while generating help message, and the last
@@ -241,10 +107,7 @@ namespace eval Tips {
         }
         ```
         Finally, we initialize model instance and print SPICE string:
-        ```tcl
-        set coreModel [CoreModel new coremodel -ms 1.7meg -a 1100 -k 2000 -alpha 1.6m -c 0.2]
-        puts [$coreModel genSPICEString]
-        ```
+        @include-code examples/ngspice/advanced/verilog_a_magnetic.tcl -region core-model-inst-verilog-a
 
         The result is:
         ```
@@ -252,7 +115,7 @@ namespace eval Tips {
         ```
 
         If you want to see the simulation example with that model, please look at 
-        /examples/ngspice/advanced/verilog_a_magnetic.tcl.
+        "examples/ngspice/advanced/verilog_a_magnetic.tcl".
     }
 
 }

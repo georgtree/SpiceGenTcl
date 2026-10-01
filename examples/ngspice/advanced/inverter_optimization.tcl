@@ -4,12 +4,15 @@ package require tclcsv
 package require tclopt
 package require tclinterp
 package require tclmeasure
+package require rbc::vector
 package require extexpr
-package require gnuplotutil
+package require math::linearalgebra
 
 namespace import ::tcl::mathfunc::*
 namespace import ::tclinterp::interpolation::*
+namespace import ::math::linearalgebra::transpose
 namespace import ::tclmeasure::*
+namespace import rbc::vector
 namespace import ::SpiceGenTcl::*
 importNgspice
 
@@ -19,7 +22,8 @@ proc pdPsCalc {width length} {
     return [expr {2*$width+2*$length}]
 }
 
-# set parameters
+### set parameters
+# docs-begin params-definition-inverter-optimization
 set vSupply 2.0
 set inpFreq 850e6
 set inpPeriod [expr {1.0/$inpFreq}]
@@ -37,8 +41,10 @@ set vHighLim 1.95
 set pd [pdPsCalc $pWidth $length]
 set ps [pdPsCalc $pWidth $length]
 set vSupplyVals {2.0 2.1 2.2}
+# docs-end params-definition-inverter-optimization
 
-# build circuit
+### build circuit
+# docs-begin circuit-creation-inverter-optimization
 set circuit [Circuit new {Inverter}]
 set vdd [Vdc new dd vdd 0 -dc $vSupply]
 set vss [Vdc new ss vss 0 -dc 0.0]
@@ -51,40 +57,57 @@ $circuit add $vdd $vss $vIn $capLoad $mp $mn
 $circuit add [Tran new -tstep [expr {$inpPeriod/1000.0}] -tstop [expr {$inpPeriod*$noPeriods}]]
 $circuit add [Include new [file join $scriptPath models n.typ]]
 $circuit add [Include new [file join $scriptPath models p.typ]]
+# docs-end circuit-creation-inverter-optimization
 
-# set simulator
+### set simulator
+# docs-begin simulator-creation-inverter-optimization
 if {[catch {set simulator [Shared new batch1]}]} {
     set simulator [Batch new batch1]
 }
 $circuit configure -simulator $simulator
+# docs-end simulator-creation-inverter-optimization
 
-# define cost function
+### define cost function
+# docs-begin cost-function-inverter-optimization
+# docs-begin pdata-inverter-optimization
 set pdata [dict create vSupplyVals $vSupplyVals nDevice $mn pDevice $mp vLowLim $vLowLim vHighLim $vHighLim length\
                    $length vdd $vdd tmeas1 $tmeas1 tmeas2 $tmeas2 objWeight 10 constrWeight 10000 circuit $circuit]
+# docs-end pdata-inverter-optimization
 proc costFunc {xall pdata args} {
+    # docs-begin pdata-unpack-inverter-optimization
     dict with pdata {}
     set width [lindex $xall 0]
+    # docs-end pdata-unpack-inverter-optimization
+    # docs-begin geometry-calculation-inverter-optimization
     set pdPs [pdPsCalc $width $length]
     $nDevice actOnParam -set l $length w [expr {$width/3.0}] pd $pdPs ps $pdPs
     $pDevice actOnParam -set l $length w $width pd $pdPs ps $pdPs
+    # docs-end geometry-calculation-inverter-optimization
+    # docs-begin loop-run-inverter-optimization
     foreach val $vSupplyVals {
         $vdd actOnParam -set dc $val
-        if {[catch {$circuit runAndRead}]} {
+        # docs-begin convergence-guard-inverter-optimization
+        if {[catch {$circuit runAndRead -vector}]} {
             # huge penalty in case of non-convergence
             lappend vlowList 1
             lappend vhighList 1
             lappend psupplyList 1
             continue
         }
+        # docs-end convergence-guard-inverter-optimization
+        # docs-begin data-extraction-inverter-optimization
         set data [$circuit configure -data]
         set dataDict [$circuit getDataDict]
         lappend vlowList [$data measure -find v(out) -at $tmeas1]
         lappend vhighList [$data measure -find v(out) -at $tmeas2]
-        set instantPower [expr {mul([dict get $dataDict i(vdd)], [dict get $dataDict v(vdd)])}]
-        lappend psupplyList [measure -xname time\
-                                     -data [dict create time [dict get $dataDict time] instantPower $instantPower]\
-                                     -rms "-vec instantPower -from $tmeas1 -to $tmeas2"]
+        vector create instantPower
+        instantPower expr {[dict get $dataDict i(vdd)]*[dict get $dataDict v(vdd)]}
+        lappend psupplyList [measure -xname [dict get $dataDict time] -rms "-vec instantPower -from $tmeas1\
+                                                                                   -to $tmeas2"]
+        # docs-end data-extraction-inverter-optimization
     }
+    # docs-end loop-run-inverter-optimization
+    # docs-begin cost-calculation-inverter-optimization
     set costObj 0.0
     set costConstr 0.0
     foreach psupply $psupplyList vlow $vlowList vhigh $vhighList {
@@ -100,84 +123,103 @@ proc costFunc {xall pdata args} {
         set costConstr [expr {$costConstr+max($constrVlow, $constrVhigh)}]
     }
     return [expr {$objWeight*$costObj+$constrWeight*$costConstr}]
+    # docs-end cost-calculation-inverter-optimization
 }
+# docs-end cost-function-inverter-optimization
 
-# set and run optimizer
+### set and run optimizer
+# docs-begin optimizer-creation-inverter-optimization
 set par [::tclopt::Parameter new width $pWidth -lowlim 1e-4 -uplim 10e-3]
 set optimizer [::tclopt::DE new -funct costFunc -pdata $pdata -strategy rand-to-best/1/exp -genmax 50 -refresh 1 -np 10\
                        -f 0.5 -cr 1 -seed 3 -debug -abstol 1e-6 -history -histfreq 1]
 $optimizer addPars $par
+# docs-end optimizer-creation-inverter-optimization
 
-# get results and history
+### get results and history
+# docs-begin get-optimization-results-inverter-optimization
 set results [$optimizer run]
 set width [dict get $results x]
 set trajectory [dict get $results besttraj]
 set bestf [dict get $results history]
+vector create generations x
 foreach genTr $trajectory genF $bestf {
-    lappend optData [list {*}[dict get $genTr x] [dict get $genF bestf]]
     lappend functionTrajectory [list [dict get $genTr gen] [dict get $genTr x]]
+    generations append [dict get $genTr gen]
+    x append [dict get $genTr x]
 }
+# docs-end get-optimization-results-inverter-optimization
 
-# plot 2D trajectory
+### plot 2D trajectory
+# docs-begin plot-generations-ticklecharts-inverter-optimization
 set chart [ticklecharts::chart new]
 $chart Xaxis -name Generation -minorTick {show True} -type value -splitLine {show True}
 $chart Yaxis -name Width -minorTick {show True}  -splitLine {show True}
 $chart SetOptions -title {} -tooltip {trigger axis} -animation False -toolbox {feature {dataZoom {yAxisIndex none}}}
 $chart Add lineSeries -name {Best trajectory} -data $functionTrajectory -showAllSymbol nothing
 set fbasename [file rootname [file tail [info script]]]
-$chart Render -outfile [file normalize [file join .. html_charts ${fbasename}_plot.html]] -width 800px -height 500px
+$chart Render -outfile [file normalize [file join .. html_charts ${fbasename}_plot.html]] -width 800px -height 500px\
+        -divid ${fbasename}_plot -jschartvar chart_${fbasename}_plot -jsvar option_${fbasename}_plot
+# docs-end plot-generations-ticklecharts-inverter-optimization
 
-# calculate initial waveforms the highest supply voltage
+### calculate initial waveforms the highest supply voltage
+# docs-begin waveforms-calculation-inverter-optimization
 set pdPs [pdPsCalc $initialPWidth $length]
 $mn actOnParam -set l $length w [expr {$initialPWidth/3.0}] pd $pdPs ps $pdPs
 $mp actOnParam -set l $length w $initialPWidth pd $pdPs ps $pdPs
 $vdd actOnParam -set dc [lindex $vSupplyVals 2]
-$circuit runAndRead
+$circuit runAndRead -vector
 set data [$circuit configure -data]
 set dataDict [$circuit getDataDict]
-foreach timeVal [dict get $dataDict time] voutVal [dict get $dataDict v(out)] {
-    lappend initialWaveform [list $timeVal $voutVal]
-}
+set initialWaveform [transpose [list [[dict get $dataDict time] index :] [[dict get $dataDict v(out)] index :]]]
+vector create initTime initVout
+initTime set [dict get $dataDict time]
+initVout set [dict get $dataDict v(out)]
 set vlowInitial [$data measure -find v(out) -at $tmeas1]
 set vhighInitial [$data measure -find v(out) -at $tmeas2]
-set instantPower [expr {mul([dict get $dataDict i(vdd)], [dict get $dataDict v(vdd)])}]
-set psupplyInitial [measure -xname time -data [dict create time [dict get $dataDict time] instantPower $instantPower]\
-                            -rms "-vec instantPower -from $tmeas1 -to $tmeas2"]
+vector create instantPower
+instantPower expr {[dict get $dataDict i(vdd)]*[dict get $dataDict v(vdd)]}
+set psupplyInitial [measure -xname [dict get $dataDict time] -rms "-vec instantPower -from $tmeas1 -to $tmeas2"]
 
-# calculate final waveform for the highest supply voltage
+### calculate final waveform for the highest supply voltage
 set pdPs [pdPsCalc $width $length]
 $mn actOnParam -set l $length w [expr {$width/3.0}] pd $pdPs ps $pdPs
 $mp actOnParam -set l $length w $width pd $pdPs ps $pdPs
 $vdd actOnParam -set dc [lindex $vSupplyVals 2]
-$circuit runAndRead
+$circuit runAndRead -vector
 set data [$circuit configure -data]
 set dataDict [$circuit getDataDict]
-foreach timeVal [dict get $dataDict time] voutVal [dict get $dataDict v(out)] {
-    lappend finalWaveform [list $timeVal $voutVal]
-}
+set finalWaveform [transpose [list [[dict get $dataDict time] index :] [[dict get $dataDict v(out)] index :]]]
+vector create finalTime finalVout
+finalTime set [dict get $dataDict time]
+finalVout set [dict get $dataDict v(out)]
 set vlowFinal [$data measure -find v(out) -at $tmeas1]
 set vhighFinal [$data measure -find v(out) -at $tmeas2]
-set instantPower [expr {mul([dict get $dataDict i(vdd)], [dict get $dataDict v(vdd)])}]
-set psupplyFinal [measure -xname time -data [dict create time [dict get $dataDict time] instantPower $instantPower]\
-                          -rms "-vec instantPower -from $tmeas1 -to $tmeas2"]
+instantPower expr {[dict get $dataDict i(vdd)]*[dict get $dataDict v(vdd)]}
+set psupplyFinal [measure -xname [dict get $dataDict time] -rms "-vec instantPower -from $tmeas1 -to $tmeas2"]
+# docs-end waveforms-calculation-inverter-optimization
 
-# plot waveforms
+### plot waveforms
+# docs-begin plot-waveforms-ticklecharts-inverter-optimization
+set numberFormat [ticklecharts::jsfunc new {
+    function (value) {
+        return Number(value).toPrecision(3);
+    }
+}]
 set chart [ticklecharts::chart new]
 $chart Xaxis -name {Time, s} -minorTick {show True} -type value -splitLine {show True}
 $chart Yaxis -name v(out) -minorTick {show True}  -splitLine {show True}
-$chart SetOptions -title {} -legend {} -tooltip {trigger axis} -animation False\
+$chart SetOptions -title {} -legend {} -tooltip [list trigger axis valueFormatter $numberFormat] -animation False\
         -toolbox {feature {dataZoom {yAxisIndex none}}}
 $chart Add lineSeries -name "initial, vdd=[lindex $vSupplyVals 2]" -data $initialWaveform -showAllSymbol nothing\
         -symbolSize 0
 $chart Add lineSeries -name "final, vdd=[lindex $vSupplyVals 2]" -data $finalWaveform -showAllSymbol nothing\
         -symbolSize 0
-
-
 set fbasename [file rootname [file tail [info script]]]
 $chart Render -outfile [file normalize [file join .. html_charts ${fbasename}_waveforms_plot.html]] -width 800px\
-        -height 500px
+        -height 500px -divid ${fbasename}_waveforms_plot -jschartvar chart_${fbasename}_waveforms_plot\
+        -jsvar option_${fbasename}_waveforms_plot
 
-# print resulted values for the highest supply voltage
+### print resulted values for the highest supply voltage
 puts "Optimization succesfully finished at generation [dict get $results generation], total number of function\
       evaluations - [dict get $results nfev]"
 puts "Convergence info: [dict get $results info]"
@@ -188,3 +230,35 @@ puts "For VDD=[lindex $vSupplyVals 2]V,\
         VLOW: [format %.3f $vlowInitial]V → [format %.3f $vlowFinal]V<[format %.3f $vLowLim]V,\
         VHIGH: [format %.3f $vhighInitial]V → [format %.3f $vhighFinal]V>[format %.3f $vHighLim]V,\
         PSUPPLY: [format %.3f $psupplyInitial]W → [format %.3f $psupplyFinal]W"
+# docs-end plot-waveforms-ticklecharts-inverter-optimization
+
+### plot results with rbc
+# docs-begin plot-rbc-inverter-optimization
+if {![catch {package require rbc}]} {
+    set colors {#5470c6 #91cc75 #fac858 #ee6666 #73c0de #3ba272 #fc8452 #9a60b4 #ea7ccc}
+    set graphTrajectory [rbc::graphtoolbar .gTrajectory -width 700 -height 400 -type graph -controlmode context -zoom\
+                                 -crosshairs -crosshairsmode closest -pan -zoomwheel]
+    set graphWfms [rbc::graphtoolbar .gWfms -width 700 -height 400 -type graph -controlmode context -zoom -crosshairs\
+                       -crosshairsmode closest  -pan -zoomwheel]
+    $graphTrajectory graph grid on
+    $graphTrajectory graph axis configure x -title Generation
+    $graphTrajectory graph axis configure y -title {Width, m}
+    $graphTrajectory graph element create trajectory -x generations -y x -symbol {} -label {Best trajectory}\
+            -color [lindex $colors 0] -linewidth 2
+    $graphWfms graph grid on
+    $graphWfms graph axis configure x -title {time, s}
+    $graphWfms graph axis configure y -title {Voltage, V}
+    $graphWfms graph element create initvout -x initTime -y initVout -symbol {} -label {Initial waveform}\
+            -color [lindex $colors 1] -linewidth 2
+    $graphWfms graph element create finalvout -x finalTime -y finalVout -symbol {} -label {Final waveform}\
+            -color [lindex $colors 2] -linewidth 2
+
+    grid $graphTrajectory -row 0 -sticky nsew
+    grid $graphWfms -row 1 -sticky nsew
+    grid columnconfigure . 0 -weight 1
+    grid rowconfigure . 0 -weight 1
+    grid rowconfigure . 1 -weight 1
+    $graphTrajectory graph svg output [file normalize [file join .. svg_charts ${fbasename}_trajectory.svg]]
+    $graphWfms graph svg output [file normalize [file join .. svg_charts ${fbasename}_wfms.svg]]
+}
+# docs-end plot-rbc-inverter-optimization

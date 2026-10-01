@@ -6,10 +6,10 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
   </head>
   <body>
-    <div id="id_ce72c8e3ad654f5683ca9bbcf8523306" class="chart-container" style="width:800px; height:500px;"></div>
+    <div id="filter" class="chart-container" style="width:800px; height:500px;"></div>
     <script>
-      var chart_ce72c8e3ad654f5683ca9bbcf8523306 = echarts.init(document.getElementById("id_ce72c8e3ad654f5683ca9bbcf8523306"), null, {renderer: "canvas"});
-      var option_ce72c8e3ad654f5683ca9bbcf8523306 = {
+      var chart_filter = echarts.init(document.getElementById("filter"), null, {renderer: "canvas"});
+      var option_filter = {
   "xAxis": [{
       "show": true,
       "type": "value",
@@ -139,6 +139,9 @@
       "alwaysShowContent": false,
       "triggerOn": "mousemove|click",
       "transitionDuration": 0.4,
+      "valueFormatter": function (value) {
+        return Number(value).toPrecision(4);
+    },
       "padding": 5,
       "order": "seriesAsc"
     }],
@@ -4061,7 +4064,7 @@
         ],
         [
           187054108.2164345,
-          0.00471583377297009
+          0.004715833772970091
         ],
         [
           187434869.7394806,
@@ -4206,7 +4209,7 @@
     }
   ]
 };
-      chart_ce72c8e3ad654f5683ca9bbcf8523306.setOption(option_ce72c8e3ad654f5683ca9bbcf8523306);
+      chart_filter.setOption(option_filter);
     </script>
   </body>
 </html>

@@ -1,10 +1,13 @@
-
 package require SpiceGenTcl
 package require ticklecharts
+package require rbc::vector
+package require math::linearalgebra
+namespace import ::math::linearalgebra::transpose
+namespace import rbc::vector
 namespace import ::SpiceGenTcl::*
 importLtspice
 
-# create top-level circuit
+### create top-level circuit
 set circuit [Circuit new {diode IV}]
 # add elements to circuit
 $circuit add [D new 1 anode 0 -model diomod -area 1]
@@ -14,34 +17,57 @@ $circuit add [Dc new -src va -start 0 -stop 2 -incr 0.01]
 set tempSt [Temp new 25]
 $circuit add $tempSt
 # add temperature sweep
-set temps [list -55 25 85 125 175]
+set temps {-55 25 85 125 175}
 #set simulator with default
-set simulator [Batch new {batch1}]
+set simulator [Batch new -nocleanup {batch1}]
 # attach simulator object to circuit
 $circuit configure -simulator $simulator
 # run circuit, change temperature, read log and data
 foreach temp $temps {
     $tempSt configure -value $temp
-    $circuit runAndRead
-    puts [$circuit configure -log]
+    $circuit runAndRead -vector
     set data [$circuit getDataDict]
-    set xydata [list]
-    foreach x [dict get $data v(anode)] y [dict get $data i(va)] {
-        set xf [format %.3f $x]
-        set yf [format %.3f [expr {-$y}]]
-        lappend xydata [list $xf $yf]
-    }
-    lappend dataList $xydata
+    lappend xVecs [dict get $data v(anode)]
+    set yVec [dict get $data i(va)]
+    $yVec expr {-$yVec}
+    lappend yVecs $yVec
 }
 
-# plot results with ticklecharts
+### plot results with ticklecharts
 set chart [ticklecharts::chart new]
-$chart Xaxis -name {v(anode), V} -minorTick {show True}  -type value -splitLine {show True}
-$chart Yaxis -name {Idiode, A} -minorTick {show True}  -type value -splitLine {show True}
-$chart SetOptions -title {} -tooltip {trigger axis} -animation False -legend {}\
-        -toolbox {feature {dataZoom {yAxisIndex none}}}  -grid {left 5% right 15%}
-foreach data $dataList temp $temps {
-    $chart Add lineSeries -data $data -showAllSymbol nothing -name ${temp}°C -symbolSize 2
+set numberFormat [ticklecharts::jsfunc new {
+    function (value) {
+        return Number(value).toPrecision(4);
+    }
+}]
+$chart Xaxis -name {v(anode), V} -minorTick {show True} -type value -splitLine {show True}
+$chart Yaxis -name {Idiode, A} -minorTick {show True} -type value -splitLine {show True}
+$chart SetOptions -title {} -tooltip [list trigger axis valueFormatter $numberFormat] -animation False -legend {}\
+        -toolbox {feature {dataZoom {yAxisIndex none}}} -grid {left 5% right 15%}
+foreach xVec $xVecs yVec $yVecs temp $temps {
+    $chart Add lineSeries -data [transpose [list [$xVec index :] [$yVec index :]]] -showAllSymbol nothing\
+            -name ${temp}°C -symbolSize 2
 }
 set fbasename [file rootname [file tail [info script]]]
-$chart Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px
+$chart Render -outfile [file normalize [file join .. html_charts $fbasename.html]] -width 800px -height 500px\
+        -divid $fbasename -jschartvar chart_$fbasename -jsvar option_$fbasename
+
+### plot results with rbc
+if {![catch {package require rbc}]} {
+    set colors {#5470c6 #91cc75 #fac858 #ee6666 #73c0de #3ba272 #fc8452 #9a60b4 #ea7ccc}
+    set graph [rbc::graphtoolbar .g -width 700 -height 400 -type graph -controlmode context -zoom -crosshairs\
+                       -crosshairsmode closest -crosshairsclosestopts {-interpolate no} -pan -zoomwheel -scaletoggle y\
+                       -activelegend]
+    $graph graph grid on
+    $graph graph axis configure x -title {v(anode), V}
+    $graph graph axis configure y -title {Idiode, A}
+    set i -1
+    foreach xVec $xVecs yVec $yVecs temp $temps {
+        $graph graph element create temp$temp -x $xVec -y $yVec -symbol circle -pixels 2 -label ${temp}°C\
+                -color [lindex $colors [incr i]]
+    }
+    grid $graph -sticky nsew
+    grid columnconfigure . 0 -weight 1
+    grid rowconfigure . 0 -weight 1
+    $graph graph svg output [file normalize [file join .. svg_charts $fbasename.svg]]
+}
