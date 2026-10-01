@@ -107,7 +107,7 @@ $layout Render -outfile [file normalize [file join .. html_charts $fbasename.htm
 
 ### plot results with rbc
 # docs-begin plot-rbc-switch-oscillator
-if {![catch {package require rbc}]} {
+if {![catch {package require rbc::graphtoolbar}]} {
 
     set currentDir [file dirname [file normalize [info script]]]
     source [file join $currentDir .. .. common.tcl]

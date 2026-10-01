@@ -75,7 +75,7 @@ $chart Render -outfile [file normalize [file join .. html_charts $fbasename.html
 
 ### plot results with rbc
 # docs-begin plot-rbc-filter
-if {![catch {package require rbc}]} {
+if {![catch {package require rbc::graphtoolbar}]} {
     set colors {#5470c6 #91cc75}
     set graph [rbc::graphtoolbar .g -width 700 -height 400 -type graph -controlmode context -zoom -crosshairs\
                        -crosshairsmode closest -crosshairsclosestopts {-interpolate no} -pan -zoomwheel -scaletoggle y\

@@ -64,7 +64,7 @@ $chart Render -outfile [file normalize [file join .. html_charts $fbasename.html
         -divid $fbasename -jschartvar chart_$fbasename -jsvar option_$fbasename
 
 ### plot results with rbc
-if {![catch {package require rbc}]} {
+if {![catch {package require rbc::graphtoolbar}]} {
     set graph [rbc::graphtoolbar .g -width 700 -height 400 -type graph -controlmode context -zoom -crosshairs\
                        -crosshairsmode closest -crosshairsclosestopts {-interpolate no} -pan -zoomwheel]
     $graph graph legend configure -hide yes

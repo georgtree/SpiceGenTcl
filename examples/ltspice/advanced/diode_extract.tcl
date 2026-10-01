@@ -153,7 +153,7 @@ $layout Render -outfile [file normalize [file join .. html_charts $fbasename.htm
         -divid $fbasename -jschartvar chart_$fbasename -jsvar option_$fbasename
 
 ### plot results with rbc
-if {![catch {package require rbc}]} {
+if {![catch {package require rbc::graphtoolbar}]} {
     set colors {#5470c6 #91cc75 #fac858 #ee6666 #73c0de #3ba272 #fc8452 #9a60b4 #ea7ccc}
     set graph [rbc::graphtoolbar .g -width 700 -height 400 -type graph -controlmode context -zoom -crosshairs\
                        -crosshairsmode closest -crosshairsclosestopts {-interpolate no} -pan -zoomwheel -scaletoggle y\

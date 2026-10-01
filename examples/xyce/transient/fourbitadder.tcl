@@ -151,7 +151,7 @@ $layout Render -outfile [file normalize [file join .. html_charts $fbasename.htm
         -divid $fbasename -jschartvar chart_$fbasename -jsvar option_$fbasename
 
 ### plot results with rbc
-if {![catch {package require rbc}]} {
+if {![catch {package require rbc::graphtoolbar}]} {
 
     set currentDir [file dirname [file normalize [info script]]]
     source [file join $currentDir .. .. common.tcl]
