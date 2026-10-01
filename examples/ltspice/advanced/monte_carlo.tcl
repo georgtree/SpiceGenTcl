@@ -230,6 +230,8 @@ if {![catch {package require rbc}]} {
     grid columnconfigure . 0 -weight 1
     grid rowconfigure . 0 -weight 1
     grid rowconfigure . 1 -weight 1
-    $graph graph svg output [file normalize [file join .. svg_charts ${fbasename}_typ.svg]]
-    $barchart graph svg output [file normalize [file join .. svg_charts ${fbasename}_combined.svg]]
+    $graph graph svg output\
+            [file normalize [file join .. .. .. docs assets img svg_charts ltspice ${fbasename}_typ.svg]]
+    $barchart graph svg output\
+            [file normalize [file join .. .. .. docs assets img svg_charts ltspice ${fbasename}_combined.svg]]
 }

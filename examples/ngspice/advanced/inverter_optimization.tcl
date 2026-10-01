@@ -258,7 +258,9 @@ if {![catch {package require rbc}]} {
     grid columnconfigure . 0 -weight 1
     grid rowconfigure . 0 -weight 1
     grid rowconfigure . 1 -weight 1
-    $graphTrajectory graph svg output [file normalize [file join .. svg_charts ${fbasename}_trajectory.svg]]
-    $graphWfms graph svg output [file normalize [file join .. svg_charts ${fbasename}_wfms.svg]]
+    $graphTrajectory graph svg output\
+            [file normalize [file join .. .. .. docs assets img svg_charts ngspice ${fbasename}_trajectory.svg]]
+    $graphWfms graph svg output\
+            [file normalize [file join .. .. .. docs assets img svg_charts ngspice ${fbasename}_wfms.svg]]
 }
 # docs-end plot-rbc-inverter-optimization

@@ -447,7 +447,7 @@ if {![catch {package require rbc}]} {
     grid $graph -sticky nsew
     grid columnconfigure \&. 0 -weight 1
     grid rowconfigure \&. 0 -weight 1
-    $graph graph svg output [file normalize [file join \&.\&. svg_charts $fbasename\&.svg]]
+    $graph graph svg output [file normalize [file join \&.\&. \&.\&. \&.\&. docs assets img svg_charts ngspice $fbasename\&.svg]]
 }
 .fi
 .RE
@@ -616,7 +616,7 @@ if {![catch {package require rbc}]} {
     grid $graph -sticky nsew
     grid columnconfigure \&. 0 -weight 1
     grid rowconfigure \&. 0 -weight 1
-    $graph graph svg output [file normalize [file join \&.\&. svg_charts $fbasename\&.svg]]
+    $graph graph svg output [file normalize [file join \&.\&. \&.\&. \&.\&. docs assets img svg_charts ngspice $fbasename\&.svg]]
 }
 .fi
 .RE
@@ -842,8 +842,10 @@ if {![catch {package require rbc}]} {
     grid columnconfigure \&. 0 -weight 1
     grid rowconfigure \&. 0 -weight 1
     grid rowconfigure \&. 1 -weight 1
-    $graphVout graph svg output [file normalize [file join \&.\&. svg_charts ${fbasename}_vout\&.svg]]
-    $graphImeas graph svg output [file normalize [file join \&.\&. svg_charts ${fbasename}_imeas\&.svg]]
+    $graphVout graph svg output\\
+            [file normalize [file join \&.\&. \&.\&. \&.\&. docs assets img svg_charts ngspice ${fbasename}_vout\&.svg]]
+    $graphImeas graph svg output\\
+            [file normalize [file join \&.\&. \&.\&. \&.\&. docs assets img svg_charts ngspice ${fbasename}_imeas\&.svg]]
 }
 .fi
 .RE
@@ -1082,7 +1084,8 @@ if {![catch {package require rbc}]} {
     }
     grid columnconfigure \&. 0 -weight 1
     foreach node $nodes {
-        \&.g$node graph svg output [file normalize [file join \&.\&. svg_charts ${fbasename}_$node\&.svg]]
+        \&.g$node graph svg output\\
+                [file normalize [file join \&.\&. \&.\&. \&.\&. docs assets img svg_charts ngspice ${fbasename}_$node\&.svg]]
     }
 }
 .fi
@@ -1198,7 +1201,7 @@ if {![catch {package require rbc}]} {
     grid $graph -sticky nsew
     grid columnconfigure \&. 0 -weight 1
     grid rowconfigure \&. 0 -weight 1
-    $graph graph svg output [file normalize [file join \&.\&. svg_charts $fbasename\&.svg]]
+    $graph graph svg output [file normalize [file join \&.\&. \&.\&. \&.\&. docs assets img svg_charts ngspice $fbasename\&.svg]]
 }
 .fi
 .RE

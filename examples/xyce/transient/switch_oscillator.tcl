@@ -123,6 +123,8 @@ if {![catch {package require rbc}]} {
     grid columnconfigure . 0 -weight 1
     grid rowconfigure . 0 -weight 1
     grid rowconfigure . 1 -weight 1
-    $graphVout graph svg output [file normalize [file join .. svg_charts ${fbasename}_vout.svg]]
-    $graphImeas graph svg output [file normalize [file join .. svg_charts ${fbasename}_imeas.svg]]
+    $graphVout graph svg output\
+            [file normalize [file join .. .. .. docs assets img svg_charts xyce ${fbasename}_vout.svg]]
+    $graphImeas graph svg output\
+            [file normalize [file join .. .. .. docs assets img svg_charts xyce ${fbasename}_imeas.svg]]
 }

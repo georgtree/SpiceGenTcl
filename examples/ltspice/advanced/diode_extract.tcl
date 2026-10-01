@@ -170,5 +170,5 @@ if {![catch {package require rbc}]} {
     grid $graph -sticky nsew
     grid columnconfigure . 0 -weight 1
     grid rowconfigure . 0 -weight 1
-    $graph graph svg output [file normalize [file join .. svg_charts $fbasename.svg]]
+    $graph graph svg output [file normalize [file join .. .. .. docs assets img svg_charts ltspice $fbasename.svg]]
 }

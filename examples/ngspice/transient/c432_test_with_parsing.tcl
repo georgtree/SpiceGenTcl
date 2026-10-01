@@ -95,7 +95,9 @@ if {![catch {package require rbc}]} {
     grid columnconfigure . 0 -weight 1
     grid rowconfigure . 0 -weight 1
     grid rowconfigure . 1 -weight 1
-    $graphVg429 graph svg output [file normalize [file join .. svg_charts ${fbasename}_vg429.svg]]
-    $graphVg430 graph svg output [file normalize [file join .. svg_charts ${fbasename}_vg430.svg]]
+    $graphVg429 graph svg output\
+            [file normalize [file join .. .. .. docs assets img svg_charts ngspice ${fbasename}_vg429.svg]]
+    $graphVg430 graph svg output\
+            [file normalize [file join .. .. .. docs assets img svg_charts ngspice ${fbasename}_vg430.svg]]
 }
 # docs-end plot-rbc-c432-parse

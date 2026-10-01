@@ -177,6 +177,7 @@ if {![catch {package require rbc}]} {
     }
     grid columnconfigure . 0 -weight 1
     foreach node $nodes {
-        .g$node graph svg output [file normalize [file join .. svg_charts ${fbasename}_$node.svg]]
+        .g$node graph svg output\
+                [file normalize [file join .. .. .. docs assets img svg_charts xyce ${fbasename}_$node.svg]]
     }
 }
