@@ -61,6 +61,10 @@ extensions = [
 suppress_warnings = [
     "image.not_readable",
 ]
+html_theme = "classic"
+html_theme_options = {
+    "stickysidebar": True,
+}
 from pygments.lexers.tcl import TclLexer
 from pygments.token import Operator
 

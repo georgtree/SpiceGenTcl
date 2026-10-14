@@ -7,11 +7,12 @@
 
     <title>Tutorials &#8212; SpiceGenTcl  documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=2bf1fcf8" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=f11ead97" />
     
     <script src="_static/documentation_options.js?v=5929fcd5"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -4691,15 +4692,10 @@ setting global temperature we use <code class="docutils literal notranslate"><sp
 charge. To achieve this, we need to apply a negative voltage bias to the anode and perform an AC simulation at
 a single frequency. We then repeat this process at different voltages, collect all the results, and finally
 plot the entire curve. We calculate the capacitance value using the following equation:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>          ⎛I⎞
-      -Im ⎜─⎟
-          ⎝V⎠
-C = ────────────
-    2 ⋅ π ⋅ freq
-</pre></div>
-</div>
-<p>where I and V - voltage and current phasors, freq - frequency of applied AC signal.
-First, we can define π constant manually, or borrow the value from <code class="docutils literal notranslate"><span class="pre">::math::constants</span></code> library:</p>
+<div class="math notranslate nohighlight">
+\[C = \frac{-\operatorname{Im}\!\left(\frac{I}{V}\right)} {2\pi\cdot f}\]</div>
+<p>where <span class="math notranslate nohighlight">\(I\)</span> and <span class="math notranslate nohighlight">\(V\)</span> - voltage and current phasors, <span class="math notranslate nohighlight">\(f\)</span> - frequency of applied AC signal.
+First, we can define <span class="math notranslate nohighlight">\(\pi\)</span> constant manually, or borrow the value from <code class="docutils literal notranslate"><span class="pre">::math::constants</span></code> library:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">package</span><span class="w"> </span>require<span class="w"> </span>math::constants
 <span class="o">::</span><span class="nv">math</span><span class="o">::</span>constants::constants<span class="w"> </span>radtodeg<span class="w"> </span>degtorad<span class="w"> </span>pi
 <span class="k">variable</span><span class="w"> </span>pi

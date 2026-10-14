@@ -7,11 +7,12 @@
 
     <title>Advanced &#8212; SpiceGenTcl  documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=2bf1fcf8" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=f11ead97" />
     
     <script src="_static/documentation_options.js?v=5929fcd5"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -3417,10 +3418,8 @@ algorithm:</p>
 </pre></div>
 </div>
 <p>The residuals is calculated with the next formula:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>f = log ⎛|i    |⎞ - log ⎛|i   |⎞
-        ⎝| meas|⎠       ⎝| sim|⎠
-</pre></div>
-</div>
+<div class="math notranslate nohighlight">
+\[f = \log\!\left|i_{\text{meas}}\right| - \log\!\left|i_{\text{sim}}\right|\]</div>
 <p>We use logarithm of values because the current values span across multiple orders, from 1e-8 to 1e-2, that
 creates issue for fitting algorithm.</p>
 <p>Procedure returns dictionary that contains lists with residuals and diode current under the keys <code class="docutils literal notranslate"><span class="pre">fvec</span></code> and
@@ -5300,59 +5299,40 @@ transistor that provide minimum possible power consumption while satisfy certain
 voltage value to be no more than certain value <code class="docutils literal notranslate"><span class="pre">VLOWLIM</span></code> and high state output voltage value to be no less than
 certain value <code class="docutils literal notranslate"><span class="pre">VHIGHLIM</span></code>.</p>
 <p>Input parameters and constraints values are:</p>
-<dl class="field-list simple">
-<dt class="field-odd">VSUPPLY<span class="colon">:</span></dt>
-<dd class="field-odd"><p>2V, 2.1V, 2.2V.</p>
-</dd>
-<dt class="field-even">VLOWLIM<span class="colon">:</span></dt>
-<dd class="field-even"><p>0.05V.</p>
-</dd>
-<dt class="field-odd">VHIGHLIM<span class="colon">:</span></dt>
-<dd class="field-odd"><p>1.95V.</p>
-</dd>
-<dt class="field-even">INPFREQ<span class="colon">:</span></dt>
-<dd class="field-even"><p>850MHz.</p>
-</dd>
-<dt class="field-odd">LMIN<span class="colon">:</span></dt>
-<dd class="field-odd"><p>0.35um.</p>
-</dd>
-<dt class="field-even">NOPERIODS<span class="colon">:</span></dt>
-<dd class="field-even"><ol class="arabic simple" start="4">
-<li></li>
-</ol>
-</dd>
-</dl>
+<p><span class="math notranslate nohighlight">\(V_{\text{supply}}=2\mathrm{V}, 2.1\mathrm{V}, 2.2\mathrm{V}\)</span></p>
+<p><span class="math notranslate nohighlight">\(V_{\text{low,lim}}=0.05\mathrm{V}\)</span></p>
+<p><span class="math notranslate nohighlight">\(V_{\text{high,lim}}=1.95\mathrm{V}\)</span></p>
+<p><span class="math notranslate nohighlight">\(f_{\text{input}}=850\mathrm{MHz}\)</span></p>
+<p><span class="math notranslate nohighlight">\(L_{\text{min}}=0.35\mathrm{um}\)</span></p>
+<p><span class="math notranslate nohighlight">\(N_{\text{periods}}=4\)</span></p>
 <p>Width <code class="docutils literal notranslate"><span class="pre">NWIDTH</span></code> of NMOS device is 3 times lower than width <code class="docutils literal notranslate"><span class="pre">PWIDTH</span></code> of PMOS device. Lengths of bothe devices are
 equal to <code class="docutils literal notranslate"><span class="pre">LENGTH</span></code>.  Perimeters of source and drain for both devices are defined by the equation:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>PD = PS = 2 ⋅ (WIDTH + LENGTH)
-</pre></div>
-</div>
+<div class="math notranslate nohighlight">
+\[\mathrm{PD} = \mathrm{PS} = 2 \cdot (\mathrm{WIDTH} + \mathrm{LENGTH})\]</div>
 <p>Input period is:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>               1
-INPPERIOD = ───────
-            INPFREQ
-</pre></div>
-</div>
-<p>The power consumption is defined as RMS value of instant power <code class="docutils literal notranslate"><span class="pre">I(VDD)*V(VDD,VSS)</span></code> across fourth period time
-interval defined by <code class="docutils literal notranslate"><span class="pre">TMEASSTART</span></code> and <code class="docutils literal notranslate"><span class="pre">TMEASSTOP</span></code>:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>TMEASSTART = (NOPERIODS - 1) ⋅ INPPERIOD
-TMEASSTOP = NOPERIODS ⋅ INPPERIOD
-            ________________________________________________________________
-           ╱                          TMEASSTOP
-          ╱            1                  ⌠                           2
-PRMS =   ╱  ────────────────────── ⋅      ⌡     (I(VDD) ⋅ V(VDD, VSS))  ⋅ dt
-       ╲╱   TMEASSTOP - TMEASSTART   TMEASSTART
-</pre></div>
-</div>
+<div class="math notranslate nohighlight">
+\[\mathrm{T_{input}} = \frac{1}{\mathrm{f_{input}}}\]</div>
+<p>The power consumption is defined as RMS value of instant power
+<span class="math notranslate nohighlight">\(\mathrm{I(VDD)}\cdot \mathrm{V(VDD,VSS)}\)</span> across fourth period time interval
+defined by <span class="math notranslate nohighlight">\(\mathrm{t_{meas,start}}\)</span>
+and <span class="math notranslate nohighlight">\(\mathrm{t_{meas,stop}}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+t_{\text{meas,start}} &amp;= (N_{\text{periods}}-1)\,T_{\text{input}},\\
+        t_{\text{meas,stop}} &amp;= N_{\text{periods}}\,T_{\text{input}},\\
+        P_{\text{RMS}} &amp;=
+\sqrt{
+    \frac{1}{t_{\text{meas,stop}}-t_{\text{meas,start}}}
+    \int_{t_{\text{meas,start}}}^{t_{\text{meas,stop}}}
+    \left[I(\text{VDD})\cdot V(\text{VDD,VSS})\right]^2
+    \,\mathrm{d}t
+}.
+\end{aligned}\end{split}\]</div>
 <p>Low and high voltages values are measured at fourth output pulse at times <code class="docutils literal notranslate"><span class="pre">TMEAS1</span></code> and <code class="docutils literal notranslate"><span class="pre">TMEAS2</span></code> correspondingly:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>                     3.0 ⋅ INPPERIOD
-TMEAS1 = TMEASSTOP - ───────────────
-                           4.0
-                     INPPERIOD
-TMEAS2 = TMEASSTOP - ─────────
-                        4.0
-</pre></div>
-</div>
+<div class="math notranslate nohighlight">
+\[t_{\text{meas1}} = t_{\text{meas,stop}} - \frac{3.0\cdot T_{\text{input}}}{4.0}\]</div>
+<div class="math notranslate nohighlight">
+\[t_{\text{meas2}} = t_{\text{meas,stop}} - \frac{T_{\text{input}}}{4.0}\]</div>
 <p>In the next code lines we define all above mentioned constants as well as equations for <code class="docutils literal notranslate"><span class="pre">PD</span></code> and <code class="docutils literal notranslate"><span class="pre">PS</span></code>:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">set</span><span class="w"> </span>vSupply<span class="w"> </span><span class="mf">2.0</span>
 <span class="k">set</span><span class="w"> </span>inpFreq<span class="w"> </span><span class="mi">850</span>e6
@@ -5403,22 +5383,20 @@ fallback to usual <a class="reference internal" href="SpiceGenTcl-SpiceGenTcl-Ng
 <p>Next large step is to define correct cost function that taking into account the constraints voltages <code class="docutils literal notranslate"><span class="pre">VLOWLIM</span></code>
 and <code class="docutils literal notranslate"><span class="pre">VHIGHLIM</span></code>, the power consumption <code class="docutils literal notranslate"><span class="pre">PRMS</span></code> and different values of <code class="docutils literal notranslate"><span class="pre">VSUPPLY</span></code> voltages.</p>
 <p>The general equation for cost function is:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>              i = n                    ⎛P      - P    ⎞
-              ____                     ⎜ spec     sim ⎟
-              ╲                        ⎜     j       j⎟
-Cost = W    ⋅  ╲    P     + W    ⋅ max ⎜──────────────⎟
-        obj    ╱     sim     con       ⎜    P         ⎟
-              ╱         i              ⎜     spec     ⎟
-              ‾‾‾‾                     ⎝         j    ⎠
-              i = 1                                    j∈[1,m]
-</pre></div>
-</div>
+<div class="math notranslate nohighlight">
+\[\text{Cost}
+= W_{\text{obj}}\sum_{i=1}^{n} P_{\text{sim},i}
++ W_{\text{con}}\max_{j\in\{1,\ldots,m\}}
+\left(
+      \frac{P_{\text{spec},j}-P_{\text{sim},j}}
+      {P_{\text{spec},j}}
+      \right)\]</div>
 <p>where:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">P_sim_i</span></code> - performance metrics (objectives), in our case it is power consumption <code class="docutils literal notranslate"><span class="pre">PMRS</span></code>, so n=1.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">W_obj</span></code> - weight for each objectives.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">P_spec_j</span></code> and <code class="docutils literal notranslate"><span class="pre">P_sim_j</span></code> - constraints metrics, specified and simulated respectively. In out case these constraints are voltages <code class="docutils literal notranslate"><span class="pre">VHIGHLIM</span></code> and <code class="docutils literal notranslate"><span class="pre">VLOWLIM</span></code>, so m=2. In cost function we include only the maximum relative error from all constraints.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">W_con</span></code> - weight for contraints.</p></li>
+<li><p><span class="math notranslate nohighlight">\(P_{\text{sim},i}\)</span> - performance metrics (objectives), in our case it is power consumption <code class="docutils literal notranslate"><span class="pre">PMRS</span></code>, so n=1.</p></li>
+<li><p><span class="math notranslate nohighlight">\(W_{\text{obj}}\)</span> - weight for each objectives.</p></li>
+<li><p><span class="math notranslate nohighlight">\(P_{\text{spec},j}\)</span> and <span class="math notranslate nohighlight">\(P_{\text{sim},j}\)</span> - constraints metrics, specified and simulated respectively. In out case these constraints are voltages <span class="math notranslate nohighlight">\(V_{\text{high,lim}}\)</span> and <span class="math notranslate nohighlight">\(V_{\text{low,lim}}\)</span>, so <span class="math notranslate nohighlight">\(m=2\)</span>. In cost function we include only the maximum relative error from all constraints.</p></li>
+<li><p><span class="math notranslate nohighlight">\(W_{\text{con}}\)</span> - weight for contraints.</p></li>
 </ul>
 <p>In our case we use three supply voltages <code class="docutils literal notranslate"><span class="pre">VSUPPLY</span></code>, so cost function is calculated for each one and summed.</p>
 <p>The tricky part is to select right weights for both objectives and constraints. When we are satisfied

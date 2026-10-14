@@ -235,16 +235,23 @@ namespace eval Tutorials {
         charge. To achieve this, we need to apply a negative voltage bias to the anode and perform an AC simulation at
         a single frequency. We then repeat this process at different voltages, collect all the results, and finally
         plot the entire curve. We calculate the capacitance value using the following equation:
+        #ruffopt includedformats nroff
         ```
                   ⎛I⎞   
               -Im ⎜─⎟   
                   ⎝V⎠   
-        C = ────────────
-            2 ⋅ π ⋅ freq
-
+        C = ───────────
+             2 ⋅ π ⋅ f
         ```
-        where I and V - voltage and current phasors, freq - frequency of applied AC signal. 
-        First, we can define π constant manually, or borrow the value from `::math::constants` library:
+
+        #ruffopt includedformats sphinx
+        ```math
+        C = \frac{-\operatorname{Im}\!\left(\frac{I}{V}\right)} {2\pi\cdot f}
+        ```
+        #ruffopt excludedformats {}
+
+        where `I`{math} and `V`{math} - voltage and current phasors, `f`{math} - frequency of applied AC signal. 
+        First, we can define `\pi`{math "π"} constant manually, or borrow the value from `::math::constants` library:
         @include-code examples/ngspice/ac/diode_cv.tcl -region constants-import-diode-cv
 
         We again go through the circuit building sequence:

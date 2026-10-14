@@ -177,10 +177,17 @@ namespace eval Advanced {
         @include-code examples/ngspice/advanced/diode_extract.tcl -region residuals-calc-diode-extract
 
         The residuals is calculated with the next formula:
+        #ruffopt includedformats nroff
         ```
         f = log ⎛|i    |⎞ - log ⎛|i   |⎞
                 ⎝| meas|⎠       ⎝| sim|⎠
         ```
+
+        #ruffopt excludedformats nroff
+        ```math
+        f = \log\!\left|i_{\text{meas}}\right| - \log\!\left|i_{\text{sim}}\right|
+        ```
+        #ruffopt excludedformats {}
 
         We use logarithm of values because the current values span across multiple orders, from 1e-8 to 1e-2, that
         creates issue for fitting algorithm.
@@ -347,28 +354,52 @@ namespace eval Advanced {
         certain value `VHIGHLIM`.
 
         Input parameters and constraints values are:
-        VSUPPLY - 2V, 2.1V, 2.2V
-        VLOWLIM - 0.05V
-        VHIGHLIM - 1.95V
-        INPFREQ - 850MHz
-        LMIN - 0.35um
-        NOPERIODS - 4
+        
+        `V_{\text{supply}}=2\mathrm{V}, 2.1\mathrm{V}, 2.2\mathrm{V}`{math "VSUPPLY=2V, 2.1V, 2.2V"}
+
+        `V_{\text{low,lim}}=0.05\mathrm{V}`{math "VLOWLIM=0.05V"}
+
+        `V_{\text{high,lim}}=1.95\mathrm{V}`{math "VHIGHLIM=1.95V"}
+
+        `f_{\text{input}}=850\mathrm{MHz}`{math "INPFREQ=850MHz"}
+
+        `L_{\text{min}}=0.35\mathrm{um}`{math "LMIN=0.35um"}
+
+        `N_{\text{periods}}=4`{math "NOPERIODS=4"}
 
         Width `NWIDTH` of NMOS device is 3 times lower than width `PWIDTH` of PMOS device. Lengths of bothe devices are
         equal to `LENGTH`.  Perimeters of source and drain for both devices are defined by the equation:
+        #ruffopt includedformats nroff
         ```
         PD = PS = 2 ⋅ (WIDTH + LENGTH)
         ```
 
+        #ruffopt excludedformats nroff
+        ```math
+        \mathrm{PD} = \mathrm{PS} = 2 \cdot (\mathrm{WIDTH} + \mathrm{LENGTH})
+        ```
+        #ruffopt excludedformats {}
+
+
         Input period is:
+        #ruffopt includedformats nroff
         ```
                        1   
         INPPERIOD = ───────
                     INPFREQ
         ```
 
-        The power consumption is defined as RMS value of instant power `I(VDD)*V(VDD,VSS)` across fourth period time
-        interval defined by `TMEASSTART` and `TMEASSTOP`:
+        #ruffopt excludedformats nroff
+        ```math
+        \mathrm{T_{input}} = \frac{1}{\mathrm{f_{input}}}
+        ```
+        #ruffopt excludedformats {}
+
+        The power consumption is defined as RMS value of instant power
+        `\mathrm{I(VDD)}\cdot \mathrm{V(VDD,VSS)}`{math "I(VDD)*V(VDD,VSS)"} across fourth period time interval
+        defined by `\mathrm{t_{meas,start}}`{math "TMEASSTART"}
+        and `\mathrm{t_{meas,stop}}`{math "TMEASSTOP"}:
+        #ruffopt includedformats nroff
         ```
         TMEASSTART = (NOPERIODS - 1) ⋅ INPPERIOD
         TMEASSTOP = NOPERIODS ⋅ INPPERIOD
@@ -380,15 +411,42 @@ namespace eval Advanced {
 
         ```
 
+        #ruffopt excludedformats nroff
+        ```math
+        \begin{aligned}
+        t_{\text{meas,start}} &= (N_{\text{periods}}-1)\,T_{\text{input}},\\
+                t_{\text{meas,stop}} &= N_{\text{periods}}\,T_{\text{input}},\\
+                P_{\text{RMS}} &=
+        \sqrt{
+            \frac{1}{t_{\text{meas,stop}}-t_{\text{meas,start}}}
+            \int_{t_{\text{meas,start}}}^{t_{\text{meas,stop}}}
+            \left[I(\text{VDD})\cdot V(\text{VDD,VSS})\right]^2
+            \,\mathrm{d}t
+        }.
+        \end{aligned}
+        ```
+        #ruffopt excludedformats {}
+
+
         Low and high voltages values are measured at fourth output pulse at times `TMEAS1` and `TMEAS2` correspondingly:
+        #ruffopt includedformats nroff
         ```
                              3.0 ⋅ INPPERIOD
         TMEAS1 = TMEASSTOP - ───────────────
                                    4.0      
                              INPPERIOD
         TMEAS2 = TMEASSTOP - ─────────
-                                4.0      
+                                4.0   
         ```
+
+        #ruffopt excludedformats nroff
+        ```math
+        t_{\text{meas1}} = t_{\text{meas,stop}} - \frac{3.0\cdot T_{\text{input}}}{4.0}
+        ```
+        ```math
+        t_{\text{meas2}} = t_{\text{meas,stop}} - \frac{T_{\text{input}}}{4.0}
+        ```
+        #ruffopt excludedformats {}
 
         In the next code lines we define all above mentioned constants as well as equations for `PD` and `PS`:
         @include-code examples/ngspice/advanced/inverter_optimization.tcl -region params-definition-inverter-optimization
@@ -409,6 +467,7 @@ namespace eval Advanced {
         and `VHIGHLIM`, the power consumption `PRMS` and different values of `VSUPPLY` voltages.
 
         The general equation for cost function is:
+        #ruffopt includedformats nroff
         ```
                       i = n                    ⎛P      - P    ⎞  
                       ____                     ⎜ spec     sim ⎟  
@@ -420,13 +479,27 @@ namespace eval Advanced {
                       i = 1                                    j∈[1,m]
         ```
 
+        #ruffopt excludedformats nroff
+        ```math
+        \text{Cost}
+        = W_{\text{obj}}\sum_{i=1}^{n} P_{\text{sim},i}
+        + W_{\text{con}}\max_{j\in\{1,\ldots,m\}}
+        \left(
+              \frac{P_{\text{spec},j}-P_{\text{sim},j}}
+              {P_{\text{spec},j}}
+              \right)
+        ```
+        #ruffopt excludedformats {}
+
         where:
-        - `P_sim_i` - performance metrics (objectives), in our case it is power consumption `PMRS`, so n=1.
-        - `W_obj` - weight for each objectives.
-        - `P_spec_j` and `P_sim_j` - constraints metrics, specified and simulated respectively. In out case these
-        constraints are voltages `VHIGHLIM` and `VLOWLIM`, so m=2. In cost function we include only the maximum
+        - `P_{\text{sim},i}`{math "P_sim_i"} - performance metrics (objectives), in our case it is power consumption
+        `PMRS`, so n=1.
+        - `W_{\text{obj}}`{math "W_obj"} - weight for each objectives.
+        - `P_{\text{spec},j}`{math "P_spec_j"} and `P_{\text{sim},j}`{math "P_sim_j"} - constraints metrics,
+        specified and simulated respectively. In out case these constraints are voltages `V_{\text{high,lim}}`{math
+        "VHIGHLIM"} and `V_{\text{low,lim}}`{math "VLOWLIM"}, so `m=2`{math}. In cost function we include only the maximum
         relative error from all constraints.
-        - `W_con` - weight for contraints.
+        - `W_{\text{con}}`{math "W_con"} - weight for contraints.
 
         In our case we use three supply voltages `VSUPPLY`, so cost function is calculated for each one and summed.
 

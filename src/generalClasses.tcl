@@ -2071,7 +2071,7 @@ namespace eval ::SpiceGenTcl {
         property name -set {
             set name [string tolower $value]
         }
-        # Type of dataset, could be voltage, vurrent, time or frequency
+        # Type of dataset, could be voltage, current, time or frequency
         property type -set {
             set type [string tolower $value]
         }
