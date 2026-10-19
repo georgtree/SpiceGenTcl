@@ -22,6 +22,7 @@ namespace eval ::SpiceGenTcl::Ngspice {
                 NamespacePath
         initialize {
             variable ModelTemplate {oo::class create @type@ {
+                self mixin -append ::SpiceGenTcl::ConstructorHelp
                 superclass ::SpiceGenTcl::Model
                 constructor {args} {
                     set paramsNames [list @paramsList@]

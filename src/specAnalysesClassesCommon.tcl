@@ -24,6 +24,7 @@ namespace eval ::SpiceGenTcl {
 namespace eval ::SpiceGenTcl::Common::Analyses {
 
     oo::class create Dc {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Analysis
         mixin ::SpiceGenTcl::Utility
         constructor {args} {
@@ -59,6 +60,7 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
     }
 
     oo::class create Ac {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Analysis
         mixin ::SpiceGenTcl::Utility
         constructor {args} {
@@ -93,6 +95,7 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
     }
 
     oo::class create Tran {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Analysis
         mixin ::SpiceGenTcl::Utility
         constructor {args} {
@@ -131,6 +134,7 @@ namespace eval ::SpiceGenTcl::Common::Analyses {
     }
 
     oo::class create Op {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Analysis
         mixin ::SpiceGenTcl::Utility
         constructor {args} {

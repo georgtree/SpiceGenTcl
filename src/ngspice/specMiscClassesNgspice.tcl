@@ -24,6 +24,7 @@ namespace eval ::SpiceGenTcl {
 namespace eval ::SpiceGenTcl::Ngspice::Misc {
 
     oo::class create OptionsNgspice {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Options
         mixin ::SpiceGenTcl::Utility
         constructor {args} {

@@ -23,14 +23,17 @@ namespace eval ::SpiceGenTcl {
 namespace eval ::SpiceGenTcl::Ngspice::Analyses {
 
     oo::class create Dc {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Common::Analyses::Dc
     }
 
     oo::class create Ac {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Common::Analyses::Ac
     }
 
     oo::class create Sp {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Analysis
         mixin ::SpiceGenTcl::Utility
         constructor {args} {
@@ -70,6 +73,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
     }
 
     oo::class create SensAc {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Analysis
         mixin ::SpiceGenTcl::Utility
         constructor {args} {
@@ -108,6 +112,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
     }
 
     oo::class create SensDc {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Analysis
         mixin ::SpiceGenTcl::Utility
         constructor {args} {
@@ -134,10 +139,12 @@ namespace eval ::SpiceGenTcl::Ngspice::Analyses {
     }
 
     oo::class create Tran {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Common::Analyses::Tran
     }
 
     oo::class create Op {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Common::Analyses::Op
     }
 }

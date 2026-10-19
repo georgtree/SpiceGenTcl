@@ -2104,4 +2104,48 @@ test testSimulatorClass-4 {} -setup {
 
 forgetNgspice
 
+# Direct parser, inherited alias, delegated source, and model preprocessing.
+foreach class {::SpiceGenTcl::Pin ::SpiceGenTcl::Ngspice::BasicDevices::R ::SpiceGenTcl::Ngspice::Sources::Vpulse\
+                       ::SpiceGenTcl::Ngspice::SemiconductorDevices::DiodeModel} {
+    test constructor-help-$class {help returns empty and leaves no instance} -body {
+        set before [info class instances $class]
+        set result [$class new -help]
+        list $result [expr {$before eq [info class instances $class]}]
+    } -match glob -output {*-help*} -result {{} 1}
+}
+
+test constructor-help-relative-create {named creation keeps the caller namespace} -body {
+    ::SpiceGenTcl::Pin create localPin p node
+} -cleanup {localPin destroy} -result ::localPin
+
+test constructor-help-relative-cleanup {relative named help leaves no object command} -body {
+    ::SpiceGenTcl::Pin create localPin -help
+    info commands localPin
+} -match glob -output {*-help*} -result {}
+
+test constructor-help-shared {help does not load the simulator bridge} -body {
+    set before [package provide ngspicetclbridge]
+    ::SpiceGenTcl::Ngspice::Simulators::Shared new -help
+    expr {$before eq [package provide ngspicetclbridge]}
+} -match glob -output {*liblocation*} -result 1
+
+test constructor-help-generated-model {parser-generated models use the same factory mixin} -setup {
+    set template [namespace eval [info object namespace ::SpiceGenTcl::Parser] {set ModelTemplate}]
+    eval [string map [list @type@ GeneratedModel @paramsList@ {rs is} @hsuppress@ type] $template]
+} -body {
+    set result [GeneratedModel new -help]
+    list $result [info class instances GeneratedModel]
+} -cleanup {GeneratedModel destroy} -match glob -output {*-rs*-is*} -result {{} {}}
+
+test constructor-help-empty-subcircuit {dynamic help also handles subcircuits without parameters} -setup {
+    set subckt [::SpiceGenTcl::Subcircuit new empty {p n} {}]
+} -body {
+    set result {}
+    foreach dialect {Common Ngspice Ltspice Xyce} {
+        lappend result [::SpiceGenTcl::${dialect}::BasicDevices::XAuto new $subckt 1 {p n} -help]
+    }
+    set result
+} -cleanup {$subckt destroy} -match glob -output {*no parameters*} -result {{} {} {} {}}
+
+
 cleanupTests

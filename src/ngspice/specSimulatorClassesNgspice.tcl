@@ -19,6 +19,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
     namespace export Batch BatchLiveLog Shared
     ##nagelfar subcmd+ _obj,Batch configure
     oo::configurable create Batch {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         # this class represent batch simulation of ngspice
         superclass ::SpiceGenTcl::Simulator
         property log -get {
@@ -123,6 +124,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
     }
 
     oo::configurable create BatchLiveLog {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         # this class represent batch simulation of ngspice
         superclass ::SpiceGenTcl::Ngspice::Simulators::Batch
         method runAndRead {args} {
@@ -170,6 +172,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
 
     ##nagelfar subcmd+ _obj,Shared configure
     oo::configurable create Shared {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         # this class represent batch simulation of ngspice in form of shared library
         superclass ::SpiceGenTcl::Simulator
         property log -get {
@@ -194,12 +197,12 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
             #  name - name of simulator object
             #  liblocation - path to .so/.dll library
             #  -nocleanup - if provided, retains RawFile object from the previous simulation
-            package require ngspicetclbridge
             argparse -help {Creates batch ngspice simulator that can be attached to top-level 'Circuit'} {
                 {name -help {Name of simulator object}}
                 {liblocation -optional -help {Path to .so/.dll library}}
                 {-nocleanup -boolean -help {Retain RawFile object from previous simulation}}
             }
+            package require ngspicetclbridge
             if {![info exists liblocation]} {
                 if {{NGSPICE_DLL} in [array names ::env]} {
                     if {$::tcl_platform(platform) eq {unix}} {
@@ -223,7 +226,7 @@ namespace eval ::SpiceGenTcl::Ngspice::Simulators {
         }
         destructor {
             next
-            $simhandle destroy
+            if {[info exists simhandle]} {$simhandle destroy}
         }
         method runAndRead {args} {
             # Runs circuit.

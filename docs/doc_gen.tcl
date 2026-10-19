@@ -1,5 +1,3 @@
-
-#set path_to_hl_tcl "C:/msys64/mingw64/lib/hl_tcl"
 package require ruff
 package require fileutil
 set docDir [file dirname [file normalize [info script]]]

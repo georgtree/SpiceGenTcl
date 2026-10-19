@@ -28,6 +28,7 @@ namespace eval ::SpiceGenTcl {
 namespace eval ::SpiceGenTcl::Common::BasicDevices {
 
     oo::class create Resistor {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Device
         constructor {args} {
             # Creates object of class `Resistor` that describes resistor.
@@ -48,7 +49,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             # Resistor new 1 netp netm -r 1e3 -tc1 1 -temp {-eq temp_amb}
             # ```
             # Synopsis: name np nm -r value ?-m value? ?-temp value? ?-tc1 value? ?-tc2 value?
-            set arguments [argparse -inline -pfirst -helplevel 1 -help {Creates object of class `Resistor` that\
+            set arguments [argparse -inline -pfirst -help {Creates object of class `Resistor` that\
                                                                                 describes resistor} {
                 {-r= -required -help {Resistance value}}
                 {-m= -help {Multiplier value}}
@@ -80,10 +81,12 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
 
     # alias for Resistor class
     oo::class create R {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass Resistor
     }
 
     oo::class create Capacitor {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Device
         constructor {args} {
             # Creates object of class `Capacitor` that describes capacitor.
@@ -138,10 +141,12 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
 
     # alias for Capacitor class
     oo::class create C {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass Capacitor
     }
 
     oo::class create Inductor {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Device
         constructor {args} {
             # Creates object of class `Inductor` that describes inductor.
@@ -193,10 +198,12 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
 
     # alias for Inductor class
     oo::class create L {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass Inductor
     }
 
     oo::class create SubcircuitInstance {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Device
         constructor {args} {
             # Creates object of class `SubcircuitInstance` that describes subcircuit instance.
@@ -225,10 +232,12 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
 
     # alias for SubcircuitInstance class
     oo::class create X {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass SubcircuitInstance
     }
 
     oo::class create VSwitch {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Device
         constructor {args} {
             # Creates object of class `VSwitch` that describes voltage controlled switch device.
@@ -271,10 +280,12 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
 
     # alias for VSwitch class
     oo::class create VSw {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass VSwitch
     }
 
     oo::class create CSwitch {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Device
         # special positional parameter that is placed before model name
         constructor {args} {
@@ -316,10 +327,12 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
 
     # alias for CSwitch class
     oo::class create W {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass CSwitch
     }
 
     oo::class create SubcircuitInstanceAuto {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Device
         constructor {subcktObj name nodes args} {
             # Creates object of class `SubcircuitInstanceAuto` that describes subcircuit instance with already created
@@ -355,7 +368,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
             }
             if {[info exists paramDefList]} {
                 # create definition for argparse module for passing parameters as optional arguments
-                set arguments [argparse -inline "
+                set arguments [argparse -inline -help {Subcircuit instance parameters} "
                     [join $paramDefList \n]
                 "]
                 # create list of parameters and values from which were supplied by args
@@ -367,6 +380,9 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
                     }
                 }
             } else {
+                if {"-help" in $args} {
+                    argparse -help {This subcircuit has no parameters} {}
+                }
                 set params {}
             }
             set params [linsert $params 0 [list -posnocheck model $subName]]
@@ -376,6 +392,7 @@ namespace eval ::SpiceGenTcl::Common::BasicDevices {
 
     # alias for SubcircuitInstanceAuto class
     oo::class create XAuto {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass SubcircuitInstanceAuto
     }
 }
@@ -754,6 +771,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
     }
 
     oo::class create Vdc {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Common::Sources::dc
         constructor {args} {
             # Creates object of class `Vdc` that describes simple constant voltage source.
@@ -774,6 +792,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
     }
 
     oo::class create Vac {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Common::Sources::ac
         constructor {args} {
             # Creates object of class `Vac` that describes ac voltage source.
@@ -796,6 +815,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
     }
 
     oo::class create Vpulse {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Common::Sources::pulse
         constructor {args} {
             # Creates object of class `Vpulse` that describes pulse voltage source.
@@ -826,6 +846,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
     }
 
     oo::class create Vsin {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Common::Sources::sin
         constructor {args} {
             # Creates object of class `Vsin` that describes sinusoidal voltage source.
@@ -855,6 +876,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
     }
 
     oo::class create Vexp {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Common::Sources::exp
         constructor {args} {
             # Creates object of class `Vexp` that describes exponential voltage source.
@@ -884,6 +906,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
     }
 
     oo::class create Vpwl {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Common::Sources::pwl
         constructor {args} {
             # Creates object of class `Vpwl` that describes piece-wise voltage source.
@@ -907,6 +930,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
     }
 
     oo::class create Vsffm {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Common::Sources::sffm
         constructor {args} {
             # Creates object of class `Vsffm` that describes single-frequency FM voltage source.
@@ -935,6 +959,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
     }
 
     oo::class create Idc {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Common::Sources::dc
         constructor {args} {
             # Creates object of class `Idc` that describes simple constant current source.
@@ -955,6 +980,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
     }
 
     oo::class create Iac {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Common::Sources::ac
         constructor {args} {
             # Creates object of class `Iac` that describes ac current source.
@@ -976,6 +1002,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
     }
 
     oo::class create Ipulse {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Common::Sources::pulse
         constructor {args} {
             # Creates object of class `Ipulse` that describes pulse current source.
@@ -1006,6 +1033,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
     }
 
     oo::class create Isin {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Common::Sources::sin
         constructor {args} {
             # Creates object of class `Isin` that describes sinusoidal current source.
@@ -1035,6 +1063,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
     }
 
     oo::class create Iexp {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Common::Sources::exp
         constructor {args} {
             # Creates object of class `Iexp` that describes exponential current source.
@@ -1064,6 +1093,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
     }
 
     oo::class create Ipwl {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Common::Sources::pwl
         constructor {args} {
             # Creates object of class `Ipwl` that describes piece-wise current source.
@@ -1087,6 +1117,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
     }
 
     oo::class create Isffm {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Common::Sources::sffm
         constructor {args} {
             # Creates object of class `Isffm` that describes single-frequency FM current source.
@@ -1115,6 +1146,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
     }
 
     oo::class create Vccs {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Device
         constructor {args} {
             # Creates object of class `Vccs` that describes linear voltage-controlled current source.
@@ -1164,10 +1196,12 @@ namespace eval ::SpiceGenTcl::Common::Sources {
 
     # alias for Vccs class
     oo::class create G {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass Vccs
     }
 
     oo::class create Vcvs {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Device
         constructor {args} {
             # Creates object of class `Vcvs` that describes linear voltage-controlled current source.
@@ -1206,10 +1240,12 @@ namespace eval ::SpiceGenTcl::Common::Sources {
 
     # alias for Vcvs class
     oo::class create E {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass Vcvs
     }
 
     oo::class create Cccs {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Device
         constructor {args} {
             # Creates object of class `Cccs` that describes linear current-controlled current source.
@@ -1259,10 +1295,12 @@ namespace eval ::SpiceGenTcl::Common::Sources {
 
     # alias for Cccs class
     oo::class create F {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass Cccs
     }
 
     oo::class create Ccvs {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Device
         constructor {args} {
             # Creates object of class `Ccvs` that describes linear current-controlled current source.
@@ -1301,6 +1339,7 @@ namespace eval ::SpiceGenTcl::Common::Sources {
 
     # alias for Ccvs class
     oo::class create H {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass Ccvs
     }
 

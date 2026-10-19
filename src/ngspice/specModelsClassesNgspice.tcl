@@ -19,6 +19,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
     namespace export RModel CModel LModel VSwitchModel CSwitchModel
 
     oo::class create RModel {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Model
         constructor {args} {
             # Creates object of class `RModel` that describes semiconductor resistor model.
@@ -35,6 +36,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
     }
 
     oo::class create CModel {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Model
         constructor {args} {
             # Creates object of class `CModel` that describes semiconductor capacitor model.
@@ -51,6 +53,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
     }
 
     oo::class create LModel {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Model
         constructor {args} {
             # Creates object of class `LModel` that describes inductor model.
@@ -67,6 +70,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
     }
 
     oo::class create VSwitchModel {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Model
         constructor {args} {
             # Creates object of class `VSwitchModel` that describes voltage switch model.
@@ -82,6 +86,7 @@ namespace eval ::SpiceGenTcl::Ngspice::BasicDevices {
     }
 
     oo::class create CSwitchModel {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Model
         constructor {args} {
             # Creates object of class `CSwitchModel` that describes current switch model.
@@ -102,6 +107,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
     namespace export DiodeModel BjtGPModel Jfet1Model Jfet2Model Mesfet1Model
 
     oo::class create DiodeModel {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Model
         constructor {args} {
             # Creates object of class `DiodeModel` that describes semiconductor diode model.
@@ -121,6 +127,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
     }
 
     oo::class create BjtGPModel {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Model
         constructor {args} {
             # Creates object of class `BjtGPModel` that describes Gummel-Poon model of semiconductor bipolar transistor.
@@ -143,6 +150,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
     }
 
     oo::class create Jfet1Model {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Model
         constructor {args} {
             # Creates object of class `Jfet1Model` that describes JFET level 1 model with Parker Skellern modification.
@@ -161,6 +169,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
     }
 
     oo::class create Jfet2Model {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Model
         constructor {args} {
             # Creates object of class `Jfet2Model` that describes JFET level 2 model with Parker Skellern modification.
@@ -180,6 +189,7 @@ namespace eval ::SpiceGenTcl::Ngspice::SemiconductorDevices {
     }
 
     oo::class create Mesfet1Model {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Model
         constructor {args} {
             # Creates object of class `Mesfet1Model` that describes MESFET model by Statz e.a..

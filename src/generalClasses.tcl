@@ -88,6 +88,32 @@ namespace eval ::SpiceGenTcl {
         }
     }
 
+    oo::class create ConstructorHelp {
+        # Class-object mixin that removes the temporary instance after constructor help.
+        # Constructors must return normally on -help (the default argparse help level), and their
+        # destructors must accept partially initialized instances. Errors are propagated.
+        method new {args} {
+            set object [next {*}$args]
+            if {({-help} in $args) || ({-h} in $args)} {
+                $object destroy
+                return
+            }
+            return $object
+        }
+        method create {name args} {
+            # Preserve TclOO's resolution of relative object names in the caller.
+            if {![string match ::* $name]} {
+                set name [uplevel 1 {namespace current}]::$name
+            }
+            set object [next $name {*}$args]
+            if {({-help} in $args) || ({-h} in $args)} {
+                $object destroy
+                return
+            }
+            return $object
+        }
+    }
+
     oo::class create Utility {
         self mixin -append oo::abstract
         method ParamsProcess {paramsOrder arguments params} {
@@ -253,6 +279,7 @@ namespace eval ::SpiceGenTcl {
 
     ##nagelfar subcmd+ _obj,Pin configure
     oo::configurable create Pin {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass SPICEElement
         # name of the node connected to pin
         property node -set {
@@ -321,6 +348,7 @@ namespace eval ::SpiceGenTcl {
 
     ##nagelfar subcmd+ _obj,ParameterSwitch configure
     oo::configurable create ParameterSwitch {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass SPICEElement
         property name -set {
             if {$value eq {}} {
@@ -354,6 +382,7 @@ namespace eval ::SpiceGenTcl {
     }
 
     oo::configurable create Parameter {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ParameterSwitch
         property value
         constructor {args} {
@@ -388,6 +417,7 @@ namespace eval ::SpiceGenTcl {
     }
 
     oo::configurable create ParameterNode {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass Parameter
         property name -set {
             if {$value eq {}} {
@@ -422,6 +452,7 @@ namespace eval ::SpiceGenTcl {
     }
 
     oo::configurable create ParameterNodeEquation {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ParameterNode
         constructor {args} {
             # Creates object of class `ParameterNodeEquation` with parameter name and value.
@@ -454,6 +485,7 @@ namespace eval ::SpiceGenTcl {
     }
 
     oo::configurable create ParameterVector {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ParameterSwitch
         property name -set {
             if {$value eq {}} {
@@ -466,6 +498,7 @@ namespace eval ::SpiceGenTcl {
     }
 
     oo::configurable create ParameterNoCheck {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass Parameter
         property value
         constructor {args} {
@@ -492,6 +525,7 @@ namespace eval ::SpiceGenTcl {
     }
 
     oo::configurable create ParameterPositional {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass Parameter
         constructor {args} {
             # Creates object of class `ParameterPositional` with parameter name and value.
@@ -517,6 +551,7 @@ namespace eval ::SpiceGenTcl {
     }
 
     oo::configurable create ParameterPositionalNoCheck {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ParameterPositional
         property value
         constructor {args} {
@@ -548,6 +583,7 @@ namespace eval ::SpiceGenTcl {
     }
 
     oo::configurable create ParameterDefault {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass Parameter
         property defvalue -set {
             if {[string is double -strict $value]} {
@@ -601,6 +637,7 @@ namespace eval ::SpiceGenTcl {
     }
 
     oo::configurable create ParameterEquation {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass Parameter
         property value
         constructor {args} {
@@ -634,6 +671,7 @@ namespace eval ::SpiceGenTcl {
     }
 
     oo::configurable create ParameterPositionalEquation {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ParameterEquation
         constructor {args} {
             # Creates object of class `ParameterPositionalEquation` with parameter name and value as an equation in
@@ -658,6 +696,7 @@ namespace eval ::SpiceGenTcl {
 
     ##nagelfar subcmd+ _obj,Device actOnPin actOnParam configure
     oo::configurable create Device {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass SPICEElement
         mixin Utility
         property name -set {
@@ -998,6 +1037,7 @@ namespace eval ::SpiceGenTcl {
 
     ##nagelfar subcmd+ _obj,Model configure addParam
     oo::configurable create Model {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass SPICEElement
         mixin Utility
         property name -set {
@@ -1066,6 +1106,7 @@ namespace eval ::SpiceGenTcl {
 
     ##nagelfar subcmd+ _obj,RawString configure
     oo::configurable create RawString {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass SPICEElement
         property name -set {
             set name $value
@@ -1100,6 +1141,7 @@ namespace eval ::SpiceGenTcl {
     }
 
     oo::configurable create Comment {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass RawString
         constructor {args} {
             # Creates object of class `Comment`.
@@ -1130,6 +1172,7 @@ namespace eval ::SpiceGenTcl {
     }
 
     oo::configurable create Include {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass RawString
         constructor {args} {
             # Creates object of class `Include`.
@@ -1158,6 +1201,7 @@ namespace eval ::SpiceGenTcl {
     }
 
     oo::configurable create Function {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass SPICEElement
         property declaration
         property body
@@ -1192,6 +1236,7 @@ namespace eval ::SpiceGenTcl {
     }
 
     oo::configurable create Library {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass RawString
         # this variable contains selected library name inside sourced file
         property libvalue -set {
@@ -1228,6 +1273,7 @@ namespace eval ::SpiceGenTcl {
 
     ##nagelfar subcmd+ _obj,Options configure addParam
     oo::configurable create Options {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass SPICEElement
         mixin Utility
         property name -set {
@@ -1279,6 +1325,7 @@ namespace eval ::SpiceGenTcl {
 
     ##nagelfar subcmd+ _obj,ParamStatement configure addParam
     oo::configurable create ParamStatement {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass SPICEElement
         mixin Utility
         property name -set {
@@ -1329,6 +1376,7 @@ namespace eval ::SpiceGenTcl {
 
     ##nagelfar subcmd+ _obj,Save configure addParam addVector
     oo::configurable create Save {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass SPICEElement
         mixin Utility
         property name -set {
@@ -1415,6 +1463,7 @@ namespace eval ::SpiceGenTcl {
 
     ##nagelfar subcmd+ _obj,Ic configure addParam
     oo::configurable create Ic {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass SPICEElement
         mixin Utility
         property name -set {
@@ -1468,6 +1517,7 @@ namespace eval ::SpiceGenTcl {
     }
 
     oo::configurable create Nodeset {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass Ic
         mixin Utility
         variable Params
@@ -1480,6 +1530,7 @@ namespace eval ::SpiceGenTcl {
 
     ##nagelfar subcmd+ _obj,Global configure addNets
     oo::configurable create Global {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass SPICEElement
         mixin Utility
         property name -set {
@@ -1547,6 +1598,7 @@ namespace eval ::SpiceGenTcl {
 
     ##nagelfar subcmd+ _obj,Temp configure AddParam
     oo::configurable create Temp {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass SPICEElement
         property name -set {
             set name [string tolower $value]
@@ -1619,6 +1671,7 @@ namespace eval ::SpiceGenTcl {
 
     ##nagelfar subcmd+ _obj,Netlist configure getAllElemNames
     oo::configurable create Netlist {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass SPICEElement
         mixin Utility
         property name -set {
@@ -1715,6 +1768,7 @@ namespace eval ::SpiceGenTcl {
     }
 
     oo::configurable create Circuit {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass Netlist
         # simulator object that run simulation
         property simulator
@@ -1836,6 +1890,7 @@ namespace eval ::SpiceGenTcl {
 
     ##nagelfar subcmd+ _obj,Subcircuit addPin addParam
     oo::configurable create Subcircuit {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass Netlist
         variable Pins Params
         constructor {args} {
@@ -1921,6 +1976,7 @@ namespace eval ::SpiceGenTcl {
 
     ##nagelfar subcmd+ _obj,Analysis configure addParam
     oo::configurable create Analysis {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass SPICEElement
         mixin Utility
         property name -set {
@@ -2067,6 +2123,7 @@ namespace eval ::SpiceGenTcl {
 
     ##nagelfar subcmd+ _obj,Dataset configure
     oo::configurable create Dataset {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         # This class models general raw dataset
         property name -set {
             set name [string tolower $value]
@@ -2153,11 +2210,13 @@ namespace eval ::SpiceGenTcl {
     }
 
     oo::configurable create Axis {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         # Class that represents axis in raw file
         superclass Dataset
     }
 
     oo::configurable create Trace {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         # Class that represents trace in raw file
         superclass Dataset
         property axis
@@ -2184,6 +2243,7 @@ namespace eval ::SpiceGenTcl {
     }
 
     oo::configurable create EmptyTrace {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         # Class represents empty trace (trace that was not readed) in raw file
         superclass Dataset
         method getDataPoints {} {
@@ -2196,6 +2256,7 @@ namespace eval ::SpiceGenTcl {
 
     ##nagelfar subcmd+ _obj,RawFile configure
     oo::configurable create RawFile {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         # Class represents raw file
         ##nagelfar ignore {Wrong number of arguments}
         mixin BinaryReader Utility
@@ -2707,6 +2768,7 @@ namespace eval ::SpiceGenTcl {
                 NamespacePath
         initialize {
             variable ModelTemplate {oo::class create @type@ {
+                self mixin -append ::SpiceGenTcl::ConstructorHelp
                 superclass ::SpiceGenTcl::Model
                 constructor {args} {
                     set paramsNames [list @paramsList@]

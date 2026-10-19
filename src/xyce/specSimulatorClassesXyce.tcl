@@ -19,6 +19,7 @@ namespace eval ::SpiceGenTcl::Xyce::Simulators {
     namespace export Batch
 
     oo::configurable create Batch {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         # this class represent batch simulation of ngspice
         superclass ::SpiceGenTcl::Simulator
         property log -get {

@@ -23,7 +23,7 @@ package require argparse
 package require tclmeasure
 namespace import ::tcl::mathop::*
 
-package provide SpiceGenTcl 0.71
+package provide SpiceGenTcl 0.75
 
 set dir [file dirname [file normalize [info script]]]
 set libDir [file join $dir lib]

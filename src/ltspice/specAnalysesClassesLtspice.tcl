@@ -23,18 +23,22 @@ namespace eval ::SpiceGenTcl {
 namespace eval ::SpiceGenTcl::Ltspice::Analyses {
 
     oo::class create Dc {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Common::Analyses::Dc
     }
 
     oo::class create Ac {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Common::Analyses::Ac
     }
 
     oo::class create Tran {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Common::Analyses::Tran
     }
 
     oo::class create Op {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Common::Analyses::Op
     }
 }

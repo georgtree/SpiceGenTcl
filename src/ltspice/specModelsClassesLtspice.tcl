@@ -19,6 +19,7 @@ namespace eval ::SpiceGenTcl::Ltspice::BasicDevices {
     namespace export VSwitchModel CSwitchModel
 
     oo::class create VSwitchModel {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Model
         constructor {args} {
             # Creates object of class `VSwitchModel` that describes voltage switch model.
@@ -34,6 +35,7 @@ namespace eval ::SpiceGenTcl::Ltspice::BasicDevices {
     }
 
     oo::class create CSwitchModel {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Model
         constructor {args} {
             # Creates object of class `CSwitchModel` that describes current switch model.
@@ -54,6 +56,7 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
     namespace export DiodeModel DiodeIdealModel BjtGPModel JfetModel MesfetModel
 
     oo::class create DiodeModel {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Model
         constructor {args} {
             # Creates object of class `DiodeModel` that describes semiconductor diode model.
@@ -71,6 +74,7 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
     }
 
     oo::class create DiodeIdealModel {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Model
         constructor {args} {
             # Creates object of class `DiodeIdealModel` that describes semiconductor diode model.
@@ -87,6 +91,7 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
     }
 
     oo::class create BjtGPModel {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Model
         constructor {args} {
             # Creates object of class `BjtGPModel` that describes Gummel-Poon model of semiconductor bipolar transistor.
@@ -108,6 +113,7 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
     }
 
     oo::class create JfetModel {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Model
         constructor {args} {
             # Creates object of class `JfetModel` that describes JFET level 1 model with Parker Skellern modification.
@@ -126,6 +132,7 @@ namespace eval ::SpiceGenTcl::Ltspice::SemiconductorDevices {
     }
 
     oo::class create MesfetModel {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         superclass ::SpiceGenTcl::Model
         constructor {args} {
             # Creates object of class `MesfetModel` that describes MESFET model by Statz e.a..

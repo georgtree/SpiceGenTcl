@@ -19,6 +19,7 @@ namespace eval ::SpiceGenTcl::Ltspice::Simulators {
     namespace export Batch BatchLiveLog
 
     oo::configurable create Batch {
+        self mixin -append ::SpiceGenTcl::ConstructorHelp
         # this class represent batch simulation of LTspice
         superclass ::SpiceGenTcl::Simulator
         property log -get {
